@@ -4,7 +4,8 @@
 // Para cada época calcula-se um desempenho na escala mundial 1-100:
 //   nível da equipa onde jogou
 //   + confiança do treinador (jogos realizados face ao esperado nessa equipa)
-//   + produtividade (golos por jogo face ao esperado para a posição e para a equipa)
+//   + produtividade (golos por jogo face ao esperado para a posição, para o domínio da equipa na sua liga,
+//     e descontada pela força da liga: marcar muito numa liga fraca vale pouco)
 // As épocas mais recentes pesam mais. O resultado substitui o nível do clube atual
 // na geração de atributos, e a produtividade ajusta atributos concretos.
 import type { Position } from './types';
@@ -22,13 +23,14 @@ export interface Moneyball {
   goalsPerGame: number; // ponderado
   expectedGpg: number; // esperado para a posição
   availability: number; // 0 a 1
+  productivity: number; // golos face ao esperado, já ajustado à força das ligas (1 = normal)
 }
 
 // Peso de cada época (a atual, ainda curta, pesa menos)
 const SEASON_WEIGHT: Record<string, number> = { '26': 0.5, '25': 1, '24': 0.75, '23': 0.5, '22': 0.35, '21': 0.25 };
 
-// Golos por jogo esperados numa equipa de nível 70
-const EXPECTED_GPG: Record<Position, number> = { GR: 0.02, FIX: 0.25, 'FIX/ALA': 0.35, UNI: 0.45, ALA: 0.55, 'ALA/PIV': 0.65, PIV: 0.75 };
+// Golos por jogo esperados para uma equipa a meio da sua liga
+const EXPECTED_GPG: Record<Position, number> = { GR: 0.02, FIX: 0.18, 'FIX/ALA': 0.25, UNI: 0.32, ALA: 0.38, 'ALA/PIV': 0.45, PIV: 0.5 };
 
 // Peso da produtividade por posição (aos fixos e guarda-redes pede-se menos golo)
 const PROD_WEIGHT: Record<Position, number> = { GR: 0, FIX: 0.4, 'FIX/ALA': 0.6, UNI: 0.8, ALA: 1, 'ALA/PIV': 1, PIV: 1 };
@@ -49,12 +51,37 @@ export const TEAM_LEVELS: Record<string, number> = {
   // Estrangeiro
   Barcelona: 96, 'ElPozo Murcia Costa Cálida': 90, 'Illes Balears Palma': 93, 'Viña Albali Valdepeñas': 84,
   'Jaén Paraíso Interior': 84, 'Real Betis': 78, Levante: 82, 'Ribera Navarra': 80, 'ETB Calviá': 55, 'Wanapix AD Sala 10': 70,
-  'HIT Kiev': 76, Tyumen: 78, Sibiryak: 74, Atyrau: 72, 'Kaspiy Aktau': 70, Ordabasy: 72, Anderlecht: 82, 'Riga FC': 72,
+  'HIT Kiev': 76, Tyumen: 78, Sibiryak: 74, Atyrau: 72, 'Kaspiy Aktau': 70, Ordabasy: 72, Anderlecht: 82, 'Riga FC': 62,
   'Al-Nassr': 60, 'Al-Qadisiyah': 60, 'Al-Tadhamon': 55, 'Al-Ula FC': 62, 'Al-Riyadh': 58, 'Ecocity Genzano': 72,
   'Fortitudo Pomezia': 74, 'Italservice Pesaro': 76, Canosa: 60, Magallanes: 50, 'Nyírbátori': 66, 'Haladás': 64,
   'MNK Osijek': 58, 'Futsal Pula': 60, 'Novo Vrijeme': 64, 'Panta Walon': 64, Omonia: 62, 'New Vision Georgians': 55,
   'United Galati': 66, 'Araz Naxçivan': 72, 'Piast Gliwice': 72, 'KS Constract Lubawa': 74, 'Svarog FC Teplice': 60,
 };
+
+/**
+ * Força da liga onde cada equipa joga (escala mundial). Uma equipa muito acima da sua liga
+ * domina os jogos e os seus jogadores marcam mais com facilidade.
+ */
+const LEAGUE_OF: Record<string, number> = {
+  // Espanha (a mais forte)
+  Barcelona: 92, 'ElPozo Murcia Costa Cálida': 92, 'Illes Balears Palma': 92, 'Viña Albali Valdepeñas': 92, 'Jaén Paraíso Interior': 92,
+  'Real Betis': 92, Levante: 92, 'Ribera Navarra': 92, 'Wanapix AD Sala 10': 72, 'ETB Calviá': 50,
+  // Outras ligas europeias
+  'HIT Kiev': 62, Tyumen: 76, Sibiryak: 76, Atyrau: 70, 'Kaspiy Aktau': 70, Ordabasy: 70, Anderlecht: 58, 'Riga FC': 42,
+  'Ecocity Genzano': 72, 'Fortitudo Pomezia': 72, 'Italservice Pesaro': 72, Canosa: 60, 'Nyírbátori': 55, 'Haladás': 55,
+  'MNK Osijek': 55, 'Futsal Pula': 55, 'Novo Vrijeme': 55, 'Panta Walon': 50, Omonia: 45, 'New Vision Georgians': 42,
+  'United Galati': 52, 'Araz Naxçivan': 55, 'Piast Gliwice': 65, 'KS Constract Lubawa': 65, 'Svarog FC Teplice': 58,
+  // Médio Oriente e América do Sul
+  'Al-Nassr': 48, 'Al-Qadisiyah': 48, 'Al-Ula FC': 48, 'Al-Riyadh': 48, 'Al-Tadhamon': 42, Magallanes: 38,
+};
+// Liga Placard (média da 1.ª divisão portuguesa); equipas portuguesas fora da lista estão em divisões inferiores
+const PT_FIRST_DIVISION = 72;
+
+function leagueLevel(clean: string) {
+  if (LEAGUE_OF[clean] != null) return LEAGUE_OF[clean];
+  if (TEAM_LEVELS[clean] != null) return PT_FIRST_DIVISION;
+  return UNKNOWN_LEVEL;
+}
 
 // Equipas desconhecidas: na maioria divisões inferiores portuguesas
 const UNKNOWN_LEVEL = 42;
@@ -65,7 +92,9 @@ const YOUTH_LEVEL = 42;
 export function teamLevel(name: string, ageAtSeason = 99) {
   const clean = name.replace(/\s*\[.*?\]/g, '').replace(/\s*\(E\)/g, '').trim();
   const lvl = TEAM_LEVELS[clean] ?? UNKNOWN_LEVEL;
-  return ageAtSeason <= YOUTH_AGE ? Math.min(lvl, YOUTH_LEVEL) : lvl;
+  const league = leagueLevel(clean);
+  if (ageAtSeason <= YOUTH_AGE) return { team: Math.min(lvl, YOUTH_LEVEL), league: YOUTH_LEVEL };
+  return { team: lvl, league };
 }
 
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
@@ -76,22 +105,29 @@ export function computeMoneyball(rows: SeasonRow[], pos: Position, ageNow: numbe
   let gpgW = 0;
   let expW = 0;
   let availW = 0;
+  let prodW = 0;
   for (const r of rows) {
     const base = SEASON_WEIGHT[r.s];
     if (!base || r.games <= 0) continue;
-    const tl = teamLevel(r.team, ageNow - (26 - Number(r.s)));
+    const { team: tl, league: ll } = teamLevel(r.team, ageNow - (26 - Number(r.s)));
     // épocas com poucos jogos pesam menos
     const w = base * Math.min(1, r.games / 8);
     const expectedGames = tl >= 85 ? 42 : tl >= 70 ? 34 : 28;
     const avail = clamp(r.games / expectedGames, 0, 1.1);
     const gpg = r.goals / r.games;
-    const exp = EXPECTED_GPG[pos] * (0.55 + 0.45 * (tl / 70));
-    const prod = clamp((gpg / Math.max(0.02, exp) - 1) * 8, -6, 10) * PROD_WEIGHT[pos];
+    // equipa dominante na sua liga: espera-se mais golo de cada jogador
+    const exp = EXPECTED_GPG[pos] * clamp(1 + (tl - ll) / 33, 0.6, 1.8);
+    // a produtividade só vale tanto quanto a liga: numa liga fraca é descontada
+    const leagueFactor = clamp(ll / 80, 0.3, 1.1);
+    const ratio = gpg / Math.max(0.02, exp);
+    // marcar pouco penaliza menos do que marcar muito beneficia (as assistências não estão nos dados)
+    const prod = clamp((ratio - 1) * 8, -3, 10) * PROD_WEIGHT[pos] * leagueFactor;
     const perf = tl + 14 * (avail - 0.6) + prod;
     lvl += perf * w;
     gpgW += gpg * w;
     expW += exp * w;
     availW += avail * w;
+    prodW += (1 + Math.max(-0.4, ratio - 1) * leagueFactor) * w;
     wSum += w;
   }
   if (wSum < 0.3) return null;
@@ -101,5 +137,6 @@ export function computeMoneyball(rows: SeasonRow[], pos: Position, ageNow: numbe
     goalsPerGame: gpgW / wSum,
     expectedGpg: expW / wSum,
     availability: availW / wSum,
+    productivity: prodW / wSum,
   };
 }

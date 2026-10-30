@@ -24,7 +24,7 @@ function buildPlayers(): Player[] {
     const key = `${p.clubId}|${p.name}`;
     const mb = computeMoneyball((HISTORY[p.id] ?? []) as SeasonRow[], p.position, p.age);
     const g = mb
-      ? generateAttributes(p as Player, mb.level, BOOST[key] ?? 0, { productivity: mb.goalsPerGame / mb.expectedGpg, availability: mb.availability })
+      ? generateAttributes(p as Player, mb.level, BOOST[key] ?? 0, { productivity: mb.productivity, availability: mb.availability })
       : generateAttributes(p as Player, club.level, BOOST[key] ?? 0);
     return { ...p, attrs: { ...g.attrs, ...(ATTR_OVERRIDES[key] ?? {}) }, potential: g.potential };
   });

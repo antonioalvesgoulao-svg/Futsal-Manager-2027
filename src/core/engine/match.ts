@@ -348,7 +348,7 @@ export function simulateMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptio
 
     let pBlock = 0.24 + (defQ - finish) * 0.01;
     let pOn = 0.47 + (finish - 10) * 0.016 + (compo - 10) * 0.006;
-    let pGoal = 0.228 + (finish - gkQ) * 0.022;
+    let pGoal = 0.207 + (finish - gkQ) * 0.022;
     if (kind === 'contra') { pBlock *= 0.5; pOn += 0.08; pGoal += 0.1; }
     if (kind === 'livre10') { pBlock = 0; pOn = 0.72 + (finish - 10) * 0.015; pGoal = 0.42 + (finish - gkQ) * 0.025; }
     if (kind === 'penalti') { pBlock = 0; pOn = 0.86 + (compo - 10) * 0.01; pGoal = 0.78 + (finish - gkQ) * 0.02; }
