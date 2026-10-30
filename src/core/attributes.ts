@@ -95,7 +95,7 @@ const KEY: Record<Position, AttrKey[]> = {
 };
 
 // Gerador aleatório com semente: o mesmo jogador tem sempre os mesmos atributos
-function rng(seed: string) {
+export function rng(seed: string) {
   let h = 1779033703 ^ seed.length;
   for (let i = 0; i < seed.length; i++) {
     h = Math.imul(h ^ seed.charCodeAt(i), 3432918353);
@@ -108,7 +108,7 @@ function rng(seed: string) {
   };
 }
 
-function gauss(r: () => number) {
+export function gauss(r: () => number) {
   return Math.sqrt(-2 * Math.log(r() || 1e-9)) * Math.cos(2 * Math.PI * r());
 }
 
