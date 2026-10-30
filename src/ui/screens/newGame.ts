@@ -23,9 +23,10 @@ export function newGameScreen(root: HTMLElement) {
   root.append(el);
 
   el.querySelector('#back')!.addEventListener('click', () => go('menu'));
-  el.addEventListener('submit', (e) => {
+  const form = el.querySelector<HTMLFormElement>('#f')!;
+  form.addEventListener('submit', (e) => {
     e.preventDefault();
-    const fd = new FormData(el as HTMLFormElement);
+    const fd = new FormData(form);
     setState(newGame(String(fd.get('name')).trim(), String(fd.get('nat')).trim(), String(fd.get('club'))));
     go('home');
   });
