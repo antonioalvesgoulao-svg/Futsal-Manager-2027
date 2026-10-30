@@ -7,7 +7,8 @@ export interface Club {
   colors: [string, string]; // principal, secundária
   city: string;
   arena: string;
-  reputation: number; // 1 a 100
+  reputation: number; // prestígio, 1 a 100 (escala mundial)
+  level: number; // qualidade atual do plantel, 1 a 100 (escala mundial)
 }
 
 import type { Attributes } from './attributes';

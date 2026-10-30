@@ -16,7 +16,7 @@ function buildPlayers(): Player[] {
   return (porPlayers.players as RawPlayer[]).map((p) => {
     const club = DB_CLUBS.find((c) => c.id === p.clubId)!;
     const key = `${p.clubId}|${p.name}`;
-    const g = generateAttributes(p as Player, club.reputation, BOOST[key] ?? 0);
+    const g = generateAttributes(p as Player, club.level, BOOST[key] ?? 0);
     return { ...p, attrs: { ...g.attrs, ...(ATTR_OVERRIDES[key] ?? {}) }, potential: g.potential };
   });
 }

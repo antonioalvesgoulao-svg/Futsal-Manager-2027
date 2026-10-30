@@ -17,8 +17,9 @@
         "#00804a",
         "#ffffff"
       ],
-      "reputation": 94,
-      "check": []
+      "reputation": 96,
+      "check": [],
+      "level": 94
     },
     {
       "id": "slb",
@@ -30,8 +31,9 @@
         "#e30613",
         "#ffffff"
       ],
-      "reputation": 95,
-      "check": []
+      "reputation": 93,
+      "check": [],
+      "level": 95
     },
     {
       "id": "scb",
@@ -46,7 +48,8 @@
       "reputation": 82,
       "check": [
         "arena"
-      ]
+      ],
+      "level": 82
     },
     {
       "id": "fun",
@@ -61,7 +64,8 @@
       "reputation": 72,
       "check": [
         "colors"
-      ]
+      ],
+      "level": 72
     },
     {
       "id": "lps",
@@ -76,7 +80,8 @@
       "reputation": 70,
       "check": [
         "colors"
-      ]
+      ],
+      "level": 70
     },
     {
       "id": "fzz",
@@ -92,7 +97,8 @@
       "check": [
         "arena",
         "colors"
-      ]
+      ],
+      "level": 60
     },
     {
       "id": "ele",
@@ -107,7 +113,8 @@
       "reputation": 66,
       "check": [
         "colors"
-      ]
+      ],
+      "level": 66
     },
     {
       "id": "rav",
@@ -122,7 +129,8 @@
       "reputation": 64,
       "check": [
         "arena"
-      ]
+      ],
+      "level": 64
     },
     {
       "id": "uvn",
@@ -139,7 +147,8 @@
         "arena",
         "colors",
         "city"
-      ]
+      ],
+      "level": 58
     },
     {
       "id": "por",
@@ -152,7 +161,8 @@
         "#ffffff"
       ],
       "reputation": 63,
-      "check": []
+      "check": [],
+      "level": 63
     },
     {
       "id": "fam",
@@ -167,7 +177,8 @@
       "reputation": 60,
       "check": [
         "arena"
-      ]
+      ],
+      "level": 60
     },
     {
       "id": "tor",
@@ -180,8 +191,9 @@
         "#ffffff"
       ],
       "reputation": 62,
-      "check": []
+      "check": [],
+      "level": 62
     }
   ],
-  "_info": "reputation: escala MUNDIAL de 1 a 100, comum a todas as ligas (ex.: topo europeu 90+, ligas medianas 50-70)."
+  "_info": "reputation: prestígio (história, títulos, Europa), escala MUNDIAL 1-100. level: qualidade atual do plantel, escala MUNDIAL 1-100, usada para gerar atributos."
 }
