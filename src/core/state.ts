@@ -2,10 +2,25 @@ import { Club, GameState, League, Player, SAVE_VERSION } from './types';
 
 import porData from '../data/por/clubs.json';
 import porPlayers from '../data/por/players.json';
+import porOverrides from '../data/por/overrides.json';
+import { generateAttributes } from './attributes';
 
 // Base de dados: cada liga é um ficheiro em src/data/<país>/clubs.json
 export const DB_CLUBS: Club[] = porData.clubs.map(({ check, ...c }) => ({ ...c, colors: c.colors as [string, string] }));
-export const DB_PLAYERS: Player[] = porPlayers.players as Player[];
+type RawPlayer = Omit<Player, 'attrs' | 'potential'>;
+const BOOST = porOverrides.boost as Record<string, number>;
+const ATTR_OVERRIDES = porOverrides.attrs as Record<string, Partial<Player['attrs']>>;
+
+// Jogadores com atributos gerados (sempre iguais para o mesmo jogador)
+function buildPlayers(): Player[] {
+  return (porPlayers.players as RawPlayer[]).map((p) => {
+    const club = DB_CLUBS.find((c) => c.id === p.clubId)!;
+    const key = `${p.clubId}|${p.name}`;
+    const g = generateAttributes(p as Player, club.reputation, BOOST[key] ?? 0);
+    return { ...p, attrs: { ...g.attrs, ...(ATTR_OVERRIDES[key] ?? {}) }, potential: g.potential };
+  });
+}
+export const DB_PLAYERS: Player[] = buildPlayers();
 export const DB_LEAGUES: League[] = [
   { ...porData.league, clubIds: porData.clubs.map((c) => c.id) },
 ];

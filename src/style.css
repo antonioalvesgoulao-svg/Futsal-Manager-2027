@@ -55,3 +55,14 @@ input, select { background: var(--bg); color: var(--text); border: 1px solid var
   .side .spacer { display: none; }
   .nav { white-space: nowrap; }
 }
+
+.click { cursor: pointer; }
+.click:hover td { background: #1e2832; }
+.stars { color: var(--accent); letter-spacing: 1px; white-space: nowrap; }
+.stars .dim { color: #3a4552; }
+.attr-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+.attr-col { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px; }
+.attr { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+.attr:last-child { border-bottom: 0; }
+.attr b { min-width: 24px; text-align: right; }
+.a1 { color: #8b98a5; } .a2 { color: #e6edf3; } .a3 { color: #7dd3a0; } .a4 { color: var(--accent); }

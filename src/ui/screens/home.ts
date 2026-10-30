@@ -1,6 +1,40 @@
 import { go, h } from '../router';
 import { advanceDay, getState, myClub } from '../../core/state';
 import { exportSave, saveToSlot, SLOTS } from '../../core/save';
+import { ATTR_GROUPS, overall, starsHtml } from '../../core/attributes';
+import type { Player } from '../../core/types';
+
+const POS_NAME: Record<string, string> = {
+  GR: 'Guarda-redes', FIX: 'Fixo', 'FIX/ALA': 'Fixo / Ala', UNI: 'Universal', ALA: 'Ala', 'ALA/PIV': 'Ala / Pivô', PIV: 'Pivô',
+};
+
+function attrClass(v: number) {
+  return v >= 16 ? 'a4' : v >= 13 ? 'a3' : v >= 10 ? 'a2' : 'a1';
+}
+
+function playerProfile(p: Player) {
+  const groups = Object.entries(ATTR_GROUPS).filter(([g]) => (p.position === 'GR' ? true : g !== 'guardaRedes'));
+  return `
+    <button class="btn ghost" data-back>◂ Plantel</button>
+    <h2 style="margin-top:12px">${p.number ?? '-'} · ${p.name}</h2>
+    <table class="tbl" style="margin-bottom:16px">
+      <tr><th>Posição</th><td>${POS_NAME[p.position]}</td><th>Idade</th><td>${p.age}</td></tr>
+      <tr><th>Nacionalidade</th><td>${p.nationality}</td><th>Valor atual</th><td>${starsHtml(overall(p.attrs, p.position))}</td></tr>
+      <tr><th></th><td></td><th>Potencial</th><td>${starsHtml(p.potential)}</td></tr>
+    </table>
+    <div class="attr-grid">
+      ${groups
+        .map(
+          ([, g]) => `<div class="attr-col"><h3>${g.label}</h3>${Object.entries(g.attrs)
+            .map(([k, label]) => {
+              const v = p.attrs[k as keyof Player['attrs']];
+              return `<div class="attr"><span>${label}</span><b class="${attrClass(v)}">${v}</b></div>`;
+            })
+            .join('')}</div>`
+        )
+        .join('')}
+    </div>`;
+}
 
 // Secções do jogo. As que ainda não existem mostram a etapa em que entram.
 const SECTIONS: { id: string; label: string; stage: string }[] = [
@@ -21,6 +55,7 @@ export function homeScreen(root: HTMLElement) {
   if (!s) return go('menu');
   const club = myClub(s);
   let section = 'inicio';
+  let playerId: string | null = null;
 
   const el = h(`
     <div class="layout">
@@ -67,6 +102,8 @@ export function homeScreen(root: HTMLElement) {
           <tr><th>Época</th><td>${s!.season}</td></tr>
         </table>
         <p class="muted">Usa "Continuar" para avançar no calendário.</p>`;
+    } else if (section === 'plantel' && playerId) {
+      content.innerHTML = playerProfile(s!.players.find((p) => p.id === playerId)!);
     } else if (section === 'plantel') {
       const order = ['GR', 'FIX', 'FIX/ALA', 'UNI', 'ALA', 'ALA/PIV', 'PIV'];
       const squad = s!.players
@@ -75,12 +112,12 @@ export function homeScreen(root: HTMLElement) {
       content.innerHTML = `
         <h2>Plantel <span class="muted small">${squad.length} jogadores</span></h2>
         <table class="tbl">
-          <thead><tr><th>Nº</th><th>Nome</th><th>Posição</th><th>Idade</th><th>Nacionalidade</th></tr></thead>
+          <thead><tr><th>Nº</th><th>Nome</th><th>Posição</th><th>Idade</th><th>Nacionalidade</th><th>Atual</th><th>Potencial</th></tr></thead>
           <tbody>${squad
-            .map((p) => `<tr><td>${p.number ?? '-'}</td><td>${p.name}</td><td>${p.position}</td><td>${p.age}</td><td>${p.nationality}</td></tr>`)
+            .map((p) => `<tr class="click" data-p="${p.id}"><td>${p.number ?? '-'}</td><td>${p.name}</td><td>${p.position}</td><td>${p.age}</td><td>${p.nationality}</td><td>${starsHtml(overall(p.attrs, p.position))}</td><td>${starsHtml(p.potential)}</td></tr>`)
             .join('')}</tbody>
         </table>
-        <p class="muted small">Atributos na etapa 3.</p>`;
+        <p class="muted small">Clica num jogador para ver os atributos.</p>`;
     } else {
       content.innerHTML = `<h2>${sec.label}</h2><div class="empty">Disponível na ${sec.stage}.</div>`;
     }
@@ -91,6 +128,7 @@ export function homeScreen(root: HTMLElement) {
     if (!b) return;
     if (b.dataset.s) {
       section = b.dataset.s;
+      playerId = null;
       renderNav();
       renderContent();
     } else if (b.dataset.a === 'save') {
@@ -101,6 +139,18 @@ export function homeScreen(root: HTMLElement) {
       exportSave(s!);
     } else if (b.dataset.a === 'menu') {
       if (confirm('Voltar ao menu? O progresso não gravado perde-se.')) go('menu');
+    }
+  });
+
+  content.addEventListener('click', (e) => {
+    const t = e.target as HTMLElement;
+    const row = t.closest<HTMLElement>('[data-p]');
+    if (row) {
+      playerId = row.dataset.p!;
+      renderContent();
+    } else if (t.closest('[data-back]')) {
+      playerId = null;
+      renderContent();
     }
   });
 

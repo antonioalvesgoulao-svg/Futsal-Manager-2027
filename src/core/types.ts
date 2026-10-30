@@ -10,6 +10,8 @@ export interface Club {
   reputation: number; // 1 a 100
 }
 
+import type { Attributes } from './attributes';
+
 export type Position = 'GR' | 'FIX' | 'FIX/ALA' | 'ALA' | 'ALA/PIV' | 'PIV' | 'UNI';
 
 export interface Player {
@@ -20,6 +22,8 @@ export interface Player {
   number: number | null;
   age: number;
   nationality: string;
+  attrs: Attributes;
+  potential: number;
 }
 
 export interface League {
@@ -47,4 +51,4 @@ export interface GameState {
   players: Player[];
 }
 
-export const SAVE_VERSION = 3;
+export const SAVE_VERSION = 4;
