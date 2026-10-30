@@ -1,0 +1,125 @@
+{
+  "_info": "Treinadores atuais (nomes: zerozero). Atributos 1-20 e estilo são ESTIMATIVAS até haver historial real. tactical: conhecimento tático; motivation: motivação; discipline: disciplina; youth: desenvolvimento de jovens. style vazio = estilo deduzido do plantel.",
+  "coaches": [
+    {
+      "id": "c_scp",
+      "name": "Nuno Dias",
+      "clubId": "scp",
+      "tactical": 19,
+      "motivation": 17,
+      "discipline": 16,
+      "youth": 15,
+      "style": {}
+    },
+    {
+      "id": "c_slb",
+      "name": "Cassiano Klein",
+      "clubId": "slb",
+      "tactical": 17,
+      "motivation": 17,
+      "discipline": 16,
+      "youth": 14,
+      "style": {}
+    },
+    {
+      "id": "c_scb",
+      "name": "Joel Rocha",
+      "clubId": "scb",
+      "tactical": 15,
+      "motivation": 14,
+      "discipline": 14,
+      "youth": 15,
+      "style": {}
+    },
+    {
+      "id": "c_fun",
+      "name": "Nuno Couto",
+      "clubId": "fun",
+      "tactical": 12,
+      "motivation": 12,
+      "discipline": 12,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_lps",
+      "name": "Miguel Velez",
+      "clubId": "lps",
+      "tactical": 12,
+      "motivation": 12,
+      "discipline": 12,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_fzz",
+      "name": "Cristiano Coelho",
+      "clubId": "fzz",
+      "tactical": 11,
+      "motivation": 11,
+      "discipline": 12,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_ele",
+      "name": "Jorge Monteiro",
+      "clubId": "ele",
+      "tactical": 12,
+      "motivation": 11,
+      "discipline": 12,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_rav",
+      "name": "Bruno Guimarães",
+      "clubId": "rav",
+      "tactical": 12,
+      "motivation": 11,
+      "discipline": 12,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_uvn",
+      "name": "Alcides Lopes",
+      "clubId": "uvn",
+      "tactical": 11,
+      "motivation": 11,
+      "discipline": 12,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_por",
+      "name": "José Santos",
+      "clubId": "por",
+      "tactical": 12,
+      "motivation": 11,
+      "discipline": 12,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_fam",
+      "name": "Cláudio Martins",
+      "clubId": "fam",
+      "tactical": 11,
+      "motivation": 11,
+      "discipline": 12,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_tor",
+      "name": "Naná",
+      "clubId": "tor",
+      "tactical": 12,
+      "motivation": 11,
+      "discipline": 12,
+      "youth": 12,
+      "style": {}
+    }
+  ]
+}

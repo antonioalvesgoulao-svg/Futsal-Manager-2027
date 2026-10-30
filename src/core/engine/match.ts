@@ -26,6 +26,7 @@ interface TeamState {
   shortUntil: number; // inferioridade numérica até este segundo (absoluto)
   shortCount: number; // jogadores a menos
   lastRotation: number;
+  qIdx: 0 | 1; // quinteto em campo
   fouls: number[]; // faltas acumuladas por período
   timeoutUsed: boolean[];
   conceded: number[]; // segundos dos golos sofridos (para pedir time-out)
@@ -72,7 +73,12 @@ export function simulateMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptio
     // Convocatória: 2 guarda-redes + melhores jogadores de campo até 14
     const gks = setup.squad.filter((p) => p.position === 'GR').sort((a, b) => overall(b.attrs, 'GR') - overall(a.attrs, 'GR'));
     const out = setup.squad.filter((p) => p.position !== 'GR').sort((a, b) => overall(b.attrs, b.position) - overall(a.attrs, a.position));
-    const called = [...gks.slice(0, 2), ...out.slice(0, MAX_SQUAD - Math.min(2, gks.length))];
+    // os escolhidos pelo treinador entram sempre na convocatória
+    const tac = setup.tactics;
+    const wanted = new Set([tac.gk, ...tac.q1, ...tac.q2].filter(Boolean) as string[]);
+    const gkList = [...gks.filter((p) => wanted.has(p.id)), ...gks.filter((p) => !wanted.has(p.id))].slice(0, 2);
+    const outList = [...out.filter((p) => wanted.has(p.id)), ...out.filter((p) => !wanted.has(p.id))];
+    const called = [...gkList, ...outList.slice(0, MAX_SQUAD - gkList.length)];
     const players: Live[] = called.map((p) => ({ p, energy: 100, onCourt: false, sentOff: false, yellow: 0 }));
     for (const l of players) {
       names[l.p.id] = l.p.name;
@@ -80,12 +86,12 @@ export function simulateMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptio
       conceded[l.p.id] = 0;
     }
     const t: TeamState = {
-      setup, players, gk: null, court: [], flying: false, shortUntil: 0, shortCount: 0, lastRotation: 0,
+      setup, players, gk: null, court: [], flying: false, shortUntil: 0, shortCount: 0, lastRotation: 0, qIdx: 0,
       fouls: [0, 0, 0, 0, 0], timeoutUsed: [false, false, false], conceded: [],
     };
-    t.gk = players.find((l) => l.p.position === 'GR') ?? null;
+    t.gk = players.find((l) => l.p.id === tac.gk) ?? players.find((l) => l.p.position === 'GR') ?? null;
     if (t.gk) t.gk.onCourt = true;
-    t.court = chooseFour(t);
+    t.court = quintet(t, 0, 4);
     t.court.forEach((l) => (l.onCourt = true));
     return t;
   }
@@ -111,6 +117,22 @@ export function simulateMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptio
     return chosen;
   }
 
+  // Quinteto definido pelo treinador (completa com os melhores disponíveis se faltar alguém)
+  function quintet(t: TeamState, idx: 0 | 1, size: number): Live[] {
+    const ids = idx === 0 ? t.setup.tactics.q1 : t.setup.tactics.q2;
+    const chosen = ids
+      .map((id) => t.players.find((l) => l.p.id === id))
+      .filter((l): l is Live => !!l && !l.sentOff && l.energy > 45 && l !== t.gk);
+    if (chosen.length < size) {
+      const extra = chooseFour(t, chosen).filter((l) => !chosen.includes(l));
+      chosen.push(...extra.slice(0, size - chosen.length));
+    }
+    return chosen.slice(0, size);
+  }
+
+  const ROT = { curta: { min: 60, energy: 80, max: 180 }, normal: { min: 90, energy: 72, max: 300 }, longa: { min: 120, energy: 62, max: 420 } };
+  const PRESS_DRAIN = { alta: 1.15, media: 1, baixa: 0.92 };
+
   const eff = (l: Live, k: keyof A) => l.p.attrs[k] * (0.72 + 0.28 * (l.energy / 100));
   const avg = (ls: Live[], ks: (keyof A)[]) =>
     ls.length ? ls.reduce((s, l) => s + ks.reduce((a, k) => a + eff(l, k), 0) / ks.length, 0) / ls.length : 5;
@@ -129,7 +151,7 @@ export function simulateMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptio
         if (l.sentOff) continue;
         if (l.onCourt) {
           pstats[l.p.id].minutes += dt;
-          const drain = l.p.position === 'GR' ? 0.012 : 0.085 * (1.35 - l.p.attrs.resistencia / 25);
+          const drain = l.p.position === 'GR' ? 0.012 : 0.085 * (1.35 - l.p.attrs.resistencia / 25) * PRESS_DRAIN[t.setup.tactics.pressure];
           l.energy = Math.max(20, l.energy - drain * dt);
         } else {
           l.energy = Math.min(100, l.energy + 0.11 * dt);
@@ -148,12 +170,20 @@ export function simulateMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptio
     const t = teams[s];
     const avgEnergy = t.court.reduce((a, l) => a + l.energy, 0) / Math.max(1, t.court.length);
     const since = clock - t.lastRotation;
-    if (since < 90) return;
-    if (avgEnergy > 72 && since < 300) return;
+    const rot = ROT[t.setup.tactics.rotation];
+    if (since < rot.min) return;
+    if (avgEnergy > rot.energy && since < rot.max) return;
     const target = 4 - (clock < t.shortUntil ? t.shortCount : 0) + (t.flying ? 1 : 0);
     const out = t.court;
-    const fresh = t.players.filter((l) => !l.onCourt && !l.sentOff && l.p.position !== 'GR' && l.energy > 70).length;
-    const next = chooseFour(t, fresh >= 4 ? out : out.filter(() => r() < 0.6)).slice(0, Math.max(0, target));
+    const hasQuintets = t.setup.tactics.q1.length + t.setup.tactics.q2.length > 0;
+    let next: Live[];
+    if (hasQuintets) {
+      t.qIdx = t.qIdx === 0 ? 1 : 0;
+      next = quintet(t, t.qIdx, Math.max(0, target));
+    } else {
+      const fresh = t.players.filter((l) => !l.onCourt && !l.sentOff && l.p.position !== 'GR' && l.energy > 70).length;
+      next = chooseFour(t, fresh >= 4 ? out : out.filter(() => r() < 0.6)).slice(0, Math.max(0, target));
+    }
     // completa com os que estavam em campo se não houver suplentes suficientes
     while (next.length < target) {
       const extra = out.find((l) => !next.includes(l) && !l.sentOff);
@@ -175,12 +205,16 @@ export function simulateMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptio
     const diff = score[s] - score[1 - s];
     const remaining = periodStart + periodLen - clock;
     let want = false;
-    if (t.setup.flyingKeeper === 'sempre') want = true;
-    else if (t.setup.flyingKeeper === 'auto') {
-      const lastPeriod = period === 2 || period === 4;
+    const fk = t.setup.tactics.flyingKeeper;
+    const lastPeriod = period === 2 || period === 4;
+    const needWin = opts.needWin?.[s] ?? false;
+    if (fk === 'sempre') want = true;
+    else if (fk === 'auto') {
       want = lastPeriod && diff < 0 && diff >= -3 && remaining <= (diff === -1 ? 180 : 300);
-      // em eliminatórias, a perder no prolongamento: também
       if (opts.knockout && period === 4 && diff < 0 && remaining <= 150) want = true;
+    } else if (fk === 'agressivo') {
+      want = lastPeriod && diff < 0 && diff >= -4 && remaining <= (diff === -1 ? 300 : 420);
+      if (needWin && lastPeriod && diff === 0 && remaining <= 180) want = true;
     }
     if (want && !t.flying && t.gk) {
       const sub = t.players.filter((l) => !l.onCourt && !l.sentOff && l.p.position !== 'GR').sort((a, b) => eff(b, 'passe') + eff(b, 'decisoes') - eff(a, 'passe') - eff(a, 'decisoes'))[0];
@@ -314,7 +348,7 @@ export function simulateMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptio
 
     let pBlock = 0.24 + (defQ - finish) * 0.01;
     let pOn = 0.47 + (finish - 10) * 0.016 + (compo - 10) * 0.006;
-    let pGoal = 0.258 + (finish - gkQ) * 0.022;
+    let pGoal = 0.228 + (finish - gkQ) * 0.022;
     if (kind === 'contra') { pBlock *= 0.5; pOn += 0.08; pGoal += 0.1; }
     if (kind === 'livre10') { pBlock = 0; pOn = 0.72 + (finish - 10) * 0.015; pGoal = 0.42 + (finish - gkQ) * 0.025; }
     if (kind === 'penalti') { pBlock = 0; pOn = 0.86 + (compo - 10) * 0.01; pGoal = 0.78 + (finish - gkQ) * 0.02; }
@@ -322,7 +356,7 @@ export function simulateMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptio
     if (!gk) { pGoal = kind === 'baliza_aberta' ? 0.85 : 0.75; }
     if (kind === 'baliza_aberta') { pBlock = 0.08; pOn = 0.5 + (eff(shooter, 'remate') - 10) * 0.02; }
     const cl = (x: number, a: number, b: number) => Math.max(a, Math.min(b, x));
-    if (kind === 'jogada' || kind === 'contra' || kind === 'canto') pGoal *= form[s] * pace;
+    if (kind === 'jogada' || kind === 'contra' || kind === 'canto') pGoal *= form[s] * pace * TEMPO[att.setup.tactics.tempo].quality;
     pBlock = cl(pBlock, 0, 0.45); pOn = cl(pOn, 0.2, 0.95); pGoal = cl(pGoal, 0.06, 0.92);
 
     const how: Record<string, string> = {
@@ -389,6 +423,43 @@ export function simulateMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptio
     }
   }
 
+  const TEMPO = {
+    rapido: { dur: 0.8, lose: 0, quality: 0.98 },
+    equilibrado: { dur: 1, lose: 0, quality: 1 },
+    paciente: { dur: 1.2, lose: -0.01, quality: 1.02 },
+  };
+  const PRESS = {
+    alta: { lose: 0.05, foul: 0.03, counter: -0.05 },
+    media: { lose: 0, foul: 0, counter: 0 },
+    baixa: { lose: -0.04, foul: -0.02, counter: 0.1 },
+  };
+
+  // Efeito do sistema e da marcação, conforme os jogadores em campo
+  function tacticalMods(t: TeamState) {
+    const tac = t.setup.tactics;
+    const court = outfield(t);
+    let att = 0;
+    let def = 0;
+    const bestBy = (pos: string[], k: keyof A) => court.filter((l) => pos.includes(l.p.position)).sort((a, b) => eff(b, k) - eff(a, k))[0];
+    if (tac.system === '3-1') {
+      const piv = bestBy(['PIV', 'ALA/PIV'], 'jogoCostas');
+      att += piv ? (eff(piv, 'jogoCostas') - 11) * 0.18 : -0.6;
+    } else if (tac.system === '4-0') {
+      att += (avg(court, ['drible', 'decisoes', 'passe', 'aceleracao']) - 11) * 0.15 + 0.2;
+      def -= 0.4;
+    } else if (tac.system === '2-2') {
+      def += 0.6;
+      att -= 0.4;
+    } else if (tac.system === '1-2-1') {
+      const fix = bestBy(['FIX', 'FIX/ALA', 'UNI'], 'posicionamento');
+      def += fix ? (eff(fix, 'posicionamento') - 11) * 0.12 + 0.15 : -0.4;
+      att += 0.1;
+    }
+    if (tac.marking === 'individual') def += (avg(court, ['desarme', 'agressividade']) - 11) * 0.12;
+    else if (tac.marking === 'zona') def += (avg(court, ['posicionamento', 'concentracao']) - 11) * 0.12;
+    return { att, def };
+  }
+
   // Uma posse de bola
   function possession(s: Side, counter = false): { next: Side; counter: boolean } {
     const att = teams[s];
@@ -396,12 +467,17 @@ export function simulateMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptio
     const attQ = avg(outfield(att), ['passe', 'rececao', 'drible', 'decisoes', 'visao']);
     const defQ = avg(outfield(def), ['desarme', 'posicionamento', 'antecipacao', 'concentracao']);
     const press = avg(outfield(def), ['aceleracao', 'resistencia', 'trabalhoEquipa', 'agressividade']);
-    const numDiff = numbers(att) - numbers(def) + (att.flying ? 0 : 0);
+    const numDiff = numbers(att) - numbers(def);
     let diff = attQ - defQ * 0.85 - press * 0.15 + numDiff * 2.2;
     if (att.flying) diff += 1.5;
+    // táticas e treinadores
+    diff += tacticalMods(att).att - tacticalMods(def).def;
+    diff += (att.setup.coachTactical - 10) * 0.07 - (def.setup.coachTactical - 10) * 0.07;
+    const tempo = TEMPO[att.setup.tactics.tempo];
+    const dPress = def.setup.tactics.pressure;
     diff += s === 0 ? 2.2 : -0.7; // vantagem de jogar em casa
 
-    const dur = (counter ? 5 + r() * 8 : 12 + r() * 26) / pace;
+    const dur = ((counter ? 5 + r() * 8 : 12 + r() * 26) * (counter ? 1 : tempo.dur)) / pace;
     const periodEnd = periodStart + periodLen;
     const timeLeft = periodEnd - clock;
     const dt = Math.min(dur, timeLeft);
@@ -415,8 +491,8 @@ export function simulateMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptio
       return { next: (1 - s) as Side, counter: false };
     }
 
-    const pFoul = 0.15 + (avg(outfield(def), ['agressividade']) - 10) * 0.005;
-    const pLose = Math.max(0.18, Math.min(0.66, 0.4 - diff * 0.03 - (counter ? 0.15 : 0)));
+    const pFoul = 0.15 + (avg(outfield(def), ['agressividade']) - 10) * 0.005 + PRESS[dPress].foul + (def.setup.tactics.marking === 'individual' ? 0.02 : 0);
+    const pLose = Math.max(0.18, Math.min(0.66, 0.4 - diff * 0.03 - (counter ? 0.15 : 0) + PRESS[dPress].lose + tempo.lose));
     const roll = r();
     if (roll < pFoul) {
       foul(s);
@@ -432,9 +508,12 @@ export function simulateMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptio
         shot((1 - s) as Side, 'baliza_aberta', tackler);
         return { next: s, counter: false };
       }
-      return { next: (1 - s) as Side, counter: r() < 0.22 };
+      // quem defende recuado sai mais vezes em contra-ataque
+      return { next: (1 - s) as Side, counter: r() < 0.22 + PRESS[dPress].counter };
     }
-    shot(s, counter ? 'contra' : 'jogada');
+    // bater a pressão alta deixa espaço nas costas
+    const beatPress = dPress === 'alta' && r() < 0.09;
+    shot(s, counter || beatPress ? 'contra' : 'jogada');
     return { next: (1 - s) as Side, counter: false };
   }
 

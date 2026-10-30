@@ -1,5 +1,6 @@
 // Tipos do motor de jogo
 import type { Player } from '../types';
+import type { Tactics } from '../tactics';
 
 export type Side = 0 | 1; // 0 = casa, 1 = fora
 
@@ -7,9 +8,9 @@ export interface TeamSetup {
   clubId: string;
   name: string;
   shortName: string;
-  squad: Player[]; // até 14 convocados
-  // Instruções (as escolhas táticas completas entram na etapa 5)
-  flyingKeeper: 'nunca' | 'auto' | 'sempre';
+  squad: Player[]; // plantel (a convocatória de 14 é feita pelo motor)
+  tactics: Tactics;
+  coachTactical: number; // conhecimento tático do treinador, 1 a 20
 }
 
 export type EventType =
@@ -84,5 +85,6 @@ export interface MatchResult {
 
 export interface MatchOptions {
   knockout?: boolean; // prolongamento e penáltis em caso de empate
+  needWin?: [boolean, boolean]; // equipa precisa de ganhar (ex.: eliminatória a duas mãos)
   seed?: string;
 }

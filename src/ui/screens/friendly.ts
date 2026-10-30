@@ -2,10 +2,21 @@
 import { simulateMatch } from '../../core/engine/match';
 import type { MatchResult, TeamSetup } from '../../core/engine/types';
 import type { Club, GameState } from '../../core/types';
+import { aiTactics } from '../../core/coaches';
+import { tacticsSummary } from './tactics';
 
-const setupFor = (s: GameState, c: Club, fk: TeamSetup['flyingKeeper']): TeamSetup => ({
-  clubId: c.id, name: c.name, shortName: c.shortName, squad: s.players.filter((p) => p.clubId === c.id), flyingKeeper: fk,
-});
+// O teu clube usa as tuas táticas; os outros usam o estilo do respetivo treinador
+function setupFor(s: GameState, c: Club, myClubId: string): TeamSetup & { coachName: string } {
+  const squad = s.players.filter((p) => p.clubId === c.id);
+  if (c.id === myClubId) {
+    return { clubId: c.id, name: c.name, shortName: c.shortName, squad, tactics: s.tactics, coachTactical: 12, coachName: s.manager.name };
+  }
+  const coach = s.coaches.find((x) => x.clubId === c.id);
+  return {
+    clubId: c.id, name: c.name, shortName: c.shortName, squad, tactics: aiTactics(squad, c, coach),
+    coachTactical: coach?.tactical ?? 11, coachName: coach?.name ?? 'Treinador interino',
+  };
+}
 
 const ICON: Record<string, string> = {
   golo: '⚽', amarelo: '🟨', vermelho: '🟥', penalti: '❗', livre_10m: '❗', remate_defendido: '🧤', poste: '▮',
@@ -20,7 +31,6 @@ export function renderFriendly(content: HTMLElement, s: GameState, myClubId: str
     <div class="form-row">
       <label>Casa<select id="home">${clubs.map((c) => `<option value="${c.id}" ${c.id === myClubId ? 'selected' : ''}>${c.name}</option>`).join('')}</select></label>
       <label>Fora<select id="away">${clubs.map((c, i) => `<option value="${c.id}" ${c.id !== myClubId && i === (clubs[0].id === myClubId ? 1 : 0) ? 'selected' : ''}>${c.name}</option>`).join('')}</select></label>
-      <label>Guarda-redes avançado (casa)<select id="fk"><option value="auto">Automático</option><option value="nunca">Nunca</option><option value="sempre">Sempre</option></select></label>
       <label class="check"><input type="checkbox" id="ko" /> Jogo a eliminar</label>
       <button class="btn primary" id="play">Jogar</button>
     </div>
@@ -30,10 +40,13 @@ export function renderFriendly(content: HTMLElement, s: GameState, myClubId: str
     const h = s.clubs.find((c) => c.id === (content.querySelector('#home') as HTMLSelectElement).value)!;
     const a = s.clubs.find((c) => c.id === (content.querySelector('#away') as HTMLSelectElement).value)!;
     if (h === a) return alert('Escolhe duas equipas diferentes.');
-    const fk = (content.querySelector('#fk') as HTMLSelectElement).value as TeamSetup['flyingKeeper'];
     const ko = (content.querySelector('#ko') as HTMLInputElement).checked;
-    const m = simulateMatch(setupFor(s, h, fk), setupFor(s, a, 'auto'), { knockout: ko });
-    content.querySelector('#result')!.innerHTML = resultHtml(m, h, a);
+    const hs = setupFor(s, h, myClubId);
+    const as = setupFor(s, a, myClubId);
+    const m = simulateMatch(hs, as, { knockout: ko });
+    content.querySelector('#result')!.innerHTML =
+      `<div class="coaches small muted"><span>${hs.coachName} · ${tacticsSummary(hs.tactics)}</span><span>${as.coachName} · ${tacticsSummary(as.tactics)}</span></div>` +
+      resultHtml(m, h, a);
     content.querySelector('#all')?.addEventListener('change', (e) => {
       content.querySelectorAll<HTMLElement>('.ev.minor').forEach((el) => (el.style.display = (e.target as HTMLInputElement).checked ? '' : 'none'));
     });

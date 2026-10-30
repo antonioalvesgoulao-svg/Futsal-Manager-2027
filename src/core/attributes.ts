@@ -155,7 +155,7 @@ export function generateAttributes(p: Player, level: number, boost = 0, hints?: 
     if (p.age > 31 && PHYSICAL.includes(k)) v -= (p.age - 31) * 0.3;
     if (p.age > 27 && MENTAL.includes(k)) v += Math.min(2, (p.age - 27) * 0.25);
     if (p.age < 21 && MENTAL.includes(k)) v -= 1;
-    if (hints && (k === 'finalizacao' || k === 'remate')) v += Math.max(-2, Math.min(3, (hints.productivity - 1) * 2.2));
+    if (hints && (k === 'finalizacao' || k === 'remate')) v += Math.max(-2, Math.min(2, (hints.productivity - 1) * 1.5));
     if (hints && (k === 'resistencia' || k === 'trabalhoEquipa' || k === 'concentracao')) v += (hints.availability - 0.6) * 3;
     attrs[k] = clamp(v);
   }

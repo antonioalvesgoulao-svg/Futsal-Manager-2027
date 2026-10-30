@@ -13,6 +13,7 @@ export interface Club {
 }
 
 import type { Attributes } from './attributes';
+import type { Tactics } from './tactics';
 
 export type Position = 'GR' | 'FIX' | 'FIX/ALA' | 'ALA' | 'ALA/PIV' | 'PIV' | 'UNI';
 
@@ -41,6 +42,17 @@ export interface Manager {
   nationality: string;
 }
 
+export interface Coach {
+  id: string;
+  name: string;
+  clubId: string | null; // null = sem clube
+  tactical: number; // 1 a 20
+  motivation: number;
+  discipline: number;
+  youth: number;
+  style: Partial<Tactics>;
+}
+
 export interface GameState {
   version: number;
   createdAt: string;
@@ -51,6 +63,8 @@ export interface GameState {
   clubs: Club[];
   leagues: League[];
   players: Player[];
+  coaches: Coach[];
+  tactics: Tactics; // táticas do teu clube
 }
 
-export const SAVE_VERSION = 4;
+export const SAVE_VERSION = 5;

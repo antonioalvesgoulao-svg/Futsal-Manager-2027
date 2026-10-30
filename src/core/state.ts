@@ -6,6 +6,9 @@ import porOverrides from '../data/por/overrides.json';
 import { generateAttributes } from './attributes';
 import porHistory from '../data/por/history.json';
 import { computeMoneyball, SeasonRow } from './moneyball';
+import porCoaches from '../data/por/coaches.json';
+import { suggestTactics } from './tactics';
+import type { Coach } from './types';
 
 // Base de dados: cada liga é um ficheiro em src/data/<país>/clubs.json
 export const DB_CLUBS: Club[] = porData.clubs.map(({ check, ...c }) => ({ ...c, colors: c.colors as [string, string] }));
@@ -27,6 +30,7 @@ function buildPlayers(): Player[] {
   });
 }
 export const DB_PLAYERS: Player[] = buildPlayers();
+export const DB_COACHES: Coach[] = porCoaches.coaches as Coach[];
 export const DB_LEAGUES: League[] = [
   { ...porData.league, clubIds: porData.clubs.map((c) => c.id) },
 ];
@@ -59,6 +63,9 @@ export function newGame(managerName: string, nationality: string, clubId: string
     clubs: structuredClone(DB_CLUBS),
     leagues: structuredClone(DB_LEAGUES),
     players: structuredClone(DB_PLAYERS),
+    // o treinador real do clube escolhido fica sem clube
+    coaches: DB_COACHES.map((c) => ({ ...structuredClone(c), clubId: c.clubId === clubId ? null : c.clubId })),
+    tactics: suggestTactics(DB_PLAYERS.filter((p) => p.clubId === clubId)),
   };
 }
 

@@ -4,6 +4,7 @@ import { exportSave, saveToSlot, SLOTS } from '../../core/save';
 import { ATTR_GROUPS, overall, starsHtml } from '../../core/attributes';
 import type { Player } from '../../core/types';
 import { renderFriendly } from './friendly';
+import { renderTactics } from './tactics';
 import porHistory from '../../data/por/history.json';
 
 const HIST = porHistory.players as Record<string, { s: string; team: string; games: number; goals: number }[]>;
@@ -50,7 +51,7 @@ const SECTIONS: { id: string; label: string; stage: string }[] = [
   { id: 'inicio', label: 'Início', stage: '' },
   { id: 'plantel', label: 'Plantel', stage: '' },
   { id: 'amigavel', label: 'Jogo amigável', stage: '' },
-  { id: 'taticas', label: 'Táticas', stage: 'Etapa 5' },
+  { id: 'taticas', label: 'Táticas', stage: '' },
   { id: 'calendario', label: 'Calendário', stage: 'Etapa 6' },
   { id: 'competicoes', label: 'Competições', stage: 'Etapa 6' },
   { id: 'treino', label: 'Treino', stage: 'Etapa 9' },
@@ -114,6 +115,8 @@ export function homeScreen(root: HTMLElement) {
           <tr><th>Época</th><td>${s!.season}</td></tr>
         </table>
         <p class="muted">Usa "Continuar" para avançar no calendário.</p>`;
+    } else if (section === 'taticas') {
+      renderTactics(content, s!, club.id);
     } else if (section === 'amigavel') {
       renderFriendly(content, s!, club.id);
     } else if (section === 'plantel' && playerId) {

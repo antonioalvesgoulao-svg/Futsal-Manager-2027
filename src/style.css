@@ -87,3 +87,10 @@ input, select { background: var(--bg); color: var(--text); border: 1px solid var
 .ev.goal { background: #1d2a1f; font-weight: 600; }
 .ev.minor { color: var(--muted); }
 @media (max-width: 800px) { .match-grid { grid-template-columns: 1fr; } }
+
+.tac-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-bottom: 20px; }
+.tac-grid label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--muted); }
+.qrow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 8px; }
+.qrow b { width: 110px; font-size: 13px; }
+.qrow select { min-width: 170px; }
+.coaches { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
