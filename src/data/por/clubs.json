@@ -19,7 +19,8 @@
       ],
       "reputation": 96,
       "check": [],
-      "level": 94
+      "level": 95,
+      "wealth": 92
     },
     {
       "id": "slb",
@@ -33,7 +34,8 @@
       ],
       "reputation": 93,
       "check": [],
-      "level": 95
+      "level": 94,
+      "wealth": 98
     },
     {
       "id": "scb",
@@ -49,7 +51,8 @@
       "check": [
         "arena"
       ],
-      "level": 82
+      "level": 82,
+      "wealth": 75
     },
     {
       "id": "fun",
@@ -65,7 +68,8 @@
       "check": [
         "colors"
       ],
-      "level": 72
+      "level": 72,
+      "wealth": 40
     },
     {
       "id": "lps",
@@ -81,7 +85,8 @@
       "check": [
         "colors"
       ],
-      "level": 70
+      "level": 70,
+      "wealth": 35
     },
     {
       "id": "fzz",
@@ -98,7 +103,8 @@
         "arena",
         "colors"
       ],
-      "level": 60
+      "level": 60,
+      "wealth": 30
     },
     {
       "id": "ele",
@@ -114,7 +120,8 @@
       "check": [
         "colors"
       ],
-      "level": 66
+      "level": 66,
+      "wealth": 35
     },
     {
       "id": "rav",
@@ -130,7 +137,8 @@
       "check": [
         "arena"
       ],
-      "level": 64
+      "level": 64,
+      "wealth": 55
     },
     {
       "id": "uvn",
@@ -148,7 +156,8 @@
         "colors",
         "city"
       ],
-      "level": 58
+      "level": 58,
+      "wealth": 30
     },
     {
       "id": "por",
@@ -162,7 +171,8 @@
       ],
       "reputation": 63,
       "check": [],
-      "level": 63
+      "level": 63,
+      "wealth": 50
     },
     {
       "id": "fam",
@@ -178,7 +188,8 @@
       "check": [
         "arena"
       ],
-      "level": 60
+      "level": 60,
+      "wealth": 55
     },
     {
       "id": "tor",
@@ -192,8 +203,9 @@
       ],
       "reputation": 62,
       "check": [],
-      "level": 62
+      "level": 62,
+      "wealth": 45
     }
   ],
-  "_info": "reputation: prestígio (história, títulos, Europa), escala MUNDIAL 1-100. level: qualidade atual do plantel, escala MUNDIAL 1-100, usada para gerar atributos."
+  "_info": "Escalas MUNDIAIS 1-100. reputation: prestígio no futsal (títulos, Europa). level: qualidade atual do plantel (gera atributos). wealth: poder financeiro e dimensão do clube (contratações, salários, orçamento)."
 }

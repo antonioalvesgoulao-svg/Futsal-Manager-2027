@@ -9,6 +9,7 @@ export interface Club {
   arena: string;
   reputation: number; // prestígio, 1 a 100 (escala mundial)
   level: number; // qualidade atual do plantel, 1 a 100 (escala mundial)
+  wealth: number; // poder financeiro e dimensão do clube, 1 a 100 (escala mundial)
 }
 
 import type { Attributes } from './attributes';
