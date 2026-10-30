@@ -2,7 +2,7 @@
   "_info": "Ajustes manuais ao nível dos jogadores. boost entre -3 e +3 (cada ponto sobe cerca de 1 em todos os atributos). Estimativas iniciais: rever à vontade.",
   "boost": {
     "scp|Zicky Té": 2,
-    "scp|Bernardo Paçó": 1.5,
+    "scp|Bernardo Paçó": 2.5,
     "scp|Tomás Paçó": 1.5,
     "scp|Erick Mendonça": 1.5,
     "scp|Ivan Chishkala": 1.5,
@@ -17,7 +17,8 @@
     "slb|Lúcio Rocha": 1,
     "slb|Léo Gugiel": 1,
     "scb|Tiago Brito": 1.5,
-    "scb|Willian Carioca": 1
+    "scb|Willian Carioca": 1,
+    "scp|Bruno Pinto": 2.5
   },
   "attrs": {}
 }

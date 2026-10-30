@@ -116,8 +116,8 @@ export function gauss(r: () => number) {
 function ageOffset(age: number) {
   if (age <= 17) return -3.5;
   if (age < 24) return -3.5 + (age - 17) * 0.5;
-  if (age <= 31) return 0;
-  return -Math.min(3, (age - 31) * 0.45);
+  if (age <= 32) return 0;
+  return -Math.min(3, (age - 32) * 0.35);
 }
 
 const clamp = (v: number) => Math.max(1, Math.min(20, Math.round(v)));
@@ -146,7 +146,7 @@ export function generateAttributes(p: Player, clubReputation: number, boost = 0)
   for (const k of ALL_ATTRS) {
     let v = base + (profile[k] ?? 0) + gauss(r) * 1.4;
     if (outfield && GK.includes(k)) v = 1 + r() * 4;
-    if (p.age > 30 && PHYSICAL.includes(k)) v -= (p.age - 30) * 0.35;
+    if (p.age > 31 && PHYSICAL.includes(k)) v -= (p.age - 31) * 0.3;
     if (p.age > 27 && MENTAL.includes(k)) v += Math.min(2, (p.age - 27) * 0.25);
     if (p.age < 21 && MENTAL.includes(k)) v -= 1;
     attrs[k] = clamp(v);

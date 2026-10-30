@@ -53,11 +53,11 @@ export function simulateMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptio
   const tstats: [TeamStats, TeamStats] = [newTeamStats(), newTeamStats()];
   const conceded: Record<string, number> = {};
 
-  const teams = [home, away].map((setup) => buildTeam(setup)) as [TeamState, TeamState];
   let clock = 0; // segundos absolutos de jogo
   let period = 1;
   let periodStart = 0;
   let periodLen = HALF;
+  const teams = [home, away].map((setup) => buildTeam(setup)) as [TeamState, TeamState];
 
   function newTeamStats(): TeamStats {
     return { possession: 0, shots: 0, onTarget: 0, corners: 0, fouls: 0, foulsByPeriod: [0, 0, 0, 0, 0], yellow: 0, red: 0, timeouts: [] };
@@ -88,7 +88,9 @@ export function simulateMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptio
   // Escolhe 4 jogadores de campo: um defensivo, um pivô e dois alas, pelos que estão mais frescos e melhores
   function chooseFour(t: TeamState, exclude: Live[] = []): Live[] {
     const avail = t.players.filter((l) => !l.sentOff && l.p.position !== 'GR' && !exclude.includes(l));
-    const value = (l: Live) => overall(l.p.attrs, l.p.position) * (0.55 + 0.45 * (l.energy / 100));
+    // penaliza ligeiramente quem já jogou muito, para a IA rodar 9 a 10 jogadores como no futsal real
+    const share = (l: Live) => (clock > 120 ? pstats[l.p.id].minutes / clock : 0);
+    const value = (l: Live) => overall(l.p.attrs, l.p.position) * (0.3 + 0.7 * (l.energy / 100)) * (1 - 0.3 * share(l));
     const take = (pred: (l: Live) => boolean, chosen: Live[]) => {
       const c = avail.filter((l) => pred(l) && !chosen.includes(l)).sort((a, b) => value(b) - value(a))[0];
       if (c) chosen.push(c);
@@ -145,7 +147,8 @@ export function simulateMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptio
     if (avgEnergy > 72 && since < 300) return;
     const target = 4 - (clock < t.shortUntil ? t.shortCount : 0) + (t.flying ? 1 : 0);
     const out = t.court;
-    const next = chooseFour(t, out.filter(() => r() < 0.85)).slice(0, Math.max(0, target));
+    const fresh = t.players.filter((l) => !l.onCourt && !l.sentOff && l.p.position !== 'GR' && l.energy > 70).length;
+    const next = chooseFour(t, fresh >= 4 ? out : out.filter(() => r() < 0.6)).slice(0, Math.max(0, target));
     // completa com os que estavam em campo se não houver suplentes suficientes
     while (next.length < target) {
       const extra = out.find((l) => !next.includes(l) && !l.sentOff);
@@ -284,8 +287,8 @@ export function simulateMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptio
 
   // Escolhas de jogadores
   const shooterWeight = (l: Live) => {
-    const posW: Record<string, number> = { PIV: 1.6, 'ALA/PIV': 1.4, ALA: 1.2, UNI: 1, 'FIX/ALA': 0.8, FIX: 0.6, GR: 0.1 };
-    return (eff(l, 'finalizacao') + eff(l, 'remate')) * (posW[l.p.position] ?? 1);
+    const posW: Record<string, number> = { PIV: 1.3, 'ALA/PIV': 1.25, ALA: 1.15, UNI: 1, 'FIX/ALA': 0.85, FIX: 0.7, GR: 0.1 };
+    return (14 + eff(l, 'finalizacao') + eff(l, 'remate')) * (posW[l.p.position] ?? 1);
   };
   const best = (ls: Live[], f: (l: Live) => number) => [...ls].sort((a, b) => f(b) - f(a))[0];
 
@@ -306,7 +309,7 @@ export function simulateMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptio
 
     let pBlock = 0.24 + (defQ - finish) * 0.01;
     let pOn = 0.47 + (finish - 10) * 0.016 + (compo - 10) * 0.006;
-    let pGoal = 0.25 + (finish - gkQ) * 0.022;
+    let pGoal = 0.24 + (finish - gkQ) * 0.022;
     if (kind === 'contra') { pBlock *= 0.5; pOn += 0.08; pGoal += 0.1; }
     if (kind === 'livre10') { pBlock = 0; pOn = 0.72 + (finish - 10) * 0.015; pGoal = 0.42 + (finish - gkQ) * 0.025; }
     if (kind === 'penalti') { pBlock = 0; pOn = 0.86 + (compo - 10) * 0.01; pGoal = 0.78 + (finish - gkQ) * 0.02; }
@@ -390,7 +393,7 @@ export function simulateMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptio
     const numDiff = numbers(att) - numbers(def) + (att.flying ? 0 : 0);
     let diff = attQ - defQ * 0.85 - press * 0.15 + numDiff * 2.2;
     if (att.flying) diff += 1.5;
-    diff += s === 0 ? 0.6 : -0.2; // vantagem de jogar em casa
+    diff += s === 0 ? 1.6 : -0.5; // vantagem de jogar em casa
 
     const dur = counter ? 5 + r() * 8 : 12 + r() * 26;
     const periodEnd = periodStart + periodLen;
