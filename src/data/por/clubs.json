@@ -1,17 +1,187 @@
 {
-  "league": { "id": "por1", "name": "Liga Placard", "country": "Portugal", "season": "2026/27", "teams": 12 },
+  "league": {
+    "id": "por1",
+    "name": "Liga Placard",
+    "country": "Portugal",
+    "season": "2026/27",
+    "teams": 12
+  },
   "clubs": [
-    { "id": "scp", "name": "Sporting CP", "shortName": "SCP", "city": "Lisboa", "arena": "Pavilhão João Rocha", "colors": ["#00804a", "#ffffff"], "reputation": 95, "check": [] },
-    { "id": "slb", "name": "SL Benfica", "shortName": "SLB", "city": "Lisboa", "arena": "Pavilhão Fidelidade", "colors": ["#e30613", "#ffffff"], "reputation": 92, "check": [] },
-    { "id": "scb", "name": "SC Braga", "shortName": "SCB", "city": "Braga", "arena": "Pavilhão Desportivo Universitário de Gualtar", "colors": ["#d71920", "#ffffff"], "reputation": 82, "check": ["arena"] },
-    { "id": "fun", "name": "AD Fundão", "shortName": "ADF", "city": "Fundão", "arena": "Pavilhão Municipal do Fundão", "colors": ["#1f3c88", "#ffffff"], "reputation": 72, "check": ["colors"] },
-    { "id": "lps", "name": "Leões de Porto Salvo", "shortName": "LPS", "city": "Porto Salvo", "arena": "Pavilhão dos Leões de Porto Salvo", "colors": ["#0b7a3b", "#ffffff"], "reputation": 70, "check": ["colors"] },
-    { "id": "fzz", "name": "SC Ferreira do Zêzere/Zêzerovo", "shortName": "FZZ", "city": "Ferreira do Zêzere", "arena": "Pavilhão Municipal de Ferreira do Zêzere", "colors": ["#1d4ed8", "#ffffff"], "reputation": 60, "check": ["arena", "colors"] },
-    { "id": "ele", "name": "Eléctrico FC", "shortName": "EFC", "city": "Ponte de Sor", "arena": "Pavilhão Gimnodesportivo de Ponte de Sor", "colors": ["#c8102e", "#ffffff"], "reputation": 66, "check": ["colors"] },
-    { "id": "rav", "name": "Rio Ave FC", "shortName": "RAV", "city": "Vila do Conde", "arena": "Pavilhão Municipal de Vila do Conde", "colors": ["#00843d", "#ffffff"], "reputation": 64, "check": ["arena"] },
-    { "id": "uvn", "name": "UP Venda Nova", "shortName": "UVN", "city": "Venda Nova", "arena": "Pavilhão da Venda Nova", "colors": ["#1e3a8a", "#facc15"], "reputation": 58, "check": ["arena", "colors", "city"] },
-    { "id": "por", "name": "Portimonense SC", "shortName": "PSC", "city": "Portimão", "arena": "Pavilhão Gimnodesportivo de Portimão", "colors": ["#111111", "#ffffff"], "reputation": 63, "check": [] },
-    { "id": "fam", "name": "FC Famalicão", "shortName": "FCF", "city": "Vila Nova de Famalicão", "arena": "Pavilhão Municipal de Famalicão", "colors": ["#1c3f94", "#ffffff"], "reputation": 60, "check": ["arena"] },
-    { "id": "tor", "name": "SCU Torreense", "shortName": "SCU", "city": "Torres Vedras", "arena": "Pavilhão Física de Torres Vedras", "colors": ["#1f4e9c", "#ffffff"], "reputation": 62, "check": [] }
-  ]
+    {
+      "id": "scp",
+      "name": "Sporting CP",
+      "shortName": "SCP",
+      "city": "Lisboa",
+      "arena": "Pavilhão João Rocha",
+      "colors": [
+        "#00804a",
+        "#ffffff"
+      ],
+      "reputation": 94,
+      "check": []
+    },
+    {
+      "id": "slb",
+      "name": "SL Benfica",
+      "shortName": "SLB",
+      "city": "Lisboa",
+      "arena": "Pavilhão Fidelidade",
+      "colors": [
+        "#e30613",
+        "#ffffff"
+      ],
+      "reputation": 95,
+      "check": []
+    },
+    {
+      "id": "scb",
+      "name": "SC Braga",
+      "shortName": "SCB",
+      "city": "Braga",
+      "arena": "Pavilhão Desportivo Universitário de Gualtar",
+      "colors": [
+        "#d71920",
+        "#ffffff"
+      ],
+      "reputation": 82,
+      "check": [
+        "arena"
+      ]
+    },
+    {
+      "id": "fun",
+      "name": "AD Fundão",
+      "shortName": "ADF",
+      "city": "Fundão",
+      "arena": "Pavilhão Municipal do Fundão",
+      "colors": [
+        "#1f3c88",
+        "#ffffff"
+      ],
+      "reputation": 72,
+      "check": [
+        "colors"
+      ]
+    },
+    {
+      "id": "lps",
+      "name": "Leões de Porto Salvo",
+      "shortName": "LPS",
+      "city": "Porto Salvo",
+      "arena": "Pavilhão dos Leões de Porto Salvo",
+      "colors": [
+        "#0b7a3b",
+        "#ffffff"
+      ],
+      "reputation": 70,
+      "check": [
+        "colors"
+      ]
+    },
+    {
+      "id": "fzz",
+      "name": "SC Ferreira do Zêzere/Zêzerovo",
+      "shortName": "FZZ",
+      "city": "Ferreira do Zêzere",
+      "arena": "Pavilhão Municipal de Ferreira do Zêzere",
+      "colors": [
+        "#1d4ed8",
+        "#ffffff"
+      ],
+      "reputation": 60,
+      "check": [
+        "arena",
+        "colors"
+      ]
+    },
+    {
+      "id": "ele",
+      "name": "Eléctrico FC",
+      "shortName": "EFC",
+      "city": "Ponte de Sor",
+      "arena": "Pavilhão Gimnodesportivo de Ponte de Sor",
+      "colors": [
+        "#c8102e",
+        "#ffffff"
+      ],
+      "reputation": 66,
+      "check": [
+        "colors"
+      ]
+    },
+    {
+      "id": "rav",
+      "name": "Rio Ave FC",
+      "shortName": "RAV",
+      "city": "Vila do Conde",
+      "arena": "Pavilhão Municipal de Vila do Conde",
+      "colors": [
+        "#00843d",
+        "#ffffff"
+      ],
+      "reputation": 64,
+      "check": [
+        "arena"
+      ]
+    },
+    {
+      "id": "uvn",
+      "name": "UP Venda Nova",
+      "shortName": "UVN",
+      "city": "Venda Nova",
+      "arena": "Pavilhão da Venda Nova",
+      "colors": [
+        "#1e3a8a",
+        "#facc15"
+      ],
+      "reputation": 58,
+      "check": [
+        "arena",
+        "colors",
+        "city"
+      ]
+    },
+    {
+      "id": "por",
+      "name": "Portimonense SC",
+      "shortName": "PSC",
+      "city": "Portimão",
+      "arena": "Pavilhão Gimnodesportivo de Portimão",
+      "colors": [
+        "#111111",
+        "#ffffff"
+      ],
+      "reputation": 63,
+      "check": []
+    },
+    {
+      "id": "fam",
+      "name": "FC Famalicão",
+      "shortName": "FCF",
+      "city": "Vila Nova de Famalicão",
+      "arena": "Pavilhão Municipal de Famalicão",
+      "colors": [
+        "#1c3f94",
+        "#ffffff"
+      ],
+      "reputation": 60,
+      "check": [
+        "arena"
+      ]
+    },
+    {
+      "id": "tor",
+      "name": "SCU Torreense",
+      "shortName": "SCU",
+      "city": "Torres Vedras",
+      "arena": "Pavilhão Física de Torres Vedras",
+      "colors": [
+        "#1f4e9c",
+        "#ffffff"
+      ],
+      "reputation": 62,
+      "check": []
+    }
+  ],
+  "_info": "reputation: escala MUNDIAL de 1 a 100, comum a todas as ligas (ex.: topo europeu 90+, ligas medianas 50-70)."
 }
