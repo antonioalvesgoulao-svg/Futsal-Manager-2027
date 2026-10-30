@@ -722,7 +722,7 @@
    "clubId": "lps",
    "name": "Diego Gabriel",
    "position": "FIX/ALA",
-   "number": 53,
+   "number": 27,
    "age": 16,
    "nationality": "Portugal"
   },
@@ -731,7 +731,7 @@
    "clubId": "lps",
    "name": "Simão Fernandes",
    "position": "ALA",
-   "number": null,
+   "number": 78,
    "age": 18,
    "nationality": "Portugal"
   },
@@ -740,7 +740,7 @@
    "clubId": "lps",
    "name": "Fábio Paulo",
    "position": "ALA",
-   "number": null,
+   "number": 23,
    "age": 18,
    "nationality": "Portugal"
   },
@@ -749,7 +749,7 @@
    "clubId": "lps",
    "name": "João Marçal",
    "position": "ALA",
-   "number": null,
+   "number": 3,
    "age": 18,
    "nationality": "Portugal"
   },
@@ -1262,7 +1262,7 @@
    "clubId": "uvn",
    "name": "Afonso Silva",
    "position": "GR",
-   "number": null,
+   "number": 31,
    "age": 17,
    "nationality": "Portugal"
   },
@@ -1316,7 +1316,7 @@
    "clubId": "uvn",
    "name": "David Tavares",
    "position": "FIX",
-   "number": null,
+   "number": 59,
    "age": 18,
    "nationality": "Portugal"
   },
@@ -1415,7 +1415,7 @@
    "clubId": "uvn",
    "name": "Gerson Sanches",
    "position": "ALA",
-   "number": 7,
+   "number": 70,
    "age": 27,
    "nationality": "Cabo Verde"
   },
@@ -1442,7 +1442,7 @@
    "clubId": "por",
    "name": "André Vieira",
    "position": "GR",
-   "number": null,
+   "number": 13,
    "age": 24,
    "nationality": "Portugal"
   },
@@ -1469,7 +1469,7 @@
    "clubId": "por",
    "name": "Tiago Marques",
    "position": "GR",
-   "number": 24,
+   "number": 31,
    "age": 16,
    "nationality": "Portugal"
   },
@@ -1550,7 +1550,7 @@
    "clubId": "por",
    "name": "João Alves",
    "position": "ALA",
-   "number": 88,
+   "number": 37,
    "age": 23,
    "nationality": "Portugal"
   },
@@ -1559,7 +1559,7 @@
    "clubId": "por",
    "name": "Santi",
    "position": "ALA",
-   "number": 18,
+   "number": 60,
    "age": 18,
    "nationality": "Portugal"
   },
@@ -1667,7 +1667,7 @@
    "clubId": "fam",
    "name": "Afonso Vieira",
    "position": "ALA",
-   "number": 6,
+   "number": 93,
    "age": 19,
    "nationality": "Portugal"
   },
