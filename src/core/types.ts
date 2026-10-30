@@ -10,6 +10,18 @@ export interface Club {
   reputation: number; // 1 a 100
 }
 
+export type Position = 'GR' | 'FIX' | 'FIX/ALA' | 'ALA' | 'ALA/PIV' | 'PIV' | 'UNI';
+
+export interface Player {
+  id: string;
+  clubId: string;
+  name: string;
+  position: Position;
+  number: number | null;
+  age: number;
+  nationality: string;
+}
+
 export interface League {
   id: string;
   name: string;
@@ -32,6 +44,7 @@ export interface GameState {
   date: string; // data atual do jogo (ISO)
   clubs: Club[];
   leagues: League[];
+  players: Player[];
 }
 
-export const SAVE_VERSION = 2;
+export const SAVE_VERSION = 3;

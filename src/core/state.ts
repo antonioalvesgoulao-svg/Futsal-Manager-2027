@@ -1,9 +1,11 @@
-import { Club, GameState, League, SAVE_VERSION } from './types';
+import { Club, GameState, League, Player, SAVE_VERSION } from './types';
 
 import porData from '../data/por/clubs.json';
+import porPlayers from '../data/por/players.json';
 
 // Base de dados: cada liga é um ficheiro em src/data/<país>/clubs.json
 export const DB_CLUBS: Club[] = porData.clubs.map(({ check, ...c }) => ({ ...c, colors: c.colors as [string, string] }));
+export const DB_PLAYERS: Player[] = porPlayers.players as Player[];
 export const DB_LEAGUES: League[] = [
   { ...porData.league, clubIds: porData.clubs.map((c) => c.id) },
 ];
@@ -35,6 +37,7 @@ export function newGame(managerName: string, nationality: string, clubId: string
     date: '2026-07-01',
     clubs: structuredClone(DB_CLUBS),
     leagues: structuredClone(DB_LEAGUES),
+    players: structuredClone(DB_PLAYERS),
   };
 }
 

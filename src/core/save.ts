@@ -75,7 +75,7 @@ export async function importSave(file: File): Promise<GameState> {
 function migrate(s: GameState): GameState {
   if (!s || typeof s !== 'object' || !s.manager) throw new Error('Ficheiro inválido');
   if (s.version > SAVE_VERSION) throw new Error('Save de uma versão mais recente do jogo');
-  if (s.version < 2) throw new Error('Save da etapa 1 (clubes de teste). Começa um jogo novo.');
+  if (s.version < 3) throw new Error('Save de uma etapa anterior. Começa um jogo novo.');
   s.version = SAVE_VERSION;
   return s;
 }

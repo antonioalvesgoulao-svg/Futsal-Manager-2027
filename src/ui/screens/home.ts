@@ -5,7 +5,7 @@ import { exportSave, saveToSlot, SLOTS } from '../../core/save';
 // Secções do jogo. As que ainda não existem mostram a etapa em que entram.
 const SECTIONS: { id: string; label: string; stage: string }[] = [
   { id: 'inicio', label: 'Início', stage: '' },
-  { id: 'plantel', label: 'Plantel', stage: 'Etapa 3' },
+  { id: 'plantel', label: 'Plantel', stage: '' },
   { id: 'taticas', label: 'Táticas', stage: 'Etapa 5' },
   { id: 'calendario', label: 'Calendário', stage: 'Etapa 6' },
   { id: 'competicoes', label: 'Competições', stage: 'Etapa 6' },
@@ -67,6 +67,20 @@ export function homeScreen(root: HTMLElement) {
           <tr><th>Época</th><td>${s!.season}</td></tr>
         </table>
         <p class="muted">Usa "Continuar" para avançar no calendário.</p>`;
+    } else if (section === 'plantel') {
+      const order = ['GR', 'FIX', 'FIX/ALA', 'UNI', 'ALA', 'ALA/PIV', 'PIV'];
+      const squad = s!.players
+        .filter((p) => p.clubId === club.id)
+        .sort((a, b) => order.indexOf(a.position) - order.indexOf(b.position) || (a.number ?? 99) - (b.number ?? 99));
+      content.innerHTML = `
+        <h2>Plantel <span class="muted small">${squad.length} jogadores</span></h2>
+        <table class="tbl">
+          <thead><tr><th>Nº</th><th>Nome</th><th>Posição</th><th>Idade</th><th>Nacionalidade</th></tr></thead>
+          <tbody>${squad
+            .map((p) => `<tr><td>${p.number ?? '-'}</td><td>${p.name}</td><td>${p.position}</td><td>${p.age}</td><td>${p.nationality}</td></tr>`)
+            .join('')}</tbody>
+        </table>
+        <p class="muted small">Atributos na etapa 3.</p>`;
     } else {
       content.innerHTML = `<h2>${sec.label}</h2><div class="empty">Disponível na ${sec.stage}.</div>`;
     }
