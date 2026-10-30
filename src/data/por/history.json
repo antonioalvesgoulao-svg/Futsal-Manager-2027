@@ -1,0 +1,7390 @@
+{
+"source": "zerozero.pt (historial de carreira, todas as competições), recolhido a 30/10/2026",
+"seasons": "21=2021/22 ... 26=2026/27 (em curso)",
+"players": {
+"scp01": [
+{
+"s": "26",
+"team": "Sporting",
+"games": 1,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Sporting",
+"games": 20,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Sporting",
+"games": 10,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Sporting",
+"games": 16,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Sporting",
+"games": 11,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Sporting",
+"games": 14,
+"goals": 2
+}
+],
+"scp02": [
+{
+"s": "26",
+"team": "Sporting",
+"games": 9,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Sporting",
+"games": 43,
+"goals": 5
+},
+{
+"s": "24",
+"team": "Sporting",
+"games": 37,
+"goals": 3
+},
+{
+"s": "23",
+"team": "Sporting",
+"games": 20,
+"goals": 3
+},
+{
+"s": "22",
+"team": "Sporting",
+"games": 27,
+"goals": 1
+},
+{
+"s": "21",
+"team": "Sporting",
+"games": 24,
+"goals": 1
+}
+],
+"scp03": [
+{
+"s": "26",
+"team": "Sporting",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "HIT Kiev",
+"games": 7,
+"goals": 3
+},
+{
+"s": "24",
+"team": "HIT Kiev",
+"games": 3,
+"goals": 0
+},
+{
+"s": "23",
+"team": "HIT Kiev",
+"games": 6,
+"goals": 2
+},
+{
+"s": "22",
+"team": "HIT Kiev",
+"games": 0,
+"goals": 0
+},
+{
+"s": "21",
+"team": "HIT Kiev",
+"games": 0,
+"goals": 0
+}
+],
+"scp04": [
+{
+"s": "26",
+"team": "Sporting",
+"games": 9,
+"goals": 7
+},
+{
+"s": "25",
+"team": "Sporting",
+"games": 44,
+"goals": 43
+},
+{
+"s": "24",
+"team": "Sporting",
+"games": 31,
+"goals": 15
+},
+{
+"s": "23",
+"team": "Sporting",
+"games": 39,
+"goals": 23
+},
+{
+"s": "22",
+"team": "Sporting",
+"games": 40,
+"goals": 17
+},
+{
+"s": "21",
+"team": "Sporting",
+"games": 41,
+"goals": 12
+}
+],
+"scp05": [
+{
+"s": "26",
+"team": "Sporting",
+"games": 9,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Sporting",
+"games": 38,
+"goals": 7
+},
+{
+"s": "24",
+"team": "Leões Porto Salvo",
+"games": 32,
+"goals": 3
+},
+{
+"s": "23",
+"team": "Leões Porto Salvo",
+"games": 27,
+"goals": 5
+},
+{
+"s": "22",
+"team": "Sporting",
+"games": 32,
+"goals": 26
+},
+{
+"s": "21",
+"team": "Sporting",
+"games": 6,
+"goals": 0
+}
+],
+"scp06": [
+{
+"s": "26",
+"team": "Sporting",
+"games": 10,
+"goals": 6
+},
+{
+"s": "25",
+"team": "Sporting",
+"games": 47,
+"goals": 14
+},
+{
+"s": "24",
+"team": "Sporting",
+"games": 50,
+"goals": 17
+},
+{
+"s": "23",
+"team": "Sporting",
+"games": 46,
+"goals": 8
+},
+{
+"s": "22",
+"team": "Leões Porto Salvo",
+"games": 30,
+"goals": 7
+},
+{
+"s": "21",
+"team": "Leões Porto Salvo",
+"games": 31,
+"goals": 10
+}
+],
+"scp07": [
+{
+"s": "26",
+"team": "Sporting",
+"games": 3,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Barcelona",
+"games": 36,
+"goals": 6
+},
+{
+"s": "24",
+"team": "Barcelona",
+"games": 37,
+"goals": 8
+},
+{
+"s": "23",
+"team": "Barcelona",
+"games": 51,
+"goals": 9
+},
+{
+"s": "22",
+"team": "Sporting",
+"games": 42,
+"goals": 7
+},
+{
+"s": "21",
+"team": "Sporting",
+"games": 37,
+"goals": 13
+}
+],
+"scp08": [
+{
+"s": "26",
+"team": "Sporting",
+"games": 8,
+"goals": 2
+},
+{
+"s": "25",
+"team": "Sporting",
+"games": 45,
+"goals": 36
+},
+{
+"s": "24",
+"team": "Sporting",
+"games": 47,
+"goals": 16
+},
+{
+"s": "23",
+"team": "Sporting",
+"games": 36,
+"goals": 15
+},
+{
+"s": "22",
+"team": "Sporting",
+"games": 33,
+"goals": 12
+},
+{
+"s": "21",
+"team": "ETB Calviá",
+"games": 10,
+"goals": 5
+}
+],
+"scp09": [
+{
+"s": "26",
+"team": "Sporting",
+"games": 10,
+"goals": 5
+},
+{
+"s": "25",
+"team": "Leões Porto Salvo",
+"games": 30,
+"goals": 14
+},
+{
+"s": "24",
+"team": "Leões Porto Salvo",
+"games": 29,
+"goals": 8
+},
+{
+"s": "23",
+"team": "Leões Porto Salvo",
+"games": 7,
+"goals": 1
+},
+{
+"s": "22",
+"team": "ADCR Caxinas Poça Barca",
+"games": 27,
+"goals": 6
+},
+{
+"s": "21",
+"team": "ADCR Caxinas Poça Barca",
+"games": 37,
+"goals": 20
+}
+],
+"scp10": [
+{
+"s": "26",
+"team": "Sporting",
+"games": 4,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Sporting",
+"games": 23,
+"goals": 5
+},
+{
+"s": "24",
+"team": "Benfica",
+"games": 31,
+"goals": 27
+},
+{
+"s": "23",
+"team": "Benfica",
+"games": 34,
+"goals": 10
+},
+{
+"s": "22",
+"team": "Benfica",
+"games": 40,
+"goals": 20
+},
+{
+"s": "21",
+"team": "Benfica",
+"games": 44,
+"goals": 34
+}
+],
+"scp11": [
+{
+"s": "26",
+"team": "Sporting",
+"games": 4,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Sporting",
+"games": 13,
+"goals": 4
+},
+{
+"s": "24",
+"team": "Sporting",
+"games": 2,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Sporting",
+"games": 20,
+"goals": 17
+},
+{
+"s": "22",
+"team": "Sporting",
+"games": 1,
+"goals": 1
+},
+{
+"s": "21",
+"team": "Sporting",
+"games": 2,
+"goals": 0
+}
+],
+"scp12": [
+{
+"s": "26",
+"team": "Sporting",
+"games": 9,
+"goals": 6
+},
+{
+"s": "25",
+"team": "Sporting",
+"games": 43,
+"goals": 22
+},
+{
+"s": "24",
+"team": "ElPozo Murcia Costa Cálida",
+"games": 38,
+"goals": 22
+},
+{
+"s": "23",
+"team": "ElPozo Murcia Costa Cálida",
+"games": 35,
+"goals": 9
+},
+{
+"s": "22",
+"team": "ElPozo Murcia Costa Cálida",
+"games": 11,
+"goals": 3
+},
+{
+"s": "21",
+"team": "ElPozo Murcia Costa Cálida",
+"games": 36,
+"goals": 13
+}
+],
+"scp13": [
+{
+"s": "26",
+"team": "Sporting",
+"games": 10,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Sporting",
+"games": 49,
+"goals": 56
+},
+{
+"s": "24",
+"team": "Al-Ula FC",
+"games": 27,
+"goals": 31
+},
+{
+"s": "23",
+"team": "Leões Porto Salvo",
+"games": 31,
+"goals": 23
+},
+{
+"s": "22",
+"team": "Leões Porto Salvo",
+"games": 29,
+"goals": 19
+},
+{
+"s": "21",
+"team": "Leões Porto Salvo",
+"games": 30,
+"goals": 22
+}
+],
+"scp14": [
+{
+"s": "26",
+"team": "Sporting",
+"games": 9,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Sporting",
+"games": 47,
+"goals": 24
+},
+{
+"s": "24",
+"team": "Sporting",
+"games": 47,
+"goals": 22
+},
+{
+"s": "23",
+"team": "Sporting",
+"games": 46,
+"goals": 25
+},
+{
+"s": "22",
+"team": "Sporting",
+"games": 42,
+"goals": 17
+},
+{
+"s": "21",
+"team": "Sporting",
+"games": 48,
+"goals": 29
+}
+],
+"scp15": [
+{
+"s": "26",
+"team": "Sporting",
+"games": 4,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Sporting",
+"games": 2,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Sporting",
+"games": 20,
+"goals": 5
+},
+{
+"s": "23",
+"team": "CS São João",
+"games": 2,
+"goals": 1
+},
+{
+"s": "22",
+"team": "CS São João",
+"games": 13,
+"goals": 9
+},
+{
+"s": "21",
+"team": "CS São João",
+"games": 14,
+"goals": 5
+}
+],
+"scp16": [
+{
+"s": "26",
+"team": "Sporting",
+"games": 0,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Sporting",
+"games": 22,
+"goals": 15
+},
+{
+"s": "24",
+"team": "Sporting",
+"games": 32,
+"goals": 27
+},
+{
+"s": "23",
+"team": "Sporting",
+"games": 41,
+"goals": 41
+},
+{
+"s": "22",
+"team": "Sporting",
+"games": 37,
+"goals": 24
+},
+{
+"s": "21",
+"team": "Sporting",
+"games": 34,
+"goals": 11
+}
+],
+"scp17": [
+{
+"s": "26",
+"team": "Sporting",
+"games": 10,
+"goals": 4
+}
+],
+"scp18": [
+{
+"s": "26",
+"team": "Sporting",
+"games": 9,
+"goals": 6
+},
+{
+"s": "25",
+"team": "Sporting",
+"games": 45,
+"goals": 26
+},
+{
+"s": "24",
+"team": "Sporting",
+"games": 22,
+"goals": 13
+},
+{
+"s": "23",
+"team": "Benfica",
+"games": 21,
+"goals": 18
+},
+{
+"s": "22",
+"team": "Benfica",
+"games": 44,
+"goals": 37
+},
+{
+"s": "21",
+"team": "Benfica",
+"games": 23,
+"goals": 15
+}
+],
+"slb01": [
+{
+"s": "26",
+"team": "Benfica",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Benfica",
+"games": 26,
+"goals": 1
+},
+{
+"s": "24",
+"team": "Benfica",
+"games": 14,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Leões Porto Salvo",
+"games": 33,
+"goals": 2
+},
+{
+"s": "22",
+"team": "Leões Porto Salvo",
+"games": 30,
+"goals": 2
+},
+{
+"s": "21",
+"team": "Eléctrico FC/ A MatosCar",
+"games": 27,
+"goals": 2
+}
+],
+"slb02": [
+{
+"s": "26",
+"team": "Benfica",
+"games": 1,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Benfica",
+"games": 5,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Benfica",
+"games": 27,
+"goals": 2
+},
+{
+"s": "23",
+"team": "URD Arranhó",
+"games": 21,
+"goals": 0
+},
+{
+"s": "22",
+"team": "URD Arranhó",
+"games": 19,
+"goals": 6
+},
+{
+"s": "21",
+"team": "URD Arranhó",
+"games": 0,
+"goals": 0
+}
+],
+"slb03": [
+{
+"s": "26",
+"team": "Benfica",
+"games": 8,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Benfica",
+"games": 43,
+"goals": 5
+},
+{
+"s": "24",
+"team": "Benfica",
+"games": 36,
+"goals": 5
+},
+{
+"s": "23",
+"team": "Benfica",
+"games": 39,
+"goals": 6
+},
+{
+"s": "22",
+"team": "Benfica",
+"games": 37,
+"goals": 3
+},
+{
+"s": "21",
+"team": "Tyumen",
+"games": 26,
+"goals": 1
+}
+],
+"slb04": [
+{
+"s": "26",
+"team": "Benfica",
+"games": 8,
+"goals": 2
+},
+{
+"s": "25",
+"team": "Benfica",
+"games": 38,
+"goals": 12
+},
+{
+"s": "24",
+"team": "Benfica",
+"games": 38,
+"goals": 17
+},
+{
+"s": "23",
+"team": "Benfica",
+"games": 39,
+"goals": 12
+},
+{
+"s": "22",
+"team": "Benfica",
+"games": 46,
+"goals": 12
+},
+{
+"s": "21",
+"team": "Benfica",
+"games": 44,
+"goals": 11
+}
+],
+"slb05": [
+{
+"s": "26",
+"team": "Benfica",
+"games": 6,
+"goals": 2
+},
+{
+"s": "25",
+"team": "Benfica",
+"games": 34,
+"goals": 6
+},
+{
+"s": "24",
+"team": "Benfica",
+"games": 26,
+"goals": 5
+},
+{
+"s": "23",
+"team": "ADCR Caxinas Poça Barca",
+"games": 28,
+"goals": 11
+},
+{
+"s": "22",
+"team": "ADCR Caxinas Poça Barca",
+"games": 25,
+"goals": 13
+},
+{
+"s": "21",
+"team": "ADCR Caxinas Poça Barca",
+"games": 34,
+"goals": 7
+}
+],
+"slb06": [
+{
+"s": "26",
+"team": "Benfica",
+"games": 8,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Benfica",
+"games": 39,
+"goals": 13
+},
+{
+"s": "24",
+"team": "Benfica",
+"games": 37,
+"goals": 11
+},
+{
+"s": "23",
+"team": "Barcelona",
+"games": 48,
+"goals": 12
+},
+{
+"s": "22",
+"team": "Barcelona",
+"games": 48,
+"goals": 8
+},
+{
+"s": "21",
+"team": "Barcelona",
+"games": 46,
+"goals": 13
+}
+],
+"slb07": [
+{
+"s": "26",
+"team": "Benfica",
+"games": 6,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Benfica",
+"games": 43,
+"goals": 14
+},
+{
+"s": "24",
+"team": "Benfica",
+"games": 26,
+"goals": 8
+},
+{
+"s": "23",
+"team": "Benfica",
+"games": 22,
+"goals": 10
+},
+{
+"s": "22",
+"team": "Benfica",
+"games": 24,
+"goals": 6
+},
+{
+"s": "21",
+"team": "Benfica",
+"games": 36,
+"goals": 10
+}
+],
+"slb08": [
+{
+"s": "26",
+"team": "Benfica",
+"games": 7,
+"goals": 2
+},
+{
+"s": "25",
+"team": "Benfica",
+"games": 41,
+"goals": 14
+},
+{
+"s": "24",
+"team": "Benfica",
+"games": 38,
+"goals": 11
+},
+{
+"s": "23",
+"team": "Benfica",
+"games": 39,
+"goals": 14
+},
+{
+"s": "22",
+"team": "Benfica",
+"games": 37,
+"goals": 6
+},
+{
+"s": "21",
+"team": "ADCR Caxinas Poça Barca",
+"games": 35,
+"goals": 24
+}
+],
+"slb09": [
+{
+"s": "26",
+"team": "Benfica",
+"games": 7,
+"goals": 2
+},
+{
+"s": "25",
+"team": "Benfica",
+"games": 45,
+"goals": 32
+},
+{
+"s": "24",
+"team": "Benfica",
+"games": 36,
+"goals": 18
+},
+{
+"s": "23",
+"team": "Benfica",
+"games": 38,
+"goals": 34
+},
+{
+"s": "22",
+"team": "Benfica",
+"games": 45,
+"goals": 23
+},
+{
+"s": "21",
+"team": "Benfica",
+"games": 37,
+"goals": 16
+}
+],
+"slb10": [
+{
+"s": "26",
+"team": "Benfica",
+"games": 7,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Benfica",
+"games": 44,
+"goals": 21
+},
+{
+"s": "24",
+"team": "Benfica",
+"games": 27,
+"goals": 10
+},
+{
+"s": "23",
+"team": "Benfica",
+"games": 35,
+"goals": 10
+},
+{
+"s": "22",
+"team": "AD Fundão",
+"games": 25,
+"goals": 13
+},
+{
+"s": "21",
+"team": "AD Fundão",
+"games": 28,
+"goals": 5
+}
+],
+"slb11": [
+{
+"s": "26",
+"team": "Benfica",
+"games": 8,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Benfica",
+"games": 43,
+"goals": 16
+},
+{
+"s": "24",
+"team": "Benfica",
+"games": 32,
+"goals": 7
+},
+{
+"s": "23",
+"team": "Benfica",
+"games": 24,
+"goals": 8
+},
+{
+"s": "22",
+"team": "Benfica",
+"games": 30,
+"goals": 3
+},
+{
+"s": "21",
+"team": "Benfica",
+"games": 18,
+"goals": 4
+}
+],
+"slb12": [
+{
+"s": "26",
+"team": "Benfica",
+"games": 7,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Benfica",
+"games": 42,
+"goals": 15
+},
+{
+"s": "24",
+"team": "Al-Nassr",
+"games": 29,
+"goals": 22
+},
+{
+"s": "23",
+"team": "Sporting",
+"games": 46,
+"goals": 16
+},
+{
+"s": "22",
+"team": "Sporting",
+"games": 42,
+"goals": 17
+},
+{
+"s": "21",
+"team": "Sporting",
+"games": 34,
+"goals": 17
+}
+],
+"slb13": [
+{
+"s": "26",
+"team": "Benfica",
+"games": 2,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Leões Porto Salvo",
+"games": 32,
+"goals": 11
+},
+{
+"s": "24",
+"team": "Leões Porto Salvo",
+"games": 33,
+"goals": 16
+},
+{
+"s": "23",
+"team": "Leões Porto Salvo",
+"games": 7,
+"goals": 6
+},
+{
+"s": "22",
+"team": "Leões Porto Salvo",
+"games": 1,
+"goals": 0
+}
+],
+"slb14": [
+{
+"s": "26",
+"team": "Benfica",
+"games": 8,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Al-Qadisiyah",
+"games": 25,
+"goals": 48
+},
+{
+"s": "24",
+"team": "Al-Qadisiyah",
+"games": 29,
+"goals": 66
+},
+{
+"s": "23",
+"team": "Illes Balears Palma",
+"games": 42,
+"goals": 14
+},
+{
+"s": "22",
+"team": "Illes Balears Palma",
+"games": 22,
+"goals": 11
+},
+{
+"s": "21",
+"team": "Real Betis",
+"games": 21,
+"goals": 10
+}
+],
+"slb15": [
+{
+"s": "26",
+"team": "Benfica",
+"games": 1,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Benfica",
+"games": 8,
+"goals": 1
+},
+{
+"s": "24",
+"team": "Benfica",
+"games": 23,
+"goals": 9
+},
+{
+"s": "23",
+"team": "Benfica",
+"games": 1,
+"goals": 1
+},
+{
+"s": "22",
+"team": "Benfica",
+"games": 26,
+"goals": 16
+},
+{
+"s": "21",
+"team": "Benfica",
+"games": 18,
+"goals": 8
+}
+],
+"slb16": [
+{
+"s": "26",
+"team": "Benfica",
+"games": 4,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Benfica",
+"games": 25,
+"goals": 4
+},
+{
+"s": "24",
+"team": "Benfica",
+"games": 26,
+"goals": 25
+},
+{
+"s": "23",
+"team": "Benfica",
+"games": 1,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Benfica",
+"games": 27,
+"goals": 16
+},
+{
+"s": "21",
+"team": "Patameiras",
+"games": 27,
+"goals": 37
+}
+],
+"slb17": [
+{
+"s": "26",
+"team": "Benfica",
+"games": 7,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Rio Ave",
+"games": 24,
+"goals": 23
+},
+{
+"s": "24",
+"team": "Rio Ave",
+"games": 17,
+"goals": 25
+},
+{
+"s": "23",
+"team": "Leões Porto Salvo",
+"games": 23,
+"goals": 6
+},
+{
+"s": "21",
+"team": "ADCR Caxinas Poça Barca",
+"games": 6,
+"goals": 2
+}
+],
+"scb01": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 2,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Anderlecht",
+"games": 16,
+"goals": 1
+},
+{
+"s": "24",
+"team": "Anderlecht",
+"games": 34,
+"goals": 1
+}
+],
+"scb02": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 4,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Atyrau",
+"games": 2,
+"goals": 1
+},
+{
+"s": "24",
+"team": "Atyrau",
+"games": 0,
+"goals": 0
+}
+],
+"scb03": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 0,
+"goals": 0
+},
+{
+"s": "25",
+"team": "SC Braga",
+"games": 0,
+"goals": 0
+},
+{
+"s": "24",
+"team": "SC Braga",
+"games": 6,
+"goals": 0
+},
+{
+"s": "23",
+"team": "SC Braga",
+"games": 30,
+"goals": 1
+},
+{
+"s": "22",
+"team": "Futsal Celorico",
+"games": 16,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Futsal Celorico",
+"games": 0,
+"goals": 0
+}
+],
+"scb04": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "SC Braga",
+"games": 30,
+"goals": 7
+},
+{
+"s": "24",
+"team": "SC Braga",
+"games": 33,
+"goals": 14
+},
+{
+"s": "23",
+"team": "SC Braga",
+"games": 36,
+"goals": 11
+},
+{
+"s": "22",
+"team": "SC Braga",
+"games": 31,
+"goals": 7
+},
+{
+"s": "21",
+"team": "Futsal Azeméis",
+"games": 30,
+"goals": 10
+}
+],
+"scb05": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "SC Braga",
+"games": 29,
+"goals": 3
+},
+{
+"s": "24",
+"team": "SC Braga",
+"games": 29,
+"goals": 6
+},
+{
+"s": "23",
+"team": "SC Braga",
+"games": 31,
+"goals": 4
+},
+{
+"s": "22",
+"team": "SC Braga",
+"games": 30,
+"goals": 5
+},
+{
+"s": "21",
+"team": "SC Braga",
+"games": 29,
+"goals": 5
+}
+],
+"scb06": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 5,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Rio Ave",
+"games": 25,
+"goals": 9
+},
+{
+"s": "24",
+"team": "Leões Porto Salvo",
+"games": 32,
+"goals": 7
+},
+{
+"s": "23",
+"team": "Leões Porto Salvo",
+"games": 27,
+"goals": 5
+},
+{
+"s": "22",
+"team": "Eléctrico FC/ A MatosCar",
+"games": 19,
+"goals": 3
+},
+{
+"s": "21",
+"team": "Eléctrico FC/ A MatosCar",
+"games": 32,
+"goals": 9
+}
+],
+"scb07": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 0,
+"goals": 0
+},
+{
+"s": "25",
+"team": "ADCR Caxinas Poça Barca",
+"games": 23,
+"goals": 6
+},
+{
+"s": "24",
+"team": "ADCR Caxinas Poça Barca",
+"games": 24,
+"goals": 3
+},
+{
+"s": "23",
+"team": "ADCR Caxinas Poça Barca",
+"games": 24,
+"goals": 2
+},
+{
+"s": "22",
+"team": "ADCR Caxinas Poça Barca",
+"games": 12,
+"goals": 0
+},
+{
+"s": "21",
+"team": "ADCR Caxinas Poça Barca",
+"games": 26,
+"goals": 4
+}
+],
+"scb08": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 2,
+"goals": 0
+},
+{
+"s": "25",
+"team": "SC Braga",
+"games": 1,
+"goals": 0
+},
+{
+"s": "24",
+"team": "SC Braga",
+"games": 16,
+"goals": 0
+},
+{
+"s": "23",
+"team": "SC Braga",
+"games": 0,
+"goals": 0
+},
+{
+"s": "22",
+"team": "CR Candoso/Natcal",
+"games": 9,
+"goals": 0
+},
+{
+"s": "21",
+"team": "CR Candoso/Natcal",
+"games": 4,
+"goals": 4
+}
+],
+"scb09": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 6,
+"goals": 5
+},
+{
+"s": "25",
+"team": "SC Braga",
+"games": 24,
+"goals": 4
+},
+{
+"s": "24",
+"team": "SC Braga",
+"games": 33,
+"goals": 22
+},
+{
+"s": "23",
+"team": "SC Braga",
+"games": 34,
+"goals": 17
+},
+{
+"s": "22",
+"team": "SC Braga",
+"games": 26,
+"goals": 12
+},
+{
+"s": "21",
+"team": "SC Braga",
+"games": 31,
+"goals": 16
+}
+],
+"scb10": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 2,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Ferreira do Zêzere",
+"games": 14,
+"goals": 3
+},
+{
+"s": "24",
+"team": "ADCR Caxinas Poça Barca",
+"games": 23,
+"goals": 2
+},
+{
+"s": "23",
+"team": "Quinta dos Lombos",
+"games": 19,
+"goals": 6
+},
+{
+"s": "22",
+"team": "AD Fundão",
+"games": 13,
+"goals": 1
+},
+{
+"s": "21",
+"team": "Benfica",
+"games": 25,
+"goals": 14
+}
+],
+"scb11": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 6,
+"goals": 2
+},
+{
+"s": "25",
+"team": "SC Braga",
+"games": 30,
+"goals": 8
+},
+{
+"s": "24",
+"team": "Leões Porto Salvo",
+"games": 34,
+"goals": 20
+},
+{
+"s": "23",
+"team": "Leões Porto Salvo",
+"games": 32,
+"goals": 17
+},
+{
+"s": "22",
+"team": "Leões Porto Salvo",
+"games": 30,
+"goals": 7
+},
+{
+"s": "21",
+"team": "Viseu 2001",
+"games": 26,
+"goals": 19
+}
+],
+"scb12": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 5,
+"goals": 0
+},
+{
+"s": "25",
+"team": "SC Braga",
+"games": 13,
+"goals": 1
+},
+{
+"s": "24",
+"team": "SC Braga",
+"games": 18,
+"goals": 9
+},
+{
+"s": "23",
+"team": "Nun´Álvares",
+"games": 18,
+"goals": 12
+},
+{
+"s": "22",
+"team": "Nun´Álvares",
+"games": 33,
+"goals": 45
+},
+{
+"s": "21",
+"team": "Nun´Álvares",
+"games": 0,
+"goals": 0
+}
+],
+"scb13": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 6,
+"goals": 4
+},
+{
+"s": "25",
+"team": "Riga FC",
+"games": 26,
+"goals": 31
+},
+{
+"s": "24",
+"team": "Riga FC",
+"games": 25,
+"goals": 19
+},
+{
+"s": "22",
+"team": "Viña Albali Valdepeñas",
+"games": 33,
+"goals": 8
+},
+{
+"s": "21",
+"team": "Wanapix AD Sala 10",
+"games": 26,
+"goals": 9
+}
+],
+"scb14": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 6,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Riga FC",
+"games": 22,
+"goals": 23
+},
+{
+"s": "24",
+"team": "Riga FC",
+"games": 22,
+"goals": 22
+},
+{
+"s": "23",
+"team": "Riga FC",
+"games": 12,
+"goals": 18
+},
+{
+"s": "22",
+"team": "Eléctrico FC/ A MatosCar",
+"games": 26,
+"goals": 11
+},
+{
+"s": "21",
+"team": "Eléctrico FC/ A MatosCar",
+"games": 34,
+"goals": 15
+}
+],
+"scb15": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 5,
+"goals": 4
+},
+{
+"s": "25",
+"team": "SC Braga",
+"games": 1,
+"goals": 0
+},
+{
+"s": "24",
+"team": "SC Braga",
+"games": 20,
+"goals": 5
+},
+{
+"s": "23",
+"team": "Nogueiró e Tenões",
+"games": 14,
+"goals": 13
+},
+{
+"s": "22",
+"team": "Nogueiró e Tenões",
+"games": 13,
+"goals": 2
+},
+{
+"s": "21",
+"team": "Nogueiró e Tenões",
+"games": 6,
+"goals": 0
+}
+],
+"scb16": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 5,
+"goals": 1
+},
+{
+"s": "25",
+"team": "SC Braga",
+"games": 19,
+"goals": 8
+},
+{
+"s": "24",
+"team": "Quinta dos Lombos",
+"games": 24,
+"goals": 26
+},
+{
+"s": "23",
+"team": "Quinta dos Lombos",
+"games": 22,
+"goals": 19
+},
+{
+"s": "22",
+"team": "Quinta dos Lombos",
+"games": 26,
+"goals": 16
+},
+{
+"s": "21",
+"team": "Quinta dos Lombos",
+"games": 32,
+"goals": 23
+}
+],
+"scb17": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 6,
+"goals": 2
+},
+{
+"s": "25",
+"team": "SC Braga",
+"games": 28,
+"goals": 10
+},
+{
+"s": "24",
+"team": "AD Fundão",
+"games": 26,
+"goals": 11
+},
+{
+"s": "23",
+"team": "Sporting",
+"games": 19,
+"goals": 10
+},
+{
+"s": "22",
+"team": "Sporting",
+"games": 29,
+"goals": 19
+},
+{
+"s": "21",
+"team": "Sporting",
+"games": 15,
+"goals": 6
+}
+],
+"scb18": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "SC Braga",
+"games": 12,
+"goals": 5
+},
+{
+"s": "24",
+"team": "Ferreira do Zêzere",
+"games": 14,
+"goals": 5
+}
+],
+"scb19": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 6,
+"goals": 8
+},
+{
+"s": "25",
+"team": "SC Braga",
+"games": 2,
+"goals": 0
+},
+{
+"s": "24",
+"team": "SC Braga",
+"games": 27,
+"goals": 21
+},
+{
+"s": "23",
+"team": "Nun´Álvares",
+"games": 2,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Nun´Álvares",
+"games": 25,
+"goals": 6
+},
+{
+"s": "21",
+"team": "Nun´Álvares",
+"games": 0,
+"goals": 0
+}
+],
+"scb20": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 5,
+"goals": 3
+},
+{
+"s": "25",
+"team": "SC Braga",
+"games": 0,
+"goals": 0
+},
+{
+"s": "24",
+"team": "AM Granja",
+"games": 25,
+"goals": 44
+},
+{
+"s": "23",
+"team": "AM Granja",
+"games": 7,
+"goals": 3
+},
+{
+"s": "22",
+"team": "AM Granja",
+"games": 1,
+"goals": 0
+},
+{
+"s": "21",
+"team": "AM Granja",
+"games": 11,
+"goals": 4
+}
+],
+"fun01": [
+{
+"s": "26",
+"team": "AD Fundão",
+"games": 1,
+"goals": 0
+},
+{
+"s": "25",
+"team": "ADR Retaxo",
+"games": 9,
+"goals": 0
+},
+{
+"s": "24",
+"team": "ABC Nelas",
+"games": 23,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Bairro Boa Esperança",
+"games": 25,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Bairro Boa Esperança",
+"games": 28,
+"goals": 2
+},
+{
+"s": "21",
+"team": "ACD Ladoeiro",
+"games": 32,
+"goals": 0
+}
+],
+"fun02": [
+{
+"s": "26",
+"team": "AD Fundão",
+"games": 2,
+"goals": 0
+},
+{
+"s": "25",
+"team": "AD Fundão",
+"games": 12,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Cariense",
+"games": 25,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Cariense",
+"games": 4,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Cariense",
+"games": 15,
+"goals": 1
+},
+{
+"s": "21",
+"team": "Cariense",
+"games": 6,
+"goals": 0
+}
+],
+"fun03": [
+{
+"s": "26",
+"team": "AD Fundão",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "AD Fundão",
+"games": 25,
+"goals": 5
+},
+{
+"s": "24",
+"team": "AD Fundão",
+"games": 10,
+"goals": 2
+}
+],
+"fun04": [
+{
+"s": "26",
+"team": "AD Fundão",
+"games": 6,
+"goals": 2
+},
+{
+"s": "25",
+"team": "AD Fundão",
+"games": 21,
+"goals": 5
+},
+{
+"s": "24",
+"team": "AD Fundão",
+"games": 19,
+"goals": 5
+},
+{
+"s": "23",
+"team": "AD Fundão",
+"games": 22,
+"goals": 9
+},
+{
+"s": "22",
+"team": "AD Fundão",
+"games": 24,
+"goals": 9
+},
+{
+"s": "21",
+"team": "Modicus Bruval",
+"games": 26,
+"goals": 8
+}
+],
+"fun05": [
+{
+"s": "26",
+"team": "AD Fundão",
+"games": 4,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Sporting",
+"games": 1,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Sporting",
+"games": 18,
+"goals": 7
+},
+{
+"s": "23",
+"team": "Sporting",
+"games": 29,
+"goals": 10
+},
+{
+"s": "22",
+"team": "Sporting",
+"games": 31,
+"goals": 9
+},
+{
+"s": "21",
+"team": "AMSAC",
+"games": 21,
+"goals": 17
+}
+],
+"fun06": [
+{
+"s": "26",
+"team": "AD Fundão",
+"games": 7,
+"goals": 8
+},
+{
+"s": "25",
+"team": "Benfica",
+"games": 17,
+"goals": 7
+},
+{
+"s": "24",
+"team": "AD Fundão",
+"games": 26,
+"goals": 18
+},
+{
+"s": "23",
+"team": "Levante",
+"games": 27,
+"goals": 16
+},
+{
+"s": "22",
+"team": "Levante",
+"games": 24,
+"goals": 5
+},
+{
+"s": "21",
+"team": "AD Fundão",
+"games": 31,
+"goals": 9
+}
+],
+"fun07": [
+{
+"s": "26",
+"team": "AD Fundão",
+"games": 1,
+"goals": 1
+},
+{
+"s": "25",
+"team": "CB Idanha-a-Nova",
+"games": 1,
+"goals": 0
+},
+{
+"s": "24",
+"team": "SLA Dominguiso",
+"games": 1,
+"goals": 0
+},
+{
+"s": "23",
+"team": "SLA Dominguiso",
+"games": 1,
+"goals": 0
+},
+{
+"s": "22",
+"team": "SLA Dominguiso",
+"games": 1,
+"goals": 0
+}
+],
+"fun08": [
+{
+"s": "26",
+"team": "AD Fundão",
+"games": 7,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Al-Tadhamon",
+"games": 0,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Torreense",
+"games": 22,
+"goals": 9
+},
+{
+"s": "23",
+"team": "Torreense",
+"games": 27,
+"goals": 10
+},
+{
+"s": "22",
+"team": "Levante",
+"games": 16,
+"goals": 2
+},
+{
+"s": "21",
+"team": "Portimonense",
+"games": 28,
+"goals": 17
+}
+],
+"fun09": [
+{
+"s": "26",
+"team": "AD Fundão",
+"games": 7,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Eléctrico",
+"games": 23,
+"goals": 8
+},
+{
+"s": "24",
+"team": "Sporting",
+"games": 25,
+"goals": 21
+},
+{
+"s": "23",
+"team": "Sporting",
+"games": 3,
+"goals": 1
+},
+{
+"s": "22",
+"team": "Sporting",
+"games": 29,
+"goals": 12
+},
+{
+"s": "21",
+"team": "AMSAC",
+"games": 21,
+"goals": 14
+}
+],
+"fun10": [
+{
+"s": "26",
+"team": "AD Fundão",
+"games": 5,
+"goals": 0
+},
+{
+"s": "25",
+"team": "ADCR Caxinas Poça Barca",
+"games": 2,
+"goals": 1
+},
+{
+"s": "24",
+"team": "AMSAC",
+"games": 25,
+"goals": 15
+},
+{
+"s": "23",
+"team": "Benfica",
+"games": 23,
+"goals": 30
+},
+{
+"s": "22",
+"team": "Benfica",
+"games": 20,
+"goals": 14
+},
+{
+"s": "21",
+"team": "Quinta dos Lombos",
+"games": 5,
+"goals": 0
+}
+],
+"fun11": [
+{
+"s": "26",
+"team": "AD Fundão",
+"games": 7,
+"goals": 0
+},
+{
+"s": "25",
+"team": "AD Fundão",
+"games": 27,
+"goals": 8
+},
+{
+"s": "24",
+"team": "AD Fundão",
+"games": 27,
+"goals": 3
+},
+{
+"s": "23",
+"team": "AD Fundão",
+"games": 25,
+"goals": 1
+},
+{
+"s": "22",
+"team": "AD Fundão",
+"games": 27,
+"goals": 10
+},
+{
+"s": "21",
+"team": "AD Fundão",
+"games": 34,
+"goals": 15
+}
+],
+"fun12": [
+{
+"s": "26",
+"team": "AD Fundão",
+"games": 7,
+"goals": 2
+},
+{
+"s": "25",
+"team": "Ecocity Genzano",
+"games": 13,
+"goals": 6
+},
+{
+"s": "24",
+"team": "Ecocity Genzano",
+"games": 33,
+"goals": 10
+},
+{
+"s": "23",
+"team": "Jaén Paraíso Interior",
+"games": 35,
+"goals": 3
+},
+{
+"s": "22",
+"team": "Jaén Paraíso Interior",
+"games": 14,
+"goals": 0
+},
+{
+"s": "21",
+"team": "AD Fundão",
+"games": 30,
+"goals": 15
+}
+],
+"fun13": [
+{
+"s": "26",
+"team": "AD Fundão",
+"games": 1,
+"goals": 0
+},
+{
+"s": "25",
+"team": "GD Mata",
+"games": 27,
+"goals": 28
+},
+{
+"s": "24",
+"team": "GD Mata",
+"games": 12,
+"goals": 12
+},
+{
+"s": "23",
+"team": "GD Mata",
+"games": 8,
+"goals": 4
+}
+],
+"fun14": [
+{
+"s": "26",
+"team": "AD Fundão",
+"games": 7,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Leões Porto Salvo",
+"games": 22,
+"goals": 3
+},
+{
+"s": "24",
+"team": "SC Lusitânia",
+"games": 19,
+"goals": 15
+}
+],
+"fun15": [
+{
+"s": "26",
+"team": "AD Fundão",
+"games": 7,
+"goals": 1
+},
+{
+"s": "25",
+"team": "AD Fundão",
+"games": 25,
+"goals": 6
+},
+{
+"s": "24",
+"team": "SC Lusitânia",
+"games": 9,
+"goals": 2
+},
+{
+"s": "23",
+"team": "Leões Porto Salvo",
+"games": 15,
+"goals": 3
+},
+{
+"s": "22",
+"team": "Leões Porto Salvo",
+"games": 4,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Leões Porto Salvo",
+"games": 20,
+"goals": 26
+}
+],
+"lps01": [
+{
+"s": "26",
+"team": "Leões Porto Salvo",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "UPVN",
+"games": 22,
+"goals": 3
+},
+{
+"s": "24",
+"team": "Quinta dos Lombos",
+"games": 21,
+"goals": 1
+},
+{
+"s": "23",
+"team": "Sporting",
+"games": 25,
+"goals": 3
+},
+{
+"s": "22",
+"team": "Sporting",
+"games": 34,
+"goals": 2
+},
+{
+"s": "21",
+"team": "Sporting",
+"games": 4,
+"goals": 0
+}
+],
+"lps02": [
+{
+"s": "26",
+"team": "Leões Porto Salvo",
+"games": 0,
+"goals": 0
+},
+{
+"s": "25",
+"team": "ADCR Caxinas Poça Barca",
+"games": 16,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Benfica",
+"games": 14,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Benfica",
+"games": 2,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Benfica",
+"games": 34,
+"goals": 1
+},
+{
+"s": "21",
+"team": "Benfica",
+"games": 2,
+"goals": 0
+}
+],
+"lps03": [
+{
+"s": "26",
+"team": "Leões Porto Salvo",
+"games": 2,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Leões Porto Salvo",
+"games": 3,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Leões Porto Salvo",
+"games": 6,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Leões Porto Salvo",
+"games": 1,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Leões Porto Salvo",
+"games": 7,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Leões Porto Salvo",
+"games": 14,
+"goals": 6
+}
+],
+"lps04": [
+{
+"s": "26",
+"team": "Leões Porto Salvo",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Leões Porto Salvo",
+"games": 30,
+"goals": 6
+},
+{
+"s": "24",
+"team": "Ferreira do Zêzere",
+"games": 28,
+"goals": 4
+},
+{
+"s": "23",
+"team": "Leões Porto Salvo",
+"games": 8,
+"goals": 2
+},
+{
+"s": "22",
+"team": "Leões Porto Salvo",
+"games": 2,
+"goals": 0
+},
+{
+"s": "21",
+"team": "PCR",
+"games": 0,
+"goals": 0
+}
+],
+"lps05": [
+{
+"s": "26",
+"team": "Leões Porto Salvo",
+"games": 0,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Leões Porto Salvo",
+"games": 31,
+"goals": 2
+},
+{
+"s": "24",
+"team": "Leões Porto Salvo",
+"games": 13,
+"goals": 1
+},
+{
+"s": "23",
+"team": "AMSAC",
+"games": 27,
+"goals": 11
+},
+{
+"s": "22",
+"team": "AMSAC",
+"games": 29,
+"goals": 15
+},
+{
+"s": "21",
+"team": "Burinhosa",
+"games": 33,
+"goals": 5
+}
+],
+"lps06": [
+{
+"s": "26",
+"team": "Leões Porto Salvo",
+"games": 0,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Leões Porto Salvo",
+"games": 7,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Leões Porto Salvo",
+"games": 2,
+"goals": 1
+},
+{
+"s": "23",
+"team": "Leões Porto Salvo",
+"games": 1,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Leões Porto Salvo",
+"games": 0,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Leões Porto Salvo",
+"games": 1,
+"goals": 1
+}
+],
+"lps07": [
+{
+"s": "26",
+"team": "Leões Porto Salvo",
+"games": 5,
+"goals": 0
+},
+{
+"s": "25",
+"team": "ADCR Caxinas Poça Barca",
+"games": 9,
+"goals": 3
+}
+],
+"lps08": [
+{
+"s": "26",
+"team": "Leões Porto Salvo",
+"games": 6,
+"goals": 2
+},
+{
+"s": "25",
+"team": "Leões Porto Salvo",
+"games": 22,
+"goals": 6
+},
+{
+"s": "24",
+"team": "Sporting",
+"games": 28,
+"goals": 11
+},
+{
+"s": "23",
+"team": "Sporting",
+"games": 24,
+"goals": 13
+},
+{
+"s": "22",
+"team": "Sporting",
+"games": 33,
+"goals": 14
+},
+{
+"s": "21",
+"team": "AMSAC",
+"games": 14,
+"goals": 7
+}
+],
+"lps09": [
+{
+"s": "26",
+"team": "Leões Porto Salvo",
+"games": 2,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Leões Porto Salvo",
+"games": 5,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Leões Porto Salvo",
+"games": 26,
+"goals": 18
+},
+{
+"s": "23",
+"team": "Leões Porto Salvo",
+"games": 1,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Reguilas Tires",
+"games": 5,
+"goals": 6
+},
+{
+"s": "21",
+"team": "Reguilas Tires",
+"games": 0,
+"goals": 0
+}
+],
+"lps10": [
+{
+"s": "26",
+"team": "Leões Porto Salvo",
+"games": 0,
+"goals": 0
+},
+{
+"s": "25",
+"team": "AMSAC",
+"games": 2,
+"goals": 0
+},
+{
+"s": "24",
+"team": "AMSAC",
+"games": 1,
+"goals": 0
+},
+{
+"s": "23",
+"team": "AMSAC",
+"games": 22,
+"goals": 2
+},
+{
+"s": "22",
+"team": "Sporting",
+"games": 32,
+"goals": 11
+},
+{
+"s": "21",
+"team": "Sporting",
+"games": 3,
+"goals": 0
+}
+],
+"lps11": [
+{
+"s": "26",
+"team": "Leões Porto Salvo",
+"games": 0,
+"goals": 0
+},
+{
+"s": "25",
+"team": "GROB",
+"games": 17,
+"goals": 12
+},
+{
+"s": "24",
+"team": "GROB",
+"games": 19,
+"goals": 4
+},
+{
+"s": "23",
+"team": "GROB",
+"games": 10,
+"goals": 2
+},
+{
+"s": "22",
+"team": "GROB",
+"games": 1,
+"goals": 0
+},
+{
+"s": "21",
+"team": "GROB",
+"games": 0,
+"goals": 0
+}
+],
+"lps12": [
+{
+"s": "26",
+"team": "Leões Porto Salvo",
+"games": 0,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Leões Porto Salvo",
+"games": 11,
+"goals": 2
+},
+{
+"s": "24",
+"team": "AMSAC",
+"games": 22,
+"goals": 5
+},
+{
+"s": "23",
+"team": "AMSAC",
+"games": 25,
+"goals": 10
+},
+{
+"s": "22",
+"team": "AMSAC",
+"games": 1,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Sporting",
+"games": 8,
+"goals": 4
+}
+],
+"lps13": [
+{
+"s": "26",
+"team": "Leões Porto Salvo",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Leões Porto Salvo",
+"games": 31,
+"goals": 8
+},
+{
+"s": "24",
+"team": "AMSAC",
+"games": 27,
+"goals": 17
+},
+{
+"s": "23",
+"team": "UPVN",
+"games": 15,
+"goals": 9
+},
+{
+"s": "22",
+"team": "Estoril Praia",
+"games": 26,
+"goals": 21
+}
+],
+"lps14": [
+{
+"s": "26",
+"team": "Leões Porto Salvo",
+"games": 2,
+"goals": 2
+},
+{
+"s": "25",
+"team": "AD Fundão",
+"games": 25,
+"goals": 5
+},
+{
+"s": "24",
+"team": "AD Fundão",
+"games": 14,
+"goals": 2
+},
+{
+"s": "23",
+"team": "AD Fundão",
+"games": 23,
+"goals": 6
+},
+{
+"s": "22",
+"team": "Benfica",
+"games": 33,
+"goals": 35
+},
+{
+"s": "21",
+"team": "Benfica",
+"games": 5,
+"goals": 0
+}
+],
+"lps15": [
+{
+"s": "26",
+"team": "Leões Porto Salvo",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "FC Famalicão",
+"games": 20,
+"goals": 8
+},
+{
+"s": "24",
+"team": "Ferreira do Zêzere",
+"games": 28,
+"goals": 12
+},
+{
+"s": "23",
+"team": "Ferreira do Zêzere by Zêzerovo",
+"games": 21,
+"goals": 4
+}
+],
+"lps16": [
+{
+"s": "26",
+"team": "Leões Porto Salvo",
+"games": 5,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Leões Porto Salvo",
+"games": 8,
+"goals": 5
+},
+{
+"s": "24",
+"team": "Leões Porto Salvo",
+"games": 32,
+"goals": 18
+},
+{
+"s": "23",
+"team": "Leões Porto Salvo",
+"games": 31,
+"goals": 11
+},
+{
+"s": "22",
+"team": "Leões Porto Salvo",
+"games": 30,
+"goals": 9
+},
+{
+"s": "21",
+"team": "Leões Porto Salvo",
+"games": 25,
+"goals": 7
+}
+],
+"lps17": [
+{
+"s": "26",
+"team": "Leões Porto Salvo",
+"games": 6,
+"goals": 4
+},
+{
+"s": "25",
+"team": "Ferreira do Zêzere",
+"games": 29,
+"goals": 10
+},
+{
+"s": "24",
+"team": "Ferreira do Zêzere",
+"games": 28,
+"goals": 5
+},
+{
+"s": "23",
+"team": "ADCR Caxinas Poça Barca",
+"games": 29,
+"goals": 10
+},
+{
+"s": "22",
+"team": "Leões Porto Salvo",
+"games": 21,
+"goals": 3
+},
+{
+"s": "21",
+"team": "Leões Porto Salvo",
+"games": 10,
+"goals": 1
+}
+],
+"lps18": [
+{
+"s": "26",
+"team": "Leões Porto Salvo",
+"games": 2,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Leões Porto Salvo",
+"games": 5,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Leões Porto Salvo",
+"games": 12,
+"goals": 2
+},
+{
+"s": "23",
+"team": "Leões Porto Salvo",
+"games": 5,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Leões Porto Salvo",
+"games": 27,
+"goals": 11
+},
+{
+"s": "21",
+"team": "Leões Porto Salvo",
+"games": 12,
+"goals": 29
+}
+],
+"lps19": [
+{
+"s": "26",
+"team": "Leões Porto Salvo",
+"games": 1,
+"goals": 0
+},
+{
+"s": "25",
+"team": "SC Barbarense",
+"games": 23,
+"goals": 15
+},
+{
+"s": "24",
+"team": "SC Barbarense",
+"games": 26,
+"goals": 3
+},
+{
+"s": "23",
+"team": "Juventude Gaia",
+"games": 20,
+"goals": 6
+},
+{
+"s": "22",
+"team": "ADCR Caxinas Poça Barca",
+"games": 15,
+"goals": 3
+},
+{
+"s": "21",
+"team": "ADCR Caxinas Poça Barca",
+"games": 2,
+"goals": 0
+}
+],
+"lps20": [
+{
+"s": "26",
+"team": "Leões Porto Salvo",
+"games": 6,
+"goals": 4
+},
+{
+"s": "25",
+"team": "Eléctrico",
+"games": 19,
+"goals": 5
+},
+{
+"s": "24",
+"team": "Leões Porto Salvo",
+"games": 34,
+"goals": 10
+},
+{
+"s": "23",
+"team": "Sporting",
+"games": 26,
+"goals": 31
+},
+{
+"s": "22",
+"team": "Sporting",
+"games": 34,
+"goals": 57
+},
+{
+"s": "21",
+"team": "Sporting",
+"games": 1,
+"goals": 0
+}
+],
+"lps21": [
+{
+"s": "26",
+"team": "Leões Porto Salvo",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Leões Porto Salvo",
+"games": 25,
+"goals": 13
+},
+{
+"s": "24",
+"team": "AD Jorge Antunes",
+"games": 25,
+"goals": 24
+},
+{
+"s": "23",
+"team": "SC Lusitânia",
+"games": 15,
+"goals": 15
+},
+{
+"s": "22",
+"team": "Dalia Management",
+"games": 0,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Canosa",
+"games": 0,
+"goals": 0
+}
+],
+"lps22": [
+{
+"s": "26",
+"team": "Leões Porto Salvo",
+"games": 3,
+"goals": 4
+},
+{
+"s": "25",
+"team": "Leões Porto Salvo",
+"games": 15,
+"goals": 6
+},
+{
+"s": "24",
+"team": "Tojeira",
+"games": 10,
+"goals": 1
+},
+{
+"s": "23",
+"team": "Tojeira",
+"games": 21,
+"goals": 17
+},
+{
+"s": "22",
+"team": "Os Vinhais",
+"games": 5,
+"goals": 9
+},
+{
+"s": "21",
+"team": "Os Vinhais",
+"games": 0,
+"goals": 0
+}
+],
+"fzz01": [
+{
+"s": "26",
+"team": "Ferreira do Zêzere",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Ferreira do Zêzere",
+"games": 24,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Ferreira do Zêzere",
+"games": 25,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Leões Porto Salvo",
+"games": 4,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Leões Porto Salvo",
+"games": 8,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Leões Porto Salvo",
+"games": 11,
+"goals": 0
+}
+],
+"fzz02": [
+{
+"s": "26",
+"team": "Ferreira do Zêzere",
+"games": 0,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Ferreira do Zêzere",
+"games": 19,
+"goals": 1
+},
+{
+"s": "24",
+"team": "Ferreira do Zêzere",
+"games": 13,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Ferreira do Zêzere by Zêzerovo",
+"games": 24,
+"goals": 3
+},
+{
+"s": "22",
+"team": "Ferreira do Zêzere by Zêzerovo",
+"games": 20,
+"goals": 0
+},
+{
+"s": "21",
+"team": "ABC Nelas",
+"games": 31,
+"goals": 3
+}
+],
+"fzz03": [
+{
+"s": "26",
+"team": "Ferreira do Zêzere",
+"games": 4,
+"goals": 0
+},
+{
+"s": "25",
+"team": "CS São João",
+"games": 1,
+"goals": 0
+},
+{
+"s": "24",
+"team": "CS São João",
+"games": 1,
+"goals": 1
+},
+{
+"s": "23",
+"team": "CS São João",
+"games": 28,
+"goals": 4
+},
+{
+"s": "22",
+"team": "CS São João",
+"games": 8,
+"goals": 1
+},
+{
+"s": "21",
+"team": "Academia Condeixa",
+"games": 0,
+"goals": 0
+}
+],
+"fzz04": [
+{
+"s": "26",
+"team": "Ferreira do Zêzere",
+"games": 6,
+"goals": 2
+},
+{
+"s": "25",
+"team": "Ferreira do Zêzere",
+"games": 28,
+"goals": 10
+},
+{
+"s": "24",
+"team": "Ferreira do Zêzere",
+"games": 26,
+"goals": 11
+},
+{
+"s": "23",
+"team": "MNK Square",
+"games": 0,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Torreense",
+"games": 24,
+"goals": 9
+}
+],
+"fzz05": [
+{
+"s": "26",
+"team": "Ferreira do Zêzere",
+"games": 4,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Ferreira do Zêzere",
+"games": 24,
+"goals": 3
+},
+{
+"s": "24",
+"team": "Black Pearl United",
+"games": 0,
+"goals": 0
+}
+],
+"fzz06": [
+{
+"s": "26",
+"team": "Ferreira do Zêzere",
+"games": 0,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Ferreira do Zêzere",
+"games": 18,
+"goals": 5
+}
+],
+"fzz07": [
+{
+"s": "26",
+"team": "Ferreira do Zêzere",
+"games": 0,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Ferreira do Zêzere",
+"games": 0,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Ferreira do Zêzere",
+"games": 5,
+"goals": 4
+},
+{
+"s": "23",
+"team": "Ferreira do Zêzere",
+"games": 22,
+"goals": 5
+},
+{
+"s": "22",
+"team": "GD Ribeira Farrio",
+"games": 0,
+"goals": 0
+},
+{
+"s": "21",
+"team": "GD Ribeira Farrio",
+"games": 0,
+"goals": 0
+}
+],
+"fzz08": [
+{
+"s": "26",
+"team": "Ferreira do Zêzere",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Benfica",
+"games": 2,
+"goals": 1
+},
+{
+"s": "24",
+"team": "Benfica",
+"games": 29,
+"goals": 13
+},
+{
+"s": "23",
+"team": "Benfica",
+"games": 1,
+"goals": 2
+},
+{
+"s": "22",
+"team": "Benfica",
+"games": 2,
+"goals": 2
+},
+{
+"s": "21",
+"team": "Benfica",
+"games": 1,
+"goals": 1
+}
+],
+"fzz09": [
+{
+"s": "26",
+"team": "Ferreira do Zêzere",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Ferreira do Zêzere",
+"games": 30,
+"goals": 6
+},
+{
+"s": "24",
+"team": "Ferreira do Zêzere",
+"games": 25,
+"goals": 6
+},
+{
+"s": "23",
+"team": "SC Barbarense",
+"games": 28,
+"goals": 14
+},
+{
+"s": "22",
+"team": "SC Barbarense",
+"games": 14,
+"goals": 8
+},
+{
+"s": "21",
+"team": "Quinta dos Lombos",
+"games": 22,
+"goals": 2
+}
+],
+"fzz10": [
+{
+"s": "26",
+"team": "Ferreira do Zêzere",
+"games": 6,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Ferreira do Zêzere",
+"games": 0,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Futsal Pula",
+"games": 0,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Leões Porto Salvo",
+"games": 30,
+"goals": 5
+},
+{
+"s": "22",
+"team": "Leões Porto Salvo",
+"games": 30,
+"goals": 13
+},
+{
+"s": "21",
+"team": "Portimonense",
+"games": 25,
+"goals": 12
+}
+],
+"fzz11": [
+{
+"s": "26",
+"team": "Ferreira do Zêzere",
+"games": 5,
+"goals": 0
+},
+{
+"s": "25",
+"team": "UPVN",
+"games": 21,
+"goals": 7
+},
+{
+"s": "24",
+"team": "SC Lusitânia",
+"games": 18,
+"goals": 1
+},
+{
+"s": "23",
+"team": "Benfica",
+"games": 25,
+"goals": 15
+},
+{
+"s": "22",
+"team": "Benfica",
+"games": 32,
+"goals": 19
+},
+{
+"s": "21",
+"team": "Benfica",
+"games": 1,
+"goals": 0
+}
+],
+"fzz12": [
+{
+"s": "26",
+"team": "Ferreira do Zêzere",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Quinta dos Lombos",
+"games": 15,
+"goals": 2
+},
+{
+"s": "24",
+"team": "Quinta dos Lombos",
+"games": 32,
+"goals": 12
+},
+{
+"s": "23",
+"team": "Ferreira do Zêzere by Zêzerovo",
+"games": 27,
+"goals": 14
+},
+{
+"s": "22",
+"team": "Ferreira do Zêzere by Zêzerovo",
+"games": 24,
+"goals": 5
+},
+{
+"s": "21",
+"team": "Ferreira do Zêzere by Zêzerovo",
+"games": 36,
+"goals": 11
+}
+],
+"fzz13": [
+{
+"s": "26",
+"team": "Ferreira do Zêzere",
+"games": 6,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Ferreira do Zêzere",
+"games": 30,
+"goals": 6
+},
+{
+"s": "24",
+"team": "Burinhosa",
+"games": 32,
+"goals": 33
+},
+{
+"s": "23",
+"team": "Burinhosa",
+"games": 31,
+"goals": 35
+},
+{
+"s": "22",
+"team": "Burinhosa",
+"games": 18,
+"goals": 11
+},
+{
+"s": "21",
+"team": "Leões Porto Salvo",
+"games": 1,
+"goals": 0
+}
+],
+"fzz14": [
+{
+"s": "26",
+"team": "Ferreira do Zêzere",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "UPVN",
+"games": 24,
+"goals": 10
+},
+{
+"s": "24",
+"team": "SC Lusitânia",
+"games": 21,
+"goals": 6
+},
+{
+"s": "23",
+"team": "AMSAC",
+"games": 29,
+"goals": 24
+},
+{
+"s": "22",
+"team": "AMSAC",
+"games": 27,
+"goals": 10
+},
+{
+"s": "21",
+"team": "Leões Porto Salvo",
+"games": 19,
+"goals": 16
+}
+],
+"fzz15": [
+{
+"s": "26",
+"team": "Ferreira do Zêzere",
+"games": 6,
+"goals": 4
+},
+{
+"s": "25",
+"team": "Ferreira do Zêzere",
+"games": 27,
+"goals": 16
+},
+{
+"s": "24",
+"team": "Ferreira do Zêzere",
+"games": 27,
+"goals": 8
+},
+{
+"s": "23",
+"team": "Ferreira do Zêzere by Zêzerovo",
+"games": 28,
+"goals": 7
+},
+{
+"s": "22",
+"team": "Ferreira do Zêzere by Zêzerovo",
+"games": 24,
+"goals": 8
+},
+{
+"s": "21",
+"team": "Ferreira do Zêzere by Zêzerovo",
+"games": 34,
+"goals": 23
+}
+],
+"ele01": [
+{
+"s": "26",
+"team": "Eléctrico",
+"games": 0,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Eléctrico",
+"games": 8,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Eléctrico",
+"games": 2,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Eléctrico",
+"games": 9,
+"goals": 1
+},
+{
+"s": "22",
+"team": "Eléctrico",
+"games": 5,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Montargilense",
+"games": 0,
+"goals": 0
+}
+],
+"ele02": [
+{
+"s": "26",
+"team": "Eléctrico",
+"games": 2,
+"goals": 0
+},
+{
+"s": "25",
+"team": "AD Fundão",
+"games": 14,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Sporting",
+"games": 25,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Sporting",
+"games": 19,
+"goals": 1
+},
+{
+"s": "22",
+"team": "Sporting",
+"games": 28,
+"goals": 2
+},
+{
+"s": "21",
+"team": "Sporting",
+"games": 3,
+"goals": 0
+}
+],
+"ele03": [
+{
+"s": "26",
+"team": "Eléctrico",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Eléctrico",
+"games": 27,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Eléctrico FC/ A MatosCar",
+"games": 27,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Eléctrico FC/ A MatosCar",
+"games": 23,
+"goals": 1
+},
+{
+"s": "22",
+"team": "Eléctrico FC/ A MatosCar",
+"games": 26,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Eléctrico FC/ A MatosCar",
+"games": 18,
+"goals": 0
+}
+],
+"ele04": [
+{
+"s": "26",
+"team": "Eléctrico",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Riga FC",
+"games": 15,
+"goals": 3
+},
+{
+"s": "24",
+"team": "Eléctrico FC/ A MatosCar",
+"games": 25,
+"goals": 4
+},
+{
+"s": "23",
+"team": "Eléctrico FC/ A MatosCar",
+"games": 25,
+"goals": 4
+},
+{
+"s": "22",
+"team": "Eléctrico FC/ A MatosCar",
+"games": 27,
+"goals": 4
+},
+{
+"s": "21",
+"team": "Eléctrico FC/ A MatosCar",
+"games": 33,
+"goals": 8
+}
+],
+"ele05": [
+{
+"s": "26",
+"team": "Eléctrico",
+"games": 6,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Eléctrico",
+"games": 27,
+"goals": 8
+},
+{
+"s": "24",
+"team": "Eléctrico",
+"games": 27,
+"goals": 10
+},
+{
+"s": "23",
+"team": "Quinta dos Lombos",
+"games": 22,
+"goals": 5
+},
+{
+"s": "22",
+"team": "Quinta dos Lombos",
+"games": 29,
+"goals": 8
+},
+{
+"s": "21",
+"team": "AMSAC",
+"games": 33,
+"goals": 17
+}
+],
+"ele06": [
+{
+"s": "26",
+"team": "Eléctrico",
+"games": 0,
+"goals": 0
+}
+],
+"ele07": [
+{
+"s": "26",
+"team": "Eléctrico",
+"games": 6,
+"goals": 2
+},
+{
+"s": "25",
+"team": "Eléctrico",
+"games": 13,
+"goals": 2
+},
+{
+"s": "24",
+"team": "Quinta dos Lombos",
+"games": 25,
+"goals": 7
+},
+{
+"s": "23",
+"team": "SC Lusitânia",
+"games": 25,
+"goals": 11
+},
+{
+"s": "22",
+"team": "Benfica",
+"games": 30,
+"goals": 16
+},
+{
+"s": "21",
+"team": "Benfica",
+"games": 17,
+"goals": 3
+}
+],
+"ele08": [
+{
+"s": "26",
+"team": "Eléctrico",
+"games": 5,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Sporting",
+"games": 1,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Sporting",
+"games": 11,
+"goals": 6
+},
+{
+"s": "23",
+"team": "Sporting",
+"games": 11,
+"goals": 4
+},
+{
+"s": "22",
+"team": "Sporting",
+"games": 27,
+"goals": 2
+},
+{
+"s": "21",
+"team": "Sporting",
+"games": 18,
+"goals": 13
+}
+],
+"ele09": [
+{
+"s": "26",
+"team": "Eléctrico",
+"games": 6,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Quinta dos Lombos",
+"games": 19,
+"goals": 7
+},
+{
+"s": "24",
+"team": "ADCR Caxinas Poça Barca",
+"games": 19,
+"goals": 5
+},
+{
+"s": "23",
+"team": "SC Lusitânia",
+"games": 23,
+"goals": 15
+}
+],
+"ele10": [
+{
+"s": "26",
+"team": "Eléctrico",
+"games": 6,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Eléctrico",
+"games": 24,
+"goals": 3
+},
+{
+"s": "24",
+"team": "Portimonense",
+"games": 24,
+"goals": 8
+},
+{
+"s": "23",
+"team": "Portimonense",
+"games": 29,
+"goals": 22
+},
+{
+"s": "22",
+"team": "Benfica",
+"games": 27,
+"goals": 12
+},
+{
+"s": "21",
+"team": "Inter-Vivos",
+"games": 0,
+"goals": 0
+}
+],
+"ele11": [
+{
+"s": "26",
+"team": "Eléctrico",
+"games": 6,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Eléctrico",
+"games": 28,
+"goals": 11
+},
+{
+"s": "24",
+"team": "Eléctrico",
+"games": 24,
+"goals": 10
+},
+{
+"s": "23",
+"team": "Quinta dos Lombos",
+"games": 23,
+"goals": 8
+},
+{
+"s": "22",
+"team": "Quinta dos Lombos",
+"games": 26,
+"goals": 15
+},
+{
+"s": "21",
+"team": "Quinta dos Lombos",
+"games": 31,
+"goals": 15
+}
+],
+"ele12": [
+{
+"s": "26",
+"team": "Eléctrico",
+"games": 1,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Magallanes",
+"games": 0,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Magallanes",
+"games": 0,
+"goals": 0
+}
+],
+"ele13": [
+{
+"s": "26",
+"team": "Eléctrico",
+"games": 3,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Nyírbátori",
+"games": 8,
+"goals": 8
+}
+],
+"ele14": [
+{
+"s": "26",
+"team": "Eléctrico",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "UPVN",
+"games": 25,
+"goals": 7
+},
+{
+"s": "24",
+"team": "Sporting",
+"games": 24,
+"goals": 13
+},
+{
+"s": "23",
+"team": "AMSAC",
+"games": 1,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Sporting",
+"games": 29,
+"goals": 22
+},
+{
+"s": "21",
+"team": "Belenenses",
+"games": 21,
+"goals": 12
+}
+],
+"ele15": [
+{
+"s": "26",
+"team": "Eléctrico",
+"games": 4,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Sibiryak",
+"games": 2,
+"goals": 2
+},
+{
+"s": "24",
+"team": "Tyumen",
+"games": 0,
+"goals": 0
+}
+],
+"rav01": [
+{
+"s": "26",
+"team": "Rio Ave",
+"games": 1,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Rio Ave",
+"games": 5,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Rio Ave",
+"games": 1,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Ascenção FC",
+"games": 20,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Ascenção FC",
+"games": 7,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Ascenção FC",
+"games": 0,
+"goals": 0
+}
+],
+"rav02": [
+{
+"s": "26",
+"team": "Rio Ave",
+"games": 5,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Rio Ave",
+"games": 22,
+"goals": 2
+},
+{
+"s": "24",
+"team": "Marítimo",
+"games": 22,
+"goals": 1
+},
+{
+"s": "23",
+"team": "Marítimo",
+"games": 16,
+"goals": 1
+},
+{
+"s": "22",
+"team": "Marítimo",
+"games": 25,
+"goals": 2
+},
+{
+"s": "21",
+"team": "Marítimo",
+"games": 33,
+"goals": 7
+}
+],
+"rav03": [
+{
+"s": "26",
+"team": "Rio Ave",
+"games": 3,
+"goals": 0
+},
+{
+"s": "25",
+"team": "ADCR Caxinas Poça Barca",
+"games": 16,
+"goals": 0
+},
+{
+"s": "24",
+"team": "ADCR Caxinas Poça Barca",
+"games": 21,
+"goals": 0
+},
+{
+"s": "23",
+"team": "ADCR Caxinas Poça Barca",
+"games": 13,
+"goals": 1
+},
+{
+"s": "22",
+"team": "ADCR Caxinas Poça Barca",
+"games": 18,
+"goals": 0
+},
+{
+"s": "21",
+"team": "ADCR Caxinas Poça Barca",
+"games": 36,
+"goals": 1
+}
+],
+"rav04": [
+{
+"s": "26",
+"team": "Rio Ave",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Rio Ave",
+"games": 25,
+"goals": 8
+},
+{
+"s": "24",
+"team": "Rio Ave",
+"games": 25,
+"goals": 5
+},
+{
+"s": "23",
+"team": "SCC/FC Famalicão",
+"games": 24,
+"goals": 5
+},
+{
+"s": "22",
+"team": "Paços de Ferreira Redifogo Futsal",
+"games": 29,
+"goals": 5
+},
+{
+"s": "21",
+"team": "Paços de Ferreira Redifogo Futsal",
+"games": 9,
+"goals": 2
+}
+],
+"rav05": [
+{
+"s": "26",
+"team": "Rio Ave",
+"games": 6,
+"goals": 2
+},
+{
+"s": "25",
+"team": "ADCR Caxinas Poça Barca",
+"games": 19,
+"goals": 3
+},
+{
+"s": "24",
+"team": "ADCR Caxinas Poça Barca",
+"games": 2,
+"goals": 0
+},
+{
+"s": "23",
+"team": "ADCR Caxinas Poça Barca",
+"games": 8,
+"goals": 0
+},
+{
+"s": "22",
+"team": "ADCR Caxinas Poça Barca",
+"games": 11,
+"goals": 5
+},
+{
+"s": "21",
+"team": "ADCR Caxinas Poça Barca",
+"games": 23,
+"goals": 16
+}
+],
+"rav06": [
+{
+"s": "26",
+"team": "Rio Ave",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Rio Ave",
+"games": 25,
+"goals": 5
+},
+{
+"s": "24",
+"team": "Rio Ave",
+"games": 24,
+"goals": 5
+},
+{
+"s": "23",
+"team": "Rio Ave",
+"games": 30,
+"goals": 22
+},
+{
+"s": "22",
+"team": "Rio Ave",
+"games": 23,
+"goals": 11
+},
+{
+"s": "21",
+"team": "CA Sangemil",
+"games": 14,
+"goals": 8
+}
+],
+"rav07": [
+{
+"s": "26",
+"team": "Rio Ave",
+"games": 6,
+"goals": 3
+},
+{
+"s": "25",
+"team": "MNK Osijek",
+"games": 1,
+"goals": 1
+},
+{
+"s": "24",
+"team": "Sporting",
+"games": 36,
+"goals": 8
+},
+{
+"s": "23",
+"team": "Eléctrico FC/ A MatosCar",
+"games": 23,
+"goals": 7
+},
+{
+"s": "22",
+"team": "Eléctrico FC/ A MatosCar",
+"games": 27,
+"goals": 12
+},
+{
+"s": "21",
+"team": "Futsal Azeméis",
+"games": 32,
+"goals": 9
+}
+],
+"rav08": [
+{
+"s": "26",
+"team": "Rio Ave",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Rio Ave",
+"games": 25,
+"goals": 2
+},
+{
+"s": "24",
+"team": "Dínamo Sanjoanense",
+"games": 12,
+"goals": 4
+},
+{
+"s": "23",
+"team": "Eléctrico FC/ A MatosCar",
+"games": 23,
+"goals": 2
+},
+{
+"s": "22",
+"team": "ADCR Caxinas Poça Barca",
+"games": 27,
+"goals": 4
+},
+{
+"s": "21",
+"team": "Eléctrico FC/ A MatosCar",
+"games": 28,
+"goals": 4
+}
+],
+"rav09": [
+{
+"s": "26",
+"team": "Rio Ave",
+"games": 2,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Rio Ave",
+"games": 26,
+"goals": 3
+},
+{
+"s": "24",
+"team": "Rio Ave",
+"games": 27,
+"goals": 13
+},
+{
+"s": "23",
+"team": "Rio Ave",
+"games": 28,
+"goals": 17
+},
+{
+"s": "22",
+"team": "ADCR Caxinas Poça Barca",
+"games": 27,
+"goals": 7
+},
+{
+"s": "21",
+"team": "ADCR Caxinas Poça Barca",
+"games": 36,
+"goals": 7
+}
+],
+"rav10": [
+{
+"s": "26",
+"team": "Rio Ave",
+"games": 4,
+"goals": 2
+},
+{
+"s": "25",
+"team": "SC Braga",
+"games": 25,
+"goals": 7
+},
+{
+"s": "24",
+"team": "SC Braga",
+"games": 34,
+"goals": 13
+},
+{
+"s": "23",
+"team": "SC Braga",
+"games": 29,
+"goals": 1
+},
+{
+"s": "22",
+"team": "AD Fundão",
+"games": 26,
+"goals": 10
+},
+{
+"s": "21",
+"team": "AD Fundão",
+"games": 33,
+"goals": 11
+}
+],
+"rav11": [
+{
+"s": "26",
+"team": "Rio Ave",
+"games": 5,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Fortitudo Pomezia",
+"games": 26,
+"goals": 12
+},
+{
+"s": "24",
+"team": "Fortitudo Pomezia",
+"games": 20,
+"goals": 9
+},
+{
+"s": "23",
+"team": "Fortitudo Pomezia",
+"games": 27,
+"goals": 13
+},
+{
+"s": "22",
+"team": "Sporting",
+"games": 25,
+"goals": 7
+},
+{
+"s": "21",
+"team": "Sporting",
+"games": 39,
+"goals": 8
+}
+],
+"rav12": [
+{
+"s": "26",
+"team": "Rio Ave",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Rio Ave",
+"games": 23,
+"goals": 4
+},
+{
+"s": "24",
+"team": "Dínamo Sanjoanense",
+"games": 24,
+"goals": 1
+},
+{
+"s": "23",
+"team": "Dínamo Sanjoanense",
+"games": 30,
+"goals": 8
+},
+{
+"s": "22",
+"team": "CR Candoso/Natcal",
+"games": 11,
+"goals": 1
+},
+{
+"s": "21",
+"team": "CR Candoso/Natcal",
+"games": 29,
+"goals": 0
+}
+],
+"rav13": [
+{
+"s": "26",
+"team": "Rio Ave",
+"games": 6,
+"goals": 4
+},
+{
+"s": "25",
+"team": "Rio Ave",
+"games": 27,
+"goals": 17
+},
+{
+"s": "24",
+"team": "Dínamo Sanjoanense",
+"games": 21,
+"goals": 16
+},
+{
+"s": "23",
+"team": "Dínamo Sanjoanense",
+"games": 29,
+"goals": 30
+},
+{
+"s": "22",
+"team": "Dínamo Sanjoanense",
+"games": 35,
+"goals": 29
+},
+{
+"s": "21",
+"team": "SC Braga",
+"games": 24,
+"goals": 7
+}
+],
+"rav14": [
+{
+"s": "26",
+"team": "Rio Ave",
+"games": 5,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Rio Ave",
+"games": 13,
+"goals": 6
+},
+{
+"s": "24",
+"team": "Rio Ave",
+"games": 5,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Rio Ave",
+"games": 9,
+"goals": 0
+}
+],
+"rav15": [
+{
+"s": "26",
+"team": "Rio Ave",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Rio Ave",
+"games": 18,
+"goals": 5
+},
+{
+"s": "24",
+"team": "Boavista FC",
+"games": 23,
+"goals": 16
+},
+{
+"s": "23",
+"team": "Boavista FC",
+"games": 25,
+"goals": 15
+},
+{
+"s": "22",
+"team": "Boavista FC",
+"games": 21,
+"goals": 9
+},
+{
+"s": "21",
+"team": "Boavista FC",
+"games": 12,
+"goals": 1
+}
+],
+"rav16": [
+{
+"s": "26",
+"team": "Rio Ave",
+"games": 6,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Panta Walon",
+"games": 5,
+"goals": 4
+},
+{
+"s": "24",
+"team": "ADCR Caxinas Poça Barca",
+"games": 22,
+"goals": 11
+}
+],
+"uvn01": [
+{
+"s": "26",
+"team": "UPVN",
+"games": 0,
+"goals": 0
+},
+{
+"s": "25",
+"team": "CF Sassoeiros",
+"games": 2,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Juventude Castanheira",
+"games": 4,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Belenenses",
+"games": 27,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Belenenses",
+"games": 1,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Atlético CP",
+"games": 0,
+"goals": 0
+}
+],
+"uvn02": [
+{
+"s": "26",
+"team": "UPVN",
+"games": 1,
+"goals": 0
+},
+{
+"s": "25",
+"team": "UPVN",
+"games": 9,
+"goals": 0
+},
+{
+"s": "24",
+"team": "AMSAC",
+"games": 23,
+"goals": 3
+},
+{
+"s": "23",
+"team": "UPVN",
+"games": 24,
+"goals": 1
+},
+{
+"s": "22",
+"team": "Torreense",
+"games": 16,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Sporting",
+"games": 1,
+"goals": 0
+}
+],
+"uvn03": [
+{
+"s": "26",
+"team": "UPVN",
+"games": 6,
+"goals": 0
+}
+],
+"uvn04": [
+{
+"s": "26",
+"team": "UPVN",
+"games": 0,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Carregado",
+"games": 19,
+"goals": 1
+},
+{
+"s": "24",
+"team": "Manjoeira",
+"games": 14,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Forte da Casa",
+"games": 30,
+"goals": 4
+},
+{
+"s": "22",
+"team": "Forte da Casa",
+"games": 23,
+"goals": 1
+},
+{
+"s": "21",
+"team": "CAD",
+"games": 0,
+"goals": 0
+}
+],
+"uvn05": [
+{
+"s": "26",
+"team": "UPVN",
+"games": 5,
+"goals": 0
+},
+{
+"s": "25",
+"team": "UPVN",
+"games": 21,
+"goals": 4
+},
+{
+"s": "24",
+"team": "AMSAC",
+"games": 26,
+"goals": 5
+},
+{
+"s": "23",
+"team": "Sporting",
+"games": 17,
+"goals": 7
+},
+{
+"s": "22",
+"team": "Sporting",
+"games": 24,
+"goals": 5
+},
+{
+"s": "21",
+"team": "Sporting",
+"games": 3,
+"goals": 0
+}
+],
+"uvn06": [
+{
+"s": "26",
+"team": "UPVN",
+"games": 6,
+"goals": 2
+},
+{
+"s": "25",
+"team": "Quinta dos Lombos",
+"games": 23,
+"goals": 3
+},
+{
+"s": "24",
+"team": "Quinta dos Lombos",
+"games": 13,
+"goals": 4
+},
+{
+"s": "23",
+"team": "AMSAC",
+"games": 21,
+"goals": 6
+},
+{
+"s": "22",
+"team": "AMSAC",
+"games": 28,
+"goals": 5
+},
+{
+"s": "21",
+"team": "Benfica",
+"games": 2,
+"goals": 1
+}
+],
+"uvn07": [
+{
+"s": "26",
+"team": "UPVN",
+"games": 2,
+"goals": 0
+},
+{
+"s": "25",
+"team": "UPVN",
+"games": 22,
+"goals": 16
+},
+{
+"s": "24",
+"team": "UPVN",
+"games": 22,
+"goals": 11
+},
+{
+"s": "23",
+"team": "São Brás",
+"games": 23,
+"goals": 6
+}
+],
+"uvn08": [
+{
+"s": "26",
+"team": "UPVN",
+"games": 4,
+"goals": 0
+},
+{
+"s": "25",
+"team": "AMSAC",
+"games": 22,
+"goals": 7
+},
+{
+"s": "24",
+"team": "AMSAC",
+"games": 27,
+"goals": 8
+},
+{
+"s": "23",
+"team": "AMSAC",
+"games": 29,
+"goals": 5
+},
+{
+"s": "22",
+"team": "Sporting",
+"games": 31,
+"goals": 10
+},
+{
+"s": "21",
+"team": "Sporting",
+"games": 22,
+"goals": 3
+}
+],
+"uvn09": [
+{
+"s": "26",
+"team": "UPVN",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "UPVN",
+"games": 23,
+"goals": 8
+},
+{
+"s": "24",
+"team": "AMSAC",
+"games": 25,
+"goals": 12
+},
+{
+"s": "23",
+"team": "Belenenses",
+"games": 21,
+"goals": 6
+},
+{
+"s": "22",
+"team": "AD Fundão",
+"games": 23,
+"goals": 2
+},
+{
+"s": "21",
+"team": "Benfica",
+"games": 1,
+"goals": 0
+}
+],
+"uvn10": [
+{
+"s": "26",
+"team": "UPVN",
+"games": 4,
+"goals": 1
+},
+{
+"s": "25",
+"team": "AGSL/OSK",
+"games": 0,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Ordabasy",
+"games": 0,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Omonia",
+"games": 0,
+"goals": 0
+},
+{
+"s": "22",
+"team": "New Vision Georgians",
+"games": 0,
+"goals": 0
+},
+{
+"s": "21",
+"team": "United Galati",
+"games": 3,
+"goals": 0
+}
+],
+"uvn11": [
+{
+"s": "26",
+"team": "UPVN",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "AD Fundão",
+"games": 25,
+"goals": 1
+},
+{
+"s": "24",
+"team": "AD Fundão",
+"games": 26,
+"goals": 3
+},
+{
+"s": "23",
+"team": "SC Lusitânia",
+"games": 23,
+"goals": 10
+},
+{
+"s": "22",
+"team": "ACD Ladoeiro",
+"games": 1,
+"goals": 0
+},
+{
+"s": "21",
+"team": "AD Fundão",
+"games": 9,
+"goals": 0
+}
+],
+"uvn12": [
+{
+"s": "26",
+"team": "UPVN",
+"games": 5,
+"goals": 3
+},
+{
+"s": "25",
+"team": "UPVN",
+"games": 23,
+"goals": 13
+},
+{
+"s": "24",
+"team": "UPVN",
+"games": 30,
+"goals": 28
+},
+{
+"s": "23",
+"team": "Torreense",
+"games": 9,
+"goals": 3
+},
+{
+"s": "22",
+"team": "Torreense",
+"games": 25,
+"goals": 8
+},
+{
+"s": "21",
+"team": "AMSAC",
+"games": 34,
+"goals": 25
+}
+],
+"uvn13": [
+{
+"s": "26",
+"team": "UPVN",
+"games": 6,
+"goals": 2
+},
+{
+"s": "25",
+"team": "UPVN",
+"games": 22,
+"goals": 6
+},
+{
+"s": "24",
+"team": "UPVN",
+"games": 29,
+"goals": 11
+},
+{
+"s": "23",
+"team": "UPVN",
+"games": 25,
+"goals": 18
+},
+{
+"s": "22",
+"team": "UPVN",
+"games": 32,
+"goals": 27
+},
+{
+"s": "21",
+"team": "Leões Porto Salvo",
+"games": 24,
+"goals": 9
+}
+],
+"uvn14": [
+{
+"s": "26",
+"team": "UPVN",
+"games": 4,
+"goals": 0
+},
+{
+"s": "25",
+"team": "UPVN",
+"games": 12,
+"goals": 10
+},
+{
+"s": "24",
+"team": "Ferreira do Zêzere",
+"games": 17,
+"goals": 4
+},
+{
+"s": "23",
+"team": "Quinta dos Lombos",
+"games": 18,
+"goals": 4
+},
+{
+"s": "22",
+"team": "Sporting",
+"games": 35,
+"goals": 34
+},
+{
+"s": "21",
+"team": "Sporting",
+"games": 2,
+"goals": 0
+}
+],
+"uvn15": [
+{
+"s": "26",
+"team": "UPVN",
+"games": 4,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Kaspiy Aktau",
+"games": 0,
+"goals": 0
+}
+],
+"uvn16": [
+{
+"s": "26",
+"team": "UPVN",
+"games": 1,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Sporting",
+"games": 1,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Sporting",
+"games": 22,
+"goals": 16
+},
+{
+"s": "23",
+"team": "Leões Porto Salvo",
+"games": 4,
+"goals": 3
+},
+{
+"s": "22",
+"team": "Leões Porto Salvo",
+"games": 23,
+"goals": 12
+},
+{
+"s": "21",
+"team": "Leões Porto Salvo",
+"games": 11,
+"goals": 18
+}
+],
+"uvn17": [
+{
+"s": "26",
+"team": "Belenenses",
+"games": 5,
+"goals": 2
+},
+{
+"s": "25",
+"team": "UPVN",
+"games": 26,
+"goals": 12
+},
+{
+"s": "24",
+"team": "CF Sassoeiros",
+"games": 23,
+"goals": 11
+},
+{
+"s": "23",
+"team": "AMSAC",
+"games": 30,
+"goals": 10
+},
+{
+"s": "22",
+"team": "Leões Porto Salvo",
+"games": 19,
+"goals": 11
+},
+{
+"s": "21",
+"team": "Benfica",
+"games": 19,
+"goals": 10
+}
+],
+"uvn18": [
+{
+"s": "26",
+"team": "Reguilas Tires",
+"games": 2,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Belenenses",
+"games": 18,
+"goals": 9
+},
+{
+"s": "24",
+"team": "Belenenses",
+"games": 25,
+"goals": 8
+},
+{
+"s": "23",
+"team": "Belenenses",
+"games": 8,
+"goals": 4
+},
+{
+"s": "22",
+"team": "Belenenses",
+"games": 5,
+"goals": 1
+},
+{
+"s": "21",
+"team": "Leões Porto Salvo",
+"games": 19,
+"goals": 2
+}
+],
+"uvn19": [
+{
+"s": "26",
+"team": "UPVN",
+"games": 4,
+"goals": 0
+},
+{
+"s": "25",
+"team": "AMSAC",
+"games": 25,
+"goals": 13
+},
+{
+"s": "24",
+"team": "UPVN",
+"games": 22,
+"goals": 4
+},
+{
+"s": "23",
+"team": "AMSAC",
+"games": 12,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Sporting",
+"games": 16,
+"goals": 1
+},
+{
+"s": "21",
+"team": "Sporting",
+"games": 6,
+"goals": 5
+}
+],
+"uvn20": [
+{
+"s": "26",
+"team": "UPVN",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "UPVN",
+"games": 22,
+"goals": 11
+},
+{
+"s": "24",
+"team": "UPVN",
+"games": 26,
+"goals": 13
+},
+{
+"s": "23",
+"team": "Quinta dos Lombos",
+"games": 17,
+"goals": 2
+},
+{
+"s": "22",
+"team": "UPVN",
+"games": 17,
+"goals": 14
+},
+{
+"s": "21",
+"team": "Leões Porto Salvo",
+"games": 0,
+"goals": 0
+}
+],
+"por01": [
+{
+"s": "26",
+"team": "Portimonense",
+"games": 0,
+"goals": 0
+},
+{
+"s": "25",
+"team": "GD Lagoa",
+"games": 6,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Pedra Mourinha",
+"games": 24,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Pedra Mourinha",
+"games": 24,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Lagoenses",
+"games": 18,
+"goals": 0
+}
+],
+"por02": [
+{
+"s": "26",
+"team": "Portimonense",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Portimonense",
+"games": 29,
+"goals": 2
+},
+{
+"s": "24",
+"team": "Portimonense",
+"games": 26,
+"goals": 2
+},
+{
+"s": "23",
+"team": "AD Fundão",
+"games": 15,
+"goals": 0
+},
+{
+"s": "22",
+"team": "AD Fundão",
+"games": 15,
+"goals": 0
+},
+{
+"s": "21",
+"team": "ACD Ladoeiro",
+"games": 33,
+"goals": 0
+}
+],
+"por03": [
+{
+"s": "26",
+"team": "Portimonense",
+"games": 2,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Rio Ave",
+"games": 19,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Rio Ave",
+"games": 27,
+"goals": 3
+},
+{
+"s": "23",
+"team": "Rio Ave",
+"games": 28,
+"goals": 1
+},
+{
+"s": "22",
+"team": "Rio Ave",
+"games": 24,
+"goals": 2
+},
+{
+"s": "21",
+"team": "Dínamo Sanjoanense",
+"games": 14,
+"goals": 0
+}
+],
+"por04": [
+{
+"s": "26",
+"team": "Portimonense",
+"games": 2,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Portimonense",
+"games": 31,
+"goals": 1
+},
+{
+"s": "24",
+"team": "Portimonense",
+"games": 23,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Portimonense",
+"games": 1,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Portimonense",
+"games": 11,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Portimonense",
+"games": 0,
+"goals": 0
+}
+],
+"por05": [
+{
+"s": "26",
+"team": "Portimonense",
+"games": 4,
+"goals": 0
+},
+{
+"s": "25",
+"team": "AD Fundão",
+"games": 16,
+"goals": 4
+},
+{
+"s": "24",
+"team": "AD Fundão",
+"games": 11,
+"goals": 1
+},
+{
+"s": "23",
+"team": "AD Fundão",
+"games": 22,
+"goals": 3
+},
+{
+"s": "22",
+"team": "AD Fundão",
+"games": 18,
+"goals": 3
+},
+{
+"s": "21",
+"team": "AD Fundão",
+"games": 17,
+"goals": 2
+}
+],
+"por06": [
+{
+"s": "26",
+"team": "Portimonense",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Portimonense",
+"games": 26,
+"goals": 9
+},
+{
+"s": "24",
+"team": "Modicus Bruval",
+"games": 24,
+"goals": 4
+},
+{
+"s": "23",
+"team": "Modicus Bruval",
+"games": 28,
+"goals": 18
+},
+{
+"s": "22",
+"team": "Modicus Bruval",
+"games": 33,
+"goals": 12
+},
+{
+"s": "21",
+"team": "ACD Ladoeiro",
+"games": 30,
+"goals": 17
+}
+],
+"por07": [
+{
+"s": "26",
+"team": "Portimonense",
+"games": 6,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Portimonense",
+"games": 9,
+"goals": 4
+},
+{
+"s": "24",
+"team": "Modicus",
+"games": 29,
+"goals": 9
+},
+{
+"s": "23",
+"team": "SC Lusitânia",
+"games": 17,
+"goals": 21
+}
+],
+"por08": [
+{
+"s": "26",
+"team": "Portimonense",
+"games": 4,
+"goals": 2
+},
+{
+"s": "25",
+"team": "Portimonense",
+"games": 3,
+"goals": 2
+},
+{
+"s": "24",
+"team": "Portimonense",
+"games": 26,
+"goals": 28
+},
+{
+"s": "23",
+"team": "Portimonense",
+"games": 12,
+"goals": 10
+},
+{
+"s": "22",
+"team": "Ferragudense",
+"games": 0,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Ferragudense",
+"games": 0,
+"goals": 0
+}
+],
+"por09": [
+{
+"s": "26",
+"team": "Portimonense",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Portimonense",
+"games": 29,
+"goals": 12
+},
+{
+"s": "24",
+"team": "Albufeira Futsal",
+"games": 24,
+"goals": 15
+},
+{
+"s": "23",
+"team": "Pedra Mourinha",
+"games": 27,
+"goals": 40
+},
+{
+"s": "22",
+"team": "Albufeira Futsal",
+"games": 28,
+"goals": 9
+},
+{
+"s": "21",
+"team": "Portimonense",
+"games": 17,
+"goals": 7
+}
+],
+"por10": [
+{
+"s": "26",
+"team": "Portimonense",
+"games": 6,
+"goals": 4
+},
+{
+"s": "25",
+"team": "Portimonense",
+"games": 31,
+"goals": 26
+},
+{
+"s": "24",
+"team": "Portimonense",
+"games": 13,
+"goals": 5
+},
+{
+"s": "23",
+"team": "Torreense",
+"games": 8,
+"goals": 1
+},
+{
+"s": "22",
+"team": "Portimonense",
+"games": 12,
+"goals": 8
+},
+{
+"s": "21",
+"team": "Quinta dos Lombos",
+"games": 29,
+"goals": 4
+}
+],
+"por11": [
+{
+"s": "26",
+"team": "Portimonense",
+"games": 6,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Viseu 2001",
+"games": 17,
+"goals": 10
+},
+{
+"s": "24",
+"team": "ADCR Caxinas Poça Barca",
+"games": 7,
+"goals": 4
+},
+{
+"s": "21",
+"team": "Torreense",
+"games": 26,
+"goals": 11
+}
+],
+"por12": [
+{
+"s": "26",
+"team": "Portimonense",
+"games": 6,
+"goals": 2
+},
+{
+"s": "25",
+"team": "Portimonense",
+"games": 28,
+"goals": 14
+},
+{
+"s": "24",
+"team": "Portimonense",
+"games": 25,
+"goals": 6
+},
+{
+"s": "23",
+"team": "Portimonense",
+"games": 1,
+"goals": 0
+}
+],
+"por13": [
+{
+"s": "26",
+"team": "Portimonense",
+"games": 0,
+"goals": 0
+},
+{
+"s": "25",
+"team": "SC Barbarense",
+"games": 22,
+"goals": 15
+},
+{
+"s": "24",
+"team": "SC Barbarense",
+"games": 23,
+"goals": 9
+},
+{
+"s": "23",
+"team": "Leões Porto Salvo",
+"games": 20,
+"goals": 7
+},
+{
+"s": "22",
+"team": "Reguilas Tires",
+"games": 8,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Sporting",
+"games": 15,
+"goals": 1
+}
+],
+"por14": [
+{
+"s": "26",
+"team": "Portimonense",
+"games": 2,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Portimonense",
+"games": 9,
+"goals": 16
+},
+{
+"s": "24",
+"team": "Portimonense",
+"games": 8,
+"goals": 12
+},
+{
+"s": "23",
+"team": "Portimonense",
+"games": 15,
+"goals": 16
+},
+{
+"s": "22",
+"team": "Portimonense",
+"games": 0,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Portimonense",
+"games": 12,
+"goals": 15
+}
+],
+"por15": [
+{
+"s": "26",
+"team": "Portimonense",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Portimonense",
+"games": 25,
+"goals": 21
+},
+{
+"s": "24",
+"team": "Albufeira Futsal",
+"games": 24,
+"goals": 44
+},
+{
+"s": "23",
+"team": "Pedra Mourinha",
+"games": 7,
+"goals": 13
+},
+{
+"s": "22",
+"team": "Albufeira Futsal",
+"games": 22,
+"goals": 28
+},
+{
+"s": "21",
+"team": "Portimonense",
+"games": 24,
+"goals": 8
+}
+],
+"por16": [
+{
+"s": "26",
+"team": "Portimonense",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Leões Porto Salvo",
+"games": 28,
+"goals": 3
+},
+{
+"s": "24",
+"team": "Sporting",
+"games": 15,
+"goals": 1
+},
+{
+"s": "23",
+"team": "Sporting",
+"games": 5,
+"goals": 2
+},
+{
+"s": "22",
+"team": "Burinhosa",
+"games": 8,
+"goals": 6
+},
+{
+"s": "21",
+"team": "CCR Telheiro",
+"games": 3,
+"goals": 3
+}
+],
+"por17": [
+{
+"s": "26",
+"team": "Portimonense",
+"games": 6,
+"goals": 2
+},
+{
+"s": "25",
+"team": "Araz Naxçivan",
+"games": 8,
+"goals": 5
+},
+{
+"s": "24",
+"team": "Anderlecht",
+"games": 15,
+"goals": 3
+},
+{
+"s": "23",
+"team": "Haladás",
+"games": 6,
+"goals": 1
+},
+{
+"s": "22",
+"team": "Haladás",
+"games": 3,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Haladás",
+"games": 8,
+"goals": 3
+}
+],
+"por18": [
+{
+"s": "26",
+"team": "Portimonense",
+"games": 1,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Portimonense",
+"games": 31,
+"goals": 11
+},
+{
+"s": "24",
+"team": "Portimonense",
+"games": 15,
+"goals": 9
+},
+{
+"s": "23",
+"team": "Benfica",
+"games": 26,
+"goals": 29
+},
+{
+"s": "22",
+"team": "Benfica",
+"games": 33,
+"goals": 26
+},
+{
+"s": "21",
+"team": "Benfica",
+"games": 19,
+"goals": 19
+}
+],
+"fam01": [
+{
+"s": "26",
+"team": "FC Famalicão",
+"games": 3,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Quinta dos Lombos",
+"games": 14,
+"goals": 1
+},
+{
+"s": "24",
+"team": "AD Fundão",
+"games": 21,
+"goals": 1
+},
+{
+"s": "23",
+"team": "SC Braga",
+"games": 6,
+"goals": 0
+},
+{
+"s": "22",
+"team": "SC Braga",
+"games": 8,
+"goals": 1
+},
+{
+"s": "21",
+"team": "SC Braga",
+"games": 3,
+"goals": 0
+}
+],
+"fam02": [
+{
+"s": "26",
+"team": "FC Famalicão",
+"games": 0,
+"goals": 0
+},
+{
+"s": "25",
+"team": "FC Famalicão",
+"games": 8,
+"goals": 0
+},
+{
+"s": "24",
+"team": "SCC/FC Famalicão",
+"games": 19,
+"goals": 0
+},
+{
+"s": "23",
+"team": "SCC/FC Famalicão",
+"games": 26,
+"goals": 0
+},
+{
+"s": "22",
+"team": "SCC/FC Famalicão",
+"games": 26,
+"goals": 0
+},
+{
+"s": "21",
+"team": "SCC/FC Famalicão",
+"games": 22,
+"goals": 0
+}
+],
+"fam03": [
+{
+"s": "26",
+"team": "FC Famalicão",
+"games": 0,
+"goals": 0
+},
+{
+"s": "25",
+"team": "ACR Lordelo",
+"games": 10,
+"goals": 0
+},
+{
+"s": "24",
+"team": "FC Famalicão",
+"games": 2,
+"goals": 0
+},
+{
+"s": "23",
+"team": "CD Aves 1930",
+"games": 7,
+"goals": 0
+},
+{
+"s": "22",
+"team": "São Mateus",
+"games": 8,
+"goals": 0
+},
+{
+"s": "21",
+"team": "CR Candoso/Natcal",
+"games": 6,
+"goals": 0
+}
+],
+"fam04": [
+{
+"s": "26",
+"team": "FC Famalicão",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "FC Famalicão",
+"games": 20,
+"goals": 1
+},
+{
+"s": "24",
+"team": "FC Famalicão",
+"games": 14,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Ferreira do Zêzere by Zêzerovo",
+"games": 18,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Ferreira do Zêzere by Zêzerovo",
+"games": 23,
+"goals": 2
+},
+{
+"s": "21",
+"team": "Ferreira do Zêzere by Zêzerovo",
+"games": 17,
+"goals": 2
+}
+],
+"fam05": [
+{
+"s": "26",
+"team": "FC Famalicão",
+"games": 5,
+"goals": 1
+},
+{
+"s": "25",
+"team": "ADCR Caxinas Poça Barca",
+"games": 3,
+"goals": 0
+},
+{
+"s": "24",
+"team": "ADCR Caxinas Poça Barca",
+"games": 5,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Nogueiró e Tenões",
+"games": 19,
+"goals": 28
+},
+{
+"s": "22",
+"team": "Nogueiró e Tenões",
+"games": 8,
+"goals": 1
+},
+{
+"s": "21",
+"team": "Nogueiró e Tenões",
+"games": 7,
+"goals": 4
+}
+],
+"fam06": [
+{
+"s": "26",
+"team": "FC Famalicão",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "FC Famalicão",
+"games": 25,
+"goals": 5
+},
+{
+"s": "24",
+"team": "SC Braga",
+"games": 22,
+"goals": 1
+},
+{
+"s": "23",
+"team": "SC Braga",
+"games": 9,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Ferreira do Zêzere by Zêzerovo",
+"games": 25,
+"goals": 4
+},
+{
+"s": "21",
+"team": "Ferreira do Zêzere by Zêzerovo",
+"games": 36,
+"goals": 11
+}
+],
+"fam07": [
+{
+"s": "26",
+"team": "FC Famalicão",
+"games": 2,
+"goals": 1
+},
+{
+"s": "25",
+"team": "CS São João",
+"games": 12,
+"goals": 4
+},
+{
+"s": "24",
+"team": "CDRC São Martinho de Mouros",
+"games": 12,
+"goals": 1
+},
+{
+"s": "23",
+"team": "Arsenal Maia",
+"games": 20,
+"goals": 4
+},
+{
+"s": "22",
+"team": "Marítimo",
+"games": 14,
+"goals": 1
+},
+{
+"s": "21",
+"team": "FC Arouca",
+"games": 20,
+"goals": 11
+}
+],
+"fam08": [
+{
+"s": "26",
+"team": "FC Famalicão",
+"games": 0,
+"goals": 0
+},
+{
+"s": "25",
+"team": "SC Braga",
+"games": 9,
+"goals": 0
+},
+{
+"s": "24",
+"team": "SC Braga",
+"games": 1,
+"goals": 1
+},
+{
+"s": "23",
+"team": "SC Braga",
+"games": 31,
+"goals": 19
+},
+{
+"s": "22",
+"team": "SC Braga",
+"games": 17,
+"goals": 14
+},
+{
+"s": "21",
+"team": "SC Braga",
+"games": 0,
+"goals": 0
+}
+],
+"fam09": [
+{
+"s": "26",
+"team": "FC Famalicão",
+"games": 6,
+"goals": 2
+},
+{
+"s": "25",
+"team": "ACD Ladoeiro",
+"games": 25,
+"goals": 19
+},
+{
+"s": "24",
+"team": "FC Famalicão",
+"games": 28,
+"goals": 16
+},
+{
+"s": "23",
+"team": "AD Fundão",
+"games": 22,
+"goals": 2
+},
+{
+"s": "22",
+"team": "SC Lusitânia",
+"games": 22,
+"goals": 7
+},
+{
+"s": "21",
+"team": "SC Lusitânia",
+"games": 21,
+"goals": 6
+}
+],
+"fam10": [
+{
+"s": "26",
+"team": "FC Famalicão",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Piast Gliwice",
+"games": 6,
+"goals": 2
+},
+{
+"s": "24",
+"team": "Benfica",
+"games": 1,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Benfica",
+"games": 10,
+"goals": 11
+},
+{
+"s": "22",
+"team": "Benfica",
+"games": 2,
+"goals": 2
+},
+{
+"s": "21",
+"team": "Leões Porto Salvo",
+"games": 14,
+"goals": 0
+}
+],
+"fam11": [
+{
+"s": "26",
+"team": "FC Famalicão",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "FC Famalicão",
+"games": 10,
+"goals": 2
+},
+{
+"s": "24",
+"team": "SCC/FC Famalicão",
+"games": 25,
+"goals": 8
+},
+{
+"s": "23",
+"team": "SCC/FC Famalicão",
+"games": 26,
+"goals": 9
+},
+{
+"s": "22",
+"team": "SCC/FC Famalicão",
+"games": 30,
+"goals": 13
+},
+{
+"s": "21",
+"team": "ACR Lordelo",
+"games": 22,
+"goals": 25
+}
+],
+"fam12": [
+{
+"s": "26",
+"team": "FC Famalicão",
+"games": 0,
+"goals": 0
+},
+{
+"s": "25",
+"team": "FC Famalicão",
+"games": 0,
+"goals": 0
+},
+{
+"s": "24",
+"team": "CDRC Tebosa",
+"games": 19,
+"goals": 15
+}
+],
+"fam13": [
+{
+"s": "26",
+"team": "FC Famalicão",
+"games": 3,
+"goals": 1
+},
+{
+"s": "25",
+"team": "AD Fundão",
+"games": 17,
+"goals": 2
+},
+{
+"s": "24",
+"team": "Leões Porto Salvo",
+"games": 25,
+"goals": 2
+},
+{
+"s": "23",
+"team": "Leões Porto Salvo",
+"games": 21,
+"goals": 2
+},
+{
+"s": "22",
+"team": "Leões Porto Salvo",
+"games": 14,
+"goals": 12
+},
+{
+"s": "21",
+"team": "Leões Porto Salvo",
+"games": 16,
+"goals": 12
+}
+],
+"fam14": [
+{
+"s": "26",
+"team": "FC Famalicão",
+"games": 5,
+"goals": 0
+}
+],
+"fam15": [
+{
+"s": "26",
+"team": "FC Famalicão",
+"games": 5,
+"goals": 2
+},
+{
+"s": "25",
+"team": "FC Famalicão",
+"games": 21,
+"goals": 2
+},
+{
+"s": "24",
+"team": "SCC/FC Famalicão",
+"games": 26,
+"goals": 13
+},
+{
+"s": "23",
+"team": "SCC/FC Famalicão",
+"games": 23,
+"goals": 18
+},
+{
+"s": "22",
+"team": "SCC/FC Famalicão",
+"games": 26,
+"goals": 26
+},
+{
+"s": "21",
+"team": "SCC/FC Famalicão",
+"games": 22,
+"goals": 22
+}
+],
+"fam16": [
+{
+"s": "26",
+"team": "FC Famalicão",
+"games": 5,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Novo Vrijeme",
+"games": 9,
+"goals": 3
+},
+{
+"s": "24",
+"team": "KS Constract Lubawa",
+"games": 39,
+"goals": 36
+},
+{
+"s": "23",
+"team": "ADCR Caxinas Poça Barca",
+"games": 12,
+"goals": 2
+},
+{
+"s": "22",
+"team": "Italservice Pesaro",
+"games": 20,
+"goals": 8
+},
+{
+"s": "21",
+"team": "Ribera Navarra",
+"games": 35,
+"goals": 16
+}
+],
+"fam17": [
+{
+"s": "26",
+"team": "FC Famalicão",
+"games": 5,
+"goals": 0
+}
+],
+"fam18": [
+{
+"s": "26",
+"team": "FC Famalicão",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Ferreira do Zêzere",
+"games": 9,
+"goals": 0
+},
+{
+"s": "24",
+"team": "SC Braga",
+"games": 20,
+"goals": 11
+},
+{
+"s": "23",
+"team": "SC Braga",
+"games": 17,
+"goals": 23
+},
+{
+"s": "22",
+"team": "Futsal Azeméis",
+"games": 11,
+"goals": 0
+},
+{
+"s": "21",
+"team": "AD Jorge Antunes",
+"games": 2,
+"goals": 0
+}
+],
+"tor01": [
+{
+"s": "26",
+"team": "Torreense",
+"games": 2,
+"goals": 0
+},
+{
+"s": "25",
+"team": "SC Barbarense",
+"games": 26,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Torreense",
+"games": 11,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Vitória FC",
+"games": 26,
+"goals": 1
+},
+{
+"s": "22",
+"team": "Vitória FC",
+"games": 27,
+"goals": 0
+}
+],
+"tor02": [
+{
+"s": "26",
+"team": "Torreense",
+"games": 4,
+"goals": 0
+},
+{
+"s": "25",
+"team": "AMSAC",
+"games": 23,
+"goals": 1
+},
+{
+"s": "24",
+"team": "Sporting",
+"games": 0,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Futsal Oeiras",
+"games": 3,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Futsal Oeiras",
+"games": 3,
+"goals": 0
+},
+{
+"s": "21",
+"team": "18 de Maio",
+"games": 0,
+"goals": 0
+}
+],
+"tor03": [
+{
+"s": "26",
+"team": "Torreense",
+"games": 0,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Pregança",
+"games": 16,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Futsal Oeiras",
+"games": 2,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Torreense",
+"games": 14,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Torreense",
+"games": 4,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Torreense",
+"games": 0,
+"goals": 0
+}
+],
+"tor04": [
+{
+"s": "26",
+"team": "Torreense",
+"games": 5,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Torreense",
+"games": 17,
+"goals": 7
+},
+{
+"s": "24",
+"team": "Benfica",
+"games": 19,
+"goals": 4
+},
+{
+"s": "23",
+"team": "Benfica",
+"games": 26,
+"goals": 28
+},
+{
+"s": "22",
+"team": "Benfica",
+"games": 33,
+"goals": 16
+},
+{
+"s": "21",
+"team": "Benfica",
+"games": 2,
+"goals": 1
+}
+],
+"tor05": [
+{
+"s": "26",
+"team": "Torreense",
+"games": 5,
+"goals": 0
+},
+{
+"s": "25",
+"team": "UPVN",
+"games": 11,
+"goals": 3
+},
+{
+"s": "24",
+"team": "SC Lusitânia",
+"games": 16,
+"goals": 2
+}
+],
+"tor06": [
+{
+"s": "26",
+"team": "Torreense",
+"games": 0,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Torreense",
+"games": 1,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Benfica",
+"games": 13,
+"goals": 4
+},
+{
+"s": "23",
+"team": "Benfica",
+"games": 6,
+"goals": 3
+},
+{
+"s": "22",
+"team": "Benfica",
+"games": 7,
+"goals": 1
+},
+{
+"s": "21",
+"team": "GROB",
+"games": 0,
+"goals": 0
+}
+],
+"tor07": [
+{
+"s": "26",
+"team": "Torreense",
+"games": 5,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Torreense",
+"games": 27,
+"goals": 6
+},
+{
+"s": "24",
+"team": "Torreense",
+"games": 24,
+"goals": 8
+},
+{
+"s": "23",
+"team": "Ferreira do Zêzere by Zêzerovo",
+"games": 28,
+"goals": 14
+},
+{
+"s": "22",
+"team": "Ferreira do Zêzere by Zêzerovo",
+"games": 27,
+"goals": 19
+},
+{
+"s": "21",
+"team": "Marítimo",
+"games": 37,
+"goals": 23
+}
+],
+"tor08": [
+{
+"s": "26",
+"team": "Torreense",
+"games": 0,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Torreense",
+"games": 5,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Sporting",
+"games": 28,
+"goals": 15
+},
+{
+"s": "23",
+"team": "Sporting",
+"games": 23,
+"goals": 7
+},
+{
+"s": "22",
+"team": "Burinhosa",
+"games": 28,
+"goals": 7
+},
+{
+"s": "21",
+"team": "Ribafria",
+"games": 0,
+"goals": 0
+}
+],
+"tor09": [
+{
+"s": "26",
+"team": "Torreense",
+"games": 2,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Torreense",
+"games": 12,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Torreense",
+"games": 2,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Torreense",
+"games": 25,
+"goals": 13
+},
+{
+"s": "22",
+"team": "Torreense",
+"games": 3,
+"goals": 1
+},
+{
+"s": "21",
+"team": "Torreense",
+"games": 0,
+"goals": 0
+}
+],
+"tor10": [
+{
+"s": "26",
+"team": "Torreense",
+"games": 5,
+"goals": 0
+},
+{
+"s": "25",
+"team": "UPVN",
+"games": 22,
+"goals": 2
+},
+{
+"s": "24",
+"team": "UPVN",
+"games": 28,
+"goals": 10
+},
+{
+"s": "23",
+"team": "Al-Riyadh",
+"games": 0,
+"goals": 0
+},
+{
+"s": "22",
+"team": "SC Lusitânia",
+"games": 34,
+"goals": 17
+},
+{
+"s": "21",
+"team": "Svarog FC Teplice",
+"games": 0,
+"goals": 0
+}
+],
+"tor11": [
+{
+"s": "26",
+"team": "Torreense",
+"games": 5,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Torreense",
+"games": 26,
+"goals": 7
+},
+{
+"s": "24",
+"team": "Portimonense",
+"games": 25,
+"goals": 13
+},
+{
+"s": "23",
+"team": "Portimonense",
+"games": 21,
+"goals": 21
+},
+{
+"s": "22",
+"team": "Torreense",
+"games": 29,
+"goals": 12
+},
+{
+"s": "21",
+"team": "AMSAC",
+"games": 31,
+"goals": 14
+}
+],
+"tor12": [
+{
+"s": "26",
+"team": "Torreense",
+"games": 5,
+"goals": 0
+}
+],
+"tor13": [
+{
+"s": "26",
+"team": "Torreense",
+"games": 4,
+"goals": 0
+}
+],
+"tor14": [
+{
+"s": "26",
+"team": "Torreense",
+"games": 1,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Quinta dos Lombos",
+"games": 23,
+"goals": 7
+},
+{
+"s": "24",
+"team": "Sporting",
+"games": 26,
+"goals": 28
+},
+{
+"s": "23",
+"team": "Sporting",
+"games": 26,
+"goals": 11
+},
+{
+"s": "22",
+"team": "Leões Porto Salvo",
+"games": 1,
+"goals": 1
+},
+{
+"s": "21",
+"team": "Belenenses",
+"games": 7,
+"goals": 1
+}
+],
+"tor15": [
+{
+"s": "26",
+"team": "Torreense",
+"games": 0,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Torreense",
+"games": 1,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Leões Porto Salvo",
+"games": 13,
+"goals": 1
+},
+{
+"s": "23",
+"team": "AMSAC",
+"games": 21,
+"goals": 6
+},
+{
+"s": "22",
+"team": "Benfica",
+"games": 1,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Amigos Luz",
+"games": 0,
+"goals": 0
+}
+],
+"tor16": [
+{
+"s": "26",
+"team": "Torreense",
+"games": 4,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Torreense",
+"games": 0,
+"goals": 0
+},
+{
+"s": "24",
+"team": "ADCR Caxinas Poça Barca",
+"games": 21,
+"goals": 6
+},
+{
+"s": "23",
+"team": "Belenenses",
+"games": 21,
+"goals": 5
+},
+{
+"s": "22",
+"team": "Belenenses",
+"games": 22,
+"goals": 8
+},
+{
+"s": "21",
+"team": "Reguilas Tires",
+"games": 19,
+"goals": 11
+}
+],
+"tor17": [
+{
+"s": "26",
+"team": "Torreense",
+"games": 4,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Torreense",
+"games": 4,
+"goals": 0
+},
+{
+"s": "24",
+"team": "ADCR Caxinas Poça Barca",
+"games": 0,
+"goals": 0
+},
+{
+"s": "23",
+"team": "PAC - Peniche Amigos",
+"games": 2,
+"goals": 0
+},
+{
+"s": "22",
+"team": "PAC - Peniche Amigos",
+"games": 10,
+"goals": 8
+},
+{
+"s": "21",
+"team": "PAC - Peniche Amigos",
+"games": 0,
+"goals": 0
+}
+],
+"tor18": [
+{
+"s": "26",
+"team": "Torreense",
+"games": 5,
+"goals": 5
+},
+{
+"s": "25",
+"team": "Torreense",
+"games": 26,
+"goals": 14
+}
+]
+}
+}

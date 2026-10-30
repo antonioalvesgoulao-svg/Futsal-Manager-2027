@@ -4,6 +4,9 @@ import { exportSave, saveToSlot, SLOTS } from '../../core/save';
 import { ATTR_GROUPS, overall, starsHtml } from '../../core/attributes';
 import type { Player } from '../../core/types';
 import { renderFriendly } from './friendly';
+import porHistory from '../../data/por/history.json';
+
+const HIST = porHistory.players as Record<string, { s: string; team: string; games: number; goals: number }[]>;
 
 const POS_NAME: Record<string, string> = {
   GR: 'Guarda-redes', FIX: 'Fixo', 'FIX/ALA': 'Fixo / Ala', UNI: 'Universal', ALA: 'Ala', 'ALA/PIV': 'Ala / Pivô', PIV: 'Pivô',
@@ -23,6 +26,11 @@ function playerProfile(p: Player) {
       <tr><th>Nacionalidade</th><td>${p.nationality}</td><th>Valor atual</th><td>${starsHtml(overall(p.attrs, p.position))}</td></tr>
       <tr><th></th><td></td><th>Potencial</th><td>${starsHtml(p.potential)}</td></tr>
     </table>
+    ${(HIST[p.id] ?? []).length ? `<h3>Historial (zerozero)</h3>
+    <table class="tbl small" style="max-width:520px;margin-bottom:16px">
+      <thead><tr><th>Época</th><th>Equipa</th><th>Jogos</th><th>Golos</th></tr></thead>
+      <tbody>${HIST[p.id].map((r) => `<tr><td>20${r.s}/${Number(r.s) + 1}</td><td>${r.team}</td><td>${r.games}</td><td>${r.goals}</td></tr>`).join('')}</tbody>
+    </table>` : ''}
     <div class="attr-grid">
       ${groups
         .map(

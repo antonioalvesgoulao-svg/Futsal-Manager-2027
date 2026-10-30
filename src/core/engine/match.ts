@@ -1,5 +1,5 @@
 // Motor de jogo de futsal: simulação posse a posse com regras oficiais.
-import { overall, rng } from '../attributes';
+import { gauss, overall, rng } from '../attributes';
 import type { Player } from '../types';
 import type { MatchEvent, MatchOptions, MatchResult, PlayerStats, Side, TeamSetup, TeamStats, EventType } from './types';
 
@@ -45,6 +45,11 @@ export function simulateMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptio
     for (let i = 0; i < arr.length; i++) if ((v -= ws[i]) <= 0) return arr[i];
     return arr[arr.length - 1];
   };
+
+  // Ritmo do jogo e inspiração de cada equipa nesse dia: dão variedade aos resultados
+  // (jogos fechados com poucos golos e jogos abertos com muitos, como no futsal real)
+  const pace = Math.max(0.7, Math.min(1.3, 1 + gauss(r) * 0.08));
+  const form: [number, number] = [Math.max(0.7, Math.min(1.3, 1 + gauss(r) * 0.08)), Math.max(0.7, Math.min(1.3, 1 + gauss(r) * 0.08))];
 
   const events: MatchEvent[] = [];
   const score: [number, number] = [0, 0];
@@ -309,7 +314,7 @@ export function simulateMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptio
 
     let pBlock = 0.24 + (defQ - finish) * 0.01;
     let pOn = 0.47 + (finish - 10) * 0.016 + (compo - 10) * 0.006;
-    let pGoal = 0.24 + (finish - gkQ) * 0.022;
+    let pGoal = 0.258 + (finish - gkQ) * 0.022;
     if (kind === 'contra') { pBlock *= 0.5; pOn += 0.08; pGoal += 0.1; }
     if (kind === 'livre10') { pBlock = 0; pOn = 0.72 + (finish - 10) * 0.015; pGoal = 0.42 + (finish - gkQ) * 0.025; }
     if (kind === 'penalti') { pBlock = 0; pOn = 0.86 + (compo - 10) * 0.01; pGoal = 0.78 + (finish - gkQ) * 0.02; }
@@ -317,6 +322,7 @@ export function simulateMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptio
     if (!gk) { pGoal = kind === 'baliza_aberta' ? 0.85 : 0.75; }
     if (kind === 'baliza_aberta') { pBlock = 0.08; pOn = 0.5 + (eff(shooter, 'remate') - 10) * 0.02; }
     const cl = (x: number, a: number, b: number) => Math.max(a, Math.min(b, x));
+    if (kind === 'jogada' || kind === 'contra' || kind === 'canto') pGoal *= form[s] * pace;
     pBlock = cl(pBlock, 0, 0.45); pOn = cl(pOn, 0.2, 0.95); pGoal = cl(pGoal, 0.06, 0.92);
 
     const how: Record<string, string> = {
@@ -393,9 +399,9 @@ export function simulateMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptio
     const numDiff = numbers(att) - numbers(def) + (att.flying ? 0 : 0);
     let diff = attQ - defQ * 0.85 - press * 0.15 + numDiff * 2.2;
     if (att.flying) diff += 1.5;
-    diff += s === 0 ? 1.6 : -0.5; // vantagem de jogar em casa
+    diff += s === 0 ? 2.2 : -0.7; // vantagem de jogar em casa
 
-    const dur = counter ? 5 + r() * 8 : 12 + r() * 26;
+    const dur = (counter ? 5 + r() * 8 : 12 + r() * 26) / pace;
     const periodEnd = periodStart + periodLen;
     const timeLeft = periodEnd - clock;
     const dt = Math.min(dur, timeLeft);

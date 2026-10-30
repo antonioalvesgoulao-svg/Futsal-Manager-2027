@@ -4,11 +4,14 @@ import porData from '../data/por/clubs.json';
 import porPlayers from '../data/por/players.json';
 import porOverrides from '../data/por/overrides.json';
 import { generateAttributes } from './attributes';
+import porHistory from '../data/por/history.json';
+import { computeMoneyball, SeasonRow } from './moneyball';
 
 // Base de dados: cada liga é um ficheiro em src/data/<país>/clubs.json
 export const DB_CLUBS: Club[] = porData.clubs.map(({ check, ...c }) => ({ ...c, colors: c.colors as [string, string] }));
 type RawPlayer = Omit<Player, 'attrs' | 'potential'>;
 const BOOST = porOverrides.boost as Record<string, number>;
+const HISTORY = porHistory.players as Record<string, SeasonRow[]>;
 const ATTR_OVERRIDES = porOverrides.attrs as Record<string, Partial<Player['attrs']>>;
 
 // Jogadores com atributos gerados (sempre iguais para o mesmo jogador)
@@ -16,7 +19,10 @@ function buildPlayers(): Player[] {
   return (porPlayers.players as RawPlayer[]).map((p) => {
     const club = DB_CLUBS.find((c) => c.id === p.clubId)!;
     const key = `${p.clubId}|${p.name}`;
-    const g = generateAttributes(p as Player, club.level, BOOST[key] ?? 0);
+    const mb = computeMoneyball((HISTORY[p.id] ?? []) as SeasonRow[], p.position, p.age);
+    const g = mb
+      ? generateAttributes(p as Player, mb.level, BOOST[key] ?? 0, { productivity: mb.goalsPerGame / mb.expectedGpg, availability: mb.availability })
+      : generateAttributes(p as Player, club.level, BOOST[key] ?? 0);
     return { ...p, attrs: { ...g.attrs, ...(ATTR_OVERRIDES[key] ?? {}) }, potential: g.potential };
   });
 }

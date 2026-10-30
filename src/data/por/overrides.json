@@ -1,24 +1,5 @@
 {
-  "_info": "Ajustes manuais ao nível dos jogadores. boost entre -3 e +3 (cada ponto sobe cerca de 1 em todos os atributos). Estimativas iniciais: rever à vontade.",
-  "boost": {
-    "scp|Zicky Té": 2,
-    "scp|Bernardo Paçó": 2.5,
-    "scp|Tomás Paçó": 1.5,
-    "scp|Erick Mendonça": 1.5,
-    "scp|Ivan Chishkala": 1.5,
-    "scp|Alex Merlim": 1.5,
-    "scp|Rocha": 1,
-    "scp|Felipe Valério": 1,
-    "slb|Pany Varela": 1.5,
-    "slb|Arthur": 1.5,
-    "slb|André Coelho": 1.5,
-    "slb|Afonso Jesus": 1,
-    "slb|Edmilson Kutchy": 1,
-    "slb|Lúcio Rocha": 1,
-    "slb|Léo Gugiel": 1,
-    "scb|Tiago Brito": 1.5,
-    "scb|Willian Carioca": 1,
-    "scp|Bruno Pinto": 2.5
-  },
+  "_info": "Ajustes manuais por cima do modelo moneyball (history.json). boost entre -3 e +3 (cada ponto sobe cerca de 1 em todos os atributos). Vazio por defeito.",
+  "boost": {},
   "attrs": {}
 }
