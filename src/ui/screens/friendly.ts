@@ -2,21 +2,11 @@
 import { simulateMatch } from '../../core/engine/match';
 import type { MatchResult, TeamSetup } from '../../core/engine/types';
 import type { Club, GameState } from '../../core/types';
-import { aiTactics } from '../../core/coaches';
+import { setupFor as gameSetup } from '../../core/game';
 import { tacticsSummary } from './tactics';
 
 // O teu clube usa as tuas táticas; os outros usam o estilo do respetivo treinador
-function setupFor(s: GameState, c: Club, myClubId: string): TeamSetup & { coachName: string } {
-  const squad = s.players.filter((p) => p.clubId === c.id);
-  if (c.id === myClubId) {
-    return { clubId: c.id, name: c.name, shortName: c.shortName, squad, tactics: s.tactics, coachTactical: 12, coachName: s.manager.name };
-  }
-  const coach = s.coaches.find((x) => x.clubId === c.id);
-  return {
-    clubId: c.id, name: c.name, shortName: c.shortName, squad, tactics: aiTactics(squad, c, coach),
-    coachTactical: coach?.tactical ?? 11, coachName: coach?.name ?? 'Treinador interino',
-  };
-}
+const setupFor = (s: GameState, c: Club, _my: string) => gameSetup(s, c.id);
 
 const ICON: Record<string, string> = {
   golo: '⚽', amarelo: '🟨', vermelho: '🟥', penalti: '❗', livre_10m: '❗', remate_defendido: '🧤', poste: '▮',
@@ -53,7 +43,7 @@ export function renderFriendly(content: HTMLElement, s: GameState, myClubId: str
   });
 }
 
-function resultHtml(m: MatchResult, h: Club, a: Club) {
+export function resultHtml(m: MatchResult, h: Club, a: Club) {
   const t = m.team;
   const total = t[0].possession + t[1].possession || 1;
   const row = (label: string, x: number | string, y: number | string) => `<tr><td class="r">${x}</td><th class="c">${label}</th><td>${y}</td></tr>`;

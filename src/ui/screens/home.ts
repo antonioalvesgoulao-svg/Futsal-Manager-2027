@@ -1,5 +1,8 @@
 import { go, h } from '../router';
-import { advanceDay, getState, myClub } from '../../core/state';
+import { getState, myClub } from '../../core/state';
+import { advance } from '../../core/game';
+import type { Fixture } from '../../core/season/types';
+import { renderCalendar, renderCompetitions, renderDashboard, renderMatchDay } from './season';
 import { exportSave, saveToSlot, SLOTS } from '../../core/save';
 import { ATTR_GROUPS, overall, starsHtml } from '../../core/attributes';
 import type { Player } from '../../core/types';
@@ -46,14 +49,19 @@ function playerProfile(p: Player) {
     </div>`;
 }
 
+function statCells(st?: { games: number; goals: number; assists: number; ratingSum: number }) {
+  if (!st || !st.games) return '<td>-</td><td>-</td><td>-</td><td>-</td>';
+  return `<td>${st.games}</td><td>${st.goals}</td><td>${st.assists}</td><td>${(st.ratingSum / st.games).toFixed(1).replace('.', ',')}</td>`;
+}
+
 // Secções do jogo. As que ainda não existem mostram a etapa em que entram.
 const SECTIONS: { id: string; label: string; stage: string }[] = [
   { id: 'inicio', label: 'Início', stage: '' },
   { id: 'plantel', label: 'Plantel', stage: '' },
   { id: 'amigavel', label: 'Jogo amigável', stage: '' },
   { id: 'taticas', label: 'Táticas', stage: '' },
-  { id: 'calendario', label: 'Calendário', stage: 'Etapa 6' },
-  { id: 'competicoes', label: 'Competições', stage: 'Etapa 6' },
+  { id: 'calendario', label: 'Calendário', stage: '' },
+  { id: 'competicoes', label: 'Competições', stage: '' },
   { id: 'treino', label: 'Treino', stage: 'Etapa 9' },
   { id: 'mercado', label: 'Mercado', stage: 'Etapa 10' },
   { id: 'financas', label: 'Finanças', stage: 'Etapa 10' },
@@ -67,12 +75,13 @@ export function homeScreen(root: HTMLElement) {
   const club = myClub(s);
   let section = 'inicio';
   let playerId: string | null = null;
+  let pending: Fixture | null = null; // jogo do teu clube por jogar
 
   const el = h(`
     <div class="layout">
       <header class="top" style="--c1:${club.colors[0]};--c2:${club.colors[1]}">
         <div class="crest">${club.shortName}</div>
-        <div><strong>${club.name}</strong><div class="muted small">${s.manager.name} · ${s.season}</div></div>
+        <div><strong>${club.name}</strong><div class="muted small">${s.manager.name} · ${s.season.label}</div></div>
         <div class="spacer"></div>
         <div class="date" id="date"></div>
         <button class="btn primary" id="next">Continuar ▸</button>
@@ -101,20 +110,20 @@ export function homeScreen(root: HTMLElement) {
 
   function renderContent() {
     const sec = SECTIONS.find((x) => x.id === section)!;
+    if (pending) {
+      renderMatchDay(
+        content, s!, pending,
+        () => { pending = null; section = 'inicio'; renderNav(); renderContent(); },
+        () => { section = 'taticas'; renderNav(); renderContent(); }
+      );
+      return;
+    }
     if (section === 'inicio') {
-      content.innerHTML = `
-        <h2>Início</h2>
-        <table class="tbl">
-          <tr><th>Clube</th><td>${club.name}</td></tr>
-          <tr><th>Cidade</th><td>${club.city}</td></tr>
-          <tr><th>Pavilhão</th><td>${club.arena}</td></tr>
-          <tr><th>Reputação no futsal</th><td>${club.reputation}/100</td></tr>
-          <tr><th>Poder financeiro</th><td>${club.wealth}/100</td></tr>
-          <tr><th>Nível do plantel</th><td>${club.level}/100</td></tr>
-          <tr><th>Treinador</th><td>${s!.manager.name} (${s!.manager.nationality})</td></tr>
-          <tr><th>Época</th><td>${s!.season}</td></tr>
-        </table>
-        <p class="muted">Usa "Continuar" para avançar no calendário.</p>`;
+      renderDashboard(content, s!);
+    } else if (section === 'calendario') {
+      renderCalendar(content, s!);
+    } else if (section === 'competicoes') {
+      renderCompetitions(content, s!);
     } else if (section === 'taticas') {
       renderTactics(content, s!, club.id);
     } else if (section === 'amigavel') {
@@ -129,9 +138,9 @@ export function homeScreen(root: HTMLElement) {
       content.innerHTML = `
         <h2>Plantel <span class="muted small">${squad.length} jogadores</span></h2>
         <table class="tbl">
-          <thead><tr><th>Nº</th><th>Nome</th><th>Posição</th><th>Idade</th><th>Nacionalidade</th><th>Atual</th><th>Potencial</th></tr></thead>
+          <thead><tr><th>Nº</th><th>Nome</th><th>Posição</th><th>Idade</th><th>Nacionalidade</th><th>Atual</th><th>Potencial</th><th>J</th><th>G</th><th>A</th><th>Nota</th></tr></thead>
           <tbody>${squad
-            .map((p) => `<tr class="click" data-p="${p.id}"><td>${p.number ?? '-'}</td><td>${p.name}</td><td>${p.position}</td><td>${p.age}</td><td>${p.nationality}</td><td>${starsHtml(overall(p.attrs, p.position))}</td><td>${starsHtml(p.potential)}</td></tr>`)
+            .map((p) => `<tr class="click" data-p="${p.id}"><td>${p.number ?? '-'}</td><td>${p.name}</td><td>${p.position}</td><td>${p.age}</td><td>${p.nationality}</td><td>${starsHtml(overall(p.attrs, p.position))}</td><td>${starsHtml(p.potential)}</td>${statCells(s!.pstats[p.id])}</tr>`)
             .join('')}</tbody>
         </table>
         <p class="muted small">Clica num jogador para ver os atributos.</p>`;
@@ -144,6 +153,7 @@ export function homeScreen(root: HTMLElement) {
     const b = (e.target as HTMLElement).closest('button');
     if (!b) return;
     if (b.dataset.s) {
+      if (pending && b.dataset.s !== 'taticas' && b.dataset.s !== 'plantel') return;
       section = b.dataset.s;
       playerId = null;
       renderNav();
@@ -172,8 +182,21 @@ export function homeScreen(root: HTMLElement) {
   });
 
   el.querySelector('#next')!.addEventListener('click', () => {
-    advanceDay(s!);
+    if (pending) {
+      section = 'inicio';
+      renderContent();
+      return; // tens de jogar o jogo primeiro
+    }
+    const res = advance(s!);
     renderDate();
+    if (res.kind === 'match') {
+      pending = res.fixture;
+      renderContent();
+    } else if (res.kind === 'seasonEnd') {
+      go('home'); // nova época: refaz o ecrã
+    } else {
+      renderContent();
+    }
   });
 
   renderDate();

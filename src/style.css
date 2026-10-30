@@ -94,3 +94,20 @@ input, select { background: var(--bg); color: var(--text); border: 1px solid var
 .qrow b { width: 110px; font-size: 13px; }
 .qrow select { min-width: 170px; }
 .coaches { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
+.card .big { font-size: 18px; font-weight: 600; margin: 4px 0; }
+.form { display: inline-block; width: 20px; height: 20px; line-height: 20px; text-align: center; border-radius: 4px; font-size: 11px; font-weight: 700; margin-right: 3px; color: #111; }
+.form.w { background: #4ade80; } .form.d { background: #9ca3af; } .form.l { background: #f87171; }
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.tab { background: #222c36; color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 6px 12px; font: inherit; font-size: 13px; cursor: pointer; }
+.tab.on { color: var(--text); border-color: var(--accent); }
+tr.mine td { background: #1f2a1f; }
+.table tr.zone-po td:first-child { box-shadow: inset 3px 0 0 #4ade80; }
+.res-w { color: #4ade80; } .res-l { color: #f87171; } .res-d { color: #9ca3af; }
+tr.today td { background: #2a2618; }
+.fixtures { width: 100%; max-width: 640px; }
+.fixtures .r { text-align: right; } .fixtures .c { text-align: center; white-space: nowrap; }
+.series { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 10px; margin-bottom: 8px; }
+.series .win { color: var(--accent); }

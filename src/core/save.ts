@@ -49,7 +49,7 @@ export function listSlots(): SlotInfo[] {
       const st: GameState = d.state;
       const club = st.clubs.find((c) => c.id === st.clubId)?.name ?? '?';
       const when = new Date(d.savedAt).toLocaleString('pt-PT');
-      return { slot, label: `${st.manager.name} · ${club} · ${st.season} · gravado ${when}` };
+      return { slot, label: `${st.manager.name} · ${club} · ${st.season.label} · gravado ${when}` };
     } catch {
       return { slot, label: null };
     }
@@ -75,7 +75,7 @@ export async function importSave(file: File): Promise<GameState> {
 function migrate(s: GameState): GameState {
   if (!s || typeof s !== 'object' || !s.manager) throw new Error('Ficheiro inválido');
   if (s.version > SAVE_VERSION) throw new Error('Save de uma versão mais recente do jogo');
-  if (s.version < 5) throw new Error('Save de uma etapa anterior. Começa um jogo novo.');
+  if (s.version < 6) throw new Error('Save de uma etapa anterior. Começa um jogo novo.');
   s.version = SAVE_VERSION;
   return s;
 }

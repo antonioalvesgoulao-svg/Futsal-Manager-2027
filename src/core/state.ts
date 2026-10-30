@@ -9,6 +9,7 @@ import { computeMoneyball, SeasonRow } from './moneyball';
 import porCoaches from '../data/por/coaches.json';
 import { suggestTactics } from './tactics';
 import type { Coach } from './types';
+import { startFirstSeason } from './game';
 
 // Base de dados: cada liga é um ficheiro em src/data/<país>/clubs.json
 export const DB_CLUBS: Club[] = porData.clubs.map(({ check, ...c }) => ({ ...c, colors: c.colors as [string, string] }));
@@ -53,12 +54,11 @@ export function onStateChange(fn: () => void) {
 }
 
 export function newGame(managerName: string, nationality: string, clubId: string): GameState {
-  return {
+  const s: GameState = {
     version: SAVE_VERSION,
     createdAt: new Date().toISOString(),
     manager: { name: managerName, nationality },
     clubId,
-    season: '2026/27',
     date: '2026-07-01',
     clubs: structuredClone(DB_CLUBS),
     leagues: structuredClone(DB_LEAGUES),
@@ -66,7 +66,14 @@ export function newGame(managerName: string, nationality: string, clubId: string
     // o treinador real do clube escolhido fica sem clube
     coaches: DB_COACHES.map((c) => ({ ...structuredClone(c), clubId: c.clubId === clubId ? null : c.clubId })),
     tactics: suggestTactics(DB_PLAYERS.filter((p) => p.clubId === clubId)),
+    season: null as unknown as GameState['season'],
+    pstats: {},
+    news: [],
+    honours: [],
   };
+  startFirstSeason(s);
+  s.news.unshift({ date: s.date, text: `${managerName} é o novo treinador do ${s.clubs.find((c) => c.id === clubId)!.name}.` });
+  return s;
 }
 
 export function myClub(s: GameState): Club {

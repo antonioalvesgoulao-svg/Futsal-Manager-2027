@@ -14,6 +14,7 @@ export interface Club {
 
 import type { Attributes } from './attributes';
 import type { Tactics } from './tactics';
+import type { Honour, NewsItem, PlayerSeason, SeasonState } from './season/types';
 
 export type Position = 'GR' | 'FIX' | 'FIX/ALA' | 'ALA' | 'ALA/PIV' | 'PIV' | 'UNI';
 
@@ -58,13 +59,16 @@ export interface GameState {
   createdAt: string;
   manager: Manager;
   clubId: string;
-  season: string; // ex.: "2026/27"
   date: string; // data atual do jogo (ISO)
   clubs: Club[];
   leagues: League[];
   players: Player[];
   coaches: Coach[];
   tactics: Tactics; // táticas do teu clube
+  season: SeasonState;
+  pstats: Record<string, PlayerSeason>; // estatísticas da época em curso
+  news: NewsItem[];
+  honours: Honour[];
 }
 
-export const SAVE_VERSION = 5;
+export const SAVE_VERSION = 6;
