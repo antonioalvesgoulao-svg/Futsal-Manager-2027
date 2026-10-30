@@ -5,7 +5,17 @@ export interface Club {
   name: string;
   shortName: string;
   colors: [string, string]; // principal, secundária
+  city: string;
   arena: string;
+  reputation: number; // 1 a 100
+}
+
+export interface League {
+  id: string;
+  name: string;
+  country: string;
+  season: string;
+  clubIds: string[];
 }
 
 export interface Manager {
@@ -21,6 +31,7 @@ export interface GameState {
   season: string; // ex.: "2026/27"
   date: string; // data atual do jogo (ISO)
   clubs: Club[];
+  leagues: League[];
 }
 
-export const SAVE_VERSION = 1;
+export const SAVE_VERSION = 2;

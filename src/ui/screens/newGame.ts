@@ -1,5 +1,5 @@
 import { go, h } from '../router';
-import { PLACEHOLDER_CLUBS, newGame, setState } from '../../core/state';
+import { DB_CLUBS, newGame, setState } from '../../core/state';
 
 export function newGameScreen(root: HTMLElement) {
   const el = h(`
@@ -10,10 +10,10 @@ export function newGameScreen(root: HTMLElement) {
         <label>Nacionalidade<input name="nat" value="Portugal" required /></label>
         <label>Clube
           <select name="club">
-            ${PLACEHOLDER_CLUBS.map((c) => `<option value="${c.id}">${c.name}</option>`).join('')}
+            ${[...DB_CLUBS].sort((a, b) => a.name.localeCompare(b.name)).map((c) => `<option value="${c.id}">${c.name} (${c.city})</option>`).join('')}
           </select>
         </label>
-        <p class="muted">Clubes temporários. A Liga Placard real entra na etapa 2.</p>
+        <p class="muted">Liga Placard 2026/27</p>
         <div class="row">
           <button type="button" class="btn ghost" id="back">Voltar</button>
           <button class="btn primary">Começar</button>

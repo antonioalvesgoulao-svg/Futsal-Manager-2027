@@ -60,7 +60,9 @@ export function homeScreen(root: HTMLElement) {
         <h2>Início</h2>
         <table class="tbl">
           <tr><th>Clube</th><td>${club.name}</td></tr>
+          <tr><th>Cidade</th><td>${club.city}</td></tr>
           <tr><th>Pavilhão</th><td>${club.arena}</td></tr>
+          <tr><th>Reputação</th><td>${club.reputation}/100</td></tr>
           <tr><th>Treinador</th><td>${s!.manager.name} (${s!.manager.nationality})</td></tr>
           <tr><th>Época</th><td>${s!.season}</td></tr>
         </table>

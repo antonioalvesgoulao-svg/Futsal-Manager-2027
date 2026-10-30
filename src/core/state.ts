@@ -1,11 +1,11 @@
-import { Club, GameState, SAVE_VERSION } from './types';
+import { Club, GameState, League, SAVE_VERSION } from './types';
 
-// Clubes temporários. Na etapa 2 são substituídos pela base de dados real.
-export const PLACEHOLDER_CLUBS: Club[] = [
-  { id: 'c01', name: 'Clube Teste Norte', shortName: 'CTN', colors: ['#1d4ed8', '#ffffff'], arena: 'Pavilhão Norte' },
-  { id: 'c02', name: 'Clube Teste Sul', shortName: 'CTS', colors: ['#16a34a', '#ffffff'], arena: 'Pavilhão Sul' },
-  { id: 'c03', name: 'Clube Teste Centro', shortName: 'CTC', colors: ['#dc2626', '#ffffff'], arena: 'Pavilhão Centro' },
-  { id: 'c04', name: 'Clube Teste Ilhas', shortName: 'CTI', colors: ['#f59e0b', '#111827'], arena: 'Pavilhão Ilhas' },
+import porData from '../data/por/clubs.json';
+
+// Base de dados: cada liga é um ficheiro em src/data/<país>/clubs.json
+export const DB_CLUBS: Club[] = porData.clubs.map(({ check, ...c }) => ({ ...c, colors: c.colors as [string, string] }));
+export const DB_LEAGUES: League[] = [
+  { ...porData.league, clubIds: porData.clubs.map((c) => c.id) },
 ];
 
 let current: GameState | null = null;
@@ -33,7 +33,8 @@ export function newGame(managerName: string, nationality: string, clubId: string
     clubId,
     season: '2026/27',
     date: '2026-07-01',
-    clubs: structuredClone(PLACEHOLDER_CLUBS),
+    clubs: structuredClone(DB_CLUBS),
+    leagues: structuredClone(DB_LEAGUES),
   };
 }
 
