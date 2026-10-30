@@ -1,5 +1,6 @@
 // Motor de jogo de futsal: simulação posse a posse com regras oficiais.
 import { gauss, overall, rng } from '../attributes';
+import { roleFit, SLOTS } from '../tactics';
 import type { Player } from '../types';
 import type { MatchEvent, MatchOptions, MatchResult, PlayerStats, Side, TeamSetup, TeamStats, EventType } from './types';
 
@@ -455,6 +456,11 @@ export function simulateMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptio
       def += fix ? (eff(fix, 'posicionamento') - 11) * 0.12 + 0.15 : -0.4;
       att += 0.1;
     }
+    // jogadores fora da sua função rendem menos (ordem dos quintetos = posições do sistema)
+    const slots = SLOTS[tac.system];
+    const fit = court.slice(0, 4).reduce((a, l, i) => a + roleFit(slots[i].role, l.p.position), 0) / Math.max(1, Math.min(4, court.length));
+    att += (fit - 0.85) * 2.5;
+    def += (fit - 0.85) * 2.5;
     if (tac.marking === 'individual') def += (avg(court, ['desarme', 'agressividade']) - 11) * 0.12;
     else if (tac.marking === 'zona') def += (avg(court, ['posicionamento', 'concentracao']) - 11) * 0.12;
     return { att, def };

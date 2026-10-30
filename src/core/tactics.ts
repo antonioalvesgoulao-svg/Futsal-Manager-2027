@@ -76,11 +76,86 @@ export function suggestTactics(squad: Player[], base?: Partial<Tactics>): Tactic
     if (q2.length < 4) take(q2, () => true);
     if (q1.length + q2.length === before) break;
   }
-  return {
+  const t: Tactics = {
     system: '3-1', pressure: 'media', tempo: 'equilibrado', marking: 'zona', flyingKeeper: 'auto', rotation: 'normal',
     ...base,
     gk: gks[0]?.id ?? null,
-    q1: q1.map((p) => p.id),
-    q2: q2.map((p) => p.id),
+    q1: [],
+    q2: [],
   };
+  t.q1 = arrangeForSystem(q1, t.system).map((p) => p?.id ?? '');
+  t.q2 = arrangeForSystem(q2, t.system).map((p) => p?.id ?? '');
+  return t;
+}
+
+// Distribui 4 jogadores pelas posições do sistema com a melhor adequação possível
+export function arrangeForSystem<T extends { position: string } | undefined>(players: T[], system: System): T[] {
+  const slots = SLOTS[system];
+  const list = [0, 1, 2, 3].map((i) => players[i]);
+  let best = list;
+  let bestScore = -1;
+  const perm = (arr: T[], k: number) => {
+    if (k === arr.length) {
+      const sc = arr.reduce((a, p, i) => a + (p ? roleFit(slots[i].role, p.position) : 0), 0);
+      if (sc > bestScore) { bestScore = sc; best = [...arr]; }
+      return;
+    }
+    for (let i = k; i < arr.length; i++) {
+      [arr[k], arr[i]] = [arr[i], arr[k]];
+      perm(arr, k + 1);
+      [arr[k], arr[i]] = [arr[i], arr[k]];
+    }
+  };
+  perm(list, 0);
+  return best;
+}
+
+// Posições no campo de cada sistema (x: 0 = baliza própria, 100 = baliza adversária; y: 0 = esquerda, 100 = direita)
+export type Role = 'Fixo' | 'Ala' | 'Pivô' | 'Universal';
+export interface Slot {
+  label: string;
+  role: Role;
+  x: number;
+  y: number;
+}
+
+export const GK_SLOT = { x: 5, y: 50 };
+
+export const SLOTS: Record<System, Slot[]> = {
+  '3-1': [
+    { label: 'Fixo', role: 'Fixo', x: 30, y: 50 },
+    { label: 'Ala E', role: 'Ala', x: 40, y: 18 },
+    { label: 'Ala D', role: 'Ala', x: 40, y: 82 },
+    { label: 'Pivô', role: 'Pivô', x: 78, y: 50 },
+  ],
+  '4-0': [
+    { label: 'Universal E', role: 'Universal', x: 38, y: 36 },
+    { label: 'Ala E', role: 'Ala', x: 48, y: 12 },
+    { label: 'Ala D', role: 'Ala', x: 48, y: 88 },
+    { label: 'Universal D', role: 'Universal', x: 38, y: 64 },
+  ],
+  '2-2': [
+    { label: 'Fixo E', role: 'Fixo', x: 30, y: 30 },
+    { label: 'Ala E', role: 'Ala', x: 64, y: 28 },
+    { label: 'Ala D', role: 'Ala', x: 64, y: 72 },
+    { label: 'Fixo D', role: 'Fixo', x: 30, y: 70 },
+  ],
+  '1-2-1': [
+    { label: 'Fixo', role: 'Fixo', x: 24, y: 50 },
+    { label: 'Ala E', role: 'Ala', x: 50, y: 20 },
+    { label: 'Ala D', role: 'Ala', x: 50, y: 80 },
+    { label: 'Pivô', role: 'Pivô', x: 76, y: 50 },
+  ],
+};
+
+// Adequação de cada posição do jogador a cada função (1 = ideal)
+const FIT: Record<Role, Record<string, number>> = {
+  Fixo: { FIX: 1, 'FIX/ALA': 0.85, UNI: 0.8, ALA: 0.45, 'ALA/PIV': 0.3, PIV: 0.25, GR: 0 },
+  Ala: { ALA: 1, UNI: 0.9, 'FIX/ALA': 0.8, 'ALA/PIV': 0.85, FIX: 0.5, PIV: 0.45, GR: 0 },
+  Pivô: { PIV: 1, 'ALA/PIV': 0.9, UNI: 0.6, ALA: 0.5, 'FIX/ALA': 0.3, FIX: 0.25, GR: 0 },
+  Universal: { UNI: 1, 'FIX/ALA': 0.9, ALA: 0.85, 'ALA/PIV': 0.75, FIX: 0.7, PIV: 0.5, GR: 0 },
+};
+
+export function roleFit(role: Role, position: string) {
+  return FIT[role][position] ?? 0.3;
 }
