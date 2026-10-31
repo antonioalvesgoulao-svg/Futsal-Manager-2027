@@ -1379,6 +1379,7 @@ export class Choreo {
     const keeperSide = 1 - (this.sideOf.get(shooter) ?? this.att);
     const gk = this.p.onCourt[keeperSide][0];
     const gkInGoal = gk && !this.p.flying[keeperSide];
+    let gkTech: ActKind | null = null;
     if (gkInGoal && res !== 'blocked') {
       // técnica de futsal: voo só aos ângulos altos; remates baixos/laterais com espargata pelo chão;
       // remates de perto com abertura em cruz (pernas e braços abertos); à figura, agarra
@@ -1387,6 +1388,7 @@ export class Choreo {
       let tech: ActKind = target.z > 1.2 && Math.abs(ty) > 0.8 ? 'dive' : close && Math.abs(ty) < 1.3 ? 'spread' : Math.abs(ty) > 0.55 ? 'splits' : 'catch';
       // defesa sem agarrar: tem de se ver o gesto que desvia a bola (nunca a bola a atravessar o GR)
       if (res === 'saved' && !caught && tech === 'catch') tech = target.z > 1.1 ? 'dive' : close ? 'spread' : 'splits';
+      gkTech = tech;
       // na espargata o corpo desloca-se pouco; é a perna que chega à bola
       // o corpo desloca-se de lado (sem recuar para a baliza) até a mão/perna ficar na bola
       const sy = Math.sign(ty) || 1;
@@ -1425,7 +1427,8 @@ export class Choreo {
     let tEnd = T + fl;
     if (caught && gk) {
       // o GR agarra, levanta-se (se mergulhou) e repõe a bola à mão para um colega aberto na ala
-      const dived = target.z > 1.2 || Math.abs(clamp(target.y, -1.75, 1.75)) > 0.55;
+      // no chão (voo/espargata) agarra junto ao chão; de pé, agarra à altura do peito
+      const dived = gkTech === 'dive' || gkTech === 'splits';
       this.balls.push({ k: 'hands', t0: tEnd, id: gk, z: dived ? 0.45 : 1.0 });
       this.label(tEnd, `${this.nm(gk)} agarra a bola`);
       const tUp = tEnd + (dived ? 1.4 : 0.6);
@@ -1887,7 +1890,15 @@ export class Choreo {
     seg ??= this.balls[0];
     if (!seg) return { x: 0, y: 0, z: 0.11 };
     if (seg.k === 'foot') return this.foot(seg.id, t);
-    if (seg.k === 'hands') { const p = this.P(seg.id, t); return { x: p.x, y: p.y, z: seg.z ?? 1.05 }; }
+    if (seg.k === 'hands') {
+      // bola nas mãos, à frente do peito (virado para o campo): nunca escondida dentro do corpo
+      const p = this.P(seg.id, t);
+      const q = this.P(seg.id, t - 0.15);
+      const vx = p.x - q.x, vy = p.y - q.y, vl = Math.hypot(vx, vy);
+      let dx: number, dy: number;
+      if (vl > 0.12) { dx = vx / vl; dy = vy / vl; } else { const cl = Math.hypot(p.x, p.y) || 1; dx = -p.x / cl; dy = -p.y / cl; }
+      return { x: p.x + dx * 0.34, y: p.y + dy * 0.34, z: seg.z ?? 1.05 };
+    }
     if (seg.k === 'still') return seg.at;
     const k = clamp((t - seg.t0) / Math.max(0.01, seg.t1 - seg.t0), 0, 1);
     if (seg.k === 'pass') {

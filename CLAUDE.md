@@ -89,6 +89,7 @@ Real: 6,38 golos/jogo, casa 49,6%, fora 37,0%, empates 13,5%, <3 golos 6,1%. Man
 - Clipes de defesas (LNFS, 31/10 20h10): GR sai ao encontro do atacante nos remates de perto (<8,5 m) e fecha em queda (abertura/espargata), saída começa 0,9 s antes do remate; voos horizontais só aos ângulos altos (já existia)
 - Feedback 31/10 noite: placas LED com número inteiro de painéis (nada cortado); marcador 2D centrado sobre a quadra; contra-ataque sem passes para trás (quem tem espaço conduz para a baliza; 1x0 vai sozinho); livre de 10 m com o GR 1,5-3 m fora da linha (penálti continua na linha, regra); qualquer golo é mostrado em 3D (também quando surge logo a seguir a outro lance 3D)
 - Comentário 2D ao estilo FM: barra grande por baixo da quadra (lance atual + anterior), só o essencial (remates, defesas, cantos, livres, cartões, golos, confrontos, faltas acumuladas); legenda pequena dentro da quadra retirada. Confrontos sempre em 3D (como os golos, em qualquer definição exceto "nenhum"), desde o lance que os provoca
+- Bola nas mãos (GR que agarra, jogador que vai buscar a bola) fica à frente do peito, nunca dentro do corpo (antes desaparecia); agarrada junto ao chão só em voo/espargata
 - Próximos melhoramentos possíveis: mais variantes de jogadas ensaiadas
 
 ## Roteiro
