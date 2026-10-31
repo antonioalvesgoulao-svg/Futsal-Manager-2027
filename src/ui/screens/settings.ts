@@ -1,6 +1,6 @@
 // Definições do jogo ao vivo e da transmissão
 import type { GameState, Settings } from '../../core/types';
-import { CHANNELS, scoreboardHtml } from '../broadcast';
+import { CHANNELS, channelBug, scoreboardHtml } from '../broadcast';
 import { settingsOf } from './live';
 
 export function renderSettings(content: HTMLElement, s: GameState) {
@@ -26,7 +26,7 @@ export function renderSettings(content: HTMLElement, s: GameState) {
       </label>
     </div>
     <h3>Canais</h3>
-    <div class="row" style="justify-content:flex-start;flex-wrap:wrap;gap:12px">${CHANNELS.filter((c) => c.bug).map((c) => c.bug).join('')}</div>
+    <div class="row" style="justify-content:flex-start;flex-wrap:wrap;gap:12px">${CHANNELS.filter((c) => c.bug).map((c) => channelBug(c.id, s.clubs.find((x) => x.id === s.clubId)!.shortName)).join('')}</div>
     <h3>Marcadores</h3>
     <div class="sb-demo">${demo('liga')}${demo('taca')}${demo('tacaLiga')}${demo('supertaca')}</div>
     <p class="small muted">Grafismo original do jogo, de inspiração portuguesa. As definições ficam guardadas com o jogo.</p>`;

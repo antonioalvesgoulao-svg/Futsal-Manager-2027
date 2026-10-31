@@ -6,11 +6,11 @@ import { matchOptions, setupFor } from '../../core/game';
 import { COMP_NAMES, Fixture } from '../../core/season/types';
 import { SLOTS, Tactics } from '../../core/tactics';
 import type { Club, GameState, Settings } from '../../core/types';
-import { CHANNELS, scoreboardHtml } from '../broadcast';
+import { channelBug, scoreboardHtml } from '../broadcast';
 import { resultHtml } from './friendly';
 import { renderTactics } from './tactics';
 
-export const DEFAULT_SETTINGS: Settings = { speed: 'medio', moments3d: 'importantes', channel: 'quinas', scoreboard: 'auto' };
+export const DEFAULT_SETTINGS: Settings = { speed: 'medio', moments3d: 'importantes', channel: 'rede', scoreboard: 'auto' };
 export const settingsOf = (s: GameState) => (s.settings ??= { ...DEFAULT_SETTINGS });
 
 // Segundos de jogo por segundo real: lenta 15 s por minuto, média 7,5 s, rápida 3 s
@@ -50,14 +50,13 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
   const mySide = f.home === s.clubId ? 0 : 1;
   const m = createMatch(hs, as, matchOptions(s, f));
   const style = st.scoreboard === 'auto' ? (f.comp === 'playoff' ? 'liga' : f.comp) : st.scoreboard;
-  const channel = CHANNELS.find((c) => c.id === st.channel) ?? CHANNELS[0];
   const colors: [string, string] = [h.colors[0], hexDist(h.colors[0], a.colors[0]) < 120 ? (hexDist(h.colors[0], a.colors[1]) < 120 ? '#f5f5f5' : a.colors[1]) : a.colors[0]];
   const textCol = (c: string) => (hexDist(c, '#ffffff') < 200 ? '#111' : '#fff');
 
   content.innerHTML = `
     <div class="live">
       <div class="live-top">
-        <div class="live-ch">${channel.bug}</div>
+        <div class="live-ch">${channelBug(st.channel, h.shortName)}</div>
         <div id="sb"></div>
         <div class="live-comp small muted">${COMP_NAMES[f.comp]} · ${f.stage}</div>
       </div>

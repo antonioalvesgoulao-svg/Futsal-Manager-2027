@@ -8,30 +8,19 @@ export interface Channel {
   bug: string; // HTML do logótipo no canto do ecrã
 }
 
-// Canais fictícios
+// Canais fictícios (o "Canal do Clube" usa o nome do clube da casa)
 export const CHANNELS: Channel[] = [
-  {
-    id: 'quinas',
-    name: 'Quinas Desporto',
-    bug: `<div class="ch ch-quinas"><span class="q-dots"><i></i><i></i><i></i><i></i><i></i></span><b>QUINAS</b><small>DESPORTO</small></div>`,
-  },
-  {
-    id: 'azulejo',
-    name: 'Azulejo TV',
-    bug: `<div class="ch ch-azulejo"><span class="az-tile"></span><b>azulejo</b><small>tv</small></div>`,
-  },
-  {
-    id: 'atlantico',
-    name: 'Atlântico Sport',
-    bug: `<div class="ch ch-atlantico"><span class="wave"></span><b>ATLÂNTICO</b><small>SPORT</small></div>`,
-  },
-  {
-    id: 'calcada',
-    name: 'Calçada 5',
-    bug: `<div class="ch ch-calcada"><span class="cal"></span><b>CALÇADA</b><em>5</em></div>`,
-  },
+  { id: 'rede', name: 'Rede Nacional', bug: `<div class="ch ch-rede"><span class="wave2"></span><b>REDE</b><small>NACIONAL</small></div>` },
+  { id: 'quadra', name: 'Quadra TV', bug: `<div class="ch ch-quadra"><span class="court-ic"></span><b>QUADRA</b><small>TV</small></div>` },
+  { id: 'arena', name: 'Arena Premium', bug: `<div class="ch ch-arena"><b>ARENA</b><em>PREMIUM</em></div>` },
+  { id: 'clube', name: 'Canal do Clube (equipa da casa)', bug: `<div class="ch ch-clube"><span class="cl-star">★</span><b>{CLUBE}</b><small>CANAL DO CLUBE</small></div>` },
   { id: 'nenhum', name: 'Sem logótipo', bug: '' },
 ];
+
+export function channelBug(id: string, homeShort: string) {
+  const c = CHANNELS.find((x) => x.id === id) ?? CHANNELS[0];
+  return c.bug.replace('{CLUBE}', homeShort);
+}
 
 export const SCOREBOARD_NAMES: Record<Exclude<CompId, 'playoff'>, string> = {
   liga: 'Liga Placard',
@@ -130,18 +119,14 @@ export const broadcastCss = `
 .sb-supertaca .sb-period { background: #d4a017; color: #0b0b0b; }
 
 /* Canais fictícios */
-.ch { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 4px; font-family: system-ui; color: #fff; opacity: .92; }
+.ch { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 4px; font-family: system-ui; color: #fff; opacity: .93; }
 .ch b { font-size: 13px; letter-spacing: .06em; } .ch small { font-size: 9px; letter-spacing: .12em; opacity: .85; }
-.ch-quinas { background: linear-gradient(90deg, #046a38 0 50%, #da291c 50%); }
-.ch-quinas .q-dots { display: grid; grid-template-columns: repeat(3, 4px); gap: 1px; }
-.ch-quinas .q-dots i { width: 4px; height: 4px; background: #fff; border-radius: 1px; }
-.ch-quinas .q-dots i:nth-child(1) { grid-column: 2; } .ch-quinas .q-dots i:nth-child(5) { grid-column: 2; }
-.ch-azulejo { background: #fff; color: #1d4ed8; border: 2px solid #1d4ed8; }
-.ch-azulejo .az-tile { width: 14px; height: 14px; background: conic-gradient(#1d4ed8 0 25%, #fff 0 50%, #1d4ed8 0 75%, #fff 0); border: 1px solid #1d4ed8; }
-.ch-azulejo b { font-family: Georgia, serif; font-style: italic; letter-spacing: 0; }
-.ch-atlantico { background: linear-gradient(135deg, #0c4a6e, #0e7490); }
-.ch-atlantico .wave { width: 16px; height: 10px; border-radius: 0 0 10px 10px; border: 2px solid #67e8f9; border-top: 0; }
-.ch-calcada { background: #111; border: 1px solid #555; }
-.ch-calcada .cal { width: 14px; height: 14px; background: repeating-linear-gradient(90deg, #fff 0 3px, #111 3px 6px), #fff; transform: skewX(-15deg); }
-.ch-calcada em { font-style: normal; font-weight: 900; font-size: 15px; color: #facc15; }
+.ch-rede { background: #0f766e; border: 1px solid #ccfbf1; }
+.ch-rede .wave2 { width: 18px; height: 8px; border: 2px solid #ccfbf1; border-top: 0; border-radius: 0 0 9px 9px; }
+.ch-quadra { background: #5b21b6; }
+.ch-quadra .court-ic { width: 18px; height: 11px; border: 1.5px solid #fff; background: linear-gradient(90deg, transparent 7.5px, #fff 7.5px 9px, transparent 9px); }
+.ch-arena { background: #27272a; border-left: 4px solid #f97316; }
+.ch-arena em { font-style: normal; font-size: 9px; font-weight: 800; letter-spacing: .14em; color: #f97316; }
+.ch-clube { background: #1f2937; border: 1px solid #4b5563; }
+.ch-clube .cl-star { color: #e5e7eb; font-size: 12px; }
 `;
