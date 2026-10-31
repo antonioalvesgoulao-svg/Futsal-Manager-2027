@@ -1,3 +1,4 @@
+import { moraleHtml, moraleOf } from '../../core/morale';
 import { injuryInfo, injuryOf } from '../../core/injuries';
 import { totalBan } from '../../core/discipline';
 import { go, h } from '../router';
@@ -141,7 +142,7 @@ export function homeScreen(root: HTMLElement) {
       const bans = s!.discipline?.bans[pl.id] ?? [];
       const status = (inj ? `<div class="card" style="margin:8px 0;padding:8px 12px">🩹 <b>${inj.type}</b> · ${inj.days} dias de paragem · volta a ${inj.until.split('-').reverse().join('/')}<br><span class="small muted">${injuryInfo(inj.type)}</span></div>` : '')
         + bans.map((b) => `<div class="card" style="margin:8px 0;padding:8px 12px">🟥 Castigado: ${b.games} jogo(s) (${b.reason})</div>`).join('');
-      content.innerHTML = playerProfile(pl, pl.clubId === club.id, status);
+      content.innerHTML = playerProfile(pl, pl.clubId === club.id, `<p>Moral: ${moraleHtml(moraleOf(s!, pl.id))}</p>` + status);
       content.querySelector<HTMLInputElement>('#pnum')?.addEventListener('change', (e) => {
         const v = Math.round(Number((e.target as HTMLInputElement).value));
         if (!(v >= 1 && v <= 99)) { content.querySelector('#pnummsg')!.textContent = 'Escolhe um número de 1 a 99.'; return; }
@@ -160,9 +161,9 @@ export function homeScreen(root: HTMLElement) {
       content.innerHTML = `
         <h2>Plantel <span class="muted small">${squad.length} jogadores</span></h2>
         <table class="tbl">
-          <thead><tr><th>Nº</th><th>Nome</th><th>Posição</th><th>Idade</th><th>Nacionalidade</th><th>Atual</th><th>Potencial</th><th>J</th><th>G</th><th>A</th><th>Nota</th></tr></thead>
+          <thead><tr><th>Nº</th><th>Nome</th><th>Posição</th><th>Idade</th><th>Nacionalidade</th><th>Atual</th><th>Potencial</th><th>Moral</th><th>J</th><th>G</th><th>A</th><th>Nota</th></tr></thead>
           <tbody>${squad
-            .map((p) => `<tr class="click" data-p="${p.id}"><td>${p.number ?? '-'}</td><td>${p.name}${injuryOf(s!, p.id) ? ` <span title="${injuryOf(s!, p.id)!.type} (até ${injuryOf(s!, p.id)!.until})">🩹</span>` : ''}${totalBan(s!, p.id) ? ` <span title="Castigado: ${totalBan(s!, p.id)} jogo(s)">🟥${totalBan(s!, p.id)}</span>` : ''}${(s!.discipline?.yellows[p.id] ?? 0) ? ` <span class="muted small" title="Amarelos na Liga">🟨${s!.discipline!.yellows[p.id]}</span>` : ''}</td><td>${p.position}</td><td>${p.age}</td><td>${p.nationality}</td><td>${starsHtml(overall(p.attrs, p.position))}</td><td>${starsHtml(p.potential)}</td>${statCells(s!.pstats[p.id])}</tr>`)
+            .map((p) => `<tr class="click" data-p="${p.id}"><td>${p.number ?? '-'}</td><td>${p.name}${injuryOf(s!, p.id) ? ` <span title="${injuryOf(s!, p.id)!.type} (até ${injuryOf(s!, p.id)!.until})">🩹</span>` : ''}${totalBan(s!, p.id) ? ` <span title="Castigado: ${totalBan(s!, p.id)} jogo(s)">🟥${totalBan(s!, p.id)}</span>` : ''}${(s!.discipline?.yellows[p.id] ?? 0) ? ` <span class="muted small" title="Amarelos na Liga">🟨${s!.discipline!.yellows[p.id]}</span>` : ''}</td><td>${p.position}</td><td>${p.age}</td><td>${p.nationality}</td><td>${starsHtml(overall(p.attrs, p.position))}</td><td>${starsHtml(p.potential)}</td><td>${moraleHtml(moraleOf(s!, p.id))}</td>${statCells(s!.pstats[p.id])}</tr>`)
             .join('')}</tbody>
         </table>
         <p class="muted small">Clica num jogador para ver os atributos.</p>`;

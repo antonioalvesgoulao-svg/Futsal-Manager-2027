@@ -97,6 +97,7 @@ Real: 6,38 golos/jogo, casa 49,6%, fora 37,0%, empates 13,5%, <3 golos 6,1%. Man
 - Regulamento da Liga Placard 2026/27 (PDF do António): ficha de jogo 5 + 7 suplentes, ou + 9 se 2 forem Sub-20 formados localmente (Art. 69.2; formado localmente estimado como português até 20 anos); desempates Art. 18.5 (confronto direto pontos e diferença, diferença geral, vitórias, golos marcados, sofridos). Para a etapa 10: máximo 20 seniores inscritos, 5 substituições após o limite (52.5), mínimo 7 formados localmente na ficha (53.1), 15 h entre jogos (52.8)
 - Lesões (`src/core/injuries.ts`): Lopes et al. 2023 (elite masculino, Portugal): 25,9/1000 h de jogo (tempo útil em campo), 3/1000 h de treino (~7,5 h/semana, estimativa); zonas virilha 19%, joelho 19%, coxa 17%, tornozelo 15%; cruzado raro (~210 dias). Mais risco com idade >28 e pouca resistência (estimativa). Simulação: ~12 lesões visíveis por equipa/época, média ~12 dias (as de 1-3 dias entre jogos não se veem). Lesionados fora da convocatória; 🩹 no plantel; aviso no dia de jogo; notícias. Lesionados nunca jogam; sem GR disponível vai à baliza o jogador de campo com melhores atributos de GR (pedido do António). Perfil mostra a lesão (tipo, explicação, dias, regresso). Lesão a meio do jogo (motor, `injure`): sai e entra um suplente sem inferioridade; GR lesionado sem suplente = jogador de campo na baliza; comentário 2D; ~0,13 lesões/jogo. Ainda não: animação do jogador a sair a coxear
 - Regulamento da Taça de Portugal 2026/27 (PDF do António): eliminatórias a uma mão com prolongamento e penáltis; na Final Eight quartos e meias vão diretos a penáltis (Art. 14.4, `noExtraTime`); a final tem prolongamento (14.5); ficha 5+7 (62.2)
+- Moral (`src/core/morale.ts`, tudo estimativa, sem dados públicos no futsal): 0-100 (65 normal), escala FM (Excelente ≥88 … Muito fraca <30). Sobe/desce com resultado (×importância), nota do jogo, golos, minutos conforme estatuto (9 melhores esperam jogar), expulsão -3, lesão >7 dias -6, título +10; regressa 15%/jogo ao normal. Efeito: atributos ×0,93 a ×1,04. Coluna no plantel, perfil, notícias quando chega a excelente/fraca
 - Próximos melhoramentos possíveis: mais variantes de jogadas ensaiadas
 
 ## Roteiro
@@ -105,7 +106,7 @@ Real: 6,38 golos/jogo, casa 49,6%, fora 37,0%, empates 13,5%, <3 golos 6,1%. Man
 | 1-6 Base, dados, atributos, motor, táticas, época | Feito |
 | 7 Quadro tático gráfico, bolas paradas, jogo ao vivo 2D, 3D | Feito (a afinar com feedback) |
 | 8 Ligação 3D ao motor | Coberta pela 7 |
-| 9 Plantel e clube: treino, moral, lesões, castigos, contratos | Em curso (castigos e lesões feitos) |
+| 9 Plantel e clube: treino, moral, lesões, castigos, contratos | Em curso (castigos, lesões e moral feitos) |
 | 10 Mercado e finanças | |
 | 11 Staff e formação (treinadores com historial real) | |
 | 12 20 ligas europeias + segundas divisões e taças | |

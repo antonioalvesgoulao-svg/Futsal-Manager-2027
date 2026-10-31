@@ -11,6 +11,7 @@ export interface TeamSetup {
   squad: Player[]; // plantel (a convocatória de 14 é feita pelo motor)
   tactics: Tactics;
   coachTactical: number; // conhecimento tático do treinador, 1 a 20
+  morale?: Record<string, number>; // moral dos jogadores (0-100)
 }
 
 export type EventType =

@@ -2,6 +2,7 @@ import { importanceOf, refereesFor } from './referees';
 // Ciclo de jogo: avançar no calendário, jogar jogos, fim de época
 import { aiTactics } from './coaches';
 import { normalizeTactics } from './tactics';
+import { applyMorale, moraleEvent } from './morale';
 import { injuryOf, matchInjuries, trainingInjuries } from './injuries';
 import { applyDiscipline, banFor, seasonEndDiscipline } from './discipline';
 import type { CompId } from './season/types';
@@ -31,12 +32,12 @@ export function setupFor(s: GameState, clubId: string, comp?: CompId): TeamSetup
     normalizeTactics(s.tactics, squad);
     const ok = (ids: string[]) => ids.filter((id) => squad.some((p) => p.id === id));
     const tactics = comp ? { ...s.tactics, q1: ok(s.tactics.q1), q2: ok(s.tactics.q2) } : s.tactics;
-    return { clubId: c.id, name: c.name, shortName: c.shortName, squad, tactics, coachTactical: 12, coachName: s.manager.name };
+    return { clubId: c.id, name: c.name, shortName: c.shortName, squad, tactics, coachTactical: 12, coachName: s.manager.name, morale: s.morale };
   }
   const coach = s.coaches.find((x) => x.clubId === c.id);
   return {
     clubId: c.id, name: c.name, shortName: c.shortName, squad, tactics: aiTactics(squad, c, coach),
-    coachTactical: coach?.tactical ?? 11, coachName: coach?.name ?? 'Treinador interino',
+    coachTactical: coach?.tactical ?? 11, morale: s.morale, coachName: coach?.name ?? 'Treinador interino',
   };
 }
 
@@ -80,9 +81,15 @@ function playFixture(s: GameState, f: Fixture, given?: MatchResult): MatchResult
   // castigos (Regulamento Disciplinar da FPF): notícias só do teu clube
   const mine = (id: string) => s.players.find((p) => p.id === id)?.clubId === s.clubId;
   const pname = (id: string) => s.players.find((p) => p.id === id)?.name ?? id;
-  for (const t of applyDiscipline(s, f, m, pname)) if (s.players.some((p) => mine(p.id) && t.startsWith(p.name + ':'))) news(s, t);
+  const banned = applyDiscipline(s, f, m, pname);
+  for (const t of banned) if (s.players.some((p) => mine(p.id) && t.startsWith(p.name + ':'))) news(s, t);
+  // moral (antes das lesões e castigos deste jogo, que a fazem descer)
+  for (const t of applyMorale(s, f, m, importanceOf(s, f))) if (/excelente|fraca/.test(t)) news(s, t);
+  moraleEvent(s, Object.entries(m.players).filter(([, st]) => st.red).map(([id]) => id), -3);
   // lesões no jogo
-  for (const [id, i] of matchInjuries(s, m, `${f.id}-${s.season.year}`)) if (mine(id)) news(s, `${pname(id)} lesionou-se no jogo: ${i.type.toLowerCase()}, ${i.days} dia${i.days > 1 ? 's' : ''} de paragem.`);
+  const newInj = matchInjuries(s, m, `${f.id}-${s.season.year}`);
+  moraleEvent(s, newInj.filter(([, i]) => i.days > 7).map(([id]) => id), -6);
+  for (const [id, i] of newInj) if (mine(id)) news(s, `${pname(id)} lesionou-se no jogo: ${i.type.toLowerCase()}, ${i.days} dia${i.days > 1 ? 's' : ''} de paragem.`);
   // estatísticas da época (só competições oficiais)
   for (const [id, st] of Object.entries(m.players)) {
     if (st.minutes < 30) continue;
@@ -103,6 +110,7 @@ function nextDate(s: GameState) {
 
 function trainingNews(s: GameState, from: string, to: string) {
   const { fresh, healed } = trainingInjuries(s, from, to);
+  moraleEvent(s, fresh.filter(([, i]) => i.days > 7).map(([id]) => id), -6);
   const name = (id: string) => s.players.find((p) => p.id === id);
   for (const id of healed) if (name(id)?.clubId === s.clubId) news(s, `${name(id)!.name} recuperou da lesão.`);
   for (const [id, i] of fresh) if (name(id)?.clubId === s.clubId) news(s, `${name(id)!.name} lesionou-se no treino: ${i.type.toLowerCase()}, ${i.days} dia${i.days > 1 ? 's' : ''} de paragem.`);
@@ -143,7 +151,10 @@ export function playMyMatch(s: GameState, f: Fixture, given?: MatchResult): Matc
 function playDay(s: GameState, d: string) {
   for (const f of s.season.fixtures.filter((x) => x.date === d && !x.result && !x.cancelled)) playFixture(s, f);
   const clubIds = s.leagues[0].clubIds;
+  const before = { ...s.season.winners };
   for (const t of afterMatchday(s.season, clubIds, (id) => clubName(s, id))) news(s, t);
+  // títulos: todo o plantel ganha moral
+  for (const [comp, w] of Object.entries(s.season.winners)) if (w && before[comp as keyof typeof before] !== w) moraleEvent(s, s.players.filter((p) => p.clubId === w).map((p) => p.id), 10);
 }
 
 // Fim de época: palmarés, evolução, reformas, formação e nova época

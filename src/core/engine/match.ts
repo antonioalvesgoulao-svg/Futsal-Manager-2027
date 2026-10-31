@@ -21,6 +21,7 @@ interface Live {
   onCourt: boolean;
   sentOff: boolean;
   yellow: number;
+  mor: number; // fator da moral nos atributos
 }
 
 interface TeamState {
@@ -90,7 +91,7 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     const called = youth.length === 2
       ? [...gkList, ...youth, ...rest.slice(0, MAX_SQUAD + 2 - gkList.length - 2)]
       : [...gkList, ...outList.slice(0, MAX_SQUAD - gkList.length)];
-    const players: Live[] = called.map((p) => ({ p, energy: 100, onCourt: false, sentOff: false, yellow: 0 }));
+    const players: Live[] = called.map((p) => ({ p, energy: 100, onCourt: false, sentOff: false, yellow: 0, mor: 1 + (((setup.morale?.[p.id] ?? 65) - 65) / 100) * 0.12 }));
     for (const l of players) {
       names[l.p.id] = l.p.name;
       pstats[l.p.id] = { minutes: 0, goals: 0, assists: 0, shots: 0, onTarget: 0, saves: 0, fouls: 0, tackles: 0, yellow: 0, red: false, rating: 6 };
@@ -145,7 +146,7 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
   const ROT = { curta: { min: 60, energy: 80, max: 180 }, normal: { min: 90, energy: 72, max: 300 }, longa: { min: 120, energy: 62, max: 420 } };
   const PRESS_DRAIN = { alta: 1.15, media: 1, baixa: 0.92 };
 
-  const eff = (l: Live, k: keyof A) => l.p.attrs[k] * (0.72 + 0.28 * (l.energy / 100));
+  const eff = (l: Live, k: keyof A) => l.p.attrs[k] * (0.72 + 0.28 * (l.energy / 100)) * l.mor;
   const avg = (ls: Live[], ks: (keyof A)[]) =>
     ls.length ? ls.reduce((s, l) => s + ks.reduce((a, k) => a + eff(l, k), 0) / ks.length, 0) / ls.length : 5;
 

@@ -84,6 +84,7 @@ export interface GameState {
   settings?: Settings;
   discipline?: Discipline; // amarelos acumulados e castigos
   injuries?: Record<string, Injury>; // lesões em curso
+  morale?: Record<string, number>; // moral 0-100 (65 = normal)
 }
 
 export const SAVE_VERSION = 6;
