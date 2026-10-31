@@ -51,6 +51,13 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
   const colors: [string, string] = [h.colors[0], hexDist(h.colors[0], a.colors[0]) < 120 ? (hexDist(h.colors[0], a.colors[1]) < 120 ? '#f5f5f5' : a.colors[1]) : a.colors[0]];
   const textCol = (c: string) => (hexDist(c, '#ffffff') < 200 ? '#111' : '#fff');
   const crowd = attendance(s, f);
+  // claques organizadas (bandeiras, tifo, tochas): Benfica e Sporting, só em jogos grandes
+  // (dérbi entre os dois ou finais das competições)
+  const BIG = ['slb', 'scp'];
+  const derby = BIG.includes(f.home) && BIG.includes(f.away);
+  const finalGame = f.comp !== 'liga' && /Final/.test(f.stage) && !/Meias|Quartos/.test(f.stage);
+  const bigGame = derby || finalGame;
+  const ultras: [boolean, boolean] = [bigGame && BIG.includes(f.home), bigGame && BIG.includes(f.away)];
   const fmtN = (n: number) => n.toLocaleString('pt-PT');
 
   content.innerHTML = `
@@ -266,7 +273,8 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
       shares: crowd.shares,
       comp: COMP_NAMES[f.comp],
       stage: f.stage,
-      teams: [{ short: h.shortName, colors: kit[0] }, { short: a.shortName, colors: kit[1] }],
+      teams: [{ short: h.shortName, colors: kit[0], name: h.name }, { short: a.shortName, colors: kit[1], name: a.name }],
+      ultras,
     });
   }
 

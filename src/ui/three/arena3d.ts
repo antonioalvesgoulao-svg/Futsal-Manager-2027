@@ -6,6 +6,7 @@ import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js
 
 import type { ArenaProfile } from '../../core/attendance';
 import { buildRoof } from './roof3d';
+import { buildUltras } from './ultras3d';
 
 export const W = 40; // comprimento do campo (m)
 export const H = 20; // largura do campo (m)
@@ -16,7 +17,8 @@ export interface ArenaOpts {
   shares: [number, number];
   comp: string; // nome da competição
   stage: string; // jornada / eliminatória
-  teams: [{ short: string; colors: [string, string] }, { short: string; colors: [string, string] }];
+  teams: [{ short: string; colors: [string, string]; name?: string }, { short: string; colors: [string, string]; name?: string }];
+  ultras?: [boolean, boolean]; // claque organizada de cada equipa (só em jogos grandes)
 }
 
 export function canvasTex(w: number, h: number, draw: (c: CanvasRenderingContext2D) => void) {
@@ -256,6 +258,7 @@ export interface ArenaHandle {
   update(now: number, excite: [number, number]): void;
   setScore(s: [number, number]): void;
   goal(side: number): void;
+  setCeremony(on: boolean): void;
   standDepth: number;
   height: number;
 }
@@ -342,11 +345,13 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
   const seats: { p: THREE.Vector3; ry: number; side: string; row: number; u: number }[] = [];
   let maxRows = 0;
   const concrete = new THREE.MeshStandardMaterial({ color: modern ? '#9aa3ad' : '#b5b0a6', roughness: 0.9 });
+  const rowsBySide: Record<string, number> = {};
   for (const sd of pr.sides) {
     const perRow = Math.floor(sideLen[sd] / seatW);
     const cap = Math.round((pr.capacity * sideLen[sd]) / lenTot);
     const rows = Math.max(2, Math.ceil(cap / perRow));
     maxRows = Math.max(maxRows, rows);
+    rowsBySide[sd] = rows;
     const ry = sd === 'N' ? 0 : sd === 'S' ? Math.PI : sd === 'E' ? -Math.PI / 2 : Math.PI / 2;
     const out = sd === 'N' || sd === 'W' ? -1 : 1; // para fora do campo
     let left = cap;
@@ -430,8 +435,12 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
   // adeptos: ocupam primeiro os lugares centrais e mais baixos
   const uniforms = { uTime: { value: 0 }, uEx: { value: new THREE.Vector3(0, 0, 0) } };
   const n = Math.min(seats.length, o.crowd);
-  const awaySide = pr.sides.includes('E') ? 'E' : pr.sides.includes('S') ? 'S' : pr.sides[0];
-  const scored = seats.map((s, i) => ({ i, w: s.row * 0.5 + Math.abs(s.u) * 0.08 + r() * 3 }));
+  // claques: a da casa num topo, a visitante no topo oposto (ou no bloco visitante)
+  const ends = pr.sides.filter((x) => x === 'W' || x === 'E');
+  const homeUltra = o.ultras?.[0] ? (ends.includes('W') ? 'W' : ends[0] ?? pr.sides[0]) : null;
+  const awayUltra = o.ultras?.[1] ? (ends.find((x) => x !== homeUltra) ?? pr.sides.find((x) => x !== homeUltra) ?? null) : null;
+  const awaySide = awayUltra ?? (pr.sides.includes('E') ? 'E' : pr.sides.includes('S') ? 'S' : pr.sides[0]);
+  const scored = seats.map((s, i) => ({ i, w: s.row * 0.5 + Math.abs(s.u) * 0.08 + r() * 3 - (s.side === homeUltra || s.side === awayUltra ? 12 : 0) }));
   scored.sort((a, b) => a.w - b.w);
   const chosen = scored.slice(0, n).map((x) => seats[x.i]);
   // bloco visitante num dos lados
@@ -457,11 +466,12 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
     m4.compose(s.p, q, new THREE.Vector3(sc, sc, sc));
     bodies.setMatrixAt(i, m4);
     heads.setMatrixAt(i, m4);
-    const away = awayIdx.has(i);
-    const side = away ? 1 : r() < (o.shares[0] / Math.max(0.01, 1 - o.shares[1])) ? 0 : 2;
+    const away = awayIdx.has(i) || s.side === awayUltra;
+    const ultra = s.side === homeUltra || s.side === awayUltra;
+    const side = away ? 1 : s.side === homeUltra || r() < (o.shares[0] / Math.max(0.01, 1 - o.shares[1])) ? 0 : 2;
     team[i] = side;
     const t = side === 2 ? null : o.teams[side];
-    const shirt = t ? (r() < 0.65 ? t.colors[0] : r() < 0.5 ? t.colors[1] : neutral[Math.floor(r() * neutral.length)]) : neutral[Math.floor(r() * neutral.length)];
+    const shirt = t ? (r() < (ultra ? 0.85 : 0.65) ? t.colors[0] : r() < 0.5 ? t.colors[1] : neutral[Math.floor(r() * neutral.length)]) : neutral[Math.floor(r() * neutral.length)];
     bodies.setColorAt(i, col.set(shirt));
     heads.setColorAt(i, col.set(skins[Math.floor(r() * skins.length)]));
     phase[i] = r() * Math.PI * 2;
@@ -608,14 +618,30 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
     scene.add(l);
   }
 
+  // claques: bandeiras, tifo e tochas
+  const ultras: { sd: number; u: ReturnType<typeof buildUltras> }[] = [];
+  const front0 = { N: H / 2 + 4.2, S: H / 2 + 4.2, E: W / 2 + 4.6, W: W / 2 + 4.6 };
+  for (const [sd, side] of [[0, homeUltra], [1, awayUltra]] as const) {
+    if (!side) continue;
+    const t = o.teams[sd];
+    ultras.push({ sd, u: buildUltras(scene, { side, out: side === 'N' || side === 'W' ? -1 : 1, front: front0[side], rows: rowsBySide[side] ?? 6, rowD, rise, base, width: side === 'E' || side === 'W' ? H + 4 : W + 8, colors: t.colors, name: t.name ?? t.short }, 99 + sd) });
+  }
+  let ceremony = false;
+  const flareUntil = [-1, -1];
+
   return {
     standDepth,
     height: hallH,
     update(now: number, ex: [number, number]) {
       uniforms.uTime.value = now;
       const base0 = 0.08;
-      uniforms.uEx.value.set(Math.max(base0, ex[0]), Math.max(base0, ex[1]), Math.max(base0 * 0.5, Math.max(ex[0], ex[1]) * 0.3));
+      const c = ceremony ? 0.7 : 0;
+      uniforms.uEx.value.set(Math.max(base0, ex[0], c), Math.max(base0, ex[1], c), Math.max(base0 * 0.5, Math.max(ex[0], ex[1]) * 0.3));
       led.update(now);
+      for (const x of ultras) x.u.update(now, ceremony, ceremony || now < flareUntil[x.sd]);
+    },
+    setCeremony(on: boolean) {
+      ceremony = on;
     },
     setScore(s: [number, number]) {
       led.score = s;
@@ -623,6 +649,7 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
     },
     goal(side: number) {
       led.goal(side, uniforms.uTime.value);
+      flareUntil[side] = uniforms.uTime.value + 9; // tochas na claque de quem marcou
     },
   };
 }

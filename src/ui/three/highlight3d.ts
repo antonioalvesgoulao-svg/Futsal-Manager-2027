@@ -169,6 +169,7 @@ export class Highlight3D {
       if (this.scores) this.arena.setScore(this.scores[1]);
     }
     for (const i of [0, 1]) this.excite[i] = lerp(this.excite[i], target[i], Math.min(1, dt * 3));
+    this.arena.setCeremony(f.phase === 'Entrada das equipas' || f.phase === 'Alinhamento');
     this.arena.update(this.clock, this.excite);
     // bola: x do motor = x do 3D; y do motor = z do 3D
     this.ballMesh.position.set(f.ball.x, Math.max(0.11, f.ball.z), f.ball.y);
