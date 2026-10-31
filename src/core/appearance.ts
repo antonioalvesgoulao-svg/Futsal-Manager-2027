@@ -20,7 +20,8 @@ const BOOTS: [string, string][] = [
   ['#f97316', '#ffffff'], ['#ec4899', '#ffffff'], ['#2563eb', '#ffffff'], ['#dc2626', '#ffffff'], ['#16a34a', '#ffffff'],
   ['#9ca3af', '#111111'], ['#22d3ee', '#1e3a8a'], ['#7c3aed', '#fde047'], ['#0f172a', '#f97316'], ['#f5f5f4', '#2563eb'],
 ];
-const SKINS = ['#f6d7c3', '#eac4a4', '#d9a77f', '#c68a5e', '#a86b43', '#7f4f2e', '#5b3820', '#3f2716'];
+// tons de pele com o vermelho natural da pele (sem ele parecem madeira)
+const SKINS = ['#f3cbb4', '#e6b095', '#d49a7a', '#bf8160', '#a0644a', '#7d4a33', '#5c3524', '#432517'];
 const HAIR = { preto: '#141414', castanhoEscuro: '#2e1e14', castanho: '#55361f', castanhoClaro: '#8a6240', loiro: '#c9a15a', ruivo: '#9c4a22', grisalho: '#8d8d8d' };
 
 // distribuição de tons de pele (índices de SKINS) por nacionalidade

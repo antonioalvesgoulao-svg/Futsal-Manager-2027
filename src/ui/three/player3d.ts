@@ -3,6 +3,7 @@
 // penteado, barba, altura, sapatilhas). Os guarda-redes jogam sem luvas. Animações: corrida, passe, remate, mergulho, defesa, carrinho,
 // finta, bloqueio, proteção de bola, bloqueio de remate, queda e festejo.
 import * as THREE from 'three';
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 
 import type { Look } from '../../core/appearance';
 import type { Act } from '../../core/visual/choreo';
@@ -10,7 +11,7 @@ import { canvasTex } from './arena3d';
 
 export interface Actor {
   g: THREE.Group; // posição e orientação no campo
-  body: THREE.Group; // inclinações, mergulhos, carrinhos (pivô nas ancas)
+  body: THREE.Object3D; // inclinações, mergulhos, carrinhos (pivô nas ancas)
   thigh: THREE.Object3D[];
   shin: THREE.Object3D[];
   arm: THREE.Object3D[];
@@ -32,15 +33,6 @@ function numberTex(n: number | null, color: string, text: string) {
     c.fillStyle = text; c.font = 'bold 84px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle';
     c.fillText(String(n ?? ''), 64, 70);
   });
-}
-
-const mat = (color: string, rough = 0.75) => new THREE.MeshStandardMaterial({ color, roughness: rough });
-
-function capsule(r: number, len: number, m: THREE.Material, y: number) {
-  const mesh = new THREE.Mesh(new THREE.CapsuleGeometry(r, len, 4, 10), m);
-  mesh.position.y = y;
-  mesh.castShadow = true;
-  return mesh;
 }
 
 function hairFor(look: Look, hairMat: THREE.Material, head: THREE.Group) {
@@ -101,100 +93,204 @@ function hairFor(look: Look, hairMat: THREE.Material, head: THREE.Group) {
   }
 }
 
+// ---- formas anatómicas ----
+/** Perfil de um segmento do corpo (raio ao longo do comprimento, a descer a partir de y0), com as
+ *  pontas arredondadas. */
+function segGeo(len: number, radii: number[], y0 = 0, caps: [boolean, boolean] = [true, true], seg = 20, capH = 0.8) {
+  const pts: THREE.Vector2[] = [];
+  const n = radii.length - 1;
+  const r0 = radii[0], rN = radii[n];
+  if (caps[0]) for (let i = 0; i <= 6; i++) { const a = (i / 6) * (Math.PI / 2); pts.push(new THREE.Vector2(Math.max(1e-4, r0 * Math.sin(a)), r0 * Math.cos(a) * capH)); }
+  else pts.push(new THREE.Vector2(r0, 0));
+  for (let i = 1; i <= 18; i++) {
+    const k = i / 18;
+    const f = k * n, j = Math.min(n - 1, Math.floor(f)), t = f - j;
+    pts.push(new THREE.Vector2(radii[j] + (radii[j + 1] - radii[j]) * (t * t * (3 - 2 * t)), -k * len));
+  }
+  if (caps[1]) for (let i = 1; i <= 6; i++) { const a = (i / 6) * (Math.PI / 2); pts.push(new THREE.Vector2(Math.max(1e-4, rN * Math.cos(a)), -len - rN * Math.sin(a) * 0.8)); }
+  const g = new THREE.LatheGeometry(pts, seg);
+  g.translate(0, y0, 0);
+  return g;
+}
+
+function sphereGeo(r: number, x: number, y: number, z: number, sx = 1, sy = 1, sz = 1) {
+  const g = new THREE.SphereGeometry(r, 20, 14);
+  g.scale(sx, sy, sz);
+  g.translate(x, y, z);
+  return g;
+}
+
+interface Part {
+  geo: THREE.BufferGeometry; // em coordenadas do osso
+  bone: THREE.Bone;
+  y0?: number; // topo do segmento (para as misturas nas articulações)
+  len?: number;
+  parent?: THREE.Bone; // mistura no topo com o osso pai
+  child?: THREE.Bone; // mistura no fundo com o osso filho
+  blend?: number;
+}
+
+/** Junta as peças numa só malha com esqueleto: nas articulações os vértices seguem dois ossos ao
+ *  mesmo tempo, por isso a pele dobra de forma contínua (sem encaixes de boneco). */
+function skinned(parts: Part[], skel: THREE.Skeleton, material: THREE.Material) {
+  const bones = skel.bones;
+  const geos = parts.map((p) => {
+    const g = p.geo.index ? p.geo.toNonIndexed() : p.geo;
+    g.deleteAttribute('uv');
+    const pos = g.attributes.position;
+    const n = pos.count;
+    const si = new Uint16Array(n * 4), sw = new Float32Array(n * 4);
+    const bi = bones.indexOf(p.bone), pi = p.parent ? bones.indexOf(p.parent) : bi, ci = p.child ? bones.indexOf(p.child) : bi;
+    const bl = p.blend ?? 0.2;
+    for (let v = 0; v < n; v++) {
+      const t = p.len ? ((p.y0 ?? 0) - pos.getY(v)) / p.len : 0.5;
+      const wP = p.parent ? Math.min(0.5, Math.max(0, (bl - t) / bl) * 0.5) : 0;
+      const wC = p.child ? Math.min(0.5, Math.max(0, (t - (1 - bl)) / bl) * 0.5) : 0;
+      si.set([bi, pi, ci, 0], v * 4);
+      sw.set([1 - wP - wC, wP, wC, 0], v * 4);
+    }
+    g.setAttribute('skinIndex', new THREE.Uint16BufferAttribute(si, 4));
+    g.setAttribute('skinWeight', new THREE.Float32BufferAttribute(sw, 4));
+    g.applyMatrix4(p.bone.matrixWorld);
+    return g;
+  });
+  const m = new THREE.SkinnedMesh(mergeGeometries(geos)!, material);
+  m.castShadow = true;
+  m.frustumCulled = false;
+  m.bind(skel, new THREE.Matrix4());
+  return m;
+}
+
+/** Pele: brilho suave com reflexo avermelhado nas bordas (aspeto de pele, não de madeira). */
+function skinMaterial(color: string) {
+  return new THREE.MeshPhysicalMaterial({ color, metalness: 0, roughness: 0.55, sheen: 0.5, sheenRoughness: 0.45, sheenColor: new THREE.Color('#ff6b4a'), clearcoat: 0.12, clearcoatRoughness: 0.55 });
+}
+const fabric = (color: string) => new THREE.MeshPhysicalMaterial({ color, roughness: 0.8, sheen: 0.5, sheenRoughness: 0.8, sheenColor: new THREE.Color(color).lerp(new THREE.Color('#ffffff'), 0.4) });
+
 export function makePlayer(kit: Kit, look: Look) {
   const g = new THREE.Group();
-  const body = new THREE.Group();
+  // esqueleto (os mesmos pontos de rotação que as animações usam)
+  const body = new THREE.Bone();
   body.position.y = HIP;
   g.add(body);
-  const shirtMat = mat(kit.shirt, 0.7);
-  const shortsMat = mat(kit.shorts, 0.7);
-  const sockMat = mat(kit.socks, 0.8);
-  const skinMat = mat(look.skin, 0.65);
-  const hairMat = mat(look.hair, 0.9);
-  const bootMat = mat(look.boots?.[0] ?? '#111827', 0.45);
-  const soleMat = mat(look.boots?.[1] ?? '#ffffff', 0.6);
+  const head = new THREE.Bone();
+  head.position.y = 0.81;
+  body.add(head);
+  const thigh: THREE.Bone[] = [], shin: THREE.Bone[] = [], arm: THREE.Bone[] = [], fore: THREE.Bone[] = [];
+  for (const x of [-0.092, 0.092]) {
+    const th = new THREE.Bone(); th.position.set(x, -0.02, 0); body.add(th);
+    const sh = new THREE.Bone(); sh.position.y = -0.44; th.add(sh);
+    thigh.push(th); shin.push(sh);
+  }
+  for (const x of [-0.205, 0.205]) {
+    const a = new THREE.Bone(); a.position.set(x, 0.56, 0); a.rotation.z = 0; body.add(a);
+    const fo = new THREE.Bone(); fo.position.y = -0.285; a.add(fo);
+    arm.push(a); fore.push(fo);
+  }
+  g.updateMatrixWorld(true);
+  const bones = new THREE.Skeleton([body, head, ...thigh, ...shin, ...arm, ...fore]);
+
+  const skinMat = skinMaterial(look.skin);
+  const shirtMat = fabric(kit.shirt);
+  const shortsMat = fabric(kit.shorts);
+  const sockMat = fabric(kit.socks);
+  const hairMat = new THREE.MeshStandardMaterial({ color: look.hair, roughness: 0.75 });
+  const bootMat = new THREE.MeshStandardMaterial({ color: look.boots?.[0] ?? '#111827', roughness: 0.4 });
+  const soleMat = new THREE.MeshStandardMaterial({ color: look.boots?.[1] ?? '#ffffff', roughness: 0.6 });
   const light = new THREE.Color(kit.shirt).getHSL({ h: 0, s: 0, l: 0 }).l > 0.6;
 
-  // tronco (camisola) e ancas (calções)
-  const torso = capsule(0.17, 0.3, shirtMat, 0.37);
-  torso.scale.set(1.22, 1, 0.72);
-  body.add(torso);
-  const hips = capsule(0.15, 0.08, shortsMat, 0.02);
-  hips.scale.set(1.3, 1, 0.85);
-  body.add(hips);
-  const back = new THREE.Mesh(new THREE.PlaneGeometry(0.26, 0.26), new THREE.MeshStandardMaterial({ map: numberTex(kit.number, kit.shirt, light ? '#111' : '#fff'), transparent: true }));
-  back.position.set(0, 0.43, -0.128);
+  // ---- pele ----
+  const skin: Part[] = [
+    { geo: segGeo(0.13, [0.048, 0.046, 0.052], 0.84), bone: body }, // pescoço
+    { geo: sphereGeo(0.112, 0, 0.012, -0.005, 0.95, 1.05, 1.02), bone: head }, // crânio
+    { geo: sphereGeo(0.085, 0, -0.045, 0.02, 1, 0.95, 1), bone: head }, // maxilar
+    { geo: sphereGeo(0.035, 0, -0.095, 0.06, 1.2, 0.8, 1), bone: head }, // queixo
+    { geo: sphereGeo(0.024, -0.106, 0, -0.005, 0.55, 1, 0.8), bone: head },
+    { geo: sphereGeo(0.024, 0.106, 0, -0.005, 0.55, 1, 0.8), bone: head },
+    { geo: sphereGeo(0.022, 0, -0.012, 0.112, 0.8, 1.3, 1), bone: head }, // nariz
+  ];
+  for (let i = 0; i < 2; i++) {
+    skin.push({ geo: segGeo(0.45, [0.086, 0.08, 0.068, 0.054], 0.02, [true, false]), bone: thigh[i], y0: 0.02, len: 0.45, parent: body, child: shin[i], blend: 0.25 });
+    skin.push({ geo: segGeo(0.44, [0.054, 0.062, 0.054, 0.04, 0.035], 0.03), bone: shin[i], y0: 0.03, len: 0.44, parent: thigh[i], blend: 0.25 });
+    if (!kit.gk) {
+      skin.push({ geo: segGeo(0.29, [0.052, 0.049, 0.041, 0.036], 0.02, [true, false]), bone: arm[i], y0: 0.02, len: 0.29, parent: body, child: fore[i], blend: 0.25 });
+      skin.push({ geo: segGeo(0.27, [0.037, 0.04, 0.032, 0.026], 0.025), bone: fore[i], y0: 0.025, len: 0.27, parent: arm[i], blend: 0.25 });
+    }
+    skin.push({ geo: sphereGeo(0.04, 0, -0.29, 0.005, 0.75, 1.25, 0.5), bone: fore[i] }); // mão
+    skin.push({ geo: sphereGeo(0.016, i ? -0.025 : 0.025, -0.27, 0.025, 0.8, 1.6, 0.8), bone: fore[i] }); // polegar
+  }
+  g.add(skinned(skin, bones, skinMat));
+
+  // ---- camisola (tronco, ombros e mangas; o GR tem manga comprida) ----
+  // tronco: ombros largos e arredondados, peito, cintura mais estreita
+  const torsoGeo = segGeo(0.48, [0.165, 0.178, 0.168, 0.15, 0.14], 0.64, [true, false], 24, 0.45);
+  torsoGeo.scale(1.25, 1, 0.66);
+  const shirt: Part[] = [{ geo: torsoGeo, bone: body }];
+  for (let i = 0; i < 2; i++) {
+    if (kit.gk) {
+      shirt.push({ geo: segGeo(0.3, [0.06, 0.055, 0.046, 0.042], 0.03), bone: arm[i], y0: 0.03, len: 0.3, parent: body, child: fore[i] });
+      shirt.push({ geo: segGeo(0.25, [0.044, 0.045, 0.036, 0.03], 0.02), bone: fore[i], y0: 0.02, len: 0.25, parent: arm[i] });
+    } else shirt.push({ geo: segGeo(0.15, [0.063, 0.059], 0.04, [true, false]), bone: arm[i], y0: 0.04, len: 0.15, parent: body, blend: 0.45 });
+  }
+  g.add(skinned(shirt, bones, shirtMat));
+
+  // ---- calções ----
+  const pelvis = segGeo(0.19, [0.142, 0.152, 0.156], 0.2, [true, false]);
+  pelvis.scale(1.2, 1, 0.8);
+  const shortsParts: Part[] = [{ geo: pelvis, bone: body }];
+  for (let i = 0; i < 2; i++) shortsParts.push({ geo: segGeo(0.2, [0.1, 0.097], 0.05, [false, false]), bone: thigh[i], y0: 0.05, len: 0.2, parent: body, blend: 0.4 });
+  g.add(skinned(shortsParts, bones, shortsMat));
+
+  // ---- meias ----
+  g.add(skinned([0, 1].map((i) => ({ geo: segGeo(0.31, [0.064, 0.059, 0.044, 0.04], -0.09, [false, false]), bone: shin[i] })), bones, sockMat));
+
+  // ---- sapatilhas, números, gola, olhos, cabelo (peças rígidas presas aos ossos) ----
+  for (const sh of shin) {
+    const boot = new THREE.Mesh(new THREE.CapsuleGeometry(0.046, 0.15, 4, 10), bootMat);
+    boot.rotation.x = Math.PI / 2;
+    boot.scale.set(1.05, 1, 0.75);
+    boot.position.set(0, -0.43, 0.045);
+    boot.castShadow = true;
+    sh.add(boot);
+    const sole = new THREE.Mesh(new THREE.BoxGeometry(0.095, 0.022, 0.25), soleMat);
+    sole.position.set(0, -0.468, 0.045);
+    sh.add(sole);
+    const stripe = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.016, 0.12), soleMat);
+    stripe.position.set(0, -0.43, 0.06);
+    sh.add(stripe);
+  }
+  const back = new THREE.Mesh(new THREE.PlaneGeometry(0.24, 0.24), new THREE.MeshStandardMaterial({ map: numberTex(kit.number, kit.shirt, light ? '#111' : '#fff'), transparent: true, roughness: 0.8 }));
+  back.position.set(0, 0.37, -0.122);
   back.rotation.y = Math.PI;
   body.add(back);
   const front = back.clone();
   front.rotation.y = 0;
-  front.scale.set(0.42, 0.42, 1);
-  front.position.set(0.08, 0.5, 0.128);
+  front.scale.set(0.4, 0.4, 1);
+  front.position.set(0.075, 0.45, 0.121);
   body.add(front);
-  const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.048, 0.055, 0.1, 10), skinMat);
-  neck.position.y = 0.68;
-  body.add(neck);
-  // cabeça: ligeiramente alongada, orelhas, nariz, cabelo e barba
-  const head = new THREE.Group();
-  head.position.y = 0.81;
-  const skull = new THREE.Mesh(new THREE.SphereGeometry(0.118, 20, 14), skinMat);
-  skull.scale.set(0.92, 1.08, 0.98);
-  skull.castShadow = true;
-  head.add(skull);
-  for (const x of [-0.11, 0.11]) {
-    const ear = new THREE.Mesh(new THREE.SphereGeometry(0.025, 8, 6), skinMat);
-    ear.position.set(x, 0, -0.005);
-    ear.scale.set(0.6, 1, 0.8);
-    head.add(ear);
+  const collar = new THREE.Mesh(new THREE.TorusGeometry(0.052, 0.012, 8, 20), fabric(kit.shorts));
+  collar.rotation.x = Math.PI / 2;
+  collar.position.set(0, 0.665, 0.005);
+  body.add(collar);
+  const white = new THREE.MeshStandardMaterial({ color: '#f4f1ea', roughness: 0.3 });
+  const iris = new THREE.MeshStandardMaterial({ color: '#2a1a10', roughness: 0.2 });
+  for (const x of [-0.037, 0.037]) {
+    const e = new THREE.Mesh(new THREE.SphereGeometry(0.016, 12, 8), white);
+    e.scale.set(1.2, 0.8, 0.6); e.position.set(x, 0.018, 0.094); head.add(e);
+    const p = new THREE.Mesh(new THREE.SphereGeometry(0.008, 10, 8), iris);
+    p.position.set(x, 0.018, 0.104); head.add(p);
+    const brow = new THREE.Mesh(new THREE.BoxGeometry(0.036, 0.008, 0.01), hairMat);
+    brow.position.set(x, 0.042, 0.1);
+    brow.rotation.z = x > 0 ? -0.12 : 0.12;
+    head.add(brow);
   }
-  const nose = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.045, 0.035), skinMat);
-  nose.position.set(0, -0.01, 0.115);
-  head.add(nose);
-  hairFor(look, hairMat, head);
-  body.add(head);
+  const mouth = new THREE.Mesh(new THREE.BoxGeometry(0.036, 0.006, 0.008), new THREE.MeshStandardMaterial({ color: '#7a3b33' }));
+  mouth.position.set(0, -0.058, 0.098);
+  head.add(mouth);
+  const hairG = new THREE.Group();
+  hairFor(look, hairMat, hairG);
+  head.add(hairG);
 
-  const thigh: THREE.Object3D[] = [], shin: THREE.Object3D[] = [], arm: THREE.Object3D[] = [], fore: THREE.Object3D[] = [];
-  for (const x of [-0.095, 0.095]) {
-    const th = new THREE.Object3D();
-    th.position.set(x, -0.02, 0);
-    th.add(capsule(0.078, 0.12, shortsMat, -0.1)); // perna dos calções
-    th.add(capsule(0.066, 0.2, skinMat, -0.3));
-    const sh = new THREE.Object3D();
-    sh.position.y = -0.44;
-    sh.add(capsule(0.06, 0.07, skinMat, -0.03));
-    sh.add(capsule(0.058, 0.26, sockMat, -0.23));
-    const boot = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.075, 0.25), bootMat);
-    boot.position.set(0, -0.43, 0.05);
-    boot.castShadow = true;
-    sh.add(boot);
-    // sola e risca lateral noutra cor
-    const sole = new THREE.Mesh(new THREE.BoxGeometry(0.105, 0.02, 0.255), soleMat);
-    sole.position.set(0, -0.475, 0.05);
-    sh.add(sole);
-    const stripe = new THREE.Mesh(new THREE.BoxGeometry(0.104, 0.018, 0.14), soleMat);
-    stripe.position.set(0, -0.42, 0.06);
-    sh.add(stripe);
-    th.add(sh);
-    body.add(th);
-    thigh.push(th);
-    shin.push(sh);
-  }
-  for (const x of [-0.25, 0.25]) {
-    const a = new THREE.Object3D();
-    a.position.set(x, 0.58, 0);
-    a.add(capsule(0.058, 0.18, shirtMat, -0.14)); // manga
-    const fo = new THREE.Object3D();
-    fo.position.y = -0.29;
-    fo.add(capsule(0.048, 0.18, kit.gk ? shirtMat : skinMat, -0.12));
-    const hand = new THREE.Mesh(new THREE.SphereGeometry(0.048, 10, 8), skinMat);
-    hand.position.y = -0.28;
-    hand.scale.set(0.8, 1.1, 0.6);
-    fo.add(hand);
-    a.add(fo);
-    body.add(a);
-    arm.push(a);
-    fore.push(fo);
-  }
   g.scale.setScalar(look.height / 1.8);
   return { g, body, thigh, shin, arm, fore };
 }

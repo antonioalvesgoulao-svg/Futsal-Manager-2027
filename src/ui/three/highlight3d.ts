@@ -1,6 +1,7 @@
 // Momentos importantes em 3D: a mesma jogada do 2D (coreografia), no pavilhão do jogo (bancadas,
 // adeptos, publicidade LED), com jogadores de aspeto próprio, várias câmaras e repetição.
 import * as THREE from 'three';
+import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 
 import type { Look } from '../../core/appearance';
 import type { Choreo } from '../../core/visual/choreo';
@@ -53,6 +54,10 @@ export class Highlight3D {
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    // reflexos de ambiente suaves (pele, tecidos e piso deixam de parecer baços)
+    const pmrem = new THREE.PMREMGenerator(this.renderer);
+    this.scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+    this.scene.environmentIntensity = 0.45;
     host.appendChild(this.renderer.domElement);
     this.arena = buildArena(this.scene, opts);
     this.colors = [opts.teams[0].colors, opts.teams[1].colors];

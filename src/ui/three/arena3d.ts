@@ -595,8 +595,8 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
 
   // iluminação de pavilhão
   scene.background = new THREE.Color(pr.wall);
-  scene.add(new THREE.HemisphereLight(0xffffff, 0x6b7280, 1.25));
-  const sun = new THREE.DirectionalLight(0xffffff, 1.5);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x6b7280, 0.75));
+  const sun = new THREE.DirectionalLight(0xfff6ea, 2.1);
   sun.position.set(6, 22, 8);
   sun.castShadow = true;
   sun.shadow.mapSize.set(2048, 2048);
