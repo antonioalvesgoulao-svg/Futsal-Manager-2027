@@ -165,9 +165,10 @@ function skinned(parts: Part[], skel: THREE.Skeleton, material: THREE.Material) 
 
 /** Pele: brilho suave com reflexo avermelhado nas bordas (aspeto de pele, não de madeira). */
 function skinMaterial(color: string) {
-  return new THREE.MeshPhysicalMaterial({ color, metalness: 0, roughness: 0.55, sheen: 0.5, sheenRoughness: 0.45, sheenColor: new THREE.Color('#ff6b4a'), clearcoat: 0.12, clearcoatRoughness: 0.55 });
+  return new THREE.MeshPhysicalMaterial({ color, metalness: 0, roughness: 0.55, sheen: 0.5, sheenRoughness: 0.45, sheenColor: new THREE.Color('#ff6b4a') });
 }
-const fabric = (color: string) => new THREE.MeshPhysicalMaterial({ color, roughness: 0.8, sheen: 0.5, sheenRoughness: 0.8, sheenColor: new THREE.Color(color).lerp(new THREE.Color('#ffffff'), 0.4) });
+// tecido: material simples (mais leve; 30 jogadores em ecrã inteiro)
+const fabric = (color: string) => new THREE.MeshStandardMaterial({ color, roughness: 0.85 });
 
 export function makePlayer(kit: Kit, look: Look) {
   const g = new THREE.Group();
@@ -300,6 +301,19 @@ export function makePlayer(kit: Kit, look: Look) {
 
 const ease = (k: number) => k * k * (3 - 2 * k);
 const clamp01 = (k: number) => Math.max(0, Math.min(1, k));
+
+/** Sentado (suplentes no banco): coxas para a frente, pernas para baixo, mãos nos joelhos. */
+export function sit(a: Actor) {
+  const { body, thigh, shin, arm, fore } = a;
+  body.position.set(0, 0.58, 0);
+  body.rotation.set(0.12, 0, 0);
+  for (let i = 0; i < 2; i++) {
+    thigh[i].rotation.set(-1.45, 0, i ? 0.08 : -0.08);
+    shin[i].rotation.set(1.4, 0, 0);
+    arm[i].rotation.set(-0.55, 0, i ? 0.12 : -0.12);
+    fore[i].rotation.set(-0.75, 0, 0);
+  }
+}
 
 // Convenção dos ângulos (rotação em x): coxa/braço negativo = para a frente; perna (joelho)
 // positivo = dobra (o pé vai para trás); antebraço negativo = cotovelo dobrado. Rotação em z:

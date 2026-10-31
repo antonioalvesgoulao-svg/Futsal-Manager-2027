@@ -6,7 +6,7 @@ import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment
 import type { Look } from '../../core/appearance';
 import type { Scene3D } from '../../core/visual/choreo';
 import { ArenaHandle, ArenaOpts, buildArena, canvasTex, H, W } from './arena3d';
-import { Actor, makePlayer, pose } from './player3d';
+import { Actor, makePlayer, pose, sit } from './player3d';
 
 export type CameraId = 'tv' | 'baliza' | 'aerea' | 'jogador';
 
@@ -51,7 +51,8 @@ export class Highlight3D {
 
   constructor(private host: HTMLElement, opts: ArenaOpts) {
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
-    this.renderer.setPixelRatio(Math.min(2, window.devicePixelRatio));
+    // resolução moderada: o 3D em ecrã inteiro tem de correr fluido em qualquer computador
+    this.renderer.setPixelRatio(Math.min(1.25, window.devicePixelRatio));
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -115,6 +116,29 @@ export class Highlight3D {
   private actor(id: string): Actor {
     let a = this.actors.get(id);
     if (a) return a;
+    a = this.createActor(id);
+    this.actors.set(id, a);
+    return a;
+  }
+
+  // suplentes sentados no banco (escondidos quando estão em campo ou a entrar)
+  private bench = new Map<string, Actor>();
+  setBench(ids: [string[], string[]]) {
+    for (const a of this.bench.values()) this.scene.remove(a.g);
+    this.bench.clear();
+    ids.forEach((list, sd) => list.slice(0, 10).forEach((id, k) => {
+      const seat = this.arena.benchSeats[sd]?.[k];
+      if (!seat) return;
+      const a = this.createActor(id);
+      a.g.position.set(seat.x, 0, seat.z);
+      a.g.rotation.y = 0; // virados para o campo
+      sit(a);
+      this.bench.set(id, a);
+    }));
+  }
+
+  private createActor(id: string): Actor {
+    let a: Actor;
     const inf = this.info[id] ?? { side: 0, number: null, gk: false, look: undefined as unknown as Look };
     const cols: [string, string] = inf.referee ? ['#facc15', '#111111'] : this.colors[inf.side];
     const shirt = inf.gk ? (inf.side === 0 ? '#0f766e' : '#7c3aed') : cols[0];
@@ -125,7 +149,6 @@ export class Highlight3D {
     const pm = makePlayer({ shirt, shorts, socks: inf.gk ? shorts : cols[0], number: inf.number, gk: inf.gk }, look);
     this.scene.add(pm.g);
     a = { ...pm, prev: new THREE.Vector3(), heading: 0, phase: (hsh % 10) / 3, speed: 0, init: false };
-    this.actors.set(id, a);
     return a;
   }
 
@@ -208,6 +231,8 @@ export class Highlight3D {
       a.prev.copy(a.g.position);
     }
     for (const [id, a] of this.actors) if (!seen.has(id)) a.g.visible = false;
+    const ceremony = f.phase === 'Entrada das equipas' || f.phase === 'Alinhamento';
+    for (const [id, a] of this.bench) a.g.visible = !ceremony && !f.pos[id];
     if (f.holder) this.lastHolder = f.holder;
     this.updateCamera(f.focus ? { x: f.focus.x, y: f.focus.y, z: 0 } : f.ball);
     if (render) this.renderer.render(this.scene, this.camera);

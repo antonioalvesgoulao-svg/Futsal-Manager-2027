@@ -189,7 +189,7 @@ tr.today td { background: #2a2618; }
 button[disabled] { opacity: .45; cursor: not-allowed; }
 @media (max-width: 1000px) { .live-grid { grid-template-columns: 1fr; } .sb { min-width: 0; width: 100%; } }
 
-.hl { position: absolute; inset: 0; background: #000; display: flex; flex-direction: column; z-index: 5; }
+.hl { position: fixed; inset: 0; background: #000; display: flex; flex-direction: column; z-index: 50; } /* 3D em ecrã inteiro */
 .hl[hidden] { display: none; }
 .hl-view { flex: 1; min-height: 0; display: grid; place-items: center; overflow: hidden; }
 .hl-view canvas { width: 100% !important; height: 100% !important; object-fit: cover; }

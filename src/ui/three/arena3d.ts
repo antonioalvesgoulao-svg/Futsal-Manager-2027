@@ -82,7 +82,8 @@ function floorTexture(mainLine: string, fl: { court: string; surround: string; a
       c.beginPath(); c.moveTo(gx - sgn * 6 * S, Z(-1.58)); c.lineTo(gx - sgn * 6 * S, Z(1.58)); c.stroke();
       for (const d of [6, 10]) { c.fillStyle = mainLine; c.beginPath(); c.arc(gx - sgn * d * S, Z(0), 0.12 * S, 0, Math.PI * 2); c.fill(); }
     }
-    for (const x of [-5, 5]) { c.beginPath(); c.moveTo(X(x), Z(H / 2)); c.lineTo(X(x), Z(H / 2 + 0.6)); c.stroke(); }
+    // zonas de substituição, do lado dos bancos
+    for (const x of [-5, 5]) { c.beginPath(); c.moveTo(X(x), Z(-H / 2)); c.lineTo(X(x), Z(-H / 2 - 0.6)); c.stroke(); }
     c.fillStyle = mainLine;
     c.beginPath(); c.arc(X(0), Z(0), 0.12 * S, 0, Math.PI * 2); c.fill();
   });
@@ -261,6 +262,7 @@ export interface ArenaHandle {
   setCeremony(on: boolean): void;
   standDepth: number;
   height: number;
+  benchSeats: { x: number; z: number; y: number }[][];
 }
 
 export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
@@ -300,18 +302,46 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
     scene.add(g);
   }
 
-  // bancos de suplentes e mesa do cronometrista (lado sul)
-  const benchMat = new THREE.MeshStandardMaterial({ color: '#334155', roughness: 0.6 });
-  for (const [x, i] of [[-9, 0], [9, 1]] as const) {
-    const b = new THREE.Mesh(new THREE.BoxGeometry(6, 1.1, 0.8), new THREE.MeshStandardMaterial({ color: o.teams[i].colors[0], transparent: true, opacity: 0.55 }));
-    b.position.set(x, 0.55, H / 2 + 1.9);
-    scene.add(b);
-    const seat = new THREE.Mesh(new THREE.BoxGeometry(5.6, 0.45, 0.6), benchMat);
-    seat.position.set(x, 0.22, H / 2 + 1.9);
-    scene.add(seat);
+  // bancos de suplentes (lado oposto à câmara principal, como nas transmissões): estrado,
+  // cadeiras individuais nas cores da equipa e abrigo
+  // de acrílico; os suplentes sentam-se nas cadeiras (posições exportadas para a vista 3D)
+  const benchSeats: { x: number; z: number; y: number }[][] = [[], []];
+  const platMat = new THREE.MeshStandardMaterial({ color: '#2b2f36', roughness: 0.8 });
+  const acrylic = new THREE.MeshStandardMaterial({ color: '#cfe3f3', transparent: true, opacity: 0.22, roughness: 0.1, metalness: 0.1, side: THREE.DoubleSide, depthWrite: false });
+  const frameMat = new THREE.MeshStandardMaterial({ color: '#9ca3af', metalness: 0.6, roughness: 0.35 });
+  for (const [cx, i] of [[-9, 0], [9, 1]] as const) {
+    const bz = -(H / 2 + 2.0);
+    const plat = new THREE.Mesh(new THREE.BoxGeometry(6.6, 0.1, 1.4), platMat);
+    plat.position.set(cx, 0.05, bz - 0.1);
+    scene.add(plat);
+    const seatMat = new THREE.MeshStandardMaterial({ color: o.teams[i].colors[0], roughness: 0.5 });
+    for (let k = 0; k < 10; k++) {
+      const x = cx - 2.7 + k * 0.6;
+      const pan = new THREE.Mesh(new THREE.BoxGeometry(0.46, 0.06, 0.42), seatMat);
+      pan.position.set(x, 0.46, bz);
+      const back = new THREE.Mesh(new THREE.BoxGeometry(0.46, 0.5, 0.06), seatMat);
+      back.position.set(x, 0.72, bz - 0.22);
+      back.rotation.x = 0.12;
+      const leg = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.42, 0.06), frameMat);
+      leg.position.set(x, 0.24, bz - 0.05);
+      scene.add(pan, back, leg);
+      benchSeats[i].push({ x, z: bz + 0.02, y: 0.49 });
+    }
+    // abrigo: costas e teto de acrílico com estrutura metálica
+    const wall = new THREE.Mesh(new THREE.PlaneGeometry(6.4, 1.9), acrylic);
+    wall.position.set(cx, 1.0, bz - 0.62);
+    const roof = new THREE.Mesh(new THREE.PlaneGeometry(6.4, 1.3), acrylic);
+    roof.rotation.x = Math.PI / 2 - 0.2;
+    roof.position.set(cx, 1.95, bz - 0.05);
+    scene.add(wall, roof);
+    for (const x of [cx - 3.2, cx + 3.2]) {
+      const post = new THREE.Mesh(new THREE.BoxGeometry(0.05, 1.95, 0.05), frameMat);
+      post.position.set(x, 0.98, bz - 0.62);
+      scene.add(post);
+    }
   }
   const table = new THREE.Mesh(new THREE.BoxGeometry(3, 0.8, 0.8), new THREE.MeshStandardMaterial({ color: '#e5e7eb' }));
-  table.position.set(0, 0.4, H / 2 + 1.9);
+  table.position.set(0, 0.4, -(H / 2 + 1.9));
   scene.add(table);
 
   // ---- placas LED à volta do campo ----
@@ -609,7 +639,7 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
   const sun = new THREE.DirectionalLight(0xfff6ea, 2.1);
   sun.position.set(6, 22, 8);
   sun.castShadow = true;
-  sun.shadow.mapSize.set(2048, 2048);
+  sun.shadow.mapSize.set(1024, 1024);
   Object.assign(sun.shadow.camera, { left: -24, right: 24, top: 14, bottom: -14, near: 1, far: 60 });
   scene.add(sun);
   for (const x of [-14, 0, 14]) {
@@ -617,6 +647,35 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
     l.position.set(x, hallH - 2.5, 0);
     scene.add(l);
   }
+
+  // túnel insuflável de entrada (só na cerimónia): os jogadores saem de dentro dele
+  const tunnel = new THREE.Group();
+  {
+    const len = 4.8, rad = 1.35;
+    const tex = canvasTex(1024, 256, (c) => {
+      c.fillStyle = '#16202c'; c.fillRect(0, 0, 1024, 256);
+      c.fillStyle = '#00a651'; c.fillRect(0, 0, 1024, 26);
+      c.fillStyle = '#e30613'; c.fillRect(0, 230, 1024, 26);
+      c.fillStyle = '#ffffff'; c.font = 'bold 64px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle';
+      c.fillText(o.comp.toUpperCase(), 512, 128, 980);
+    });
+    const tubeMat = new THREE.MeshStandardMaterial({ map: tex, side: THREE.DoubleSide, roughness: 0.7 });
+    const tube = new THREE.Mesh(new THREE.CylinderGeometry(rad, rad, len, 28, 1, true, -Math.PI / 2, Math.PI), tubeMat);
+    tube.rotation.x = -Math.PI / 2;
+    tube.scale.set(1, 1, 1.75);
+    tube.position.set(-4.5, 0, -(H / 2 + 1.6 + len / 2));
+    tunnel.add(tube);
+    // arcos insuflados na boca e ao longo do túnel
+    const ringMat = new THREE.MeshStandardMaterial({ color: '#e5e7eb', roughness: 0.6 });
+    for (let k = 0; k <= 3; k++) {
+      const ring = new THREE.Mesh(new THREE.TorusGeometry(rad, 0.12, 8, 24, Math.PI), ringMat);
+      ring.scale.set(1, 1.75, 1);
+      ring.position.set(-4.5, 0, -(H / 2 + 1.6 + (k * len) / 3));
+      tunnel.add(ring);
+    }
+  }
+  tunnel.visible = false;
+  scene.add(tunnel);
 
   // claques: bandeiras, tifo e tochas
   const ultras: { sd: number; u: ReturnType<typeof buildUltras> }[] = [];
@@ -633,6 +692,7 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
   return {
     standDepth,
     height: hallH,
+    benchSeats,
     update(now: number, ex: [number, number]) {
       uniforms.uTime.value = now;
       const base0 = 0.08;
@@ -646,6 +706,7 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
     setCeremony(on: boolean) {
       if (on && !ceremony) ceremonyStart = uniforms.uTime.value;
       ceremony = on;
+      tunnel.visible = on;
     },
     setScore(s: [number, number]) {
       led.score = s;

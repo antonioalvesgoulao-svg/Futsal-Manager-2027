@@ -1,11 +1,11 @@
 // Cerimónia antes do jogo (3D): a dupla de arbitragem e as duas equipas saem do túnel em fila,
-// atravessam a quadra e alinham no centro, viradas para a bancada principal (casa à esquerda,
+// vêm do lado dos bancos (de frente para a câmara) e alinham no centro, viradas para a bancada principal (casa à esquerda,
 // visitantes à direita, árbitros ao meio).
 import type { Act, Frame, P2, Scene3D } from './choreo';
 
 const SPEED = 1.8; // m/s (passo de entrada)
 const GAP = 0.45; // segundos entre jogadores à saída do túnel
-const TUNNEL_Y = 12.6; // boca do túnel, atrás da linha lateral do lado dos bancos
+const TUNNEL_Y = -16.2; // fundo do túnel insuflável, do lado dos bancos (a boca fica junto à linha lateral)
 const HOLD = 4; // alinhados, antes do gráfico dos cinco iniciais
 
 interface Walker { id: string; t0: number; path: P2[]; len: number[] }
@@ -19,18 +19,18 @@ export class IntroScene implements Scene3D {
   /** teams: ids de cada equipa (titulares primeiro); refs: os dois árbitros. */
   constructor(teams: [string[], string[]], refs: string[]) {
     const add = (id: string, t0: number, lineX: number, spot: P2) => {
-      const path = [{ x: lineX, y: TUNNEL_Y }, { x: lineX, y: 1.2 }, { x: spot.x, y: 1.2 }, spot];
+      const path = [{ x: lineX, y: TUNNEL_Y }, { x: lineX, y: -1.2 }, { x: spot.x, y: -1.2 }, spot];
       const len = [0];
       for (let i = 1; i < path.length; i++) len.push(len[i - 1] + Math.hypot(path[i].x - path[i - 1].x, path[i].y - path[i - 1].y));
       this.walkers.push({ id, t0, path, len });
     };
     // os árbitros à frente, depois as duas filas lado a lado
-    refs.forEach((id, i) => add(id, 0, -4.5 + i * 0.9, { x: i ? 0.45 : -0.45, y: 0 }));
+    refs.forEach((id, i) => add(id, 0, -4.9 + i * 0.8, { x: i ? 0.45 : -0.45, y: 0 }));
     const n = Math.max(teams[0].length, teams[1].length);
     for (let i = 0; i < n; i++) {
       const t0 = 1.2 + i * GAP;
-      if (teams[0][i]) add(teams[0][i], t0, -5, { x: -1.3 - i * 0.92, y: 0 });
-      if (teams[1][i]) add(teams[1][i], t0, -4, { x: 1.3 + i * 0.92, y: 0 });
+      if (teams[0][i]) add(teams[0][i], t0, -4.95, { x: -1.3 - i * 0.92, y: 0 });
+      if (teams[1][i]) add(teams[1][i], t0, -4.05, { x: 1.3 + i * 0.92, y: 0 });
     }
     this.lineupAt = Math.max(...this.walkers.map((w) => w.t0 + w.len[w.len.length - 1] / SPEED)) + 0.6;
     this.total = this.lineupAt + HOLD;

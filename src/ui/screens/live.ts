@@ -264,6 +264,7 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
     return p.events.find((e) => e.type === 'golo') ?? ev;
   }
 
+  const benchIds = (): [string[], string[]] => [0, 1].map((sd) => snap.teams[sd].bench.filter((p) => !p.sentOff).map((p) => p.id)) as [string[], string[]];
   async function ensure3d() {
     if (hl) return;
     const mod = await import('../three/highlight3d');
@@ -332,6 +333,7 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
     hl.onEnd = () => {
       if (!introDone && introStage === 0) introStep(1);
     };
+    hl.setBench(benchIds());
     hl.play(intro, info, kit, 0, intro.total, [[0, 0], [0, 0]]);
   }
 
@@ -359,6 +361,7 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
     hl.onEnd = () => {
       autoClose = setTimeout(close3d, 2500);
     };
+    hl.setBench(benchIds());
     const total = choreo.total;
     const after: [number, number] = ev.type === 'golo' ? [ev.score[0], ev.score[1]] : [shownScore[0], shownScore[1]];
     hl.play(choreo, info, kit, Math.max(0, total - Math.max(10, choreo.extra + 7)), total, [[shownScore[0], shownScore[1]], after]);
