@@ -287,12 +287,12 @@ export function makePlayer(kit: Kit, look: Look) {
     sh.add(stripe);
   }
   const txt = light ? '#111' : '#fff';
-  const back = new THREE.Mesh(new THREE.PlaneGeometry(0.27, 0.27), new THREE.MeshStandardMaterial({ map: numberTex(kit.number, txt, kit.name), transparent: true, roughness: 0.8, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2 }));
-  back.position.set(0, 0.4, -0.125);
+  const back = new THREE.Mesh(new THREE.PlaneGeometry(0.31, 0.31), new THREE.MeshStandardMaterial({ map: numberTex(kit.number, txt, kit.name), transparent: true, roughness: 0.8, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2 }));
+  back.position.set(0, 0.4, -0.127);
   back.rotation.y = Math.PI;
   body.add(back);
   const numOnly = new THREE.MeshStandardMaterial({ map: numberTex(kit.number, txt), transparent: true, roughness: 0.8, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2 });
-  const front = new THREE.Mesh(new THREE.PlaneGeometry(0.1, 0.1), numOnly);
+  const front = new THREE.Mesh(new THREE.PlaneGeometry(0.13, 0.13), numOnly);
   front.position.set(0.075, 0.46, 0.124);
   body.add(front);
   // número pequeno nos calções (perna esquerda, à frente)

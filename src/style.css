@@ -235,3 +235,4 @@ button[disabled] { opacity: .45; cursor: not-allowed; }
 .kitpair { display: flex; align-items: flex-end; gap: 6px; }
 .kitx { font-weight: 800; color: #6b7280; }
 .kitsvg { display: block; }
+.hl-bar .btn.on { border-color: #facc15; color: #facc15; }

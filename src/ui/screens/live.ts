@@ -104,6 +104,7 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
               <div class="hl-bar">
                 <div class="seg cams">${[['tv', 'TV'], ['baliza', 'Atrás da baliza'], ['aerea', 'Aérea'], ['jogador', 'Jogador']].map(([v, l]) => `<button data-cam="${v}" class="${v === 'tv' ? 'on' : ''}">${l}</button>`).join('')}</div>
                 <span class="spacer"></span>
+                <button class="btn on" id="tags" title="Mostrar ou esconder o número e o nome por cima dos jogadores">Nomes</button>
                 <button class="btn" id="rep">Repetição</button>
                 <button class="btn primary" id="hlc">Continuar</button>
               </div>
@@ -652,6 +653,12 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
       content.querySelectorAll('[data-cam]').forEach((x) => x.classList.toggle('on', x === b));
     })
   );
+  let tagsOn = true;
+  $('#tags').addEventListener('click', () => {
+    tagsOn = !tagsOn;
+    $('#tags').classList.toggle('on', tagsOn);
+    hl?.setTags(tagsOn);
+  });
   $('#rep').addEventListener('click', () => {
     if (autoClose) { clearTimeout(autoClose); autoClose = null; }
     hl?.replay(0.6);

@@ -20,6 +20,7 @@ export interface ActorInfo {
 }
 
 const lerp = (a: number, b: number, k: number) => a + (b - a) * k;
+const textOn = (hex: string) => (new THREE.Color(hex).getHSL({ h: 0, s: 0, l: 0 }).l > 0.6 ? '#111' : '#fff');
 
 // ---------- vista ----------
 export class Highlight3D {
@@ -171,8 +172,31 @@ export class Highlight3D {
       a.g.position.set(seat.x, 0, seat.z);
       a.g.rotation.y = 0; // virados para o campo
       sit(a);
+      const tg = a.g.getObjectByName('tag'); if (tg) tg.removeFromParent();
       this.bench.set(id, a);
     }));
+  }
+
+  /** Mostrar ou esconder os nomes por cima dos jogadores. */
+  showTags = true;
+  setTags(on: boolean) {
+    this.showTags = on;
+    for (const a of this.actors.values()) { const t = a.g.getObjectByName('tag'); if (t) t.visible = on; }
+  }
+
+  private tagTex(n: number | null, name: string, col: string, txt: string) {
+    return canvasTex(256, 64, (c) => {
+      c.clearRect(0, 0, 256, 64);
+      c.fillStyle = 'rgba(10,14,20,.72)';
+      c.beginPath(); c.roundRect(4, 8, 248, 48, 10); c.fill();
+      c.fillStyle = col;
+      c.beginPath(); c.roundRect(4, 8, 56, 48, [10, 0, 0, 10]); c.fill();
+      c.textBaseline = 'middle'; c.textAlign = 'center';
+      c.font = 'bold 30px Arial, sans-serif'; c.fillStyle = txt;
+      c.fillText(String(n ?? ''), 32, 33);
+      c.textAlign = 'left'; c.fillStyle = '#fff'; c.font = 'bold 26px "Arial Narrow", Arial, sans-serif';
+      c.fillText(name.toUpperCase(), 70, 33, 176);
+    });
   }
 
   private createActor(id: string): Actor {
@@ -187,6 +211,15 @@ export class Highlight3D {
     const look: Look = inf.look ?? { skin: '#d9a77f', hair: '#2e1e14', style: 'curto', beard: 'nenhuma', height: 1.78, boots: ['#111111', '#ffffff'] };
     const pm = makePlayer({ shirt, shorts, socks: kd?.socks ?? cols[0], number: inf.number, name: inf.name, gk: inf.gk, pattern: kd?.pattern, alt: kd?.alt }, look);
     this.scene.add(pm.g);
+    // identificação discreta por cima da cabeça: número e apelido, com a cor da equipa
+    if (!inf.referee && inf.look) {
+      const tag = new THREE.Sprite(new THREE.SpriteMaterial({ map: this.tagTex(inf.number, inf.name ?? '', shirt, textOn(shirt)), transparent: true, opacity: 0.88, depthWrite: false }));
+      tag.scale.set(0.95, 0.24, 1);
+      tag.position.y = (look.height ?? 1.78) + 0.38;
+      tag.name = 'tag';
+      tag.visible = this.showTags;
+      pm.g.add(tag);
+    }
     a = { ...pm, prev: new THREE.Vector3(), heading: 0, phase: (hsh % 10) / 3, speed: 0, init: false };
     return a;
   }
@@ -275,6 +308,13 @@ export class Highlight3D {
     for (const [id, a] of this.bench) a.g.visible = !ceremony && !f.pos[id];
     if (f.holder) this.lastHolder = f.holder;
     this.updateCamera(f.focus ? { x: f.focus.x, y: f.focus.y, z: 0 } : f.ball);
+    // etiquetas: tamanho legível a qualquer distância, sem tapar o jogo de perto
+    if (this.showTags) for (const ac of this.actors.values()) {
+      const tg = ac.g.getObjectByName('tag');
+      if (!tg || !ac.g.visible) continue;
+      const k = Math.min(3.2, Math.max(0.8, ac.g.position.distanceTo(this.camera.position) * 0.1));
+      tg.scale.set(0.95 * k, 0.24 * k, 1);
+    }
     if (render) this.renderer.render(this.scene, this.camera);
   }
 

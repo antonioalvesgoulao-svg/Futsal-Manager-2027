@@ -80,6 +80,7 @@ Real: 6,38 golos/jogo, casa 49,6%, fora 37,0%, empates 13,5%, <3 golos 6,1%. Man
 - Definição "Qualidade gráfica do 3D": alta = reflexos no piso (Reflector), sombras 2048
 - Corredor do túnel desce em rampa (2,2 m abaixo do piso, pedido do António) para a bancada continuar por cima; só 2-3 filas da frente ficam sem lugares
 - Feedback 1/11 (tarde): túnel refeito como túnel retrátil real (estrutura em tesoura com lona, relva sintética) que entra na bancada do lado dos bancos por uma passagem (corredor para os balneários; bancada cortada, placas abertas); mesa do cronometrista à frente da boca do túnel com dois árbitros auxiliares sentados; mais espaço desse lado (bancada a 5 m da quadra); na entrada, casa passa à esquerda da mesa e visitantes à direita. Sem legenda a descrever o lance no 3D (tirava o suspense). 2D com nomes por baixo dos números. Equipamentos escolhidos graficamente no dia de jogo (os meus dois + como vão jogar as duas equipas, com GR)
+- Identificação no 3D: etiqueta discreta por cima de cada jogador em campo (número na cor da camisola + apelido), tamanho ajustado à distância; botão "Nomes" para esconder. Números nas camisolas maiores
 - Próximos melhoramentos possíveis: mais variantes de jogadas ensaiadas
 
 ## Roteiro
