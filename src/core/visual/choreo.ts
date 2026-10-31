@@ -412,9 +412,10 @@ export class Choreo {
     const assist = shotA?.assist && this.attOut.includes(shotA.assist) && shotA.assist !== shooter ? shotA.assist : undefined;
     const tS = D - 0.25; // instante do remate
     const finishLen = gkRun ? 4.4 : counter ? 4.6 : 2.6;
-    const needed = ending.kind === 'shot' && shooter ? (counter ? holder : assist ?? shooter) : ending.kind === 'foul' && this.attOut.includes(ending.foul!.shooter!) ? ending.foul!.shooter! : undefined;
+    // no contra-ataque com assistência, quem conduz é o assistente (para o passe lateral final)
+    const needed = ending.kind === 'shot' && shooter ? (counter ? assist ?? holder : assist ?? shooter) : ending.kind === 'foul' && this.attOut.includes(ending.foul!.shooter!) ? ending.foul!.shooter! : undefined;
     const tFin = ending.kind === 'shot' && shooter ? Math.max(T + 0.3, tS - finishLen) : ending.kind === 'foul' ? D - 1.5 : ending.kind === 'lost' ? D - 1.1 : D;
-    holder = this.beats(T, tFin, holder, counter || gkRun ? undefined : needed);
+    holder = this.beats(T, tFin, holder, gkRun ? undefined : counter ? (assist ? needed : undefined) : needed);
     T = Math.max(T, tFin);
 
     // ---- finalização / perda / falta ----
@@ -938,7 +939,7 @@ export class Choreo {
     const r1 = shooter !== carrier ? shooter : ahead[0];
     const r2 = assist && assist !== carrier && assist !== r1 ? assist : ahead.find((x) => x !== r1);
     const vc = clamp(cp.y * 0.4, -3, 3);
-    const end = this.A(29.5 + r() * 2, vc * 0.6);
+    const end = this.A(32 + r() * 2, vc * 0.6);
     this.phase(T, 'Contra-ataque');
     // quem conduz ataca o espaço pelo meio; os colegas abrem as linhas
     this.key(carrier, lerp(T, tS, 0.5), this.A(lerp(this.U(cp), this.U(end), 0.6), lerp(cp.y, vc, 0.6)));
@@ -973,13 +974,44 @@ export class Choreo {
       this.act(assist, 'pass', tS - 0.75, tS - 0.4, { face: shooter });
       this.pass(assist, shooter, tS - 0.55, tS - 0.02, 0.05);
     } else {
-      // 2x1: arrasta o defensor e passa ao colega no segundo poste
-      const post = this.A(36.6, s1 * 2.6);
-      this.key(carrier, tS - 0.55, this.A(lerp(this.U(cp), this.U(end), 0.95), vc));
+      // 2x1 / 2x0: os dois sobem lado a lado, quem conduz atrai o defensor (e o GR) e solta para o lado;
+      // o colega encosta para a baliza quase vazia
+      const uc = lerp(this.U(cp), this.U(end), 0.95);
+      const post = this.A(Math.min(36.6, uc + 4.6), s1 * 1.9);
+      this.key(carrier, tS - 0.55, this.A(uc, vc));
+      this.key(shooter, lerp(T, tS, 0.75), this.A(uc - 1.2, vc + s1 * 3.4));
+      this.key(shooter, tS - 0.5, this.A(uc + 0.4, vc + s1 * 3.2));
       this.key(shooter, tS, post);
+      this.label(tS - 0.6, `Passe lateral para ${this.nm(shooter)}`);
       this.act(shooter, 'run', T, tS, { to: post });
       this.act(carrier, 'pass', tS - 0.75, tS - 0.4, { face: shooter });
       this.pass(carrier, shooter, tS - 0.55, tS - 0.02, 0.05);
+    }
+    // superioridade real: os defensores apanhados à frente da bola ficam para trás (correm a recuperar, sem chegar);
+    // só 0, 1 ou 2 defendem (2x0, 2x1, 3x2), e o GR é atraído por quem conduz antes do passe lateral
+    const nAttack = shooter === carrier ? 1 : assist && assist !== carrier && r2 ? 3 : 2;
+    const keep = nAttack === 3 ? 2 : r() < 0.3 ? 0 : 1;
+    const defs = [...this.defOut].sort((x, y) => this.U(this.P(y, T)) - this.U(this.P(x, T)));
+    defs.slice(keep).forEach((id, i) => {
+      const d0 = this.P(id, T);
+      this.fix(id, T, tS + 0.6);
+      this.key(id, T, d0);
+      // corre para a própria baliza atrás da jogada, sempre uns metros atrás
+      this.later.push(() => {
+        const bu = this.U(this.P(carrier, tS - 0.8));
+        this.key(id, tS - 0.3, this.A(Math.min(bu - 2.5 - i * 1.6, this.U(d0) + 0.8 * (tS - T) * 5.6), d0.y * 0.5));
+        this.key(id, tS + 0.6, this.A(Math.min(bu - 1 - i * 1.6, 36), d0.y * 0.4));
+      });
+      this.act(id, 'run', T, tS);
+    });
+    if (keep === 0) this.label(T + 0.6, 'Ninguém atrás: 2x0!');
+    if (this.gkD && shooter !== carrier) {
+      const gk = this.gkD;
+      this.later.push(() => {
+        const cpp = this.P(carrier, tS - 0.7);
+        this.fix(gk, tS - 1.4, tS - 0.05);
+        this.key(gk, tS - 0.65, this.A(37.2, clamp(cpp.y * 0.55, -1.6, 1.6)));
+      });
     }
     // descrição real do lance: quantos atacantes contra quantos defensores (depois de a defesa se mexer)
     this.post.push(() => {
@@ -1455,16 +1487,23 @@ export class Choreo {
     const ball = this.ballAt(T);
     const routine = this.tactics[att].setPieces?.freeKickRoutine ?? 'remate_direto';
     let at: P2 = { x: ball.x, y: ball.y };
-    // livre fora da área (dentro seria penálti); com remate, perto da área
-    if (sh && this.U(at) < 24) at = this.A(26 + r() * 4, clamp(at.y, -6, 6));
+    // o livre marca-se no local da falta (só se corrige se a bola estiver dentro da área, que seria penálti)
     if (this.U(at) > 31.5 - Math.max(0, Math.abs(at.y) - 3) * 0.4) at = this.A(31.5 - Math.max(0, Math.abs(at.y) - 3) * 0.4, clamp(at.y, -8, 8));
     const bu = this.U(at);
     const kicker = sh ? (sh.assist && this.attOut.includes(sh.assist) ? sh.assist : sh.shooter!) : this.nearestOut(at, T);
     const shooter = sh?.shooter && this.attOut.includes(sh.shooter) ? sh.shooter : kicker;
-    const tSet = T + (sh ? 2.8 : 1.4);
-    const tKick = tSet + (sh ? 0.7 : 0.3);
-    this.balls.push({ k: 'fly', t0: T, t1: T + 0.8, from: ball, b: { ...at, z: 0.11 }, lift: 0.2 });
-    this.balls.push({ k: 'still', t0: T + 0.8, at: { ...at, z: 0.11 } });
+    // quem marca vai buscar a bola (se rolou) e pousa-a no sítio da falta
+    const kp0 = this.P(kicker, T);
+    const tPick = T + clamp(dist(kp0, ball) / 5.5, 0.4, 1.8);
+    const tPlace = tPick + clamp(dist(ball, at) / 4.5, 0.3, 1.6);
+    const tSet = Math.max(T + (sh ? 2.8 : 1.4), tPlace + 0.5);
+    const tKick = tSet + (sh ? 0.9 : 0.3);
+    this.balls.push({ k: 'still', t0: T, at: { x: ball.x, y: ball.y, z: 0.11 } });
+    this.key(kicker, tPick, { x: ball.x, y: ball.y }, true);
+    this.balls.push({ k: 'hands', t0: tPick, id: kicker, z: 0.95 });
+    this.key(kicker, tPlace, { x: at.x, y: at.y }, true);
+    this.balls.push({ k: 'still', t0: tPlace, at: { ...at, z: 0.11 } });
+    this.fix(kicker, T, tPlace + 0.1);
     const m = new Map<string, P2>();
     const g = this.A(40, 0);
     const gl = dist(at, g) || 1;
@@ -1671,9 +1710,17 @@ export class Choreo {
     const sp = Math.hypot(vx, vy);
     const sd = this.sideOf.get(id) ?? this.att;
     const d = sd === this.att ? this.dirA : -this.dirA;
-    const ox = sp > 1 ? (vx / sp) * 0.42 : d * 0.42;
-    const oy = sp > 1 ? (vy / sp) * 0.42 : 0;
-    return { x: p.x + ox, y: p.y + oy, z: 0.11 };
+    // condução: a correr, a bola vai à frente a toques (empurra, o pé volta a alcançá-la);
+    // parado ou devagar, bola à sola (arrasta-a de lado, típico do futsal)
+    if (sp > 1.5) {
+      const rate = 1.4 + sp * 0.22; // toques por segundo
+      const ph = (t * rate) % 1;
+      const lead = 0.32 + Math.min(1, sp / 7) * 0.75 * Math.sin(ph * Math.PI);
+      return { x: p.x + (vx / sp) * lead, y: p.y + (vy / sp) * lead, z: 0.11 };
+    }
+    const side = Math.sin(t * 2.6) * 0.14;
+    const fx = sp > 0.6 ? vx / sp : d, fy = sp > 0.6 ? vy / sp : 0;
+    return { x: p.x + fx * 0.3 - fy * side, y: p.y + fy * 0.3 + fx * side, z: 0.11 };
   }
 
   private ballAt(t: number): Ball {
