@@ -278,7 +278,16 @@ export interface ArenaHandle {
   tableSeats: { x: number; z: number; y: number }[];
 }
 
+// cores da mesa e do túnel conforme a competição (as mesmas dos marcadores do jogo)
+function compTheme(comp: string): { bg: string; a: string; b: string } {
+  if (/Taça de Portugal/.test(comp)) return { bg: '#5b0a14', a: '#d4a017', b: '#d4a017' };
+  if (/Taça da Liga/.test(comp)) return { bg: '#0b2a6f', a: '#ffffff', b: '#1d4ed8' };
+  if (/Supertaça/.test(comp)) return { bg: '#0b0b0b', a: '#d4a017', b: '#d4a017' };
+  return { bg: '#16202c', a: '#00a651', b: '#e30613' };
+}
+
 export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
+  const ct = compTheme(o.comp);
   const pr = o.profile;
   const r = rng(pr.name.length * 131 + pr.capacity);
   const modern = pr.style === 'moderno';
@@ -372,8 +381,8 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
     const top = new THREE.Mesh(new THREE.BoxGeometry(3, 0.06, 0.8), new THREE.MeshStandardMaterial({ color: '#e5e7eb', roughness: 0.5 }));
     top.position.set(0, 0.78, -TABLE_Z);
     const front = new THREE.Mesh(new THREE.BoxGeometry(3, 0.74, 0.04), new THREE.MeshStandardMaterial({ map: canvasTex(512, 128, (c) => {
-      c.fillStyle = '#16202c'; c.fillRect(0, 0, 512, 128);
-      c.fillStyle = '#00a651'; c.fillRect(0, 0, 256, 10); c.fillStyle = '#e30613'; c.fillRect(256, 0, 256, 10);
+      c.fillStyle = ct.bg; c.fillRect(0, 0, 512, 128);
+      c.fillStyle = ct.a; c.fillRect(0, 0, 256, 10); c.fillStyle = ct.b; c.fillRect(256, 0, 256, 10);
       c.fillStyle = '#fff'; c.font = 'bold 44px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(o.comp.toUpperCase(), 256, 70, 480);
     }), roughness: 0.6 }));
     front.position.set(0, 0.38, -TABLE_Z + 0.38);
@@ -449,6 +458,13 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
         scene.add(glass);
       }
       // degrau (do lado dos bancos, em duas metades: a passagem do túnel fica ao meio)
+      // por cima do corredor (acima da laje do túnel) a bancada continua inteira
+      const overTunnel = gap > 0 && y > 2.95;
+      if (overTunnel) {
+        const fill = new THREE.Mesh(new THREE.BoxGeometry(gap + 0.4, Math.max(0.05, y - 2.9), rowD), concrete);
+        fill.position.set(0, (y + 2.9) / 2, out * (d + rowD / 2));
+        scene.add(fill);
+      }
       const pieces: [number, number][] = gap ? [[-(sideLen[sd] + gap) / 4, (sideLen[sd] - gap) / 2], [(sideLen[sd] + gap) / 4, (sideLen[sd] - gap) / 2]] : [[0, sideLen[sd]]];
       for (const [c0, len0] of pieces) {
         const step = new THREE.Mesh(new THREE.BoxGeometry(len0, y + 0.01, rowD), concrete);
@@ -462,7 +478,7 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
       // lugares da fila, a começar pelo centro (sem os da passagem)
       const us: number[] = [];
       const tot = Math.floor(sideLen[sd] / seatW);
-      for (let k = 0; k < tot; k++) { const u = (k - (tot - 1) / 2) * seatW; if (Math.abs(u) > gap / 2 + 0.2 || !gap) us.push(u); }
+      for (let k = 0; k < tot; k++) { const u = (k - (tot - 1) / 2) * seatW; if (Math.abs(u) > gap / 2 + 0.2 || !gap || overTunnel) us.push(u); }
       us.sort((a, b) => Math.abs(a) - Math.abs(b));
       for (let k = 0; k < n && k < us.length; k++) {
         const u = us[k];
@@ -732,7 +748,7 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
       const slab = new THREE.Mesh(new THREE.BoxGeometry(wG + 0.4, 0.35, corrLen), concrete);
       slab.position.set(0, 2.75, -(FRONT_N + corrLen / 2));
       scene.add(slab);
-      const lintel = new THREE.Mesh(new THREE.BoxGeometry(wG + 0.4, 0.5, 0.2), new THREE.MeshStandardMaterial({ color: '#16202c' }));
+      const lintel = new THREE.Mesh(new THREE.BoxGeometry(wG + 0.4, 0.5, 0.2), new THREE.MeshStandardMaterial({ color: ct.bg }));
       lintel.position.set(0, 2.85, -FRONT_N + 0.05);
       scene.add(lintel);
       for (const sg of [-1, 1]) {
@@ -758,7 +774,9 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
       // estrutura em tesoura por trás da lona
       c.strokeStyle = 'rgba(230,235,240,.55)'; c.lineWidth = 6;
       for (let x = 0; x < 1024; x += 128) { c.beginPath(); c.moveTo(x, 40); c.lineTo(x + 128, 216); c.moveTo(x + 128, 40); c.lineTo(x, 216); c.stroke(); }
-      c.fillStyle = '#16202c'; c.fillRect(0, 0, 1024, 28);
+      c.fillStyle = ct.bg; c.fillRect(0, 0, 1024, 28);
+      c.fillStyle = '#fff'; c.font = 'bold 22px sans-serif'; c.textBaseline = 'middle';
+      for (let x = 20; x < 1024; x += 340) c.fillText(o.comp.toUpperCase(), x, 15);
     });
     const lonaMat = new THREE.MeshStandardMaterial({ map: lona, side: THREE.DoubleSide, roughness: 0.75 });
     const frame = new THREE.MeshStandardMaterial({ color: '#d1d5db', metalness: 0.6, roughness: 0.35 });
@@ -784,8 +802,8 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
     tunnel.add(top);
     // pórtico na boca, com o nome da competição
     const head = new THREE.Mesh(new THREE.BoxGeometry(tw + 0.2, 0.5, 0.12), new THREE.MeshStandardMaterial({ map: canvasTex(512, 96, (c) => {
-      c.fillStyle = '#16202c'; c.fillRect(0, 0, 512, 96);
-      c.fillStyle = '#00a651'; c.fillRect(0, 84, 256, 12); c.fillStyle = '#e30613'; c.fillRect(256, 84, 256, 12);
+      c.fillStyle = ct.bg; c.fillRect(0, 0, 512, 96);
+      c.fillStyle = ct.a; c.fillRect(0, 84, 256, 12); c.fillStyle = ct.b; c.fillRect(256, 84, 256, 12);
       c.fillStyle = '#fff'; c.font = 'bold 42px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(o.comp.toUpperCase(), 256, 44, 490);
     }) }));
     head.position.set(0, th + 0.2, -z0 + 0.02);
