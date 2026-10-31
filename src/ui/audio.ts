@@ -64,6 +64,7 @@ class Sound {
   private running = false;
   private match: MatchSound | null = null;
   private chanting = 0; // até quando dura o cântico atual
+  private babbleAt = 0;
   setMatch(m: MatchSound) { this.match = m; }
 
   setVolume(v: Vol) {
@@ -97,13 +98,10 @@ class Sound {
       const src = c.createBufferSource();
       src.buffer = this.noiseBuf; src.loop = true;
       this.crowdFilter = c.createBiquadFilter();
-      this.crowdFilter.type = 'bandpass'; this.crowdFilter.frequency.value = 700; this.crowdFilter.Q.value = 0.6;
+      this.crowdFilter.type = 'bandpass'; this.crowdFilter.frequency.value = 900; this.crowdFilter.Q.value = 1.2;
       this.crowdGain = c.createGain(); this.crowdGain.gain.value = 0;
       src.connect(this.crowdFilter).connect(this.crowdGain).connect(this.master);
       src.start();
-      const lfo = c.createOscillator(); lfo.frequency.value = 0.13;
-      const lfoG = c.createGain(); lfoG.gain.value = 120;
-      lfo.connect(lfoG).connect(this.crowdFilter.frequency); lfo.start();
       // cânticos (vozes em uníssono: ruído filtrado em formantes, pulsado ao ritmo)
       this.chantGain = c.createGain(); this.chantGain.gain.value = 0;
       this.chantGain.connect(this.master);
@@ -123,14 +121,22 @@ class Sound {
     if (!this.ctx || !this.running) return;
     const c = this.ctx;
     this.excite += (excite - this.excite) * 0.08;
-    const base = 0.05 + this.fill * 0.22;
-    this.crowdGain.gain.setTargetAtTime(base * (1 + this.excite * 2.2), c.currentTime, 0.25);
-    this.crowdFilter.frequency.setTargetAtTime(600 + this.excite * 700, c.currentTime, 0.3);
-    // de vez em quando um cântico ou palmas ritmadas (mais com pavilhão cheio)
+    // fundo de sala muito baixo; o "público" ouve-se sobretudo pelas vozes soltas (conversa, gritos)
+    const base = 0.012 + this.fill * 0.03;
+    this.crowdGain.gain.setTargetAtTime(base * (1 + this.excite * 3), c.currentTime, 0.25);
+    this.crowdFilter.frequency.setTargetAtTime(900 + this.excite * 500, c.currentTime, 0.3);
     const now = c.currentTime;
+    // conversa do público: vozes curtas a falar/gritar, mais com o pavilhão cheio e nos lances perigosos
+    while (this.babbleAt < now + 0.2) {
+      this.babbleAt = Math.max(this.babbleAt, now) + (0.09 + Math.random() * 0.12) / (0.4 + this.fill + this.excite);
+      const t = this.babbleAt - now;
+      const vw = 'aeiou'[Math.floor(Math.random() * 5)];
+      this.voices(0.12 + Math.random() * 0.25, vw, vw, 110 + Math.random() * 120, (0.014 + this.fill * 0.026) * (1 + this.excite * 2.5), 2, t);
+    }
+    // de vez em quando palmas ritmadas da bancada
     if (now > this.chantTimer) {
-      this.chantTimer = now + 14 + Math.random() * 20;
-      if (Math.random() < 0.45 + this.fill * 0.5) Math.random() < 0.8 ? this.chant() : this.claps();
+      this.chantTimer = now + 25 + Math.random() * 30;
+      if (Math.random() < 0.3 + this.fill * 0.4) this.claps();
     }
   }
 
@@ -156,6 +162,30 @@ class Sound {
     return o;
   }
   private ok() { return !!this.ctx && this.running && this.vol !== 'off'; }
+
+  /** Vozes de pessoas: várias vozes (dente de serra) desafinadas, filtradas nas formantes de uma vogal
+   *  que pode mudar a meio (ex.: "u" -> "o"). Base para "uuuh", assobios de desagrado e gritos. */
+  private voices(dur: number, v0: string, v1: string, pitch: number, gain: number, n = 10, when = 0, pitchEnd?: number) {
+    const c = this.ctx!;
+    const t = c.currentTime + when;
+    const [a1, a2] = VOWEL[v0] ?? VOWEL.a, [b1, b2] = VOWEL[v1] ?? VOWEL.a;
+    const f1 = c.createBiquadFilter(); f1.type = 'bandpass'; f1.Q.value = 5; f1.frequency.setValueAtTime(a1, t); f1.frequency.linearRampToValueAtTime(b1, t + dur);
+    const f2 = c.createBiquadFilter(); f2.type = 'bandpass'; f2.Q.value = 7; f2.frequency.setValueAtTime(a2, t); f2.frequency.linearRampToValueAtTime(b2, t + dur);
+    const env = c.createGain();
+    env.gain.setValueAtTime(0, t); env.gain.linearRampToValueAtTime(gain, t + Math.min(0.25, dur * 0.3));
+    env.gain.setValueAtTime(gain, t + dur * 0.6); env.gain.linearRampToValueAtTime(0, t + dur);
+    const mix = c.createGain();
+    mix.connect(f1); mix.connect(f2); f1.connect(env); f2.connect(env); env.connect(this.master);
+    for (let k = 0; k < n; k++) {
+      const o = c.createOscillator(); o.type = 'sawtooth';
+      const p = pitch * Math.pow(2, ((Math.random() - 0.5) * 300) / 1200); // cada pessoa no seu tom
+      o.frequency.setValueAtTime(p, t);
+      if (pitchEnd) o.frequency.linearRampToValueAtTime(p * (pitchEnd / pitch), t + dur);
+      const og = c.createGain(); og.gain.value = 1 / Math.sqrt(n);
+      o.connect(og).connect(mix);
+      o.start(t + Math.random() * 0.08); o.stop(t + dur + 0.05);
+    }
+  }
 
   /** Cântico: frase de 4 tempos, vozes masculinas (formantes ~500 e ~1100 Hz). */
   chant(side?: 0 | 1) {
@@ -245,13 +275,20 @@ class Sound {
   whistle(kind: 'short' | 'long' | 'triple' = 'short') {
     if (!this.ok()) return;
     const parts = kind === 'triple' ? [[0, 0.35], [0.45, 0.35], [0.9, 1.1]] : kind === 'long' ? [[0, 0.9]] : [[0, 0.32]];
+    const c = this.ctx!;
     for (const [w, d] of parts) {
-      for (const f of [2900, 3150]) {
-        const o = this.tone(f, d, 0.1, 'sine', w);
-        const tr = this.ctx!.createOscillator(); tr.frequency.value = 38;
-        const tg = this.ctx!.createGain(); tg.gain.value = 60;
-        tr.connect(tg).connect(o.frequency); tr.start(this.ctx!.currentTime + w); tr.stop(this.ctx!.currentTime + w + d);
-      }
+      const t = c.currentTime + w;
+      const o = c.createOscillator(); o.type = 'triangle'; o.frequency.value = 3200;
+      const o2 = c.createOscillator(); o2.type = 'sine'; o2.frequency.value = 6400; // harmónico agudo
+      const tr = c.createOscillator(); tr.frequency.value = 26 + Math.random() * 6; // a bolinha dentro do apito
+      const fm = c.createGain(); fm.gain.value = 240; tr.connect(fm); fm.connect(o.frequency); fm.connect(o2.frequency);
+      const am = c.createGain(); am.gain.value = 0.35; tr.connect(am);
+      const g = c.createGain(); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.32, t + 0.02); g.gain.setValueAtTime(0.32, t + d - 0.05); g.gain.linearRampToValueAtTime(0, t + d);
+      am.connect(g.gain);
+      const g2 = c.createGain(); g2.gain.value = 0.25;
+      o.connect(g); o2.connect(g2).connect(g); g.connect(this.master);
+      for (const x of [o, o2, tr]) { x.start(t); x.stop(t + d + 0.05); }
+      this.noise(d, 3200, 2, 'bandpass', 0.05, w, 0.02); // sopro
     }
   }
   /** Buzina do pavilhão (fim das partes, desconto de tempo). */
@@ -284,28 +321,33 @@ class Sound {
   /** "Uuuh!" do público numa ocasião falhada ou grande defesa. */
   ooh(k = 1) {
     if (!this.ok()) return;
-    const g = (0.12 + this.fill * 0.22) * k;
-    const f = this.noise(1.6, 420, 2.5, 'bandpass', g, 0, 0.25);
-    f.frequency.setValueAtTime(380, this.ctx!.currentTime);
-    f.frequency.linearRampToValueAtTime(650, this.ctx!.currentTime + 0.5);
-    f.frequency.linearRampToValueAtTime(330, this.ctx!.currentTime + 1.6);
+    const g = (0.1 + this.fill * 0.18) * k;
+    // centenas de pessoas: "uuuh" que sobe e desce de tom (vozes graves e agudas)
+    this.voices(1.7, 'u', 'o', 170, g, 14, 0, 125);
+    this.voices(1.5, 'u', 'o', 260, g * 0.6, 10, 0.05, 190);
+    this.noise(1.5, 500, 1.2, 'bandpass', g * 0.5, 0, 0.2);
   }
   /** Festa do golo: explosão do público (mais forte se for da casa). */
   goal(home: boolean) {
     if (!this.ok()) return;
     const g = (0.45 + this.fill * 0.75) * (home ? 1 : 0.55);
-    this.noise(5.5, 900, 0.5, 'bandpass', g, 0, 0.12);
-    this.noise(4.5, 2400, 0.8, 'bandpass', g * 0.5, 0.1, 0.2);
+    this.voices(4, 'o', 'a', 190, g * 0.9, 18, 0, 210); // "GOOOLO"
+    this.noise(5.5, 900, 0.5, 'bandpass', g * 0.6, 0, 0.12);
+    this.noise(4.5, 2400, 0.8, 'bandpass', g * 0.35, 0.1, 0.2);
     this.net();
     if (this.match?.big) this.petards(3 + Math.floor(Math.random() * 4));
     this.chanting = 0;
-    setTimeout(() => this.chant(home ? 0 : 1), 4500);
+    setTimeout(() => this.claps(), 4500);
   }
   /** Assobios (visitante ou decisão contra a casa). */
   boo() {
     if (!this.ok()) return;
-    const g = 0.04 + this.fill * 0.06;
-    for (let i = 0; i < 6; i++) this.tone(1800 + Math.random() * 900, 1.2 + Math.random(), g, 'sine', Math.random() * 0.5, 1500 + Math.random() * 700);
+    const g = 0.08 + this.fill * 0.14;
+    this.voices(2.6, 'u', 'u', 120, g, 16, 0, 105); // "buuuu"
+    for (let i = 0; i < 10; i++) {
+      const f0 = 2200 + Math.random() * 1400;
+      this.tone(f0, 0.8 + Math.random() * 1.2, g * 0.35, 'sine', Math.random() * 1.2, f0 * (0.75 + Math.random() * 0.2)); // assobios com os dedos
+    }
   }
 }
 

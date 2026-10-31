@@ -22,12 +22,6 @@ export function renderSettings(content: HTMLElement, s: GameState) {
         <select data-k="sound">${opt('sound', 'off', 'Desligado')}${opt('sound', 'low', 'Baixo')}${opt('sound', 'mid', 'Médio')}${opt('sound', 'high', 'Alto')}</select>
         <span class="small muted">Ambiente do pavilhão, apito, buzina e bola. Sons gerados pelo jogo (sem gravações com direitos).</span>
       </label>
-      <label>Cânticos
-        <select data-k="chantWords">${opt('chantWords' as never, 'true', 'Com letra (voz do sistema)')}${opt('chantWords' as never, 'false', 'Só o coro, sem letra')}</select>
-      </label>
-      <label>Cânticos provocadores no dérbi
-        <select data-k="chantsRude">${opt('chantsRude' as never, 'true', 'Sim (só Benfica-Sporting)')}${opt('chantsRude' as never, 'false', 'Não')}</select>
-      </label>
       <label>Qualidade gráfica do 3D
         <select data-k="quality">${opt('quality', 'normal', 'Normal (mais fluido) · recomendada')}${opt('quality', 'alta', 'Alta (reflexos no piso, sombras mais finas; precisa de um computador mais rápido)')}</select>
       </label>
