@@ -48,8 +48,12 @@ export function nextMyFixture(s: GameState) {
   return myFixtures(s).find((f) => !f.result);
 }
 
-function playFixture(s: GameState, f: Fixture): MatchResult {
-  const m = simulateMatch(setupFor(s, f.home), setupFor(s, f.away), { knockout: f.knockout, seed: `${f.id}-${s.season.year}` });
+export function matchOptions(s: GameState, f: Fixture) {
+  return { knockout: f.knockout, seed: `${f.id}-${s.season.year}`, manual: f.home === s.clubId ? (0 as const) : f.away === s.clubId ? (1 as const) : undefined };
+}
+
+function playFixture(s: GameState, f: Fixture, given?: MatchResult): MatchResult {
+  const m = given ?? simulateMatch(setupFor(s, f.home), setupFor(s, f.away), matchOptions(s, f));
   f.result = {
     score: m.score,
     pens: m.penalties,
@@ -94,8 +98,8 @@ export function advance(s: GameState): AdvanceResult {
 }
 
 // Joga o teu jogo e os restantes jogos do dia
-export function playMyMatch(s: GameState, f: Fixture): MatchResult {
-  const m = playFixture(s, f);
+export function playMyMatch(s: GameState, f: Fixture, given?: MatchResult): MatchResult {
+  const m = playFixture(s, f, given);
   const mySide = f.home === s.clubId ? 0 : 1;
   const [a, b] = mySide === 0 ? m.score : [m.score[1], m.score[0]];
   const opp = clubName(s, mySide === 0 ? f.away : f.home);

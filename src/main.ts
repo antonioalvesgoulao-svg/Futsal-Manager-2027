@@ -1,4 +1,6 @@
 import './style.css';
+import { broadcastCss } from './ui/broadcast';
+import { renderSettings } from './ui/screens/settings';
 import { initRouter, register, go } from './ui/router';
 import { menuScreen } from './ui/screens/menu';
 import { newGameScreen } from './ui/screens/newGame';
@@ -9,3 +11,8 @@ register('menu', menuScreen);
 register('newGame', newGameScreen);
 register('home', homeScreen);
 go('menu');
+
+const css = document.createElement('style');
+css.textContent = broadcastCss;
+document.head.append(css);
+void renderSettings;

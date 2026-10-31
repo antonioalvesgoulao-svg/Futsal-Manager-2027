@@ -5,6 +5,8 @@ import { COMP_NAMES, CompId, Fixture } from '../../core/season/types';
 import type { GameState } from '../../core/types';
 import { resultHtml } from './friendly';
 import { tacticsSummary } from './tactics';
+import { renderLive, settingsOf } from './live';
+import { CHANNELS } from '../broadcast';
 
 const fmtDate = (d: string) => new Date(d + 'T12:00:00Z').toLocaleDateString('pt-PT', { weekday: 'short', day: '2-digit', month: 'short' });
 const short = (s: GameState, id: string) => s.clubs.find((c) => c.id === id)?.shortName ?? id;
@@ -161,16 +163,31 @@ export function renderMatchDay(content: HTMLElement, s: GameState, f: Fixture, o
       <div class="team" style="--c1:${a.colors[0]}">${a.name}</div>
     </div>
     <div class="coaches small muted" style="margin-top:8px"><span>${hs.coachName} · ${tacticsSummary(hs.tactics)}</span><span>${as.coachName} · ${tacticsSummary(as.tactics)}</span></div>
-    <div class="row" style="justify-content:flex-start;margin-top:16px">
+    <div class="form-row" style="margin-top:16px">
+      <label>Canal<select id="ch">${CHANNELS.map((c) => `<option value="${c.id}" ${settingsOf(s).channel === c.id ? 'selected' : ''}>${c.name}</option>`).join('')}</select></label>
+      <label>Marcador<select id="sbs">${[['auto', 'Da competição'], ['liga', 'Liga Placard'], ['taca', 'Taça de Portugal'], ['tacaLiga', 'Taça da Liga'], ['supertaca', 'Supertaça']].map(([v, l]) => `<option value="${v}" ${settingsOf(s).scoreboard === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
+      <label>Velocidade<select id="spd">${[['lento', 'Lenta'], ['medio', 'Média'], ['rapido', 'Rápida']].map(([v, l]) => `<option value="${v}" ${settingsOf(s).speed === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
+    </div>
+    <div class="row" style="justify-content:flex-start;margin-top:4px">
       <button class="btn" id="tac">Rever táticas</button>
-      <button class="btn primary" id="play">Jogar</button>
+      <button class="btn primary" id="live">Jogar ao vivo</button>
+      <button class="btn" id="play">Resultado imediato</button>
     </div>
     <div id="result"></div>`;
   content.querySelector('#tac')!.addEventListener('click', goTactics);
+  const st = settingsOf(s);
+  content.querySelector<HTMLSelectElement>('#ch')!.addEventListener('change', (e) => (st.channel = (e.target as HTMLSelectElement).value));
+  content.querySelector<HTMLSelectElement>('#sbs')!.addEventListener('change', (e) => (st.scoreboard = (e.target as HTMLSelectElement).value as typeof st.scoreboard));
+  content.querySelector<HTMLSelectElement>('#spd')!.addEventListener('change', (e) => (st.speed = (e.target as HTMLSelectElement).value as typeof st.speed));
+  content.querySelector('#live')!.addEventListener('click', () => {
+    renderLive(content, s, f, (res) => {
+      playMyMatch(s, f, res);
+      onDone();
+    });
+  });
   content.querySelector('#play')!.addEventListener('click', () => {
     const m = playMyMatch(s, f);
-    content.querySelector('.row')!.remove();
-    content.querySelector('.scoreboard')!.remove();
+    content.querySelectorAll('.row, .form-row, .scoreboard').forEach((x) => x.remove());
     content.querySelector('#result')!.innerHTML = resultHtml(m, h, a) + `<div class="row" style="justify-content:flex-start;margin-top:16px"><button class="btn primary" id="cont">Continuar</button></div>`;
     content.querySelector('#all')?.addEventListener('change', (e) => {
       content.querySelectorAll<HTMLElement>('.ev.minor').forEach((el) => (el.style.display = (e.target as HTMLInputElement).checked ? '' : 'none'));

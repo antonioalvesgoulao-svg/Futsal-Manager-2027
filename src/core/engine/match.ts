@@ -39,7 +39,7 @@ const fmt = (t: number) => {
   return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
 };
 
-export function simulateMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions = {}): MatchResult {
+export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions = {}) {
   const r = rng(opts.seed ?? `${home.clubId}-${away.clubId}-${Math.random()}`);
   const pick = <T>(arr: T[], w: (x: T) => number): T => {
     const ws = arr.map((x) => Math.max(0.01, w(x)));
@@ -574,57 +574,126 @@ export function simulateMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptio
     return { next: (1 - s) as Side, counter: false };
   }
 
-  function playPeriod(p: number, len: number, startSide: Side) {
-    period = p;
+  // ---- Máquina de estados: o jogo avança uma posse de cada vez (permite o modo ao vivo) ----
+  const first: Side = r() < 0.5 ? 0 : 1;
+  const plan: { p: number; len: number; start: Side }[] = [
+    { p: 1, len: HALF, start: first },
+    { p: 2, len: HALF, start: (1 - first) as Side },
+  ];
+  let stage = -1;
+  let side: Side = first;
+  let counter = false;
+  let extraTime = false;
+  let penalties: [number, number] | undefined;
+  let finished = false;
+  let lastPossession: Possession | null = null;
+  const timeoutRequest: [boolean, boolean] = [false, false];
+
+  function beginPeriod(i: number) {
+    const pl = plan[i];
+    period = pl.p;
     periodStart = clock;
-    periodLen = len;
-    let side: Side = startSide;
-    let counter = false;
-    const label = p === 1 ? 'Início da 1.ª parte' : p === 2 ? 'Início da 2.ª parte' : `Início da ${p - 2}.ª parte do prolongamento`;
-    log(p === 1 ? 'inicio' : p >= 3 ? 'prolongamento' : 'inicio', label);
-    while (clock < periodStart + len - 0.001) {
-      for (const s of [0, 1] as Side[]) {
-        const t = teams[s];
-        if (t.shortCount && clock >= t.shortUntil) {
-          t.shortCount = 0;
-          completeTeam(s);
-        }
-        flyingDecision(s);
-        rotate(s);
-        maybeTimeout(s);
-      }
-      const before = score[0] + score[1];
-      const res = possession(side, counter);
-      side = res.next;
-      counter = res.counter;
-      // após golo, reinicia quem sofreu
-      if (score[0] + score[1] > before) {
-        const last = events.filter((e) => e.type === 'golo').pop()!;
-        side = (1 - (last.side as number)) as Side;
-        counter = false;
-      }
-    }
+    periodLen = pl.len;
+    side = pl.start;
+    counter = false;
+    const label = pl.p === 1 ? 'Início da 1.ª parte' : pl.p === 2 ? 'Início da 2.ª parte' : `Início da ${pl.p - 2}.ª parte do prolongamento`;
+    log(pl.p >= 3 ? 'prolongamento' : 'inicio', label);
+  }
+
+  function endPeriod() {
     log('fim_parte', `Fim do período. ${home.shortName} ${score[0]}-${score[1]} ${away.shortName}`);
     for (const s of [0, 1] as Side[]) {
       if (teams[s].flying) removeFlying(s);
-      // intervalo: recuperação
-      for (const l of teams[s].players) l.energy = Math.min(100, l.energy + (p === 1 ? 25 : 8));
+      for (const l of teams[s].players) l.energy = Math.min(100, l.energy + (period === 1 ? 25 : 8));
     }
   }
 
-  // Jogo
-  const first: Side = r() < 0.5 ? 0 : 1;
-  playPeriod(1, HALF, first);
-  playPeriod(2, HALF, (1 - first) as Side);
-  let extraTime = false;
-  let penalties: [number, number] | undefined;
-  if (opts.knockout && score[0] === score[1]) {
-    extraTime = true;
-    playPeriod(3, ET, first);
-    playPeriod(4, ET, (1 - first) as Side);
-    if (score[0] === score[1]) penalties = shootout();
+  function manualTimeout(s: Side) {
+    const t = teams[s];
+    const idx = period <= 2 ? period : 2;
+    if (period > 2 || t.timeoutUsed[idx]) return false;
+    t.timeoutUsed[idx] = true;
+    tstats[s].timeouts.push(clock);
+    log('time_out', `Desconto de tempo pedido pelo ${sideName(s)}`, s);
+    for (const l of t.court) l.energy = Math.min(100, l.energy + 6);
+    return true;
   }
-  log('fim_jogo', `Fim do jogo: ${home.shortName} ${score[0]}-${score[1]} ${away.shortName}${penalties ? ` (${penalties[0]}-${penalties[1]} nos penáltis)` : ''}`);
+
+  function onePossession() {
+    for (const s of [0, 1] as Side[]) {
+      const t = teams[s];
+      if (t.shortCount && clock >= t.shortUntil) {
+        t.shortCount = 0;
+        completeTeam(s);
+      }
+      flyingDecision(s);
+      rotate(s);
+      if (timeoutRequest[s]) {
+        timeoutRequest[s] = false;
+        manualTimeout(s);
+      } else if (opts.manual !== s) maybeTimeout(s);
+    }
+    const before = score[0] + score[1];
+    const evBefore = events.length;
+    const start = clock;
+    const att = side;
+    const wasCounter = counter;
+    const res = possession(side, counter);
+    side = res.next;
+    counter = res.counter;
+    if (score[0] + score[1] > before) {
+      const last = events.filter((e) => e.type === 'golo').pop()!;
+      side = (1 - (last.side as number)) as Side;
+      counter = false;
+    }
+    lastPossession = { side: att, start, end: clock, counter: wasCounter, events: events.slice(evBefore) };
+  }
+
+  function finish() {
+    log('fim_jogo', `Fim do jogo: ${home.shortName} ${score[0]}-${score[1]} ${away.shortName}${penalties ? ` (${penalties[0]}-${penalties[1]} nos penáltis)` : ''}`);
+    // Notas dos jogadores (1 a 10)
+    for (const t of teams) {
+      const sd = teams.indexOf(t) as Side;
+      const won = score[sd] > score[1 - sd] ? 0.3 : score[sd] < score[1 - sd] ? -0.3 : 0;
+      for (const l of t.players) {
+        const st = pstats[l.p.id];
+        if (st.minutes < 30) { st.rating = 0; continue; }
+        let rt = 6.2 + won + st.goals * 0.9 + st.assists * 0.5 + st.tackles * 0.08 - st.fouls * 0.08 - st.yellow * 0.3 - (st.red ? 1.5 : 0);
+        if (l.p.position === 'GR') rt += st.saves * 0.18 - conceded[l.p.id] * 0.35;
+        rt += (r() - 0.5) * 0.6;
+        st.rating = Math.round(Math.max(3, Math.min(10, rt)) * 10) / 10;
+      }
+    }
+    finished = true;
+  }
+
+  /** Avança uma posse (ou uma mudança de período). Devolve false quando o jogo terminou. */
+  function step(): boolean {
+    if (finished) return false;
+    lastPossession = null;
+    if (stage < 0) {
+      stage = 0;
+      beginPeriod(0);
+      return true;
+    }
+    if (clock < periodStart + periodLen - 0.001) {
+      onePossession();
+      return true;
+    }
+    endPeriod();
+    stage++;
+    if (stage === 2 && opts.knockout && score[0] === score[1]) {
+      extraTime = true;
+      plan.push({ p: 3, len: ET, start: first }, { p: 4, len: ET, start: (1 - first) as Side });
+    }
+    if (stage < plan.length) {
+      beginPeriod(stage);
+      return true;
+    }
+    if (opts.knockout && score[0] === score[1]) penalties = shootout();
+    finish();
+    return false;
+  }
 
   function shootout(): [number, number] {
     period = 5;
@@ -669,19 +738,86 @@ export function simulateMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptio
     }
   }
 
-  // Notas dos jogadores (1 a 10)
-  for (const t of teams) {
-    const side = teams.indexOf(t) as Side;
-    const won = score[side] > score[1 - side] ? 0.3 : score[side] < score[1 - side] ? -0.3 : 0;
-    for (const l of t.players) {
-      const st = pstats[l.p.id];
-      if (st.minutes < 30) { st.rating = 0; continue; }
-      let rt = 6.2 + won + st.goals * 0.9 + st.assists * 0.5 + st.tackles * 0.08 - st.fouls * 0.08 - st.yellow * 0.3 - (st.red ? 1.5 : 0);
-      if (l.p.position === 'GR') rt += st.saves * 0.18 - conceded[l.p.id] * 0.35;
-      rt += (r() - 0.5) * 0.6;
-      st.rating = Math.round(Math.max(3, Math.min(10, rt)) * 10) / 10;
-    }
+  const result = (): MatchResult => ({ score, penalties, extraTime, events, team: tstats, players: pstats, names });
+
+  // Fotografia do momento, para o modo ao vivo
+  function snapshot(): LiveSnapshot {
+    const fp = period >= 3 ? 2 : period;
+    return {
+      clock, period, periodStart, periodLen, score: [score[0], score[1]], finished,
+      teams: teams.map((t) => ({
+        gk: t.gk ? { id: t.gk.p.id, number: t.gk.p.number, name: t.gk.p.name, energy: t.gk.energy } : null,
+        court: t.court.map((l) => ({ id: l.p.id, number: l.p.number, name: l.p.name, energy: l.energy, position: l.p.position })),
+        bench: t.players.filter((l) => !l.onCourt).map((l) => ({ id: l.p.id, number: l.p.number, name: l.p.name, energy: l.energy, position: l.p.position, sentOff: l.sentOff })),
+        flying: t.flying,
+        fouls: t.fouls[fp] ?? 0,
+        timeoutAvailable: period <= 2 && !t.timeoutUsed[period],
+        short: clock < t.shortUntil ? t.shortCount : 0,
+      })) as [LiveTeam, LiveTeam],
+      possession: lastPossession,
+    };
   }
 
-  return { score, penalties, extraTime, events, team: tstats, players: pstats, names };
+  return {
+    step,
+    result,
+    snapshot,
+    events,
+    stats: tstats,
+    players: pstats,
+    names,
+    requestTimeout: (s: Side) => {
+      const t = teams[s];
+      if (period > 2 || t.timeoutUsed[period]) return false;
+      timeoutRequest[s] = true;
+      return true;
+    },
+  };
+}
+
+export interface Possession {
+  side: Side;
+  start: number;
+  end: number;
+  counter: boolean;
+  events: MatchEvent[];
+}
+
+export interface LivePlayer {
+  id: string;
+  number: number | null;
+  name: string;
+  energy: number;
+  position?: string;
+  sentOff?: boolean;
+}
+
+export interface LiveTeam {
+  gk: LivePlayer | null;
+  court: LivePlayer[];
+  bench: LivePlayer[];
+  flying: boolean;
+  fouls: number;
+  timeoutAvailable: boolean;
+  short: number;
+}
+
+export interface LiveSnapshot {
+  clock: number;
+  period: number;
+  periodStart: number;
+  periodLen: number;
+  score: [number, number];
+  finished: boolean;
+  teams: [LiveTeam, LiveTeam];
+  possession: Possession | null;
+}
+
+export type LiveMatch = ReturnType<typeof createMatch>;
+
+/** Simula o jogo inteiro de uma vez (jogos dos outros clubes e "saltar para o fim"). */
+export function simulateMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions = {}): MatchResult {
+  const m = createMatch(home, away, opts);
+  while (m.step());
+  return m.result();
 }

@@ -8,6 +8,7 @@ import { ATTR_GROUPS, overall, starsHtml } from '../../core/attributes';
 import type { Player } from '../../core/types';
 import { renderFriendly } from './friendly';
 import { renderTactics } from './tactics';
+import { renderSettings } from './settings';
 import porHistory from '../../data/por/history.json';
 
 const HIST = porHistory.players as Record<string, { s: string; team: string; games: number; goals: number }[]>;
@@ -67,6 +68,7 @@ const SECTIONS: { id: string; label: string; stage: string }[] = [
   { id: 'financas', label: 'Finanças', stage: 'Etapa 10' },
   { id: 'staff', label: 'Staff', stage: 'Etapa 11' },
   { id: 'formacao', label: 'Formação', stage: 'Etapa 11' },
+  { id: 'definicoes', label: 'Definições', stage: '' },
 ];
 
 export function homeScreen(root: HTMLElement) {
@@ -120,6 +122,8 @@ export function homeScreen(root: HTMLElement) {
     }
     if (section === 'inicio') {
       renderDashboard(content, s!);
+    } else if (section === 'definicoes') {
+      renderSettings(content, s!);
     } else if (section === 'calendario') {
       renderCalendar(content, s!);
     } else if (section === 'competicoes') {

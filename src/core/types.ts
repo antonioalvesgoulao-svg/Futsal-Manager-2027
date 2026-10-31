@@ -54,6 +54,13 @@ export interface Coach {
   style: Partial<Tactics>;
 }
 
+export interface Settings {
+  speed: 'lento' | 'medio' | 'rapido';
+  moments3d: 'nenhum' | 'golos' | 'importantes' | 'todos';
+  channel: string; // canal fictício
+  scoreboard: 'auto' | 'liga' | 'taca' | 'tacaLiga' | 'supertaca';
+}
+
 export interface GameState {
   version: number;
   createdAt: string;
@@ -69,6 +76,7 @@ export interface GameState {
   pstats: Record<string, PlayerSeason>; // estatísticas da época em curso
   news: NewsItem[];
   honours: Honour[];
+  settings?: Settings;
 }
 
 export const SAVE_VERSION = 6;
