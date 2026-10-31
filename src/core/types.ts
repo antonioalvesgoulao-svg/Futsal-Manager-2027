@@ -57,7 +57,6 @@ export interface Coach {
 export interface Settings {
   speed: 'lento' | 'medio' | 'rapido';
   moments3d: 'nenhum' | 'golos' | 'importantes' | 'todos';
-  channel: string; // canal fictício
   scoreboard: 'auto' | 'liga' | 'taca' | 'tacaLiga' | 'supertaca';
 }
 

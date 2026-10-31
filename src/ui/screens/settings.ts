@@ -1,6 +1,6 @@
 // Definições do jogo ao vivo e da transmissão
 import type { GameState, Settings } from '../../core/types';
-import { CHANNELS, channelBug, scoreboardHtml } from '../broadcast';
+import { scoreboardHtml } from '../broadcast';
 import { settingsOf } from './live';
 
 export function renderSettings(content: HTMLElement, s: GameState) {
@@ -18,15 +18,10 @@ export function renderSettings(content: HTMLElement, s: GameState) {
         <select data-k="moments3d">${opt('moments3d', 'nenhum', 'Não destacar')}${opt('moments3d', 'golos', 'Só golos')}${opt('moments3d', 'importantes', 'Golos, penáltis, livres de 10 m, expulsões, postes, 5x4')}${opt('moments3d', 'todos', 'Todas as ocasiões')}</select>
         <span class="small muted">Nos momentos escolhidos o jogo abranda e destaca o lance. A vista 3D destes momentos chega na próxima fase.</span>
       </label>
-      <label>Canal
-        <select data-k="channel">${CHANNELS.map((c) => opt('channel', c.id, c.name)).join('')}</select>
-      </label>
       <label>Marcador eletrónico
         <select data-k="scoreboard">${opt('scoreboard', 'auto', 'O da competição do jogo')}${opt('scoreboard', 'liga', 'Liga Placard')}${opt('scoreboard', 'taca', 'Taça de Portugal')}${opt('scoreboard', 'tacaLiga', 'Taça da Liga')}${opt('scoreboard', 'supertaca', 'Supertaça')}</select>
       </label>
     </div>
-    <h3>Canais</h3>
-    <div class="row" style="justify-content:flex-start;flex-wrap:wrap;gap:12px">${CHANNELS.filter((c) => c.bug).map((c) => channelBug(c.id, s.clubs.find((x) => x.id === s.clubId)!.shortName)).join('')}</div>
     <h3>Marcadores</h3>
     <div class="sb-demo">${demo('liga')}${demo('taca')}${demo('tacaLiga')}${demo('supertaca')}</div>
     <p class="small muted">Grafismo original do jogo, de inspiração portuguesa. As definições ficam guardadas com o jogo.</p>`;

@@ -6,11 +6,11 @@ import { matchOptions, setupFor } from '../../core/game';
 import { COMP_NAMES, Fixture } from '../../core/season/types';
 import { SLOTS, Tactics } from '../../core/tactics';
 import type { Club, GameState, Settings } from '../../core/types';
-import { channelBug, scoreboardHtml } from '../broadcast';
+import { scoreboardHtml } from '../broadcast';
 import { resultHtml } from './friendly';
 import { renderTactics } from './tactics';
 
-export const DEFAULT_SETTINGS: Settings = { speed: 'medio', moments3d: 'importantes', channel: 'rede', scoreboard: 'auto' };
+export const DEFAULT_SETTINGS: Settings = { speed: 'medio', moments3d: 'importantes', scoreboard: 'auto' };
 export const settingsOf = (s: GameState) => (s.settings ??= { ...DEFAULT_SETTINGS });
 
 // Segundos de jogo por segundo real: lenta 15 s por minuto, média 7,5 s, rápida 3 s
@@ -56,7 +56,7 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
   content.innerHTML = `
     <div class="live">
       <div class="live-top">
-        <div class="live-ch">${channelBug(st.channel, h.shortName)}</div>
+        <div></div>
         <div id="sb"></div>
         <div class="live-comp small muted">${COMP_NAMES[f.comp]} · ${f.stage}</div>
       </div>

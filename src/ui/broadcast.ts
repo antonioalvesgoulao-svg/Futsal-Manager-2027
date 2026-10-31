@@ -1,26 +1,6 @@
-// Grafismo de transmissão original do jogo: marcadores eletrónicos por competição e canais fictícios.
+// Grafismo de transmissão original do jogo: marcadores eletrónicos por competição.
 // Inspiração portuguesa (azulejo, calçada, verde e vermelho), desenhado de raiz.
 import type { CompId } from '../core/season/types';
-
-export interface Channel {
-  id: string;
-  name: string;
-  bug: string; // HTML do logótipo no canto do ecrã
-}
-
-// Canais fictícios (o "Canal do Clube" usa o nome do clube da casa)
-export const CHANNELS: Channel[] = [
-  { id: 'rede', name: 'Rede Nacional', bug: `<div class="ch ch-rede"><span class="wave2"></span><b>REDE</b><small>NACIONAL</small></div>` },
-  { id: 'quadra', name: 'Quadra TV', bug: `<div class="ch ch-quadra"><span class="court-ic"></span><b>QUADRA</b><small>TV</small></div>` },
-  { id: 'arena', name: 'Arena Premium', bug: `<div class="ch ch-arena"><b>ARENA</b><em>PREMIUM</em></div>` },
-  { id: 'clube', name: 'Canal do Clube (equipa da casa)', bug: `<div class="ch ch-clube"><span class="cl-star">★</span><b>{CLUBE}</b><small>CANAL DO CLUBE</small></div>` },
-  { id: 'nenhum', name: 'Sem logótipo', bug: '' },
-];
-
-export function channelBug(id: string, homeShort: string) {
-  const c = CHANNELS.find((x) => x.id === id) ?? CHANNELS[0];
-  return c.bug.replace('{CLUBE}', homeShort);
-}
 
 export const SCOREBOARD_NAMES: Record<Exclude<CompId, 'playoff'>, string> = {
   liga: 'Liga Placard',
@@ -118,15 +98,4 @@ export const broadcastCss = `
 .sb-supertaca .sb-sub { background: #1a1a1a; color: #f5f5f5; }
 .sb-supertaca .sb-period { background: #d4a017; color: #0b0b0b; }
 
-/* Canais fictícios */
-.ch { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 4px; font-family: system-ui; color: #fff; opacity: .93; }
-.ch b { font-size: 13px; letter-spacing: .06em; } .ch small { font-size: 9px; letter-spacing: .12em; opacity: .85; }
-.ch-rede { background: #0f766e; border: 1px solid #ccfbf1; }
-.ch-rede .wave2 { width: 18px; height: 8px; border: 2px solid #ccfbf1; border-top: 0; border-radius: 0 0 9px 9px; }
-.ch-quadra { background: #5b21b6; }
-.ch-quadra .court-ic { width: 18px; height: 11px; border: 1.5px solid #fff; background: linear-gradient(90deg, transparent 7.5px, #fff 7.5px 9px, transparent 9px); }
-.ch-arena { background: #27272a; border-left: 4px solid #f97316; }
-.ch-arena em { font-style: normal; font-size: 9px; font-weight: 800; letter-spacing: .14em; color: #f97316; }
-.ch-clube { background: #1f2937; border: 1px solid #4b5563; }
-.ch-clube .cl-star { color: #e5e7eb; font-size: 12px; }
 `;
