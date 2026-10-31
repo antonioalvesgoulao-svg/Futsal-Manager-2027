@@ -5,7 +5,7 @@ import type { Act, Frame, P2, Scene3D } from './choreo';
 
 const SPEED = 1.8; // m/s (passo de entrada)
 const GAP = 0.45; // segundos entre jogadores à saída do túnel
-const TUNNEL_Y = -16.2; // fundo do túnel insuflável, do lado dos bancos (a boca fica junto à linha lateral)
+const TUNNEL_Y = -13.9; // fundo do túnel (ao centro, do lado dos bancos; vem do interior do pavilhão)
 const HOLD = 4; // alinhados, antes do gráfico dos cinco iniciais
 
 interface Walker { id: string; t0: number; path: P2[]; len: number[] }
@@ -25,12 +25,12 @@ export class IntroScene implements Scene3D {
       this.walkers.push({ id, t0, path, len });
     };
     // os árbitros à frente, depois as duas filas lado a lado
-    refs.forEach((id, i) => add(id, 0, -4.9 + i * 0.8, { x: i ? 0.45 : -0.45, y: 0 }));
+    refs.forEach((id, i) => add(id, 0, i ? 0.4 : -0.4, { x: i ? 0.45 : -0.45, y: 0 }));
     const n = Math.max(teams[0].length, teams[1].length);
     for (let i = 0; i < n; i++) {
       const t0 = 1.2 + i * GAP;
-      if (teams[0][i]) add(teams[0][i], t0, -4.95, { x: -1.3 - i * 0.92, y: 0 });
-      if (teams[1][i]) add(teams[1][i], t0, -4.05, { x: 1.3 + i * 0.92, y: 0 });
+      if (teams[0][i]) add(teams[0][i], t0, -0.45, { x: -1.3 - i * 0.92, y: 0 });
+      if (teams[1][i]) add(teams[1][i], t0, 0.45, { x: 1.3 + i * 0.92, y: 0 });
     }
     this.lineupAt = Math.max(...this.walkers.map((w) => w.t0 + w.len[w.len.length - 1] / SPEED)) + 0.6;
     this.total = this.lineupAt + HOLD;

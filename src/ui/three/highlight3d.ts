@@ -219,7 +219,7 @@ export class Highlight3D {
       a.heading += d * Math.min(1, dt * 9);
       a.g.rotation.set(0, a.heading, 0);
       let act2 = act;
-      if (act?.kind === 'dive' && act.to) {
+      if ((act?.kind === 'dive' || act?.kind === 'splits') && act.to) {
         // lado do mergulho, visto pelo guarda-redes
         const rx = Math.cos(a.heading), rz = -Math.sin(a.heading);
         const side = (act.to.x - p.x) * rx + (act.to.y - p.y) * rz >= 0 ? 1 : -1;

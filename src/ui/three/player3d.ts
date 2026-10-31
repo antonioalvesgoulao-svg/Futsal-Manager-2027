@@ -403,6 +403,39 @@ export function pose(a: Actor, act: Act | undefined, gk: boolean, near: boolean,
       shin[1].rotation.x = 0.3;
       break;
     }
+    case 'splits': {
+      // espargata lateral (futsal): uma perna estica rente ao chão para o lado da bola, a outra
+      // fica dobrada; o corpo baixa e o braço do mesmo lado acompanha
+      const local = act.side ?? 1;
+      const e = ease(clamp01(k * 3.2)) * (k > 0.85 ? 1 - ease((k - 0.85) / 0.15) : 1);
+      const out = local > 0 ? 1 : 0; // índice da perna que vai à bola (1 = lado +x)
+      const sgn = out ? 1 : -1;
+      body.position.y = HIP - 0.55 * e;
+      body.position.x = sgn * 0.12 * e;
+      body.rotation.z = -sgn * 0.25 * e;
+      body.rotation.x = 0.2 * e;
+      thigh[out].rotation.set(0, 0, sgn * 1.45 * e);
+      shin[out].rotation.x = 0.05;
+      thigh[1 - out].rotation.set(-0.55 * e, 0, -sgn * 0.25 * e);
+      shin[1 - out].rotation.x = 1.9 * e;
+      arm[out].rotation.set(-0.2, 0, sgn * 1.25 * e);
+      arm[1 - out].rotation.set(-0.4, 0, -sgn * 0.5 * e);
+      fore[0].rotation.x = fore[1].rotation.x = -0.2;
+      break;
+    }
+    case 'spread': {
+      // abertura em cruz: pernas muito abertas e fletidas, braços abertos, a tapar a baliza
+      const e = ease(clamp01(k * 3.5)) * (k > 0.85 ? 1 - ease((k - 0.85) / 0.15) : 1);
+      thigh[0].rotation.set(-0.25 * e, 0, -0.85 * e);
+      thigh[1].rotation.set(-0.25 * e, 0, 0.85 * e);
+      shin[0].rotation.x = shin[1].rotation.x = 0.45 * e;
+      body.position.y = HIP - 0.3 * e;
+      body.rotation.x = 0.15 * e;
+      arm[0].rotation.set(-0.3, 0, -1.35 * e);
+      arm[1].rotation.set(-0.3, 0, 1.35 * e);
+      fore[0].rotation.x = fore[1].rotation.x = -0.1;
+      break;
+    }
     case 'catch': {
       thigh[0].rotation.x = thigh[1].rotation.x = -0.5;
       shin[0].rotation.x = shin[1].rotation.x = 0.85;

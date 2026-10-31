@@ -17,7 +17,7 @@ import type { Tactics } from '../tactics';
 export interface P2 { x: number; y: number }
 export interface Ball { x: number; y: number; z: number }
 
-export type ActKind = 'pass' | 'shoot' | 'dive' | 'catch' | 'tackle' | 'feint' | 'screen' | 'shield' | 'block' | 'celebrate' | 'fall' | 'run' | 'throw' | 'idle';
+export type ActKind = 'pass' | 'shoot' | 'dive' | 'splits' | 'spread' | 'catch' | 'tackle' | 'feint' | 'screen' | 'shield' | 'block' | 'celebrate' | 'fall' | 'run' | 'throw' | 'idle';
 export interface Act {
   kind: ActKind;
   k: number; // progresso da ação (0 a 1)
@@ -1055,19 +1055,23 @@ export class Choreo {
     const gk = this.p.onCourt[keeperSide][0];
     const gkInGoal = gk && !this.p.flying[keeperSide];
     if (gkInGoal && res !== 'blocked') {
-      const tgt = { x: g * 19.35, y: clamp(target.y * (res === 'saved' ? 1 : res === 'goal' ? 0.72 : 0.6), -1.75, 1.75) };
-      const reach = Math.abs(tgt.y) > 0.65 || target.z > 1.3;
+      // técnica de futsal: voo só aos ângulos altos; remates baixos/laterais com espargata pelo chão;
+      // remates de perto com abertura em cruz (pernas e braços abertos); à figura, agarra
+      const ty = clamp(target.y * (res === 'saved' ? 1 : res === 'goal' ? 0.72 : 0.6), -1.75, 1.75);
+      const close = Math.hypot(g * 20 - from.x, from.y) < 7.5;
+      const tech: ActKind = target.z > 1.2 && Math.abs(ty) > 0.8 ? 'dive' : close && Math.abs(ty) < 1.3 ? 'spread' : Math.abs(ty) > 0.55 ? 'splits' : 'catch';
+      // na espargata o corpo desloca-se pouco; é a perna que chega à bola
+      const tgt = { x: g * 19.35, y: tech === 'dive' ? ty : tech === 'splits' ? ty * 0.45 : tech === 'spread' ? ty * 0.3 : ty * 0.8 };
       this.later.push(() => {
         const g0 = this.P(gk, T - 0.15);
         this.fix(gk, T - 0.2, T + fl + 1.6);
         this.key(gk, T, g0);
-        this.key(gk, T + fl, reach ? tgt : { x: tgt.x, y: tgt.y * 0.8 });
-        this.key(gk, T + fl + 1.3, reach ? tgt : { x: tgt.x, y: tgt.y * 0.8 });
+        this.key(gk, T + fl, tgt);
+        this.key(gk, T + fl + 1.3, tgt);
       });
-      if (reach) {
-        this.act(gk, 'dive', T + 0.04, T + fl + 1.2, { to: { x: target.x, y: target.y }, h: target.z, face: shooter });
-        if (res === 'saved') this.label(T + fl, `Grande defesa de ${this.nm(gk)}!`);
-      } else this.act(gk, 'catch', T, T + fl + 0.8, { face: shooter });
+      if (tech === 'catch') this.act(gk, 'catch', T, T + fl + 0.8, { face: shooter });
+      else this.act(gk, tech, T + 0.04, T + fl + 1.2, { to: { x: target.x, y: target.y }, h: target.z, face: shooter });
+      if (res === 'saved' && tech !== 'catch') this.label(T + fl, tech === 'dive' ? `Voo de ${this.nm(gk)} ao ângulo!` : tech === 'splits' ? `${this.nm(gk)} defende com a perna, em espargata` : `${this.nm(gk)} fecha o ângulo em cruz`);
     }
     if (res === 'blocked' && a.other && this.tr.has(a.other)) {
       const bl = a.other;
@@ -1084,7 +1088,7 @@ export class Choreo {
     let tEnd = T + fl;
     if (caught && gk) {
       // o GR agarra, levanta-se (se mergulhou) e repõe a bola à mão para um colega aberto na ala
-      const dived = Math.abs(clamp(target.y, -1.75, 1.75)) > 0.65 || target.z > 1.3;
+      const dived = target.z > 1.2 || Math.abs(clamp(target.y, -1.75, 1.75)) > 0.55;
       this.balls.push({ k: 'hands', t0: tEnd, id: gk, z: dived ? 0.45 : 1.0 });
       this.label(tEnd, `${this.nm(gk)} agarra a bola`);
       const tUp = tEnd + (dived ? 1.4 : 0.6);

@@ -314,7 +314,8 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
     const plat = new THREE.Mesh(new THREE.BoxGeometry(6.6, 0.1, 1.4), platMat);
     plat.position.set(cx, 0.05, bz - 0.1);
     scene.add(plat);
-    const seatMat = new THREE.MeshStandardMaterial({ color: o.teams[i].colors[0], roughness: 0.5 });
+    // as cadeiras dos dois bancos são do pavilhão: cor da equipa da casa
+    const seatMat = new THREE.MeshStandardMaterial({ color: o.teams[0].colors[0], roughness: 0.5 });
     for (let k = 0; k < 10; k++) {
       const x = cx - 2.7 + k * 0.6;
       const pan = new THREE.Mesh(new THREE.BoxGeometry(0.46, 0.06, 0.42), seatMat);
@@ -341,7 +342,7 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
     }
   }
   const table = new THREE.Mesh(new THREE.BoxGeometry(3, 0.8, 0.8), new THREE.MeshStandardMaterial({ color: '#e5e7eb' }));
-  table.position.set(0, 0.4, -(H / 2 + 1.9));
+  table.position.set(3.4, 0.4, -(H / 2 + 1.9)); // ao lado da boca do túnel, que fica ao centro
   scene.add(table);
 
   // ---- placas LED à volta do campo ----
@@ -351,8 +352,10 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
     return new THREE.MeshStandardMaterial({ map: t, emissive: 0xffffff, emissiveMap: t, emissiveIntensity: 0.55, roughness: 0.4 });
   };
   const bz = H / 2 + 3.1, bx = W / 2 + 2.6;
+  // do lado dos bancos as placas abrem ao centro para a passagem do túnel de entrada
+  const half = (W + 4) / 2 - 1.8;
   const boards: [number, number, number, number, number][] = [
-    [0, -bz, W + 4, 0, 0], [0, bz, W + 4, Math.PI, 3], [-bx, 0, H + 4, Math.PI / 2, 6], [bx, 0, H + 4, -Math.PI / 2, 8],
+    [-(1.8 + half / 2), -bz, half, 0, 0], [1.8 + half / 2, -bz, half, 0, 2], [0, bz, W + 4, Math.PI, 3], [-bx, 0, H + 4, Math.PI / 2, 6], [bx, 0, H + 4, -Math.PI / 2, 8],
   ];
   for (const [x, z, len, ry, off] of boards) {
     const m = new THREE.Mesh(new THREE.BoxGeometry(len, 0.85, 0.12), [
@@ -651,7 +654,11 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
   // túnel insuflável de entrada (só na cerimónia): os jogadores saem de dentro dele
   const tunnel = new THREE.Group();
   {
-    const len = 4.8, rad = 1.35;
+    // ao centro, do lado dos bancos: vem do interior do pavilhão (por baixo da bancada) até à quadra
+    const rad = 1.35;
+    const z0 = H / 2 + 0.8;
+    const z1 = pr.sides.includes('N') ? H / 2 + 4.2 : hallD / 2 - 0.2;
+    const len = z1 - z0;
     const tex = canvasTex(1024, 256, (c) => {
       c.fillStyle = '#16202c'; c.fillRect(0, 0, 1024, 256);
       c.fillStyle = '#00a651'; c.fillRect(0, 0, 1024, 26);
@@ -663,16 +670,24 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
     const tube = new THREE.Mesh(new THREE.CylinderGeometry(rad, rad, len, 28, 1, true, -Math.PI / 2, Math.PI), tubeMat);
     tube.rotation.x = -Math.PI / 2;
     tube.scale.set(1, 1, 1.75);
-    tube.position.set(-4.5, 0, -(H / 2 + 1.6 + len / 2));
+    tube.position.set(0, 0, -(z0 + len / 2));
     tunnel.add(tube);
     // arcos insuflados na boca e ao longo do túnel
     const ringMat = new THREE.MeshStandardMaterial({ color: '#e5e7eb', roughness: 0.6 });
     for (let k = 0; k <= 3; k++) {
       const ring = new THREE.Mesh(new THREE.TorusGeometry(rad, 0.12, 8, 24, Math.PI), ringMat);
       ring.scale.set(1, 1.75, 1);
-      ring.position.set(-4.5, 0, -(H / 2 + 1.6 + (k * len) / 3));
+      ring.position.set(0, 0, -(z0 + (k * len) / 3));
       tunnel.add(ring);
     }
+    // fundo escuro: a saída do corredor interior (balneários), sem nada à vista lá dentro
+    const back = new THREE.Mesh(new THREE.CircleGeometry(rad * 1.02, 24, 0, Math.PI), new THREE.MeshBasicMaterial({ color: '#05070a', side: THREE.DoubleSide }));
+    back.scale.set(1, 1.75, 1);
+    back.position.set(0, 0, -(z1 + 0.05));
+    tunnel.add(back);
+    const door = new THREE.Mesh(new THREE.PlaneGeometry(rad * 2.3, rad * 1.85), new THREE.MeshBasicMaterial({ color: '#05070a' }));
+    door.position.set(0, rad * 0.9, -(z1 + 0.08));
+    tunnel.add(door);
   }
   tunnel.visible = false;
   scene.add(tunnel);
