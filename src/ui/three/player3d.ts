@@ -23,7 +23,7 @@ export interface Actor {
   init: boolean;
 }
 
-export interface Kit { shirt: string; shorts: string; socks: string; number: number | null; gk: boolean }
+export interface Kit { shirt: string; shorts: string; socks: string; number: number | null; gk: boolean; pattern?: 'liso' | 'listas' | 'riscas' | 'metade'; alt?: string }
 
 const HIP = 0.92;
 
@@ -138,7 +138,6 @@ function skinned(parts: Part[], skel: THREE.Skeleton, material: THREE.Material) 
   const bones = skel.bones;
   const geos = parts.map((p) => {
     const g = p.geo.index ? p.geo.toNonIndexed() : p.geo;
-    g.deleteAttribute('uv');
     const pos = g.attributes.position;
     const n = pos.count;
     const si = new Uint16Array(n * 4), sw = new Float32Array(n * 4);
@@ -195,6 +194,17 @@ export function makePlayer(kit: Kit, look: Look) {
 
   const skinMat = skinMaterial(look.skin);
   const shirtMat = fabric(kit.shirt);
+  if (kit.pattern && kit.pattern !== 'liso' && kit.alt) {
+    // padrão da camisola: listas horizontais, riscas verticais ou metades (coordenadas do tecido: u à volta, v ao longo)
+    shirtMat.map = canvasTex(256, 256, (c) => {
+      c.fillStyle = kit.shirt; c.fillRect(0, 0, 256, 256);
+      c.fillStyle = kit.alt!;
+      if (kit.pattern === 'listas') for (let y = 0; y < 256; y += 64) c.fillRect(0, y, 256, 32);
+      else if (kit.pattern === 'riscas') for (let x = 0; x < 256; x += 32) c.fillRect(x, 0, 16, 256);
+      else c.fillRect(128, 0, 128, 256);
+    });
+    shirtMat.color.set('#ffffff');
+  }
   const shortsMat = fabric(kit.shorts);
   const sockMat = fabric(kit.socks);
   const hairMat = new THREE.MeshStandardMaterial({ color: look.hair, roughness: 0.75 });

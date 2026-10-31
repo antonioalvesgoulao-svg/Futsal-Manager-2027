@@ -14,6 +14,7 @@ import { Choreo, StartState } from '../../core/visual/choreo';
 import { IntroScene } from '../../core/visual/intro';
 import { attendance } from '../../core/attendance';
 import { lookOf } from '../../core/appearance';
+import { matchKits, pendingKit, setPendingKit } from '../../core/kits';
 import { refBadgeHtml } from '../../core/referees';
 
 export const DEFAULT_SETTINGS: Settings = { speed: 'medio', moments3d: 'importantes', scoreboard: 'auto' };
@@ -51,7 +52,9 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
   const mopts = matchOptions(s, f);
   const m = createMatch(hs, as, mopts);
   const style = st.scoreboard === 'auto' ? (f.comp === 'playoff' ? 'liga' : f.comp) : st.scoreboard;
-  const colors: [string, string] = [h.colors[0], hexDist(h.colors[0], a.colors[0]) < 120 ? (hexDist(h.colors[0], a.colors[1]) < 120 ? '#f5f5f5' : a.colors[1]) : a.colors[0]];
+  const kits = matchKits(h, a, mySide, pendingKit);
+  setPendingKit('auto');
+  const colors: [string, string] = [kits[0].shirt, kits[1].shirt];
   const textCol = (c: string) => (hexDist(c, '#ffffff') < 200 ? '#111' : '#fff');
   const crowd = attendance(s, f);
   // claques organizadas (bandeiras, tifo, tochas): Benfica e Sporting, só em jogos grandes
@@ -127,7 +130,7 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
   const info: Record<string, ActorInfo> = {};
   for (const [side, setup] of [[0, hs], [1, as]] as const) for (const p of setup.squad) info[p.id] = { side, number: p.number, gk: p.position === 'GR', look: lookOf(p) };
   for (const id of ['arbitro1', 'arbitro2']) info[id] = { side: 0, number: null, gk: false, referee: true, look: lookOf({ id }) };
-  const kit: [[string, string], [string, string]] = [[colors[0], h.colors[1]], [colors[1], colors[1] === a.colors[0] ? a.colors[1] : a.colors[0]]];
+  const kit: [[string, string], [string, string]] = [[kits[0].shirt, kits[0].shorts], [kits[1].shirt, kits[1].shorts]];
 
   let snap: LiveSnapshot = m.snapshot();
   let display = 0; // tempo de jogo mostrado (relógio)
@@ -277,6 +280,7 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
     if (hl) return;
     const mod = await import('../three/highlight3d');
     hl = new mod.Highlight3D($('#hlv'), {
+      kits,
       profile: crowd.arena,
       crowd: crowd.total,
       shares: crowd.shares,

@@ -3,6 +3,7 @@ import { clubName, myFixtures, nextMyFixture, playMyMatch, setupFor } from '../.
 import { leagueTable } from '../../core/season/season';
 import { ARENAS, arenaOf } from '../../core/attendance';
 import { refBadgeHtml, refereesFor } from '../../core/referees';
+import { KitChoice, setPendingKit } from '../../core/kits';
 import { COMP_NAMES, CompId, Fixture } from '../../core/season/types';
 import type { GameState } from '../../core/types';
 import { resultHtml } from './friendly';
@@ -166,6 +167,7 @@ export function renderMatchDay(content: HTMLElement, s: GameState, f: Fixture, o
     <div class="coaches small muted" style="margin-top:8px"><span>${hs.coachName} · ${tacticsSummary(hs.tactics)}</span><span>${as.coachName} · ${tacticsSummary(as.tactics)}</span></div>
     <div class="form-row" style="margin-top:16px">
       <label>Marcador<select id="sbs">${[['auto', 'Da competição'], ['liga', 'Liga Placard'], ['taca', 'Taça de Portugal'], ['tacaLiga', 'Taça da Liga'], ['supertaca', 'Supertaça']].map(([v, l]) => `<option value="${v}" ${settingsOf(s).scoreboard === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
+      <label>Equipamento<select id="kit">${[['auto', 'Automático (evita choque de cores)'], ['home', 'Principal'], ['away', 'Alternativo']].map(([v, l]) => `<option value="${v}">${l}</option>`).join('')}</select></label>
       <label>Velocidade<select id="spd">${[['lento', 'Lenta'], ['medio', 'Média'], ['rapido', 'Rápida']].map(([v, l]) => `<option value="${v}" ${settingsOf(s).speed === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
     </div>
     <div class="row" style="justify-content:flex-start;margin-top:4px">
@@ -177,6 +179,8 @@ export function renderMatchDay(content: HTMLElement, s: GameState, f: Fixture, o
   content.querySelector('#tac')!.addEventListener('click', goTactics);
   const st = settingsOf(s);
   content.querySelector<HTMLSelectElement>('#sbs')!.addEventListener('change', (e) => (st.scoreboard = (e.target as HTMLSelectElement).value as typeof st.scoreboard));
+  content.querySelector<HTMLSelectElement>('#kit')!.addEventListener('change', (e) => setPendingKit((e.target as HTMLSelectElement).value as KitChoice));
+  setPendingKit('auto');
   content.querySelector<HTMLSelectElement>('#spd')!.addEventListener('change', (e) => (st.speed = (e.target as HTMLSelectElement).value as typeof st.speed));
   content.querySelector('#live')!.addEventListener('click', () => {
     renderLive(content, s, f, (res) => {

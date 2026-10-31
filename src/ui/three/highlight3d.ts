@@ -49,7 +49,7 @@ export class Highlight3D {
   private goalShown = false;
   private scores: [[number, number], [number, number]] | null = null;
 
-  constructor(private host: HTMLElement, opts: ArenaOpts) {
+  constructor(private host: HTMLElement, private opts: ArenaOpts) {
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
     // resolução moderada: o 3D em ecrã inteiro tem de correr fluido em qualquer computador
     this.renderer.setPixelRatio(Math.min(1.25, window.devicePixelRatio));
@@ -156,12 +156,13 @@ export class Highlight3D {
     let a: Actor;
     const inf = this.info[id] ?? { side: 0, number: null, gk: false, look: undefined as unknown as Look };
     const cols: [string, string] = inf.referee ? ['#facc15', '#111111'] : this.colors[inf.side];
-    const shirt = inf.gk ? (inf.side === 0 ? '#0f766e' : '#7c3aed') : cols[0];
-    const shorts = inf.gk ? '#111827' : cols[1];
+    const kd = !inf.gk && !inf.referee ? this.opts.kits?.[inf.side] : undefined;
+    const shirt = inf.gk ? (inf.side === 0 ? '#0f766e' : '#7c3aed') : kd?.shirt ?? cols[0];
+    const shorts = inf.gk ? '#111827' : kd?.shorts ?? cols[1];
     let hsh = 0;
     for (const ch of id) hsh = (hsh * 31 + ch.charCodeAt(0)) >>> 0;
     const look: Look = inf.look ?? { skin: '#d9a77f', hair: '#2e1e14', style: 'curto', beard: 'nenhuma', height: 1.78, boots: ['#111111', '#ffffff'] };
-    const pm = makePlayer({ shirt, shorts, socks: inf.gk ? shorts : cols[0], number: inf.number, gk: inf.gk }, look);
+    const pm = makePlayer({ shirt, shorts, socks: inf.gk ? shorts : kd?.socks ?? cols[0], number: inf.number, gk: inf.gk, pattern: kd?.pattern, alt: kd?.alt }, look);
     this.scene.add(pm.g);
     a = { ...pm, prev: new THREE.Vector3(), heading: 0, phase: (hsh % 10) / 3, speed: 0, init: false };
     return a;

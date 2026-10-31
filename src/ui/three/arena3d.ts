@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 
 import type { ArenaProfile } from '../../core/attendance';
+import type { KitDef } from '../../core/kits';
 import { buildRoof } from './roof3d';
 import { buildUltras } from './ultras3d';
 
@@ -19,6 +20,7 @@ export interface ArenaOpts {
   stage: string; // jornada / eliminatória
   teams: [{ short: string; colors: [string, string]; name?: string }, { short: string; colors: [string, string]; name?: string }];
   ultras?: [boolean, boolean]; // claque organizada de cada equipa (só em jogos grandes)
+  kits?: [KitDef, KitDef]; // equipamentos do jogo
 }
 
 export function canvasTex(w: number, h: number, draw: (c: CanvasRenderingContext2D) => void) {
