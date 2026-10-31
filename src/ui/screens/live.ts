@@ -46,8 +46,8 @@ const KEY_TYPES: Record<Settings['moments3d'], string[]> = {
 
 export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDone: (m: MatchResult) => void) {
   const st = settingsOf(s);
-  const hs = setupFor(s, f.home);
-  const as = setupFor(s, f.away);
+  const hs = setupFor(s, f.home, f.comp);
+  const as = setupFor(s, f.away, f.comp);
   const h = s.clubs.find((c) => c.id === f.home)!;
   const a = s.clubs.find((c) => c.id === f.away)!;
   const mySide = f.home === s.clubId ? 0 : 1;

@@ -2,6 +2,8 @@ import { importanceOf, refereesFor } from './referees';
 // Ciclo de jogo: avançar no calendário, jogar jogos, fim de época
 import { aiTactics } from './coaches';
 import { normalizeTactics } from './tactics';
+import { applyDiscipline, banFor, seasonEndDiscipline } from './discipline';
+import type { CompId } from './season/types';
 import { developPlayer, retires, youthIntake, DevChange } from './development';
 import { simulateMatch } from './engine/match';
 import type { MatchResult, TeamSetup } from './engine/types';
@@ -13,12 +15,15 @@ export function clubName(s: GameState, id: string) {
   return s.clubs.find((c) => c.id === id)?.name ?? id;
 }
 
-export function setupFor(s: GameState, clubId: string): TeamSetup & { coachName: string } {
+/** comp: competição oficial do jogo (os castigados ficam de fora). */
+export function setupFor(s: GameState, clubId: string, comp?: CompId): TeamSetup & { coachName: string } {
   const c = s.clubs.find((x) => x.id === clubId)!;
-  const squad = s.players.filter((p) => p.clubId === c.id);
+  const squad = s.players.filter((p) => p.clubId === c.id && !(comp && banFor(s, p.id, comp) > 0));
   if (c.id === s.clubId) {
     normalizeTactics(s.tactics, squad);
-    return { clubId: c.id, name: c.name, shortName: c.shortName, squad, tactics: s.tactics, coachTactical: 12, coachName: s.manager.name };
+    const ok = (ids: string[]) => ids.filter((id) => squad.some((p) => p.id === id));
+    const tactics = comp ? { ...s.tactics, q1: ok(s.tactics.q1), q2: ok(s.tactics.q2) } : s.tactics;
+    return { clubId: c.id, name: c.name, shortName: c.shortName, squad, tactics, coachTactical: 12, coachName: s.manager.name };
   }
   const coach = s.coaches.find((x) => x.clubId === c.id);
   return {
@@ -55,13 +60,17 @@ export function matchOptions(s: GameState, f: Fixture) {
 }
 
 function playFixture(s: GameState, f: Fixture, given?: MatchResult): MatchResult {
-  const m = given ?? simulateMatch(setupFor(s, f.home), setupFor(s, f.away), matchOptions(s, f));
+  const m = given ?? simulateMatch(setupFor(s, f.home, f.comp), setupFor(s, f.away, f.comp), matchOptions(s, f));
   f.result = {
     score: m.score,
     pens: m.penalties,
     et: m.extraTime,
     scorers: m.events.filter((e) => e.type === 'golo').map((e) => ({ id: e.playerId!, side: e.side!, min: Math.floor(e.t / 60) + 1 })),
   };
+  // castigos (Regulamento Disciplinar da FPF): notícias só do teu clube
+  const mine = (id: string) => s.players.find((p) => p.id === id)?.clubId === s.clubId;
+  const pname = (id: string) => s.players.find((p) => p.id === id)?.name ?? id;
+  for (const t of applyDiscipline(s, f, m, pname)) if (s.players.some((p) => mine(p.id) && t.startsWith(p.name + ':'))) news(s, t);
   // estatísticas da época (só competições oficiais)
   for (const [id, st] of Object.entries(m.players)) {
     if (st.minutes < 30) continue;
@@ -159,6 +168,7 @@ function endSeason(s: GameState): DevChange[] {
   s.leagues[0].season = s.season.label;
   s.date = `${old.year + 1}-07-01`;
   s.pstats = {};
+  seasonEndDiscipline(s);
   news(s, `Começa a época ${s.season.label}.`);
   return changes;
 }

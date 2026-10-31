@@ -59,6 +59,7 @@ export interface PlayerStats {
   tackles: number;
   yellow: number;
   red: boolean;
+  redKind?: 'dogso' | 'brawl' | 'twoYellows'; // motivo da expulsão (castigo)
   rating: number;
 }
 

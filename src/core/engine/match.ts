@@ -294,7 +294,7 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     }
   }
 
-  function card(s: Side, l: Live, red: boolean) {
+  function card(s: Side, l: Live, red: boolean, why: 'dogso' | 'brawl' = 'dogso') {
     const t = teams[s];
     if (!red) {
       l.yellow++;
@@ -309,6 +309,7 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     l.sentOff = true;
     l.onCourt = false;
     pstats[l.p.id].red = true;
+    pstats[l.p.id].redKind = red ? why : 'twoYellows';
     tstats[s].red++;
     log('vermelho', `Cartão vermelho${red ? '' : ' (segundo amarelo)'} para ${l.p.name}. ${sideName(s)} fica em inferioridade`, s, l.p.id);
     if (t.gk === l) {
@@ -492,7 +493,7 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
       const side = (teams[0].court.includes(l) || teams[0].gk === l ? 0 : 1) as Side;
       const main = l === fouler || l === victim;
       const hot = (eff(l, 'agressividade') - 10) * 0.02;
-      if (r() < (main ? 0.07 : 0.03) * REF.harsh * (0.6 + ten) + hot * 0.3) { cards.push({ id: l.p.id, red: true }); card(side, l, true); }
+      if (r() < (main ? 0.07 : 0.03) * REF.harsh * (0.6 + ten) + hot * 0.3) { cards.push({ id: l.p.id, red: true }); card(side, l, true, 'brawl'); }
       else if (r() < (main ? 0.55 : 0.28) * REF.cards + hot) { cards.push({ id: l.p.id, red: l.yellow >= 1 }); card(side, l, false); }
     }
     actions.push({ type: 'brawl', side: s, players: who.map((l) => l.p.id), cards });

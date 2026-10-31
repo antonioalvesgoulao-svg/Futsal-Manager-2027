@@ -1,3 +1,4 @@
+import { banFor } from '../../core/discipline';
 // Ecrãs da época: início, calendário, competições e dia de jogo
 import { clubName, myFixtures, nextMyFixture, playMyMatch, setupFor } from '../../core/game';
 import { leagueTable } from '../../core/season/season';
@@ -151,10 +152,18 @@ function fixturesTable(s: GameState, fx: Fixture[]) {
     .join('')}</tbody></table>`;
 }
 
+// Castigados para este jogo (Regulamento Disciplinar da FPF)
+function banLine(s: GameState, f: Fixture) {
+  const out = s.players.filter((p) => (p.clubId === f.home || p.clubId === f.away) && banFor(s, p.id, f.comp) > 0);
+  if (!out.length) return '';
+  const r = (p: (typeof out)[0]) => (s.discipline?.bans[p.id] ?? []).map((b) => b.reason).join(', ');
+  return `<p class="small" style="margin-top:8px">🟥 Castigados: ${out.map((p) => `<b>${p.name}</b> (${clubName(s, p.clubId)}, ${r(p)})`).join(' · ')}</p>`;
+}
+
 // Dia de jogo: antevisão e resultado
 export function renderMatchDay(content: HTMLElement, s: GameState, f: Fixture, onDone: () => void, goTactics: () => void) {
-  const hs = setupFor(s, f.home);
-  const as = setupFor(s, f.away);
+  const hs = setupFor(s, f.home, f.comp);
+  const as = setupFor(s, f.away, f.comp);
   const h = s.clubs.find((c) => c.id === f.home)!;
   const a = s.clubs.find((c) => c.id === f.away)!;
   content.innerHTML = `
@@ -166,6 +175,7 @@ export function renderMatchDay(content: HTMLElement, s: GameState, f: Fixture, o
       <div class="team" style="--c1:${a.colors[0]}">${a.name}</div>
     </div>
     <div class="coaches small muted" style="margin-top:8px"><span>${hs.coachName} · ${tacticsSummary(hs.tactics)}</span><span>${as.coachName} · ${tacticsSummary(as.tactics)}</span></div>
+    ${banLine(s, f)}
     <div class="form-row" style="margin-top:16px">
       <label>Marcador<select id="sbs">${[['auto', 'Da competição'], ['liga', 'Liga Placard'], ['taca', 'Taça de Portugal'], ['tacaLiga', 'Taça da Liga'], ['supertaca', 'Supertaça']].map(([v, l]) => `<option value="${v}" ${settingsOf(s).scoreboard === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
       <label>Velocidade<select id="spd">${[['lento', 'Lenta'], ['medio', 'Média'], ['rapido', 'Rápida']].map(([v, l]) => `<option value="${v}" ${settingsOf(s).speed === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>

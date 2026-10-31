@@ -1,3 +1,4 @@
+import { totalBan } from '../../core/discipline';
 import { go, h } from '../router';
 import { getState, myClub } from '../../core/state';
 import { advance } from '../../core/game';
@@ -156,7 +157,7 @@ export function homeScreen(root: HTMLElement) {
         <table class="tbl">
           <thead><tr><th>Nº</th><th>Nome</th><th>Posição</th><th>Idade</th><th>Nacionalidade</th><th>Atual</th><th>Potencial</th><th>J</th><th>G</th><th>A</th><th>Nota</th></tr></thead>
           <tbody>${squad
-            .map((p) => `<tr class="click" data-p="${p.id}"><td>${p.number ?? '-'}</td><td>${p.name}</td><td>${p.position}</td><td>${p.age}</td><td>${p.nationality}</td><td>${starsHtml(overall(p.attrs, p.position))}</td><td>${starsHtml(p.potential)}</td>${statCells(s!.pstats[p.id])}</tr>`)
+            .map((p) => `<tr class="click" data-p="${p.id}"><td>${p.number ?? '-'}</td><td>${p.name}${totalBan(s!, p.id) ? ` <span title="Castigado: ${totalBan(s!, p.id)} jogo(s)">🟥${totalBan(s!, p.id)}</span>` : ''}${(s!.discipline?.yellows[p.id] ?? 0) ? ` <span class="muted small" title="Amarelos na Liga">🟨${s!.discipline!.yellows[p.id]}</span>` : ''}</td><td>${p.position}</td><td>${p.age}</td><td>${p.nationality}</td><td>${starsHtml(overall(p.attrs, p.position))}</td><td>${starsHtml(p.potential)}</td>${statCells(s!.pstats[p.id])}</tr>`)
             .join('')}</tbody>
         </table>
         <p class="muted small">Clica num jogador para ver os atributos.</p>`;

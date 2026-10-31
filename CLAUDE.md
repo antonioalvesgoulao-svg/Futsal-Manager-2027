@@ -93,6 +93,7 @@ Real: 6,38 golos/jogo, casa 49,6%, fora 37,0%, empates 13,5%, <3 golos 6,1%. Man
 - Bola nas mãos (GR que agarra, jogador que vai buscar a bola) fica à frente do peito, nunca dentro do corpo (antes desaparecia); agarrada junto ao chão só em voo/espargata
 - Som (1/11 noite): gerado no browser. Cânticos retirados a pedido do António (soavam artificiais); fundo = conversa do público (vozes curtas) + ruído de sala muito baixo (o varrimento antigo soava a ondas do mar); apito com trilo da bolinha (~3,2 kHz, bem audível); "uuuh", "buuu" e golo feitos com vozes de multidão; assobios com os dedos; palmas ocasionais; petardos nos golos dos jogos grandes
 - Som (1/11 noite, pedido do António): SÓ gravações reais em `public/sons/` (créditos em CREDITOS.txt): público (ciclo), golo, apito, três apitos do fim, petardo, assobios, uuuh, palmas, buzina. Nada sintético (sem sons da bola nem chiar; sem cânticos). Repetições: público abafado (passa-baixo 700 Hz, metade do volume). Golo do visitante: o pavilhão cala-se (público a 25% durante 4 s) e ouve-se ao longe a festa dos visitantes. Público = nº real de pessoas (log) × ocupação; apito e buzina fixos. freesound bloqueia este servidor: o António descarrega e envia os ficheiros. Cortar ficheiros m4a: converter primeiro para wav (cortar m4a diretamente com -ss deixou o golo mudo)
+- Castigos (`src/core/discipline.ts`, Regulamento Disciplinar FPF 2025/26, texto colado pelo António): 2 amarelos = 1 jogo (Art. 169, não contam para acumulação); Liga Placard 1 jogo ao 5.º, 9.º, 12.º e depois a cada 3 amarelos (Art. 170; Taças e Supertaça sem acumulação); play-off recomeça a contagem se ainda não chegou ao 5.º (170.4); vermelho direto por impedir golo 1-2 jogos (168.1); vermelho em confronto 1-5 (Art. 154 sem lesão; distribuição estimada, quase sempre 1-2); cumpre na mesma competição, senão noutra da época (40.2), senão na seguinte (40.3); acumulação caduca no fim da época (40.9). Castigados ficam fora da convocatória; aviso no dia de jogo; 🟥/🟨 no plantel
 - Próximos melhoramentos possíveis: mais variantes de jogadas ensaiadas
 
 ## Roteiro
@@ -101,7 +102,7 @@ Real: 6,38 golos/jogo, casa 49,6%, fora 37,0%, empates 13,5%, <3 golos 6,1%. Man
 | 1-6 Base, dados, atributos, motor, táticas, época | Feito |
 | 7 Quadro tático gráfico, bolas paradas, jogo ao vivo 2D, 3D | Feito (a afinar com feedback) |
 | 8 Ligação 3D ao motor | Coberta pela 7 |
-| 9 Plantel e clube: treino, moral, lesões, castigos, contratos | Próxima |
+| 9 Plantel e clube: treino, moral, lesões, castigos, contratos | Em curso (castigos feitos) |
 | 10 Mercado e finanças | |
 | 11 Staff e formação (treinadores com historial real) | |
 | 12 20 ligas europeias + segundas divisões e taças | |
