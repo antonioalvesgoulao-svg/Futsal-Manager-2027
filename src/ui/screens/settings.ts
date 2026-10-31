@@ -12,7 +12,7 @@ export function renderSettings(content: HTMLElement, s: GameState) {
     <h2>Definições</h2>
     <div class="tac-grid">
       <label>Velocidade do jogo ao vivo
-        <select data-k="speed">${opt('speed', 'lento', 'Lenta (15 s por minuto de jogo, cerca de 10 min por jogo)')}${opt('speed', 'medio', 'Média (7,5 s por minuto, cerca de 5 min) · recomendada')}${opt('speed', 'rapido', 'Rápida (3 s por minuto, cerca de 2 min)')}</select>
+        <select data-k="speed">${opt('speed', 'lento', 'Lenta (cerca de 23 min por jogo)')}${opt('speed', 'medio', 'Média (cerca de 11 min por jogo) · recomendada')}${opt('speed', 'rapido', 'Rápida (cerca de 5 min por jogo)')}</select>
       </label>
       <label>Momentos importantes em 3D
         <select data-k="moments3d">${opt('moments3d', 'nenhum', 'Nenhum (só 2D)')}${opt('moments3d', 'golos', 'Só golos')}${opt('moments3d', 'importantes', 'Golos, grandes defesas, bolas aos postes, penáltis, livres de 10 m, expulsões')}${opt('moments3d', 'todos', 'Todas as ocasiões (inclui remates ao lado e cantos)')}</select>

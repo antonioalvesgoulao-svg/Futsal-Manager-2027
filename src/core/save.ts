@@ -1,4 +1,5 @@
 import { GameState, SAVE_VERSION } from './types';
+import porClubs from '../data/por/clubs.json';
 
 const PREFIX = 'fm27_save_';
 export const SLOTS = [1, 2, 3];
@@ -76,6 +77,11 @@ function migrate(s: GameState): GameState {
   if (!s || typeof s !== 'object' || !s.manager) throw new Error('Ficheiro inválido');
   if (s.version > SAVE_VERSION) throw new Error('Save de uma versão mais recente do jogo');
   if (s.version < 6) throw new Error('Save de uma etapa anterior. Começa um jogo novo.');
+  // cores dos clubes sempre atualizadas com os dados (equipamentos reais)
+  for (const c of s.clubs) {
+    const d = (porClubs.clubs as { id: string; colors: string[] }[]).find((x) => x.id === c.id);
+    if (d) c.colors = [d.colors[0], d.colors[1]] as typeof c.colors;
+  }
   s.version = SAVE_VERSION;
   return s;
 }
