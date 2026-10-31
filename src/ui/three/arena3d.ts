@@ -35,23 +35,25 @@ function rng(seed: number) {
 }
 
 // ---------- piso ----------
-function floorTexture(mainLine: string) {
+function floorTexture(mainLine: string, fl: { court: string; surround: string; area?: string; wood?: boolean }) {
   const S = 40; // px por metro
   const pad = 4;
   return canvasTex((W + pad * 2) * S, (H + pad * 2) * S, (c) => {
-    // zona exterior (piso sintético azul) e campo em madeira
-    c.fillStyle = '#2b4a6f';
+    // zona exterior e campo (madeira, azul ou verde, conforme o pavilhão)
+    c.fillStyle = fl.surround;
     c.fillRect(0, 0, c.canvas.width, c.canvas.height);
     const X = (m: number) => (m + W / 2 + pad) * S;
     const Z = (m: number) => (m + H / 2 + pad) * S;
-    c.fillStyle = '#c08a4f';
-    c.fillRect(X(-W / 2 - 1), Z(-H / 2 - 1), (W + 2) * S, (H + 2) * S);
-    for (let i = 0; i < c.canvas.width; i += 9) {
-      c.fillStyle = i % 18 ? 'rgba(0,0,0,0.035)' : 'rgba(255,255,255,0.03)';
-      c.fillRect(i, Z(-H / 2 - 1), 4, (H + 2) * S);
+    c.fillStyle = fl.court;
+    c.fillRect(X(-W / 2), Z(-H / 2), W * S, H * S);
+    if (fl.wood) {
+      for (let i = 0; i < c.canvas.width; i += 9) {
+        c.fillStyle = i % 18 ? 'rgba(0,0,0,0.035)' : 'rgba(255,255,255,0.03)';
+        c.fillRect(i, 0, 4, c.canvas.height);
+      }
     }
-    // áreas pintadas (6 m) ligeiramente mais escuras
-    c.fillStyle = 'rgba(120,60,20,0.18)';
+    // áreas de baliza (6 m): pintadas ou ligeiramente mais escuras
+    c.fillStyle = fl.area ?? 'rgba(0,0,0,0.12)';
     for (const sg of [-1, 1]) {
       c.beginPath();
       c.moveTo(X(sg * W / 2), Z(-7.6));
@@ -261,7 +263,7 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
   const pr = o.profile;
   const r = rng(pr.name.length * 131 + pr.capacity);
   const modern = pr.style === 'moderno';
-  const floor = new THREE.Mesh(new THREE.PlaneGeometry(W + 8, H + 8), new THREE.MeshStandardMaterial({ map: floorTexture('#ffffff'), roughness: 0.45, metalness: 0.05 }));
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(W + 8, H + 8), new THREE.MeshStandardMaterial({ map: floorTexture('#ffffff', pr.floor ?? { court: '#c08a4f', surround: '#c08a4f', wood: true }), roughness: 0.45, metalness: 0.05 }));
   floor.rotation.x = -Math.PI / 2;
   floor.receiveShadow = true;
   scene.add(floor);
@@ -346,9 +348,19 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
     const ry = sd === 'N' ? 0 : sd === 'S' ? Math.PI : sd === 'E' ? -Math.PI / 2 : Math.PI / 2;
     const out = sd === 'N' || sd === 'W' ? -1 : 1; // para fora do campo
     let left = cap;
+    const split = pr.upperTier ? Math.ceil(rows * 0.55) : 99;
     for (let rI = 0; rI < rows; rI++) {
-      const d = front[sd] + rI * rowD;
-      const y = base + rI * rise;
+      // segundo anel: recua e sobe, com camarotes envidraçados no intervalo
+      const up = rI >= split;
+      const d = front[sd] + rI * rowD + (up ? 1.4 : 0);
+      const y = base + rI * rise + (up ? 2.2 : 0);
+      if (rI === split) {
+        const glass = new THREE.Mesh(new THREE.BoxGeometry(sideLen[sd], 1.7, 0.25), new THREE.MeshStandardMaterial({ color: '#9fc3d9', emissive: '#3b5568', roughness: 0.15, metalness: 0.3 }));
+        const gy = base + split * rise + 0.9;
+        if (sd === 'N' || sd === 'S') glass.position.set(0, gy, out * (front[sd] + split * rowD + 0.4));
+        else { glass.rotation.y = Math.PI / 2; glass.position.set(out * (front[sd] + split * rowD + 0.4), gy, 0); }
+        scene.add(glass);
+      }
       // degrau
       const step = new THREE.Mesh(new THREE.BoxGeometry(sideLen[sd], y + 0.01, rowD), concrete);
       step.receiveShadow = true;
@@ -360,12 +372,24 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
       for (let k = 0; k < n; k++) {
         const u = (k - (n - 1) / 2) * seatW;
         const p = sd === 'N' || sd === 'S' ? new THREE.Vector3(u, y, out * (d + 0.3)) : new THREE.Vector3(out * (d + 0.3), y, u);
+        // sem cadeiras: sentados no degrau (cimento) ou de pé junto à grade
+        if (pr.benches) p.y -= 0.3;
+        if (pr.standing) p.y += 0.4;
         seats.push({ p, ry, side: sd, row: rI, u });
       }
     }
     // frente da bancada: LED nos modernos, muro pintado nos outros
     const fl = sideLen[sd];
-    const wallMesh = modern
+    const frontsTex = pr.fronts ? canvasTex(2048, 64, (c) => {
+      c.fillStyle = pr.fronts!.bg; c.fillRect(0, 0, 2048, 64);
+      c.fillStyle = pr.fronts!.fg; c.font = 'bold 34px sans-serif'; c.textBaseline = 'middle';
+      const txt = pr.fronts!.text;
+      for (let k = 0, x = 30; x < 2048; k++) { c.fillText(txt[k % txt.length], x, 34); x += c.measureText(txt[k % txt.length]).width + 90; }
+    }) : null;
+    if (frontsTex) { frontsTex.wrapS = THREE.RepeatWrapping; frontsTex.repeat.set(sideLen[sd] / 28, 1); }
+    const wallMesh = frontsTex
+      ? new THREE.Mesh(new THREE.BoxGeometry(fl, 0.9, 0.12), [concrete, concrete, concrete, concrete, new THREE.MeshStandardMaterial({ map: frontsTex, roughness: 0.6 }), concrete])
+      : modern
       ? new THREE.Mesh(new THREE.BoxGeometry(fl, 0.9, 0.1), [concrete, concrete, concrete, concrete, boardMat(fl, (sd.charCodeAt(0) * 3) % PANELS), concrete])
       : new THREE.Mesh(new THREE.BoxGeometry(fl, base + 0.2, 0.15), new THREE.MeshStandardMaterial({ color: o.teams[0].colors[0], roughness: 0.8 }));
     const fy = modern ? base - 0.35 : (base + 0.2) / 2;
@@ -374,7 +398,7 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
     wallMesh.rotation.y = sd === 'N' ? 0 : sd === 'S' ? Math.PI : sd === 'E' ? -Math.PI / 2 : Math.PI / 2;
     scene.add(wallMesh);
   }
-  const standDepth = maxRows * rowD;
+  const standDepth = maxRows * rowD + (pr.upperTier ? 1.4 : 0);
 
   // cadeiras (instanciadas)
   const pan = new THREE.BoxGeometry(0.44, 0.08, 0.4);
@@ -392,7 +416,7 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
     m4.compose(s.p, q, one);
     seatMesh.setMatrixAt(i, m4);
   });
-  scene.add(seatMesh);
+  if (!pr.benches && !pr.standing) scene.add(seatMesh);
 
   // adeptos: ocupam primeiro os lugares centrais e mais baixos
   const uniforms = { uTime: { value: 0 }, uEx: { value: new THREE.Vector3(0, 0, 0) } };
@@ -445,7 +469,7 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
   // ---- edifício: paredes, janelas, teto e luzes ----
   const hallW = W + 2 * (W / 2 + 4.6 + standDepth + 3 - W / 2);
   const hallD = H + 2 * (H / 2 + 4.2 + standDepth + 3 - H / 2);
-  const hallH = Math.max(11, base + maxRows * rise + 6);
+  const hallH = Math.max(11, base + maxRows * rise + (pr.upperTier ? 2.2 : 0) + 6);
   // chão do pavilhão à volta do campo e das bancadas
   const outer = new THREE.Mesh(new THREE.PlaneGeometry(hallW, hallD), new THREE.MeshStandardMaterial({ color: '#3b4b5f', roughness: 0.9 }));
   outer.rotation.x = -Math.PI / 2;
@@ -476,7 +500,7 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
     }
   }
   // teto
-  const roofMat = new THREE.MeshStandardMaterial({ color: pr.roof === 'laje' ? '#e7e5e4' : '#cbd5e1', roughness: 0.9, side: THREE.DoubleSide });
+  const roofMat = new THREE.MeshStandardMaterial({ color: pr.ceilingDark ? '#17191d' : pr.roof === 'laje' ? '#e7e5e4' : '#cbd5e1', roughness: 0.9, side: THREE.DoubleSide });
   if (pr.roof === 'abóbada') {
     // meia abóbada ao longo do comprimento (eixo do cilindro em x, arco para cima)
     const vault = new THREE.Mesh(new THREE.CylinderGeometry(hallD / 2, hallD / 2, hallW, 32, 1, true, 0, Math.PI), roofMat);
@@ -491,10 +515,11 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
     scene.add(ceil);
   }
   if (pr.roof === 'treliça') {
-    const trussMat = new THREE.MeshStandardMaterial({ color: '#e2e8f0', metalness: 0.4, roughness: 0.5 });
+    const trussMat = new THREE.MeshStandardMaterial({ color: pr.truss ?? '#e2e8f0', metalness: 0.4, roughness: 0.5 });
+    const tw = pr.truss ? 0.26 : 0.18;
     for (let x = -hallW / 2 + 4; x < hallW / 2; x += 6) {
       for (const y of [hallH - 0.3, hallH - 1.6]) {
-        const b = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.18, hallD), trussMat);
+        const b = new THREE.Mesh(new THREE.BoxGeometry(tw, tw, hallD), trussMat);
         b.position.set(x, y, 0);
         scene.add(b);
       }
@@ -506,9 +531,50 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
       }
     }
   }
+  if (pr.ceilingDark) {
+    // grelha de linhas de luz LED no teto escuro
+    const ledMat = new THREE.MeshBasicMaterial({ color: '#ffffff' });
+    for (let x = -24; x <= 24; x += 6) {
+      const l = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.05, 30), ledMat);
+      l.position.set(x, hallH - 0.6, 0);
+      scene.add(l);
+    }
+    for (let z = -15; z <= 15; z += 5) {
+      const l = new THREE.Mesh(new THREE.BoxGeometry(48, 0.05, 0.12), ledMat);
+      l.position.set(0, hallH - 0.6, z);
+      scene.add(l);
+    }
+  }
+  if (pr.skylights) {
+    const skyMat = new THREE.MeshBasicMaterial({ color: '#e8f3ff' });
+    for (let x = -hallW / 2 + 7; x < hallW / 2 - 4; x += 12) {
+      for (const z of [-hallD / 4, hallD / 4]) {
+        const sk = new THREE.Mesh(new THREE.PlaneGeometry(3, 5), skyMat);
+        sk.rotation.x = Math.PI / 2;
+        sk.position.set(x, hallH - 0.02, z);
+        scene.add(sk);
+      }
+    }
+  }
+  if (pr.wallArt) {
+    // desenho de linhas (marcações de campo estilizadas) na parede do topo
+    const art = canvasTex(1024, 512, (c) => {
+      c.fillStyle = pr.wall; c.fillRect(0, 0, 1024, 512);
+      c.lineWidth = 5;
+      for (let k = 0; k < 26; k++) {
+        c.strokeStyle = k % 3 ? '#c8102e' : '#111111';
+        const x = 40 + r() * 900, y = 40 + r() * 400, w = 60 + r() * 220, h = 40 + r() * 160;
+        if (k % 4 === 0) { c.beginPath(); c.arc(x, y, h / 2, 0, Math.PI * 2); c.stroke(); } else c.strokeRect(x, y, w, h);
+      }
+    });
+    const wa = new THREE.Mesh(new THREE.PlaneGeometry(hallD * 0.8, hallH * 0.5), new THREE.MeshStandardMaterial({ map: art }));
+    wa.position.set(hallW / 2 - 0.05, hallH * 0.42, 0);
+    wa.rotation.y = -Math.PI / 2;
+    scene.add(wa);
+  }
   // projetores (painéis luminosos)
   const lampMat = new THREE.MeshBasicMaterial({ color: '#fffbe8' });
-  for (let x = -18; x <= 18; x += 6) {
+  for (let x = -18; x <= 18 && !pr.ceilingDark; x += 6) {
     for (const z of [-7, 0, 7]) {
       const l = new THREE.Mesh(new THREE.BoxGeometry(1.4, 0.15, 0.7), lampMat);
       l.position.set(x, hallH - 2, z);
@@ -538,7 +604,7 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
   };
   drawScore([0, 0]);
   const scoreMat = new THREE.MeshBasicMaterial({ map: scoreTex });
-  if (modern) {
+  if (pr.cube ?? modern) {
     const cube = new THREE.Group();
     const frame = new THREE.Mesh(new THREE.BoxGeometry(4.2, 2.4, 4.2), new THREE.MeshStandardMaterial({ color: '#111827' }));
     cube.add(frame);
