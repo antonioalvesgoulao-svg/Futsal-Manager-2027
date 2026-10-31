@@ -65,6 +65,40 @@ class Sound {
   private match: MatchSound | null = null;
   private chanting = 0; // até quando dura o cântico atual
   private babbleAt = 0;
+  // gravações reais (licença livre, ver public/sons/CREDITOS.txt); se faltarem, usa os sons gerados
+  private buf: Record<string, AudioBuffer> = {};
+  private crowdLoop: { g: GainNode } | null = null;
+  private async loadAll() {
+    const c = this.ctx!;
+    const base = (import.meta as { env?: { BASE_URL?: string } }).env?.BASE_URL ?? '/';
+    await Promise.all(['publico', 'golo', 'apito', 'palmas', 'buzina'].map(async (n) => {
+      try {
+        const r = await fetch(`${base}sons/${n}.mp3`);
+        if (!r.ok) return;
+        this.buf[n] = await c.decodeAudioData(await r.arrayBuffer());
+      } catch { /* sem a gravação: fica o som gerado */ }
+    }));
+    if (this.buf.publico && !this.crowdLoop) {
+      const s = c.createBufferSource(); s.buffer = this.buf.publico; s.loop = true;
+      const g = c.createGain(); g.gain.value = 0;
+      s.connect(g).connect(this.master); s.start(0, Math.random() * this.buf.publico.duration);
+      this.crowdLoop = { g };
+    }
+  }
+  /** Toca uma gravação (opcional: troço de [from, from+dur] s, velocidade). */
+  private sample(n: string, gain: number, from = 0, dur?: number, rate = 1, when = 0) {
+    const b = this.buf[n];
+    if (!b || !this.ctx) return false;
+    const c = this.ctx;
+    const t = c.currentTime + when;
+    const s = c.createBufferSource(); s.buffer = b; s.playbackRate.value = rate;
+    const g = c.createGain();
+    const d = dur ?? b.duration - from;
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(gain, t + 0.015);
+    g.gain.setValueAtTime(gain, t + Math.max(0.02, d / rate - 0.08)); g.gain.linearRampToValueAtTime(0, t + d / rate);
+    s.connect(g).connect(this.master); s.start(t, from, d + 0.05);
+    return true;
+  }
   setMatch(m: MatchSound) { this.match = m; }
 
   setVolume(v: Vol) {
@@ -107,6 +141,7 @@ class Sound {
       this.chantGain.connect(this.master);
     }
     void this.ctx.resume();
+    if (!Object.keys(this.buf).length) void this.loadAll();
     this.running = true;
     this.update(0);
   }
@@ -114,6 +149,7 @@ class Sound {
   stop() {
     this.running = false;
     if (this.ctx) this.crowdGain.gain.setTargetAtTime(0, this.ctx.currentTime, 0.4);
+    if (this.ctx && this.crowdLoop) this.crowdLoop.g.gain.setTargetAtTime(0, this.ctx.currentTime, 0.4);
   }
 
   /** Chamar a cada fotograma: excitação 0 (calmo) a 1 (lance de golo). */
@@ -121,6 +157,14 @@ class Sound {
     if (!this.ctx || !this.running) return;
     const c = this.ctx;
     this.excite += (excite - this.excite) * 0.08;
+    const now0 = c.currentTime;
+    if (this.crowdLoop) {
+      // gravação real do público: volume conforme a ocupação e a excitação do lance
+      this.crowdLoop.g.gain.setTargetAtTime((0.12 + this.fill * 0.35) * (1 + this.excite * 1.6), now0, 0.3);
+      this.crowdGain.gain.setTargetAtTime(0, now0, 0.3);
+      if (now0 > this.chantTimer) { this.chantTimer = now0 + 25 + Math.random() * 30; if (Math.random() < 0.3 + this.fill * 0.4) this.claps(); }
+      return;
+    }
     // fundo de sala muito baixo; o "público" ouve-se sobretudo pelas vozes soltas (conversa, gritos)
     const base = 0.012 + this.fill * 0.03;
     this.crowdGain.gain.setTargetAtTime(base * (1 + this.excite * 3), c.currentTime, 0.25);
@@ -268,12 +312,21 @@ class Sound {
   /** Palmas ritmadas da bancada. */
   claps() {
     if (!this.ok()) return;
+    if (this.sample('palmas', 0.35 + this.fill * 0.4, Math.random() * 2, 6)) return;
     const g = 0.06 + this.fill * 0.1;
     for (let i = 0; i < 12; i++) { const w = i * 0.55 + (i % 4 === 3 ? 0.15 : 0); this.noise(0.09, 1800, 0.8, 'bandpass', g, w, 0.002); }
   }
   /** Apito: dois tons agudos com trilo. kind: curto (falta), longo (início/fim), triplo (fim do jogo). */
   whistle(kind: 'short' | 'long' | 'triple' = 'short') {
     if (!this.ok()) return;
+    if (this.buf.apito) {
+      // apito real: curto = só o golpe inicial; longo = o apito inteiro; fim do jogo = três
+      const W = this.WHISTLE;
+      if (kind === 'short') this.sample('apito', 0.9, W.from, W.short);
+      else if (kind === 'long') this.sample('apito', 0.9, W.from, W.long);
+      else { this.sample('apito', 0.9, W.from, W.short); this.sample('apito', 0.9, W.from, W.short, 1, 0.45); this.sample('apito', 0.9, W.from, W.long, 1, 0.9); }
+      return;
+    }
     const parts = kind === 'triple' ? [[0, 0.35], [0.45, 0.35], [0.9, 1.1]] : kind === 'long' ? [[0, 0.9]] : [[0, 0.32]];
     const c = this.ctx!;
     for (const [w, d] of parts) {
@@ -291,9 +344,12 @@ class Sound {
       this.noise(d, 3200, 2, 'bandpass', 0.05, w, 0.02); // sopro
     }
   }
+  // troço do apito gravado que se usa (ajustado ao ficheiro)
+  private WHISTLE = { from: 0, short: 0.35, long: 0.9 };
   /** Buzina do pavilhão (fim das partes, desconto de tempo). */
   horn(dur = 1.4) {
     if (!this.ok()) return;
+    if (this.sample('buzina', 0.6, 0, Math.min(dur, this.buf.buzina?.duration ?? 0))) return;
     for (const f of [233, 466, 699]) this.tone(f, dur, f === 233 ? 0.09 : 0.04, 'sawtooth');
   }
   /** Toque na bola: passe (fraco) ou remate (forte). */
@@ -331,6 +387,7 @@ class Sound {
   goal(home: boolean) {
     if (!this.ok()) return;
     const g = (0.45 + this.fill * 0.75) * (home ? 1 : 0.55);
+    if (this.sample('golo', Math.min(1, g * 1.1))) { this.net(); if (this.match?.big) this.petards(3 + Math.floor(Math.random() * 4)); setTimeout(() => this.claps(), 4500); return; }
     this.voices(4, 'o', 'a', 190, g * 0.9, 18, 0, 210); // "GOOOLO"
     this.noise(5.5, 900, 0.5, 'bandpass', g * 0.6, 0, 0.12);
     this.noise(4.5, 2400, 0.8, 'bandpass', g * 0.35, 0.1, 0.2);
