@@ -42,15 +42,13 @@
       "name": "SC Braga",
       "shortName": "SCB",
       "city": "Braga",
-      "arena": "Pavilhão Desportivo Universitário de Gualtar",
+      "arena": "AMCO Arena",
       "colors": [
         "#d71920",
         "#ffffff"
       ],
       "reputation": 82,
-      "check": [
-        "arena"
-      ],
+      "check": [],
       "level": 82,
       "wealth": 75
     },

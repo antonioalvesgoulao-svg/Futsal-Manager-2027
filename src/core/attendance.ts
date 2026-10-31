@@ -36,13 +36,14 @@ export interface ArenaProfile {
   banners?: boolean; // grandes painéis publicitários nas paredes
 }
 
-// Lotações: Wikipédia (listas de pavilhões da Liga Placard 2016/17 e 2025/26). Interiores: João Rocha
+// Lotações: Wikipédia (listas de pavilhões da Liga Placard 2016/17 e 2025/26); AMCO Arena (SC Braga,
+// inaugurada em 2023): 1 400, Correio do Minho. Interiores: João Rocha
 // (Wikimedia Commons); Fidelidade, Braga, Fundão, Porto Salvo, Ferreira do Zêzere, Ponte de Sor, Vila do
 // Conde, Venda Nova, Portimão, Famalicão, Torres Vedras, Gondomar e Odivelas (fotos enviadas pelo António). Os restantes são uma aproximação proporcional à lotação.
 export const ARENAS: Record<string, ArenaProfile> = {
   scp: { name: 'Pavilhão João Rocha', capacity: 3000, capacityReal: true, style: 'moderno', sides: ['N', 'S', 'E', 'W'], seat: '#0a7a46', wall: '#45484d', roof: 'laje', windows: false, ceilingDark: true, upperTier: true, cube: true, floor: { court: '#1f63b5', surround: '#d3542c' } },
   slb: { name: 'Pavilhão Fidelidade', capacity: 2400, capacityReal: true, style: 'moderno', sides: ['N', 'S', 'E', 'W'], seat: '#c8102e', wall: '#d6d8db', roof: 'treliça', windows: false, truss: '#c8102e', skylights: true, cube: true, floor: { court: '#d9c39a', surround: '#c8102e', wood: true }, fronts: { bg: '#f5f5f5', fg: '#c8102e', text: ['E PLURIBUS UNUM', 'SPORT LISBOA E BENFICA', 'FIDELIDADE'] } },
-  scb: { name: 'Pavilhão Desportivo Universitário de Gualtar', capacity: 1740, capacityReal: true, style: 'moderno', sides: ['N', 'S'], seat: '#b3122a', wall: '#eef0f2', roof: 'treliça', windows: true, truss: '#8f979f', wallArt: true, cube: false, floor: { court: '#d2a565', surround: '#d2a565', wood: true } },
+  scb: { name: 'AMCO Arena', capacity: 1400, capacityReal: true, style: 'moderno', sides: ['N', 'S'], seat: '#b3122a', wall: '#eef0f2', roof: 'treliça', windows: true, truss: '#8f979f', wallArt: true, cube: false, floor: { court: '#d2a565', surround: '#d2a565', wood: true } },
   fun: { name: 'Pavilhão Municipal do Fundão', capacity: 1056, capacityReal: true, style: 'municipal', sides: ['N', 'E'], seat: '#e4572e', wall: '#eceae4', roof: 'treliça', windows: true, truss: '#c9ced4', floor: { court: '#2f7d4f', surround: '#3a8a5c' } },
   lps: { name: 'Pavilhão dos Leões de Porto Salvo', capacity: 660, capacityReal: true, style: 'clube', sides: ['N', 'S'], seat: '#a8a29e', wall: '#f4f4f2', roof: 'treliça', windows: true, truss: '#b8bec6', benches: true, floor: { court: '#c99a5e', surround: '#c99a5e', wood: true } },
   fzz: { name: 'Pavilhão Municipal de Ferreira do Zêzere', capacity: 600, capacityReal: false, style: 'municipal', sides: ['N'], seat: '#9ca3af', wall: '#f2f0ea', roof: 'treliça', windows: true, truss: '#e3b81f', standing: true, floor: { court: '#c99a5e', surround: '#d9a520', wood: true } },
