@@ -37,7 +37,7 @@ function hexDist(a: string, b: string) {
 
 const KEY_TYPES: Record<Settings['moments3d'], string[]> = {
   nenhum: [],
-  golos: ['golo'],
+  golos: ['golo', 'confronto'],
   importantes: ['golo', 'penalti', 'livre_10m', 'vermelho', 'poste', 'remate_defendido', 'gr_avancado_on', 'confronto'],
   todos: ['golo', 'penalti', 'livre_10m', 'vermelho', 'poste', 'remate_defendido', 'gr_avancado_on', 'remate_fora', 'canto', 'confronto'],
 };
@@ -109,6 +109,7 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
               </div>
             </div>
           </div>
+          <div class="comm" id="comm"><div class="comm-prev" id="commPrev"></div><div class="comm-now" id="commNow">Início do jogo</div></div>
           <div class="live-controls">
             <button class="btn" id="pause">⏸ Pausa</button>
             <div class="seg speed">${(['lento', 'medio', 'rapido'] as const).map((v) => `<button data-speed="${v}" class="${st.speed === v ? 'on' : ''}">${{ lento: 'Lenta', medio: 'Média', rapido: 'Rápida' }[v]}</button>`).join('')}</div>
@@ -220,10 +221,34 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
       ballEl.setAttribute('cx', b.x.toFixed(1));
       ballEl.setAttribute('cy', b.y.toFixed(1));
       ballEl.setAttribute('r', String(3.5 + Math.min(3, fr.ball.z * 2)));
+      fr0Label = fr.label;
       const what = fr.label || (fr.holder ? `Com bola: ${m.names[fr.holder] ?? ''}` : '');
       label = fr.phase ? `${fr.phase}${what ? ' · ' + what : ''}` : what;
     }
-    $('#cap2d').textContent = label;
+    $('#cap2d').textContent = '';
+    // comentário em tempo real: só os lances importantes da jogada (remates, defesas, cantos, livres…)
+    const lb = fr0Label;
+    if (lb && lb !== lastLabel && IMPORTANT.test(lb)) comment(lb);
+    lastLabel = lb;
+    void label;
+  }
+
+  // ---- comentário ao estilo FM: barra grande por baixo da quadra, só o essencial ----
+  const IMPORTANT = /^(Remate|GOLO|Voo|Defesa|Ao poste|Canto para|Livre|Penálti|Barreira|Cruzamento|Contra-ataque|.* isolado|.* agarra a bola|.* defende|.* fecha o ângulo|.* sai ao encontro|.* vai à recarga|.* desarma e a bola sai|Pontapé de linha lateral)/;
+  let lastLabel = '';
+  let fr0Label = '';
+  let commTimer = 0;
+  function comment(text: string, kind = '') {
+    const now = performance.now();
+    const el = $('#commNow');
+    if (el.textContent === text) return;
+    // não troca mais depressa do que ~1,2 s, a não ser num golo/cartão
+    if (now - commTimer < 1200 && !kind) return;
+    commTimer = now;
+    $('#commPrev').textContent = el.textContent ?? '';
+    el.textContent = text;
+    el.className = `comm-now ${kind}`;
+    el.style.animation = 'none'; void el.offsetWidth; el.style.animation = '';
   }
 
   function drawScoreboard() {
@@ -305,8 +330,10 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
     const types = KEY_TYPES[st.moments3d];
     const ev = p.events.find((e) => types.includes(e.type));
     if (!ev) return null;
-    if (ev.type !== 'golo' && ev.t - last3d < 60 && !p.events.some((e) => e.type === 'golo')) return null;
-    return p.events.find((e) => e.type === 'golo') ?? ev;
+    // golos e confrontos são sempre mostrados (o 3D começa no lance que os provoca)
+    const must = p.events.find((e) => e.type === 'golo' || e.type === 'confronto');
+    if (!must && ev.t - last3d < 60) return null;
+    return p.events.find((e) => e.type === 'golo') ?? must ?? ev;
   }
 
   const benchIds = (): [string[], string[]] => [0, 1].map((sd) => snap.teams[sd].bench.filter((p) => !p.sentOff).map((p) => p.id)) as [string[], string[]];
@@ -447,7 +474,7 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
     if (!more || !poss || !choreo) return false;
     const counter = poss.counter || poss.actions.some((x) => x.kind === 'counter');
     // golo na posse seguinte: tem sempre de ser visto em 3D (continua sem cortes); o resto segue no 2D
-    const goalNext = poss.events.some((e) => e.type === 'golo') && st.moments3d !== 'nenhum';
+    const goalNext = poss.events.some((e) => e.type === 'golo' || e.type === 'confronto') && st.moments3d !== 'nenhum';
     if (!counter && !goalNext) return false;
     chain++;
     shown3d = choreo;
@@ -481,6 +508,9 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
       if (poss && playing && e.t >= poss.end - 0.01) break;
       revealed++;
       feed.push(e);
+      // comentário: golos, cartões, faltas importantes, confrontos, descontos de tempo, 5x4, fim das partes
+      const COMM: Record<string, string> = { golo: 'goal', amarelo: 'card', vermelho: 'red', confronto: 'red', livre_10m: '', penalti: '', time_out: '', gr_avancado_on: '', fim_parte: '', prolongamento: '', poste: '', canto: '', remate_defendido: '', remate_fora: '', remate_bloqueado: '' };
+      if (e.type in COMM || (e.type === 'falta' && /acumulada/.test(e.text))) comment(e.text.replace(/^\d+:\d+ /, ''), COMM[e.type] ?? 'card');
       if (e.type === 'golo') {
         shownScore = [e.score[0], e.score[1]];
         goalBar(e);
