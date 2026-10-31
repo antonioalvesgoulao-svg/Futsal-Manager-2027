@@ -326,7 +326,11 @@ export class Choreo {
       const spot = { x: clamp(sb.x, -19, 19), y: Math.sign(sb.y || 1) * 10 };
       holder = this.attOut.reduce((x, y) => (dist(this.P(y, t0), spot) < dist(this.P(x, t0), spot) ? y : x));
       const mates = this.attOut.filter((x) => x !== holder);
-      const mate = mates.length ? mates.reduce((x, y) => (dist(this.P(y, t0), spot) < dist(this.P(x, t0), spot) ? y : x)) : holder;
+      // variantes: apoio curto ao lado, passe atrás para o fixo (que entra de frente), ou bloqueio e desmarcação em diagonal
+      const variant = r() < 0.45 ? 'curto' : r() < 0.6 ? 'atras' : 'bloqueio';
+      const near = mates.length ? mates.reduce((x, y) => (dist(this.P(y, t0), spot) < dist(this.P(x, t0), spot) ? y : x)) : holder;
+      const back = mates.length ? mates.reduce((x, y) => (this.U(this.P(y, t0)) < this.U(this.P(x, t0)) ? y : x)) : holder;
+      const mate = variant === 'atras' ? back : near;
       const sgn = Math.sign(spot.y);
       // a bola está onde saiu: quem repõe vai buscá-la, pousa-a sobre a linha e bate
       this.balls.push({ k: 'still', t0, at: { x: sb.x, y: sb.y, z: 0.11 } });
@@ -334,7 +338,15 @@ export class Choreo {
       this.balls.push({ k: 'hands', t0: -1.5, id: holder, z: 0.95 });
       this.key(holder, -0.9, { x: spot.x - this.dirA * 0.3, y: spot.y + sgn * 0.2 }, true);
       this.balls.push({ k: 'still', t0: -0.85, at: { x: spot.x, y: spot.y, z: 0.11 } });
-      const recv = { x: clamp(spot.x - this.dirA * 2.5, -17, 17), y: spot.y - sgn * 3.8 };
+      const recv = variant === 'atras' ? { x: clamp(spot.x - this.dirA * 6, -17, 17), y: spot.y - sgn * 5.5 }
+        : variant === 'bloqueio' ? { x: clamp(spot.x + this.dirA * 3.5, -17, 17), y: spot.y - sgn * 4.5 }
+          : { x: clamp(spot.x - this.dirA * 2.5, -17, 17), y: spot.y - sgn * 3.8 };
+      if (variant === 'bloqueio') {
+        // um colega bloqueia o marcador de quem vai receber, que sai em diagonal para a frente
+        const scr = mates.find((x) => x !== mate);
+        if (scr) { this.key(scr, -0.6, { x: recv.x - this.dirA * 2.2, y: recv.y + sgn * 1.2 }, true); this.act(scr, 'screen', -0.9, 0.3, { face: mate }); }
+        this.key(mate, -1.0, { x: recv.x - this.dirA * 3, y: recv.y + sgn * 1.5 }, true);
+      }
       this.key(mate, -0.1, recv, true);
       this.act(holder, 'pass', -0.35, 0.05, { face: mate });
       this.balls.push({ k: 'pass', t0: -0.1, t1: 0.45, from: holder, to: mate, lift: 0.05 });
@@ -612,7 +624,14 @@ export class Choreo {
       if (sys === '2-2' && hs !== undefined) opts.push(['cruzamento', 1.4]);
       if (len >= 1.6) opts.push(['bloqueio', sys === '4-0' ? 0.9 : 0.7], ['drible', tA.tempo === 'rapido' ? 0.6 : 0.4]);
       if (sys === '5x4') opts.push(['inversao', 2.5]);
+      // falso pivô: o pivô sai da área para receber e o ala ataca o espaço nas costas
+      if ((sys === '3-1' || sys === '1-2-1') && hs !== 3 && pivo && len >= 1.5) opts.push(['falsoPivo', 1.1]);
     }
+    // saída de pressão: contra pressão alta, no próprio meio-campo, a bola volta ao GR e sai pelo lado contrário
+    const oppPress = this.tactics[1 - this.att].pressure;
+    // ataque à zona: o ala do lado contrário faz o movimento em "U" por trás de quem tem a bola e aparece do lado da bola
+    if (len >= 1.6 && others.length >= 2) opts.push(['emU', this.tactics[1 - this.att].marking === 'zona' ? 0.9 : 0.35]);
+    if (this.gkA && this.U(hp) < 17 && len >= 1.5) opts.push(['saidaGR', oppPress === 'alta' ? 3 : oppPress === 'media' ? 0.8 : 0.2]);
     let pick = r() * opts.reduce((a, o) => a + o[1], 0);
     let mv = opts[0][0];
     for (const [k, w] of opts) { pick -= w; if (pick <= 0) { mv = k; break; } }
@@ -621,7 +640,9 @@ export class Choreo {
       const fs = this.slot.get(forced);
       if (mv === 'pivo' && fs !== 3) mv = 'circ';
       if ((mv === 'paralela' || mv === 'diagonal') && (fs !== 1 && fs !== 2)) mv = 'circ';
-      if (mv === 'bloqueio' || mv === 'drible') mv = 'circ';
+      if (mv === 'bloqueio' || mv === 'drible' || mv === 'saidaGR') mv = 'circ';
+      if (mv === 'falsoPivo' && fs !== 3) mv = 'circ';
+      if (mv === 'emU') mv = 'circ';
       if (mv === 'passaCorta' && fs !== (hs === 0 ? 1 : 2)) mv = 'circ';
     }
 
@@ -730,6 +751,75 @@ export class Choreo {
       this.label(tEnd - 0.5, 'Inversão do centro do jogo');
       this.attKeysAt(tEnd, new Set([holder, recv]), -hp.y * 0.3);
       return recv;
+    }
+
+    if (mv === 'saidaGR' && this.gkA) {
+      // passe atrás para o GR (que se oferece fora da baliza) e saída pelo lado contrário, onde um colega
+      // baixa para receber longe da pressão
+      const gk = this.gkA;
+      const s = sideOfBall;
+      const gSpot = this.A(3.2, clamp(hp.y * 0.3, -2, 2));
+      const t1 = T + len * 0.45;
+      this.key(gk, t1, gSpot);
+      this.act(holder, 'pass', t1 - 0.45, t1 - 0.1, { face: gk });
+      this.pass(holder, gk, t1 - 0.3, t1, 0.03);
+      const recv = others.reduce((a, b) => (this.P(b, T).y * -s > this.P(a, T).y * -s ? b : a));
+      const rSpot = this.A(clamp(this.U(this.P(recv, T)) - 3, 6, 14), -s * 7.6);
+      this.key(recv, tEnd, rSpot);
+      this.act(recv, 'run', t1 - 0.4, tEnd, { to: rSpot });
+      this.act(gk, 'pass', tEnd - 0.75, tEnd - 0.4, { face: recv });
+      this.pass(gk, recv, tEnd - 0.6, tEnd, 0.12);
+      // quem passou atrás abre para dar linha
+      this.key(holder, tEnd, this.A(clamp(this.U(hp) + 2, 6, 16), s * 7));
+      this.label(t1 - 0.3, `Saída de pressão pelo guarda-redes`);
+      this.attKeysAt(tEnd, new Set([holder, recv, gk]), -s * 4);
+      this.key(gk, tEnd + 1.2, this.A(1.2, 0));
+      return recv;
+    }
+
+    if (mv === 'emU') {
+      const s = sideOfBall;
+      const recv = others.reduce((a, b) => (this.P(b, T).y * -s > this.P(a, T).y * -s ? b : a));
+      const behind = this.A(clamp(this.U(hp) - 2.2, 5, 30), hp.y * 0.2);
+      const spot = this.A(clamp(this.U(hp) + 2.5, 8, 33), clamp(hp.y + s * 2.5, -8.5, 8.5));
+      this.key(recv, T + len * 0.55, behind);
+      this.key(recv, tEnd, spot);
+      this.act(recv, 'run', T, tEnd, { to: spot });
+      carry(this.A(this.U(hp) + 0.6, hp.y - s * 0.8));
+      passTo(recv, spot);
+      this.label(T + len * 0.5, `Movimento em U de ${this.nm(recv)} por trás de ${this.nm(holder)}`);
+      const rs = this.slot.get(recv);
+      if (rs !== undefined) { this.slot.set(recv, hs); this.slot.set(holder, rs); }
+      this.attKeysAt(tEnd, new Set([holder, recv]), spot.y);
+      this.key(holder, tEnd + 0.9, this.slotPos(this.slot.get(holder) ?? hs, tEnd + 0.9, spot.y, 1));
+      return recv;
+    }
+
+    if (mv === 'falsoPivo' && pivo) {
+      // o pivô sai ao encontro da bola (arrasta o fixo adversário) e o ala do lado contrário ataca as costas
+      const s = sideOfBall;
+      const come = this.A(clamp(this.U(hp) + 5.5, 18, 28), clamp(hp.y * 0.5, -4, 4));
+      this.key(pivo, tEnd, come);
+      this.act(pivo, 'run', T, tEnd, { to: come });
+      passTo(pivo, come);
+      const runner = others.find((x) => x !== pivo && (this.P(x, T).y >= 0 ? 1 : -1) !== s) ?? others.find((x) => x !== pivo);
+      if (runner) {
+        const deep = this.A(34.5, -s * 1.5);
+        this.key(runner, tEnd + 0.9, deep);
+        this.act(runner, 'run', tEnd - 0.5, tEnd + 0.9, { to: deep });
+        this.slot.set(runner, 3);
+      }
+      this.slot.set(pivo, this.slot.get(runner ?? '') ?? hs);
+      this.label(tEnd - 0.4, `Falso pivô: ${this.nm(pivo)} sai para receber${runner ? `, ${this.nm(runner)} ataca as costas` : ''}`);
+      // o fixo adversário acompanha o pivô e abre o espaço
+      this.later.push(() => {
+        const m = this.defOut.reduce((a, b) => (dist(this.P(b, T), this.P(pivo, T)) < dist(this.P(a, T), this.P(pivo, T)) ? b : a), this.defOut[0]);
+        if (!m) return;
+        this.fix(m, T + 0.2, tEnd + 0.6);
+        this.key(m, tEnd + 0.1, { x: come.x + this.dirA * 1.1, y: come.y });
+      });
+      this.attKeysAt(tEnd, new Set([holder, pivo, ...(runner ? [runner] : [])]), come.y);
+      return pivo;
     }
 
     if (mv === 'bloqueio') {
