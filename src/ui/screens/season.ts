@@ -1,6 +1,7 @@
 // Ecrãs da época: início, calendário, competições e dia de jogo
 import { clubName, myFixtures, nextMyFixture, playMyMatch, setupFor } from '../../core/game';
 import { leagueTable } from '../../core/season/season';
+import { arenaOf } from '../../core/attendance';
 import { COMP_NAMES, CompId, Fixture } from '../../core/season/types';
 import type { GameState } from '../../core/types';
 import { resultHtml } from './friendly';
@@ -155,7 +156,7 @@ export function renderMatchDay(content: HTMLElement, s: GameState, f: Fixture, o
   const a = s.clubs.find((c) => c.id === f.away)!;
   content.innerHTML = `
     <h2>Dia de jogo</h2>
-    <p class="muted">${COMP_NAMES[f.comp]} · ${f.stage} · ${f.neutral ? 'Campo neutro' : h.arena}${f.knockout ? ' · Jogo a eliminar' : ''}</p>
+    <p class="muted">${COMP_NAMES[f.comp]} · ${f.stage} · ${f.neutral ? `${arenaOf(s, f).name} (campo neutro)` : h.arena}${f.knockout ? ' · Jogo a eliminar' : ''}</p>
     <div class="scoreboard">
       <div class="team" style="--c1:${h.colors[0]}">${h.name}</div>
       <div class="score">vs</div>

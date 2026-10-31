@@ -36,11 +36,23 @@ export const ARENAS: Record<string, ArenaProfile> = {
   tor: { name: 'Pavilhão Física de Torres Vedras', capacity: 1000, capacityReal: true, style: 'municipal', sides: ['N', 'S'], seat: '#1d4ed8', wall: '#ebe6dd', roof: 'treliça', windows: true },
 };
 
-/** Campo neutro (finais, Supertaça): pavilhão multiusos genérico. */
-export const NEUTRAL: ArenaProfile = { name: 'Pavilhão Multiusos (campo neutro)', capacity: 2500, capacityReal: false, style: 'moderno', sides: ['N', 'S', 'E', 'W'], seat: '#475569', wall: '#dfe3e8', roof: 'treliça', windows: false };
+/** Campos neutros (final eight, finais, Supertaça), indicados pelo António. Gondomar: 3 005 lugares
+ *  sentados com a bancada retrátil (apresentação da Câmara de Gondomar, 2018); Vila do Conde: 800
+ *  (Wikipédia); Odivelas: lotação não encontrada (estimativa). */
+export const NEUTRALS: ArenaProfile[] = [
+  { name: 'Pavilhão Multiusos de Gondomar', capacity: 3005, capacityReal: true, style: 'moderno', sides: ['N', 'S', 'E', 'W'], seat: '#1e3a8a', wall: '#dde3ea', roof: 'treliça', windows: false },
+  { name: 'Pavilhão Multiusos de Odivelas', capacity: 2000, capacityReal: false, style: 'moderno', sides: ['N', 'S', 'E'], seat: '#dc2626', wall: '#e3e6ea', roof: 'treliça', windows: false },
+  { name: 'Pavilhão Municipal de Desportos de Vila do Conde', capacity: 800, capacityReal: true, style: 'municipal', sides: ['N', 'S'], seat: '#16a34a', wall: '#e9e5dc', roof: 'abóbada', windows: true },
+];
+
+/** Cada competição joga num dos campos neutros, rodando de época para época. */
+export function neutralFor(comp: string, year: number): ArenaProfile {
+  const k = { tacaLiga: 1, taca: 0, supertaca: 2, playoff: 0, liga: 0 }[comp] ?? 0;
+  return NEUTRALS[(k + year) % NEUTRALS.length];
+}
 
 export function arenaOf(s: GameState, f: Fixture): ArenaProfile {
-  if (f.neutral) return NEUTRAL;
+  if (f.neutral) return neutralFor(f.comp, s.season.year);
   const c = s.clubs.find((x) => x.id === f.home);
   return ARENAS[f.home] ?? { ...ARENAS.fun, name: c?.arena ?? 'Pavilhão', capacity: 800, capacityReal: false };
 }

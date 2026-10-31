@@ -60,9 +60,9 @@ Real: 6,38 golos/jogo, casa 49,6%, fora 37,0%, empates 13,5%, <3 golos 6,1%. Man
   - defesa: pressão conforme a linha escolhida, cobertura/ajuda, individual mantém pares, zona troca marcações; 5x4 deixa livre o mais longe da bola
   - bolas paradas organizadas: cantos (4 jogadas do motor), livres com barreira a 5 m (3 jogadas), 10 m e penálti com todos atrás da linha da bola, festejos, reposições do GR, pontapé de saída
   - ações por jogador (`Frame.acts`): passe, remate, mergulho, defesa, carrinho, finta, bloqueio, proteção do pivô, bloqueio de remate, queda, festejo. 3D com corpo articulado; 2D com setas de desmarcação e marcas de ação
-  - pavilhões e adeptos (pedido de 31/10): lotações da Wikipédia (8 reais, 4 estimadas: Ferreira do Zêzere, Venda Nova, Famalicão, campo neutro); disposição das bancadas é aproximação (sem fotos do interior). Assistência = procura por reputação × adversário × classificação/forma × importância × acaso, limitada à lotação (calibração estimada)
+  - pavilhões e adeptos (pedido de 31/10): lotações da Wikipédia (8 reais, 3 estimadas: Ferreira do Zêzere, Venda Nova, Famalicão); campos neutros indicados pelo António: Gondomar (3 005, Câmara), Odivelas (2 000 estimada), Vila do Conde (800), rodam por competição e época; disposição das bancadas é aproximação (sem fotos do interior). Assistência = procura por reputação × adversário × classificação/forma × importância × acaso, limitada à lotação (calibração estimada)
   - ritmo: lenta 2,2x (lances decisivos 1,3x) ≈ 23 min, média 4,5x (2x) ≈ 11 min, rápida 9x ≈ 5 min
-- Não consigo ver vídeos do YouTube; posso analisar gravações de ecrã que o António envie (extraio fotogramas)
+- Não consigo ver vídeos do YouTube nem imagens da internet (rede do ambiente bloqueia sites de imagens); posso analisar fotos, capturas e gravações que o António envie
 - Próximos melhoramentos possíveis: pontapés de linha lateral, mais variantes de jogadas ensaiadas, ressaltos/recargas
 
 ## Roteiro
