@@ -51,31 +51,36 @@ export function scoreboardHtml(d: ScoreboardData) {
 export interface LineupData {
   style: Exclude<CompId, 'playoff'>;
   team: { name: string; short: string; color: string };
-  players: { number: number | null; name: string; pos: string }[]; // os cinco iniciais (GR primeiro)
+  players: { number: number | null; name: string; pos: string }[]; // cinco iniciais (GR primeiro) ou suplentes
+  title: string;
+  compact?: boolean;
   coach: string;
   system: string;
-  stage: string;
 }
 
-/** Gráfico dos cinco iniciais, com o mesmo desenho do marcador da competição. */
+/** Gráfico dos cinco iniciais (ou dos suplentes), com o mesmo desenho do marcador da competição. */
 export function lineupHtml(d: LineupData) {
   return `
-  <div class="lu sb-${d.style}">
+  <div class="lu sb-${d.style} ${d.compact ? 'compact' : ''}">
     <div class="sb-row lu-head">
       <div class="sb-team home"><span class="chip" style="background:${d.team.color}"></span><span class="nm">${d.team.name}</span></div>
       <div class="sb-mid">${EMBLEM[d.style]}<span class="cn">${SCOREBOARD_NAMES[d.style]}</span></div>
     </div>
-    <div class="sb-sub lu-title"><span>Cinco inicial</span><span class="sb-period">${d.system}</span></div>
+    <div class="sb-sub lu-title"><span>${d.title}</span><span class="sb-period">${d.system}</span></div>
     ${d.players.map((p, i) => `<div class="lu-row" style="animation-delay:${0.15 + i * 0.12}s"><span class="sb-score lu-num">${p.number ?? ''}</span><span class="lu-name">${p.name}</span><span class="lu-pos">${p.pos}</span></div>`).join('')}
-    <div class="sb-sub lu-foot"><span>Treinador: <b>${d.coach}</b></span><span>${d.stage}</span></div>
+    <div class="sb-sub lu-foot"><span>Treinador: <b>${d.coach}</b></span></div>
   </div>`;
 }
 
 export const broadcastCss = `
 /* Cinco inicial (mesmas cores do marcador da competição) */
-.lu { display: flex; flex-direction: column; width: 420px; font-family: 'Segoe UI', system-ui, sans-serif; filter: drop-shadow(0 6px 14px rgba(0,0,0,.5)); animation: luIn .45s ease-out both; }
-.lu .lu-head { grid-template-columns: 1fr 132px; height: 48px; }
-.lu .lu-head .nm { font-size: 18px; }
+.lu { display: flex; flex-direction: column; width: min(420px, calc(50% - 8px)); font-family: 'Segoe UI', system-ui, sans-serif; filter: drop-shadow(0 6px 14px rgba(0,0,0,.5)); animation: luIn .45s ease-out both; }
+.lu .lu-head { grid-template-columns: 1fr 96px; height: 44px; }
+.lu .lu-head .nm { font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lu.compact .lu-row { height: 25px; }
+.lu.compact .lu-row .lu-num { font-size: 15px; }
+.lu.compact .lu-row .lu-name { font-size: 13px; }
+.lu-row .lu-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .lu .lu-title, .lu .lu-foot { justify-content: space-between; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; height: 28px; padding: 0 12px; }
 .lu .lu-foot { font-weight: 600; text-transform: none; letter-spacing: 0; }
 .lu-row { display: grid; grid-template-columns: 52px 1fr 54px; align-items: center; height: 36px; border-bottom: 1px solid rgba(255,255,255,.08); animation: luRow .35s ease-out both; }

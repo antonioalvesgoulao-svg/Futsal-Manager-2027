@@ -30,7 +30,7 @@ O António não programa: o Claude escreve o código, testa e envia para o GitHu
 | `src/core/moneyball.ts` | Nível do jogador a partir do historial: nível da equipa, força da liga (golos em ligas fracas descontados), jogos, produtividade |
 | `src/core/engine/match.ts` | Motor posse a posse (`createMatch` passo a passo; `simulateMatch` de uma vez). Regista `actions` por posse (remate, assistência, roubo, falta) |
 | `src/core/visual/choreo.ts` | Coreografia de cada posse, **comum ao 2D e 3D**: bola de pé em pé, 4x4 tático, bolas paradas |
-| `src/core/visual/intro.ts` | Cerimónia 3D antes do jogo: árbitros e equipas saem do túnel, alinham no centro; depois o gráfico dos 5 iniciais (`lineupHtml` em `broadcast.ts`, estilo do marcador) |
+| `src/core/visual/intro.ts` | Cerimónia 3D antes do jogo: árbitros e equipas saem do túnel, alinham no centro; depois os 5 iniciais das duas equipas lado a lado (10 s) e os suplentes (5 s); clique no ecrã passa ao momento seguinte (`lineupHtml` em `broadcast.ts`, estilo do marcador) |
 | `src/core/tactics.ts` | Sistemas, pressão, ritmo, marcação, GR avançado, rotação, quintetos, bolas paradas |
 | `src/core/season/` | Calendário e competições portuguesas |
 | `src/core/game.ts` | Ciclo de jogo (avançar, jogar, fim de época) |

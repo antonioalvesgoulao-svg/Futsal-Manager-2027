@@ -272,12 +272,15 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
 
   // ---- Antes do jogo: entrada das equipas, alinhamento e cinco iniciais (3D) ----
   let introTimers: ReturnType<typeof setTimeout>[] = [];
+  let introStage = -1; // 0 entrada, 1 cinco iniciais, 2 suplentes
+  let introStep: (step: number) => void = () => {};
   async function openIntro() {
     in3d = true;
     $('#hl').hidden = false;
     $('#hlcap').textContent = `${h.name} - ${a.name} · ${crowd.arena.name}`;
     await ensure3d();
     if (!hl) return;
+    introStage = 0;
     const lineup = (sd: 0 | 1) => {
       const t = snap.teams[sd];
       return [t.gk, ...t.court, ...t.bench].filter((p): p is NonNullable<typeof p> => !!p).map((p) => p.id);
@@ -287,25 +290,39 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
     const intro = new IntroScene([lineup(0), lineup(1)], refs);
     // gráfico dos cinco iniciais de cada equipa, no estilo do marcador
     const pos = (id: string, sd: 0 | 1) => ([hs, as][sd].squad.find((p) => p.id === id)?.position ?? '');
-    const card = (sd: 0 | 1) => {
+    const card = (sd: 0 | 1, subs: boolean) => {
       const t = snap.teams[sd];
       const club = sd ? a : h;
       const setup = sd ? as : hs;
+      const list = subs ? t.bench : [t.gk, ...t.court];
       return lineupHtml({
         style: style as 'liga',
         team: { name: club.name, short: club.shortName, color: kit[sd][0] },
-        players: [t.gk, ...t.court].filter((p): p is NonNullable<typeof p> => !!p).map((p) => ({ number: p.number, name: p.name, pos: pos(p.id, sd) })),
+        title: subs ? 'Suplentes' : 'Cinco inicial',
+        compact: subs,
+        players: list.filter((p): p is NonNullable<typeof p> => !!p).map((p) => ({ number: p.number, name: p.name, pos: pos(p.id, sd) })),
         coach: setup.coachName,
         system: setup.tactics.system,
-        stage: `${COMP_NAMES[f.comp]} · ${f.stage}`,
       });
     };
-    hl.onEnd = () => {
-      if (introDone) return;
+    // momentos da apresentação: entrada -> cinco iniciais (10 s) -> suplentes (5 s) -> jogo;
+    // um clique no ecrã passa ao momento seguinte
+    introStep = (step: number) => {
+      for (const t of introTimers) clearTimeout(t);
+      introTimers = [];
       const box = $('#hllu');
-      box.innerHTML = card(0);
-      introTimers.push(setTimeout(() => (box.innerHTML = card(1)), 5000));
-      introTimers.push(setTimeout(closeIntro, 10000));
+      introStage = step;
+      if (step === 1) {
+        hl?.seek(intro.total);
+        box.innerHTML = card(0, false) + card(1, false);
+        introTimers.push(setTimeout(() => introStep(2), 10000));
+      } else if (step === 2) {
+        box.innerHTML = card(0, true) + card(1, true);
+        introTimers.push(setTimeout(() => introStep(3), 5000));
+      } else closeIntro();
+    };
+    hl.onEnd = () => {
+      if (!introDone && introStage === 0) introStep(1);
     };
     hl.play(intro, info, kit, 0, intro.total, [[0, 0], [0, 0]]);
   }
@@ -313,6 +330,7 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
   let introDone = false;
   function closeIntro() {
     introDone = true;
+    introStage = -1;
     if (hl) hl.onEnd = null;
     for (const t of introTimers) clearTimeout(t);
     introTimers = [];
@@ -487,7 +505,12 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
     if (autoClose) { clearTimeout(autoClose); autoClose = null; }
     hl?.replay(0.6);
   });
-  $('#hlc').addEventListener('click', () => (introTimers.length || $('#hllu').innerHTML || !choreo ? closeIntro() : close3d()));
+  $('#hlc').addEventListener('click', () => (introStage >= 0 ? closeIntro() : close3d()));
+  // clique no ecrã 3D durante a apresentação: passa ao momento seguinte
+  $('#hl').addEventListener('click', (e) => {
+    if (introStage < 0 || (e.target as HTMLElement).closest('button')) return;
+    introStep(introStage + 1);
+  });
   $('#skip').addEventListener('click', () => {
     if (in3d) close3d();
     while (m.step());
