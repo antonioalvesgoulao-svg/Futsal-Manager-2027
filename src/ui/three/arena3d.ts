@@ -627,6 +627,7 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
     ultras.push({ sd, u: buildUltras(scene, { side, out: side === 'N' || side === 'W' ? -1 : 1, front: front0[side], rows: rowsBySide[side] ?? 6, rowD, rise, base, width: side === 'E' || side === 'W' ? H + 4 : W + 8, colors: t.colors, name: t.name ?? t.short }, 99 + sd) });
   }
   let ceremony = false;
+  let ceremonyStart = 0;
   const flareUntil = [-1, -1];
 
   return {
@@ -638,9 +639,12 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
       const c = ceremony ? 0.7 : 0;
       uniforms.uEx.value.set(Math.max(base0, ex[0], c), Math.max(base0, ex[1], c), Math.max(base0 * 0.5, Math.max(ex[0], ex[1]) * 0.3));
       led.update(now);
-      for (const x of ultras) x.u.update(now, ceremony, ceremony || now < flareUntil[x.sd]);
+      // na entrada: primeiro o tifo, depois (quando o baixam) acendem-se as tochas
+      const ce = ceremony ? now - ceremonyStart : -1;
+      for (const x of ultras) x.u.update(now, ce >= 0 && ce < 12, ce >= 9 || now < flareUntil[x.sd]);
     },
     setCeremony(on: boolean) {
+      if (on && !ceremony) ceremonyStart = uniforms.uTime.value;
       ceremony = on;
     },
     setScore(s: [number, number]) {
