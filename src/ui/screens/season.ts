@@ -2,7 +2,7 @@
 import { clubName, myFixtures, nextMyFixture, playMyMatch, setupFor } from '../../core/game';
 import { leagueTable } from '../../core/season/season';
 import { ARENAS, arenaOf } from '../../core/attendance';
-import { refereesFor, TEMPER_LABEL } from '../../core/referees';
+import { refBadgeHtml, refereesFor } from '../../core/referees';
 import { COMP_NAMES, CompId, Fixture } from '../../core/season/types';
 import type { GameState } from '../../core/types';
 import { resultHtml } from './friendly';
@@ -157,7 +157,7 @@ export function renderMatchDay(content: HTMLElement, s: GameState, f: Fixture, o
   const a = s.clubs.find((c) => c.id === f.away)!;
   content.innerHTML = `
     <h2>Dia de jogo</h2>
-    <p class="muted">${COMP_NAMES[f.comp]} · ${f.stage} · ${f.neutral ? `${arenaOf(s, f).name} (campo neutro)` : arenaOf(s, f).name}${f.knockout ? ' · Jogo a eliminar' : ''}<br>Árbitros: ${refereesFor(s, f).names.join(' e ')} (${TEMPER_LABEL(refereesFor(s, f))})</p>
+    <p class="muted">${COMP_NAMES[f.comp]} · ${f.stage} · ${f.neutral ? `${arenaOf(s, f).name} (campo neutro)` : arenaOf(s, f).name}${f.knockout ? ' · Jogo a eliminar' : ''}<br>Árbitros: ${refBadgeHtml(refereesFor(s, f))}</p>
     <div class="scoreboard">
       <div class="team" style="--c1:${h.colors[0]}">${h.name}</div>
       <div class="score">vs</div>

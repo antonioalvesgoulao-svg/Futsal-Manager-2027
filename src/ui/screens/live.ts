@@ -14,7 +14,7 @@ import { Choreo, StartState } from '../../core/visual/choreo';
 import { IntroScene } from '../../core/visual/intro';
 import { attendance } from '../../core/attendance';
 import { lookOf } from '../../core/appearance';
-import { TEMPER_LABEL } from '../../core/referees';
+import { refBadgeHtml } from '../../core/referees';
 
 export const DEFAULT_SETTINGS: Settings = { speed: 'medio', moments3d: 'importantes', scoreboard: 'auto' };
 export const settingsOf = (s: GameState) => (s.settings ??= { ...DEFAULT_SETTINGS });
@@ -68,7 +68,7 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
       <div class="live-top">
         <div></div>
         <div id="sb"></div>
-        <div class="live-comp small muted">${COMP_NAMES[f.comp]} · ${f.stage}<br>${crowd.arena.name} · ${fmtN(crowd.total)} espetadores${crowd.total >= crowd.arena.capacity ? ' (esgotado)' : ''}<br>Árbitros: ${mopts.referees.names[0]} e ${mopts.referees.names[1]} (${TEMPER_LABEL(mopts.referees)})</div>
+        <div class="live-comp small muted">${COMP_NAMES[f.comp]} · ${f.stage}<br>${crowd.arena.name} · ${fmtN(crowd.total)} espetadores${crowd.total >= crowd.arena.capacity ? ' (esgotado)' : ''}<br>${refBadgeHtml(mopts.referees)}</div>
       </div>
       <div class="live-grid">
         <div>

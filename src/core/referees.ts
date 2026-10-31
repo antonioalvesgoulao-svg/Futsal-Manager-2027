@@ -61,3 +61,20 @@ export function refereesFor(s: GameState, f: Fixture): RefPair {
   const pool = imp >= 0.5 ? REF_PAIRS.filter((p) => p.top) : REF_PAIRS;
   return pool[Math.floor(hash(f.id + s.season.year) * pool.length)];
 }
+
+/** Severidade da dupla (0 = deixa jogar, poucos cartões; 1 = apita muito, cartões fáceis, dura nos confrontos). */
+export function severity(p: RefPair) {
+  const v = ((2 - p.tolerance) + p.cards + p.harsh) / 3; // ~0,75 a ~1,3
+  return Math.max(0, Math.min(1, (v - 0.75) / 0.55));
+}
+
+// bandeira de Portugal (desenho simples: verde, vermelho e esfera amarela)
+const FLAG_PT = `<svg viewBox="0 0 30 20" width="21" height="14" style="vertical-align:-2px;border-radius:2px"><rect width="12" height="20" fill="#046a38"/><rect x="12" width="18" height="20" fill="#da291c"/><circle cx="12" cy="10" r="4.2" fill="#ffe900"/><circle cx="12" cy="10" r="2.4" fill="#da291c"/></svg>`;
+
+/** Dupla de arbitragem com a bandeira e uma barra de severidade (verde, pouco cheia → vermelha, cheia). */
+export function refBadgeHtml(p: RefPair) {
+  const sv = severity(p);
+  const w = Math.round(12 + sv * 88);
+  const col = `hsl(${Math.round(120 - sv * 120)}, 75%, 45%)`;
+  return `<span class="refb">${FLAG_PT} ${p.names[0]} ${FLAG_PT} ${p.names[1]} <span class="refbar" title="Severidade: ${TEMPER_LABEL(p)}"><i style="width:${w}%;background:${col}"></i></span> <span class="small muted">${TEMPER_LABEL(p)}</span></span>`;
+}
