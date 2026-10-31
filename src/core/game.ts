@@ -21,10 +21,11 @@ export function setupFor(s: GameState, clubId: string, comp?: CompId): TeamSetup
   const c = s.clubs.find((x) => x.id === clubId)!;
   const all = s.players.filter((p) => p.clubId === c.id && !(comp && banFor(s, p.id, comp) > 0));
   let squad = all.filter((p) => !injuryOf(s, p.id));
-  // sem guarda-redes disponível: joga o menos lesionado (na realidade subiria um júnior)
-  if (!squad.some((p) => p.position === 'GR')) {
-    const gr = all.filter((p) => p.position === 'GR').sort((a, b) => injuryOf(s, a.id)!.until.localeCompare(injuryOf(s, b.id)!.until))[0];
-    if (gr) squad = [gr, ...squad];
+  // sem guarda-redes disponível (lesionados/castigados): vai à baliza o jogador de campo com mais jeito (lesionados nunca jogam)
+  if (!squad.some((p) => p.position === 'GR') && squad.length) {
+    const a = (p: (typeof squad)[0]) => p.attrs.reflexos + p.attrs.agilidade + p.attrs.umParaUm + p.attrs.posicionamento;
+    const best = [...squad].sort((x, y) => a(y) - a(x))[0];
+    squad = squad.map((p) => (p === best ? { ...p, position: 'GR' as const } : p));
   }
   if (c.id === s.clubId) {
     normalizeTactics(s.tactics, squad);
@@ -63,7 +64,9 @@ export function nextMyFixture(s: GameState) {
 
 export function matchOptions(s: GameState, f: Fixture) {
   const ref = refereesFor(s, f);
-  return { knockout: f.knockout, seed: `${f.id}-${s.season.year}`, manual: f.home === s.clubId ? (0 as const) : f.away === s.clubId ? (1 as const) : undefined, referees: ref, importance: importanceOf(s, f) };
+  // Taça de Portugal (Regulamento 2026/27, Art. 14.4): quartos e meias da Final Eight vão diretos a penáltis; a final tem prolongamento
+  const noExtraTime = f.comp === 'taca' && (f.stage === 'Quartos-de-final' || f.stage === 'Meias-finais');
+  return { knockout: f.knockout, noExtraTime, seed: `${f.id}-${s.season.year}`, manual: f.home === s.clubId ? (0 as const) : f.away === s.clubId ? (1 as const) : undefined, referees: ref, importance: importanceOf(s, f) };
 }
 
 function playFixture(s: GameState, f: Fixture, given?: MatchResult): MatchResult {

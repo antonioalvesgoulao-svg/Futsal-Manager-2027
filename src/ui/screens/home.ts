@@ -1,4 +1,4 @@
-import { injuryOf } from '../../core/injuries';
+import { injuryInfo, injuryOf } from '../../core/injuries';
 import { totalBan } from '../../core/discipline';
 import { go, h } from '../router';
 import { getState, myClub } from '../../core/state';
@@ -23,11 +23,11 @@ function attrClass(v: number) {
   return v >= 16 ? 'a4' : v >= 13 ? 'a3' : v >= 10 ? 'a2' : 'a1';
 }
 
-function playerProfile(p: Player, mine = false) {
+function playerProfile(p: Player, mine = false, status = '') {
   const groups = Object.entries(ATTR_GROUPS).filter(([g]) => (p.position === 'GR' ? true : g !== 'guardaRedes'));
   return `
     <button class="btn ghost" data-back>◂ Plantel</button>
-    <h2 style="margin-top:12px">${p.number ?? '-'} · ${p.name}</h2>
+    <h2 style="margin-top:12px">${p.number ?? '-'} · ${p.name}</h2>${status}
     ${mine ? `<div class="row" style="justify-content:flex-start;gap:8px;margin-bottom:12px"><label class="small">Número da camisola <input id="pnum" type="number" min="1" max="99" value="${p.number ?? ''}" style="width:64px"></label><span class="muted small" id="pnummsg">Se o número já estiver ocupado, os dois jogadores trocam.</span></div>` : ''}
     <table class="tbl" style="margin-bottom:16px">
       <tr><th>Posição</th><td>${POS_NAME[p.position]}</td><th>Idade</th><td>${p.age}</td></tr>
@@ -137,7 +137,11 @@ export function homeScreen(root: HTMLElement) {
       renderFriendly(content, s!, club.id);
     } else if (section === 'plantel' && playerId) {
       const pl = s!.players.find((p) => p.id === playerId)!;
-      content.innerHTML = playerProfile(pl, pl.clubId === club.id);
+      const inj = injuryOf(s!, pl.id);
+      const bans = s!.discipline?.bans[pl.id] ?? [];
+      const status = (inj ? `<div class="card" style="margin:8px 0;padding:8px 12px">🩹 <b>${inj.type}</b> · ${inj.days} dias de paragem · volta a ${inj.until.split('-').reverse().join('/')}<br><span class="small muted">${injuryInfo(inj.type)}</span></div>` : '')
+        + bans.map((b) => `<div class="card" style="margin:8px 0;padding:8px 12px">🟥 Castigado: ${b.games} jogo(s) (${b.reason})</div>`).join('');
+      content.innerHTML = playerProfile(pl, pl.clubId === club.id, status);
       content.querySelector<HTMLInputElement>('#pnum')?.addEventListener('change', (e) => {
         const v = Math.round(Number((e.target as HTMLInputElement).value));
         if (!(v >= 1 && v <= 99)) { content.querySelector('#pnummsg')!.textContent = 'Escolhe um número de 1 a 99.'; return; }

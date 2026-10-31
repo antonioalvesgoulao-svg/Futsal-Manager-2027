@@ -91,3 +91,21 @@ export function trainingInjuries(s: GameState, from: string, to: string): { fres
   }
   return { fresh, healed };
 }
+
+/** Explicação curta de cada lesão (o que é e como costuma acontecer no futsal). */
+const INFO: Record<string, string> = {
+  'Pubalgia / lesão na virilha': 'Dor na zona púbica e adutores, por sobrecarga de mudanças de direção e remates. A mais comum no futsal.',
+  'Entorse do joelho': 'Torção do joelho numa travagem ou mudança de direção, com distensão dos ligamentos.',
+  'Lesão de ligamentos do joelho': 'Rotura parcial do ligamento lateral interno (ou externo), normalmente numa torção ou choque.',
+  'Rotura do ligamento cruzado': 'Rotura do ligamento cruzado anterior: precisa de cirurgia e cerca de 6 a 9 meses de recuperação.',
+  'Contusão no joelho': 'Pancada direta no joelho (choque ou queda no piso).',
+  'Rotura muscular na coxa': 'Lesão muscular nos isquiotibiais ou no quadricípite, num sprint ou num remate.',
+  'Contusão na coxa': 'Pancada na coxa (\'paralítica\') num choque com adversário.',
+  'Entorse do tornozelo': 'Torção do tornozelo, muitas vezes ao pisar o pé de outro jogador.',
+  'Lesão muscular na barriga da perna': 'Distensão dos gémeos, típica em arranques e travagens.',
+  'Lesão no pé': 'Contusão ou lesão óssea no pé (por exemplo, pisão ou sobrecarga do metatarso).',
+  'Lombalgia': 'Dor na zona lombar por sobrecarga ou queda.',
+  'Lesão no ombro / mão': 'Queda sobre o braço: entorse do ombro, dedo ou pulso.',
+  'Pancada na cabeça': 'Choque de cabeças ou queda: protocolo de concussão antes de voltar.',
+};
+export const injuryInfo = (type: string) => INFO[type] ?? '';

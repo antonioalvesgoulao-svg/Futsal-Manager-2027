@@ -87,6 +87,7 @@ export interface MatchResult {
 
 export interface MatchOptions {
   knockout?: boolean; // prolongamento e penáltis em caso de empate
+  noExtraTime?: boolean; // a eliminar sem prolongamento: empate vai diretamente a penáltis
   needWin?: [boolean, boolean]; // equipa precisa de ganhar (ex.: eliminatória a duas mãos)
   manual?: Side; // equipa controlada pelo jogador no modo ao vivo (sem pedidos de tempo automáticos)
   seed?: string;
