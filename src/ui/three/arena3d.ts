@@ -154,7 +154,8 @@ class Led {
     const t = new THREE.CanvasTexture(this.cv);
     t.colorSpace = THREE.SRGBColorSpace;
     t.wrapS = THREE.RepeatWrapping;
-    t.repeat.set(lengthM / PANEL_M / PANELS, 1);
+    // número inteiro de painéis em cada placa (estica ligeiramente): nenhum anúncio fica cortado na ponta
+    t.repeat.set(Math.max(1, Math.round(lengthM / PANEL_M)) / PANELS, 1);
     t.offset.x = offsetPanels / PANELS;
     t.userData.base = offsetPanels;
     this.tex.push(t);

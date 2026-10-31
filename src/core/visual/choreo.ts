@@ -380,6 +380,7 @@ export class Choreo {
           : first?.type === 'shot' && first.side === att ? { kind: 'shot', shot: first }
             : { kind: 'none' };
     const counter = p.counter || ending.shot?.kind === 'counter';
+    this.isCounter = counter;
 
     // ---- jogo corrido ----
     let T = 0;
@@ -485,6 +486,7 @@ export class Choreo {
   }
 
   private lastGoal = false;
+  private isCounter = false; // em transição: quem tem a bola e espaço à frente conduz para a baliza (nunca passa para trás)
   private spillNext = false; // a defesa seguinte dá ressalto (recarga a seguir)
   private outAt: P2 | null = null; // bola fora pela linha lateral (pontapé de linha lateral a seguir)
   private endGk: string | null = null;
@@ -605,6 +607,14 @@ export class Choreo {
     const tA = this.tactics[this.att];
     const hs = this.slot.get(holder);
     const others = this.attOut.filter((x) => x !== holder);
+    if (this.isCounter && !forced && hs !== undefined) {
+      // contra-ataque: conduz em velocidade para a baliza, os colegas acompanham pelos corredores
+      const hp0 = this.P(holder, T);
+      const go = this.A(Math.min(this.U(hp0) + len * 5.2, 29), hp0.y * 0.75);
+      this.key(holder, T + len, go);
+      this.attKeysAt(T + len, new Set([holder]), go.y);
+      return holder;
+    }
     if (hs === undefined || !others.length) {
       // GR com a bola ou jogador sozinho: passe simples
       const to = forced ?? others[0] ?? holder;
@@ -1126,7 +1136,7 @@ export class Choreo {
     // superioridade real: os defensores apanhados à frente da bola ficam para trás (correm a recuperar, sem chegar);
     // só 0, 1 ou 2 defendem (2x0, 2x1, 3x2), e o GR é atraído por quem conduz antes do passe lateral
     const nAttack = shooter === carrier ? 1 : assist && assist !== carrier && r2 ? 3 : 2;
-    const keep = nAttack === 3 ? 2 : r() < 0.3 ? 0 : 1;
+    const keep = nAttack === 3 ? 2 : nAttack === 1 ? (r() < 0.4 ? 0 : 1) : 1;
     const defs = [...this.defOut].sort((x, y) => this.U(this.P(y, T)) - this.U(this.P(x, T)));
     defs.slice(keep).forEach((id, i) => {
       const d0 = this.P(id, T);
@@ -1140,7 +1150,7 @@ export class Choreo {
       });
       this.act(id, 'run', T, tS);
     });
-    if (keep === 0) this.label(T + 0.6, 'Ninguém atrás: 2x0!');
+    if (keep === 0) this.label(T + 0.6, `${this.nm(carrier)} isolado, sozinho para a baliza!`);
     if (this.gkD && shooter !== carrier) {
       const gk = this.gkD;
       this.later.push(() => {
@@ -1739,7 +1749,8 @@ export class Choreo {
       const v = lanes[li++ % lanes.length];
       m.set(id, this.A(line - (this.sideOf.get(id) === att ? 1.2 : 0) - (li > 4 ? 2 : 0), v + (this.sideOf.get(id) === att ? 0.6 : -0.6)));
     }
-    if (this.gkD) m.set(this.gkD, this.A(39.75, 0));
+    // penálti: GR sobre a linha de golo (regra); livre de 10 m: o GR sai 1,5-3 m para reduzir o ângulo (pode ir até 5 m da bola)
+    if (this.gkD) m.set(this.gkD, pen ? this.A(39.75, 0) : this.A(40 - (1.5 + this.r() * 1.5), 0));
     if (this.gkA) m.set(this.gkA, this.A(3.5, 0));
     this.placeAll(tSet, m);
     for (const [id, p2] of m) this.key(id, tKick - 0.45, p2, true);

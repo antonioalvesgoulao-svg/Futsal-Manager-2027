@@ -74,12 +74,11 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
   content.innerHTML = `
     <div class="live">
       <div class="live-top">
-        <div></div>
-        <div id="sb"></div>
         <div class="live-comp small muted">${COMP_NAMES[f.comp]} · ${f.stage}<br>${crowd.arena.name} · ${fmtN(crowd.total)} espetadores${crowd.total >= crowd.arena.capacity ? ' (esgotado)' : ''}<br>${refBadgeHtml(mopts.referees)}</div>
       </div>
       <div class="live-grid">
         <div>
+          <div class="sb-center" id="sb"></div>
           <div class="pitch2d">
             <svg viewBox="0 0 400 200" preserveAspectRatio="none" id="pitch">
               <rect x="0" y="0" width="400" height="200" class="floor"/>
@@ -440,14 +439,16 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
   let chain = 0;
   let shown3d: Choreo | null = null;
   function tryContinue(): boolean {
-    if (!hl || !choreo || done || chain >= 2) return false;
+    if (!hl || !choreo || done || chain >= 3) return false;
     ct = choreo.total;
     if (poss) display = poss.end;
     reveal();
     const more = nextPossession(false);
     if (!more || !poss || !choreo) return false;
     const counter = poss.counter || poss.actions.some((x) => x.kind === 'counter');
-    if (!counter) return false; // o 2D segue com esta posse normalmente
+    // golo na posse seguinte: tem sempre de ser visto em 3D (continua sem cortes); o resto segue no 2D
+    const goalNext = poss.events.some((e) => e.type === 'golo') && st.moments3d !== 'nenhum';
+    if (!counter && !goalNext) return false;
     chain++;
     shown3d = choreo;
     $('#hlcap').textContent = '';
