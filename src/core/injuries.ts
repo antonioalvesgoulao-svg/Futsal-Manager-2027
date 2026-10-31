@@ -5,6 +5,7 @@
 import { addDays } from './season/season';
 import type { MatchResult } from './engine/types';
 import type { GameState } from './types';
+import { INT_INJ, planOf } from './training';
 
 export interface Injury { type: string; until: string; days: number }
 
@@ -81,7 +82,9 @@ export function trainingInjuries(s: GameState, from: string, to: string): { fres
   const rnd = rng(`${from}-${to}-train`);
   for (const p of s.players) {
     if (inj[p.id]) continue;
-    const pr = TRAIN_RATE * TRAIN_H_DAY * days * riskOf(p.age, p.attrs.resistencia);
+    const plan = planOf(s, p.clubId);
+    const f = plan.individual[p.id] ?? plan.focus;
+    const pr = TRAIN_RATE * TRAIN_H_DAY * days * riskOf(p.age, p.attrs.resistencia) * INT_INJ[plan.intensity] * (f === 'recuperacao' ? 0.5 : f === 'fisico' ? 1.15 : 1);
     if (rnd() < pr) {
       const start = addDays(from, Math.floor(rnd() * days));
       const i = draw(rnd, start);

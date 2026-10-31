@@ -2,6 +2,7 @@ import { importanceOf, refereesFor } from './referees';
 // Ciclo de jogo: avançar no calendário, jogar jogos, fim de época
 import { aiTactics } from './coaches';
 import { normalizeTactics } from './tactics';
+import { accumulate, shootingFocus, trainingBonus } from './training';
 import { applyMorale, moraleEvent } from './morale';
 import { injuryOf, matchInjuries, trainingInjuries } from './injuries';
 import { applyDiscipline, banFor, seasonEndDiscipline } from './discipline';
@@ -109,6 +110,8 @@ function nextDate(s: GameState) {
 }
 
 function trainingNews(s: GameState, from: string, to: string) {
+  const days = Math.round((Date.parse(to) - Date.parse(from)) / 864e5);
+  if (days > 0 && days <= 60) accumulate(s, days);
   const { fresh, healed } = trainingInjuries(s, from, to);
   moraleEvent(s, fresh.filter(([, i]) => i.days > 7).map(([id]) => id), -6);
   const name = (id: string) => s.players.find((p) => p.id === id);
@@ -172,7 +175,7 @@ function endSeason(s: GameState): DevChange[] {
   // evolução
   const changes: DevChange[] = [];
   for (const p of s.players) {
-    const c = developPlayer(p, s.pstats[p.id], old.year);
+    const c = developPlayer(p, s.pstats[p.id], old.year, trainingBonus(s, p.id, p.position === 'GR'), shootingFocus(s, p.id, p.clubId));
     if (p.clubId === s.clubId) changes.push(c);
   }
   // reformas
@@ -200,6 +203,7 @@ function endSeason(s: GameState): DevChange[] {
   s.date = `${old.year + 1}-07-01`;
   s.pstats = {};
   seasonEndDiscipline(s);
+  s.trainLog = {};
   news(s, `Começa a época ${s.season.label}.`);
   return changes;
 }

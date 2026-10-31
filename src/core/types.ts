@@ -16,6 +16,7 @@ import type { Attributes } from './attributes';
 import type { Tactics } from './tactics';
 import type { Discipline } from './discipline';
 import type { Injury } from './injuries';
+import type { TrainingPlan, TrainLog } from './training';
 import type { Honour, NewsItem, PlayerSeason, SeasonState } from './season/types';
 
 export type Position = 'GR' | 'FIX' | 'FIX/ALA' | 'ALA' | 'ALA/PIV' | 'PIV' | 'UNI';
@@ -85,6 +86,8 @@ export interface GameState {
   discipline?: Discipline; // amarelos acumulados e castigos
   injuries?: Record<string, Injury>; // lesões em curso
   morale?: Record<string, number>; // moral 0-100 (65 = normal)
+  training?: TrainingPlan; // plano de treino do meu clube
+  trainLog?: TrainLog; // treino acumulado na época
 }
 
 export const SAVE_VERSION = 6;

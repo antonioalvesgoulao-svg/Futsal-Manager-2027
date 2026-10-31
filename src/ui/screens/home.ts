@@ -1,3 +1,4 @@
+import { FOCUS_LABEL, INT_LABEL, planOf, type Focus, type Intensity } from '../../core/training';
 import { moraleHtml, moraleOf } from '../../core/morale';
 import { injuryInfo, injuryOf } from '../../core/injuries';
 import { totalBan } from '../../core/discipline';
@@ -67,7 +68,7 @@ const SECTIONS: { id: string; label: string; stage: string }[] = [
   { id: 'taticas', label: 'Táticas', stage: '' },
   { id: 'calendario', label: 'Calendário', stage: '' },
   { id: 'competicoes', label: 'Competições', stage: '' },
-  { id: 'treino', label: 'Treino', stage: 'Etapa 9' },
+  { id: 'treino', label: 'Treino', stage: '' },
   { id: 'mercado', label: 'Mercado', stage: 'Etapa 10' },
   { id: 'financas', label: 'Finanças', stage: 'Etapa 10' },
   { id: 'staff', label: 'Staff', stage: 'Etapa 11' },
@@ -167,6 +168,34 @@ export function homeScreen(root: HTMLElement) {
             .join('')}</tbody>
         </table>
         <p class="muted small">Clica num jogador para ver os atributos.</p>`;
+    } else if (section === 'treino') {
+      const plan = planOf(s!, club.id);
+      const order = ['GR', 'FIX', 'FIX/ALA', 'UNI', 'ALA', 'ALA/PIV', 'PIV'];
+      const squad = s!.players.filter((p) => p.clubId === club.id).sort((a, b) => order.indexOf(a.position) - order.indexOf(b.position));
+      const opts = (cur: string, list: Record<string, string>, extra = '') => extra + Object.entries(list).map(([v, l]) => `<option value="${v}" ${cur === v ? 'selected' : ''}>${l}</option>`).join('');
+      content.innerHTML = `
+        <h2>Treino</h2>
+        <div class="form-row">
+          <label>Foco da equipa<select id="tfocus">${opts(plan.focus, FOCUS_LABEL)}</select></label>
+          <label>Intensidade<select id="tint">${opts(plan.intensity, INT_LABEL)}</select></label>
+        </div>
+        <table class="tbl small" style="margin:10px 0 16px"><tbody>
+          <tr><td>Foco</td><td>Esses atributos evoluem mais no fim da época (até ~+0,5 por atributo com foco total); os outros um pouco menos</td></tr>
+          <tr><td>Intensidade alta</td><td>+25% de evolução, +40% de lesões no treino</td></tr>
+          <tr><td>Intensidade baixa</td><td>-25% de evolução, -30% de lesões no treino</td></tr>
+          <tr><td>Recuperação</td><td>Quase não evolui, metade das lesões no treino</td></tr>
+          <tr><td>Guarda-redes</td><td>Fazem sempre metade do treino específico de GR</td></tr>
+        </tbody></table>
+        <p class="muted small">Valores estimados (não há estudos públicos com números do efeito do treino no futsal). Os mais novos evoluem mais; o treino junta-se aos minutos jogados.</p>
+        <h3>Treino individual</h3>
+        <table class="tbl"><thead><tr><th>Nº</th><th>Nome</th><th>Posição</th><th>Idade</th><th>Foco individual</th></tr></thead><tbody>
+        ${squad.map((p) => `<tr><td>${p.number ?? '-'}</td><td>${p.name}${injuryOf(s!, p.id) ? ' 🩹' : ''}</td><td>${p.position}</td><td>${p.age}</td><td><select data-ind="${p.id}">${opts(plan.individual[p.id] ?? '', FOCUS_LABEL, '<option value="">Como a equipa</option>')}</select></td></tr>`).join('')}
+        </tbody></table>`;
+      content.querySelector<HTMLSelectElement>('#tfocus')!.onchange = (e) => (plan.focus = (e.target as HTMLSelectElement).value as Focus);
+      content.querySelector<HTMLSelectElement>('#tint')!.onchange = (e) => (plan.intensity = (e.target as HTMLSelectElement).value as Intensity);
+      content.querySelectorAll<HTMLSelectElement>('[data-ind]').forEach((sel) => (sel.onchange = () => {
+        if (sel.value) plan.individual[sel.dataset.ind!] = sel.value as Focus; else delete plan.individual[sel.dataset.ind!];
+      }));
     } else {
       content.innerHTML = `<h2>${sec.label}</h2><div class="empty">Disponível na ${sec.stage}.</div>`;
     }

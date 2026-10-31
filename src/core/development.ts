@@ -21,7 +21,7 @@ export interface DevChange {
  * - 30 a 32: começa o declínio físico (o mental ainda pode subir)
  * - 33 ou mais: declínio físico mais acentuado
  */
-export function developPlayer(p: Player, st: PlayerSeason | undefined, seasonYear: number): DevChange {
+export function developPlayer(p: Player, st: PlayerSeason | undefined, seasonYear: number, train: Partial<Record<'tecnicos' | 'mentais' | 'fisicos' | 'guardaRedes', number>> = {}, shooting = false): DevChange {
   const r = rng(`dev-${p.id}-${seasonYear}`);
   const before = overall(p.attrs, p.position);
   const minutesShare = Math.min(1, (st?.minutes ?? 0) / 60 / 600); // ~600 min = muito utilizado
@@ -49,6 +49,9 @@ export function developPlayer(p: Player, st: PlayerSeason | undefined, seasonYea
     if (p.position !== 'GR' && GK.includes(k)) continue;
     let d = PHYSICAL.includes(k) ? physical : growth;
     if (MENTAL.includes(k) && age >= 27) d += 0.15; // experiência
+    // treino (ver training.ts)
+    d += train[PHYSICAL.includes(k) ? 'fisicos' : MENTAL.includes(k) ? 'mentais' : GK.includes(k) ? 'guardaRedes' : 'tecnicos'] ?? 0;
+    if (shooting && (k === 'remate' || k === 'finalizacao')) d += 0.4;
     d += gauss(r) * 0.35;
     // atributos guardados como inteiros: acumula a parte decimal de forma aleatória
     const v = p.attrs[k] + d;
