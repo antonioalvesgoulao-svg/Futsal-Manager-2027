@@ -115,7 +115,7 @@ export class Highlight3D {
     const shorts = inf.gk ? '#111827' : cols[1];
     let hsh = 0;
     for (const ch of id) hsh = (hsh * 31 + ch.charCodeAt(0)) >>> 0;
-    const look: Look = inf.look ?? { skin: '#d9a77f', hair: '#2e1e14', style: 'curto', beard: 'nenhuma', height: 1.78 };
+    const look: Look = inf.look ?? { skin: '#d9a77f', hair: '#2e1e14', style: 'curto', beard: 'nenhuma', height: 1.78, boots: ['#111111', '#ffffff'] };
     const pm = makePlayer({ shirt, shorts, socks: inf.gk ? shorts : cols[0], number: inf.number, gk: inf.gk }, look);
     this.scene.add(pm.g);
     a = { ...pm, prev: new THREE.Vector3(), heading: 0, phase: (hsh % 10) / 3, speed: 0, init: false };

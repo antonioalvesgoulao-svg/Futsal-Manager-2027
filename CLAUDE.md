@@ -40,7 +40,7 @@ O António não programa: o Claude escreve o código, testa e envia para o GitHu
 | `src/ui/three/player3d.ts` | Jogadores 3D articulados e animações |
 | `src/ui/three/roof3d.ts` | Tetos conforme as fotos: arcos em treliça ou maciços, malha de triângulos (plana/cúpula), asnas com projetores, vigas, LED. `viewFrom` em highlight3d para comparar com fotos |
 | `src/core/attendance.ts` | Pavilhões (lotação real quando conhecida, `capacityReal`) e assistência ao estilo FM |
-| `src/core/appearance.ts` | Aspeto de cada jogador (pele, cabelo, barba, altura) por nacionalidade/idade; `LOOKS` para correções manuais |
+| `src/core/appearance.ts` | Aspeto de cada jogador (pele, cabelo, barba, altura, cor das sapatilhas) por nacionalidade/idade; GR sem luvas (pedido do António); `LOOKS` para correções manuais |
 
 ## Regras oficiais implementadas
 2 x 20 min de tempo útil; faltas acumuladas por parte, 6.ª = livre direto sem barreira (10 m ou local da falta); no prolongamento contam as da 2.ª parte; 1 desconto de tempo por parte; expulsão = 2 min de inferioridade (acaba se sofrer golo); buzina (remate antes do fim conta); prolongamento 2 x 5 min; penáltis 5 + pares até desempatar; substituições volantes ilimitadas; GR avançado como instrução tática.

@@ -1,4 +1,4 @@
-// Aspeto de cada jogador para o 3D: tom de pele, cabelo, barba e altura.
+// Aspeto de cada jogador para o 3D: tom de pele, cabelo, barba, altura e cor das sapatilhas.
 // Sem fotos (não se usam fotos reais): é gerado de forma fixa a partir do jogador, com
 // probabilidades conforme a nacionalidade e a idade, e é sempre o mesmo em todos os jogos.
 // Para acertar um jogador concreto basta acrescentá-lo a LOOKS.
@@ -12,8 +12,14 @@ export interface Look {
   style: HairStyle;
   beard: Beard;
   height: number; // metros
+  boots: [string, string]; // cor das sapatilhas e dos pormenores (sola, risca)
 }
 
+const BOOTS: [string, string][] = [
+  ['#111111', '#ffffff'], ['#ffffff', '#111111'], ['#ffffff', '#e11d48'], ['#d9f99d', '#111111'], ['#facc15', '#111111'],
+  ['#f97316', '#ffffff'], ['#ec4899', '#ffffff'], ['#2563eb', '#ffffff'], ['#dc2626', '#ffffff'], ['#16a34a', '#ffffff'],
+  ['#9ca3af', '#111111'], ['#22d3ee', '#1e3a8a'], ['#7c3aed', '#fde047'], ['#0f172a', '#f97316'], ['#f5f5f4', '#2563eb'],
+];
 const SKINS = ['#f6d7c3', '#eac4a4', '#d9a77f', '#c68a5e', '#a86b43', '#7f4f2e', '#5b3820', '#3f2716'];
 const HAIR = { preto: '#141414', castanhoEscuro: '#2e1e14', castanho: '#55361f', castanhoClaro: '#8a6240', loiro: '#c9a15a', ruivo: '#9c4a22', grisalho: '#8d8d8d' };
 
@@ -67,5 +73,7 @@ export function lookOf(p: { id: string; nationality?: string; age?: number; posi
   // altura: os guarda-redes são em média mais altos
   const gk = p.position === 'GR';
   const height = Math.round((1.77 + (r() + r() + r() - 1.5) * 0.07 + (gk ? 0.06 : 0)) * 100) / 100;
-  return { skin: SKINS[si], hair, style, beard, height, ...LOOKS[p.id] };
+  // sapatilhas: cada jogador tem as suas cores
+  const boots = BOOTS[Math.floor(r() * BOOTS.length)];
+  return { skin: SKINS[si], hair, style, beard, height, boots, ...LOOKS[p.id] };
 }

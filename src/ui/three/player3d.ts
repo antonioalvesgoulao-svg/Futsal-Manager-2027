@@ -1,6 +1,6 @@
 // Jogadores em 3D, ao estilo do Football Manager: corpo arredondado e articulado (ancas,
 // joelhos, ombros, cotovelos), equipamento, e aspeto próprio de cada jogador (pele, cabelo,
-// penteado, barba, altura). Animações: corrida, passe, remate, mergulho, defesa, carrinho,
+// penteado, barba, altura, sapatilhas). Os guarda-redes jogam sem luvas. Animações: corrida, passe, remate, mergulho, defesa, carrinho,
 // finta, bloqueio, proteção de bola, bloqueio de remate, queda e festejo.
 import * as THREE from 'three';
 
@@ -111,7 +111,8 @@ export function makePlayer(kit: Kit, look: Look) {
   const sockMat = mat(kit.socks, 0.8);
   const skinMat = mat(look.skin, 0.65);
   const hairMat = mat(look.hair, 0.9);
-  const bootMat = mat('#111827', 0.45);
+  const bootMat = mat(look.boots?.[0] ?? '#111827', 0.45);
+  const soleMat = mat(look.boots?.[1] ?? '#ffffff', 0.6);
   const light = new THREE.Color(kit.shirt).getHSL({ h: 0, s: 0, l: 0 }).l > 0.6;
 
   // tronco (camisola) e ancas (calções)
@@ -163,9 +164,16 @@ export function makePlayer(kit: Kit, look: Look) {
     sh.add(capsule(0.06, 0.07, skinMat, -0.03));
     sh.add(capsule(0.058, 0.26, sockMat, -0.23));
     const boot = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.075, 0.25), bootMat);
-    boot.position.set(0, -0.44, 0.05);
+    boot.position.set(0, -0.43, 0.05);
     boot.castShadow = true;
     sh.add(boot);
+    // sola e risca lateral noutra cor
+    const sole = new THREE.Mesh(new THREE.BoxGeometry(0.105, 0.02, 0.255), soleMat);
+    sole.position.set(0, -0.475, 0.05);
+    sh.add(sole);
+    const stripe = new THREE.Mesh(new THREE.BoxGeometry(0.104, 0.018, 0.14), soleMat);
+    stripe.position.set(0, -0.42, 0.06);
+    sh.add(stripe);
     th.add(sh);
     body.add(th);
     thigh.push(th);
@@ -178,7 +186,7 @@ export function makePlayer(kit: Kit, look: Look) {
     const fo = new THREE.Object3D();
     fo.position.y = -0.29;
     fo.add(capsule(0.048, 0.18, kit.gk ? shirtMat : skinMat, -0.12));
-    const hand = new THREE.Mesh(new THREE.SphereGeometry(0.048, 10, 8), kit.gk ? mat('#f5f5f5') : skinMat);
+    const hand = new THREE.Mesh(new THREE.SphereGeometry(0.048, 10, 8), skinMat);
     hand.position.y = -0.28;
     hand.scale.set(0.8, 1.1, 0.6);
     fo.add(hand);
