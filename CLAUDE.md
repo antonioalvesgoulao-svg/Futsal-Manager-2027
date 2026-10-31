@@ -38,6 +38,7 @@ O António não programa: o Claude escreve o código, testa e envia para o GitHu
 | `src/ui/three/highlight3d.ts` | Momentos importantes em 3D (4 câmaras, repetição, `seek` para testes) |
 | `src/ui/three/arena3d.ts` | Pavilhão 3D: bancadas à medida da lotação, adeptos animados, teto, ecrã, placas LED com anúncios fictícios |
 | `src/ui/three/player3d.ts` | Jogadores 3D articulados e animações |
+| `src/ui/three/roof3d.ts` | Tetos conforme as fotos: arcos em treliça ou maciços, malha de triângulos (plana/cúpula), asnas com projetores, vigas, LED. `viewFrom` em highlight3d para comparar com fotos |
 | `src/core/attendance.ts` | Pavilhões (lotação real quando conhecida, `capacityReal`) e assistência ao estilo FM |
 | `src/core/appearance.ts` | Aspeto de cada jogador (pele, cabelo, barba, altura) por nacionalidade/idade; `LOOKS` para correções manuais |
 

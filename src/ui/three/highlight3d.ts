@@ -204,8 +204,22 @@ export class Highlight3D {
     if (render) this.renderer.render(this.scene, this.camera);
   }
 
+  /** Câmara fixa num ponto (para ver o pavilhão como numa fotografia); null volta às câmaras normais. */
+  viewFrom(pos: [number, number, number] | null, look: [number, number, number] = [0, 2, 0], fov = 40) {
+    this.fixedView = pos ? { pos: new THREE.Vector3(...pos), look: new THREE.Vector3(...look) } : null;
+    this.camera.fov = fov;
+    this.camera.updateProjectionMatrix();
+    this.snapCamera = true;
+  }
+  private fixedView: { pos: THREE.Vector3; look: THREE.Vector3 } | null = null;
+
   private updateCamera(b: { x: number; y: number; z: number }) {
     const cam = this.camera;
+    if (this.fixedView) {
+      cam.position.copy(this.fixedView.pos);
+      cam.lookAt(this.fixedView.look);
+      return;
+    }
     const ball = new THREE.Vector3(b.x, 0, b.y);
     const dir = Math.sign(this.choreo?.attackDirection ?? 1) || 1;
     let pos: THREE.Vector3;

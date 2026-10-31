@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 
 import type { ArenaProfile } from '../../core/attendance';
+import { buildRoof } from './roof3d';
 
 export const W = 40; // comprimento do campo (m)
 export const H = 20; // largura do campo (m)
@@ -485,8 +486,9 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
   outer.receiveShadow = true;
   scene.add(outer);
   const wallMat = new THREE.MeshStandardMaterial({ color: pr.wall, roughness: 0.95, side: THREE.BackSide });
-  const hall = new THREE.Mesh(new THREE.BoxGeometry(hallW, hallH, hallD), wallMat);
-  hall.position.y = hallH / 2 - 0.01;
+  // paredes mais altas do que o teto (as coberturas curvas sobem acima delas)
+  const hall = new THREE.Mesh(new THREE.BoxGeometry(hallW, hallH + 8, hallD), wallMat);
+  hall.position.y = (hallH + 8) / 2 - 0.01;
   scene.add(hall);
   // faixa de cor do clube a meia altura
   const bandMat = new THREE.MeshStandardMaterial({ color: o.teams[0].colors[0], roughness: 0.8 });
@@ -507,61 +509,7 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
       }
     }
   }
-  // teto
-  const roofMat = new THREE.MeshStandardMaterial({ color: pr.ceiling ? pr.ceiling : pr.ceilingDark ? '#17191d' : pr.roof === 'laje' ? '#e7e5e4' : '#cbd5e1', roughness: 0.9, side: THREE.DoubleSide });
-  if (pr.roof === 'abóbada') {
-    // meia abóbada ao longo do comprimento (eixo do cilindro em x, arco para cima)
-    const vault = new THREE.Mesh(new THREE.CylinderGeometry(hallD / 2, hallD / 2, hallW, 32, 1, true, 0, Math.PI), roofMat);
-    vault.rotation.z = Math.PI / 2;
-    vault.scale.set(0.35, 1, 1);
-    vault.position.y = hallH;
-    scene.add(vault);
-  } else {
-    const ceil = new THREE.Mesh(new THREE.PlaneGeometry(hallW, hallD), roofMat);
-    ceil.rotation.x = Math.PI / 2;
-    ceil.position.y = hallH;
-    scene.add(ceil);
-  }
-  if (pr.roof === 'treliça') {
-    const trussMat = new THREE.MeshStandardMaterial({ color: pr.truss ?? '#e2e8f0', metalness: 0.4, roughness: 0.5 });
-    const tw = pr.truss ? 0.26 : 0.18;
-    for (let x = -hallW / 2 + 4; x < hallW / 2; x += 6) {
-      for (const y of [hallH - 0.3, hallH - 1.6]) {
-        const b = new THREE.Mesh(new THREE.BoxGeometry(tw, tw, hallD), trussMat);
-        b.position.set(x, y, 0);
-        scene.add(b);
-      }
-      for (let z = -hallD / 2; z < hallD / 2; z += 1.6) {
-        const d = new THREE.Mesh(new THREE.BoxGeometry(0.06, 1.6, 0.06), trussMat);
-        d.position.set(x, hallH - 0.95, z);
-        d.rotation.x = (Math.round(z) % 2 ? 1 : -1) * 0.6;
-        scene.add(d);
-      }
-    }
-  }
-  if (pr.ceilingDark) {
-    // grelha de linhas de luz LED no teto escuro
-    const ledMat = new THREE.MeshBasicMaterial({ color: '#ffffff' });
-    for (let x = -24; x <= 24; x += 6) {
-      const l = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.05, 30), ledMat);
-      l.position.set(x, hallH - 0.6, 0);
-      scene.add(l);
-    }
-    for (let z = -15; z <= 15; z += 5) {
-      const l = new THREE.Mesh(new THREE.BoxGeometry(48, 0.05, 0.12), ledMat);
-      l.position.set(0, hallH - 0.6, z);
-      scene.add(l);
-    }
-  }
-  if (pr.beams) {
-    // vigas grossas de lado a lado (madeira lamelada ou betão)
-    const bm = new THREE.MeshStandardMaterial({ color: pr.beams, roughness: 0.7 });
-    for (let x = -hallW / 2 + 3; x < hallW / 2; x += 5) {
-      const b = new THREE.Mesh(new THREE.BoxGeometry(0.45, 1.0, hallD), bm);
-      b.position.set(x, hallH - 0.5, 0);
-      scene.add(b);
-    }
-  }
+  buildRoof(scene, pr, hallW, hallD, hallH);
   if (pr.pillars) {
     const pm = new THREE.MeshStandardMaterial({ color: pr.pillars, roughness: 0.85 });
     for (const sg of [-1, 1]) for (let x = -hallW / 2 + 3; x < hallW / 2; x += 5) {
@@ -585,17 +533,6 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
       scene.add(bn);
     }
   }
-  if (pr.skylights) {
-    const skyMat = new THREE.MeshBasicMaterial({ color: '#e8f3ff' });
-    for (let x = -hallW / 2 + 7; x < hallW / 2 - 4; x += 12) {
-      for (const z of [-hallD / 4, hallD / 4]) {
-        const sk = new THREE.Mesh(new THREE.PlaneGeometry(3, 5), skyMat);
-        sk.rotation.x = Math.PI / 2;
-        sk.position.set(x, hallH - 0.02, z);
-        scene.add(sk);
-      }
-    }
-  }
   if (pr.wallArt) {
     // desenho de linhas (marcações de campo estilizadas) na parede do topo
     const art = canvasTex(1024, 512, (c) => {
@@ -614,16 +551,6 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
     wa.rotation.y = -Math.PI / 2;
     scene.add(wa);
   }
-  // projetores (painéis luminosos)
-  const lampMat = new THREE.MeshBasicMaterial({ color: '#fffbe8' });
-  for (let x = -18; x <= 18 && !pr.ceilingDark; x += 6) {
-    for (const z of [-7, 0, 7]) {
-      const l = new THREE.Mesh(new THREE.BoxGeometry(1.4, 0.15, 0.7), lampMat);
-      l.position.set(x, hallH - 2, z);
-      scene.add(l);
-    }
-  }
-
   // ecrã de resultado: suspenso ao centro (pavilhões modernos) ou na parede do topo
   const scoreCv = document.createElement('canvas');
   scoreCv.width = 512; scoreCv.height = 256;
