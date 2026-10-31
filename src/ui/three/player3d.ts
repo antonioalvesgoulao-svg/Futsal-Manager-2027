@@ -23,15 +23,28 @@ export interface Actor {
   init: boolean;
 }
 
-export interface Kit { shirt: string; shorts: string; socks: string; number: number | null; gk: boolean; pattern?: 'liso' | 'listas' | 'riscas' | 'metade'; alt?: string }
+export interface Kit { shirt: string; shorts: string; socks: string; number: number | null; name?: string; gk: boolean; pattern?: 'liso' | 'listas' | 'riscas' | 'metade'; alt?: string }
 
 const HIP = 0.92;
 
-function numberTex(n: number | null, color: string, text: string) {
-  return canvasTex(128, 128, (c) => {
-    c.fillStyle = color; c.fillRect(0, 0, 128, 128);
-    c.fillStyle = text; c.font = 'bold 84px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle';
-    c.fillText(String(n ?? ''), 64, 70);
+// costas da camisola: nome (por cima) e número, como nas camisolas reais; fundo transparente para se ver o padrão
+function numberTex(n: number | null, text: string, name = '') {
+  return canvasTex(256, 256, (c) => {
+    c.clearRect(0, 0, 256, 256);
+    c.textAlign = 'center'; c.textBaseline = 'middle';
+    c.lineJoin = 'round';
+    const dark = text === '#111';
+    const draw = (t: string, y: number, size: number, w: number) => {
+      c.font = `bold ${size}px "Arial Narrow", Arial, sans-serif`;
+      const sc = Math.min(1, w / Math.max(1, c.measureText(t).width));
+      c.save(); c.translate(128, y); c.scale(sc, 1);
+      c.lineWidth = size * 0.18; c.strokeStyle = dark ? 'rgba(255,255,255,.55)' : 'rgba(0,0,0,.45)';
+      c.strokeText(t, 0, 0);
+      c.fillStyle = text; c.fillText(t, 0, 0);
+      c.restore();
+    };
+    if (name) draw(name.toUpperCase(), 36, 54, 240);
+    draw(String(n ?? ''), name ? 150 : 128, 168, 230);
   });
 }
 
@@ -273,15 +286,21 @@ export function makePlayer(kit: Kit, look: Look) {
     stripe.position.set(0, -0.43, 0.06);
     sh.add(stripe);
   }
-  const back = new THREE.Mesh(new THREE.PlaneGeometry(0.24, 0.24), new THREE.MeshStandardMaterial({ map: numberTex(kit.number, kit.shirt, light ? '#111' : '#fff'), transparent: true, roughness: 0.8 }));
-  back.position.set(0, 0.37, -0.122);
+  const txt = light ? '#111' : '#fff';
+  const back = new THREE.Mesh(new THREE.PlaneGeometry(0.27, 0.27), new THREE.MeshStandardMaterial({ map: numberTex(kit.number, txt, kit.name), transparent: true, roughness: 0.8, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2 }));
+  back.position.set(0, 0.4, -0.125);
   back.rotation.y = Math.PI;
   body.add(back);
-  const front = back.clone();
-  front.rotation.y = 0;
-  front.scale.set(0.4, 0.4, 1);
-  front.position.set(0.075, 0.45, 0.121);
+  const numOnly = new THREE.MeshStandardMaterial({ map: numberTex(kit.number, txt), transparent: true, roughness: 0.8, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2 });
+  const front = new THREE.Mesh(new THREE.PlaneGeometry(0.1, 0.1), numOnly);
+  front.position.set(0.075, 0.46, 0.124);
   body.add(front);
+  // número pequeno nos calções (perna esquerda, à frente)
+  const shortsLight = new THREE.Color(kit.shorts).getHSL({ h: 0, s: 0, l: 0 }).l > 0.6;
+  const sn = new THREE.Mesh(new THREE.PlaneGeometry(0.07, 0.07), new THREE.MeshStandardMaterial({ map: numberTex(kit.number, shortsLight ? '#111' : '#fff'), transparent: true, roughness: 0.8, depthWrite: false }));
+  sn.position.set(0.03, -0.1, 0.104);
+  sn.rotation.y = 0.35;
+  thigh[1].add(sn);
   const collar = new THREE.Mesh(new THREE.TorusGeometry(0.056, 0.007, 8, 24), fabric(kit.shorts));
   collar.rotation.x = Math.PI / 2;
   collar.position.set(0, 0.665, 0.005);

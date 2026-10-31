@@ -55,7 +55,7 @@ O António não programa: o Claude escreve o código, testa e envia para o GitHu
 
 ## Validação (5 épocas reais 2021/22 a 2025/26, zerozero)
 Real: 6,38 golos/jogo, casa 49,6%, fora 37,0%, empates 13,5%, <3 golos 6,1%. Manter a simulação próxima destes valores após mexer no motor (script de 5 épocas com play-off).
-Última validação (1/11, 3 696 jogos da Liga): 6,42 golos/jogo, casa 50,1%, fora 37,3%, empates 12,7%, <3 golos 6,5% (pGoal base 0,182; vantagem casa 3,0/-0,8; momento do jogo: quem perde +0,55 por golo, quem ganha -0,2).
+Última validação (1/11, 3 696 jogos da Liga, já com recargas): 6,43 golos/jogo, casa 51,7%, fora 34,7%, empates 13,6%, <3 golos 6,3% (pGoal base 0,17; recarga em 25% das defesas para a frente (estimativa); vantagem casa 3,0/-0,8; momento do jogo: quem perde +0,55 por golo, quem ganha -0,2).
 
 ## Feedback recente do António (prioridade)
 - Vídeo de 31/10/2026: transições artificiais, cantos sem marcador nem organização, 3D sem animações. Resposta (`choreo.ts` reescrito):
@@ -73,7 +73,12 @@ Real: 6,38 golos/jogo, casa 49,6%, fora 37,0%, empates 13,5%, <3 golos 6,1%. Man
 - Confrontos (`maybeBrawl` no motor): depois de faltas, probabilidade 0,15%+3%×tensão² (tensão = importância + resultado apertado no fim); mais jogadores em jogos grandes; cartões conforme a dupla. 3D/2D: jogadores juntam-se e empurram, árbitros separam, cartões
 - Vídeos: o António arrasta clipes mp4 (30 s–2 min) para a conversa; extraio fotogramas com ffmpeg
 - Não consigo ver vídeos do YouTube nem imagens da internet (rede do ambiente bloqueia sites de imagens); posso analisar fotos, capturas e gravações que o António envie
-- Próximos melhoramentos possíveis: pontapés de linha lateral, mais variantes de jogadas ensaiadas, ressaltos/recargas
+- Equipamentos (`src/core/kits.ts`): principal e alternativo reais dos 12 clubes (dados do António, 1/11), escolha no dia de jogo; visitante muda se chocar. GR sem dados reais: cor fixa por clube entre laranja/calções pretos, azul-claro, amarelo, verde fluorescente, laranja fluorescente (pedido do António); árbitros passam a preto se um GR jogar de amarelo
+- Camisolas com nome (apelido) e número nas costas, número à frente e nos calções; números oficiais do zerozero, alteráveis no perfil do jogador (troca se o número estiver ocupado)
+- Gráfico de golo no terço inferior (`goalBarHtml` em broadcast.ts), 2D e 3D; repetição automática do golo em câmara lenta (0,4x) noutro ângulo
+- Pontapés de linha lateral (desarmes que mandam a bola fora, 40%) e recargas (ressaltos)
+- Definição "Qualidade gráfica do 3D": alta = reflexos no piso (Reflector), sombras 2048
+- Próximos melhoramentos possíveis: mais variantes de jogadas ensaiadas
 
 ## Roteiro
 | Etapa | Estado |

@@ -21,11 +21,12 @@ function attrClass(v: number) {
   return v >= 16 ? 'a4' : v >= 13 ? 'a3' : v >= 10 ? 'a2' : 'a1';
 }
 
-function playerProfile(p: Player) {
+function playerProfile(p: Player, mine = false) {
   const groups = Object.entries(ATTR_GROUPS).filter(([g]) => (p.position === 'GR' ? true : g !== 'guardaRedes'));
   return `
     <button class="btn ghost" data-back>◂ Plantel</button>
     <h2 style="margin-top:12px">${p.number ?? '-'} · ${p.name}</h2>
+    ${mine ? `<div class="row" style="justify-content:flex-start;gap:8px;margin-bottom:12px"><label class="small">Número da camisola <input id="pnum" type="number" min="1" max="99" value="${p.number ?? ''}" style="width:64px"></label><span class="muted small" id="pnummsg">Se o número já estiver ocupado, os dois jogadores trocam.</span></div>` : ''}
     <table class="tbl" style="margin-bottom:16px">
       <tr><th>Posição</th><td>${POS_NAME[p.position]}</td><th>Idade</th><td>${p.age}</td></tr>
       <tr><th>Nacionalidade</th><td>${p.nationality}</td><th>Valor atual</th><td>${starsHtml(overall(p.attrs, p.position))}</td></tr>
@@ -133,7 +134,18 @@ export function homeScreen(root: HTMLElement) {
     } else if (section === 'amigavel') {
       renderFriendly(content, s!, club.id);
     } else if (section === 'plantel' && playerId) {
-      content.innerHTML = playerProfile(s!.players.find((p) => p.id === playerId)!);
+      const pl = s!.players.find((p) => p.id === playerId)!;
+      content.innerHTML = playerProfile(pl, pl.clubId === club.id);
+      content.querySelector<HTMLInputElement>('#pnum')?.addEventListener('change', (e) => {
+        const v = Math.round(Number((e.target as HTMLInputElement).value));
+        if (!(v >= 1 && v <= 99)) { content.querySelector('#pnummsg')!.textContent = 'Escolhe um número de 1 a 99.'; return; }
+        // número já usado no plantel: troca com esse jogador
+        const other = s!.players.find((p) => p.clubId === club.id && p.number === v && p !== pl);
+        if (other) other.number = pl.number;
+        pl.number = v;
+        renderContent();
+        content.querySelector('#pnummsg')!.textContent = other ? `Número alterado (troca com ${other.name}, que fica com o ${other.number ?? '-'}).` : 'Número alterado.';
+      });
     } else if (section === 'plantel') {
       const order = ['GR', 'FIX', 'FIX/ALA', 'UNI', 'ALA', 'ALA/PIV', 'PIV'];
       const squad = s!.players

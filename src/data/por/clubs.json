@@ -44,7 +44,7 @@
       "city": "Braga",
       "arena": "AMCO Arena",
       "colors": [
-        "#d71920",
+        "#e30613",
         "#ffffff"
       ],
       "reputation": 82,
@@ -59,8 +59,8 @@
       "city": "Fundão",
       "arena": "Pavilhão Municipal do Fundão",
       "colors": [
-        "#1f3c88",
-        "#ffffff"
+        "#582321",
+        "#000000"
       ],
       "reputation": 72,
       "check": [
@@ -76,7 +76,7 @@
       "city": "Porto Salvo",
       "arena": "Pavilhão dos Leões de Porto Salvo",
       "colors": [
-        "#0b7a3b",
+        "#1b4937",
         "#ffffff"
       ],
       "reputation": 70,
@@ -93,8 +93,8 @@
       "city": "Ferreira do Zêzere",
       "arena": "Pavilhão Municipal de Ferreira do Zêzere",
       "colors": [
-        "#1d4ed8",
-        "#ffffff"
+        "#f2e44f",
+        "#000000"
       ],
       "reputation": 60,
       "check": [
@@ -111,8 +111,8 @@
       "city": "Ponte de Sor",
       "arena": "Pavilhão Gimnodesportivo de Ponte de Sor",
       "colors": [
-        "#c8102e",
-        "#ffffff"
+        "#0b8a3e",
+        "#000000"
       ],
       "reputation": 66,
       "check": [
@@ -128,7 +128,7 @@
       "city": "Vila do Conde",
       "arena": "Pavilhão Municipal de Vila do Conde",
       "colors": [
-        "#00843d",
+        "#024b3a",
         "#ffffff"
       ],
       "reputation": 64,
@@ -145,8 +145,8 @@
       "city": "Venda Nova",
       "arena": "Pavilhão da Venda Nova",
       "colors": [
-        "#1e3a8a",
-        "#facc15"
+        "#facc15",
+        "#000000"
       ],
       "reputation": 58,
       "check": [
@@ -179,8 +179,8 @@
       "city": "Vila Nova de Famalicão",
       "arena": "Pavilhão Multiusos de Famalicão",
       "colors": [
-        "#1c3f94",
-        "#ffffff"
+        "#ffffff",
+        "#18214e"
       ],
       "reputation": 60,
       "check": [
@@ -196,8 +196,8 @@
       "city": "Torres Vedras",
       "arena": "Pavilhão Física de Torres Vedras",
       "colors": [
-        "#1f4e9c",
-        "#ffffff"
+        "#881732",
+        "#34497e"
       ],
       "reputation": 62,
       "check": [],

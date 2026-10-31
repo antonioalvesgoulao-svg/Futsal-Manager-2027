@@ -14,6 +14,7 @@ export interface ActorInfo {
   side: 0 | 1;
   referee?: boolean; // equipa de arbitragem
   number: number | null;
+  name?: string; // nome nas costas
   gk: boolean;
   look: Look;
 }
@@ -41,6 +42,7 @@ export class Highlight3D {
   private lastHolder: string | null = null;
   cameraId: CameraId = 'tv';
   onEnd: (() => void) | null = null;
+  onGoal: (() => void) | null = null; // golo na imagem (para o gráfico de golo)
   private ended = false;
 
   private arena: ArenaHandle;
@@ -52,7 +54,7 @@ export class Highlight3D {
   constructor(private host: HTMLElement, private opts: ArenaOpts) {
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
     // resolução moderada: o 3D em ecrã inteiro tem de correr fluido em qualquer computador
-    this.renderer.setPixelRatio(Math.min(1.25, window.devicePixelRatio));
+    this.renderer.setPixelRatio(Math.min(opts.quality === 'alta' ? 1.75 : 1.25, window.devicePixelRatio));
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -114,6 +116,16 @@ export class Highlight3D {
     this.raf = requestAnimationFrame(this.frame);
   }
 
+  /** Repetição de um trecho (câmara lenta, outro ângulo); o marcador fica com o resultado depois do golo. */
+  replayWindow(from: number, to: number, speed: number, cam: CameraId) {
+    if (!this.choreo) return;
+    this.from = from;
+    this.to = to;
+    this.cameraId = cam;
+    this.goalShown = true; // na repetição não se repete a festa do pavilhão nem o gráfico
+    this.start(speed);
+  }
+
   replay(speed = 0.6) {
     if (this.choreo) this.start(speed);
   }
@@ -155,14 +167,14 @@ export class Highlight3D {
   private createActor(id: string): Actor {
     let a: Actor;
     const inf = this.info[id] ?? { side: 0, number: null, gk: false, look: undefined as unknown as Look };
-    const cols: [string, string] = inf.referee ? ['#facc15', '#111111'] : this.colors[inf.side];
-    const kd = !inf.gk && !inf.referee ? this.opts.kits?.[inf.side] : undefined;
-    const shirt = inf.gk ? (inf.side === 0 ? '#0f766e' : '#7c3aed') : kd?.shirt ?? cols[0];
-    const shorts = inf.gk ? '#111827' : kd?.shorts ?? cols[1];
+    const cols: [string, string] = inf.referee ? [this.opts.refShirt ?? '#facc15', '#111111'] : this.colors[inf.side];
+    const kd = inf.referee ? undefined : inf.gk ? this.opts.gkKits?.[inf.side] ?? { shirt: inf.side === 0 ? '#0f766e' : '#7c3aed', shorts: '#111827', socks: '#111827', pattern: 'liso' as const, alt: '#ffffff' } : this.opts.kits?.[inf.side];
+    const shirt = kd?.shirt ?? cols[0];
+    const shorts = kd?.shorts ?? cols[1];
     let hsh = 0;
     for (const ch of id) hsh = (hsh * 31 + ch.charCodeAt(0)) >>> 0;
     const look: Look = inf.look ?? { skin: '#d9a77f', hair: '#2e1e14', style: 'curto', beard: 'nenhuma', height: 1.78, boots: ['#111111', '#ffffff'] };
-    const pm = makePlayer({ shirt, shorts, socks: inf.gk ? shorts : kd?.socks ?? cols[0], number: inf.number, gk: inf.gk, pattern: kd?.pattern, alt: kd?.alt }, look);
+    const pm = makePlayer({ shirt, shorts, socks: kd?.socks ?? cols[0], number: inf.number, name: inf.name, gk: inf.gk, pattern: kd?.pattern, alt: kd?.alt }, look);
     this.scene.add(pm.g);
     a = { ...pm, prev: new THREE.Vector3(), heading: 0, phase: (hsh % 10) / 3, speed: 0, init: false };
     return a;
@@ -205,6 +217,7 @@ export class Highlight3D {
     if (cel && !this.goalShown) {
       this.goalShown = true;
       this.arena.goal(this.info[cel[0]]?.side ?? 0);
+      this.onGoal?.();
       if (this.scores) this.arena.setScore(this.scores[1]);
     }
     for (const i of [0, 1]) this.excite[i] = lerp(this.excite[i], target[i], Math.min(1, dt * 3));

@@ -7,6 +7,7 @@ import type { MatchEvent, MatchOptions, MatchResult, PlayerStats, Side, TeamSetu
 const HALF = 1200; // 20 minutos de tempo útil
 const ET = 300; // prolongamento: 2 x 5 minutos
 const MAX_SQUAD = 14;
+const REBOUND = 0.25; // defesas para a frente que dão recarga (estimativa)
 
 type A = Player['attrs'];
 
@@ -340,7 +341,7 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
   // Ações da posse em curso (quem passa, remata, rouba), para a visualização 2D/3D
   let actions: Action[] = [];
 
-  function shot(s: Side, kind: 'jogada' | 'contra' | 'livre10' | 'penalti' | 'canto' | 'baliza_aberta', shooterIn?: Live): void {
+  function shot(s: Side, kind: 'jogada' | 'contra' | 'livre10' | 'penalti' | 'canto' | 'baliza_aberta' | 'recarga', shooterIn?: Live): void {
     const att = teams[s];
     const def = teams[1 - s];
     const shooter = shooterIn ?? pick(outfield(att), shooterWeight);
@@ -357,22 +358,24 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
 
     let pBlock = 0.24 + (defQ - finish) * 0.01;
     let pOn = 0.47 + (finish - 10) * 0.016 + (compo - 10) * 0.006;
-    let pGoal = 0.182 + (finish - gkQ) * 0.022; // calibrado com 5 épocas reais (6,38 golos/jogo)
+    let pGoal = 0.17 + (finish - gkQ) * 0.022; // calibrado com 5 épocas reais (6,38 golos/jogo)
     if (kind === 'contra') { pBlock *= 0.5; pOn += 0.08; pGoal += 0.1; }
     if (kind === 'livre10') { pBlock = 0; pOn = 0.72 + (finish - 10) * 0.015; pGoal = 0.42 + (finish - gkQ) * 0.025; }
     if (kind === 'penalti') { pBlock = 0; pOn = 0.86 + (compo - 10) * 0.01; pGoal = 0.78 + (finish - gkQ) * 0.02; }
     if (kind === 'canto') { pBlock += 0.05 + (setPiece?.block ?? 0); pOn -= 0.05; pGoal *= setPiece?.q ?? 1; }
     if (!gk || kind === 'baliza_aberta') { pGoal = kind === 'baliza_aberta' ? (gk ? 0.6 : 0.85) : 0.75; } // GR fora da baliza (a recuperar) ainda pode chegar
+    // recarga: a bola sai da defesa para a frente da baliza e alguém chega primeiro (GR ainda no chão)
+    if (kind === 'recarga') { pBlock = 0.18; pOn = 0.62 + (finish - 10) * 0.012; pGoal = 0.3 + (finish - gkQ) * 0.02; }
     if (kind === 'baliza_aberta') { pBlock = 0.08; pOn = 0.5 + (eff(shooter, 'remate') - 10) * 0.02; }
     const cl = (x: number, a: number, b: number) => Math.max(a, Math.min(b, x));
     if (kind === 'jogada' || kind === 'contra' || kind === 'canto') pGoal *= form[s] * pace * TEMPO[att.setup.tactics.tempo].quality;
     pBlock = cl(pBlock, 0, 0.45); pOn = cl(pOn, 0.2, 0.95); pGoal = cl(pGoal, 0.06, 0.92);
 
     const how: Record<string, string> = {
-      jogada: '', contra: ' em contra-ataque', livre10: ' no livre direto dos 10 metros', penalti: ' de penálti', canto: ' na sequência de um canto', baliza_aberta: ' para a baliza deserta',
+      jogada: '', contra: ' em contra-ataque', livre10: ' no livre direto dos 10 metros', penalti: ' de penálti', canto: ' na sequência de um canto', baliza_aberta: ' para a baliza deserta', recarga: ' na recarga',
     };
 
-    const vk = kind === 'livre10' ? 'free10' : kind === 'penalti' ? 'penalty' : kind === 'canto' ? 'setpiece' : kind === 'baliza_aberta' ? 'open' : kind === 'contra' ? 'counter' : 'play';
+    const vk = kind === 'livre10' ? 'free10' : kind === 'penalti' ? 'penalty' : kind === 'canto' ? 'setpiece' : kind === 'baliza_aberta' ? 'open' : kind === 'contra' ? 'counter' : kind === 'recarga' ? 'rebound' : 'play';
     if (r() < pBlock) {
       const blocker = pick(outfield(def), (l) => eff(l, 'desarme') + eff(l, 'posicionamento'));
       pstats[blocker.p.id].tackles++;
@@ -400,7 +403,11 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
       if (caught) savedCaught = { side: (1 - s) as Side, gk };
       pstats[gk.p.id].saves++;
       if (kind !== 'jogada' || r() < 0.35) log('remate_defendido', `Defesa de ${gk.p.name} a remate de ${shooter.p.name}${kind === 'penalti' ? ' (penálti defendido!)' : kind === 'livre10' ? ' (livre dos 10 m)' : ''}`, s, shooter.p.id);
-      if (r() < 0.2) corner(s);
+      if (!caught && (kind === 'jogada' || kind === 'contra') && r() < REBOUND) {
+        // ressalto: a bola fica viva à frente da baliza; recarga de um atacante (às vezes o próprio rematador)
+        const rs = r() < 0.3 ? shooter : pick(outfield(att), (l) => eff(l, 'antecipacao') + eff(l, 'finalizacao'));
+        shot(s, 'recarga', rs);
+      } else if (r() < 0.2) corner(s);
     }
   }
 
@@ -886,7 +893,7 @@ export interface Action {
   shooter?: string; // rematador / marcador do canto / vítima da falta
   assist?: string;
   other?: string; // quem bloqueia, defende, rouba ou faz a falta
-  kind?: 'play' | 'counter' | 'free10' | 'penalty' | 'setpiece' | 'open';
+  kind?: 'play' | 'counter' | 'free10' | 'penalty' | 'setpiece' | 'open' | 'rebound';
   caught?: boolean; // defesa: o GR ficou com a bola
   gkRun?: boolean; // remate do próprio GR, depois de sair a jogar
   players?: string[]; // confronto: quem se envolve (os dois primeiros começaram)

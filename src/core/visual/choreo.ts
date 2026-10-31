@@ -50,7 +50,7 @@ export interface StartState {
   holder: string | null;
   ball: P2;
   pos?: Record<string, P2>;
-  kind?: 'live' | 'gk' | 'kickoff';
+  kind?: 'live' | 'gk' | 'kickoff' | 'lateral';
 }
 
 type UV = [number, number];
@@ -260,12 +260,12 @@ export class Choreo {
     const kind0 = start?.kind ?? (start ? 'live' : 'kickoff');
     // reposição do GR só se a bola for mesmo do GR de quem ataca agora
     const kind = kind0 === 'gk' && (!this.gkA || start?.holder !== this.gkA) ? 'live' : kind0;
-    this.lead = kind === 'kickoff' ? (start ? 4 : 1.6) : kind === 'gk' ? 2.4 : 0;
+    this.lead = kind === 'kickoff' ? (start ? 4 : 1.6) : kind === 'gk' ? 2.4 : kind === 'lateral' ? 2.6 : 0;
     const t0 = -this.lead;
     for (const [id, tr] of this.tr) {
       const prev = start?.pos?.[id];
       // quem entra por substituição vem da zona de substituição, do lado dos bancos
-      tr.set(t0, prev ?? (start?.pos ? { x: 0, y: -10.4 } : this.restPos(id, kind)), true);
+      tr.set(t0, prev ?? (start?.pos ? { x: 0, y: -10.4 } : this.restPos(id, kind === 'lateral' ? 'live' : kind)), true);
     }
 
     let holder: string;
@@ -290,6 +290,24 @@ export class Choreo {
       this.balls.push({ k: 'hands', t0: t0 + 1.3, id: holder });
       this.phase(t0, 'Reposição do guarda-redes');
       this.progFn = this.makeProg(0, 0);
+    } else if (kind === 'lateral') {
+      // pontapé de linha lateral (regra do futsal: bola parada sobre a linha, 4 segundos para repor)
+      const spot = { x: clamp(sb.x, -19, 19), y: Math.sign(sb.y || 1) * 10 };
+      holder = this.attOut.reduce((x, y) => (dist(this.P(y, t0), spot) < dist(this.P(x, t0), spot) ? y : x));
+      const mates = this.attOut.filter((x) => x !== holder);
+      const mate = mates.length ? mates.reduce((x, y) => (dist(this.P(y, t0), spot) < dist(this.P(x, t0), spot) ? y : x)) : holder;
+      const sgn = Math.sign(spot.y);
+      this.balls.push({ k: 'still', t0, at: { x: spot.x, y: spot.y, z: 0.11 } });
+      this.key(holder, -1.2, { x: spot.x - this.dirA * 0.3, y: spot.y + sgn * 0.2 }, true);
+      const recv = { x: clamp(spot.x - this.dirA * 2.5, -17, 17), y: spot.y - sgn * 3.8 };
+      this.key(mate, -0.1, recv, true);
+      this.act(holder, 'pass', -0.35, 0.05, { face: mate });
+      this.balls.push({ k: 'pass', t0: -0.1, t1: 0.45, from: holder, to: mate, lift: 0.05 });
+      this.balls.push({ k: 'foot', t0: 0.45, id: mate });
+      this.phase(t0, 'Pontapé de linha lateral');
+      this.label(-0.6, `Pontapé de linha lateral: ${this.nm(holder)}`);
+      this.progFn = this.makeProg(0, clamp((this.U(spot) - 12) / 16, 0, 1));
+      holder = mate;
     } else {
       const h0 = start?.holder && this.attOut.concat(this.gkA ? [this.gkA] : []).includes(start.holder) ? start.holder : null;
       holder = h0 ?? this.nearestOut(sb, t0);
@@ -350,7 +368,7 @@ export class Choreo {
       this.attKeysAt(1.4, new Set());
       holder = back;
       T = 0.8;
-    }
+    } else if (kind === 'lateral') T = 0.5;
     this.phase(Math.max(0, T), counter && p.counter ? 'Contra-ataque' : this.sys === '5x4' ? 'Ataque 5x4 (guarda-redes avançado)' : `Ataque organizado (${this.sys})`);
 
     const shotA = ending.shot;
@@ -370,9 +388,11 @@ export class Choreo {
       if (gkRun) this.gkCarry(holder, T, tS, shooter);
       else if (counter) this.counterRun(holder, T, tS, shooter, assist, shotA!);
       else this.finish(holder, T, tS, shooter, assist, shotA!);
+      this.spillNext = p.actions[1]?.kind === 'rebound' && p.actions[1].side === att;
       afterT = this.shot(tS, shooter, shotA!, this.dirA);
     } else if (ending.kind === 'lost') {
       this.loseBall(holder, T, D, ending.lost!.other);
+      if (this.outAt) afterT = D + 0.7;
     } else if (ending.kind === 'foul') {
       this.fouled(holder, T, D, ending.foul!);
       afterT = D + 0.6;
@@ -406,12 +426,15 @@ export class Choreo {
     const ballEnd = this.ballAt(T);
     const h = this.holderAt(T);
     this.end = goal ? { holder: null, ball: ballEnd, pos, kind: 'kickoff' }
+      : this.outAt && ending.kind === 'lost' ? { holder: null, ball: this.outAt, pos, kind: 'lateral' }
       : h && this.gkOfAny(h) && this.balls[this.balls.length - 1].k === 'hands' ? { holder: h, ball: ballEnd, pos, kind: 'gk' }
         : this.endGk ? { holder: this.endGk, ball: ballEnd, pos, kind: 'gk' }
           : { holder: h, ball: ballEnd, pos, kind: 'live' };
   }
 
   private lastGoal = false;
+  private spillNext = false; // a defesa seguinte dá ressalto (recarga a seguir)
+  private outAt: P2 | null = null; // bola fora pela linha lateral (pontapé de linha lateral a seguir)
   private endGk: string | null = null;
 
   get attackDirection() { return this.dirA; }
@@ -421,6 +444,8 @@ export class Choreo {
   /** Momentos que merecem ser vistos devagar: a finalização e as bolas paradas. */
   isKey(ct: number) { const t = ct - this.lead; return t > this.D - 4.5 && (this.shotTimes.length > 0 || t > this.D); }
   private shotTimes: number[] = [];
+  /** Instante (na escala de at) do remate que deu golo, para a repetição. */
+  get goalShotCt(): number | null { return this.lastGoal && this.shotTimes.length ? this.lead + this.shotTimes[this.shotTimes.length - 1] : null; }
 
   // ---------- utilidades ----------
   private sortBalls() { this.balls = this.balls.map((b, i) => [b, i] as const).sort((x, y) => x[0].t0 - y[0].t0 || x[1] - y[1]).map((x) => x[0]); }
@@ -954,6 +979,20 @@ export class Choreo {
       });
       this.pass(holder, tackler, D - 0.55, D);
       this.label(D - 0.3, `${this.nm(tackler)} interceta o passe`);
+    } else if (r() < 0.4) {
+      // desarme com a bola a sair pela linha lateral
+      const hp2 = this.P(holder, D);
+      const out = { x: clamp(hp2.x + this.dirA * (1 + r() * 2), -19, 19), y: (hp2.y >= 0 ? 1 : -1) * 10.6 };
+      this.later.push(() => {
+        this.fix(tackler, D - 0.8, D + 0.3);
+        this.key(tackler, D - 0.55, { x: hp2.x + this.dirA * 1.6, y: hp2.y + 0.8 });
+        this.key(tackler, D, { x: hp2.x + this.dirA * 0.55, y: hp2.y + 0.25 });
+      });
+      this.act(tackler, 'tackle', D - 0.45, D + 0.2, { face: holder });
+      this.balls.push({ k: 'fly', t0: D - 0.05, t1: D + 0.6, from: holder, b: { x: out.x, y: out.y, z: 0.11 }, lift: 0.3 });
+      this.balls.push({ k: 'still', t0: D + 0.6, at: { x: out.x, y: out.y, z: 0.11 } });
+      this.outAt = out;
+      this.label(D - 0.3, `${this.nm(tackler)} desarma e a bola sai pela lateral`);
     } else {
       // desarme
       this.later.push(() => {
@@ -1084,6 +1123,8 @@ export class Choreo {
     const side = r() < 0.5 ? -1 : 1;
     let target: Ball, after: Ball;
     let caught = false;
+    const spill = this.spillNext;
+    this.spillNext = false;
     if (res === 'goal') { const v = (r() - 0.5) * 2.5; target = { x: g * 20.35, y: v, z: 0.15 + r() * 1.6 }; after = { x: g * 20.9, y: v * 0.9, z: 0.1 }; }
     else if (res === 'post') { target = { x: g * 19.95, y: side * 1.52, z: 0.3 + r() * 1.4 }; after = { x: g * 15, y: side * 4.5, z: 0.1 }; }
     else if (res === 'wide') { target = { x: g * 20.2, y: side * (1.9 + r() * 1.6), z: 0.2 + r() * 1.8 }; after = { x: g * 21.8, y: side * (3 + r() * 2), z: 0.1 }; }
@@ -1091,9 +1132,10 @@ export class Choreo {
       const v = (r() - 0.5) * 2.6;
       target = { x: g * 19.4, y: v, z: 0.2 + r() * 1.3 };
       // remates sem muita força ou à figura: o GR agarra (a maioria das defesas em futsal)
-      caught = a.caught ?? (target.z < 1.7 && (Math.abs(v) < 0.8 || r() < 0.45));
+      caught = spill ? false : a.caught ?? (target.z < 1.7 && (Math.abs(v) < 0.8 || r() < 0.45));
       if (caught && target.z > 1.5) target.z = 1.1;
-      after = caught ? target : { x: g * 21, y: v + side * 3, z: 0.1 }; // defesa para canto
+      // defesa para canto, ou para a frente (ressalto que dá recarga)
+      after = caught ? target : spill ? { x: g * (14.5 + r() * 2), y: clamp(v * 2.5 + side * 1.5, -5, 5), z: 0.1 } : { x: g * 21, y: v + side * 3, z: 0.1 };
     } else {
       const gl = Math.hypot(g * 20 - from.x, -from.y) || 1;
       target = { x: from.x + ((g * 20 - from.x) / gl) * 2.2, y: from.y + (-from.y / gl) * 2.2, z: 0.4 };
@@ -1171,6 +1213,7 @@ export class Choreo {
       this.lastGoal = true;
       this.label(tEnd, `GOLO de ${this.nm(shooter)}!`);
     }
+    if (spill && res === 'saved') { this.label(tEnd, `${this.nm(gk)} defende para a frente... ressalto!`); return tEnd + 0.5; }
     if ((res === 'wide' || res === 'saved') && gk && !this.p.flying[keeperSide]) this.endGk = gk;
     tEnd += fl2 + 0.3;
     return tEnd;
@@ -1201,6 +1244,11 @@ export class Choreo {
         continue;
       }
       if (a.type !== 'shot') continue;
+      if (a.kind === 'rebound') {
+        T = this.rebound(T, a);
+        if (a.result === 'goal') return this.celebrate(T, a.shooter!, att);
+        continue;
+      }
       if (a.side !== att) {
         // contra-ataque do adversário (perda num canto) ou remate à baliza deserta
         T = this.oppShot(T, a);
@@ -1486,6 +1534,20 @@ export class Choreo {
   }
 
   /** Remate da outra equipa no mesmo lance (contra-ataque após canto, baliza deserta). */
+  // recarga: o atacante mais perto ataca a bola solta e remata logo
+  private rebound(T: number, a: Action): number {
+    const ball = this.ballAt(T);
+    const cand = this.attOut.filter((x) => this.tr.has(x));
+    if (!cand.length) return T;
+    const sh = a.shooter && cand.includes(a.shooter) ? a.shooter : cand.reduce((x, y) => (dist(this.P(y, T), ball) < dist(this.P(x, T), ball) ? y : x));
+    const tl = clamp(dist(this.P(sh, T - 0.6), ball) / 6.5, 0.45, 1.2);
+    this.later.push(() => { this.fix(sh, T - 0.6, T + tl + 0.4); this.key(sh, T + tl, { x: ball.x - this.dirA * 0.4, y: ball.y }); });
+    this.balls.push({ k: 'foot', t0: T + tl, id: sh });
+    this.label(T + 0.1, `${this.nm(sh)} vai à recarga`);
+    this.spillNext = false;
+    return this.shot(T + tl + 0.15, sh, a, this.dirA);
+  }
+
   private oppShot(T: number, a: Action): number {
     const sh = a.shooter!;
     if (!this.tr.has(sh)) return T;

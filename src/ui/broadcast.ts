@@ -72,7 +72,47 @@ export function lineupHtml(d: LineupData) {
   </div>`;
 }
 
+export interface GoalBarData {
+  style: Exclude<CompId, 'playoff'>;
+  team: { short: string; color: string };
+  scorer: { number: number | null; name: string };
+  assist?: string;
+  time: string; // "mm:ss" e parte
+  score: string; // ex.: "SLB 2-1 SCP"
+  note?: string; // ex.: "de penálti", "na recarga"
+}
+
+/** Gráfico de golo no terço inferior da transmissão (mesmo desenho do marcador da competição). */
+export function goalBarHtml(d: GoalBarData) {
+  return `
+  <div class="gbar sb-${d.style}">
+    <div class="gb-tag" style="--tc:${d.team.color}"><span>GOLO</span><b>${d.team.short}</b></div>
+    <div class="sb-score gb-num">${d.scorer.number ?? ''}</div>
+    <div class="gb-main"><div class="gb-name">${d.scorer.name}</div><div class="gb-sub">${d.time}${d.note ? ` · ${d.note}` : ''}${d.assist ? ` · Assistência: <b>${d.assist}</b>` : ''}</div></div>
+    <div class="sb-mid gb-res">${EMBLEM[d.style]}<span class="cn">${d.score}</span></div>
+  </div>`;
+}
+
 export const broadcastCss = `
+/* Golo: terço inferior */
+.gbar { display: grid; grid-template-columns: 92px 56px 1fr 120px; align-items: stretch; height: 58px; width: min(640px, calc(100% - 24px)); font-family: 'Segoe UI', system-ui, sans-serif; filter: drop-shadow(0 6px 14px rgba(0,0,0,.5)); animation: gbIn .45s cubic-bezier(.2,.8,.2,1) both; }
+.gbar.out { animation: gbOut .4s ease-in both; }
+.gb-tag { display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--tc); color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,.7); }
+.gb-tag span { font-size: 19px; font-weight: 900; letter-spacing: .08em; }
+.gb-tag b { font-size: 11px; font-weight: 800; letter-spacing: .06em; }
+.gb-num { font-size: 26px; }
+.gb-main { display: flex; flex-direction: column; justify-content: center; padding: 0 14px; color: #fff; min-width: 0; }
+.gb-name { font-size: 20px; font-weight: 800; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gb-sub { font-size: 12px; opacity: .85; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gb-res .cn { font-size: 13px; letter-spacing: .02em; }
+.sb-liga .gb-main { background: #1c2229; }
+.sb-taca .gb-main { background: linear-gradient(90deg, #5b0a14, #7a1420); }
+.sb-tacaLiga .gb-main { background: #0b2a6f; }
+.sb-supertaca .gb-main { background: #0b0b0b; }
+@keyframes gbIn { from { opacity: 0; transform: translateY(24px); clip-path: inset(0 100% 0 0); } to { opacity: 1; transform: none; clip-path: inset(0 0 0 0); } }
+@keyframes gbOut { to { opacity: 0; transform: translateY(18px); } }
+@media (max-width: 600px) { .gbar { grid-template-columns: 70px 44px 1fr; height: 50px; } .gb-res { display: none; } .gb-name { font-size: 16px; } }
+
 /* Cinco inicial (mesmas cores do marcador da competição) */
 .lu { display: flex; flex-direction: column; width: min(420px, calc(50% - 8px)); font-family: 'Segoe UI', system-ui, sans-serif; filter: drop-shadow(0 6px 14px rgba(0,0,0,.5)); animation: luIn .45s ease-out both; }
 .lu .lu-head { grid-template-columns: 1fr 96px; height: 44px; }

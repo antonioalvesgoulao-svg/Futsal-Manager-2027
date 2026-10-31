@@ -46,3 +46,33 @@ export function matchKits(home: { id: string; colors: [string, string] }, away: 
   if (hexDist(hk.shirt, ak.shirt) < 130) hk = hk === H.home ? H.away : H.home; // escolha manual em choque: a casa cede
   return [hk, ak];
 }
+
+// Equipamentos dos guarda-redes: não há dados certos por clube; cada clube tem uma cor fixa (sorteada
+// a partir do clube) entre as cores habituais no futsal (indicadas pelo António).
+export const GK_KITS: KitDef[] = [
+  k('#f97316', '#111111', '#f97316'), // laranja, calções pretos
+  k('#7dd3fc', '#7dd3fc', '#7dd3fc'), // todo azul-claro
+  k('#facc15', '#facc15', '#facc15'), // todo amarelo
+  k('#a3e635', '#a3e635', '#a3e635'), // todo verde fluorescente
+  k('#ff6b1a', '#ff6b1a', '#ff6b1a'), // todo laranja fluorescente
+];
+
+function gkPref(id: string) {
+  let h = 7;
+  for (const ch of id) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+  return h % GK_KITS.length;
+}
+
+/** Guarda-redes do jogo: a cor do clube, mudando se chocar com as camisolas de campo ou com o outro GR. */
+export function matchGkKits(homeId: string, awayId: string, kits: [KitDef, KitDef]): [KitDef, KitDef] {
+  const field = [kits[0].shirt, kits[1].shirt];
+  const ok = (g: KitDef, other?: KitDef) => field.every((f) => hexDist(f, g.shirt) > 110) && (!other || hexDist(other.shirt, g.shirt) > 110);
+  const choose = (id: string, other?: KitDef) => {
+    const p = gkPref(id);
+    for (let i = 0; i < GK_KITS.length; i++) { const g = GK_KITS[(p + i) % GK_KITS.length]; if (ok(g, other)) return g; }
+    for (let i = 0; i < GK_KITS.length; i++) { const g = GK_KITS[(p + i) % GK_KITS.length]; if (!other || hexDist(other.shirt, g.shirt) > 110) return g; }
+    return GK_KITS[p];
+  };
+  const hg = choose(homeId);
+  return [hg, choose(awayId, hg)];
+}

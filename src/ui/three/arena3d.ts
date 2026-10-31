@@ -3,6 +3,7 @@
 // placas LED de publicidade animadas (anúncios fictícios, competição, resultado, golo).
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
+import { Reflector } from 'three/examples/jsm/objects/Reflector.js';
 
 import type { ArenaProfile } from '../../core/attendance';
 import type { KitDef } from '../../core/kits';
@@ -21,6 +22,9 @@ export interface ArenaOpts {
   teams: [{ short: string; colors: [string, string]; name?: string }, { short: string; colors: [string, string]; name?: string }];
   ultras?: [boolean, boolean]; // claque organizada de cada equipa (só em jogos grandes)
   kits?: [KitDef, KitDef]; // equipamentos do jogo
+  gkKits?: [KitDef, KitDef]; // guarda-redes
+  quality?: 'normal' | 'alta';
+  refShirt?: string;
 }
 
 export function canvasTex(w: number, h: number, draw: (c: CanvasRenderingContext2D) => void) {
@@ -275,6 +279,17 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
   floor.rotation.x = -Math.PI / 2;
   floor.receiveShadow = true;
   scene.add(floor);
+  if (o.quality === 'alta') {
+    // piso envernizado: reflexo verdadeiro (jogadores, bola, luzes) por baixo de um piso ligeiramente transparente
+    const mirror = new Reflector(new THREE.PlaneGeometry(W + 8, H + 8), { textureWidth: 1024, textureHeight: 512, color: 0x8a8a8a });
+    mirror.rotation.x = -Math.PI / 2;
+    mirror.position.y = -0.01;
+    scene.add(mirror);
+    const fm = floor.material as THREE.MeshStandardMaterial;
+    fm.transparent = true;
+    fm.opacity = 0.84;
+    fm.roughness = 0.3;
+  }
 
   // balizas 3 x 2 m
   const postMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.35 });
@@ -644,7 +659,7 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
   const sun = new THREE.DirectionalLight(0xfff6ea, 2.1);
   sun.position.set(6, 22, 8);
   sun.castShadow = true;
-  sun.shadow.mapSize.set(1024, 1024);
+  sun.shadow.mapSize.set(o.quality === 'alta' ? 2048 : 1024, o.quality === 'alta' ? 2048 : 1024);
   Object.assign(sun.shadow.camera, { left: -24, right: 24, top: 14, bottom: -14, near: 1, far: 60 });
   scene.add(sun);
   for (const x of [-14, 0, 14]) {

@@ -5,7 +5,7 @@ import type { MatchEvent, MatchResult } from '../../core/engine/types';
 import { matchOptions, setupFor } from '../../core/game';
 import { COMP_NAMES, Fixture } from '../../core/season/types';
 import type { Club, GameState, Settings } from '../../core/types';
-import { lineupHtml, scoreboardHtml } from '../broadcast';
+import { goalBarHtml, lineupHtml, scoreboardHtml } from '../broadcast';
 import { resultHtml } from './friendly';
 import { renderTactics } from './tactics';
 import { arrangeForSystem } from '../../core/tactics';
@@ -14,10 +14,10 @@ import { Choreo, StartState } from '../../core/visual/choreo';
 import { IntroScene } from '../../core/visual/intro';
 import { attendance } from '../../core/attendance';
 import { lookOf } from '../../core/appearance';
-import { matchKits, pendingKit, setPendingKit } from '../../core/kits';
+import { matchGkKits, matchKits, pendingKit, setPendingKit } from '../../core/kits';
 import { refBadgeHtml } from '../../core/referees';
 
-export const DEFAULT_SETTINGS: Settings = { speed: 'medio', moments3d: 'importantes', scoreboard: 'auto' };
+export const DEFAULT_SETTINGS: Settings = { speed: 'medio', moments3d: 'importantes', scoreboard: 'auto', quality: 'normal' };
 export const settingsOf = (s: GameState) => (s.settings ??= { ...DEFAULT_SETTINGS });
 
 // Segundos de jogo por segundo real. Os lances decisivos (finalização e bolas paradas) abrandam
@@ -54,7 +54,12 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
   const style = st.scoreboard === 'auto' ? (f.comp === 'playoff' ? 'liga' : f.comp) : st.scoreboard;
   const kits = matchKits(h, a, mySide, pendingKit);
   setPendingKit('auto');
+  const gkKits = matchGkKits(h.id, a.id, kits);
+  // árbitros de amarelo, ou de preto se um GR jogar de amarelo
+  const refShirt = gkKits.some((g) => g.shirt === '#facc15') ? '#1f2937' : '#facc15';
   const colors: [string, string] = [kits[0].shirt, kits[1].shirt];
+  /** nome nas costas: o apelido (último nome), ou o nome inteiro se for só um */
+const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
   const textCol = (c: string) => (hexDist(c, '#ffffff') < 200 ? '#111' : '#fff');
   const crowd = attendance(s, f);
   // claques organizadas (bandeiras, tifo, tochas): Benfica e Sporting, só em jogos grandes
@@ -91,6 +96,7 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
             </svg>
             <div class="cap2d" id="cap2d"></div>
             <div class="flash" id="flash"></div>
+            <div class="gbar-host" id="gbar"></div>
             <div class="hl" id="hl" hidden>
               <div class="hl-view" id="hlv"></div>
               <div class="hl-cap" id="hlcap"></div>
@@ -128,7 +134,7 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
 
   // quem é quem (lado, número, guarda-redes)
   const info: Record<string, ActorInfo> = {};
-  for (const [side, setup] of [[0, hs], [1, as]] as const) for (const p of setup.squad) info[p.id] = { side, number: p.number, gk: p.position === 'GR', look: lookOf(p) };
+  for (const [side, setup] of [[0, hs], [1, as]] as const) for (const p of setup.squad) info[p.id] = { side, number: p.number, name: shirtName(p.name), gk: p.position === 'GR', look: lookOf(p) };
   for (const id of ['arbitro1', 'arbitro2']) info[id] = { side: 0, number: null, gk: false, referee: true, look: lookOf({ id }) };
   const kit: [[string, string], [string, string]] = [[kits[0].shirt, kits[0].shorts], [kits[1].shirt, kits[1].shorts]];
 
@@ -174,7 +180,7 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
       let pp = drawn[id];
       if (act?.kind === 'feint') pp = { x: pp.x + Math.cos(act.ang) * Math.sin(act.k * Math.PI * 2) * 0.5, y: pp.y - Math.sin(act.ang) * Math.sin(act.k * Math.PI * 2) * 0.5 };
       const p = toSvg(pp);
-      const fill = inf.referee ? '#facc15' : inf.gk ? (inf.side === 0 ? '#0f766e' : '#7c3aed') : colors[inf.side];
+      const fill = inf.referee ? refShirt : inf.gk ? gkKits[inf.side].shirt : colors[inf.side];
       const hasBall = fr?.holder === id;
       let extra = '';
       let body = `<circle r="${inf.referee ? 5 : 8}" fill="${fill}" stroke="${inf.side === mySide ? '#facc15' : '#111'}" stroke-width="1.5"/>`;
@@ -205,7 +211,7 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
           body = body.replace('<circle', '<circle opacity=".55"');
         }
       }
-      html += `<g transform="translate(${p.x.toFixed(1)},${p.y.toFixed(1)})">${hasBall ? '<circle r="11" fill="none" stroke="#fff" stroke-width="2"/>' : ''}${body}${extra}<text y="3.5" text-anchor="middle" font-size="9" font-weight="700" fill="${inf.gk ? '#fff' : textCol(fill)}">${inf.number ?? ''}</text></g>`;
+      html += `<g transform="translate(${p.x.toFixed(1)},${p.y.toFixed(1)})">${hasBall ? '<circle r="11" fill="none" stroke="#fff" stroke-width="2"/>' : ''}${body}${extra}<text y="3.5" text-anchor="middle" font-size="9" font-weight="700" fill="${textCol(fill)}">${inf.number ?? ''}</text></g>`;
     }
     dotsG.innerHTML = under + html;
     if (fr) {
@@ -226,7 +232,7 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
     const note = snap.teams.some((t) => t.flying) ? '5x4' : snap.teams.some((t) => t.short) ? 'Inferioridade numérica' : banner;
     $('#sb').innerHTML = scoreboardHtml({
       style: style as 'liga',
-      home: { short: h.shortName, color: h.colors[0], score: shownScore[0], fouls: snap.teams[0].fouls },
+      home: { short: h.shortName, color: colors[0], score: shownScore[0], fouls: snap.teams[0].fouls },
       away: { short: a.shortName, color: colors[1], score: shownScore[1], fouls: snap.teams[1].fouls },
       clock: fmt(inPeriod),
       period: per === 1 ? '1.ª P' : per === 2 ? '2.ª P' : per <= 4 ? 'Prol.' : 'Pen.',
@@ -252,6 +258,34 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
         ${t.bench.map((p) => `<tr class="${p.sentOff ? 'muted' : ''}"><td>${p.number ?? ''}</td><td>${p.name}${p.sentOff ? ' 🟥' : ''}</td><td>${bar(p.energy)}</td><td>${ps[p.id]?.goals || ''}</td></tr>`).join('')}
       </tbody></table><p class="small muted">Em campo a amarelo. Energia baixa rende menos; muda os quintetos ou a rotação nas Táticas.</p>`;
     }
+  }
+
+  // gráfico de golo no terço inferior (2D e 3D), uma vez por golo
+  const goalsShown = new Set<string>();
+  let gbarTimer: ReturnType<typeof setTimeout> | null = null;
+  function goalBar(e: MatchEvent) {
+    const key = `${e.t}-${e.score[0]}-${e.score[1]}`;
+    if (goalsShown.has(key)) return;
+    goalsShown.add(key);
+    const sd = e.side ?? 0;
+    const sq = (sd === 0 ? hs : as).squad.find((p) => p.id === e.playerId);
+    const how = / (de penálti|no livre direto dos 10 metros|em contra-ataque|na recarga|na sequência de um canto|para a baliza deserta)/.exec(e.text)?.[1];
+    const per = e.period === 1 ? '1.ª parte' : e.period === 2 ? '2.ª parte' : 'Prolongamento';
+    const el = $('#gbar');
+    el.innerHTML = goalBarHtml({
+      style: style as 'liga',
+      team: { short: sd === 0 ? h.shortName : a.shortName, color: colors[sd] },
+      scorer: { number: sq?.number ?? null, name: m.names[e.playerId!] ?? '' },
+      assist: e.assistId ? m.names[e.assistId] : undefined,
+      time: `${e.text.slice(0, 5)} · ${per}`,
+      score: `${h.shortName} ${e.score[0]}-${e.score[1]} ${a.shortName}`,
+      note: how,
+    });
+    if (gbarTimer) clearTimeout(gbarTimer);
+    gbarTimer = setTimeout(() => {
+      el.firstElementChild?.classList.add('out');
+      gbarTimer = setTimeout(() => (el.innerHTML = ''), 450);
+    }, 6500);
   }
 
   function flash(text: string, cls = '') {
@@ -281,6 +315,9 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
     const mod = await import('../three/highlight3d');
     hl = new mod.Highlight3D($('#hlv'), {
       kits,
+      quality: st.quality ?? 'normal',
+      gkKits,
+      refShirt,
       profile: crowd.arena,
       crowd: crowd.total,
       shares: crowd.shares,
@@ -289,6 +326,7 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
       teams: [{ short: h.shortName, colors: kit[0], name: h.name }, { short: a.shortName, colors: kit[1], name: a.name }],
       ultras,
     });
+    hl.onGoal = () => { const g = poss?.events.find((e) => e.type === 'golo'); if (g) goalBar(g); };
   }
 
   // ---- Antes do jogo: entrada das equipas, alinhamento e cinco iniciais (3D) ----
@@ -372,14 +410,29 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
     if (!hl) return;
     chain = 0;
     shown3d = choreo;
-    hl.onEnd = () => {
-      if (tryContinue()) return;
-      autoClose = setTimeout(close3d, 2500);
-    };
+    hl.onEnd = end3d;
     hl.setBench(benchIds());
     const total = choreo.total;
     const after: [number, number] = ev.type === 'golo' ? [ev.score[0], ev.score[1]] : [shownScore[0], shownScore[1]];
     hl.play(choreo, info, kit, Math.max(0, total - Math.max(10, choreo.extra + 7)), total, [[shownScore[0], shownScore[1]], after]);
+  }
+
+  // fim da imagem 3D: depois de um golo, repetição automática em câmara lenta noutro ângulo
+  let userCam: CameraId = 'tv';
+  const replayed = new Set<Choreo>();
+  function end3d() {
+    if (!hl) return;
+    const c = shown3d;
+    const g = c?.goalShotCt;
+    if (c && g != null && !replayed.has(c)) {
+      replayed.add(c);
+      $('#hlcap').textContent = 'Repetição';
+      hl.replayWindow(Math.max(0, g - 2.6), Math.min(c.total, g + 1.4), 0.4, userCam === 'baliza' ? 'tv' : 'baliza');
+      return;
+    }
+    hl.cameraId = userCam;
+    if (tryContinue()) return;
+    autoClose = setTimeout(close3d, 2500);
   }
 
   // depois de um lance perigoso: se quem defendeu sai em contra-ataque, o 3D continua sem cortes
@@ -428,7 +481,7 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
       feed.push(e);
       if (e.type === 'golo') {
         shownScore = [e.score[0], e.score[1]];
-        flash(`GOLO! ${m.names[e.playerId!] ?? ''}`, e.side === mySide ? 'mine' : 'opp');
+        goalBar(e);
         hold = 1.6;
       } else if (KEY_TYPES[st.moments3d].includes(e.type)) {
         banner = { penalti: 'Penálti', livre_10m: 'Livre de 10 m', vermelho: 'Expulsão', poste: 'Ao poste!', gr_avancado_on: '5x4', remate_defendido: 'Grande defesa', remate_fora: 'Ocasião', canto: 'Canto', confronto: 'Confronto!' }[e.type as string] ?? '';
@@ -594,7 +647,8 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
   content.querySelectorAll<HTMLButtonElement>('[data-cam]').forEach((b) =>
     b.addEventListener('click', () => {
       if (autoClose) { clearTimeout(autoClose); autoClose = null; }
-      if (hl) hl.cameraId = b.dataset.cam as CameraId;
+      userCam = b.dataset.cam as CameraId;
+      if (hl) hl.cameraId = userCam;
       content.querySelectorAll('[data-cam]').forEach((x) => x.classList.toggle('on', x === b));
     })
   );

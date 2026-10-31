@@ -58,6 +58,7 @@ export interface Settings {
   speed: 'lento' | 'medio' | 'rapido';
   moments3d: 'nenhum' | 'golos' | 'importantes' | 'todos';
   scoreboard: 'auto' | 'liga' | 'taca' | 'tacaLiga' | 'supertaca';
+  quality?: 'normal' | 'alta'; // gráficos 3D: alta = reflexos no piso, sombras mais finas
 }
 
 export interface GameState {
