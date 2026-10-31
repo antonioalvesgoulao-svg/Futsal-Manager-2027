@@ -6,6 +6,8 @@ import { matchOptions, setupFor } from '../../core/game';
 import { COMP_NAMES, Fixture } from '../../core/season/types';
 import type { Club, GameState, Settings } from '../../core/types';
 import { goalBarHtml, lineupHtml, scoreboardHtml } from '../broadcast';
+import { sound } from '../audio';
+import type { Frame } from '../../core/visual/choreo';
 import { resultHtml } from './friendly';
 import { renderTactics } from './tactics';
 import { arrangeForSystem } from '../../core/tactics';
@@ -62,6 +64,9 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
 const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
   const textCol = (c: string) => (hexDist(c, '#ffffff') < 200 ? '#111' : '#fff');
   const crowd = attendance(s, f);
+  // som: o clique em "Jogar ao vivo" permite ao browser tocar som
+  sound.setVolume(st.sound ?? 'mid');
+  sound.start(crowd.total / Math.max(1, crowd.arena.capacity));
   // claques organizadas (bandeiras, tifo, tochas): Benfica e Sporting, só em jogos grandes
   // (dérbi entre os dois ou finais das competições)
   const BIG = ['slb', 'scp'];
@@ -113,6 +118,7 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
           <div class="live-controls">
             <button class="btn" id="pause">⏸ Pausa</button>
             <div class="seg speed">${(['lento', 'medio', 'rapido'] as const).map((v) => `<button data-speed="${v}" class="${st.speed === v ? 'on' : ''}">${{ lento: 'Lenta', medio: 'Média', rapido: 'Rápida' }[v]}</button>`).join('')}</div>
+            <button class="btn" id="snd" title="Som: desligado / baixo / médio / alto">🔊</button>
             <button class="btn" id="subs">Substituições</button>
             <button class="btn" id="tac">Táticas</button>
             <button class="btn" id="to">Pedir desconto de tempo</button>
@@ -160,8 +166,28 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
   let ballP: P = { x: 0, y: 0 };
   const toSvg = (p: P) => ({ x: (p.x + 20) * 10, y: (p.y + 10) * 10 });
 
+  // ---- som: toques na bola, chiar das sapatilhas e excitação do público, a partir da jogada (2D e 3D) ----
+  const heard = new Set<string>();
+  function soundFrame(fr: Frame, dir: number) {
+    let ex = 0.05;
+    const bu = Math.abs(fr.ball.x);
+    if (bu > 12 && !fr.stoppage) ex = 0.25 + (bu - 12) * 0.05;
+    for (const [id, a] of Object.entries(fr.acts)) {
+      if (a.kind === 'shoot' || a.kind === 'dive' || a.kind === 'splits' || a.kind === 'spread') ex = Math.max(ex, 0.9);
+      if ((a.kind === 'pass' || a.kind === 'shoot' || a.kind === 'throw') && a.k > 0.35 && a.k < 0.75) {
+        const key = `${id}:${a.kind}:${Math.round(fr.ball.x)}:${Math.round(fr.ball.y)}`;
+        if (!heard.has(key)) { heard.add(key); if (a.kind !== 'throw') sound.kick(a.kind === 'shoot'); if (heard.size > 300) heard.clear(); }
+      }
+      if ((a.kind === 'feint' || a.kind === 'tackle') && a.k < 0.2 && Math.random() < 0.05) sound.squeak();
+    }
+    if (fr.acts && Object.values(fr.acts).some((a) => a.kind === 'celebrate')) ex = 1;
+    void dir;
+    sound.update(ex);
+  }
+
   function drawFrame() {
     const fr = choreo ? choreo.at(ct) : null;
+    if (fr && !in3d) soundFrame(fr, choreo!.attackDirection);
     const pos = fr?.pos ?? {};
     let html = '';
     let under = '';
@@ -292,6 +318,7 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
     const key = `${e.t}-${e.score[0]}-${e.score[1]}`;
     if (goalsShown.has(key)) return;
     goalsShown.add(key);
+    sound.goal(e.side === 0);
     const sd = e.side ?? 0;
     const sq = (sd === 0 ? hs : as).squad.find((p) => p.id === e.playerId);
     const how = / (de penálti|no livre direto dos 10 metros|em contra-ataque|na recarga|na sequência de um canto|para a baliza deserta)/.exec(e.text)?.[1];
@@ -353,6 +380,7 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
       teams: [{ short: h.shortName, colors: kit[0], name: h.name }, { short: a.shortName, colors: kit[1], name: a.name }],
       ultras,
     });
+    hl.onFrame = (fr) => soundFrame(fr, 1);
     hl.onGoal = () => { const g = poss?.events.find((e) => e.type === 'golo'); if (g) goalBar(g); };
   }
 
@@ -508,6 +536,15 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
       if (poss && playing && e.t >= poss.end - 0.01) break;
       revealed++;
       feed.push(e);
+      // som dos acontecimentos: apito, buzina, "uuuh", poste, assobios
+      if (e.type === 'inicio' || e.type === 'prolongamento') sound.whistle('long');
+      else if (e.type === 'fim_parte') { sound.horn(); sound.whistle('long'); }
+      else if (e.type === 'fim_jogo') { sound.horn(1.8); sound.whistle('triple'); }
+      else if (e.type === 'falta' || e.type === 'livre_10m' || e.type === 'penalti' || e.type === 'amarelo') sound.whistle('short');
+      else if (e.type === 'vermelho' || e.type === 'confronto') { sound.whistle('short'); sound.boo(); }
+      else if (e.type === 'poste') sound.post();
+      else if (e.type === 'remate_defendido' || e.type === 'remate_fora') sound.ooh(e.type === 'remate_defendido' ? 1 : 0.7);
+      else if (e.type === 'time_out') sound.horn(0.9);
       // comentário: golos, cartões, faltas importantes, confrontos, descontos de tempo, 5x4, fim das partes
       const COMM: Record<string, string> = { golo: 'goal', amarelo: 'card', vermelho: 'red', confronto: 'red', livre_10m: '', penalti: '', time_out: '', gr_avancado_on: '', fim_parte: '', prolongamento: '', poste: '', canto: '', remate_defendido: '', remate_fora: '', remate_bloqueado: '' };
       // golos e confrontos vêem-se em 3D: não vão para o comentário (só se o 3D estiver desligado)
@@ -528,6 +565,7 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
 
   function finishUi() {
     done = true;
+    sound.stop();
     hl?.dispose();
     hl = null;
     const res = m.result();
@@ -674,6 +712,15 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
     $('#modal').hidden = true;
     paused = false;
     $('#pause').textContent = '⏸ Pausa';
+  });
+  const SND = ['off', 'low', 'mid', 'high'] as const;
+  const sndIcon = () => ($('#snd').textContent = sound.volume === 'off' ? '🔇' : sound.volume === 'low' ? '🔈' : sound.volume === 'mid' ? '🔉' : '🔊');
+  sndIcon();
+  $('#snd').addEventListener('click', () => {
+    const v = SND[(SND.indexOf(sound.volume) + 1) % SND.length];
+    sound.setVolume(v);
+    st.sound = v;
+    sndIcon();
   });
   $('#to').addEventListener('click', () => {
     if (m.requestTimeout(mySide)) flash('Desconto de tempo pedido', 'mine');

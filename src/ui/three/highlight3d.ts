@@ -43,7 +43,8 @@ export class Highlight3D {
   private lastHolder: string | null = null;
   cameraId: CameraId = 'tv';
   onEnd: (() => void) | null = null;
-  onGoal: (() => void) | null = null; // golo na imagem (para o gráfico de golo)
+  onGoal: (() => void) | null = null;
+  onFrame: ((f: ReturnType<Scene3D['at']>) => void) | null = null; // som // golo na imagem (para o gráfico de golo)
   private ended = false;
 
   private arena: ArenaHandle;
@@ -252,6 +253,7 @@ export class Highlight3D {
 
   private draw(dt: number, render: boolean) {
     const f = this.choreo!.at(this.t);
+    if (render) this.onFrame?.(f);
     // adeptos: festejam o golo da sua equipa, vibram nas ocasiões
     this.clock += dt;
     const cel = Object.entries(f.acts).find(([, a]) => a.kind === 'celebrate');

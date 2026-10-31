@@ -18,6 +18,10 @@ export function renderSettings(content: HTMLElement, s: GameState) {
         <select data-k="moments3d">${opt('moments3d', 'nenhum', 'Nenhum (só 2D)')}${opt('moments3d', 'golos', 'Só golos')}${opt('moments3d', 'importantes', 'Golos, grandes defesas, bolas aos postes, penáltis, livres de 10 m, expulsões')}${opt('moments3d', 'todos', 'Todas as ocasiões (inclui remates ao lado e cantos)')}</select>
         <span class="small muted">O jogo para e mostra o lance em 3D, com 4 câmaras e repetição. Fora os golos, há pelo menos 1 minuto de jogo entre momentos 3D.</span>
       </label>
+      <label>Som do jogo
+        <select data-k="sound">${opt('sound', 'off', 'Desligado')}${opt('sound', 'low', 'Baixo')}${opt('sound', 'mid', 'Médio')}${opt('sound', 'high', 'Alto')}</select>
+        <span class="small muted">Ambiente do pavilhão, apito, buzina e bola. Sons gerados pelo jogo (sem gravações com direitos).</span>
+      </label>
       <label>Qualidade gráfica do 3D
         <select data-k="quality">${opt('quality', 'normal', 'Normal (mais fluido) · recomendada')}${opt('quality', 'alta', 'Alta (reflexos no piso, sombras mais finas; precisa de um computador mais rápido)')}</select>
       </label>

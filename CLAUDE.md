@@ -42,6 +42,7 @@ O António não programa: o Claude escreve o código, testa e envia para o GitHu
 | `src/ui/three/ultras3d.ts` | Claques (Benfica e Sporting, só em dérbis e finais): bandeiras, faixas, tifo no início da entrada (12 s), depois tochas seguras por adeptos (chama, faíscas, fumo que se acumula, luz a tremeluzir) na entrada e nos golos |
 | `src/ui/three/roof3d.ts` | Tetos conforme as fotos: arcos em treliça ou maciços, malha de triângulos (plana/cúpula), asnas com projetores, vigas, LED. `viewFrom` em highlight3d para comparar com fotos |
 | `src/core/attendance.ts` | Pavilhões (lotação real quando conhecida, `capacityReal`) e assistência ao estilo FM |
+| `src/ui/audio.ts` | Som gerado no browser (Web Audio, sem gravações): público conforme a ocupação e a excitação, cânticos, palmas, "uuuh", festa do golo, assobios, apito (curto/longo/triplo), buzina, toques na bola, poste, rede, sapatilhas. Volume nas Definições e botão no jogo ao vivo |
 | `src/core/appearance.ts` | Aspeto de cada jogador (pele, cabelo, barba, altura, cor das sapatilhas) por nacionalidade/idade; GR sem luvas (pedido do António); `LOOKS` para correções manuais |
 
 ## Regras oficiais implementadas
@@ -90,6 +91,7 @@ Real: 6,38 golos/jogo, casa 49,6%, fora 37,0%, empates 13,5%, <3 golos 6,1%. Man
 - Feedback 31/10 noite: placas LED com número inteiro de painéis (nada cortado); marcador 2D centrado sobre a quadra; contra-ataque sem passes para trás (quem tem espaço conduz para a baliza; 1x0 vai sozinho); livre de 10 m com o GR 1,5-3 m fora da linha (penálti continua na linha, regra); qualquer golo é mostrado em 3D (também quando surge logo a seguir a outro lance 3D)
 - Comentário 2D ao estilo FM: barra grande por baixo da quadra (lance atual + anterior), só o essencial (remates, defesas, cantos, livres, cartões, golos, confrontos, faltas acumuladas); legenda pequena dentro da quadra retirada. Confrontos sempre em 3D (como os golos, em qualquer definição exceto "nenhum"), desde o lance que os provoca
 - Bola nas mãos (GR que agarra, jogador que vai buscar a bola) fica à frente do peito, nunca dentro do corpo (antes desaparecia); agarrada junto ao chão só em voo/espargata
+- Som (fase 1+2, 1/11 noite): ambiente do pavilhão e sons do jogo gerados no browser; próximas fases possíveis: cânticos próprios das claques (Benfica/Sporting), sons livres de direitos indicados pelo António
 - Próximos melhoramentos possíveis: mais variantes de jogadas ensaiadas
 
 ## Roteiro
