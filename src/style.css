@@ -202,3 +202,13 @@ button[disabled] { opacity: .45; cursor: not-allowed; }
 
 .cap2d { position: absolute; left: 10px; bottom: 8px; background: rgba(0,0,0,.55); color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; pointer-events: none; }
 .cap2d:empty { display: none; }
+
+/* Substituições durante o jogo */
+.subs-box { width: min(900px, 100%); }
+.subs-top { display: flex; gap: 24px; flex-wrap: wrap; margin: 10px 0; }
+.subs-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.subs-cols tr.pick { cursor: pointer; }
+.subs-cols tr.pick:hover td { background: rgba(250,204,21,.08); }
+.subs-cols tr.sel td { background: rgba(250,204,21,.22); }
+.flash-msg { background: #1f2937; border-left: 3px solid #facc15; padding: 6px 10px; margin: 6px 0; border-radius: 4px; }
+@media (max-width: 700px) { .subs-cols { grid-template-columns: 1fr; } }

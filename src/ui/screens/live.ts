@@ -8,6 +8,7 @@ import type { Club, GameState, Settings } from '../../core/types';
 import { lineupHtml, scoreboardHtml } from '../broadcast';
 import { resultHtml } from './friendly';
 import { renderTactics } from './tactics';
+import { arrangeForSystem } from '../../core/tactics';
 import type { Highlight3D, CameraId, ActorInfo } from '../three/highlight3d';
 import { Choreo, StartState } from '../../core/visual/choreo';
 import { IntroScene } from '../../core/visual/intro';
@@ -100,6 +101,7 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
           <div class="live-controls">
             <button class="btn" id="pause">⏸ Pausa</button>
             <div class="seg speed">${(['lento', 'medio', 'rapido'] as const).map((v) => `<button data-speed="${v}" class="${st.speed === v ? 'on' : ''}">${{ lento: 'Lenta', medio: 'Média', rapido: 'Rápida' }[v]}</button>`).join('')}</div>
+            <button class="btn" id="subs">Substituições</button>
             <button class="btn" id="tac">Táticas</button>
             <button class="btn" id="to">Pedir desconto de tempo</button>
             <span class="spacer"></span>
@@ -111,6 +113,7 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
           <div id="lt"></div>
         </div>
       </div>
+      <div class="modal" id="msubs" hidden><div class="modal-box subs-box"><div class="row"><b>Substituições e sistema (jogo em pausa)</b><span class="spacer"></span><button class="btn primary" id="closesubs">Voltar ao jogo</button></div><div id="subsbody"></div></div></div>
       <div class="modal" id="modal" hidden><div class="modal-box"><div class="row"><b>Táticas (jogo em pausa)</b><span class="spacer"></span><button class="btn primary" id="close">Voltar ao jogo</button></div><div id="mtac"></div></div></div>
     </div>`;
 
@@ -520,6 +523,52 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
       drawSide();
     })
   );
+  // ---- Substituições manuais e sistema, como no FM: pausa, escolhe quem sai e quem entra ----
+  let subOut: string | null = null;
+  function drawSubs(msg = '') {
+    const t = m.snapshot().teams[mySide];
+    const bar = (e: number) => `<span class="ebar"><i style="width:${e}%;background:${e > 70 ? '#4ade80' : e > 50 ? '#facc15' : '#f87171'}"></i></span>`;
+    const row = (p: { id: string; number: number | null; name: string; energy: number; position?: string; sentOff?: boolean }, where: 'out' | 'in') =>
+      `<tr class="${where === 'out' && subOut === p.id ? 'sel' : ''} ${p.sentOff ? 'muted' : 'pick'}" data-${where}="${p.id}"><td>${p.number ?? ''}</td><td>${p.name}${p.sentOff ? ' 🟥' : ''}</td><td>${p.position ?? ''}</td><td>${bar(Math.round(p.energy))} ${Math.round(p.energy)}%</td></tr>`;
+    const tac = s.tactics;
+    const segBtns = (key: 'system' | 'rotation', opts: Record<string, string>) => Object.entries(opts).map(([v, l]) => `<button class="${(tac as unknown as Record<string, string>)[key] === v ? 'on' : ''}" data-tk="${key}" data-tv="${v}">${l.split(' (')[0]}</button>`).join('');
+    $('#subsbody').innerHTML = `
+      <div class="subs-top">
+        <div><div class="seg-title">Sistema</div><div class="seg">${segBtns('system', { '3-1': '3-1', '4-0': '4-0', '2-2': '2-2', '1-2-1': '1-2-1' })}</div></div>
+        <div><div class="seg-title">Rotação automática</div><div class="seg">${segBtns('rotation', { curta: 'Curta', normal: 'Normal', longa: 'Longa', manual: 'Manual (só eu substituo)' })}</div></div>
+      </div>
+      <p class="small muted">1) Clica em quem <b>sai</b> (em campo). 2) Clica em quem <b>entra</b> (banco). As substituições são volantes e ilimitadas; a troca faz-se na jogada seguinte. ${tac.rotation === 'manual' ? 'Rotação manual: o motor não troca ninguém.' : 'Com rotação automática o motor também vai trocando quintetos; escolhe Manual para mandares sozinho.'}</p>
+      ${msg ? `<div class="flash-msg">${msg}</div>` : ''}
+      <div class="subs-cols">
+        <div><b>Em campo</b><table class="tbl small"><tbody>${[t.gk, ...t.court].filter((p): p is NonNullable<typeof p> => !!p).map((p) => row(p, 'out')).join('')}</tbody></table></div>
+        <div><b>Banco</b><table class="tbl small"><tbody>${t.bench.map((p) => row(p, 'in')).join('')}</tbody></table></div>
+      </div>`;
+    $('#subsbody').querySelectorAll<HTMLElement>('[data-out]').forEach((el) => el.addEventListener('click', () => { subOut = el.dataset.out!; drawSubs(); }));
+    $('#subsbody').querySelectorAll<HTMLElement>('[data-in]').forEach((el) => el.addEventListener('click', () => {
+      if (!subOut) return drawSubs('Escolhe primeiro quem sai (em campo).');
+      const err = m.substitute(mySide, subOut, el.dataset.in!);
+      subOut = null;
+      snap = m.snapshot();
+      drawSubs(err ?? 'Substituição feita.');
+    }));
+    $('#subsbody').querySelectorAll<HTMLButtonElement>('[data-tk]').forEach((b) => b.addEventListener('click', () => {
+      const k = b.dataset.tk as 'system' | 'rotation';
+      (tac as unknown as Record<string, string>)[k] = b.dataset.tv!;
+      if (k === 'system') for (const q of ['q1', 'q2'] as const) tac[q] = arrangeForSystem(tac[q].map((id) => s.players.find((p) => p.id === id)), tac.system).map((p) => p?.id ?? '');
+      drawSubs(k === 'system' ? `Sistema ${tac.system} a partir da próxima jogada.` : '');
+    }));
+  }
+  $('#subs').addEventListener('click', () => {
+    paused = true;
+    subOut = null;
+    $('#msubs').hidden = false;
+    drawSubs();
+  });
+  $('#closesubs').addEventListener('click', () => {
+    $('#msubs').hidden = true;
+    paused = false;
+    $('#pause').textContent = '⏸ Pausa';
+  });
   $('#tac').addEventListener('click', () => {
     paused = true;
     $('#modal').hidden = false;

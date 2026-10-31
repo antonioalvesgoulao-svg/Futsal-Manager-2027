@@ -55,7 +55,7 @@ O António não programa: o Claude escreve o código, testa e envia para o GitHu
 
 ## Validação (5 épocas reais 2021/22 a 2025/26, zerozero)
 Real: 6,38 golos/jogo, casa 49,6%, fora 37,0%, empates 13,5%, <3 golos 6,1%. Manter a simulação próxima destes valores após mexer no motor (script de 5 épocas com play-off).
-Última validação (1/11, 1 848 jogos da Liga): 6,37 golos/jogo, casa 49,8%, fora 37,7%, empates 12,6%, <3 golos 7,0% (pGoal base 0,185; vantagem casa 2,6).
+Última validação (1/11, 3 696 jogos da Liga): 6,42 golos/jogo, casa 50,1%, fora 37,3%, empates 12,7%, <3 golos 6,5% (pGoal base 0,182; vantagem casa 3,0/-0,8; momento do jogo: quem perde +0,55 por golo, quem ganha -0,2).
 
 ## Feedback recente do António (prioridade)
 - Vídeo de 31/10/2026: transições artificiais, cantos sem marcador nem organização, 3D sem animações. Resposta (`choreo.ts` reescrito):
@@ -68,6 +68,7 @@ Real: 6,38 golos/jogo, casa 49,6%, fora 37,0%, empates 13,5%, <3 golos 6,1%. Man
   - ritmo: lenta 2,2x (lances decisivos 1,3x) ≈ 23 min, média 4,5x (2x) ≈ 11 min, rápida 9x ≈ 5 min
 - Feedback 3D (1/11): bancos com cadeiras (ambos na cor da equipa da casa) e suplentes sentados (lado oposto à câmara de TV, com mesa e zona de substituição), túnel insuflável ao centro a sair do interior (placas abertas na passagem, mesa ao lado), GR de futsal (voo só aos ângulos altos; espargata lateral pelo chão; abertura em cruz de perto), GR agarra e repõe à mão, 3D em ecrã inteiro (pixel ratio 1,25, sombras 1024, tecidos em MeshStandard para fluidez). Jogo mais parecido com futsal: ~36 passes/min de posse, ~0,9 s com a bola por toque, marcação a ~2,2 m no meio-campo ofensivo (só 15 % do tempo com atacantes livres a >3 m). Referências reais são estimativas
 - Estilo do GR (tática `gkStyle`: clássico/construtor/atacante): o construtor ajuda a sair da pressão; o atacante sai a jogar com os pés, às vezes remata de longe (~0,5 remates/jogo, estimativa) e arrisca a baliza deserta. Defesas agarradas (`Action.caught`) dão contra-ataques com reposição rápida à mão (~1,5/jogo). No 3D, se o lance perigoso dá origem a contra-ataque, a imagem continua sem cortes (`continueWith`). Estudos de elite: 58% das ações do GR são ofensivas; não há números públicos por jogo de remates/conduções do GR
+- Durante o jogo: botão Substituições (pausa; quem sai → quem entra, `m.substitute`), mudar sistema e rotação; rotação 'manual' = o motor não troca jogadores (só expulsões/inferioridade)
 - Vídeos: o António arrasta clipes mp4 (30 s–2 min) para a conversa; extraio fotogramas com ffmpeg
 - Não consigo ver vídeos do YouTube nem imagens da internet (rede do ambiente bloqueia sites de imagens); posso analisar fotos, capturas e gravações que o António envie
 - Próximos melhoramentos possíveis: pontapés de linha lateral, mais variantes de jogadas ensaiadas, ressaltos/recargas

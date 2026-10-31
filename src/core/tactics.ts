@@ -8,7 +8,7 @@ export type Tempo = 'rapido' | 'equilibrado' | 'paciente';
 export type Marking = 'zona' | 'individual' | 'misto';
 export type FlyingKeeper = 'nunca' | 'auto' | 'agressivo' | 'sempre';
 export type GkStyle = 'classico' | 'construtor' | 'avancado';
-export type Rotation = 'curta' | 'normal' | 'longa';
+export type Rotation = 'curta' | 'normal' | 'longa' | 'manual';
 export type CornerRoutine = 'primeiro_poste' | 'remate_fora' | 'bloqueio_pivo' | 'curto';
 export type FreeKickRoutine = 'remate_direto' | 'jogada_ensaiada' | 'cruzamento';
 
@@ -52,7 +52,7 @@ export const LABELS = {
     agressivo: 'Agressivo (mais cedo, também empatado quando é preciso ganhar)',
     sempre: 'Sempre',
   },
-  rotation: { curta: 'Curta (rodar muito)', normal: 'Normal', longa: 'Longa (titulares mais tempo)' },
+  rotation: { curta: 'Curta (rodar muito)', normal: 'Normal', longa: 'Longa (titulares mais tempo)', manual: 'Manual (só eu substituo)' },
   gkStyle: { classico: 'Clássico (fica na baliza)', construtor: 'Construtor (joga com os pés)', avancado: 'Atacante (sai a jogar e remata)' },
   cornerRoutine: { primeiro_poste: 'Ao primeiro poste', remate_fora: 'Remate de fora', bloqueio_pivo: 'Bloqueio para o pivô', curto: 'Canto curto' },
   freeKickRoutine: { remate_direto: 'Remate direto', jogada_ensaiada: 'Jogada ensaiada', cruzamento: 'Cruzamento ao segundo poste' },
@@ -77,6 +77,7 @@ export const DESCRIPTIONS: Record<string, string> = {
   bloqueio_pivo: 'Bloqueio para libertar o pivô junto à baliza. Menos remates, mas muito perigosos com um bom pivô.',
   curto: 'Canto jogado curto para manter a posse. Poucos remates, quase nenhum risco de contra-ataque.',
   remate_direto: 'O especialista remata diretamente. Depende do remate e das bolas paradas.',
+  manual: 'O motor não troca jogadores: as substituições são todas tuas (durante o jogo, em Substituições). Atenção ao cansaço.',
   classico: 'O GR fica na baliza e repõe para os colegas. Mais seguro.',
   construtor: 'O GR participa na saída de bola com os pés. Ajuda contra a pressão; depende do jogo de pés.',
   avancado: 'O GR sai com a bola, junta-se ao ataque e às vezes remata. Mais ataque e contra-ataques, mas arrisca a baliza deserta.',

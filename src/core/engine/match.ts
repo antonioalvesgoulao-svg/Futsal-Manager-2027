@@ -171,7 +171,8 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     const t = teams[s];
     const avgEnergy = t.court.reduce((a, l) => a + l.energy, 0) / Math.max(1, t.court.length);
     const since = clock - t.lastRotation;
-    const rot = ROT[t.setup.tactics.rotation];
+    if (t.setup.tactics.rotation === 'manual') return; // só o treinador substitui
+    const rot = ROT[t.setup.tactics.rotation] ?? ROT.normal;
     if (since < rot.min) return;
     if (avgEnergy > rot.energy && since < rot.max) return;
     const target = 4 - (clock < t.shortUntil ? t.shortCount : 0) + (t.flying ? 1 : 0);
@@ -355,7 +356,7 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
 
     let pBlock = 0.24 + (defQ - finish) * 0.01;
     let pOn = 0.47 + (finish - 10) * 0.016 + (compo - 10) * 0.006;
-    let pGoal = 0.185 + (finish - gkQ) * 0.022; // calibrado com 5 épocas reais (6,38 golos/jogo)
+    let pGoal = 0.182 + (finish - gkQ) * 0.022; // calibrado com 5 épocas reais (6,38 golos/jogo)
     if (kind === 'contra') { pBlock *= 0.5; pOn += 0.08; pGoal += 0.1; }
     if (kind === 'livre10') { pBlock = 0; pOn = 0.72 + (finish - 10) * 0.015; pGoal = 0.42 + (finish - gkQ) * 0.025; }
     if (kind === 'penalti') { pBlock = 0; pOn = 0.86 + (compo - 10) * 0.01; pGoal = 0.78 + (finish - gkQ) * 0.02; }
@@ -548,7 +549,10 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     diff += (att.setup.coachTactical - 10) * 0.07 - (def.setup.coachTactical - 10) * 0.07;
     const tempo = TEMPO[att.setup.tactics.tempo];
     const dPress = def.setup.tactics.pressure;
-    diff += s === 0 ? 2.6 : -0.7; // vantagem de jogar em casa
+    diff += s === 0 ? 3.0 : -0.8; // vantagem de jogar em casa
+    // momento do jogo: quem perde arrisca e empurra; quem ganha gere (aproxima resultados e empates)
+    const gd = score[s] - score[1 - s];
+    diff += Math.min(3, Math.max(0, -gd)) * 0.55 - Math.min(3, Math.max(0, gd)) * 0.2;
     // estilo do GR: o construtor ajuda a sair da pressão; o atacante dá mais um jogador ao ataque
     const gs = att.setup.tactics.gkStyle ?? 'classico';
     if (att.gk && !att.flying && gs !== 'classico') diff += (eff(att.gk, 'jogoPes') - 10) * (gs === 'avancado' ? 0.08 : 0.06) + (gs === 'avancado' ? 0.15 : 0.05);
@@ -789,7 +793,7 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     return {
       clock, period, periodStart, periodLen, score: [score[0], score[1]], finished,
       teams: teams.map((t) => ({
-        gk: t.gk ? { id: t.gk.p.id, number: t.gk.p.number, name: t.gk.p.name, energy: t.gk.energy } : null,
+        gk: t.gk ? { id: t.gk.p.id, number: t.gk.p.number, name: t.gk.p.name, energy: t.gk.energy, position: t.gk.p.position } : null,
         court: t.court.map((l) => ({ id: l.p.id, number: l.p.number, name: l.p.name, energy: l.energy, position: l.p.position })),
         bench: t.players.filter((l) => !l.onCourt).map((l) => ({ id: l.p.id, number: l.p.number, name: l.p.name, energy: l.energy, position: l.p.position, sentOff: l.sentOff })),
         flying: t.flying,
@@ -809,6 +813,30 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     stats: tstats,
     players: pstats,
     names,
+    /** Substituição manual (volante, ilimitada): sai `outId` (em campo) e entra `inId` (no banco). */
+    substitute: (s: Side, outId: string, inId: string): string | null => {
+      const t = teams[s];
+      const out = t.players.find((l) => l.p.id === outId);
+      const inn = t.players.find((l) => l.p.id === inId);
+      if (!out || !inn) return 'Jogador não encontrado';
+      if (!out.onCourt) return `${out.p.name} não está em campo`;
+      if (inn.onCourt) return `${inn.p.name} já está em campo`;
+      if (inn.sentOff) return `${inn.p.name} foi expulso`;
+      if (t.gk === out) {
+        // troca de guarda-redes: entra outro GR (ou um jogador de campo a fazer de GR, se não houver)
+        out.onCourt = false;
+        inn.onCourt = true;
+        t.gk = inn;
+      } else {
+        if (inn.p.position === 'GR' && !t.flying) return 'Um guarda-redes só entra para o lugar do guarda-redes';
+        out.onCourt = false;
+        inn.onCourt = true;
+        t.court = t.court.map((l) => (l === out ? inn : l));
+      }
+      t.lastRotation = clock; // a rotação automática (se ligada) espera antes de voltar a mexer
+      log('substituicao', `${sideName(s)}: entra ${inn.p.name}, sai ${out.p.name}`, s, inn.p.id);
+      return null;
+    },
     requestTimeout: (s: Side) => {
       const t = teams[s];
       if (period > 2 || t.timeoutUsed[period]) return false;
