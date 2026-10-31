@@ -10,14 +10,16 @@ import { resultHtml } from './friendly';
 import { renderTactics } from './tactics';
 import type { Highlight3D, CameraId, ActorInfo } from '../three/highlight3d';
 import { Choreo, StartState } from '../../core/visual/choreo';
+import { attendance } from '../../core/attendance';
+import { lookOf } from '../../core/appearance';
 
 export const DEFAULT_SETTINGS: Settings = { speed: 'medio', moments3d: 'importantes', scoreboard: 'auto' };
 export const settingsOf = (s: GameState) => (s.settings ??= { ...DEFAULT_SETTINGS });
 
 // Segundos de jogo por segundo real. Os lances decisivos (finalização e bolas paradas) abrandam
-// para se verem os movimentos: na lenta a 1,3x, na média a 2,5x.
-const RATE = { lento: 2.2, medio: 7, rapido: 9 };
-const KEY_RATE = { lento: 1.3, medio: 2.5, rapido: 9 };
+// para se verem os movimentos: na lenta a 1,3x, na média a 2x.
+const RATE = { lento: 2.2, medio: 4.5, rapido: 9 };
+const KEY_RATE = { lento: 1.3, medio: 2, rapido: 9 };
 
 type P = { x: number; y: number };
 const lerp = (a: number, b: number, k: number) => a + (b - a) * k;
@@ -47,13 +49,15 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
   const style = st.scoreboard === 'auto' ? (f.comp === 'playoff' ? 'liga' : f.comp) : st.scoreboard;
   const colors: [string, string] = [h.colors[0], hexDist(h.colors[0], a.colors[0]) < 120 ? (hexDist(h.colors[0], a.colors[1]) < 120 ? '#f5f5f5' : a.colors[1]) : a.colors[0]];
   const textCol = (c: string) => (hexDist(c, '#ffffff') < 200 ? '#111' : '#fff');
+  const crowd = attendance(s, f);
+  const fmtN = (n: number) => n.toLocaleString('pt-PT');
 
   content.innerHTML = `
     <div class="live">
       <div class="live-top">
         <div></div>
         <div id="sb"></div>
-        <div class="live-comp small muted">${COMP_NAMES[f.comp]} · ${f.stage}</div>
+        <div class="live-comp small muted">${COMP_NAMES[f.comp]} · ${f.stage}<br>${crowd.arena.name} · ${fmtN(crowd.total)} espetadores${crowd.total >= crowd.arena.capacity ? ' (esgotado)' : ''}</div>
       </div>
       <div class="live-grid">
         <div>
@@ -107,7 +111,7 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
 
   // quem é quem (lado, número, guarda-redes)
   const info: Record<string, ActorInfo> = {};
-  for (const [side, setup] of [[0, hs], [1, as]] as const) for (const p of setup.squad) info[p.id] = { side, number: p.number, gk: p.position === 'GR' };
+  for (const [side, setup] of [[0, hs], [1, as]] as const) for (const p of setup.squad) info[p.id] = { side, number: p.number, gk: p.position === 'GR', look: lookOf(p) };
   const kit: [[string, string], [string, string]] = [[colors[0], h.colors[1]], [colors[1], colors[1] === a.colors[0] ? a.colors[1] : a.colors[0]]];
 
   let snap: LiveSnapshot = m.snapshot();
@@ -259,13 +263,21 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
     $('#hlcap').textContent = ev.text.replace(/^\d+:\d+ /, '');
     if (!hl) {
       const mod = await import('../three/highlight3d');
-      hl = new mod.Highlight3D($('#hlv'), h.arena);
+      hl = new mod.Highlight3D($('#hlv'), {
+        profile: crowd.arena,
+        crowd: crowd.total,
+        shares: crowd.shares,
+        comp: COMP_NAMES[f.comp],
+        stage: f.stage,
+        teams: [{ short: h.shortName, colors: kit[0] }, { short: a.shortName, colors: kit[1] }],
+      });
     }
     hl.onEnd = () => {
       autoClose = setTimeout(close3d, 2500);
     };
     const total = choreo.total;
-    hl.play(choreo, info, kit, Math.max(0, total - Math.max(10, choreo.extra + 7)), total);
+    const after: [number, number] = ev.type === 'golo' ? [ev.score[0], ev.score[1]] : [shownScore[0], shownScore[1]];
+    hl.play(choreo, info, kit, Math.max(0, total - Math.max(10, choreo.extra + 7)), total, [[shownScore[0], shownScore[1]], after]);
   }
 
   function close3d() {

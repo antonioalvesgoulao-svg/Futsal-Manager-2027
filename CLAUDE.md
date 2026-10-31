@@ -35,7 +35,11 @@ O António não programa: o Claude escreve o código, testa e envia para o GitHu
 | `src/core/game.ts` | Ciclo de jogo (avançar, jogar, fim de época) |
 | `src/core/development.ts` | Evolução, reformas, jovens da formação |
 | `src/ui/screens/` | Ecrãs (início, plantel, táticas, calendário, competições, dia de jogo, ao vivo, definições) |
-| `src/ui/three/highlight3d.ts` | Momentos importantes em 3D (pavilhão, 4 câmaras, repetição) |
+| `src/ui/three/highlight3d.ts` | Momentos importantes em 3D (4 câmaras, repetição, `seek` para testes) |
+| `src/ui/three/arena3d.ts` | Pavilhão 3D: bancadas à medida da lotação, adeptos animados, teto, ecrã, placas LED com anúncios fictícios |
+| `src/ui/three/player3d.ts` | Jogadores 3D articulados e animações |
+| `src/core/attendance.ts` | Pavilhões (lotação real quando conhecida, `capacityReal`) e assistência ao estilo FM |
+| `src/core/appearance.ts` | Aspeto de cada jogador (pele, cabelo, barba, altura) por nacionalidade/idade; `LOOKS` para correções manuais |
 
 ## Regras oficiais implementadas
 2 x 20 min de tempo útil; faltas acumuladas por parte, 6.ª = livre direto sem barreira (10 m ou local da falta); no prolongamento contam as da 2.ª parte; 1 desconto de tempo por parte; expulsão = 2 min de inferioridade (acaba se sofrer golo); buzina (remate antes do fim conta); prolongamento 2 x 5 min; penáltis 5 + pares até desempatar; substituições volantes ilimitadas; GR avançado como instrução tática.
@@ -56,7 +60,8 @@ Real: 6,38 golos/jogo, casa 49,6%, fora 37,0%, empates 13,5%, <3 golos 6,1%. Man
   - defesa: pressão conforme a linha escolhida, cobertura/ajuda, individual mantém pares, zona troca marcações; 5x4 deixa livre o mais longe da bola
   - bolas paradas organizadas: cantos (4 jogadas do motor), livres com barreira a 5 m (3 jogadas), 10 m e penálti com todos atrás da linha da bola, festejos, reposições do GR, pontapé de saída
   - ações por jogador (`Frame.acts`): passe, remate, mergulho, defesa, carrinho, finta, bloqueio, proteção do pivô, bloqueio de remate, queda, festejo. 3D com corpo articulado; 2D com setas de desmarcação e marcas de ação
-  - ritmo: lenta 2,2x (lances decisivos 1,3x) ≈ 23 min, média 7x (2,5x) ≈ 8 min, rápida 9x ≈ 5 min
+  - pavilhões e adeptos (pedido de 31/10): lotações da Wikipédia (8 reais, 4 estimadas: Ferreira do Zêzere, Venda Nova, Famalicão, campo neutro); disposição das bancadas é aproximação (sem fotos do interior). Assistência = procura por reputação × adversário × classificação/forma × importância × acaso, limitada à lotação (calibração estimada)
+  - ritmo: lenta 2,2x (lances decisivos 1,3x) ≈ 23 min, média 4,5x (2x) ≈ 11 min, rápida 9x ≈ 5 min
 - Não consigo ver vídeos do YouTube; posso analisar gravações de ecrã que o António envie (extraio fotogramas)
 - Próximos melhoramentos possíveis: pontapés de linha lateral, mais variantes de jogadas ensaiadas, ressaltos/recargas
 
