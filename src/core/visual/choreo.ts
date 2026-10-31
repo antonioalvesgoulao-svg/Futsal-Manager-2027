@@ -1338,7 +1338,10 @@ export class Choreo {
     const kSide = 1 - (this.sideOf.get(shooter) ?? this.att);
     const kId = this.p.onCourt[kSide][0];
     const kPos = kId && !this.p.flying[kSide] ? this.P(kId, T) : null;
-    const gkX = kPos ? g * clamp(Math.abs(kPos.x), 17.4, 19.5) : g * 19.4;
+    // remate de perto (1x1, contra-ataque): o GR sai ao encontro do atacante e fecha-o em queda (como na liga espanhola)
+    const fromDist = Math.hypot(g * 20 - from.x, from.y);
+    const rush = kPos && fromDist < 8.5 && res !== 'blocked' ? clamp((8.5 - fromDist) * 0.45, 0.4, 2.6) : 0;
+    const gkX = kPos ? g * (clamp(Math.abs(kPos.x), 17.4, 19.5) - rush) : g * 19.4;
     if (res === 'goal') { const v = (r() - 0.5) * 2.5; target = { x: g * 20.35, y: v, z: 0.15 + r() * 1.6 }; after = { x: g * 20.9, y: v * 0.9, z: 0.1 }; }
     else if (res === 'post') { target = { x: g * 19.95, y: side * 1.52, z: 0.3 + r() * 1.4 }; after = { x: g * 15, y: side * 4.5, z: 0.1 }; }
     else if (res === 'wide') { target = { x: g * 20.2, y: side * (1.9 + r() * 1.6), z: 0.2 + r() * 1.8 }; after = { x: g * 21.8, y: side * (3 + r() * 2), z: 0.1 }; }
@@ -1379,11 +1382,14 @@ export class Choreo {
       const sy = Math.sign(ty) || 1;
       const reach = tech === 'dive' ? 0.9 : tech === 'splits' ? 0.75 : 0;
       const ky = res === 'saved' ? ty - sy * reach : tech === 'spread' ? ty * 0.3 : ty * 0.6 - sy * reach * 0.5;
-      const tgt = { x: gkX, y: clamp(ky, -1.4, 1.4) };
+      const tgt = { x: gkX, y: clamp(rush ? lerp(ky, from.y * 0.5, 0.5) : ky, -1.8, 1.8) };
+      if (rush) this.label(T - 0.2, `${this.nm(gk)} sai ao encontro do atacante`);
       this.later.push(() => {
         const g0 = this.P(gk, T - 0.15);
-        this.fix(gk, T - 0.2, T + fl + 1.6);
-        this.key(gk, T, g0);
+        this.fix(gk, T - (rush ? 0.9 : 0.2), T + fl + 1.6);
+        // a saída começa antes do remate (lê o 1x1); sem saída fica onde está
+        if (rush) { const g1 = this.P(gk, T - 0.9); this.key(gk, T - 0.9, g1); this.key(gk, T - 0.05, { x: lerp(g1.x, tgt.x, 0.8), y: lerp(g1.y, tgt.y, 0.6) }); }
+        else this.key(gk, T, g0);
         this.key(gk, T + fl, tgt, true);
         this.key(gk, T + fl + 1.3, tgt);
       });

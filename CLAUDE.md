@@ -86,6 +86,7 @@ Real: 6,38 golos/jogo, casa 49,6%, fora 37,0%, empates 13,5%, <3 golos 6,1%. Man
 - Clipes reais do António (31/10 19h: Sporting-Benfica Liga Placard, Tigers-Benfica UEFA, Barcelona-Inter): ocupação de toda a largura (alas junto às linhas, fixo no meio-campo), bloco à zona compacto (lado contrário fecha o meio), portador marcado corpo a corpo e a proteger a bola de costas. Aplicado: estruturas mais largas, pressão no portador 0,65-1,1 m, ajuda à zona até 45%, proteção automática da bola com adversário encostado
 - Clipes 31/10 20h (jogadas ensaiadas reais: cantos com remate de primeira e bloqueios ao GR, 5x4 em pirâmide com diagonal curta, saída de pressão da Ucrânia com cortina + passe de primeira para o pivô + corte): aplicados como "cortina" e "diagonalCurta" no choreo
 - Clipe 2 min Tigers-Benfica (31/10 20h): GR atacante conduz até ao meio-campo (agora 15-19,5 m, a ~4,6 m/s); muitos choques com quedas (35% dos desarmes deitam quem perde a bola); confusões na área com GR no chão (recargas já existem)
+- Clipes de defesas (LNFS, 31/10 20h10): GR sai ao encontro do atacante nos remates de perto (<8,5 m) e fecha em queda (abertura/espargata), saída começa 0,9 s antes do remate; voos horizontais só aos ângulos altos (já existia)
 - Próximos melhoramentos possíveis: mais variantes de jogadas ensaiadas
 
 ## Roteiro
