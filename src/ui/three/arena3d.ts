@@ -811,13 +811,17 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
         tunnel.add(wh);
       }
     }
-    // teto abaulado
-    const top = new THREE.Mesh(new THREE.CylinderGeometry(tw / 2, tw / 2, len, 20, 1, true, -Math.PI / 2, Math.PI), new THREE.MeshStandardMaterial({ color: '#5b6f86', side: THREE.DoubleSide, roughness: 0.75 }));
-    top.rotation.x = Math.PI / 2;
-    top.rotation.z = Math.PI / 2;
-    top.scale.set(1, 1, 0.35);
-    top.position.set(0, th, -(z0 + len / 2));
+    // teto plano com cantos arredondados (como nos túneis retráteis reais)
+    const roofMat = new THREE.MeshStandardMaterial({ color: '#5b6f86', roughness: 0.75 });
+    const top = new THREE.Mesh(new THREE.BoxGeometry(tw - 0.1, 0.06, len), roofMat);
+    top.position.set(0, th + 0.12, -(z0 + len / 2));
     tunnel.add(top);
+    for (const sg of [-1, 1]) {
+      const edge = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.14, len, 10, 1, false, sg > 0 ? 0 : Math.PI, Math.PI), roofMat);
+      edge.rotation.x = Math.PI / 2;
+      edge.position.set(sg * (tw / 2 - 0.06), th, -(z0 + len / 2));
+      tunnel.add(edge);
+    }
     // pórtico na boca, com o nome da competição
     const head = new THREE.Mesh(new THREE.BoxGeometry(tw + 0.2, 0.5, 0.12), new THREE.MeshStandardMaterial({ map: canvasTex(512, 96, (c) => {
       c.fillStyle = ct.bg; c.fillRect(0, 0, 512, 96);
