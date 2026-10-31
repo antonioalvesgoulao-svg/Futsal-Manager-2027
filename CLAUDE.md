@@ -92,6 +92,7 @@ Real: 6,38 golos/jogo, casa 49,6%, fora 37,0%, empates 13,5%, <3 golos 6,1%. Man
 - Comentário 2D ao estilo FM: barra grande por baixo da quadra (lance atual + anterior), só o essencial (remates, defesas, cantos, livres, cartões, golos, confrontos, faltas acumuladas); legenda pequena dentro da quadra retirada. Confrontos sempre em 3D (como os golos, em qualquer definição exceto "nenhum"), desde o lance que os provoca
 - Bola nas mãos (GR que agarra, jogador que vai buscar a bola) fica à frente do peito, nunca dentro do corpo (antes desaparecia); agarrada junto ao chão só em voo/espargata
 - Som (1/11 noite): gerado no browser. Cânticos retirados a pedido do António (soavam artificiais); fundo = conversa do público (vozes curtas) + ruído de sala muito baixo (o varrimento antigo soava a ondas do mar); apito com trilo da bolinha (~3,2 kHz, bem audível); "uuuh", "buuu" e golo feitos com vozes de multidão; assobios com os dedos; palmas ocasionais; petardos nos golos dos jogos grandes
+- Sons reais (freesound, escolhidos pelo António) em `public/sons/` (créditos em CREDITOS.txt): público (pavilhão de basquetebol, em ciclo), golo, apito, três apitos do fim, petardo, assobios. Carregados por `loadAll` em audio.ts; se faltarem, ficam os sons gerados. Ainda gerados: "uuuh", buzina, palmas, bola. freesound bloqueia pedidos a partir deste servidor (403) e o Wikimedia limita pedidos: o António descarrega e envia os ficheiros
 - Próximos melhoramentos possíveis: mais variantes de jogadas ensaiadas
 
 ## Roteiro

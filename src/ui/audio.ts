@@ -71,7 +71,7 @@ class Sound {
   private async loadAll() {
     const c = this.ctx!;
     const base = (import.meta as { env?: { BASE_URL?: string } }).env?.BASE_URL ?? '/';
-    await Promise.all(['publico', 'golo', 'apito', 'palmas', 'buzina'].map(async (n) => {
+    await Promise.all(['publico', 'golo', 'apito', 'apito_fim', 'petardo', 'assobios', 'palmas', 'buzina'].map(async (n) => {
       try {
         const r = await fetch(`${base}sons/${n}.mp3`);
         if (!r.ok) return;
@@ -301,6 +301,11 @@ class Sound {
   /** Petardos (jogos grandes, nos golos): estrondos secos com eco no pavilhão. */
   petards(n = 4) {
     if (!this.ok()) return;
+    if (this.buf.petardo) {
+      // petardos reais, cada um com o seu tamanho e distância (velocidade e volume diferentes)
+      for (let i = 0, w = 0.3; i < n; i++, w += 0.35 + Math.random() * 0.9) this.sample('petardo', 0.45 + Math.random() * 0.45, 0, undefined, 0.85 + Math.random() * 0.3, w);
+      return;
+    }
     for (let i = 0; i < n; i++) {
       const w = 0.3 + i * (0.4 + Math.random() * 0.9);
       this.noise(0.9, 180, 0.4, 'lowpass', 0.9, w, 0.002);
@@ -324,7 +329,7 @@ class Sound {
       const W = this.WHISTLE;
       if (kind === 'short') this.sample('apito', 0.9, W.from, W.short);
       else if (kind === 'long') this.sample('apito', 0.9, W.from, W.long);
-      else { this.sample('apito', 0.9, W.from, W.short); this.sample('apito', 0.9, W.from, W.short, 1, 0.45); this.sample('apito', 0.9, W.from, W.long, 1, 0.9); }
+      else if (!this.sample('apito_fim', 0.9)) { this.sample('apito', 0.9, W.from, W.short); this.sample('apito', 0.9, W.from, W.short, 1, 0.45); this.sample('apito', 0.9, W.from, W.long, 1, 0.9); }
       return;
     }
     const parts = kind === 'triple' ? [[0, 0.35], [0.45, 0.35], [0.9, 1.1]] : kind === 'long' ? [[0, 0.9]] : [[0, 0.32]];
@@ -345,7 +350,7 @@ class Sound {
     }
   }
   // troço do apito gravado que se usa (ajustado ao ficheiro)
-  private WHISTLE = { from: 0, short: 0.35, long: 0.9 };
+  private WHISTLE = { from: 0, short: 0.4, long: 1.6 };
   /** Buzina do pavilhão (fim das partes, desconto de tempo). */
   horn(dur = 1.4) {
     if (!this.ok()) return;
@@ -399,6 +404,7 @@ class Sound {
   /** Assobios (visitante ou decisão contra a casa). */
   boo() {
     if (!this.ok()) return;
+    if (this.sample('assobios', 0.35 + this.fill * 0.5, Math.random() * 3, 5)) return;
     const g = 0.08 + this.fill * 0.14;
     this.voices(2.6, 'u', 'u', 120, g, 16, 0, 105); // "buuuu"
     for (let i = 0; i < 10; i++) {
