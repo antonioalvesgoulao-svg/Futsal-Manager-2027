@@ -623,7 +623,7 @@ export class Choreo {
       if (backLike) opts.push(['passaCorta', sys === '4-0' ? 3.5 : 1.6]);
       if (sys === '2-2' && hs !== undefined) opts.push(['cruzamento', 1.4]);
       if (len >= 1.6) opts.push(['bloqueio', sys === '4-0' ? 0.9 : 0.7], ['drible', tA.tempo === 'rapido' ? 0.6 : 0.4]);
-      if (sys === '5x4') opts.push(['inversao', 2.5]);
+      if (sys === '5x4') opts.push(['inversao', 2.5], ['diagonalCurta', 2]);
       // falso pivô: o pivô sai da área para receber e o ala ataca o espaço nas costas
       if ((sys === '3-1' || sys === '1-2-1') && hs !== 3 && pivo && len >= 1.5) opts.push(['falsoPivo', 1.1]);
     }
@@ -631,6 +631,7 @@ export class Choreo {
     const oppPress = this.tactics[1 - this.att].pressure;
     // ataque à zona: o ala do lado contrário faz o movimento em "U" por trás de quem tem a bola e aparece do lado da bola
     if (len >= 1.6 && others.length >= 2) opts.push(['emU', this.tactics[1 - this.att].marking === 'zona' ? 0.9 : 0.35]);
+    if (len >= 2 && this.U(hp) < 20 && pivo) opts.push(['cortina', oppPress === 'alta' ? 2 : 0.6]);
     if (this.gkA && this.U(hp) < 17 && len >= 1.5) opts.push(['saidaGR', oppPress === 'alta' ? 3 : oppPress === 'media' ? 0.8 : 0.2]);
     let pick = r() * opts.reduce((a, o) => a + o[1], 0);
     let mv = opts[0][0];
@@ -642,7 +643,7 @@ export class Choreo {
       if ((mv === 'paralela' || mv === 'diagonal') && (fs !== 1 && fs !== 2)) mv = 'circ';
       if (mv === 'bloqueio' || mv === 'drible' || mv === 'saidaGR') mv = 'circ';
       if (mv === 'falsoPivo' && fs !== 3) mv = 'circ';
-      if (mv === 'emU') mv = 'circ';
+      if (mv === 'emU' || mv === 'diagonalCurta' || mv === 'cortina') mv = 'circ';
       if (mv === 'passaCorta' && fs !== (hs === 0 ? 1 : 2)) mv = 'circ';
     }
 
@@ -775,6 +776,49 @@ export class Choreo {
       this.attKeysAt(tEnd, new Set([holder, recv, gk]), -s * 4);
       this.key(gk, tEnd + 1.2, this.A(1.2, 0));
       return recv;
+    }
+
+    if (mv === 'diagonalCurta') {
+      // 5x4 em pirâmide: passe curto em diagonal para o vão entre as linhas da defesa (o da base vem ao espaço)
+      const s = sideOfBall;
+      const base = others.filter((x) => this.U(this.P(x, T)) > 31).sort((a, b) => dist(this.P(a, T), hp) - dist(this.P(b, T), hp))[0] ?? others[0];
+      const gapSpot = this.A(clamp(this.U(hp) + 3, 29, 33), clamp(hp.y * 0.45, -4.5, 4.5));
+      this.key(base, tEnd, gapSpot);
+      this.act(base, 'run', T + len * 0.3, tEnd, { to: gapSpot });
+      passTo(base, gapSpot, 0.03);
+      this.label(tEnd - 0.4, `Diagonal curta para ${this.nm(base)}, entre as linhas`);
+      this.attKeysAt(tEnd, new Set([holder, base]), s * 2);
+      this.key(base, tEnd + 1, this.slotPos(this.slot.get(base) ?? 3, tEnd + 1, s * 2));
+      return base;
+    }
+
+    if (mv === 'cortina' && pivo) {
+      // saída de pressão: um colega faz a cortina ao marcador, passe atravessado de primeira para o ala,
+      // passe de primeira para o pivô e corte de quem iniciou
+      const s = sideOfBall;
+      const wing = others.filter((x) => x !== pivo).reduce((a, b) => (this.P(b, T).y * -s > this.P(a, T).y * -s ? b : a));
+      const curtain = others.find((x) => x !== pivo && x !== wing);
+      const t1 = T + len * 0.45;
+      if (curtain) {
+        const cs = { x: hp.x + this.dirA * 1.6, y: hp.y - s * 1.2 };
+        this.key(curtain, t1 - 0.2, cs);
+        this.act(curtain, 'screen', t1 - 0.5, t1 + 0.3, { face: holder });
+      }
+      const wSpot = this.A(clamp(this.U(hp) + 3, 10, 24), -s * 7.6);
+      this.key(wing, t1 + 0.5, wSpot);
+      this.act(holder, 'pass', t1 - 0.35, t1, { face: wing });
+      this.pass(holder, wing, t1 - 0.2, t1 + 0.5, 0.05);
+      const pSpot = this.A(33, -s * 1.8);
+      this.key(pivo, tEnd, pSpot);
+      this.act(wing, 'pass', t1 + 0.4, t1 + 0.7, { face: pivo });
+      this.pass(wing, pivo, t1 + 0.55, tEnd, 0.05);
+      this.act(pivo, 'shield', tEnd, tEnd + 0.8, { ang: this.dirA > 0 ? -Math.PI / 2 : Math.PI / 2 });
+      const cut = this.A(clamp(this.U(hp) + 9, 22, 32), -s * 3);
+      this.key(holder, tEnd + 0.4, cut);
+      this.act(holder, 'run', t1, tEnd + 0.4, { to: cut });
+      this.label(t1 - 0.3, `Cortina, passe de primeira para o pivô e corte de ${this.nm(holder)}`);
+      this.attKeysAt(tEnd, new Set([holder, wing, pivo, ...(curtain ? [curtain] : [])]), -s * 3);
+      return pivo;
     }
 
     if (mv === 'emU') {
@@ -1488,7 +1532,8 @@ export class Choreo {
       roles.push(this.A(30, 0), this.A(33.5, -s * 3.5));
     } else if (routine === 'remate_fora') {
       startShooter = this.A(26.5, s * 2); shotSpot = this.A(30, s * 1.2);
-      roles.push(this.A(34.5, s * 1.5), this.A(34.5, -s * 2));
+      // bloqueios colados ao GR, a tapar-lhe a visão do remate (como nos cantos ensaiados reais)
+      roles.push(this.A(37.6, s * 0.5), this.A(36.9, -s * 1.3));
     } else if (routine === 'bloqueio_pivo') {
       startShooter = this.A(33.5, 0); shotSpot = this.A(36.6, s * 2.4);
       roles.push(this.A(34, s * 2), this.A(29.5, -s * 2));
