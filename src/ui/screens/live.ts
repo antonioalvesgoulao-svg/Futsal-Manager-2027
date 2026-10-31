@@ -14,8 +14,10 @@ import { Choreo, StartState } from '../../core/visual/choreo';
 export const DEFAULT_SETTINGS: Settings = { speed: 'medio', moments3d: 'importantes', scoreboard: 'auto' };
 export const settingsOf = (s: GameState) => (s.settings ??= { ...DEFAULT_SETTINGS });
 
-// Segundos de jogo por segundo real: lenta 15 s por minuto, média 7,5 s, rápida 3 s
-const RATE = { lento: 4, medio: 8, rapido: 20 };
+// Segundos de jogo por segundo real. Os lances decisivos (finalização e bolas paradas) abrandam
+// para se verem os movimentos: na lenta em tempo real, na média a 2x.
+const RATE = { lento: 1.5, medio: 5, rapido: 12 };
+const KEY_RATE = { lento: 1, medio: 2, rapido: 12 };
 
 type P = { x: number; y: number };
 const lerp = (a: number, b: number, k: number) => a + (b - a) * k;
@@ -133,30 +135,63 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
     const fr = choreo ? choreo.at(ct) : null;
     const pos = fr?.pos ?? {};
     let html = '';
+    let under = '';
     const ids = Object.keys(pos);
+    // a coreografia já é contínua; só se suaviza um eventual salto (substituições, início de período)
     for (const id of ids) {
       const target = pos[id];
       const cur = drawn[id] ?? target;
-      drawn[id] = { x: lerp(cur.x, target.x, 0.35), y: lerp(cur.y, target.y, 0.35) };
+      const jump = Math.hypot(cur.x - target.x, cur.y - target.y) > 2.5;
+      drawn[id] = jump ? { x: lerp(cur.x, target.x, 0.3), y: lerp(cur.y, target.y, 0.3) } : target;
     }
     for (const id of Object.keys(drawn)) if (!pos[id]) delete drawn[id];
     for (const id of ids) {
       const inf = info[id];
       if (!inf) continue;
-      const p = toSvg(drawn[id]);
+      const act = fr?.acts[id];
+      let pp = drawn[id];
+      if (act?.kind === 'feint') pp = { x: pp.x + Math.cos(act.ang) * Math.sin(act.k * Math.PI * 2) * 0.5, y: pp.y - Math.sin(act.ang) * Math.sin(act.k * Math.PI * 2) * 0.5 };
+      const p = toSvg(pp);
       const fill = inf.gk ? (inf.side === 0 ? '#0f766e' : '#7c3aed') : colors[inf.side];
       const hasBall = fr?.holder === id;
-      html += `<g transform="translate(${p.x.toFixed(1)},${p.y.toFixed(1)})">${hasBall ? '<circle r="11" fill="none" stroke="#fff" stroke-width="2"/>' : ''}<circle r="8" fill="${fill}" stroke="${inf.side === mySide ? '#facc15' : '#111'}" stroke-width="1.5"/><text y="3.5" text-anchor="middle" font-size="9" font-weight="700" fill="${inf.gk ? '#fff' : textCol(fill)}">${inf.number ?? ''}</text></g>`;
+      let extra = '';
+      let body = `<circle r="8" fill="${fill}" stroke="${inf.side === mySide ? '#facc15' : '#111'}" stroke-width="1.5"/>`;
+      if (act) {
+        // direção do corpo no SVG (ang = atan2(dx, dy))
+        const dx = Math.sin(act.ang), dy = Math.cos(act.ang);
+        if (act.kind === 'run' && act.to) {
+          const q = toSvg(act.to);
+          under += `<line x1="${p.x.toFixed(1)}" y1="${p.y.toFixed(1)}" x2="${q.x.toFixed(1)}" y2="${q.y.toFixed(1)}" class="run2d" stroke="${colors[inf.side]}"/><circle cx="${q.x.toFixed(1)}" cy="${q.y.toFixed(1)}" r="2.5" fill="${colors[inf.side]}" opacity=".7"/>`;
+        } else if (act.kind === 'pass' || act.kind === 'shoot' || act.kind === 'throw') {
+          extra += `<circle r="${(9 + act.k * (act.kind === 'shoot' ? 9 : 5)).toFixed(1)}" fill="none" stroke="#fff" stroke-width="${act.kind === 'shoot' ? 2.5 : 1.5}" opacity="${(1 - act.k).toFixed(2)}"/>`;
+        } else if (act.kind === 'screen' || act.kind === 'block') {
+          // bloqueio: barra perpendicular à direção do corpo
+          const px = -dy * 9, py = dx * 9;
+          extra += `<line x1="${(dx * 9 - px).toFixed(1)}" y1="${(dy * 9 - py).toFixed(1)}" x2="${(dx * 9 + px).toFixed(1)}" y2="${(dy * 9 + py).toFixed(1)}" stroke="#fff" stroke-width="3" stroke-linecap="round"/>`;
+        } else if (act.kind === 'dive' && act.to) {
+          const q = toSvg(act.to);
+          const a = (Math.atan2(q.y - p.y, q.x - p.x) * 180) / Math.PI;
+          const st = Math.sin(Math.min(1, act.k * 2.2) * Math.PI / 2);
+          body = `<ellipse rx="${(8 + st * 7).toFixed(1)}" ry="7" transform="rotate(${a.toFixed(0)}) translate(${(st * 4).toFixed(1)},0)" fill="${fill}" stroke="${inf.side === mySide ? '#facc15' : '#111'}" stroke-width="1.5"/>`;
+        } else if (act.kind === 'tackle') {
+          extra += `<circle r="11" fill="none" stroke="#fb923c" stroke-width="2" stroke-dasharray="3 2"/>`;
+        } else if (act.kind === 'celebrate') {
+          extra += `<circle r="${(10 + Math.sin(act.k * Math.PI * 6) * 2).toFixed(1)}" fill="none" stroke="#facc15" stroke-width="2"/>`;
+        } else if (act.kind === 'fall') {
+          body = body.replace('<circle', '<circle opacity=".55"');
+        }
+      }
+      html += `<g transform="translate(${p.x.toFixed(1)},${p.y.toFixed(1)})">${hasBall ? '<circle r="11" fill="none" stroke="#fff" stroke-width="2"/>' : ''}${body}${extra}<text y="3.5" text-anchor="middle" font-size="9" font-weight="700" fill="${inf.gk ? '#fff' : textCol(fill)}">${inf.number ?? ''}</text></g>`;
     }
-    dotsG.innerHTML = html;
+    dotsG.innerHTML = under + html;
     if (fr) {
-      // a bola segue a coreografia quase sem atraso (só suaviza mudanças de posse)
-      ballP = { x: lerp(ballP.x, fr.ball.x, 0.6), y: lerp(ballP.y, fr.ball.y, 0.6) };
+      ballP = { x: fr.ball.x, y: fr.ball.y };
       const b = toSvg(ballP);
       ballEl.setAttribute('cx', b.x.toFixed(1));
       ballEl.setAttribute('cy', b.y.toFixed(1));
       ballEl.setAttribute('r', String(3.5 + Math.min(3, fr.ball.z * 2)));
-      label = fr.label || (fr.holder ? `Com bola: ${m.names[fr.holder] ?? ''}` : '');
+      const what = fr.label || (fr.holder ? `Com bola: ${m.names[fr.holder] ?? ''}` : '');
+      label = fr.phase ? `${fr.phase}${what ? ' · ' + what : ''}` : what;
     }
     $('#cap2d').textContent = label;
   }
@@ -229,8 +264,8 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
     hl.onEnd = () => {
       autoClose = setTimeout(close3d, 2500);
     };
-    const total = choreo.duration + choreo.extra;
-    hl.play(choreo, info, kit, Math.max(0, total - Math.max(9, choreo.extra + 6)), total);
+    const total = choreo.total;
+    hl.play(choreo, info, kit, Math.max(0, total - Math.max(10, choreo.extra + 7)), total);
   }
 
   function close3d() {
@@ -238,14 +273,14 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
     autoClose = null;
     $('#hl').hidden = true;
     in3d = false;
-    if (choreo) ct = choreo.duration + choreo.extra; // a jogada já foi vista em 3D
+    if (choreo) ct = choreo.total; // a jogada já foi vista em 3D
     if (poss) display = poss.end;
     reveal();
   }
 
   function reveal() {
     const evs = m.events;
-    const playing = choreo ? ct < choreo.duration + choreo.extra - 0.001 : false;
+    const playing = choreo ? ct < choreo.total - 0.001 : false;
     while (revealed < evs.length && evs[revealed].t <= display + 0.01) {
       const e = evs[revealed];
       // os eventos do fim da posse (remates, golos, bolas paradas) só aparecem quando a jogada lá chega
@@ -309,9 +344,9 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
     if (!paused && !done && !in3d) {
       if (hold > 0) hold -= dtReal;
       else {
-        let budget = dtReal * RATE[st.speed];
+        let budget = dtReal;
         while (budget > 0 && !done && !in3d) {
-          const total = choreo ? choreo.duration + choreo.extra : 0;
+          const total = choreo ? choreo.total : 0;
           if (!choreo || ct >= total - 0.0001) {
             if (choreo) reveal();
             if (hold > 0) break;
@@ -324,11 +359,12 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
             }
             continue;
           }
-          const stepT = Math.min(budget, total - ct);
+          const rate = choreo.isKey(ct) ? KEY_RATE[st.speed] : RATE[st.speed];
+          const stepT = Math.min(budget * rate, total - ct, 0.05);
           ct += stepT;
-          budget -= stepT;
+          budget -= stepT / rate;
           // o relógio só anda durante o jogo corrido (pára nas bolas paradas)
-          if (poss) display = poss.start + Math.min(ct, choreo.duration);
+          if (poss) display = poss.start + choreo.clockAt(ct);
           reveal();
           if (hold > 0) break;
         }

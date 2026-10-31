@@ -2,7 +2,7 @@
 // várias câmaras e repetição. Movimento contínuo, sem cortes.
 import * as THREE from 'three';
 
-import type { Choreo } from '../../core/visual/choreo';
+import type { Act, Choreo } from '../../core/visual/choreo';
 
 export type CameraId = 'tv' | 'baliza' | 'aerea' | 'jogador';
 
@@ -182,13 +182,22 @@ function buildArena(scene: THREE.Scene, arenaName: string) {
 }
 
 // ---------- jogadores ----------
+// Corpo articulado: ancas, coxas e canelas (joelhos), braços e antebraços (cotovelos), tronco e cabeça.
 interface Actor {
-  g: THREE.Group;
-  legs: THREE.Object3D[];
-  arms: THREE.Object3D[];
+  g: THREE.Group; // posição e orientação no campo
+  body: THREE.Group; // inclinações, mergulhos, carrinhos (pivô nas ancas)
+  thigh: THREE.Object3D[];
+  shin: THREE.Object3D[];
+  arm: THREE.Object3D[];
+  fore: THREE.Object3D[];
   prev: THREE.Vector3;
   heading: number;
+  phase: number; // ciclo da corrida
+  speed: number;
+  init: boolean;
 }
+
+const HIP = 0.92;
 
 function numberTex(n: number | null, color: string, text: string) {
   return canvasTex(128, 128, (c) => {
@@ -198,58 +207,267 @@ function numberTex(n: number | null, color: string, text: string) {
   });
 }
 
-function makePlayer(shirt: string, shorts: string, number: number | null, skin: string) {
+function limb(len: number, w: number, mat: THREE.Material) {
+  const pivot = new THREE.Object3D();
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w, len, w), mat);
+  m.position.y = -len / 2;
+  m.castShadow = true;
+  pivot.add(m);
+  return pivot;
+}
+
+function makePlayer(shirt: string, shorts: string, number: number | null, skin: string, hair: string, gk: boolean) {
   const g = new THREE.Group();
+  const body = new THREE.Group();
+  body.position.y = HIP;
+  g.add(body);
   const shirtMat = new THREE.MeshStandardMaterial({ color: shirt, roughness: 0.7 });
   const shortsMat = new THREE.MeshStandardMaterial({ color: shorts, roughness: 0.7 });
   const skinMat = new THREE.MeshStandardMaterial({ color: skin, roughness: 0.8 });
-  const torso = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.6, 0.24), shirtMat);
-  torso.position.y = 1.2;
+  const sockMat = new THREE.MeshStandardMaterial({ color: gk ? shorts : shirt, roughness: 0.8 });
+  const bootMat = new THREE.MeshStandardMaterial({ color: '#111827', roughness: 0.5 });
+  const hairMat = new THREE.MeshStandardMaterial({ color: hair, roughness: 0.9 });
+  const torso = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.58, 0.23), shirtMat);
+  torso.position.y = 0.36;
   torso.castShadow = true;
-  g.add(torso);
+  body.add(torso);
   const light = new THREE.Color(shirt).getHSL({ h: 0, s: 0, l: 0 }).l > 0.6;
   const back = new THREE.Mesh(new THREE.PlaneGeometry(0.3, 0.3), new THREE.MeshStandardMaterial({ map: numberTex(number, shirt, light ? '#111' : '#fff') }));
-  back.position.set(0, 1.25, -0.125);
+  back.position.set(0, 0.4, -0.118);
   back.rotation.y = Math.PI;
-  g.add(back);
+  body.add(back);
   const front = back.clone();
-  front.position.z = 0.125;
   front.rotation.y = 0;
-  front.scale.set(0.5, 0.5, 1);
-  front.position.set(0.1, 1.33, 0.125);
-  g.add(front);
-  const head = new THREE.Mesh(new THREE.SphereGeometry(0.13, 16, 12), skinMat);
-  head.position.y = 1.65;
+  front.scale.set(0.45, 0.45, 1);
+  front.position.set(0.1, 0.5, 0.118);
+  body.add(front);
+  const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.06, 0.1, 8), skinMat);
+  neck.position.y = 0.7;
+  body.add(neck);
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.12, 16, 12), skinMat);
+  head.position.y = 0.83;
   head.castShadow = true;
-  g.add(head);
+  body.add(head);
+  const cap = new THREE.Mesh(new THREE.SphereGeometry(0.125, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2), hairMat);
+  cap.position.y = 0.845;
+  cap.rotation.x = -0.25;
+  body.add(cap);
   const hips = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.2, 0.24), shortsMat);
-  hips.position.y = 0.85;
-  g.add(hips);
-  const legs: THREE.Object3D[] = [];
+  hips.position.y = 0.0;
+  body.add(hips);
+  const thigh: THREE.Object3D[] = [], shin: THREE.Object3D[] = [], arm: THREE.Object3D[] = [], fore: THREE.Object3D[] = [];
   for (const x of [-0.1, 0.1]) {
-    const pivot = new THREE.Object3D();
-    pivot.position.set(x, 0.8, 0);
-    const leg = new THREE.Mesh(new THREE.BoxGeometry(0.13, 0.78, 0.14), skinMat);
-    leg.position.y = -0.39;
-    leg.castShadow = true;
-    const sock = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.3, 0.15), shortsMat);
-    sock.position.y = -0.62;
-    pivot.add(leg, sock);
-    g.add(pivot);
-    legs.push(pivot);
+    const th = limb(0.44, 0.15, shortsMat);
+    th.position.set(x, -0.02, 0);
+    // pele por baixo dos calções
+    const skinT = new THREE.Mesh(new THREE.BoxGeometry(0.13, 0.22, 0.13), skinMat);
+    skinT.position.y = -0.33;
+    th.add(skinT);
+    const sh = limb(0.44, 0.12, sockMat);
+    sh.position.y = -0.44;
+    const boot = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.08, 0.24), bootMat);
+    boot.position.set(0, -0.44, 0.05);
+    boot.castShadow = true;
+    sh.add(boot);
+    th.add(sh);
+    body.add(th);
+    thigh.push(th);
+    shin.push(sh);
   }
-  const arms: THREE.Object3D[] = [];
-  for (const x of [-0.27, 0.27]) {
-    const pivot = new THREE.Object3D();
-    pivot.position.set(x, 1.45, 0);
-    const arm = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.55, 0.1), shirtMat);
-    arm.position.y = -0.27;
-    pivot.add(arm);
-    g.add(pivot);
-    arms.push(pivot);
+  for (const x of [-0.26, 0.26]) {
+    const a = limb(0.3, 0.1, shirtMat);
+    a.position.set(x, 0.6, 0);
+    const fo = limb(0.28, 0.085, gk ? shirtMat : skinMat);
+    fo.position.y = -0.3;
+    const hand = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.09, 0.05), gk ? new THREE.MeshStandardMaterial({ color: '#f5f5f5' }) : skinMat);
+    hand.position.y = -0.31;
+    fo.add(hand);
+    a.add(fo);
+    body.add(a);
+    arm.push(a);
+    fore.push(fo);
   }
-  return { g, legs, arms };
+  return { g, body, thigh, shin, arm, fore };
 }
+
+const ease = (k: number) => k * k * (3 - 2 * k);
+const clamp01 = (k: number) => Math.max(0, Math.min(1, k));
+
+/** Pose do jogador conforme a corrida e a ação em curso. */
+function pose(a: Actor, act: Act | undefined, gk: boolean, near: boolean, dt: number) {
+  const { body, thigh, shin, arm, fore } = a;
+  // reinicia
+  body.position.set(0, HIP, 0);
+  body.rotation.set(0, 0, 0);
+  a.g.position.y = 0;
+  for (const o of [...thigh, ...shin, ...arm, ...fore]) o.rotation.set(0, 0, 0);
+  const sp = a.speed;
+  a.phase += dt * (4 + sp * 1.35);
+  const amp = Math.min(1, sp / 6.5);
+  const s = Math.sin(a.phase);
+  // corrida (ou postura de espera)
+  thigh[0].rotation.x = s * 0.9 * amp;
+  thigh[1].rotation.x = -s * 0.9 * amp;
+  shin[0].rotation.x = -Math.max(0, -Math.cos(a.phase)) * 1.4 * amp - 0.08;
+  shin[1].rotation.x = -Math.max(0, Math.cos(a.phase)) * 1.4 * amp - 0.08;
+  arm[0].rotation.x = -s * 0.8 * amp;
+  arm[1].rotation.x = s * 0.8 * amp;
+  fore[0].rotation.x = -0.4 - amp * 0.9;
+  fore[1].rotation.x = -0.4 - amp * 0.9;
+  arm[0].rotation.z = 0.08;
+  arm[1].rotation.z = -0.08;
+  body.rotation.x = amp * 0.22;
+  body.position.y = HIP - Math.abs(Math.cos(a.phase)) * 0.04 * amp;
+  if (gk && near && !act && sp < 2.5) {
+    // guarda-redes em posição de espera: pernas fletidas, braços abertos
+    thigh[0].rotation.x = thigh[1].rotation.x = 0.55;
+    shin[0].rotation.x = shin[1].rotation.x = -0.95;
+    thigh[0].rotation.z = -0.15; thigh[1].rotation.z = 0.15;
+    body.position.y = HIP - 0.17;
+    body.rotation.x = 0.3;
+    arm[0].rotation.set(-0.5, 0, 0.7);
+    arm[1].rotation.set(-0.5, 0, -0.7);
+    fore[0].rotation.x = fore[1].rotation.x = -0.5;
+  }
+  if (!act) return;
+  const k = act.k;
+  switch (act.kind) {
+    case 'pass':
+    case 'shoot': {
+      // perna direita: recua, bate na bola e acompanha
+      const big = act.kind === 'shoot' ? 1.35 : 0.85;
+      const back = k < 0.5 ? ease(k / 0.5) : 0;
+      const hit = k >= 0.5 ? ease(clamp01((k - 0.5) / 0.3)) : 0;
+      thigh[1].rotation.x = k < 0.5 ? -0.75 * big * back : lerp(-0.75 * big, 1.1 * big, hit);
+      shin[1].rotation.x = k < 0.5 ? -1.5 * back : lerp(-1.5, -0.05, hit);
+      thigh[0].rotation.x = -0.15;
+      shin[0].rotation.x = -0.25;
+      arm[0].rotation.set(-0.3, 0, 0.9);
+      arm[1].rotation.set(0.4, 0, -0.5);
+      body.rotation.x = act.kind === 'shoot' ? -0.15 + hit * 0.3 : 0.05;
+      body.rotation.y = (k < 0.5 ? -0.25 * back : lerp(-0.25, 0.2, hit));
+      break;
+    }
+    case 'throw': {
+      const up = k < 0.6 ? ease(k / 0.6) : 1 - ease((k - 0.6) / 0.4);
+      arm[1].rotation.x = -Math.PI * 0.9 * up - (k > 0.6 ? 0.6 : 0);
+      arm[0].rotation.set(-0.4, 0, 0.6);
+      thigh[0].rotation.x = 0.35;
+      body.rotation.x = -0.2 * up + 0.2 * (1 - up);
+      break;
+    }
+    case 'dive': {
+      // mergulho para o lado da bola: voa, estica os braços e cai
+      const local = act.side ?? 1;
+      const up = ease(clamp01(k * 2.4));
+      const roll = (Math.PI / 2) * up * 0.95;
+      body.rotation.z = -local * roll;
+      const h = (act.h ?? 0.5) * 0.8;
+      const air = Math.sin(clamp01(k * 1.6) * Math.PI) * h;
+      body.position.y = HIP * Math.cos(roll) + 0.15 * Math.sin(roll) + air * (k < 0.6 ? 1 : 0);
+      body.position.x = local * Math.sin(roll) * 0.7;
+      arm[0].rotation.set(0, 0, 2.7);
+      arm[1].rotation.set(0, 0, -2.7);
+      fore[0].rotation.x = fore[1].rotation.x = 0;
+      thigh[0].rotation.set(0.2, 0, -0.25 * local);
+      thigh[1].rotation.set(-0.2, 0, -0.1 * local);
+      shin[0].rotation.x = -0.6;
+      shin[1].rotation.x = -0.3;
+      break;
+    }
+    case 'catch': {
+      thigh[0].rotation.x = thigh[1].rotation.x = 0.45;
+      shin[0].rotation.x = shin[1].rotation.x = -0.8;
+      body.position.y = HIP - 0.14;
+      body.rotation.x = 0.25;
+      arm[0].rotation.set(-1.3, 0, 0.15);
+      arm[1].rotation.set(-1.3, 0, -0.15);
+      fore[0].rotation.x = fore[1].rotation.x = -0.6;
+      break;
+    }
+    case 'tackle': {
+      // carrinho / desarme: desliza com a perna esticada
+      const e = ease(clamp01(k * 2.5)) * (k > 0.8 ? 1 - ease((k - 0.8) / 0.2) : 1);
+      body.rotation.x = -1.0 * e;
+      body.position.y = HIP - 0.55 * e;
+      thigh[1].rotation.x = 1.5 * e;
+      shin[1].rotation.x = -0.05;
+      thigh[0].rotation.x = 0.4 * e;
+      shin[0].rotation.x = -1.4 * e;
+      arm[0].rotation.set(0.6 * e, 0, 0.9 * e);
+      arm[1].rotation.set(0.6 * e, 0, -0.9 * e);
+      break;
+    }
+    case 'feint': {
+      // finta: o corpo vai para um lado e a bola sai para o outro
+      const w = Math.sin(k * Math.PI * 2);
+      body.rotation.z = w * 0.38;
+      body.rotation.x = 0.25;
+      thigh[w > 0 ? 0 : 1].rotation.z = w * 0.7;
+      thigh[w > 0 ? 0 : 1].rotation.x = 0.5;
+      shin[0].rotation.x = shin[1].rotation.x = -0.6;
+      arm[0].rotation.z = 0.5 + Math.max(0, w) * 0.6;
+      arm[1].rotation.z = -0.5 - Math.max(0, -w) * 0.6;
+      body.position.y = HIP - 0.1;
+      break;
+    }
+    case 'screen': {
+      // bloqueio: pernas abertas, braços cruzados à frente do peito
+      thigh[0].rotation.set(0.15, 0, -0.22);
+      thigh[1].rotation.set(0.15, 0, 0.22);
+      shin[0].rotation.x = shin[1].rotation.x = -0.3;
+      body.position.y = HIP - 0.07;
+      arm[0].rotation.set(-1.2, 0, -0.7);
+      arm[1].rotation.set(-1.2, 0, 0.7);
+      fore[0].rotation.x = fore[1].rotation.x = -0.9;
+      break;
+    }
+    case 'shield': {
+      // pivô de costas: protege a bola com o corpo e os braços
+      thigh[0].rotation.set(0.45, 0, -0.2);
+      thigh[1].rotation.set(0.45, 0, 0.2);
+      shin[0].rotation.x = shin[1].rotation.x = -0.8;
+      body.position.y = HIP - 0.13;
+      body.rotation.x = 0.35;
+      arm[0].rotation.set(0.3, 0, 0.95);
+      arm[1].rotation.set(0.3, 0, -0.95);
+      break;
+    }
+    case 'block': {
+      // bloqueio de remate: abre as pernas, braços atrás das costas
+      thigh[0].rotation.set(0.1, 0, -0.42);
+      thigh[1].rotation.set(0.1, 0, 0.42);
+      shin[0].rotation.x = shin[1].rotation.x = -0.2;
+      body.position.y = HIP - 0.12;
+      body.rotation.x = 0.2;
+      arm[0].rotation.set(0.7, 0, 0.1);
+      arm[1].rotation.set(0.7, 0, -0.1);
+      fore[0].rotation.x = fore[1].rotation.x = -1.1;
+      break;
+    }
+    case 'celebrate': {
+      arm[0].rotation.set(0, 0, 2.6 + Math.sin(k * 30) * 0.2);
+      arm[1].rotation.set(0, 0, -2.6 - Math.sin(k * 30) * 0.2);
+      fore[0].rotation.x = fore[1].rotation.x = 0;
+      a.g.position.y = Math.abs(Math.sin(k * Math.PI * 5)) * 0.22 * (sp < 2 ? 1 : 0.3);
+      break;
+    }
+    case 'fall': {
+      const down = ease(clamp01(k / 0.25)) * (k > 0.75 ? 1 - ease((k - 0.75) / 0.25) : 1);
+      body.rotation.x = 1.45 * down;
+      body.position.y = HIP - 0.72 * down;
+      arm[0].rotation.set(-1.4 * down, 0, 0.3);
+      arm[1].rotation.set(-1.4 * down, 0, -0.3);
+      thigh[0].rotation.x = -0.3 * down;
+      shin[0].rotation.x = -0.6 * down;
+      break;
+    }
+    default:
+      break;
+  }
+}
+
+const lerp = (a: number, b: number, k: number) => a + (b - a) * k;
 
 // ---------- vista ----------
 export class Highlight3D {
@@ -338,11 +556,12 @@ export class Highlight3D {
     const shirt = inf.gk ? (inf.side === 0 ? '#0f766e' : '#7c3aed') : cols[0];
     const shorts = inf.gk ? '#111827' : cols[1];
     const skins = ['#f1c27d', '#e0ac69', '#c68642', '#8d5524', '#ffdbac'];
+    const hairs = ['#1f1300', '#2d1b0e', '#4a3121', '#0d0d0d', '#6b4423', '#a67b5b'];
     let hsh = 0;
     for (const ch of id) hsh = (hsh * 31 + ch.charCodeAt(0)) >>> 0;
-    const pm = makePlayer(shirt, shorts, inf.number, skins[hsh % skins.length]);
+    const pm = makePlayer(shirt, shorts, inf.number, skins[hsh % skins.length], hairs[(hsh >> 3) % hairs.length], inf.gk);
     this.scene.add(pm.g);
-    a = { g: pm.g, legs: pm.legs, arms: pm.arms, prev: new THREE.Vector3(), heading: 0 };
+    a = { ...pm, prev: new THREE.Vector3(), heading: 0, phase: (hsh % 10) / 3, speed: 0, init: false };
     this.actors.set(id, a);
     return a;
   }
@@ -352,44 +571,68 @@ export class Highlight3D {
     const dtReal = Math.max(0, Math.min(0.05, (now - this.last) / 1000));
     this.last = now;
     this.t = Math.min(this.to, this.t + dtReal * this.speed);
-    const f = this.choreo.at(this.t);
-    // bola: x do motor = x do 3D; y do motor = z do 3D
-    this.ballMesh.position.set(f.ball.x, Math.max(0.11, f.ball.z), f.ball.y);
-    this.ballMesh.rotation.x += dtReal * this.speed * 10;
-    const seen = new Set<string>();
-    for (const [id, p] of Object.entries(f.pos)) {
-      seen.add(id);
-      const a = this.actor(id);
-      a.g.visible = true;
-      const target = new THREE.Vector3(p.x, 0, p.y);
-      if (a.prev.lengthSq() === 0) a.g.position.copy(target);
-      const before = a.g.position.clone();
-      a.g.position.lerp(target, 0.5);
-      const vel = before.distanceTo(a.g.position) / Math.max(1e-4, dtReal * this.speed);
-      // virar para a bola, suavemente
-      const want = Math.atan2(f.ball.x - a.g.position.x, f.ball.y - a.g.position.z);
-      let d = want - a.heading;
-      while (d > Math.PI) d -= Math.PI * 2;
-      while (d < -Math.PI) d += Math.PI * 2;
-      a.heading += d * 0.2;
-      a.g.rotation.set(0, a.heading, 0);
-      const swing = Math.min(1, vel / 5) * Math.sin(this.t * 16) * 0.75;
-      a.legs[0].rotation.x = swing;
-      a.legs[1].rotation.x = -swing;
-      a.arms[0].rotation.x = -swing * 0.8;
-      a.arms[1].rotation.x = swing * 0.8;
-      a.prev.copy(a.g.position);
-    }
-    for (const [id, a] of this.actors) if (!seen.has(id)) a.g.visible = false;
-    if (f.holder) this.lastHolder = f.holder;
-    this.updateCamera(f.ball);
-    this.renderer.render(this.scene, this.camera);
+    this.draw(Math.max(1e-4, dtReal * this.speed), true);
     if (this.t >= this.to && !this.ended) {
       this.ended = true;
       this.onEnd?.();
     }
     if (!this.ended) this.raf = requestAnimationFrame(this.frame);
   };
+
+  /** Mostra um instante exato da jogada (para pausar num momento ou para testes). */
+  seek(t: number) {
+    if (!this.choreo) return;
+    cancelAnimationFrame(this.raf);
+    this.ended = true;
+    this.snapCamera = true;
+    for (let x = Math.max(0, t - 0.8); x <= t + 1e-6; x += 1 / 30) {
+      this.t = x;
+      this.draw(1 / 30, t - x < 1 / 30);
+    }
+  }
+
+  private draw(dt: number, render: boolean) {
+    const f = this.choreo!.at(this.t);
+    // bola: x do motor = x do 3D; y do motor = z do 3D
+    this.ballMesh.position.set(f.ball.x, Math.max(0.11, f.ball.z), f.ball.y);
+    this.ballMesh.rotation.x += dt * 10;
+    const seen = new Set<string>();
+    for (const [id, p] of Object.entries(f.pos)) {
+      seen.add(id);
+      const a = this.actor(id);
+      a.g.visible = true;
+      const before = a.g.position.clone();
+      a.g.position.set(p.x, 0, p.y);
+      if (!a.init) { before.copy(a.g.position); a.init = true; }
+      const vx = (a.g.position.x - before.x) / dt, vz = (a.g.position.z - before.z) / dt;
+      a.speed = lerp(a.speed, Math.min(9, Math.hypot(vx, vz)), 0.25);
+      const act = f.acts[id];
+      // para onde olha: a ação em curso, a direção da corrida ou a bola
+      let want = Math.atan2(f.ball.x - p.x, f.ball.y - p.y);
+      if (act && (act.kind !== 'run' && act.kind !== 'celebrate' && act.kind !== 'fall')) want = act.ang;
+      else if (a.speed > 3.2) want = Math.atan2(vx, vz);
+      let d = want - a.heading;
+      while (d > Math.PI) d -= Math.PI * 2;
+      while (d < -Math.PI) d += Math.PI * 2;
+      a.heading += d * Math.min(1, dt * 9);
+      a.g.rotation.set(0, a.heading, 0);
+      let act2 = act;
+      if (act?.kind === 'dive' && act.to) {
+        // lado do mergulho, visto pelo guarda-redes
+        const rx = Math.cos(a.heading), rz = -Math.sin(a.heading);
+        const side = (act.to.x - p.x) * rx + (act.to.y - p.y) * rz >= 0 ? 1 : -1;
+        act2 = { ...act, side };
+      }
+      const inf = this.info[id];
+      const near = Math.hypot(f.ball.x - p.x, f.ball.y - p.y) < 16;
+      pose(a, act2, !!inf?.gk, near, dt);
+      a.prev.copy(a.g.position);
+    }
+    for (const [id, a] of this.actors) if (!seen.has(id)) a.g.visible = false;
+    if (f.holder) this.lastHolder = f.holder;
+    this.updateCamera(f.ball);
+    if (render) this.renderer.render(this.scene, this.camera);
+  }
 
   private updateCamera(b: { x: number; y: number; z: number }) {
     const cam = this.camera;
@@ -398,7 +641,7 @@ export class Highlight3D {
     let pos: THREE.Vector3;
     let look: THREE.Vector3;
     if (this.cameraId === 'baliza') {
-      pos = new THREE.Vector3(dir * (W / 2 + 1.7), 2.8, ball.z * 0.15);
+      pos = new THREE.Vector3(dir * (W / 2 + 3.4), 3.9, ball.z * 0.15);
       look = new THREE.Vector3(ball.x - dir * 2, 0.6, ball.z * 0.7);
     } else if (this.cameraId === 'aerea') {
       pos = new THREE.Vector3(ball.x - dir * 3, 22, ball.z + 9);

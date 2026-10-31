@@ -50,9 +50,15 @@ O António não programa: o Claude escreve o código, testa e envia para o GitHu
 Real: 6,38 golos/jogo, casa 49,6%, fora 37,0%, empates 13,5%, <3 golos 6,1%. Manter a simulação próxima destes valores após mexer no motor (script de 5 épocas com play-off).
 
 ## Feedback recente do António (prioridade)
-- 2D: a bola tem de passar de jogador em jogador e ver-se a progressão tática (corrigido com `choreo.ts`; confirmar com ele)
-- 3D: mostrar a mesma jogada, contínua, com os 10 jogadores sempre visíveis; momentos 3D incluem grandes defesas e postes, não só golos
-- Próximos melhoramentos possíveis: movimentos sem bola (desmarcações, bloqueios do pivô), animações de remate e mergulho
+- Vídeo de 31/10/2026: transições artificiais, cantos sem marcador nem organização, 3D sem animações. Resposta (`choreo.ts` reescrito):
+  - percursos contínuos com inércia (velocidade máx. 7,4 m/s, aceleração 9 m/s²), continuidade entre posses
+  - padrões reais: paralela, diagonal, bola no pivô + corte, bloqueio e continuação, finta 1x1, passe e corte (4-0), cruzamento (2-2), inversão (5x4), segundo poste, contra-ataques com contagem real (2x1, 3x2)
+  - defesa: pressão conforme a linha escolhida, cobertura/ajuda, individual mantém pares, zona troca marcações; 5x4 deixa livre o mais longe da bola
+  - bolas paradas organizadas: cantos (4 jogadas do motor), livres com barreira a 5 m (3 jogadas), 10 m e penálti com todos atrás da linha da bola, festejos, reposições do GR, pontapé de saída
+  - ações por jogador (`Frame.acts`): passe, remate, mergulho, defesa, carrinho, finta, bloqueio, proteção do pivô, bloqueio de remate, queda, festejo. 3D com corpo articulado; 2D com setas de desmarcação e marcas de ação
+  - ritmo: lenta 1,5x (lances decisivos 1x), média 5x (2x), rápida 12x
+- Não consigo ver vídeos do YouTube; posso analisar gravações de ecrã que o António envie (extraio fotogramas)
+- Próximos melhoramentos possíveis: pontapés de linha lateral, mais variantes de jogadas ensaiadas, ressaltos/recargas
 
 ## Roteiro
 | Etapa | Estado |

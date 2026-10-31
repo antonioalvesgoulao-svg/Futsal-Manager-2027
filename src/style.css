@@ -173,6 +173,7 @@ tr.today td { background: #2a2618; }
 .pitch2d .floor { fill: #b5793f; } .pitch2d .line { fill: none; stroke: rgba(255,255,255,.85); stroke-width: 1.5; }
 .pitch2d .dot { fill: rgba(255,255,255,.85); } .pitch2d .goal { fill: #e5e7eb; }
 .ball2d { fill: #fff; stroke: #111; stroke-width: 1.5; }
+.run2d { stroke-width: 1.6; stroke-dasharray: 4 3; opacity: .75; }
 .flash { position: absolute; inset: 0; display: grid; place-items: center; font-size: 42px; font-weight: 900; color: #fff; text-shadow: 0 3px 12px rgba(0,0,0,.6); opacity: 0; pointer-events: none; transition: opacity .2s; }
 .flash.show { opacity: 1; background: rgba(0,0,0,.25); } .flash.mine { color: #facc15; }
 .live-controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; }
