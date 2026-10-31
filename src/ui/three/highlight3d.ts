@@ -3,7 +3,7 @@
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 
-import type { Look } from '../../core/appearance';
+import { lookOf, type Look } from '../../core/appearance';
 import type { Scene3D } from '../../core/visual/choreo';
 import { ArenaHandle, ArenaOpts, buildArena, canvasTex, H, W } from './arena3d';
 import { Actor, makePlayer, pose, sit } from './player3d';
@@ -150,7 +150,18 @@ export class Highlight3D {
 
   // suplentes sentados no banco (escondidos quando estão em campo ou a entrar)
   private bench = new Map<string, Actor>();
+  private officials: Actor[] = [];
   setBench(ids: [string[], string[]]) {
+    // os dois árbitros auxiliares sentados à mesa (equipados de árbitro)
+    if (!this.officials.length) for (const [k, seat] of this.arena.tableSeats.entries()) {
+      const id = `auxiliar${k + 1}`;
+      this.info[id] = { side: 0, number: null, gk: false, referee: true, look: lookOf({ id }) };
+      const a = this.createActor(id);
+      a.g.position.set(seat.x, 0, seat.z);
+      a.g.rotation.y = 0;
+      sit(a);
+      this.officials.push(a);
+    }
     for (const a of this.bench.values()) this.scene.remove(a.g);
     this.bench.clear();
     ids.forEach((list, sd) => list.slice(0, 10).forEach((id, k) => {

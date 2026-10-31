@@ -3,7 +3,8 @@ import { clubName, myFixtures, nextMyFixture, playMyMatch, setupFor } from '../.
 import { leagueTable } from '../../core/season/season';
 import { ARENAS, arenaOf } from '../../core/attendance';
 import { refBadgeHtml, refereesFor } from '../../core/referees';
-import { KitChoice, setPendingKit } from '../../core/kits';
+import { KitChoice, kitsOf, matchGkKits, matchKits, setPendingKit } from '../../core/kits';
+import { kitSvg } from '../kitSvg';
 import { COMP_NAMES, CompId, Fixture } from '../../core/season/types';
 import type { GameState } from '../../core/types';
 import { resultHtml } from './friendly';
@@ -167,9 +168,10 @@ export function renderMatchDay(content: HTMLElement, s: GameState, f: Fixture, o
     <div class="coaches small muted" style="margin-top:8px"><span>${hs.coachName} · ${tacticsSummary(hs.tactics)}</span><span>${as.coachName} · ${tacticsSummary(as.tactics)}</span></div>
     <div class="form-row" style="margin-top:16px">
       <label>Marcador<select id="sbs">${[['auto', 'Da competição'], ['liga', 'Liga Placard'], ['taca', 'Taça de Portugal'], ['tacaLiga', 'Taça da Liga'], ['supertaca', 'Supertaça']].map(([v, l]) => `<option value="${v}" ${settingsOf(s).scoreboard === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
-      <label>Equipamento<select id="kit">${[['auto', 'Automático (evita choque de cores)'], ['home', 'Principal'], ['away', 'Alternativo']].map(([v, l]) => `<option value="${v}">${l}</option>`).join('')}</select></label>
       <label>Velocidade<select id="spd">${[['lento', 'Lenta'], ['medio', 'Média'], ['rapido', 'Rápida']].map(([v, l]) => `<option value="${v}" ${settingsOf(s).speed === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
     </div>
+    <h3 style="margin-top:14px">Equipamentos</h3>
+    <div id="kits"></div>
     <div class="row" style="justify-content:flex-start;margin-top:4px">
       <button class="btn" id="tac">Rever táticas</button>
       <button class="btn primary" id="live">Jogar ao vivo</button>
@@ -179,8 +181,28 @@ export function renderMatchDay(content: HTMLElement, s: GameState, f: Fixture, o
   content.querySelector('#tac')!.addEventListener('click', goTactics);
   const st = settingsOf(s);
   content.querySelector<HTMLSelectElement>('#sbs')!.addEventListener('change', (e) => (st.scoreboard = (e.target as HTMLSelectElement).value as typeof st.scoreboard));
-  content.querySelector<HTMLSelectElement>('#kit')!.addEventListener('change', (e) => setPendingKit((e.target as HTMLSelectElement).value as KitChoice));
-  setPendingKit('auto');
+  // escolha gráfica: os meus dois equipamentos e como vão jogar as duas equipas (com os guarda-redes)
+  const mySide: 0 | 1 | null = f.home === s.clubId ? 0 : f.away === s.clubId ? 1 : null;
+  let choice: KitChoice = 'auto';
+  const drawKits = () => {
+    const ks = matchKits(h, a, mySide, choice);
+    const gks = matchGkKits(h.id, a.id, ks);
+    const mine = mySide === null ? null : kitsOf(mySide === 0 ? h.id : a.id, (mySide === 0 ? h : a).colors);
+    const opt = (c: KitChoice, label: string, svg: string) => `<button class="kitopt ${choice === c ? 'on' : ''}" data-kit="${c}">${svg}<span>${label}</span></button>`;
+    const team = (sd: 0 | 1) => `<div class="kitteam"><b>${(sd === 0 ? h : a).name}</b><div class="kitpair">${kitSvg(ks[sd], 86)}${kitSvg(gks[sd], 62)}</div><span class="small muted">Jogadores · Guarda-redes</span></div>`;
+    content.querySelector('#kits')!.innerHTML = `<div class="kitbox">
+      ${mine ? `<div class="kitpick"><span class="small muted">A minha equipa</span><div class="kitopts">${opt('home', 'Principal', kitSvg(mine.home, 70))}${opt('away', 'Alternativo', kitSvg(mine.away, 70))}${opt('auto', 'Automático', '<span class="kitauto">A</span>')}</div><span class="small muted">Automático: o visitante muda se as cores chocarem.</span></div>` : ''}
+      <div class="kitmatch"><span class="small muted">Como vão jogar</span><div class="kitvs">${team(0)}<span class="kitx">vs</span>${team(1)}</div></div>
+    </div>`;
+    setPendingKit(choice);
+  };
+  content.querySelector('#kits')!.addEventListener('click', (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLElement>('[data-kit]');
+    if (!b) return;
+    choice = b.dataset.kit as KitChoice;
+    drawKits();
+  });
+  drawKits();
   content.querySelector<HTMLSelectElement>('#spd')!.addEventListener('change', (e) => (st.speed = (e.target as HTMLSelectElement).value as typeof st.speed));
   content.querySelector('#live')!.addEventListener('click', () => {
     renderLive(content, s, f, (res) => {

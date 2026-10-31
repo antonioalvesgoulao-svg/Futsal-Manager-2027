@@ -78,6 +78,7 @@ Real: 6,38 golos/jogo, casa 49,6%, fora 37,0%, empates 13,5%, <3 golos 6,1%. Man
 - Gráfico de golo no terço inferior (`goalBarHtml` em broadcast.ts), 2D e 3D; repetição automática do golo em câmara lenta (0,4x) noutro ângulo
 - Pontapés de linha lateral (desarmes que mandam a bola fora, 40%) e recargas (ressaltos)
 - Definição "Qualidade gráfica do 3D": alta = reflexos no piso (Reflector), sombras 2048
+- Feedback 1/11 (tarde): túnel refeito como túnel retrátil real (estrutura em tesoura com lona, relva sintética) que entra na bancada do lado dos bancos por uma passagem (corredor para os balneários; bancada cortada, placas abertas); mesa do cronometrista à frente da boca do túnel com dois árbitros auxiliares sentados; mais espaço desse lado (bancada a 5 m da quadra); na entrada, casa passa à esquerda da mesa e visitantes à direita. Sem legenda a descrever o lance no 3D (tirava o suspense). 2D com nomes por baixo dos números. Equipamentos escolhidos graficamente no dia de jogo (os meus dois + como vão jogar as duas equipas, com GR)
 - Próximos melhoramentos possíveis: mais variantes de jogadas ensaiadas
 
 ## Roteiro

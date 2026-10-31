@@ -211,7 +211,7 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
           body = body.replace('<circle', '<circle opacity=".55"');
         }
       }
-      html += `<g transform="translate(${p.x.toFixed(1)},${p.y.toFixed(1)})">${hasBall ? '<circle r="11" fill="none" stroke="#fff" stroke-width="2"/>' : ''}${body}${extra}<text y="3.5" text-anchor="middle" font-size="9" font-weight="700" fill="${textCol(fill)}">${inf.number ?? ''}</text></g>`;
+      html += `<g transform="translate(${p.x.toFixed(1)},${p.y.toFixed(1)})">${hasBall ? '<circle r="11" fill="none" stroke="#fff" stroke-width="2"/>' : ''}${body}${extra}<text y="3.5" text-anchor="middle" font-size="9" font-weight="700" fill="${textCol(fill)}">${inf.number ?? ''}</text>${inf.name ? `<text y="17" text-anchor="middle" font-size="6.5" font-weight="700" fill="#fff" stroke="rgba(0,0,0,.65)" stroke-width="1.6" paint-order="stroke">${inf.name}</text>` : ''}</g>`;
     }
     dotsG.innerHTML = under + html;
     if (fr) {
@@ -405,7 +405,7 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
     in3d = true;
     last3d = ev.t;
     $('#hl').hidden = false;
-    $('#hlcap').textContent = ev.text.replace(/^\d+:\d+ /, '');
+    $('#hlcap').textContent = ''; // sem descrição do lance: não se sabe o que vai acontecer
     await ensure3d();
     if (!hl) return;
     chain = 0;
@@ -449,7 +449,7 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
     if (!counter) return false; // o 2D segue com esta posse normalmente
     chain++;
     shown3d = choreo;
-    $('#hlcap').textContent = 'Contra-ataque!';
+    $('#hlcap').textContent = '';
     const g = poss.events.find((e) => e.type === 'golo');
     const after: [number, number] = g ? [g.score[0], g.score[1]] : [shownScore[0], shownScore[1]];
     hl.setBench(benchIds());
