@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 
 import type { Look } from '../../core/appearance';
-import type { Choreo } from '../../core/visual/choreo';
+import type { Scene3D } from '../../core/visual/choreo';
 import { ArenaHandle, ArenaOpts, buildArena, canvasTex, H, W } from './arena3d';
 import { Actor, makePlayer, pose } from './player3d';
 
@@ -12,6 +12,7 @@ export type CameraId = 'tv' | 'baliza' | 'aerea' | 'jogador';
 
 export interface ActorInfo {
   side: 0 | 1;
+  referee?: boolean; // equipa de arbitragem
   number: number | null;
   gk: boolean;
   look: Look;
@@ -26,7 +27,7 @@ export class Highlight3D {
   private camera = new THREE.PerspectiveCamera(40, 16 / 9, 0.1, 200);
   private ballMesh: THREE.Mesh;
   private actors = new Map<string, Actor>();
-  private choreo: Choreo | null = null;
+  private choreo: Scene3D | null = null;
   private info: Record<string, ActorInfo> = {};
   private colors: [[string, string], [string, string]] = [['#e30613', '#ffffff'], ['#00804a', '#ffffff']];
   private t = 0;
@@ -82,7 +83,7 @@ export class Highlight3D {
   };
 
   /** Mostra a jogada entre os instantes `from` e `to` da coreografia (segundos de jogo). */
-  play(choreo: Choreo, info: Record<string, ActorInfo>, colors: [[string, string], [string, string]], from: number, to: number, scores?: [[number, number], [number, number]]) {
+  play(choreo: Scene3D, info: Record<string, ActorInfo>, colors: [[string, string], [string, string]], from: number, to: number, scores?: [[number, number], [number, number]]) {
     this.choreo = choreo;
     this.scores = scores ?? null;
     this.goalShown = false;
@@ -115,7 +116,7 @@ export class Highlight3D {
     let a = this.actors.get(id);
     if (a) return a;
     const inf = this.info[id] ?? { side: 0, number: null, gk: false, look: undefined as unknown as Look };
-    const cols = this.colors[inf.side];
+    const cols: [string, string] = inf.referee ? ['#facc15', '#111111'] : this.colors[inf.side];
     const shirt = inf.gk ? (inf.side === 0 ? '#0f766e' : '#7c3aed') : cols[0];
     const shorts = inf.gk ? '#111827' : cols[1];
     let hsh = 0;
@@ -159,8 +160,9 @@ export class Highlight3D {
     this.clock += dt;
     const cel = Object.entries(f.acts).find(([, a]) => a.kind === 'celebrate');
     const target: [number, number] = [0.08, 0.08];
-    if (cel) target[this.info[cel[0]]?.side ?? 0] = 1;
+    if (cel && !this.info[cel[0]]?.referee) target[this.info[cel[0]]?.side ?? 0] = 1;
     else if (Object.values(f.acts).some((a) => a.kind === 'shoot' || a.kind === 'dive')) { target[0] = 0.4; target[1] = 0.4; }
+    else if (f.phase === 'Entrada das equipas') { target[0] = 0.75; target[1] = 0.6; }
     if (cel && !this.goalShown) {
       this.goalShown = true;
       this.arena.goal(this.info[cel[0]]?.side ?? 0);
@@ -170,6 +172,7 @@ export class Highlight3D {
     this.arena.update(this.clock, this.excite);
     // bola: x do motor = x do 3D; y do motor = z do 3D
     this.ballMesh.position.set(f.ball.x, Math.max(0.11, f.ball.z), f.ball.y);
+    this.ballMesh.visible = !f.hideBall;
     this.ballMesh.rotation.x += dt * 10;
     const seen = new Set<string>();
     for (const [id, p] of Object.entries(f.pos)) {
@@ -205,7 +208,7 @@ export class Highlight3D {
     }
     for (const [id, a] of this.actors) if (!seen.has(id)) a.g.visible = false;
     if (f.holder) this.lastHolder = f.holder;
-    this.updateCamera(f.ball);
+    this.updateCamera(f.focus ? { x: f.focus.x, y: f.focus.y, z: 0 } : f.ball);
     if (render) this.renderer.render(this.scene, this.camera);
   }
 

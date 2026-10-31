@@ -48,7 +48,47 @@ export function scoreboardHtml(d: ScoreboardData) {
   </div>`;
 }
 
+export interface LineupData {
+  style: Exclude<CompId, 'playoff'>;
+  team: { name: string; short: string; color: string };
+  players: { number: number | null; name: string; pos: string }[]; // os cinco iniciais (GR primeiro)
+  coach: string;
+  system: string;
+  stage: string;
+}
+
+/** Gráfico dos cinco iniciais, com o mesmo desenho do marcador da competição. */
+export function lineupHtml(d: LineupData) {
+  return `
+  <div class="lu sb-${d.style}">
+    <div class="sb-row lu-head">
+      <div class="sb-team home"><span class="chip" style="background:${d.team.color}"></span><span class="nm">${d.team.name}</span></div>
+      <div class="sb-mid">${EMBLEM[d.style]}<span class="cn">${SCOREBOARD_NAMES[d.style]}</span></div>
+    </div>
+    <div class="sb-sub lu-title"><span>Cinco inicial</span><span class="sb-period">${d.system}</span></div>
+    ${d.players.map((p, i) => `<div class="lu-row" style="animation-delay:${0.15 + i * 0.12}s"><span class="sb-score lu-num">${p.number ?? ''}</span><span class="lu-name">${p.name}</span><span class="lu-pos">${p.pos}</span></div>`).join('')}
+    <div class="sb-sub lu-foot"><span>Treinador: <b>${d.coach}</b></span><span>${d.stage}</span></div>
+  </div>`;
+}
+
 export const broadcastCss = `
+/* Cinco inicial (mesmas cores do marcador da competição) */
+.lu { display: flex; flex-direction: column; width: 420px; font-family: 'Segoe UI', system-ui, sans-serif; filter: drop-shadow(0 6px 14px rgba(0,0,0,.5)); animation: luIn .45s ease-out both; }
+.lu .lu-head { grid-template-columns: 1fr 132px; height: 48px; }
+.lu .lu-head .nm { font-size: 18px; }
+.lu .lu-title, .lu .lu-foot { justify-content: space-between; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; height: 28px; padding: 0 12px; }
+.lu .lu-foot { font-weight: 600; text-transform: none; letter-spacing: 0; }
+.lu-row { display: grid; grid-template-columns: 52px 1fr 54px; align-items: center; height: 36px; border-bottom: 1px solid rgba(255,255,255,.08); animation: luRow .35s ease-out both; }
+.lu-row .lu-num { height: 100%; font-size: 20px; }
+.lu-row .lu-name { padding: 0 12px; font-size: 16px; font-weight: 700; color: #fff; }
+.lu-row .lu-pos { font-size: 12px; font-weight: 800; text-align: center; color: rgba(255,255,255,.75); }
+.sb-liga .lu-row { background: #1c2229; }
+.sb-taca .lu-row { background: linear-gradient(90deg, #5b0a14, #7a1420); }
+.sb-tacaLiga .lu-row { background: #0b2a6f; }
+.sb-supertaca .lu-row { background: #0b0b0b; }
+@keyframes luIn { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: none; } }
+@keyframes luRow { from { opacity: 0; transform: translateX(-16px); } to { opacity: 1; transform: none; } }
+
 .sb { display: inline-flex; flex-direction: column; min-width: 520px; font-family: 'Segoe UI', system-ui, sans-serif; filter: drop-shadow(0 4px 10px rgba(0,0,0,.45)); }
 .sb-row { display: grid; grid-template-columns: 1fr 52px 132px 52px 1fr; align-items: stretch; height: 42px; }
 .sb-team { display: flex; align-items: center; gap: 8px; padding: 0 12px; font-weight: 800; font-size: 17px; letter-spacing: .02em; text-transform: uppercase; color: #fff; }

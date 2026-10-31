@@ -5,11 +5,12 @@ import type { MatchEvent, MatchResult } from '../../core/engine/types';
 import { matchOptions, setupFor } from '../../core/game';
 import { COMP_NAMES, Fixture } from '../../core/season/types';
 import type { Club, GameState, Settings } from '../../core/types';
-import { scoreboardHtml } from '../broadcast';
+import { lineupHtml, scoreboardHtml } from '../broadcast';
 import { resultHtml } from './friendly';
 import { renderTactics } from './tactics';
 import type { Highlight3D, CameraId, ActorInfo } from '../three/highlight3d';
 import { Choreo, StartState } from '../../core/visual/choreo';
+import { IntroScene } from '../../core/visual/intro';
 import { attendance } from '../../core/attendance';
 import { lookOf } from '../../core/appearance';
 
@@ -80,6 +81,7 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
             <div class="hl" id="hl" hidden>
               <div class="hl-view" id="hlv"></div>
               <div class="hl-cap" id="hlcap"></div>
+              <div class="hl-lu" id="hllu"></div>
               <div class="hl-bar">
                 <div class="seg cams">${[['tv', 'TV'], ['baliza', 'Atrás da baliza'], ['aerea', 'Aérea'], ['jogador', 'Jogador']].map(([v, l]) => `<button data-cam="${v}" class="${v === 'tv' ? 'on' : ''}">${l}</button>`).join('')}</div>
                 <span class="spacer"></span>
@@ -255,23 +257,79 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
     return p.events.find((e) => e.type === 'golo') ?? ev;
   }
 
+  async function ensure3d() {
+    if (hl) return;
+    const mod = await import('../three/highlight3d');
+    hl = new mod.Highlight3D($('#hlv'), {
+      profile: crowd.arena,
+      crowd: crowd.total,
+      shares: crowd.shares,
+      comp: COMP_NAMES[f.comp],
+      stage: f.stage,
+      teams: [{ short: h.shortName, colors: kit[0] }, { short: a.shortName, colors: kit[1] }],
+    });
+  }
+
+  // ---- Antes do jogo: entrada das equipas, alinhamento e cinco iniciais (3D) ----
+  let introTimers: ReturnType<typeof setTimeout>[] = [];
+  async function openIntro() {
+    in3d = true;
+    $('#hl').hidden = false;
+    $('#hlcap').textContent = `${h.name} - ${a.name} · ${crowd.arena.name}`;
+    await ensure3d();
+    if (!hl) return;
+    const lineup = (sd: 0 | 1) => {
+      const t = snap.teams[sd];
+      return [t.gk, ...t.court, ...t.bench].filter((p): p is NonNullable<typeof p> => !!p).map((p) => p.id);
+    };
+    const refs = ['arbitro1', 'arbitro2'];
+    for (const id of refs) info[id] = { side: 0, number: null, gk: false, referee: true, look: lookOf({ id }) };
+    const intro = new IntroScene([lineup(0), lineup(1)], refs);
+    // gráfico dos cinco iniciais de cada equipa, no estilo do marcador
+    const pos = (id: string, sd: 0 | 1) => ([hs, as][sd].squad.find((p) => p.id === id)?.position ?? '');
+    const card = (sd: 0 | 1) => {
+      const t = snap.teams[sd];
+      const club = sd ? a : h;
+      const setup = sd ? as : hs;
+      return lineupHtml({
+        style: style as 'liga',
+        team: { name: club.name, short: club.shortName, color: kit[sd][0] },
+        players: [t.gk, ...t.court].filter((p): p is NonNullable<typeof p> => !!p).map((p) => ({ number: p.number, name: p.name, pos: pos(p.id, sd) })),
+        coach: setup.coachName,
+        system: setup.tactics.system,
+        stage: `${COMP_NAMES[f.comp]} · ${f.stage}`,
+      });
+    };
+    hl.onEnd = () => {
+      if (introDone) return;
+      const box = $('#hllu');
+      box.innerHTML = card(0);
+      introTimers.push(setTimeout(() => (box.innerHTML = card(1)), 5000));
+      introTimers.push(setTimeout(closeIntro, 10000));
+    };
+    hl.play(intro, info, kit, 0, intro.total, [[0, 0], [0, 0]]);
+  }
+
+  let introDone = false;
+  function closeIntro() {
+    introDone = true;
+    if (hl) hl.onEnd = null;
+    for (const t of introTimers) clearTimeout(t);
+    introTimers = [];
+    $('#hllu').innerHTML = '';
+    $('#hl').hidden = true;
+    in3d = false;
+    last = performance.now();
+  }
+
   async function open3d(ev: MatchEvent) {
     if (!choreo) return;
     in3d = true;
     last3d = ev.t;
     $('#hl').hidden = false;
     $('#hlcap').textContent = ev.text.replace(/^\d+:\d+ /, '');
-    if (!hl) {
-      const mod = await import('../three/highlight3d');
-      hl = new mod.Highlight3D($('#hlv'), {
-        profile: crowd.arena,
-        crowd: crowd.total,
-        shares: crowd.shares,
-        comp: COMP_NAMES[f.comp],
-        stage: f.stage,
-        teams: [{ short: h.shortName, colors: kit[0] }, { short: a.shortName, colors: kit[1] }],
-      });
-    }
+    await ensure3d();
+    if (!hl) return;
     hl.onEnd = () => {
       autoClose = setTimeout(close3d, 2500);
     };
@@ -429,7 +487,7 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
     if (autoClose) { clearTimeout(autoClose); autoClose = null; }
     hl?.replay(0.6);
   });
-  $('#hlc').addEventListener('click', close3d);
+  $('#hlc').addEventListener('click', () => (introTimers.length || $('#hllu').innerHTML || !choreo ? closeIntro() : close3d()));
   $('#skip').addEventListener('click', () => {
     if (in3d) close3d();
     while (m.step());
@@ -438,4 +496,5 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
 
   drawSide();
   requestAnimationFrame(frame);
+  if (st.moments3d !== 'nenhum') openIntro();
 }

@@ -193,6 +193,8 @@ button[disabled] { opacity: .45; cursor: not-allowed; }
 .hl[hidden] { display: none; }
 .hl-view { flex: 1; min-height: 0; display: grid; place-items: center; overflow: hidden; }
 .hl-view canvas { width: 100% !important; height: 100% !important; object-fit: cover; }
+.hl-lu { position: absolute; left: 24px; top: 50%; transform: translateY(-50%); z-index: 6; pointer-events: none; }
+.hl-lu:empty { display: none; }
 .hl-cap { position: absolute; left: 12px; top: 10px; background: rgba(0,0,0,.65); color: #fff; padding: 6px 10px; border-radius: 6px; font-weight: 600; font-size: 14px; max-width: 70%; }
 .hl-bar { position: absolute; left: 0; right: 0; bottom: 0; display: flex; gap: 8px; align-items: center; padding: 8px; background: linear-gradient(transparent, rgba(0,0,0,.75)); }
 .hl-bar .spacer { flex: 1; }

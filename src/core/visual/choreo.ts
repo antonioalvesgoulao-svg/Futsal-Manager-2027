@@ -17,7 +17,7 @@ import type { Tactics } from '../tactics';
 export interface P2 { x: number; y: number }
 export interface Ball { x: number; y: number; z: number }
 
-export type ActKind = 'pass' | 'shoot' | 'dive' | 'catch' | 'tackle' | 'feint' | 'screen' | 'shield' | 'block' | 'celebrate' | 'fall' | 'run' | 'throw';
+export type ActKind = 'pass' | 'shoot' | 'dive' | 'catch' | 'tackle' | 'feint' | 'screen' | 'shield' | 'block' | 'celebrate' | 'fall' | 'run' | 'throw' | 'idle';
 export interface Act {
   kind: ActKind;
   k: number; // progresso da ação (0 a 1)
@@ -35,6 +35,15 @@ export interface Frame {
   label: string; // ação em curso (para legendas)
   phase: string; // momento do jogo (ataque organizado, contra-ataque, canto...)
   acts: Record<string, Act>;
+  focus?: P2; // para onde olham as câmaras (por omissão, a bola)
+  hideBall?: boolean;
+}
+
+/** O que a vista 3D precisa de uma cena (jogada ou cerimónia de entrada). */
+export interface Scene3D {
+  at(ct: number): Frame;
+  readonly attackDirection: number;
+  readonly total: number;
 }
 
 export interface StartState {
