@@ -384,20 +384,22 @@ export class Choreo {
     // ---- jogo corrido ----
     let T = 0;
     const gkStyle = tactics[att].gkStyle ?? 'classico';
-    if (holder === this.gkA && gkStyle !== 'classico' && D > 5 && r() < (gkStyle === 'avancado' ? 0.3 : 0.12)) {
+    if (holder === this.gkA && gkStyle !== 'classico' && D > 7 && r() < (gkStyle === 'avancado' ? 0.3 : 0.12)) {
       // GR que joga com os pés: pousa a bola e sai a conduzir antes de passar
       const g0 = this.P(holder, 0);
-      const carryTo = this.A(gkStyle === 'avancado' ? 11 + r() * 4 : 7 + r() * 2, clamp(g0.y + (r() - 0.5) * 6, -5, 5));
+      // o GR atacante conduz até ao meio-campo (como o GR do Benfica no clipe da Liga dos Campeões)
+      const carryTo = this.A(gkStyle === 'avancado' ? 15 + r() * 4.5 : 7 + r() * 2, clamp(g0.y + (r() - 0.5) * 6, -5, 5));
       this.balls.push({ k: 'foot', t0: 0.3, id: holder });
-      this.key(holder, 2.4, carryTo);
-      this.attKeysAt(2.4, new Set([holder]));
+      const tc = Math.min(D - 1.2, 0.3 + dist(g0, carryTo) / 4.6); // condução a ~4,6 m/s
+      this.key(holder, tc, carryTo);
+      this.attKeysAt(tc, new Set([holder]));
       this.label(0.4, `${this.nm(holder)} sai a jogar com os pés`);
-      const to = this.attOut.reduce((x, y) => (this.U(this.P(y, 2.4)) > this.U(this.P(x, 2.4)) ? y : x));
-      this.act(holder, 'pass', 2.35, 2.7, { face: to });
-      this.pass(holder, to, 2.5, 3.1);
-      this.key(holder, 4.5, this.A(gkStyle === 'avancado' ? 9 : 5, 0));
+      const to = this.attOut.reduce((x, y) => (this.U(this.P(y, tc)) > this.U(this.P(x, tc)) ? y : x));
+      this.act(holder, 'pass', tc - 0.05, tc + 0.3, { face: to });
+      this.pass(holder, to, tc + 0.1, tc + 0.7);
+      this.key(holder, tc + 2.2, this.A(gkStyle === 'avancado' ? 9 : 5, 0));
       holder = to;
-      T = 3.1;
+      T = tc + 0.7;
     } else if (holder === this.gkA) {
       // o GR repõe com a mão ou com o pé para um colega aberto
       const to = this.attOut[Math.floor(r() * this.attOut.length)];
@@ -1206,6 +1208,8 @@ export class Choreo {
       });
       this.act(tackler, 'tackle', D - 0.45, D + 0.2, { face: holder });
       this.balls.push({ k: 'foot', t0: D - 0.05, id: tackler });
+      // no choque, quem perde a bola vai muitas vezes ao chão (como se vê nos jogos)
+      if (r() < 0.35) this.act(holder, 'fall', D - 0.05, D + 1.3);
       this.label(D - 0.3, `Desarme de ${this.nm(tackler)}`);
     }
   }
