@@ -6,7 +6,8 @@ import type { MatchEvent, MatchOptions, MatchResult, PlayerStats, Side, TeamSetu
 
 const HALF = 1200; // 20 minutos de tempo útil
 const ET = 300; // prolongamento: 2 x 5 minutos
-const MAX_SQUAD = 14;
+// Regulamento da Liga Placard, Art. 69.2: 5 + 7 suplentes; até 9 suplentes se 2 da ficha forem Sub-20 formados localmente
+const MAX_SQUAD = 12;
 const REBOUND = 0.25; // defesas para a frente que dão recarga (estimativa)
 
 type A = Player['attrs'];
@@ -80,7 +81,12 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     const wanted = new Set([tac.gk, ...tac.q1, ...tac.q2].filter(Boolean) as string[]);
     const gkList = [...gks.filter((p) => wanted.has(p.id)), ...gks.filter((p) => !wanted.has(p.id))].slice(0, 2);
     const outList = [...out.filter((p) => wanted.has(p.id)), ...out.filter((p) => !wanted.has(p.id))];
-    const called = [...gkList, ...outList.slice(0, MAX_SQUAD - gkList.length)];
+    // Sub-20 formados localmente (estimativa: portugueses até 20 anos): com 2 na ficha, mais 2 lugares
+    const youth = outList.filter((p) => p.age <= 20 && p.nationality === 'Portugal').slice(0, 2);
+    const rest = outList.filter((p) => !youth.includes(p));
+    const called = youth.length === 2
+      ? [...gkList, ...youth, ...rest.slice(0, MAX_SQUAD + 2 - gkList.length - 2)]
+      : [...gkList, ...outList.slice(0, MAX_SQUAD - gkList.length)];
     const players: Live[] = called.map((p) => ({ p, energy: 100, onCourt: false, sentOff: false, yellow: 0 }));
     for (const l of players) {
       names[l.p.id] = l.p.name;

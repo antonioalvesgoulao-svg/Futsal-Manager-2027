@@ -130,7 +130,23 @@ export function leagueTable(s: SeasonState, clubIds: string[], upToRound = 99): 
     else if (hg < ag) { a.w++; h.l++; a.pts += 3; }
     else { h.d++; a.d++; h.pts++; a.pts++; }
   }
-  return Object.values(rows).sort((x, y) => y.pts - x.pts || y.gf - y.ga - (x.gf - x.ga) || y.gf - x.gf || x.club.localeCompare(y.club));
+  // Desempates (Regulamento da Liga Placard, Art. 18.5): confronto direto entre os empatados (pontos, diferença
+  // de golos), diferença de golos geral, vitórias, golos marcados, golos sofridos
+  const games = s.fixtures.filter((f) => f.comp === 'liga' && f.result && (f.round ?? 0) <= upToRound);
+  const all = Object.values(rows);
+  const h2h = (club: string, group: Set<string>) => {
+    let pts = 0, gd = 0;
+    for (const f of games) {
+      if (!group.has(f.home) || !group.has(f.away) || (f.home !== club && f.away !== club)) continue;
+      const [a, b] = f.home === club ? f.result!.score : [f.result!.score[1], f.result!.score[0]];
+      pts += a > b ? 3 : a === b ? 1 : 0; gd += a - b;
+    }
+    return { pts, gd };
+  };
+  const hh: Record<string, { pts: number; gd: number }> = {};
+  for (const r of all) hh[r.club] = h2h(r.club, new Set(all.filter((x) => x.pts === r.pts).map((x) => x.club)));
+  return all.sort((x, y) => y.pts - x.pts || hh[y.club].pts - hh[x.club].pts || hh[y.club].gd - hh[x.club].gd
+    || y.gf - y.ga - (x.gf - x.ga) || y.w - x.w || y.gf - x.gf || x.ga - y.ga || x.club.localeCompare(y.club));
 }
 
 // Vencedor de um jogo a eliminar
