@@ -1,3 +1,4 @@
+import { injuryOf } from '../../core/injuries';
 import { banFor } from '../../core/discipline';
 // Ecrãs da época: início, calendário, competições e dia de jogo
 import { clubName, myFixtures, nextMyFixture, playMyMatch, setupFor } from '../../core/game';
@@ -155,9 +156,11 @@ function fixturesTable(s: GameState, fx: Fixture[]) {
 // Castigados para este jogo (Regulamento Disciplinar da FPF)
 function banLine(s: GameState, f: Fixture) {
   const out = s.players.filter((p) => (p.clubId === f.home || p.clubId === f.away) && banFor(s, p.id, f.comp) > 0);
-  if (!out.length) return '';
+  const inj = s.players.filter((p) => (p.clubId === f.home || p.clubId === f.away) && injuryOf(s, p.id));
+  const injHtml = inj.length ? `<p class="small" style="margin-top:6px">🩹 Lesionados: ${inj.map((p) => `<b>${p.name}</b> (${clubName(s, p.clubId)}, ${injuryOf(s, p.id)!.type.toLowerCase()}, volta a ${fmtDate(injuryOf(s, p.id)!.until)})`).join(' · ')}</p>` : '';
+  if (!out.length) return injHtml;
   const r = (p: (typeof out)[0]) => (s.discipline?.bans[p.id] ?? []).map((b) => b.reason).join(', ');
-  return `<p class="small" style="margin-top:8px">🟥 Castigados: ${out.map((p) => `<b>${p.name}</b> (${clubName(s, p.clubId)}, ${r(p)})`).join(' · ')}</p>`;
+  return `<p class="small" style="margin-top:8px">🟥 Castigados: ${out.map((p) => `<b>${p.name}</b> (${clubName(s, p.clubId)}, ${r(p)})`).join(' · ')}</p>${injHtml}`;
 }
 
 // Dia de jogo: antevisão e resultado

@@ -2,6 +2,7 @@ import { importanceOf, refereesFor } from './referees';
 // Ciclo de jogo: avançar no calendário, jogar jogos, fim de época
 import { aiTactics } from './coaches';
 import { normalizeTactics } from './tactics';
+import { injuryOf, matchInjuries, trainingInjuries } from './injuries';
 import { applyDiscipline, banFor, seasonEndDiscipline } from './discipline';
 import type { CompId } from './season/types';
 import { developPlayer, retires, youthIntake, DevChange } from './development';
@@ -18,7 +19,13 @@ export function clubName(s: GameState, id: string) {
 /** comp: competição oficial do jogo (os castigados ficam de fora). */
 export function setupFor(s: GameState, clubId: string, comp?: CompId): TeamSetup & { coachName: string } {
   const c = s.clubs.find((x) => x.id === clubId)!;
-  const squad = s.players.filter((p) => p.clubId === c.id && !(comp && banFor(s, p.id, comp) > 0));
+  const all = s.players.filter((p) => p.clubId === c.id && !(comp && banFor(s, p.id, comp) > 0));
+  let squad = all.filter((p) => !injuryOf(s, p.id));
+  // sem guarda-redes disponível: joga o menos lesionado (na realidade subiria um júnior)
+  if (!squad.some((p) => p.position === 'GR')) {
+    const gr = all.filter((p) => p.position === 'GR').sort((a, b) => injuryOf(s, a.id)!.until.localeCompare(injuryOf(s, b.id)!.until))[0];
+    if (gr) squad = [gr, ...squad];
+  }
   if (c.id === s.clubId) {
     normalizeTactics(s.tactics, squad);
     const ok = (ids: string[]) => ids.filter((id) => squad.some((p) => p.id === id));
@@ -71,6 +78,8 @@ function playFixture(s: GameState, f: Fixture, given?: MatchResult): MatchResult
   const mine = (id: string) => s.players.find((p) => p.id === id)?.clubId === s.clubId;
   const pname = (id: string) => s.players.find((p) => p.id === id)?.name ?? id;
   for (const t of applyDiscipline(s, f, m, pname)) if (s.players.some((p) => mine(p.id) && t.startsWith(p.name + ':'))) news(s, t);
+  // lesões no jogo
+  for (const [id, i] of matchInjuries(s, m, `${f.id}-${s.season.year}`)) if (mine(id)) news(s, `${pname(id)} lesionou-se no jogo: ${i.type.toLowerCase()}, ${i.days} dia${i.days > 1 ? 's' : ''} de paragem.`);
   // estatísticas da época (só competições oficiais)
   for (const [id, st] of Object.entries(m.players)) {
     if (st.minutes < 30) continue;
@@ -89,6 +98,13 @@ function nextDate(s: GameState) {
   return pending[0];
 }
 
+function trainingNews(s: GameState, from: string, to: string) {
+  const { fresh, healed } = trainingInjuries(s, from, to);
+  const name = (id: string) => s.players.find((p) => p.id === id);
+  for (const id of healed) if (name(id)?.clubId === s.clubId) news(s, `${name(id)!.name} recuperou da lesão.`);
+  for (const [id, i] of fresh) if (name(id)?.clubId === s.clubId) news(s, `${name(id)!.name} lesionou-se no treino: ${i.type.toLowerCase()}, ${i.days} dia${i.days > 1 ? 's' : ''} de paragem.`);
+}
+
 export type AdvanceResult = { kind: 'match'; fixture: Fixture } | { kind: 'day' } | { kind: 'seasonEnd'; changes: DevChange[] };
 
 /**
@@ -101,6 +117,7 @@ export function advance(s: GameState): AdvanceResult {
     s.date = keyDates(s.season.year).end;
     return { kind: 'seasonEnd', changes: endSeason(s) };
   }
+  trainingNews(s, s.date, d);
   s.date = d;
   const mine = s.season.fixtures.find((f) => f.date === d && !f.result && !f.cancelled && (f.home === s.clubId || f.away === s.clubId));
   if (mine) return { kind: 'match', fixture: mine };

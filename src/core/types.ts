@@ -15,6 +15,7 @@ export interface Club {
 import type { Attributes } from './attributes';
 import type { Tactics } from './tactics';
 import type { Discipline } from './discipline';
+import type { Injury } from './injuries';
 import type { Honour, NewsItem, PlayerSeason, SeasonState } from './season/types';
 
 export type Position = 'GR' | 'FIX' | 'FIX/ALA' | 'ALA' | 'ALA/PIV' | 'PIV' | 'UNI';
@@ -82,6 +83,7 @@ export interface GameState {
   honours: Honour[];
   settings?: Settings;
   discipline?: Discipline; // amarelos acumulados e castigos
+  injuries?: Record<string, Injury>; // lesões em curso
 }
 
 export const SAVE_VERSION = 6;

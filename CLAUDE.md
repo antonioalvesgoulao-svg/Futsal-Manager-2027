@@ -95,6 +95,7 @@ Real: 6,38 golos/jogo, casa 49,6%, fora 37,0%, empates 13,5%, <3 golos 6,1%. Man
 - Som (1/11 noite, pedido do António): SÓ gravações reais em `public/sons/` (créditos em CREDITOS.txt): público (ciclo), golo, apito, três apitos do fim, petardo, assobios, uuuh, palmas, buzina. Nada sintético (sem sons da bola nem chiar; sem cânticos). Repetições: público abafado (passa-baixo 700 Hz, metade do volume). Golo do visitante: o pavilhão cala-se (público a 25% durante 4 s) e ouve-se ao longe a festa dos visitantes. Público = nº real de pessoas (log) × ocupação; apito e buzina fixos. freesound bloqueia este servidor: o António descarrega e envia os ficheiros. Cortar ficheiros m4a: converter primeiro para wav (cortar m4a diretamente com -ss deixou o golo mudo)
 - Castigos (`src/core/discipline.ts`, Regulamento Disciplinar FPF 2025/26, texto colado pelo António): 2 amarelos = 1 jogo (Art. 169, não contam para acumulação); Liga Placard 1 jogo ao 5.º, 9.º, 12.º e depois a cada 3 amarelos (Art. 170; Taças e Supertaça sem acumulação); play-off recomeça a contagem se ainda não chegou ao 5.º (170.4); vermelho direto por impedir golo 1-2 jogos (168.1); vermelho em confronto 1-5 (Art. 154 sem lesão; distribuição estimada, quase sempre 1-2); cumpre na mesma competição, senão noutra da época (40.2), senão na seguinte (40.3); acumulação caduca no fim da época (40.9). Castigados ficam fora da convocatória; aviso no dia de jogo; 🟥/🟨 no plantel
 - Regulamento da Liga Placard 2026/27 (PDF do António): ficha de jogo 5 + 7 suplentes, ou + 9 se 2 forem Sub-20 formados localmente (Art. 69.2; formado localmente estimado como português até 20 anos); desempates Art. 18.5 (confronto direto pontos e diferença, diferença geral, vitórias, golos marcados, sofridos). Para a etapa 10: máximo 20 seniores inscritos, 5 substituições após o limite (52.5), mínimo 7 formados localmente na ficha (53.1), 15 h entre jogos (52.8)
+- Lesões (`src/core/injuries.ts`): Lopes et al. 2023 (elite masculino, Portugal): 25,9/1000 h de jogo (tempo útil em campo), 3/1000 h de treino (~7,5 h/semana, estimativa); zonas virilha 19%, joelho 19%, coxa 17%, tornozelo 15%; cruzado raro (~210 dias). Mais risco com idade >28 e pouca resistência (estimativa). Simulação: ~12 lesões visíveis por equipa/época, média ~12 dias (as de 1-3 dias entre jogos não se veem). Lesionados fora da convocatória; 🩹 no plantel; aviso no dia de jogo; notícias. Ainda não: lesão a meio do jogo com saída do jogador
 - Próximos melhoramentos possíveis: mais variantes de jogadas ensaiadas
 
 ## Roteiro
@@ -103,7 +104,7 @@ Real: 6,38 golos/jogo, casa 49,6%, fora 37,0%, empates 13,5%, <3 golos 6,1%. Man
 | 1-6 Base, dados, atributos, motor, táticas, época | Feito |
 | 7 Quadro tático gráfico, bolas paradas, jogo ao vivo 2D, 3D | Feito (a afinar com feedback) |
 | 8 Ligação 3D ao motor | Coberta pela 7 |
-| 9 Plantel e clube: treino, moral, lesões, castigos, contratos | Em curso (castigos feitos) |
+| 9 Plantel e clube: treino, moral, lesões, castigos, contratos | Em curso (castigos e lesões feitos) |
 | 10 Mercado e finanças | |
 | 11 Staff e formação (treinadores com historial real) | |
 | 12 20 ligas europeias + segundas divisões e taças | |
