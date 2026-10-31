@@ -16,5 +16,8 @@ export function aiTactics(squad: Player[], club: Club, coach?: Coach): Tactics {
   const tempo: Tactics['tempo'] = club.level >= 85 ? 'paciente' : r() < 0.35 ? 'rapido' : 'equilibrado';
   const marking: Tactics['marking'] = r() < 0.6 ? 'zona' : r() < 0.5 ? 'individual' : 'misto';
   const flyingKeeper: Tactics['flyingKeeper'] = r() < 0.3 ? 'agressivo' : 'auto';
-  return suggestTactics(squad, { system, pressure, tempo, marking, flyingKeeper, rotation: 'normal', ...(coach?.style ?? {}) });
+  // estilo do GR conforme o jogo de pés do titular
+  const gkFeet = Math.max(0, ...squad.filter((p) => p.position === 'GR').map((p) => p.attrs.jogoPes));
+  const gkStyle: Tactics['gkStyle'] = gkFeet >= 15 && r() < 0.45 ? 'avancado' : gkFeet >= 12 && r() < 0.5 ? 'construtor' : 'classico';
+  return suggestTactics(squad, { system, pressure, tempo, marking, flyingKeeper, gkStyle, rotation: 'normal', ...(coach?.style ?? {}) });
 }

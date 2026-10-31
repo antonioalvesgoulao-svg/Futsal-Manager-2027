@@ -358,7 +358,10 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
     $('#hlcap').textContent = ev.text.replace(/^\d+:\d+ /, '');
     await ensure3d();
     if (!hl) return;
+    chain = 0;
+    shown3d = choreo;
     hl.onEnd = () => {
+      if (tryContinue()) return;
       autoClose = setTimeout(close3d, 2500);
     };
     hl.setBench(benchIds());
@@ -367,13 +370,38 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
     hl.play(choreo, info, kit, Math.max(0, total - Math.max(10, choreo.extra + 7)), total, [[shownScore[0], shownScore[1]], after]);
   }
 
+  // depois de um lance perigoso: se quem defendeu sai em contra-ataque, o 3D continua sem cortes
+  let chain = 0;
+  let shown3d: Choreo | null = null;
+  function tryContinue(): boolean {
+    if (!hl || !choreo || done || chain >= 2) return false;
+    ct = choreo.total;
+    if (poss) display = poss.end;
+    reveal();
+    const more = nextPossession(false);
+    if (!more || !poss || !choreo) return false;
+    const counter = poss.counter || poss.actions.some((x) => x.kind === 'counter');
+    if (!counter) return false; // o 2D segue com esta posse normalmente
+    chain++;
+    shown3d = choreo;
+    $('#hlcap').textContent = 'Contra-ataque!';
+    const g = poss.events.find((e) => e.type === 'golo');
+    const after: [number, number] = g ? [g.score[0], g.score[1]] : [shownScore[0], shownScore[1]];
+    hl.setBench(benchIds());
+    hl.continueWith(choreo, 0, choreo.total, [[shownScore[0], shownScore[1]], after]);
+    return true;
+  }
+
   function close3d() {
     if (autoClose) clearTimeout(autoClose);
     autoClose = null;
     $('#hl').hidden = true;
     in3d = false;
-    if (choreo) ct = choreo.total; // a jogada já foi vista em 3D
-    if (poss) display = poss.end;
+    // a jogada mostrada em 3D já foi vista (se o 3D avançou para a posse seguinte sem contra-ataque, o 2D mostra-a)
+    if (choreo && choreo === shown3d) {
+      ct = choreo.total;
+      if (poss) display = poss.end;
+    }
     reveal();
   }
 
@@ -412,7 +440,7 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
   }
 
   // avança o motor para a posse seguinte e prepara a coreografia
-  function nextPossession(): boolean {
+  function nextPossession(allow3d = true): boolean {
     const more = m.step();
     snap = m.snapshot();
     if (snap.possession) {
@@ -421,7 +449,7 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
       startState = choreo.end;
       ct = 0;
       display = poss.start;
-      const key = st.moments3d !== 'nenhum' ? keyEventOf(poss) : null;
+      const key = allow3d && st.moments3d !== 'nenhum' ? keyEventOf(poss) : null;
       if (key) open3d(key);
     } else {
       // início/fim de período: bola ao centro

@@ -99,6 +99,21 @@ export class Highlight3D {
     this.start(1);
   }
 
+  /** Continua para a jogada seguinte sem cortes (mesmos jogadores, câmara contínua): transições e contra-ataques. */
+  continueWith(choreo: Scene3D, from: number, to: number, scores?: [[number, number], [number, number]]) {
+    this.choreo = choreo;
+    this.from = from;
+    this.to = to;
+    if (scores) { this.scores = scores; this.arena.setScore(scores[0]); }
+    this.goalShown = false;
+    this.t = from;
+    this.speed = 1;
+    this.ended = false;
+    cancelAnimationFrame(this.raf);
+    this.last = performance.now();
+    this.raf = requestAnimationFrame(this.frame);
+  }
+
   replay(speed = 0.6) {
     if (this.choreo) this.start(speed);
   }

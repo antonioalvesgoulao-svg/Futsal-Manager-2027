@@ -314,7 +314,22 @@ export class Choreo {
 
     // ---- jogo corrido ----
     let T = 0;
-    if (holder === this.gkA) {
+    const gkStyle = tactics[att].gkStyle ?? 'classico';
+    if (holder === this.gkA && gkStyle !== 'classico' && D > 5 && r() < (gkStyle === 'avancado' ? 0.3 : 0.12)) {
+      // GR que joga com os pés: pousa a bola e sai a conduzir antes de passar
+      const g0 = this.P(holder, 0);
+      const carryTo = this.A(gkStyle === 'avancado' ? 11 + r() * 4 : 7 + r() * 2, clamp(g0.y + (r() - 0.5) * 6, -5, 5));
+      this.balls.push({ k: 'foot', t0: 0.3, id: holder });
+      this.key(holder, 2.4, carryTo);
+      this.attKeysAt(2.4, new Set([holder]));
+      this.label(0.4, `${this.nm(holder)} sai a jogar com os pés`);
+      const to = this.attOut.reduce((x, y) => (this.U(this.P(y, 2.4)) > this.U(this.P(x, 2.4)) ? y : x));
+      this.act(holder, 'pass', 2.35, 2.7, { face: to });
+      this.pass(holder, to, 2.5, 3.1);
+      this.key(holder, 4.5, this.A(gkStyle === 'avancado' ? 9 : 5, 0));
+      holder = to;
+      T = 3.1;
+    } else if (holder === this.gkA) {
       // o GR repõe com a mão ou com o pé para um colega aberto
       const to = this.attOut[Math.floor(r() * this.attOut.length)];
       const tl = Math.min(1.1, D * 0.3);
@@ -335,19 +350,21 @@ export class Choreo {
     this.phase(Math.max(0, T), counter && p.counter ? 'Contra-ataque' : this.sys === '5x4' ? 'Ataque 5x4 (guarda-redes avançado)' : `Ataque organizado (${this.sys})`);
 
     const shotA = ending.shot;
-    const shooter = shotA && this.attOut.includes(shotA.shooter!) ? shotA.shooter! : undefined;
+    const gkRun = !!(shotA?.gkRun && this.gkA && shotA.shooter === this.gkA);
+    const shooter = shotA && (this.attOut.includes(shotA.shooter!) || gkRun) ? shotA.shooter! : undefined;
     const assist = shotA?.assist && this.attOut.includes(shotA.assist) && shotA.assist !== shooter ? shotA.assist : undefined;
     const tS = D - 0.25; // instante do remate
-    const finishLen = counter ? 4.6 : 2.6;
+    const finishLen = gkRun ? 4.4 : counter ? 4.6 : 2.6;
     const needed = ending.kind === 'shot' && shooter ? (counter ? holder : assist ?? shooter) : ending.kind === 'foul' && this.attOut.includes(ending.foul!.shooter!) ? ending.foul!.shooter! : undefined;
     const tFin = ending.kind === 'shot' && shooter ? Math.max(T + 0.3, tS - finishLen) : ending.kind === 'foul' ? D - 1.5 : ending.kind === 'lost' ? D - 1.1 : D;
-    holder = this.beats(T, tFin, holder, counter ? undefined : needed);
+    holder = this.beats(T, tFin, holder, counter || gkRun ? undefined : needed);
     T = Math.max(T, tFin);
 
     // ---- finalização / perda / falta ----
     let afterT = D;
     if (ending.kind === 'shot' && shooter) {
-      if (counter) this.counterRun(holder, T, tS, shooter, assist, shotA!);
+      if (gkRun) this.gkCarry(holder, T, tS, shooter);
+      else if (counter) this.counterRun(holder, T, tS, shooter, assist, shotA!);
       else this.finish(holder, T, tS, shooter, assist, shotA!);
       afterT = this.shot(tS, shooter, shotA!, this.dirA);
     } else if (ending.kind === 'lost') {
@@ -469,7 +486,10 @@ export class Choreo {
   private attKeysAt(t: number, skip: Set<string>, bv?: number) {
     const b = bv ?? this.ballAt(Math.min(t, this.lastBallT())).y;
     for (const id of this.attOut) if (!skip.has(id)) this.key(id, t, this.slotPos(this.slot.get(id) ?? 0, t, b, 1.6));
-    if (this.gkA && !skip.has(this.gkA)) this.key(this.gkA, t, this.A(lerp(1.4, 4.2, this.progFn(t)), clamp(b * 0.12, -1, 1)));
+    // posição do GR conforme o estilo: clássico perto da baliza, construtor e atacante mais subidos
+    const gs = this.tactics[this.att].gkStyle ?? 'classico';
+    const gkU = gs === 'avancado' ? lerp(2, 10, this.progFn(t)) : gs === 'construtor' ? lerp(1.6, 6.5, this.progFn(t)) : lerp(1.4, 4.2, this.progFn(t));
+    if (this.gkA && !skip.has(this.gkA)) this.key(this.gkA, t, this.A(gkU, clamp(b * (gs === 'classico' ? 0.12 : 0.25), -2, 2)));
   }
   private lastBallT() {
     const s = this.balls[this.balls.length - 1];
@@ -820,6 +840,26 @@ export class Choreo {
     this.attKeysAt(tS, skip, s * 2);
   }
 
+  // ---------- GR atacante: recebe atrás, conduz até ao meio-campo e remata de longe ----------
+  private gkCarry(holder: string, T: number, tS: number, gk: string) {
+    this.replan(T);
+    const hp = this.P(holder, T);
+    const g0 = this.P(gk, T);
+    // atraso para o GR
+    this.act(holder, 'pass', T + 0.1, T + 0.45, { face: gk });
+    this.pass(holder, gk, T + 0.3, T + 1.0);
+    this.key(holder, T + 1.4, this.A(clamp(this.U(hp) + 4, 14, 30), hp.y));
+    this.key(gk, T + 1.0, g0);
+    const v = clamp(g0.y + (this.r() - 0.5) * 5, -5, 5);
+    const spot = this.A(18 + this.r() * 4, v);
+    this.key(gk, lerp(T + 1.0, tS, 0.55), this.A(lerp(this.U(g0), this.U(spot), 0.6), lerp(g0.y, v, 0.6)));
+    this.key(gk, tS, spot);
+    // os colegas abrem e dão linhas (o GR leva a equipa para a frente)
+    for (const id of this.attOut) if (id !== holder) this.key(id, tS, this.slotPos(this.slot.get(id) ?? 0, tS, v, 1.2));
+    this.label(T + 1.2, `${this.nm(gk)} (GR) sai a jogar com a bola`);
+    this.label(tS - 0.3, `${this.nm(gk)} arrisca o remate de longe!`);
+  }
+
   // ---------- contra-ataque: 2x1, 3x2, 2x0 ----------
   private counterRun(carrier: string, T: number, tS: number, shooter: string, assist: string | undefined, a: Action) {
     const r = this.r;
@@ -1038,7 +1078,8 @@ export class Choreo {
       const v = (r() - 0.5) * 2.6;
       target = { x: g * 19.4, y: v, z: 0.2 + r() * 1.3 };
       // remates sem muita força ou à figura: o GR agarra (a maioria das defesas em futsal)
-      caught = target.z < 1.7 && (Math.abs(v) < 0.8 || r() < 0.45);
+      caught = a.caught ?? (target.z < 1.7 && (Math.abs(v) < 0.8 || r() < 0.45));
+      if (caught && target.z > 1.5) target.z = 1.1;
       after = caught ? target : { x: g * 21, y: v + side * 3, z: 0.1 }; // defesa para canto
     } else {
       const gl = Math.hypot(g * 20 - from.x, -from.y) || 1;

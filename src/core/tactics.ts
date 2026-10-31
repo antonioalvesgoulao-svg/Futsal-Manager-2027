@@ -7,6 +7,7 @@ export type Pressure = 'alta' | 'media' | 'baixa';
 export type Tempo = 'rapido' | 'equilibrado' | 'paciente';
 export type Marking = 'zona' | 'individual' | 'misto';
 export type FlyingKeeper = 'nunca' | 'auto' | 'agressivo' | 'sempre';
+export type GkStyle = 'classico' | 'construtor' | 'avancado';
 export type Rotation = 'curta' | 'normal' | 'longa';
 export type CornerRoutine = 'primeiro_poste' | 'remate_fora' | 'bloqueio_pivo' | 'curto';
 export type FreeKickRoutine = 'remate_direto' | 'jogada_ensaiada' | 'cruzamento';
@@ -27,6 +28,7 @@ export interface Tactics {
   tempo: Tempo;
   marking: Marking;
   flyingKeeper: FlyingKeeper;
+  gkStyle?: GkStyle; // estilo do guarda-redes (por omissão, clássico)
   rotation: Rotation;
   gk: string | null; // guarda-redes titular
   q1: string[]; // 1.º quinteto (4 jogadores de campo)
@@ -51,6 +53,7 @@ export const LABELS = {
     sempre: 'Sempre',
   },
   rotation: { curta: 'Curta (rodar muito)', normal: 'Normal', longa: 'Longa (titulares mais tempo)' },
+  gkStyle: { classico: 'Clássico (fica na baliza)', construtor: 'Construtor (joga com os pés)', avancado: 'Atacante (sai a jogar e remata)' },
   cornerRoutine: { primeiro_poste: 'Ao primeiro poste', remate_fora: 'Remate de fora', bloqueio_pivo: 'Bloqueio para o pivô', curto: 'Canto curto' },
   freeKickRoutine: { remate_direto: 'Remate direto', jogada_ensaiada: 'Jogada ensaiada', cruzamento: 'Cruzamento ao segundo poste' },
 } as const;
@@ -74,6 +77,9 @@ export const DESCRIPTIONS: Record<string, string> = {
   bloqueio_pivo: 'Bloqueio para libertar o pivô junto à baliza. Menos remates, mas muito perigosos com um bom pivô.',
   curto: 'Canto jogado curto para manter a posse. Poucos remates, quase nenhum risco de contra-ataque.',
   remate_direto: 'O especialista remata diretamente. Depende do remate e das bolas paradas.',
+  classico: 'O GR fica na baliza e repõe para os colegas. Mais seguro.',
+  construtor: 'O GR participa na saída de bola com os pés. Ajuda contra a pressão; depende do jogo de pés.',
+  avancado: 'O GR sai com a bola, junta-se ao ataque e às vezes remata. Mais ataque e contra-ataques, mas arrisca a baliza deserta.',
   jogada_ensaiada: 'Combinação de passes para um remate desmarcado. Mais remates, de boa qualidade.',
   cruzamento: 'Bola ao segundo poste para o pivô finalizar. Depende do pivô.',
 };

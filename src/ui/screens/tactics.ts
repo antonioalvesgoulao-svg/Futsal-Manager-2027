@@ -257,6 +257,7 @@ export function renderTactics(content: HTMLElement, s: GameState, clubId: string
           ${segs('tempo', 'Ritmo', tv.tempo, LABELS.tempo)}
           ${segs('marking', 'Marcação', tv.marking, LABELS.marking)}
           ${segs('flyingKeeper', 'Guarda-redes avançado', tv.flyingKeeper, LABELS.flyingKeeper)}
+          ${segs('gkStyle', 'Estilo do guarda-redes', tv.gkStyle ?? 'classico', LABELS.gkStyle)}
           ${segs('rotation', 'Rotação de quintetos', tv.rotation, LABELS.rotation)}
         </div>`}
       </div>

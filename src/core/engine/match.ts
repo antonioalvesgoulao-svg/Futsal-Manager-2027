@@ -333,6 +333,8 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
   const best = (ls: Live[], f: (l: Live) => number) => [...ls].sort((a, b) => f(b) - f(a))[0];
 
   let setPiece: { q: number; block: number; assist?: Live } | null = null;
+  // defesa com a bola agarrada: a equipa do GR pode sair em contra-ataque com reposição rápida à mão
+  let savedCaught: { side: Side; gk: Live } | null = null;
   // Ações da posse em curso (quem passa, remata, rouba), para a visualização 2D/3D
   let actions: Action[] = [];
 
@@ -353,12 +355,12 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
 
     let pBlock = 0.24 + (defQ - finish) * 0.01;
     let pOn = 0.47 + (finish - 10) * 0.016 + (compo - 10) * 0.006;
-    let pGoal = 0.207 + (finish - gkQ) * 0.022;
+    let pGoal = 0.185 + (finish - gkQ) * 0.022; // calibrado com 5 épocas reais (6,38 golos/jogo)
     if (kind === 'contra') { pBlock *= 0.5; pOn += 0.08; pGoal += 0.1; }
     if (kind === 'livre10') { pBlock = 0; pOn = 0.72 + (finish - 10) * 0.015; pGoal = 0.42 + (finish - gkQ) * 0.025; }
     if (kind === 'penalti') { pBlock = 0; pOn = 0.86 + (compo - 10) * 0.01; pGoal = 0.78 + (finish - gkQ) * 0.02; }
     if (kind === 'canto') { pBlock += 0.05 + (setPiece?.block ?? 0); pOn -= 0.05; pGoal *= setPiece?.q ?? 1; }
-    if (!gk) { pGoal = kind === 'baliza_aberta' ? 0.85 : 0.75; }
+    if (!gk || kind === 'baliza_aberta') { pGoal = kind === 'baliza_aberta' ? (gk ? 0.6 : 0.85) : 0.75; } // GR fora da baliza (a recuperar) ainda pode chegar
     if (kind === 'baliza_aberta') { pBlock = 0.08; pOn = 0.5 + (eff(shooter, 'remate') - 10) * 0.02; }
     const cl = (x: number, a: number, b: number) => Math.max(a, Math.min(b, x));
     if (kind === 'jogada' || kind === 'contra' || kind === 'canto') pGoal *= form[s] * pace * TEMPO[att.setup.tactics.tempo].quality;
@@ -390,7 +392,10 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
       actions.push({ type: 'shot', side: s, kind: vk, shooter: shooter.p.id, assist: assist?.p.id, result: 'goal' });
       goal(s, shooter, assist, how[kind]);
     } else if (gk) {
-      actions.push({ type: 'shot', side: s, kind: vk, shooter: shooter.p.id, assist: assist?.p.id, result: 'saved', other: gk.p.id });
+      // agarra ou defende para a frente/canto (melhores reflexos e colocação agarram mais)
+      const caught = r() < 0.5 + (eff(gk, 'posicionamento') - 10) * 0.02;
+      actions.push({ type: 'shot', side: s, kind: vk, shooter: shooter.p.id, assist: assist?.p.id, result: 'saved', other: gk.p.id, caught });
+      if (caught) savedCaught = { side: (1 - s) as Side, gk };
       pstats[gk.p.id].saves++;
       if (kind !== 'jogada' || r() < 0.35) log('remate_defendido', `Defesa de ${gk.p.name} a remate de ${shooter.p.name}${kind === 'penalti' ? ' (penálti defendido!)' : kind === 'livre10' ? ' (livre dos 10 m)' : ''}`, s, shooter.p.id);
       if (r() < 0.2) corner(s);
@@ -543,7 +548,10 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     diff += (att.setup.coachTactical - 10) * 0.07 - (def.setup.coachTactical - 10) * 0.07;
     const tempo = TEMPO[att.setup.tactics.tempo];
     const dPress = def.setup.tactics.pressure;
-    diff += s === 0 ? 2.2 : -0.7; // vantagem de jogar em casa
+    diff += s === 0 ? 2.6 : -0.7; // vantagem de jogar em casa
+    // estilo do GR: o construtor ajuda a sair da pressão; o atacante dá mais um jogador ao ataque
+    const gs = att.setup.tactics.gkStyle ?? 'classico';
+    if (att.gk && !att.flying && gs !== 'classico') diff += (eff(att.gk, 'jogoPes') - 10) * (gs === 'avancado' ? 0.08 : 0.06) + (gs === 'avancado' ? 0.15 : 0.05);
 
     const dur = ((counter ? 5 + r() * 8 : 12 + r() * 26) * (counter ? 1 : tempo.dur)) / pace;
     const periodEnd = periodStart + periodLen;
@@ -577,12 +585,33 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
         shot((1 - s) as Side, 'baliza_aberta', tackler);
         return { next: s, counter: false };
       }
+      // GR atacante apanhado fora da baliza
+      if (!att.flying && (att.setup.tactics.gkStyle ?? 'classico') === 'avancado' && r() < 0.05) {
+        shot((1 - s) as Side, 'baliza_aberta', tackler);
+        return { next: s, counter: false };
+      }
       // quem defende recuado sai mais vezes em contra-ataque
       return { next: (1 - s) as Side, counter: r() < 0.22 + PRESS[dPress].counter };
     }
     // bater a pressão alta deixa espaço nas costas
     const beatPress = dPress === 'alta' && r() < 0.09;
-    shot(s, counter || beatPress ? 'contra' : 'jogada');
+    // GR atacante: às vezes é ele que sai com a bola e remata (de longe)
+    const gkStyle = att.setup.tactics.gkStyle ?? 'classico';
+    // raro mesmo no GR atacante (estimativa: nos estudos de futsal de elite o GR remata sobretudo no 5x4)
+    const gkShoots = !att.flying && att.gk && !counter && r() < (gkStyle === 'avancado' ? 0.025 : gkStyle === 'construtor' ? 0.005 : 0);
+    savedCaught = null;
+    if (gkShoots) {
+      shot(s, 'jogada', att.gk!);
+      const last = actions[actions.length - 1];
+      if (last?.type === 'shot') last.gkRun = true;
+    } else shot(s, counter || beatPress ? 'contra' : 'jogada');
+    // defesa agarrada: reposição rápida à mão e contra-ataque (mais com GR de bom jogo de pés)
+    const sc = savedCaught as { side: Side; gk: Live } | null;
+    if (sc && sc.side === 1 - s) {
+      const style = teams[sc.side].setup.tactics.gkStyle ?? 'classico';
+      const pc = 0.09 + (eff(sc.gk, 'jogoPes') - 10) * 0.01 + (style === 'avancado' ? 0.05 : style === 'construtor' ? 0.02 : 0);
+      return { next: (1 - s) as Side, counter: r() < pc };
+    }
     return { next: (1 - s) as Side, counter: false };
   }
 
@@ -796,6 +825,8 @@ export interface Action {
   assist?: string;
   other?: string; // quem bloqueia, defende, rouba ou faz a falta
   kind?: 'play' | 'counter' | 'free10' | 'penalty' | 'setpiece' | 'open';
+  caught?: boolean; // defesa: o GR ficou com a bola
+  gkRun?: boolean; // remate do próprio GR, depois de sair a jogar
   result?: 'goal' | 'saved' | 'post' | 'wide' | 'blocked';
 }
 
