@@ -556,7 +556,7 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
       else if (e.type === 'remate_defendido' || e.type === 'remate_fora') sound.ooh(e.type === 'remate_defendido' ? 1 : 0.7);
       else if (e.type === 'time_out') sound.horn(0.9);
       // comentário: golos, cartões, faltas importantes, confrontos, descontos de tempo, 5x4, fim das partes
-      const COMM: Record<string, string> = { golo: 'goal', amarelo: 'card', vermelho: 'red', confronto: 'red', livre_10m: '', penalti: '', time_out: '', gr_avancado_on: '', fim_parte: '', prolongamento: '', poste: '', canto: '', remate_defendido: '', remate_fora: '', remate_bloqueado: '' };
+      const COMM: Record<string, string> = { lesao: 'card', golo: 'goal', amarelo: 'card', vermelho: 'red', confronto: 'red', livre_10m: '', penalti: '', time_out: '', gr_avancado_on: '', fim_parte: '', prolongamento: '', poste: '', canto: '', remate_defendido: '', remate_fora: '', remate_bloqueado: '' };
       // golos e confrontos vêem-se em 3D: não vão para o comentário (só se o 3D estiver desligado)
       const in3dOnly = (e.type === 'golo' || e.type === 'confronto') && st.moments3d !== 'nenhum';
       if (in3dOnly) { /* mostrado em 3D */ } else if (e.type in COMM || (e.type === 'falta' && /acumulada/.test(e.text))) comment(e.text.replace(/^\d+:\d+ /, ''), COMM[e.type] ?? 'card');

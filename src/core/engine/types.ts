@@ -26,6 +26,7 @@ export type EventType =
   | 'penalti'
   | 'amarelo'
   | 'vermelho'
+  | 'lesao'
   | 'canto'
   | 'quatro_segundos'
   | 'substituicao'
@@ -59,6 +60,7 @@ export interface PlayerStats {
   tackles: number;
   yellow: number;
   red: boolean;
+  injured?: boolean; // lesionou-se e saiu durante o jogo
   redKind?: 'dogso' | 'brawl' | 'twoYellows'; // motivo da expulsão (castigo)
   rating: number;
 }
@@ -87,6 +89,7 @@ export interface MatchResult {
 
 export interface MatchOptions {
   knockout?: boolean; // prolongamento e penáltis em caso de empate
+  injuries?: boolean; // false = sem lesões (amigáveis de teste)
   noExtraTime?: boolean; // a eliminar sem prolongamento: empate vai diretamente a penáltis
   needWin?: [boolean, boolean]; // equipa precisa de ganhar (ex.: eliminatória a duas mãos)
   manual?: Side; // equipa controlada pelo jogador no modo ao vivo (sem pedidos de tempo automáticos)

@@ -62,9 +62,8 @@ export function matchInjuries(s: GameState, m: MatchResult, seed: string): [stri
   const rnd = rng(seed + '-inj');
   for (const [id, st] of Object.entries(m.players)) {
     const p = s.players.find((x) => x.id === id);
-    if (!p || st.minutes < 30 || injuryOf(s, id)) continue;
-    const pr = MATCH_RATE * (st.minutes / 3600) * riskOf(p.age, p.attrs.resistencia) * (p.position === 'GR' ? 0.6 : 1);
-    if (rnd() < pr) out.push([id, draw(rnd, s.date)]);
+    if (!p || injuryOf(s, id)) continue;
+    if (st.injured) out.push([id, draw(rnd, s.date)]); // o motor decide quem se lesiona (taxa MATCH_RATE)
   }
   (s.injuries ??= {});
   for (const [id, i] of out) s.injuries[id] = i;

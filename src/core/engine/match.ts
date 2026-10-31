@@ -8,6 +8,9 @@ const HALF = 1200; // 20 minutos de tempo útil
 const ET = 300; // prolongamento: 2 x 5 minutos
 // Regulamento da Liga Placard, Art. 69.2: 5 + 7 suplentes; até 9 suplentes se 2 da ficha forem Sub-20 formados localmente
 const MAX_SQUAD = 12;
+const INJ_PER_S = 25.9 / 1000 / 3600;
+const injRisk = (l: { p: { age: number; position: string; attrs: { resistencia: number } } }) =>
+  (1 + Math.max(0, l.p.age - 28) * 0.03) * (1.25 - l.p.attrs.resistencia / 40) * (l.p.position === 'GR' ? 0.6 : 1);
 const REBOUND = 0.25; // defesas para a frente que dão recarga (estimativa)
 
 type A = Player['attrs'];
@@ -160,6 +163,7 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
         if (l.sentOff) continue;
         if (l.onCourt) {
           pstats[l.p.id].minutes += dt;
+          if (opts.injuries !== false && r() < INJ_PER_S * dt * injRisk(l)) injure(t, l);
           const drain = l.p.position === 'GR' ? 0.012 : 0.085 * (1.35 - l.p.attrs.resistencia / 25) * PRESS_DRAIN[t.setup.tactics.pressure];
           l.energy = Math.max(20, l.energy - drain * dt);
         } else {
@@ -168,6 +172,30 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
       }
     }
     clock += dt;
+  }
+
+  // Lesão a meio do jogo (Lopes et al. 2023: 25,9 por 1000 h em campo): sai e entra um suplente (sem inferioridade)
+  function injure(t: TeamState, l: Live) {
+    const s = teams.indexOf(t) as Side;
+    l.sentOff = true; l.onCourt = false;
+    pstats[l.p.id].injured = true;
+    const bench = t.players.filter((x) => !x.onCourt && !x.sentOff);
+    if (t.gk === l) {
+      const gk2 = bench.find((x) => x.p.position === 'GR');
+      if (gk2) { gk2.onCourt = true; t.gk = gk2; }
+      else {
+        // sem guarda-redes no banco: vai à baliza o jogador de campo com mais jeito, entra outro para o lugar dele
+        const g = [...t.court].sort((a, b) => b.p.attrs.reflexos + b.p.attrs.agilidade - a.p.attrs.reflexos - a.p.attrs.agilidade)[0];
+        if (g) { t.court = t.court.filter((x) => x !== g); t.gk = g; }
+        const sub = bench.filter((x) => x.p.position !== 'GR').sort((a, b) => b.energy - a.energy)[0];
+        if (sub) { sub.onCourt = true; t.court.push(sub); }
+      }
+    } else {
+      t.court = t.court.filter((x) => x !== l);
+      const sub = bench.filter((x) => x.p.position !== 'GR').sort((a, b) => b.energy - a.energy)[0];
+      if (sub) { sub.onCourt = true; t.court.push(sub); }
+    }
+    log('lesao', `${l.p.name} lesiona-se e tem de sair (${sideName(s)})`, s, l.p.id);
   }
 
   function sideName(s: Side) {
