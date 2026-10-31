@@ -3,6 +3,51 @@
 // apito dos árbitros, buzina do fim das partes e sons da bola (passe, remate, poste, rede).
 
 type Vol = 'off' | 'low' | 'mid' | 'high';
+
+// ---------- cânticos ----------
+// Cada cântico: letra (com {C} = nome curto do clube que canta, {R} = rival), melodia em meios-tons por sílaba
+// (repete-se se a letra for maior) e duração de cada sílaba. Melodias originais, simples, ao estilo das bancadas.
+interface ChantDef { text: string; mel: number[]; beat: number; claps?: boolean; who?: 'slb' | 'scp'; rude?: boolean; reps?: number }
+const CHANTS: ChantDef[] = [
+  // de qualquer equipa
+  { text: 'Allez allez allez, {C} allez', mel: [0, 0, 2, 4, 4, 2, 0, -1, 0], beat: 0.32, claps: true, reps: 3 },
+  { text: 'Força {C}!', mel: [0, 4, 4], beat: 0.45, claps: true, reps: 4 },
+  { text: '{C}! {C}!', mel: [0, 0, 4, 4], beat: 0.38, claps: true, reps: 4 },
+  { text: 'Vamos {C}, vamos ganhar', mel: [0, 2, 4, 4, 2, 0, -1, 0], beat: 0.33, claps: true, reps: 3 },
+  { text: 'Olé, olé, olé, olé', mel: [0, 4, 4, 2, 2, 0, -1, 0], beat: 0.34, reps: 2 },
+  { text: 'Nós somos {C}, nós vamos ganhar', mel: [4, 4, 2, 0, 0, 2, 4, 2, 0], beat: 0.3, claps: true, reps: 2 },
+  { text: 'Ninguém nos para, {C} até morrer', mel: [0, 0, 2, 4, 4, 5, 4, 2, 0, -1, 0], beat: 0.3, reps: 2 },
+  // Benfica
+  { text: 'Benfica! Benfica!', mel: [0, 4, 4, 0, 4, 4], beat: 0.4, claps: true, who: 'slb', reps: 4 },
+  { text: 'Benfica allez, Benfica allez', mel: [0, 2, 4, 4, 2, 0, 2, 4, 2, 0], beat: 0.3, claps: true, who: 'slb', reps: 3 },
+  { text: 'Glorioso SLB, Glorioso SLB', mel: [0, 2, 4, 5, 4, 2, 0, 2, 4, 5, 4, 2, 0], beat: 0.28, claps: true, who: 'slb', reps: 2 },
+  { text: 'Somos águias, vamos voar', mel: [0, 2, 4, 2, 0, 2, 4, 5, 4], beat: 0.32, who: 'slb', reps: 2 },
+  // Sporting
+  { text: 'Sporting allez, Sporting allez', mel: [0, 2, 4, 4, 2, 0, 2, 4, 2, 0], beat: 0.3, claps: true, who: 'scp', reps: 3 },
+  { text: 'Sporting! Sporting!', mel: [0, 4, 4, 0, 4, 4], beat: 0.4, claps: true, who: 'scp', reps: 4 },
+  { text: 'Leões! Leões! Leões!', mel: [0, 4, 0, 4, 0, 4], beat: 0.4, claps: true, who: 'scp', reps: 3 },
+  { text: 'Verde e branco até morrer', mel: [0, 2, 4, 4, 2, 0, -1, 0], beat: 0.32, who: 'scp', reps: 2 },
+  // provocações (só no dérbi Benfica-Sporting; desligáveis nas Definições)
+  { text: 'E o Sporting vai para o caralho', mel: [0, 2, 4, 4, 4, 2, 0, -1, 0, 0], beat: 0.28, claps: true, who: 'slb', rude: true, reps: 3 },
+  { text: 'E o Benfica vai para o caralho', mel: [0, 2, 4, 4, 4, 2, 0, -1, 0, 0], beat: 0.28, claps: true, who: 'scp', rude: true, reps: 3 },
+  { text: 'Lagartos! Lagartos!', mel: [0, 0, -2, 0, 0, -2], beat: 0.38, who: 'slb', rude: true, reps: 3 },
+  { text: 'Lampiões! Lampiões!', mel: [0, 0, -2, 0, 0, -2], beat: 0.38, who: 'scp', rude: true, reps: 3 },
+  { text: 'Quem não salta é lagarto, olé', mel: [0, 0, 2, 2, 4, 4, 2, 0, 0], beat: 0.27, claps: true, who: 'slb', rude: true, reps: 3 },
+  { text: 'Quem não salta é lampião, olé', mel: [0, 0, 2, 2, 4, 4, 2, 0, 0], beat: 0.27, claps: true, who: 'scp', rude: true, reps: 3 },
+];
+// formantes das vogais (Hz): a voz do público "canta" a vogal de cada sílaba
+const VOWEL: Record<string, [number, number]> = { a: [800, 1250], e: [520, 1850], i: [320, 2300], o: [520, 900], u: [360, 820] };
+function syllables(text: string): string[] {
+  const norm = text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const out: string[] = [];
+  for (const w of norm.split(/[^a-z]+/).filter(Boolean)) {
+    const groups = w.match(/[aeiou]+/g) ?? ['a'];
+    for (const g of groups) out.push(g[g.length - 1]);
+  }
+  return out;
+}
+export interface MatchSound { home: { id: string; short: string }; away: { id: string; short: string }; big: boolean; derby: boolean; rude: boolean; words: boolean }
+
 const VOL: Record<Vol, number> = { off: 0, low: 0.35, mid: 0.7, high: 1 };
 
 class Sound {
@@ -17,6 +62,9 @@ class Sound {
   private excite = 0;
   private chantTimer = 0;
   private running = false;
+  private match: MatchSound | null = null;
+  private chanting = 0; // até quando dura o cântico atual
+  setMatch(m: MatchSound) { this.match = m; }
 
   setVolume(v: Vol) {
     this.vol = v;
@@ -82,7 +130,7 @@ class Sound {
     const now = c.currentTime;
     if (now > this.chantTimer) {
       this.chantTimer = now + 14 + Math.random() * 20;
-      if (Math.random() < 0.35 + this.fill * 0.5) Math.random() < 0.5 ? this.chant() : this.claps();
+      if (Math.random() < 0.45 + this.fill * 0.5) Math.random() < 0.8 ? this.chant() : this.claps();
     }
   }
 
@@ -110,15 +158,82 @@ class Sound {
   private ok() { return !!this.ctx && this.running && this.vol !== 'off'; }
 
   /** Cântico: frase de 4 tempos, vozes masculinas (formantes ~500 e ~1100 Hz). */
-  chant() {
-    if (!this.ok()) return;
-    const g = 0.05 + this.fill * 0.09;
-    for (let rep = 0; rep < 3; rep++) for (let i = 0; i < 4; i++) {
-      const w = rep * 2.2 + i * 0.5;
-      this.noise(0.42, 520, 3, 'bandpass', g, w, 0.06, this.chantGain);
-      this.noise(0.42, 1150, 4, 'bandpass', g * 0.6, w, 0.06, this.chantGain);
+  chant(side?: 0 | 1) {
+    if (!this.ok() || !this.match) return;
+    const c = this.ctx!;
+    if (c.currentTime < this.chanting) return;
+    const m = this.match;
+    // quem canta: sobretudo a casa; visitantes de vez em quando (mais nos dérbis)
+    const sd: 0 | 1 = side ?? (Math.random() < (m.derby ? 0.4 : 0.22) ? 1 : 0);
+    const team = sd === 0 ? m.home : m.away;
+    const rival = sd === 0 ? m.away : m.home;
+    const pool = CHANTS.filter((d) => (!d.who || d.who === team.id) && (!d.rude || (m.derby && m.rude)));
+    // os cânticos próprios do clube saem mais vezes
+    const own = pool.filter((d) => d.who === team.id);
+    const def = own.length && Math.random() < 0.6 ? own[Math.floor(Math.random() * own.length)] : pool[Math.floor(Math.random() * pool.length)];
+    const text = def.text.split('{C}').join(team.short).split('{R}').join(rival.short);
+    this.sing(text, def, sd === 0 ? 1 : 0.55);
+  }
+
+  /** Coro do público: muitas vozes ligeiramente desafinadas a cantar as vogais, com palmas no tempo. */
+  private sing(text: string, def: ChantDef, level: number) {
+    const c = this.ctx!;
+    const syl = syllables(text);
+    const reps = def.reps ?? 2;
+    const base = 138 * Math.pow(2, (Math.random() * 3 - 1.5) / 12); // vozes masculinas
+    const g = (0.035 + this.fill * 0.06) * level * (this.match?.big ? 1.3 : 1);
+    const phrase = syl.length * def.beat + def.beat * 1.5;
+    const t0 = c.currentTime + 0.05;
+    for (let r = 0; r < reps; r++) {
+      syl.forEach((v, i) => {
+        const t = t0 + r * phrase + i * def.beat;
+        const f = base * Math.pow(2, def.mel[i % def.mel.length] / 12);
+        const [f1, f2] = VOWEL[v] ?? VOWEL.a;
+        const dur = def.beat * 0.92;
+        const f1n = c.createBiquadFilter(); f1n.type = 'bandpass'; f1n.frequency.value = f1; f1n.Q.value = 4;
+        const f2n = c.createBiquadFilter(); f2n.type = 'bandpass'; f2n.frequency.value = f2; f2n.Q.value = 6;
+        const env = c.createGain();
+        env.gain.setValueAtTime(0, t); env.gain.linearRampToValueAtTime(g, t + 0.04); env.gain.setValueAtTime(g, t + dur - 0.06); env.gain.linearRampToValueAtTime(0, t + dur);
+        const mix = c.createGain(); mix.gain.value = 1;
+        f1n.connect(env); f2n.connect(env); env.connect(this.chantGain);
+        for (let k = 0; k < 6; k++) {
+          const o = c.createOscillator(); o.type = 'sawtooth';
+          o.frequency.value = f * Math.pow(2, ((Math.random() - 0.5) * 40) / 1200) * (k === 5 ? 2 : 1);
+          o.connect(mix); o.start(t); o.stop(t + dur + 0.02);
+        }
+        mix.connect(f1n); mix.connect(f2n);
+        // ruído de muitas vozes por cima (consoantes e "multidão")
+        this.noise(dur, f1, 1.5, 'bandpass', g * 1.2, t - c.currentTime, 0.03, this.chantGain);
+        if (def.claps && i % 2 === 0) this.noise(0.08, 1900, 0.9, 'bandpass', g * 2.2, t - c.currentTime, 0.002, this.chantGain);
+      });
+      // letra dita pela voz do sistema (português), a acompanhar o coro
+      if (this.match?.words && 'speechSynthesis' in window && r < 2) {
+        const when = (t0 + r * phrase - c.currentTime) * 1000;
+        setTimeout(() => {
+          if (!this.ok()) return;
+          const u = new SpeechSynthesisUtterance(text);
+          u.lang = 'pt-PT'; u.rate = Math.min(1.6, (syl.length * 0.32) / Math.max(0.6, syl.length * def.beat)); u.pitch = 0.7;
+          u.volume = Math.min(1, VOL[this.vol] * 0.55 * level);
+          const pt = speechSynthesis.getVoices().find((v) => v.lang === 'pt-PT') ?? speechSynthesis.getVoices().find((v) => v.lang.startsWith('pt'));
+          if (pt) u.voice = pt;
+          speechSynthesis.speak(u);
+        }, Math.max(0, when));
+      }
     }
-    this.chantGain.gain.setTargetAtTime(1, this.ctx!.currentTime, 0.05);
+    this.chanting = t0 + reps * phrase + 1;
+    this.chantGain.gain.setTargetAtTime(1, c.currentTime, 0.05);
+  }
+
+  /** Petardos (jogos grandes, nos golos): estrondos secos com eco no pavilhão. */
+  petards(n = 4) {
+    if (!this.ok()) return;
+    for (let i = 0; i < n; i++) {
+      const w = 0.3 + i * (0.4 + Math.random() * 0.9);
+      this.noise(0.9, 180, 0.4, 'lowpass', 0.9, w, 0.002);
+      this.noise(0.25, 2500, 0.5, 'bandpass', 0.5, w, 0.001);
+      this.tone(60, 0.5, 0.5, 'sine', w, 35);
+      this.noise(1.6, 400, 0.7, 'bandpass', 0.12, w + 0.12, 0.05); // eco
+    }
   }
   /** Palmas ritmadas da bancada. */
   claps() {
@@ -182,7 +297,9 @@ class Sound {
     this.noise(5.5, 900, 0.5, 'bandpass', g, 0, 0.12);
     this.noise(4.5, 2400, 0.8, 'bandpass', g * 0.5, 0.1, 0.2);
     this.net();
-    if (home) setTimeout(() => this.chant(), 4500);
+    if (this.match?.big) this.petards(3 + Math.floor(Math.random() * 4));
+    this.chanting = 0;
+    setTimeout(() => this.chant(home ? 0 : 1), 4500);
   }
   /** Assobios (visitante ou decisão contra a casa). */
   boo() {

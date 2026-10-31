@@ -59,7 +59,9 @@ export interface Settings {
   moments3d: 'nenhum' | 'golos' | 'importantes' | 'todos';
   scoreboard: 'auto' | 'liga' | 'taca' | 'tacaLiga' | 'supertaca';
   quality?: 'normal' | 'alta';
-  sound?: 'off' | 'low' | 'mid' | 'high'; // volume do som do jogo // gráficos 3D: alta = reflexos no piso, sombras mais finas
+  sound?: 'off' | 'low' | 'mid' | 'high'; // volume do som do jogo
+  chantWords?: boolean; // letra dos cânticos dita pela voz do sistema
+  chantsRude?: boolean; // cânticos provocadores no dérbi Benfica-Sporting // gráficos 3D: alta = reflexos no piso, sombras mais finas
 }
 
 export interface GameState {

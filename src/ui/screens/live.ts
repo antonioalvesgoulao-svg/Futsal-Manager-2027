@@ -64,15 +64,20 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
 const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
   const textCol = (c: string) => (hexDist(c, '#ffffff') < 200 ? '#111' : '#fff');
   const crowd = attendance(s, f);
-  // som: o clique em "Jogar ao vivo" permite ao browser tocar som
-  sound.setVolume(st.sound ?? 'mid');
-  sound.start(crowd.total / Math.max(1, crowd.arena.capacity));
   // claques organizadas (bandeiras, tifo, tochas): Benfica e Sporting, só em jogos grandes
   // (dérbi entre os dois ou finais das competições)
   const BIG = ['slb', 'scp'];
   const derby = BIG.includes(f.home) && BIG.includes(f.away);
   const finalGame = f.comp !== 'liga' && /Final/.test(f.stage) && !/Meias|Quartos/.test(f.stage);
   const bigGame = derby || finalGame;
+  // som: o clique em "Jogar ao vivo" permite ao browser tocar som
+  sound.setVolume(st.sound ?? 'mid');
+  // nome cantado de cada clube (como as bancadas o gritam)
+  const CHANT_NAME: Record<string, string> = { slb: 'Benfica', scp: 'Sporting', scb: 'Braga', fun: 'Fundão', lps: 'Leões', fzz: 'Ferreira', ele: 'Eléctrico', rav: 'Rio Ave', uvn: 'Venda Nova', por: 'Portimonense', fam: 'Famalicão', tor: 'Torreense' };
+  const cname = (c: { id: string; name: string }) => CHANT_NAME[c.id] ?? c.name.split(' ').pop()!;
+  const flag = (v: unknown, d: boolean) => (v === undefined ? d : v === true || v === 'true');
+  sound.setMatch({ home: { id: h.id, short: cname(h) }, away: { id: a.id, short: cname(a) }, big: bigGame, derby, rude: flag(st.chantsRude, true), words: flag(st.chantWords, true) });
+  sound.start(crowd.total / Math.max(1, crowd.arena.capacity));
   const ultras: [boolean, boolean] = [bigGame && BIG.includes(f.home), bigGame && BIG.includes(f.away)];
   const fmtN = (n: number) => n.toLocaleString('pt-PT');
 
