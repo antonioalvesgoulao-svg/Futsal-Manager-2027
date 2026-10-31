@@ -228,7 +228,7 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
     $('#cap2d').textContent = '';
     // comentário em tempo real: só os lances importantes da jogada (remates, defesas, cantos, livres…)
     const lb = fr0Label;
-    if (lb && lb !== lastLabel && IMPORTANT.test(lb)) comment(lb);
+    if (lb && lb !== lastLabel && IMPORTANT.test(lb) && !(st.moments3d !== 'nenhum' && /^GOLO|Confronto/.test(lb))) comment(lb);
     lastLabel = lb;
     void label;
   }
@@ -510,7 +510,9 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
       feed.push(e);
       // comentário: golos, cartões, faltas importantes, confrontos, descontos de tempo, 5x4, fim das partes
       const COMM: Record<string, string> = { golo: 'goal', amarelo: 'card', vermelho: 'red', confronto: 'red', livre_10m: '', penalti: '', time_out: '', gr_avancado_on: '', fim_parte: '', prolongamento: '', poste: '', canto: '', remate_defendido: '', remate_fora: '', remate_bloqueado: '' };
-      if (e.type in COMM || (e.type === 'falta' && /acumulada/.test(e.text))) comment(e.text.replace(/^\d+:\d+ /, ''), COMM[e.type] ?? 'card');
+      // golos e confrontos vêem-se em 3D: não vão para o comentário (só se o 3D estiver desligado)
+      const in3dOnly = (e.type === 'golo' || e.type === 'confronto') && st.moments3d !== 'nenhum';
+      if (in3dOnly) { /* mostrado em 3D */ } else if (e.type in COMM || (e.type === 'falta' && /acumulada/.test(e.text))) comment(e.text.replace(/^\d+:\d+ /, ''), COMM[e.type] ?? 'card');
       if (e.type === 'golo') {
         shownScore = [e.score[0], e.score[1]];
         goalBar(e);
