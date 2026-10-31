@@ -108,6 +108,8 @@ function segGeo(len: number, radii: number[], y0 = 0, caps: [boolean, boolean] =
     pts.push(new THREE.Vector2(radii[j] + (radii[j + 1] - radii[j]) * (t * t * (3 - 2 * t)), -k * len));
   }
   if (caps[1]) for (let i = 1; i <= 6; i++) { const a = (i / 6) * (Math.PI / 2); pts.push(new THREE.Vector2(Math.max(1e-4, rN * Math.cos(a)), -len - rN * Math.sin(a) * 0.8)); }
+  // o perfil tem de ir de baixo para cima para as faces ficarem viradas para fora
+  pts.reverse();
   const g = new THREE.LatheGeometry(pts, seg);
   g.translate(0, y0, 0);
   return g;
@@ -223,26 +225,27 @@ export function makePlayer(kit: Kit, look: Look) {
 
   // ---- camisola (tronco, ombros e mangas; o GR tem manga comprida) ----
   // tronco: ombros largos e arredondados, peito, cintura mais estreita
-  const torsoGeo = segGeo(0.48, [0.165, 0.178, 0.168, 0.15, 0.14], 0.64, [true, false], 24, 0.45);
+  const torsoGeo = segGeo(0.47, [0.165, 0.178, 0.168, 0.152, 0.148], 0.64, [true, true], 24, 0.45);
   torsoGeo.scale(1.25, 1, 0.66);
   const shirt: Part[] = [{ geo: torsoGeo, bone: body }];
   for (let i = 0; i < 2; i++) {
     if (kit.gk) {
       shirt.push({ geo: segGeo(0.3, [0.06, 0.055, 0.046, 0.042], 0.03), bone: arm[i], y0: 0.03, len: 0.3, parent: body, child: fore[i] });
       shirt.push({ geo: segGeo(0.25, [0.044, 0.045, 0.036, 0.03], 0.02), bone: fore[i], y0: 0.02, len: 0.25, parent: arm[i] });
-    } else shirt.push({ geo: segGeo(0.15, [0.063, 0.059], 0.04, [true, false]), bone: arm[i], y0: 0.04, len: 0.15, parent: body, blend: 0.45 });
+    } else shirt.push({ geo: segGeo(0.14, [0.066, 0.063], 0.05, [true, true], 20, 0.35), bone: arm[i], y0: 0.02, len: 0.29, parent: body, child: fore[i], blend: 0.25 });
   }
   g.add(skinned(shirt, bones, shirtMat));
 
   // ---- calções ----
-  const pelvis = segGeo(0.19, [0.142, 0.152, 0.156], 0.2, [true, false]);
+  const pelvis = segGeo(0.2, [0.128, 0.15, 0.155], 0.2, [true, true], 20, 0.5);
   pelvis.scale(1.2, 1, 0.8);
   const shortsParts: Part[] = [{ geo: pelvis, bone: body }];
-  for (let i = 0; i < 2; i++) shortsParts.push({ geo: segGeo(0.2, [0.1, 0.097], 0.05, [false, false]), bone: thigh[i], y0: 0.05, len: 0.2, parent: body, blend: 0.4 });
+  // as peças de roupa usam exatamente os mesmos pesos que a pele por baixo (não deixam a pele atravessar)
+  for (let i = 0; i < 2; i++) shortsParts.push({ geo: segGeo(0.17, [0.104, 0.101], 0.03, [false, true], 20, 0.3), bone: thigh[i], y0: 0.02, len: 0.45, parent: body, child: shin[i], blend: 0.25 });
   g.add(skinned(shortsParts, bones, shortsMat));
 
   // ---- meias ----
-  g.add(skinned([0, 1].map((i) => ({ geo: segGeo(0.31, [0.064, 0.059, 0.044, 0.04], -0.09, [false, false]), bone: shin[i] })), bones, sockMat));
+  g.add(skinned([0, 1].map((i) => ({ geo: segGeo(0.31, [0.066, 0.061, 0.046, 0.042], -0.09, [false, false]), bone: shin[i], y0: 0.03, len: 0.44, parent: thigh[i], blend: 0.25 })), bones, sockMat));
 
   // ---- sapatilhas, números, gola, olhos, cabelo (peças rígidas presas aos ossos) ----
   for (const sh of shin) {
@@ -268,7 +271,7 @@ export function makePlayer(kit: Kit, look: Look) {
   front.scale.set(0.4, 0.4, 1);
   front.position.set(0.075, 0.45, 0.121);
   body.add(front);
-  const collar = new THREE.Mesh(new THREE.TorusGeometry(0.052, 0.012, 8, 20), fabric(kit.shorts));
+  const collar = new THREE.Mesh(new THREE.TorusGeometry(0.056, 0.007, 8, 24), fabric(kit.shorts));
   collar.rotation.x = Math.PI / 2;
   collar.position.set(0, 0.665, 0.005);
   body.add(collar);
@@ -298,40 +301,42 @@ export function makePlayer(kit: Kit, look: Look) {
 const ease = (k: number) => k * k * (3 - 2 * k);
 const clamp01 = (k: number) => Math.max(0, Math.min(1, k));
 
+// Convenção dos ângulos (rotação em x): coxa/braço negativo = para a frente; perna (joelho)
+// positivo = dobra (o pé vai para trás); antebraço negativo = cotovelo dobrado. Rotação em z:
+// braço/coxa do lado -x (índice 0) negativo = para fora; do lado +x (índice 1) positivo = para fora.
 /** Pose do jogador conforme a corrida e a ação em curso. */
 export function pose(a: Actor, act: Act | undefined, gk: boolean, near: boolean, dt: number) {
   const { body, thigh, shin, arm, fore } = a;
-  // reinicia
   body.position.set(0, HIP, 0);
   body.rotation.set(0, 0, 0);
   a.g.position.y = 0;
   for (const o of [...thigh, ...shin, ...arm, ...fore]) o.rotation.set(0, 0, 0);
   const sp = a.speed;
-  a.phase += dt * (4 + sp * 1.35);
-  const amp = Math.min(1, sp / 6.5);
-  const s = Math.sin(a.phase);
-  // corrida (ou postura de espera)
-  thigh[0].rotation.x = s * 0.9 * amp;
-  thigh[1].rotation.x = -s * 0.9 * amp;
-  shin[0].rotation.x = -Math.max(0, -Math.cos(a.phase)) * 1.4 * amp - 0.08;
-  shin[1].rotation.x = -Math.max(0, Math.cos(a.phase)) * 1.4 * amp - 0.08;
-  arm[0].rotation.x = -s * 0.8 * amp;
-  arm[1].rotation.x = s * 0.8 * amp;
-  fore[0].rotation.x = -0.4 - amp * 0.9;
-  fore[1].rotation.x = -0.4 - amp * 0.9;
-  arm[0].rotation.z = 0.08;
-  arm[1].rotation.z = -0.08;
-  body.rotation.x = amp * 0.22;
-  body.position.y = HIP - Math.abs(Math.cos(a.phase)) * 0.04 * amp;
+  // cadência de corrida: ~2,8 passadas por segundo a sprintar, mais lenta a andar
+  a.phase += dt * (5 + sp * 1.25);
+  const amp = Math.min(1, sp / 7);
+  const walk = Math.min(1, sp / 2);
+  for (let i = 0; i < 2; i++) {
+    const ph = a.phase + i * Math.PI;
+    const hip = -(0.08 + 0.5 * amp) * Math.sin(ph) * walk - 0.06 * amp; // passada (ligeiramente à frente)
+    thigh[i].rotation.x = hip;
+    // o joelho dobra sobretudo quando a perna vem de trás para a frente
+    shin[i].rotation.x = (0.08 + (0.25 + 1.35 * amp) * Math.pow(Math.max(0, Math.cos(ph)), 1.3)) * walk + 0.06;
+    arm[i].rotation.x = -hip * 0.85;
+    arm[i].rotation.z = i ? 0.1 : -0.1; // braços ligeiramente afastados do corpo
+    fore[i].rotation.x = -(0.35 + 0.95 * amp);
+  }
+  body.rotation.x = amp * 0.18;
+  body.position.y = HIP - 0.015 - Math.abs(Math.cos(a.phase)) * 0.035 * amp;
   if (gk && near && !act && sp < 2.5) {
-    // guarda-redes em posição de espera: pernas fletidas, braços abertos
-    thigh[0].rotation.x = thigh[1].rotation.x = 0.55;
-    shin[0].rotation.x = shin[1].rotation.x = -0.95;
-    thigh[0].rotation.z = -0.15; thigh[1].rotation.z = 0.15;
+    // guarda-redes em posição de espera: pernas fletidas, peso à frente, braços abertos
+    thigh[0].rotation.set(-0.6, 0, -0.12);
+    thigh[1].rotation.set(-0.6, 0, 0.12);
+    shin[0].rotation.x = shin[1].rotation.x = 1.0;
     body.position.y = HIP - 0.17;
-    body.rotation.x = 0.3;
-    arm[0].rotation.set(-0.5, 0, 0.7);
-    arm[1].rotation.set(-0.5, 0, -0.7);
+    body.rotation.x = 0.35;
+    arm[0].rotation.set(-0.5, 0, -0.75);
+    arm[1].rotation.set(-0.5, 0, 0.75);
     fore[0].rotation.x = fore[1].rotation.x = -0.5;
   }
   if (!act) return;
@@ -339,26 +344,30 @@ export function pose(a: Actor, act: Act | undefined, gk: boolean, near: boolean,
   switch (act.kind) {
     case 'pass':
     case 'shoot': {
-      // perna direita: recua, bate na bola e acompanha
-      const big = act.kind === 'shoot' ? 1.35 : 0.85;
+      // perna direita: recua (joelho dobrado), bate na bola e acompanha
+      const big = act.kind === 'shoot' ? 1.3 : 0.85;
       const back = k < 0.5 ? ease(k / 0.5) : 0;
       const hit = k >= 0.5 ? ease(clamp01((k - 0.5) / 0.3)) : 0;
-      thigh[1].rotation.x = k < 0.5 ? -0.75 * big * back : lerp(-0.75 * big, 1.1 * big, hit);
-      shin[1].rotation.x = k < 0.5 ? -1.5 * back : lerp(-1.5, -0.05, hit);
-      thigh[0].rotation.x = -0.15;
-      shin[0].rotation.x = -0.25;
-      arm[0].rotation.set(-0.3, 0, 0.9);
-      arm[1].rotation.set(0.4, 0, -0.5);
-      body.rotation.x = act.kind === 'shoot' ? -0.15 + hit * 0.3 : 0.05;
-      body.rotation.y = (k < 0.5 ? -0.25 * back : lerp(-0.25, 0.2, hit));
+      thigh[1].rotation.x = k < 0.5 ? 0.6 * big * back : lerp(0.6 * big, -1.05 * big, hit);
+      shin[1].rotation.x = k < 0.5 ? 1.5 * back : lerp(1.5, 0.08, hit);
+      thigh[0].rotation.x = -0.12;
+      shin[0].rotation.x = 0.3;
+      arm[0].rotation.set(-0.3, 0, -0.9);
+      arm[1].rotation.set(0.35, 0, 0.5);
+      fore[0].rotation.x = fore[1].rotation.x = -0.4;
+      body.rotation.x = act.kind === 'shoot' ? 0.05 + hit * 0.2 : 0.08;
+      body.rotation.y = k < 0.5 ? -0.25 * back : lerp(-0.25, 0.2, hit);
+      body.position.y = HIP - 0.05;
       break;
     }
     case 'throw': {
       const up = k < 0.6 ? ease(k / 0.6) : 1 - ease((k - 0.6) / 0.4);
       arm[1].rotation.x = -Math.PI * 0.9 * up - (k > 0.6 ? 0.6 : 0);
-      arm[0].rotation.set(-0.4, 0, 0.6);
-      thigh[0].rotation.x = 0.35;
-      body.rotation.x = -0.2 * up + 0.2 * (1 - up);
+      arm[0].rotation.set(-0.4, 0, -0.6);
+      thigh[0].rotation.x = -0.4;
+      shin[0].rotation.x = 0.3;
+      thigh[1].rotation.x = 0.25;
+      body.rotation.x = -0.15 * up + 0.2 * (1 - up);
       break;
     }
     case 'dive': {
@@ -371,88 +380,88 @@ export function pose(a: Actor, act: Act | undefined, gk: boolean, near: boolean,
       const air = Math.sin(clamp01(k * 1.6) * Math.PI) * h;
       body.position.y = HIP * Math.cos(roll) + 0.15 * Math.sin(roll) + air * (k < 0.6 ? 1 : 0);
       body.position.x = local * Math.sin(roll) * 0.7;
-      arm[0].rotation.set(0, 0, 2.7);
-      arm[1].rotation.set(0, 0, -2.7);
+      arm[0].rotation.set(0, 0, -2.7);
+      arm[1].rotation.set(0, 0, 2.7);
       fore[0].rotation.x = fore[1].rotation.x = 0;
-      thigh[0].rotation.set(0.2, 0, -0.25 * local);
-      thigh[1].rotation.set(-0.2, 0, -0.1 * local);
-      shin[0].rotation.x = -0.6;
-      shin[1].rotation.x = -0.3;
+      thigh[0].rotation.set(-0.2, 0, -0.25 * local);
+      thigh[1].rotation.set(0.15, 0, -0.1 * local);
+      shin[0].rotation.x = 0.6;
+      shin[1].rotation.x = 0.3;
       break;
     }
     case 'catch': {
-      thigh[0].rotation.x = thigh[1].rotation.x = 0.45;
-      shin[0].rotation.x = shin[1].rotation.x = -0.8;
+      thigh[0].rotation.x = thigh[1].rotation.x = -0.5;
+      shin[0].rotation.x = shin[1].rotation.x = 0.85;
       body.position.y = HIP - 0.14;
-      body.rotation.x = 0.25;
-      arm[0].rotation.set(-1.3, 0, 0.15);
-      arm[1].rotation.set(-1.3, 0, -0.15);
+      body.rotation.x = 0.3;
+      arm[0].rotation.set(-1.3, 0, -0.15);
+      arm[1].rotation.set(-1.3, 0, 0.15);
       fore[0].rotation.x = fore[1].rotation.x = -0.6;
       break;
     }
     case 'tackle': {
-      // carrinho / desarme: desliza com a perna esticada
+      // carrinho / desarme: desliza com a perna esticada à frente
       const e = ease(clamp01(k * 2.5)) * (k > 0.8 ? 1 - ease((k - 0.8) / 0.2) : 1);
       body.rotation.x = -1.0 * e;
       body.position.y = HIP - 0.55 * e;
-      thigh[1].rotation.x = 1.5 * e;
-      shin[1].rotation.x = -0.05;
-      thigh[0].rotation.x = 0.4 * e;
-      shin[0].rotation.x = -1.4 * e;
-      arm[0].rotation.set(0.6 * e, 0, 0.9 * e);
-      arm[1].rotation.set(0.6 * e, 0, -0.9 * e);
+      thigh[1].rotation.x = -1.45 * e;
+      shin[1].rotation.x = 0.05;
+      thigh[0].rotation.x = -0.35 * e;
+      shin[0].rotation.x = 1.4 * e;
+      arm[0].rotation.set(0.6 * e, 0, -(0.9 * e));
+      arm[1].rotation.set(0.6 * e, 0, 0.9 * e);
       break;
     }
     case 'feint': {
       // finta: o corpo vai para um lado e a bola sai para o outro
       const w = Math.sin(k * Math.PI * 2);
-      body.rotation.z = w * 0.38;
+      body.rotation.z = w * 0.35;
       body.rotation.x = 0.25;
-      thigh[w > 0 ? 0 : 1].rotation.z = w * 0.7;
-      thigh[w > 0 ? 0 : 1].rotation.x = 0.5;
-      shin[0].rotation.x = shin[1].rotation.x = -0.6;
-      arm[0].rotation.z = 0.5 + Math.max(0, w) * 0.6;
-      arm[1].rotation.z = -0.5 - Math.max(0, -w) * 0.6;
+      thigh[w > 0 ? 0 : 1].rotation.z = w * 0.6;
+      thigh[0].rotation.x = thigh[1].rotation.x = -0.35;
+      shin[0].rotation.x = shin[1].rotation.x = 0.6;
+      arm[0].rotation.z = -(0.5 + Math.max(0, w) * 0.6);
+      arm[1].rotation.z = 0.5 + Math.max(0, -w) * 0.6;
       body.position.y = HIP - 0.1;
       break;
     }
     case 'screen': {
-      // bloqueio: pernas abertas, braços cruzados à frente do peito
-      thigh[0].rotation.set(0.15, 0, -0.22);
-      thigh[1].rotation.set(0.15, 0, 0.22);
-      shin[0].rotation.x = shin[1].rotation.x = -0.3;
+      // bloqueio: pernas abertas e fletidas, braços cruzados à frente do peito
+      thigh[0].rotation.set(-0.2, 0, -0.22);
+      thigh[1].rotation.set(-0.2, 0, 0.22);
+      shin[0].rotation.x = shin[1].rotation.x = 0.35;
       body.position.y = HIP - 0.07;
-      arm[0].rotation.set(-1.2, 0, -0.7);
-      arm[1].rotation.set(-1.2, 0, 0.7);
+      arm[0].rotation.set(-1.2, 0, 0.7);
+      arm[1].rotation.set(-1.2, 0, -0.7);
       fore[0].rotation.x = fore[1].rotation.x = -0.9;
       break;
     }
     case 'shield': {
       // pivô de costas: protege a bola com o corpo e os braços
-      thigh[0].rotation.set(0.45, 0, -0.2);
-      thigh[1].rotation.set(0.45, 0, 0.2);
-      shin[0].rotation.x = shin[1].rotation.x = -0.8;
+      thigh[0].rotation.set(-0.45, 0, -0.2);
+      thigh[1].rotation.set(-0.45, 0, 0.2);
+      shin[0].rotation.x = shin[1].rotation.x = 0.8;
       body.position.y = HIP - 0.13;
       body.rotation.x = 0.35;
-      arm[0].rotation.set(0.3, 0, 0.95);
-      arm[1].rotation.set(0.3, 0, -0.95);
+      arm[0].rotation.set(0.3, 0, -0.95);
+      arm[1].rotation.set(0.3, 0, 0.95);
       break;
     }
     case 'block': {
       // bloqueio de remate: abre as pernas, braços atrás das costas
-      thigh[0].rotation.set(0.1, 0, -0.42);
-      thigh[1].rotation.set(0.1, 0, 0.42);
-      shin[0].rotation.x = shin[1].rotation.x = -0.2;
+      thigh[0].rotation.set(-0.15, 0, -0.42);
+      thigh[1].rotation.set(-0.15, 0, 0.42);
+      shin[0].rotation.x = shin[1].rotation.x = 0.25;
       body.position.y = HIP - 0.12;
       body.rotation.x = 0.2;
-      arm[0].rotation.set(0.7, 0, 0.1);
-      arm[1].rotation.set(0.7, 0, -0.1);
+      arm[0].rotation.set(0.7, 0, -0.1);
+      arm[1].rotation.set(0.7, 0, 0.1);
       fore[0].rotation.x = fore[1].rotation.x = -1.1;
       break;
     }
     case 'celebrate': {
-      arm[0].rotation.set(0, 0, 2.6 + Math.sin(k * 30) * 0.2);
-      arm[1].rotation.set(0, 0, -2.6 - Math.sin(k * 30) * 0.2);
+      arm[0].rotation.set(0, 0, -(2.6 + Math.sin(k * 30) * 0.2));
+      arm[1].rotation.set(0, 0, 2.6 + Math.sin(k * 30) * 0.2);
       fore[0].rotation.x = fore[1].rotation.x = 0;
       a.g.position.y = Math.abs(Math.sin(k * Math.PI * 5)) * 0.22 * (sp < 2 ? 1 : 0.3);
       break;
@@ -461,10 +470,10 @@ export function pose(a: Actor, act: Act | undefined, gk: boolean, near: boolean,
       const down = ease(clamp01(k / 0.25)) * (k > 0.75 ? 1 - ease((k - 0.75) / 0.25) : 1);
       body.rotation.x = 1.45 * down;
       body.position.y = HIP - 0.72 * down;
-      arm[0].rotation.set(-1.4 * down, 0, 0.3);
-      arm[1].rotation.set(-1.4 * down, 0, -0.3);
-      thigh[0].rotation.x = -0.3 * down;
-      shin[0].rotation.x = -0.6 * down;
+      arm[0].rotation.set(-1.4 * down, 0, -0.3);
+      arm[1].rotation.set(-1.4 * down, 0, 0.3);
+      thigh[0].rotation.x = 0.3 * down;
+      shin[0].rotation.x = 0.6 * down;
       break;
     }
     default:
