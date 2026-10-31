@@ -7,18 +7,18 @@ export interface ClubKits { home: KitDef; away: KitDef; confirmed: boolean }
 const k = (shirt: string, shorts: string, socks: string, pattern: KitPattern = 'liso', alt = '#ffffff'): KitDef => ({ shirt, shorts, socks, pattern, alt });
 
 export const KITS: Record<string, ClubKits> = {
-  scp: { home: k('#00804a', '#111111', '#00804a', 'listas', '#ffffff'), away: k('#111111', '#111111', '#111111'), confirmed: false },
-  slb: { home: k('#e30613', '#ffffff', '#e30613'), away: k('#ffffff', '#ffffff', '#ffffff'), confirmed: false },
-  scb: { home: k('#d71920', '#ffffff', '#d71920'), away: k('#ffffff', '#ffffff', '#ffffff'), confirmed: false },
-  fun: { home: k('#1f3c88', '#ffffff', '#1f3c88'), away: k('#ffffff', '#1f3c88', '#ffffff'), confirmed: false },
-  lps: { home: k('#0b7a3b', '#ffffff', '#0b7a3b'), away: k('#ffffff', '#0b7a3b', '#ffffff'), confirmed: false },
-  fzz: { home: k('#1d4ed8', '#ffffff', '#1d4ed8'), away: k('#ffffff', '#1d4ed8', '#ffffff'), confirmed: false },
-  ele: { home: k('#c8102e', '#ffffff', '#c8102e'), away: k('#ffffff', '#c8102e', '#ffffff'), confirmed: false },
-  rav: { home: k('#00843d', '#ffffff', '#00843d', 'riscas', '#ffffff'), away: k('#ffffff', '#ffffff', '#ffffff'), confirmed: false },
-  uvn: { home: k('#1e3a8a', '#1e3a8a', '#facc15', 'liso'), away: k('#facc15', '#1e3a8a', '#facc15'), confirmed: false },
-  por: { home: k('#111111', '#111111', '#111111', 'riscas', '#ffffff'), away: k('#ffffff', '#ffffff', '#ffffff'), confirmed: false },
-  fam: { home: k('#1c3f94', '#ffffff', '#1c3f94'), away: k('#ffffff', '#1c3f94', '#ffffff'), confirmed: false },
-  tor: { home: k('#1f4e9c', '#ffffff', '#1f4e9c'), away: k('#ffffff', '#1f4e9c', '#ffffff'), confirmed: false },
+  scp: { home: k('#00804a', '#111111', '#00804a', 'listas', '#ffffff'), away: k('#ccaa6b', '#ccab6a', '#ccab6a', 'liso', '#ffffff'), confirmed: true },
+  slb: { home: k('#e30613', '#ffffff', '#e30613', 'liso', '#ffffff'), away: k('#ffffff', '#ff0000', '#ffffff', 'liso', '#ffffff'), confirmed: true },
+  scb: { home: k('#e30613', '#ffffff', '#e30613', 'liso', '#ffffff'), away: k('#782d3b', '#792b3a', '#9e8a70', 'liso', '#ffffff'), confirmed: true },
+  fun: { home: k('#582321', '#000000', '#582321', 'liso', '#ffffff'), away: k('#ffffff', '#000000', '#ffffff', 'liso', '#ffffff'), confirmed: true },
+  lps: { home: k('#1b4937', '#1b4937', '#1b4937', 'liso', '#ffffff'), away: k('#ffffff', '#ffffff', '#ffffff', 'liso', '#ffffff'), confirmed: true },
+  fzz: { home: k('#f2e44f', '#000000', '#000000', 'liso', '#ffffff'), away: k('#f01c35', '#f01c35', '#ffffff', 'liso', '#ffffff'), confirmed: true },
+  ele: { home: k('#0b8a3e', '#000000', '#0b8a3e', 'riscas', '#ffffff'), away: k('#000000', '#000000', '#000000', 'liso', '#ffffff'), confirmed: true },
+  rav: { home: k('#024b3a', '#ffffff', '#ffffff', 'riscas', '#ffffff'), away: k('#73b4d2', '#1c1f2e', '#1c1f2e', 'listas', '#1c1f2e'), confirmed: true },
+  uvn: { home: k('#facc15', '#000000', '#facc15', 'liso', '#ffffff'), away: k('#facc15', '#facc15', '#facc15', 'liso', '#ffffff'), confirmed: true },
+  por: { home: k('#111111', '#111111', '#ffffff', 'riscas', '#ffffff'), away: k('#facc15', '#facc15', '#facc15', 'liso', '#ffffff'), confirmed: true },
+  fam: { home: k('#ffffff', '#ffffff', '#ffffff', 'metade', '#18214e'), away: k('#cee5d4', '#cee5d4', '#cee5d4', 'liso', '#ffffff'), confirmed: true },
+  tor: { home: k('#881732', '#34497e', '#881732', 'metade', '#34497e'), away: k('#cbd9e6', '#cbd9e6', '#cbd9e6', 'riscas', '#d6e0ea'), confirmed: true },
 };
 
 export type KitChoice = 'auto' | 'home' | 'away';
