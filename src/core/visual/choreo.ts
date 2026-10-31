@@ -58,9 +58,9 @@ type Sys = Tactics['system'] | '5x4';
 
 // estruturas ofensivas (u, v) na fase de finalização
 const SHAPES: Record<Sys, UV[]> = {
-  '3-1': [[21, 0], [27.5, -7.8], [27.5, 7.8], [34.5, 0]], // fixo, ala E, ala D, pivô
-  '1-2-1': [[19.5, 0], [27, -7.5], [27, 7.5], [34.5, 0]],
-  '4-0': [[23, -3.2], [29.5, -8.4], [29.5, 8.4], [23, 3.2]], // universal E, ala E, ala D, universal D
+  '3-1': [[19.5, 0], [26.5, -8.4], [26.5, 8.4], [34, 0]], // fixo, ala E, ala D, pivô (largura total, como nos jogos reais)
+  '1-2-1': [[18.5, 0], [26, -8.2], [26, 8.2], [33.5, 0]],
+  '4-0': [[22, -3.6], [28.5, -8.6], [28.5, 8.6], [22, 3.6]], // universal E, ala E, ala D, universal D
   '2-2': [[22, -4.5], [31.5, -6], [31.5, 6], [22, 4.5]],
   '5x4': [[24, 0], [27.5, -8.3], [27.5, 8.3], [34.5, -6.5], [34.5, 6.5]], // GR avançado no topo, alas, dois nos cantos da área
 };
@@ -1196,7 +1196,8 @@ export class Choreo {
     const press = PRESS_LINE[tD.pressure];
     // distâncias de marcação (lado da baliza): futsal é jogado muito em cima do adversário
     const gap = tD.marking === 'individual' ? 1.0 : tD.marking === 'misto' ? 1.3 : 1.6;
-    const pressGap = tD.pressure === 'alta' ? 0.8 : tD.pressure === 'media' ? 1.0 : 1.3;
+    // quem tem a bola é marcado muito em cima (corpo a corpo, como se vê nos jogos)
+    const pressGap = tD.pressure === 'alta' ? 0.65 : tD.pressure === 'media' ? 0.85 : 1.1;
     let fixedPairs: Map<string, string> | null = null;
     const dt = 0.25;
     for (let t = t0; t <= t1 + 1e-6; t += dt) {
@@ -1223,9 +1224,10 @@ export class Choreo {
         if (!isH) {
           // ajuda: quem está longe da bola fecha por dentro, entre a bola e a baliza
           const dB = Math.hypot(au - bu, av - bv);
-          const help = clamp((dB - 10) / 16, 0, 0.2) * (tD.marking === 'individual' ? 0.4 : 1);
+          // à zona o bloco é compacto: os do lado contrário fecham bem o meio (bola longe = mais ajuda)
+          const help = clamp((dB - 7) / 14, 0, tD.marking === 'zona' ? 0.45 : tD.marking === 'misto' ? 0.3 : 0.12);
           v = lerp(v, bv * 0.35, help);
-          u += help * 2.5;
+          u += help * 3;
         }
         u = clamp(Math.max(u, isH ? press : press + 1.5), 2, 39.2);
         spots.set(m.id, this.A(u, clamp(v, -9.4, 9.4)));
@@ -1849,6 +1851,17 @@ export class Choreo {
       const ang = a.ang ?? (a.face && pos[a.face] ? angTo(me, pos[a.face]) : a.to ? angTo(me, a.to) : angTo(me, ball));
       acts[a.id] = { kind: a.kind, k: (t - a.t0) / Math.max(0.01, a.t1 - a.t0), ang, to: a.to, h: a.h };
     }
-    return { pos, ball, holder: this.holderAt(t), stoppage: t < 0 || t > this.D, label, phase, acts };
+    // quem tem a bola com um adversário encostado protege-a de costas para ele (sola na bola), como nos jogos reais
+    const holder = this.holderAt(t);
+    if (holder && !acts[holder] && t >= 0 && t <= this.D && !this.gkOfAny(holder)) {
+      const hp = pos[holder];
+      const hq = this.tr.get(holder)!.at(t - 0.2);
+      const slow = dist(hp, hq) < 0.5;
+      const opp = this.sideOf.get(holder) === this.att ? this.defOut : this.attOut;
+      let near: P2 | null = null, nd = 1.15;
+      for (const id of opp) { const p = pos[id]; if (p) { const d = dist(p, hp); if (d < nd) { nd = d; near = p; } } }
+      if (near && slow) acts[holder] = { kind: 'shield', k: 0.5, ang: angTo(near, hp) };
+    }
+    return { pos, ball, holder, stoppage: t < 0 || t > this.D, label, phase, acts };
   }
 }
