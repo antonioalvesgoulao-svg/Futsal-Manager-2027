@@ -56,7 +56,7 @@ Real: 6,38 golos/jogo, casa 49,6%, fora 37,0%, empates 13,5%, <3 golos 6,1%. Man
   - defesa: pressão conforme a linha escolhida, cobertura/ajuda, individual mantém pares, zona troca marcações; 5x4 deixa livre o mais longe da bola
   - bolas paradas organizadas: cantos (4 jogadas do motor), livres com barreira a 5 m (3 jogadas), 10 m e penálti com todos atrás da linha da bola, festejos, reposições do GR, pontapé de saída
   - ações por jogador (`Frame.acts`): passe, remate, mergulho, defesa, carrinho, finta, bloqueio, proteção do pivô, bloqueio de remate, queda, festejo. 3D com corpo articulado; 2D com setas de desmarcação e marcas de ação
-  - ritmo: lenta 2,2x (lances decisivos 1,3x) ≈ 23 min, média 7x (2,5x) ≈ 8 min, rápida 16x ≈ 3 min
+  - ritmo: lenta 2,2x (lances decisivos 1,3x) ≈ 23 min, média 7x (2,5x) ≈ 8 min, rápida 9x ≈ 5 min
 - Não consigo ver vídeos do YouTube; posso analisar gravações de ecrã que o António envie (extraio fotogramas)
 - Próximos melhoramentos possíveis: pontapés de linha lateral, mais variantes de jogadas ensaiadas, ressaltos/recargas
 

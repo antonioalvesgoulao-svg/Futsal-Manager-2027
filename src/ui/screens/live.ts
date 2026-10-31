@@ -16,8 +16,8 @@ export const settingsOf = (s: GameState) => (s.settings ??= { ...DEFAULT_SETTING
 
 // Segundos de jogo por segundo real. Os lances decisivos (finalização e bolas paradas) abrandam
 // para se verem os movimentos: na lenta a 1,3x, na média a 2,5x.
-const RATE = { lento: 2.2, medio: 7, rapido: 16 };
-const KEY_RATE = { lento: 1.3, medio: 2.5, rapido: 16 };
+const RATE = { lento: 2.2, medio: 7, rapido: 9 };
+const KEY_RATE = { lento: 1.3, medio: 2.5, rapido: 9 };
 
 type P = { x: number; y: number };
 const lerp = (a: number, b: number, k: number) => a + (b - a) * k;
