@@ -50,6 +50,7 @@ export class Highlight3D {
   private clock = 0;
   private excite: [number, number] = [0, 0];
   private goalShown = false;
+  private netBusy = false;
   private scores: [[number, number], [number, number]] | null = null;
 
   constructor(private host: HTMLElement, private opts: ArenaOpts) {
@@ -270,6 +271,10 @@ export class Highlight3D {
     // bola: x do motor = x do 3D; y do motor = z do 3D
     this.ballMesh.position.set(f.ball.x, Math.max(0.11, f.ball.z), f.ball.y);
     this.ballMesh.visible = !f.hideBall;
+    // bola dentro da baliza (ou na rede lateral por fora): a rede abana
+    const bx = Math.abs(f.ball.x), inGoal = bx > W / 2 + 0.05 && bx < W / 2 + 1.1 && Math.abs(f.ball.y) < 1.55 && f.ball.z < 2.05;
+    if (inGoal && !this.netBusy && !f.hideBall) { this.netBusy = true; this.arena.netHit(Math.sign(f.ball.x), Math.max(0.2, f.ball.z), f.ball.y); }
+    if (!inGoal && bx < W / 2 - 1) this.netBusy = false;
     this.ballMesh.rotation.x += dt * 10;
     const seen = new Set<string>();
     for (const [id, p] of Object.entries(f.pos)) {

@@ -277,6 +277,7 @@ export interface ArenaHandle {
   update(now: number, excite: [number, number]): void;
   setScore(s: [number, number]): void;
   goal(side: number): void;
+  netHit(sgn: number, y: number, z: number, amp?: number): void; // bola na rede (sgn = baliza)
   setCeremony(on: boolean): void;
   standDepth: number;
   height: number;
@@ -317,7 +318,38 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
   // balizas 3 x 2 m
   const postMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.35 });
   const stripeMat = new THREE.MeshStandardMaterial({ color: 0xd61f26, roughness: 0.35 });
-  const netMat = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true, transparent: true, opacity: 0.4 });
+  // redes: malha de 10 cm em fio branco, com profundidade 1 m (fundo, teto e laterais); ondulam quando a bola entra
+  const netMat = new THREE.LineBasicMaterial({ color: 0xf5f5f5, transparent: true, opacity: 0.8 });
+  const nets: { pos: THREE.BufferAttribute; orig: Float32Array; sgn: number; hit: { t: number; y: number; z: number; amp: number } | null }[] = [];
+  const makeNet = (sgn: number) => {
+    const pts: number[] = [];
+    const seg = (a: number[], b: number[]) => pts.push(...a, ...b);
+    const S = 0.1;
+    const nz = Math.round(3 / S), ny = Math.round(2 / S), nd = Math.round(1 / S);
+    // ponto na rede: d = profundidade (0 na linha de golo, 1 no fundo), y altura, z largura; o fundo desce um pouco (rede caída)
+    const P = (d: number, y: number, z: number) => [sgn * d * (y > 1.99 ? 0.85 : 1), y, z];
+    for (let i = 0; i <= nz; i++) for (let j = 0; j <= ny; j++) {
+      const z = -1.5 + i * S, y = j * S;
+      if (i < nz) seg(P(1, y, z), P(1, y, z + S));
+      if (j < ny) seg(P(1, y, z), P(1, y + S, z));
+    }
+    for (let i = 0; i <= nz; i++) for (let k = 0; k <= nd; k++) {
+      const z = -1.5 + i * S, d = k * S;
+      if (i < nz) seg(P(d, 2, z), P(d, 2, z + S));
+      if (k < nd) seg(P(d, 2, z), P(d + S, 2, z));
+    }
+    for (const z of [-1.5, 1.5]) for (let k = 0; k <= nd; k++) for (let j = 0; j <= ny; j++) {
+      const d = k * S, y = j * S;
+      if (k < nd) seg(P(d, y, z), P(d + S, y, z));
+      if (j < ny) seg(P(d, y, z), P(d, y + S, z));
+    }
+    const geo = new THREE.BufferGeometry();
+    const arr = new Float32Array(pts);
+    const pos = new THREE.BufferAttribute(arr, 3);
+    geo.setAttribute('position', pos);
+    nets.push({ pos, orig: arr.slice(), sgn, hit: null });
+    return new THREE.LineSegments(geo, netMat);
+  };
   for (const sgn of [-1, 1]) {
     const g = new THREE.Group();
     const rr = 0.04;
@@ -335,9 +367,7 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
       bar.position.set(0, 2, -1.25 + k * 0.5);
       g.add(bar);
     }
-    const net = new THREE.Mesh(new THREE.BoxGeometry(1, 2, 3, 6, 10, 14), netMat);
-    net.position.set(sgn * 0.5, 1, 0);
-    g.add(net);
+    g.add(makeNet(sgn));
     g.position.x = (sgn * W) / 2;
     scene.add(g);
   }
@@ -862,8 +892,27 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
     benchSeats,
     tableSeats,
     groundAt: (x: number, z: number) => (pr.sides.includes('N') && Math.abs(x) < TUNNEL_GAP / 2 && z < -FRONT_N ? rampFloor(-z - FRONT_N) : 0),
+    netHit(sgn: number, y: number, z: number, amp = 0.35) {
+      const n = nets.find((x) => x.sgn === sgn);
+      if (n) n.hit = { t: uniforms.uTime.value, y, z, amp };
+    },
     update(now: number, ex: [number, number]) {
       uniforms.uTime.value = now;
+      // rede a ondular depois de a bola entrar (empurrada para trás junto ao ponto de impacto, depois oscila e assenta)
+      for (const n of nets) {
+        if (!n.hit) continue;
+        const e = now - n.hit.t;
+        const arr = n.pos.array as Float32Array;
+        if (e > 2.5) { arr.set(n.orig); n.hit = null; n.pos.needsUpdate = true; continue; }
+        const w = n.hit.amp * Math.exp(-e * 2.2) * Math.cos(e * 9) * Math.min(1, e * 12);
+        for (let i = 0; i < arr.length; i += 3) {
+          const d = Math.abs(n.orig[i]);
+          const g2 = Math.exp(-((n.orig[i + 1] - n.hit.y) ** 2 + (n.orig[i + 2] - n.hit.z) ** 2) / 0.6);
+          arr[i] = n.orig[i] + n.sgn * w * g2 * d;
+          arr[i + 1] = n.orig[i + 1] - Math.abs(w) * g2 * d * 0.15;
+        }
+        n.pos.needsUpdate = true;
+      }
       const base0 = 0.08;
       const c = ceremony ? 0.7 : 0;
       uniforms.uEx.value.set(Math.max(base0, ex[0], c), Math.max(base0, ex[1], c), Math.max(base0 * 0.5, Math.max(ex[0], ex[1]) * 0.3));

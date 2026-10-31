@@ -107,6 +107,30 @@ class Track {
     this.keys.splice(i, 0, k);
   }
 
+  /** Movimentos de apoio sem bola: onde o jogador ficaria parado muito tempo, faz desmarcações curtas
+   * (fintar a marcação, aproximar-se e voltar a abrir), como no futsal real. */
+  liven(r: () => number, t0: number, t1: number, amp: number, skip: (t: number) => boolean) {
+    const out: Key[] = [];
+    for (let i = 0; i < this.keys.length; i++) {
+      const a = this.keys[i], b = this.keys[i + 1];
+      out.push(a);
+      if (!b || b.t < t0 || a.t > t1) continue;
+      const gap = b.t - a.t;
+      const n = Math.floor(gap / 1.3);
+      for (let k = 1; k <= n; k++) {
+        const t = a.t + (gap * k) / (n + 1);
+        if (skip(t)) continue;
+        const kk = k / (n + 1);
+        const bx = a.x + (b.x - a.x) * kk, by = a.y + (b.y - a.y) * kk;
+        const ang = r() * Math.PI * 2;
+        const m = amp * (0.5 + r() * 0.5);
+        out.push({ t, x: clamp(bx + Math.cos(ang) * m, -19.5, 19.5), y: clamp(by + Math.sin(ang) * m, -9.8, 9.8), hold: false });
+      }
+    }
+    this.keys = out;
+    this.baked = null;
+  }
+
   /** Remove pontos-chave dentro de um intervalo (para dar lugar a movimentos explícitos). */
   clear(t0: number, t1: number) {
     this.baked = null;
@@ -260,7 +284,7 @@ export class Choreo {
     const kind0 = start?.kind ?? (start ? 'live' : 'kickoff');
     // reposição do GR só se a bola for mesmo do GR de quem ataca agora
     const kind = kind0 === 'gk' && (!this.gkA || start?.holder !== this.gkA) ? 'live' : kind0;
-    this.lead = kind === 'kickoff' ? (start ? 4 : 1.6) : kind === 'gk' ? 2.4 : kind === 'lateral' ? 2.6 : 0;
+    this.lead = kind === 'kickoff' ? (start ? 4 : 1.6) : kind === 'gk' ? 2.4 : kind === 'lateral' ? 3.6 : 0;
     const t0 = -this.lead;
     for (const [id, tr] of this.tr) {
       const prev = start?.pos?.[id];
@@ -283,11 +307,18 @@ export class Choreo {
     } else if (kind === 'gk' && this.gkA) {
       holder = this.gkA;
       for (const id of this.tr.keys()) this.tr.get(id)!.set(-0.15, this.restPos(id, 'gk'), id === holder);
-      // a bola regressa às mãos do GR
+      // o GR vai buscar a bola (atrás da baliza ou perto dela) e volta para repor; se estiver longe, um apanha-bolas devolve-a
       const b0: Ball = { x: sb.x, y: sb.y, z: 0.11 };
       this.balls.push({ k: 'still', t0, at: b0 });
-      this.balls.push({ k: 'fly', t0: t0 + 0.3, t1: t0 + 1.3, from: b0, b: holder, lift: 0.8 });
-      this.balls.push({ k: 'hands', t0: t0 + 1.3, id: holder });
+      const gp = this.P(holder, t0);
+      if (dist(gp, b0) < 6) {
+        const tg = t0 + clamp(dist(gp, b0) / 5, 0.4, 1.2);
+        this.key(holder, tg, { x: clamp(b0.x, -20.8, 20.8), y: b0.y }, true);
+        this.balls.push({ k: 'hands', t0: tg, id: holder });
+      } else {
+        this.balls.push({ k: 'fly', t0: t0 + 0.3, t1: t0 + 1.3, from: { x: b0.x, y: Math.sign(b0.y || 1) * 11.5, z: 0.6 }, b: holder, lift: 0.8 });
+        this.balls.push({ k: 'hands', t0: t0 + 1.3, id: holder });
+      }
       this.phase(t0, 'Reposição do guarda-redes');
       this.progFn = this.makeProg(0, 0);
     } else if (kind === 'lateral') {
@@ -297,8 +328,12 @@ export class Choreo {
       const mates = this.attOut.filter((x) => x !== holder);
       const mate = mates.length ? mates.reduce((x, y) => (dist(this.P(y, t0), spot) < dist(this.P(x, t0), spot) ? y : x)) : holder;
       const sgn = Math.sign(spot.y);
-      this.balls.push({ k: 'still', t0, at: { x: spot.x, y: spot.y, z: 0.11 } });
-      this.key(holder, -1.2, { x: spot.x - this.dirA * 0.3, y: spot.y + sgn * 0.2 }, true);
+      // a bola está onde saiu: quem repõe vai buscá-la, pousa-a sobre a linha e bate
+      this.balls.push({ k: 'still', t0, at: { x: sb.x, y: sb.y, z: 0.11 } });
+      this.key(holder, -1.5, { x: sb.x, y: sb.y }, true);
+      this.balls.push({ k: 'hands', t0: -1.5, id: holder, z: 0.95 });
+      this.key(holder, -0.9, { x: spot.x - this.dirA * 0.3, y: spot.y + sgn * 0.2 }, true);
+      this.balls.push({ k: 'still', t0: -0.85, at: { x: spot.x, y: spot.y, z: 0.11 } });
       const recv = { x: clamp(spot.x - this.dirA * 2.5, -17, 17), y: spot.y - sgn * 3.8 };
       this.key(mate, -0.1, recv, true);
       this.act(holder, 'pass', -0.35, 0.05, { face: mate });
@@ -401,6 +436,8 @@ export class Choreo {
     }
 
     // ---- defesa (depois de o ataque estar definido) ----
+    this.sortBalls();
+    for (const id of this.attOut) if (id !== this.gkA) this.tr.get(id)?.liven(this.r, 0, D - 0.3, 1.8, (t) => this.isFixed(id, t) || this.holderAt(t) === id);
     for (const id of this.tr.keys()) if (this.sideOf.get(id) === att) { this.tr.get(id)!.limit(VMAX); this.tr.get(id)!.bake(-this.lead, D + 1, VMAX, AMAX); }
     this.sortBalls();
     for (const f of this.later) f();
@@ -1125,17 +1162,24 @@ export class Choreo {
     let caught = false;
     const spill = this.spillNext;
     this.spillNext = false;
+    // onde está o GR (a defesa acontece à frente dele, não na linha de golo)
+    const kSide = 1 - (this.sideOf.get(shooter) ?? this.att);
+    const kId = this.p.onCourt[kSide][0];
+    const kPos = kId && !this.p.flying[kSide] ? this.P(kId, T) : null;
+    const gkX = kPos ? g * clamp(Math.abs(kPos.x), 17.4, 19.5) : g * 19.4;
     if (res === 'goal') { const v = (r() - 0.5) * 2.5; target = { x: g * 20.35, y: v, z: 0.15 + r() * 1.6 }; after = { x: g * 20.9, y: v * 0.9, z: 0.1 }; }
     else if (res === 'post') { target = { x: g * 19.95, y: side * 1.52, z: 0.3 + r() * 1.4 }; after = { x: g * 15, y: side * 4.5, z: 0.1 }; }
     else if (res === 'wide') { target = { x: g * 20.2, y: side * (1.9 + r() * 1.6), z: 0.2 + r() * 1.8 }; after = { x: g * 21.8, y: side * (3 + r() * 2), z: 0.1 }; }
     else if (res === 'saved') {
       const v = (r() - 0.5) * 2.6;
-      target = { x: g * 19.4, y: v, z: 0.2 + r() * 1.3 };
+      target = { x: gkX - g * 0.2, y: v, z: 0.2 + r() * 1.3 };
       // remates sem muita força ou à figura: o GR agarra (a maioria das defesas em futsal)
       caught = spill ? false : a.caught ?? (target.z < 1.7 && (Math.abs(v) < 0.8 || r() < 0.45));
       if (caught && target.z > 1.5) target.z = 1.1;
       // defesa para canto, ou para a frente (ressalto que dá recarga)
-      after = caught ? target : spill ? { x: g * (14.5 + r() * 2), y: clamp(v * 2.5 + side * 1.5, -5, 5), z: 0.1 } : { x: g * 21, y: v + side * 3, z: 0.1 };
+      // desviada pelo GR: para canto (sai pela linha de fundo bem longe dos postes) ou para a frente (ressalto)
+      const sv = Math.sign(v) || side;
+      after = caught ? target : spill ? { x: g * (14.5 + r() * 2), y: clamp(v * 2.5 + side * 1.5, -5, 5), z: 0.1 } : { x: g * (20.6 + r() * 0.8), y: sv * (2.6 + r() * 2.2), z: 0.1 };
     } else {
       const gl = Math.hypot(g * 20 - from.x, -from.y) || 1;
       target = { x: from.x + ((g * 20 - from.x) / gl) * 2.2, y: from.y + (-from.y / gl) * 2.2, z: 0.4 };
@@ -1155,18 +1199,27 @@ export class Choreo {
       // remates de perto com abertura em cruz (pernas e braços abertos); à figura, agarra
       const ty = clamp(target.y * (res === 'saved' ? 1 : res === 'goal' ? 0.72 : 0.6), -1.75, 1.75);
       const close = Math.hypot(g * 20 - from.x, from.y) < 7.5;
-      const tech: ActKind = target.z > 1.2 && Math.abs(ty) > 0.8 ? 'dive' : close && Math.abs(ty) < 1.3 ? 'spread' : Math.abs(ty) > 0.55 ? 'splits' : 'catch';
+      let tech: ActKind = target.z > 1.2 && Math.abs(ty) > 0.8 ? 'dive' : close && Math.abs(ty) < 1.3 ? 'spread' : Math.abs(ty) > 0.55 ? 'splits' : 'catch';
+      // defesa sem agarrar: tem de se ver o gesto que desvia a bola (nunca a bola a atravessar o GR)
+      if (res === 'saved' && !caught && tech === 'catch') tech = target.z > 1.1 ? 'dive' : close ? 'spread' : 'splits';
       // na espargata o corpo desloca-se pouco; é a perna que chega à bola
-      const tgt = { x: g * 19.35, y: tech === 'dive' ? ty : tech === 'splits' ? ty * 0.45 : tech === 'spread' ? ty * 0.3 : ty * 0.8 };
+      // o corpo desloca-se de lado (sem recuar para a baliza) até a mão/perna ficar na bola
+      const sy = Math.sign(ty) || 1;
+      const reach = tech === 'dive' ? 0.9 : tech === 'splits' ? 0.75 : 0;
+      const ky = res === 'saved' ? ty - sy * reach : tech === 'spread' ? ty * 0.3 : ty * 0.6 - sy * reach * 0.5;
+      const tgt = { x: gkX, y: clamp(ky, -1.4, 1.4) };
       this.later.push(() => {
         const g0 = this.P(gk, T - 0.15);
         this.fix(gk, T - 0.2, T + fl + 1.6);
         this.key(gk, T, g0);
-        this.key(gk, T + fl, tgt);
+        this.key(gk, T + fl, tgt, true);
         this.key(gk, T + fl + 1.3, tgt);
       });
+      // a extensão máxima coincide com a chegada da bola
+      const peak = tech === 'dive' ? 0.42 : tech === 'splits' ? 0.31 : 0.29;
+      const t0a = T - 0.05;
       if (tech === 'catch') this.act(gk, 'catch', T, T + fl + 0.8, { face: shooter });
-      else this.act(gk, tech, T + 0.04, T + fl + 1.2, { to: { x: target.x, y: target.y }, h: target.z, face: shooter });
+      else this.act(gk, tech, t0a, t0a + (fl + 0.05) / peak, { to: { x: target.x, y: target.y }, h: target.z, face: shooter });
       if (res === 'saved' && tech !== 'catch') this.label(T + fl, tech === 'dive' ? `Voo de ${this.nm(gk)} ao ângulo!` : tech === 'splits' ? `${this.nm(gk)} defende com a perna, em espargata` : `${this.nm(gk)} fecha o ângulo em cruz`);
     }
     if (res === 'blocked' && a.other && this.tr.has(a.other)) {
@@ -1282,10 +1335,19 @@ export class Choreo {
     const routine = this.tactics[att].setPieces?.cornerRoutine ?? 'primeiro_poste';
     const s = this.ballAt(T).y >= 0 ? 1 : -1; // lado do canto
     const spot: Ball = { x: this.dirA * 19.75, y: s * 9.75, z: 0.11 };
-    const tSet = T + 3.4; // organização
+    // quem marca vai buscar a bola onde ela parou e leva-a à mão até ao canto (nada é reposto sozinho)
+    const b0 = this.ballAt(T);
+    const tp0 = this.P(taker, T);
+    const tPick = T + clamp(dist(tp0, b0) / 6, 0.5, 2.6);
+    const tPlace = tPick + clamp(dist(b0, spot) / 4.5, 0.4, 2.5);
+    const tSet = Math.max(T + 3.4, tPlace + 0.6); // organização
     const tKick = tSet + 0.9;
-    this.balls.push({ k: 'fly', t0: T, t1: T + 1.3, from: this.ballAt(T), b: spot, lift: 0.6 });
-    this.balls.push({ k: 'still', t0: T + 1.3, at: spot });
+    this.key(taker, tPick, { x: b0.x, y: b0.y }, true);
+    this.key(taker, tPlace, { x: spot.x + this.dirA * 0.5, y: spot.y + Math.sign(spot.y) * 0.5 }, true);
+    this.fix(taker, T, tKick);
+    this.balls.push({ k: 'still', t0: T, at: { x: b0.x, y: b0.y, z: 0.11 } });
+    this.balls.push({ k: 'hands', t0: tPick, id: taker, z: 0.95 });
+    this.balls.push({ k: 'still', t0: tPlace, at: spot });
     const NAMES = { primeiro_poste: 'ao primeiro poste', remate_fora: 'remate de fora', bloqueio_pivo: 'bloqueio para o pivô', curto: 'canto curto' };
     this.phase(T, `Canto (${NAMES[routine]})`);
     this.label(T + 0.4, `Canto para ${this.nm(taker)} marcar`);
