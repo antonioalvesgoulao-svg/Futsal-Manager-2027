@@ -8,6 +8,18 @@ export type Tempo = 'rapido' | 'equilibrado' | 'paciente';
 export type Marking = 'zona' | 'individual' | 'misto';
 export type FlyingKeeper = 'nunca' | 'auto' | 'agressivo' | 'sempre';
 export type Rotation = 'curta' | 'normal' | 'longa';
+export type CornerRoutine = 'primeiro_poste' | 'remate_fora' | 'bloqueio_pivo' | 'curto';
+export type FreeKickRoutine = 'remate_direto' | 'jogada_ensaiada' | 'cruzamento';
+
+export interface SetPieces {
+  penalty: string | null; // penáltis e livres de 10 m (se não estiver em campo, bate o melhor em campo)
+  free10: string | null;
+  corner: string | null;
+  freeKick: string | null;
+  kickIn: string | null; // pontapés de linha lateral
+  cornerRoutine: CornerRoutine;
+  freeKickRoutine: FreeKickRoutine;
+}
 
 export interface Tactics {
   system: System;
@@ -19,6 +31,7 @@ export interface Tactics {
   gk: string | null; // guarda-redes titular
   q1: string[]; // 1.º quinteto (4 jogadores de campo)
   q2: string[]; // 2.º quinteto
+  setPieces: SetPieces;
 }
 
 export const LABELS = {
@@ -38,6 +51,8 @@ export const LABELS = {
     sempre: 'Sempre',
   },
   rotation: { curta: 'Curta (rodar muito)', normal: 'Normal', longa: 'Longa (titulares mais tempo)' },
+  cornerRoutine: { primeiro_poste: 'Ao primeiro poste', remate_fora: 'Remate de fora', bloqueio_pivo: 'Bloqueio para o pivô', curto: 'Canto curto' },
+  freeKickRoutine: { remate_direto: 'Remate direto', jogada_ensaiada: 'Jogada ensaiada', cruzamento: 'Cruzamento ao segundo poste' },
 } as const;
 
 export const DESCRIPTIONS: Record<string, string> = {
@@ -54,6 +69,13 @@ export const DESCRIPTIONS: Record<string, string> = {
   zona: 'Depende do posicionamento e concentração da equipa.',
   individual: 'Depende do desarme e agressividade; mais faltas.',
   misto: 'Sem bónus nem penalização.',
+  primeiro_poste: 'Bola rasteira e tensa ao primeiro poste para um desvio. Remates frequentes, de qualidade média.',
+  remate_fora: 'Passe atrasado para remate de primeira de fora da área. Depende do remate; mais bloqueios.',
+  bloqueio_pivo: 'Bloqueio para libertar o pivô junto à baliza. Menos remates, mas muito perigosos com um bom pivô.',
+  curto: 'Canto jogado curto para manter a posse. Poucos remates, quase nenhum risco de contra-ataque.',
+  remate_direto: 'O especialista remata diretamente. Depende do remate e das bolas paradas.',
+  jogada_ensaiada: 'Combinação de passes para um remate desmarcado. Mais remates, de boa qualidade.',
+  cruzamento: 'Bola ao segundo poste para o pivô finalizar. Depende do pivô.',
 };
 
 // Quintetos sugeridos: melhor guarda-redes e os 8 melhores jogadores de campo divididos em dois blocos equilibrados
@@ -82,6 +104,7 @@ export function suggestTactics(squad: Player[], base?: Partial<Tactics>): Tactic
     gk: gks[0]?.id ?? null,
     q1: [],
     q2: [],
+    setPieces: suggestSetPieces(squad),
   };
   t.q1 = arrangeForSystem(q1, t.system).map((p) => p?.id ?? '');
   t.q2 = arrangeForSystem(q2, t.system).map((p) => p?.id ?? '');
@@ -158,4 +181,27 @@ const FIT: Record<Role, Record<string, number>> = {
 
 export function roleFit(role: Role, position: string) {
   return FIT[role][position] ?? 0.3;
+}
+
+// Marcadores sugeridos: os melhores em cada especialidade
+export function suggestSetPieces(squad: Player[], base?: Partial<SetPieces>): SetPieces {
+  const out = squad.filter((p) => p.position !== 'GR');
+  const best = (f: (p: Player) => number) => [...out].sort((a, b) => f(b) - f(a))[0]?.id ?? null;
+  const a = (p: Player) => p.attrs;
+  return {
+    penalty: best((p) => a(p).finalizacao + a(p).compostura),
+    free10: best((p) => a(p).remate + a(p).finalizacao + a(p).compostura),
+    corner: best((p) => a(p).bolasParadas * 2 + a(p).passe),
+    freeKick: best((p) => a(p).bolasParadas * 2 + a(p).remate),
+    kickIn: best((p) => a(p).passe + a(p).visao + a(p).bolasParadas),
+    cornerRoutine: 'primeiro_poste',
+    freeKickRoutine: 'remate_direto',
+    ...base,
+  };
+}
+
+// Compatibilidade com jogos gravados antes das bolas paradas
+export function normalizeTactics(t: Tactics, squad: Player[]): Tactics {
+  if (!t.setPieces) t.setPieces = suggestSetPieces(squad);
+  return t;
 }

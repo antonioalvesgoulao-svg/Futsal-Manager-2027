@@ -332,12 +332,14 @@ export function simulateMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptio
   };
   const best = (ls: Live[], f: (l: Live) => number) => [...ls].sort((a, b) => f(b) - f(a))[0];
 
+  let setPiece: { q: number; block: number; assist?: Live } | null = null;
+
   function shot(s: Side, kind: 'jogada' | 'contra' | 'livre10' | 'penalti' | 'canto' | 'baliza_aberta', shooterIn?: Live): void {
     const att = teams[s];
     const def = teams[1 - s];
     const shooter = shooterIn ?? pick(outfield(att), shooterWeight);
     const others = outfield(att).filter((l) => l !== shooter);
-    const assist = kind === 'jogada' || kind === 'contra' || kind === 'canto' ? (r() < 0.62 && others.length ? pick(others, (l) => eff(l, 'passe') + eff(l, 'visao')) : undefined) : undefined;
+    const assist = setPiece ? setPiece.assist : kind === 'jogada' || kind === 'contra' || kind === 'canto' ? (r() < 0.62 && others.length ? pick(others, (l) => eff(l, 'passe') + eff(l, 'visao')) : undefined) : undefined;
     tstats[s].shots++;
     pstats[shooter.p.id].shots++;
 
@@ -353,7 +355,7 @@ export function simulateMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptio
     if (kind === 'contra') { pBlock *= 0.5; pOn += 0.08; pGoal += 0.1; }
     if (kind === 'livre10') { pBlock = 0; pOn = 0.72 + (finish - 10) * 0.015; pGoal = 0.42 + (finish - gkQ) * 0.025; }
     if (kind === 'penalti') { pBlock = 0; pOn = 0.86 + (compo - 10) * 0.01; pGoal = 0.78 + (finish - gkQ) * 0.02; }
-    if (kind === 'canto') { pBlock += 0.05; pOn -= 0.05; }
+    if (kind === 'canto') { pBlock += 0.05 + (setPiece?.block ?? 0); pOn -= 0.05; pGoal *= setPiece?.q ?? 1; }
     if (!gk) { pGoal = kind === 'baliza_aberta' ? 0.85 : 0.75; }
     if (kind === 'baliza_aberta') { pBlock = 0.08; pOn = 0.5 + (eff(shooter, 'remate') - 10) * 0.02; }
     const cl = (x: number, a: number, b: number) => Math.max(a, Math.min(b, x));
@@ -387,10 +389,58 @@ export function simulateMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptio
     }
   }
 
+  // Marcador designado se estiver em campo; senão o melhor em campo
+  function taker(t: TeamState, id: string | null | undefined, f: (l: Live) => number) {
+    return outfield(t).find((l) => l.p.id === id) ?? best(outfield(t), f);
+  }
+
+  const CORNER = {
+    primeiro_poste: { chance: 0.36, target: (l: Live) => eff(l, 'finalizacao') + eff(l, 'antecipacao'), q: 1, block: 0, counter: 0.06 },
+    remate_fora: { chance: 0.4, target: (l: Live) => eff(l, 'remate') * 2, q: 0.92, block: 0.08, counter: 0.1 },
+    bloqueio_pivo: { chance: 0.28, target: (l: Live) => eff(l, 'jogoCostas') + eff(l, 'finalizacao') + (l.p.position === 'PIV' ? 6 : 0), q: 1.18, block: -0.04, counter: 0.06 },
+    curto: { chance: 0.24, target: (l: Live) => eff(l, 'finalizacao') + eff(l, 'remate'), q: 1, block: -0.06, counter: 0.01 },
+  };
+
   function corner(s: Side) {
+    const att = teams[s];
     tstats[s].corners++;
-    log('canto', `Canto para o ${sideName(s)}`, s);
-    if (r() < 0.32) shot(s, 'canto');
+    const sp = att.setup.tactics.setPieces;
+    const rt = CORNER[sp?.cornerRoutine ?? 'primeiro_poste'];
+    const kicker = taker(att, sp?.corner, (l) => eff(l, 'bolasParadas') * 2 + eff(l, 'passe'));
+    log('canto', `Canto para o ${sideName(s)}, marcado por ${kicker.p.name}`, s);
+    // a qualidade do marcador aumenta a hipótese de criar remate
+    if (r() < rt.chance + (eff(kicker, 'bolasParadas') - 10) * 0.01) {
+      const others = outfield(att).filter((l) => l !== kicker);
+      const shooter = others.length ? pick(others, rt.target) : kicker;
+      setPiece = { q: rt.q, block: rt.block, assist: kicker };
+      shot(s, 'canto', shooter);
+      setPiece = null;
+    } else if (r() < rt.counter) {
+      // perda na bola parada: contra-ataque do adversário
+      shot((1 - s) as Side, 'contra');
+    }
+  }
+
+  const FREEKICK = {
+    remate_direto: { chance: 0.75, q: 0.95 },
+    jogada_ensaiada: { chance: 0.5, q: 1.12 },
+    cruzamento: { chance: 0.42, q: 1.08 },
+  };
+
+  function freeKick(s: Side) {
+    const att = teams[s];
+    const sp = att.setup.tactics.setPieces;
+    const kind = sp?.freeKickRoutine ?? 'remate_direto';
+    const rt = FREEKICK[kind];
+    const kicker = taker(att, sp?.freeKick, (l) => eff(l, 'bolasParadas') * 2 + eff(l, 'remate'));
+    if (r() > rt.chance + (eff(kicker, 'bolasParadas') - 10) * 0.012) return;
+    let shooter = kicker;
+    const others = outfield(att).filter((l) => l !== kicker);
+    if (kind === 'cruzamento' && others.length) shooter = best(others, (l) => eff(l, 'finalizacao') + eff(l, 'jogoCostas'));
+    else if (kind === 'jogada_ensaiada' && others.length) shooter = pick(others, (l) => eff(l, 'finalizacao') + eff(l, 'remate'));
+    setPiece = { q: rt.q, block: 0, assist: shooter === kicker ? undefined : kicker };
+    shot(s, 'canto', shooter);
+    setPiece = null;
   }
 
   function foul(s: Side) {
@@ -410,17 +460,18 @@ export function simulateMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptio
     if (dogso) card((1 - s) as Side, fouler, true);
     else if (r() < 0.11 + (eff(fouler, 'agressividade') - 10) * 0.005) card((1 - s) as Side, fouler, false);
 
+    const sp = att.setup.tactics.setPieces;
     if (r() < 0.03) {
       log('penalti', `Penálti! Falta de ${fouler.p.name} sobre ${victim.p.name}`, s);
-      shot(s, 'penalti', best(outfield(att), (l) => eff(l, 'finalizacao') + eff(l, 'compostura')));
+      shot(s, 'penalti', taker(att, sp?.penalty, (l) => eff(l, 'finalizacao') + eff(l, 'compostura')));
     } else if (n >= 6) {
       log('livre_10m', `${n}.ª falta acumulada do ${sideName((1 - s) as Side)} (${fouler.p.name}): livre direto sem barreira`, s);
-      shot(s, 'livre10', best(outfield(att), (l) => eff(l, 'finalizacao') + eff(l, 'remate') + eff(l, 'compostura')));
+      shot(s, 'livre10', taker(att, sp?.free10, (l) => eff(l, 'finalizacao') + eff(l, 'remate') + eff(l, 'compostura')));
     } else {
       if (n === 5) log('falta', `5.ª falta acumulada do ${sideName((1 - s) as Side)}: a próxima dá livre de 10 metros`, (1 - s) as Side);
       else log('falta', `Falta de ${fouler.p.name} sobre ${victim.p.name}`, (1 - s) as Side, fouler.p.id);
-      // livre perto da área: hipótese de remate de bola parada
-      if (r() < 0.3) shot(s, 'canto', best(outfield(att), (l) => eff(l, 'bolasParadas') + eff(l, 'remate')));
+      // livre perto da área: bola parada conforme a jogada escolhida
+      if (r() < 0.3) freeKick(s);
     }
   }
 

@@ -122,7 +122,7 @@ tr.today td { background: #2a2618; }
 .court .dot { fill: rgba(255,255,255,0.85); }
 .court .goal { fill: #e5e7eb; }
 .court .press-label { fill: rgba(0,0,0,0.55); font-size: 9px; text-anchor: middle; font-family: system-ui; }
-.attack-arrow { position: absolute; right: 8px; top: 6px; font-size: 11px; color: rgba(0,0,0,0.6); font-weight: 600; }
+.attack-arrow { position: absolute; right: 10px; bottom: 4px; font-size: 11px; color: rgba(0,0,0,0.6); font-weight: 600; }
 .token { position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; cursor: pointer; user-select: none; width: 92px; }
 .token .disc { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; background: #1f2937; color: #fff; border: 3px solid #9ca3af; box-shadow: 0 2px 6px rgba(0,0,0,0.4); }
 .token .disc.fit-g { border-color: #4ade80; } .token .disc.fit-y { border-color: #facc15; } .token .disc.fit-r { border-color: #f87171; }
@@ -144,3 +144,24 @@ tr.today td { background: #2a2618; }
 .seg button.on { background: var(--accent); color: #111; font-weight: 600; }
 .seg-desc { margin-top: 4px; min-height: 2.4em; }
 @media (max-width: 1000px) { .tboard { grid-template-columns: 1fr; } .token { width: 70px; } .token .disc { width: 32px; height: 32px; } }
+.tabs.views { margin-bottom: 6px; }
+.court .ahead { fill: rgba(17,17,17,0.85); }
+.court .arr { fill: none; stroke: rgba(17,17,17,0.8); stroke-width: 2; }
+.court .arr.pass { stroke-dasharray: 5 4; }
+.court .arr.run { stroke: #0b3d91; }
+.court .arr.rot { stroke: #6d28d9; }
+.court .arr.fast { stroke: #b91c1c; stroke-width: 3; }
+.court .arr.slow { stroke: #065f46; stroke-dasharray: 2 4; }
+.court .arr.shot { stroke: #b91c1c; stroke-width: 2.5; }
+.court .hold { fill: rgba(11,61,145,0.12); stroke: rgba(11,61,145,0.5); stroke-dasharray: 3 3; }
+.court .dline { stroke: #0b3d91; stroke-width: 2; stroke-dasharray: 6 4; }
+.court .pline { stroke: #b91c1c; stroke-width: 2; stroke-dasharray: 6 4; }
+.court .mark { stroke: #111; stroke-width: 1.5; stroke-dasharray: 3 2; }
+.court .opp { fill: #e5e7eb; stroke: #111; stroke-width: 1; }
+.court .zone { fill: rgba(11,61,145,0.12); stroke: rgba(11,61,145,0.4); }
+.court .empty-goal { fill: rgba(185,28,28,0.25); }
+.court .olabel { fill: rgba(0,0,0,0.65); font-size: 9px; font-family: system-ui; font-weight: 600; }
+.token.static { cursor: default; }
+.ball { position: absolute; width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 2px solid #111; transform: translate(-50%, -50%); }
+.takers { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px; margin-bottom: 10px; }
+.taker { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--muted); }

@@ -1,5 +1,6 @@
 // Ciclo de jogo: avançar no calendário, jogar jogos, fim de época
 import { aiTactics } from './coaches';
+import { normalizeTactics } from './tactics';
 import { developPlayer, retires, youthIntake, DevChange } from './development';
 import { simulateMatch } from './engine/match';
 import type { MatchResult, TeamSetup } from './engine/types';
@@ -15,6 +16,7 @@ export function setupFor(s: GameState, clubId: string): TeamSetup & { coachName:
   const c = s.clubs.find((x) => x.id === clubId)!;
   const squad = s.players.filter((p) => p.clubId === c.id);
   if (c.id === s.clubId) {
+    normalizeTactics(s.tactics, squad);
     return { clubId: c.id, name: c.name, shortName: c.shortName, squad, tactics: s.tactics, coachTactical: 12, coachName: s.manager.name };
   }
   const coach = s.coaches.find((x) => x.clubId === c.id);
