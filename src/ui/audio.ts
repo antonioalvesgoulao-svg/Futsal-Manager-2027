@@ -71,7 +71,7 @@ class Sound {
   private async loadAll() {
     const c = this.ctx!;
     const base = (import.meta as { env?: { BASE_URL?: string } }).env?.BASE_URL ?? '/';
-    await Promise.all(['publico', 'golo', 'apito', 'apito_fim', 'petardo', 'assobios', 'palmas', 'buzina'].map(async (n) => {
+    await Promise.all(['publico', 'golo', 'apito', 'apito_fim', 'petardo', 'assobios', 'uuuh', 'palmas', 'buzina'].map(async (n) => {
       try {
         const r = await fetch(`${base}sons/${n}.mp3`);
         if (!r.ok) return;
@@ -160,7 +160,7 @@ class Sound {
     const now0 = c.currentTime;
     if (this.crowdLoop) {
       // gravação real do público: volume conforme a ocupação e a excitação do lance
-      this.crowdLoop.g.gain.setTargetAtTime((0.12 + this.fill * 0.35) * (1 + this.excite * 1.6), now0, 0.3);
+      this.crowdLoop.g.gain.setTargetAtTime((0.015 + this.fill * 0.22) * (1 + this.excite * 2.2), now0, 0.3);
       this.crowdGain.gain.setTargetAtTime(0, now0, 0.3);
       if (now0 > this.chantTimer) { this.chantTimer = now0 + 25 + Math.random() * 30; if (Math.random() < 0.3 + this.fill * 0.4) this.claps(); }
       return;
@@ -303,7 +303,7 @@ class Sound {
     if (!this.ok()) return;
     if (this.buf.petardo) {
       // petardos reais, cada um com o seu tamanho e distância (velocidade e volume diferentes)
-      for (let i = 0, w = 0.3; i < n; i++, w += 0.35 + Math.random() * 0.9) this.sample('petardo', 0.45 + Math.random() * 0.45, 0, undefined, 0.85 + Math.random() * 0.3, w);
+      for (let i = 0, w = 0.3; i < n; i++, w += 0.35 + Math.random() * 0.9) this.sample('petardo', 0.8 + Math.random() * 0.7, 0, undefined, 0.85 + Math.random() * 0.3, w);
       return;
     }
     for (let i = 0; i < n; i++) {
@@ -317,7 +317,7 @@ class Sound {
   /** Palmas ritmadas da bancada. */
   claps() {
     if (!this.ok()) return;
-    if (this.sample('palmas', 0.35 + this.fill * 0.4, Math.random() * 2, 6)) return;
+    if (this.sample('palmas', 0.08 + this.fill * 0.5)) return;
     const g = 0.06 + this.fill * 0.1;
     for (let i = 0; i < 12; i++) { const w = i * 0.55 + (i % 4 === 3 ? 0.15 : 0); this.noise(0.09, 1800, 0.8, 'bandpass', g, w, 0.002); }
   }
@@ -327,9 +327,9 @@ class Sound {
     if (this.buf.apito) {
       // apito real: curto = só o golpe inicial; longo = o apito inteiro; fim do jogo = três
       const W = this.WHISTLE;
-      if (kind === 'short') this.sample('apito', 0.9, W.from, W.short);
-      else if (kind === 'long') this.sample('apito', 0.9, W.from, W.long);
-      else if (!this.sample('apito_fim', 0.9)) { this.sample('apito', 0.9, W.from, W.short); this.sample('apito', 0.9, W.from, W.short, 1, 0.45); this.sample('apito', 0.9, W.from, W.long, 1, 0.9); }
+      if (kind === 'short') this.sample('apito', 1.2, W.from, W.short);
+      else if (kind === 'long') this.sample('apito', 1.2, W.from, W.long);
+      else if (!this.sample('apito_fim', 1.2)) { this.sample('apito', 0.9, W.from, W.short); this.sample('apito', 0.9, W.from, W.short, 1, 0.45); this.sample('apito', 0.9, W.from, W.long, 1, 0.9); }
       return;
     }
     const parts = kind === 'triple' ? [[0, 0.35], [0.45, 0.35], [0.9, 1.1]] : kind === 'long' ? [[0, 0.9]] : [[0, 0.32]];
@@ -354,7 +354,7 @@ class Sound {
   /** Buzina do pavilhão (fim das partes, desconto de tempo). */
   horn(dur = 1.4) {
     if (!this.ok()) return;
-    if (this.sample('buzina', 0.6, 0, Math.min(dur, this.buf.buzina?.duration ?? 0))) return;
+    if (this.sample('buzina', 1.4, 0, Math.min(dur + 0.6, this.buf.buzina?.duration ?? 0))) return;
     for (const f of [233, 466, 699]) this.tone(f, dur, f === 233 ? 0.09 : 0.04, 'sawtooth');
   }
   /** Toque na bola: passe (fraco) ou remate (forte). */
@@ -382,6 +382,7 @@ class Sound {
   /** "Uuuh!" do público numa ocasião falhada ou grande defesa. */
   ooh(k = 1) {
     if (!this.ok()) return;
+    if (this.sample('uuuh', (0.12 + this.fill * 0.9) * k)) return;
     const g = (0.1 + this.fill * 0.18) * k;
     // centenas de pessoas: "uuuh" que sobe e desce de tom (vozes graves e agudas)
     this.voices(1.7, 'u', 'o', 170, g, 14, 0, 125);
@@ -391,8 +392,8 @@ class Sound {
   /** Festa do golo: explosão do público (mais forte se for da casa). */
   goal(home: boolean) {
     if (!this.ok()) return;
-    const g = (0.45 + this.fill * 0.75) * (home ? 1 : 0.55);
-    if (this.sample('golo', Math.min(1, g * 1.1))) { this.net(); if (this.match?.big) this.petards(3 + Math.floor(Math.random() * 4)); setTimeout(() => this.claps(), 4500); return; }
+    const g = (0.15 + this.fill * 1.05) * (home ? 1 : 0.55);
+    if (this.sample('golo', Math.min(1.8, g * 1.5))) { this.net(); if (this.match?.big) this.petards(3 + Math.floor(Math.random() * 4)); setTimeout(() => this.claps(), 4500); return; }
     this.voices(4, 'o', 'a', 190, g * 0.9, 18, 0, 210); // "GOOOLO"
     this.noise(5.5, 900, 0.5, 'bandpass', g * 0.6, 0, 0.12);
     this.noise(4.5, 2400, 0.8, 'bandpass', g * 0.35, 0.1, 0.2);
@@ -404,7 +405,7 @@ class Sound {
   /** Assobios (visitante ou decisão contra a casa). */
   boo() {
     if (!this.ok()) return;
-    if (this.sample('assobios', 0.35 + this.fill * 0.5, Math.random() * 3, 5)) return;
+    if (this.sample('assobios', 0.12 + this.fill * 0.9, Math.random() * 2, 6)) return;
     const g = 0.08 + this.fill * 0.14;
     this.voices(2.6, 'u', 'u', 120, g, 16, 0, 105); // "buuuu"
     for (let i = 0; i < 10; i++) {

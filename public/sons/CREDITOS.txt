@@ -4,5 +4,7 @@ golo.mp3               - "golo" (463492), por parrot
 apito.mp3              - "Referee whistle" (90743), por pablo-f
 apito_fim.mp3          - "whistle end" (455491), por affreftony
 petardo.mp3            - "petarda jaka" (60880), por mandzo18
-assobios.mp3           - "to be booed 2" (25270), por freesound
 Licenças: ver a página de cada som em freesound.org (CC0 ou Creative Commons com atribuição).
+assobios.mp3, uuuh.mp3 - "large crowd whistling ... disappointed shouting" (316716), por ylearkisto (substitui o anterior)
+buzina.mp3             - "electronic scoreboard horn" (350773), por jsjsjsjss
+palmas.mp3             - "crowd clap rhythmic" (424793), por johnnyguitar01

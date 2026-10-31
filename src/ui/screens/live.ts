@@ -77,7 +77,10 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
   const cname = (c: { id: string; name: string }) => CHANT_NAME[c.id] ?? c.name.split(' ').pop()!;
   const flag = (v: unknown, d: boolean) => (v === undefined ? d : v === true || v === 'true');
   sound.setMatch({ home: { id: h.id, short: cname(h) }, away: { id: a.id, short: cname(a) }, big: bigGame, derby, rude: flag(st.chantsRude, true), words: flag(st.chantWords, true) });
-  sound.start(crowd.total / Math.max(1, crowd.arena.capacity));
+  // barulho do público: conta o número real de pessoas (300 pessoas não fazem o barulho de 3 000) e a ocupação
+  const occ = crowd.total / Math.max(1, crowd.arena.capacity);
+  const people = Math.max(0, Math.min(1, (Math.log10(Math.max(50, crowd.total)) - 1.7) / (3.7 - 1.7))); // 50 -> 0, 5 000 -> 1
+  sound.start(Math.max(0.04, people * (0.45 + 0.55 * occ)));
   const ultras: [boolean, boolean] = [bigGame && BIG.includes(f.home), bigGame && BIG.includes(f.away)];
   const fmtN = (n: number) => n.toLocaleString('pt-PT');
 
