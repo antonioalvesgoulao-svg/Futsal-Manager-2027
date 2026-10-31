@@ -37,7 +37,7 @@ export interface ArenaProfile {
 }
 
 // Lotações: Wikipédia (listas de pavilhões da Liga Placard 2016/17 e 2025/26); AMCO Arena (SC Braga,
-// inaugurada em 2023): 1 400, Correio do Minho. Interiores: João Rocha
+// inaugurada em 2023): 1 400, Correio do Minho; Multiusos de Famalicão: 1 200 (indicada pelo António). Interiores: João Rocha
 // (Wikimedia Commons); Fidelidade, Braga, Fundão, Porto Salvo, Ferreira do Zêzere, Ponte de Sor, Vila do
 // Conde, Venda Nova, Portimão, Famalicão, Torres Vedras, Gondomar e Odivelas (fotos enviadas pelo António). Os restantes são uma aproximação proporcional à lotação.
 export const ARENAS: Record<string, ArenaProfile> = {
@@ -51,7 +51,7 @@ export const ARENAS: Record<string, ArenaProfile> = {
   rav: { name: 'Pavilhão Municipal de Vila do Conde', capacity: 800, capacityReal: true, style: 'moderno', sides: ['N', 'S', 'W'], seat: '#1f2a44', wall: '#eef0f2', roof: 'treliça', windows: true, truss: '#8a9099', cube: false, wallArt: ['#2f6b4f', '#1f4d3a', '#e5e7eb'], floor: { court: '#d9b27a', surround: '#d9b27a', wood: true } },
   uvn: { name: 'Pavilhão da Venda Nova', capacity: 500, capacityReal: false, style: 'municipal', sides: ['N', 'S', 'E'], seat: '#2b4fa8', seatMix: ['#2b4fa8', '#f5f5f5'], wall: '#f1f1ef', roof: 'treliça', windows: true, truss: '#2a3a55', skylights: true, benches: ['N'], floor: { court: '#8a4b2a', surround: '#7a3f22', wood: true } },
   por: { name: 'Pavilhão Gimnodesportivo de Portimão', capacity: 235, capacityReal: true, style: 'municipal', sides: ['N'], seat: '#f2f2f2', wall: '#f3f4f5', roof: 'laje', windows: true, beams: '#d5d8db', pillars: '#9aa1a8', ceiling: '#c9cdd1', base: 1.6, floor: { court: '#7a3f22', surround: '#7a3f22', wood: true } },
-  fam: { name: 'Pavilhão Municipal de Famalicão', capacity: 3000, capacityReal: true, style: 'municipal', sides: ['N', 'S'], seat: '#eab308', seatMix: ['#eab308', '#dc2626', '#16a34a', '#2563eb', '#f97316'], wall: '#4f7f5a', roof: 'treliça', windows: false, truss: '#2b2f36', ceiling: '#2b2f36', banners: true, floor: { court: '#b5763e', surround: '#b5763e', wood: true } },
+  fam: { name: 'Pavilhão Multiusos de Famalicão', capacity: 1200, capacityReal: true, style: 'municipal', sides: ['N', 'S'], seat: '#eab308', seatMix: ['#eab308', '#dc2626', '#16a34a', '#2563eb', '#f97316'], wall: '#4f7f5a', roof: 'treliça', windows: false, truss: '#2b2f36', ceiling: '#2b2f36', banners: true, floor: { court: '#b5763e', surround: '#b5763e', wood: true } },
   tor: { name: 'Pavilhão Física de Torres Vedras', capacity: 1000, capacityReal: true, style: 'municipal', sides: ['N', 'S'], seat: '#c8202e', wall: '#eeeeec', roof: 'abóbada', windows: true, beams: '#f5f5f4', ceiling: '#f2f2f0', base: 1.6, fronts: { bg: '#f5f5f5', fg: '#c8202e', text: ['SCU TORREENSE', 'FÍSICA', 'TORRES VEDRAS'] }, floor: { court: '#d6a066', surround: '#c0392b', wood: true } },
 };
 
