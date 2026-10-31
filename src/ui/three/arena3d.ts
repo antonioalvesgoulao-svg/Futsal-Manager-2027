@@ -336,7 +336,8 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
   const lenTot = pr.sides.reduce((a, s) => a + sideLen[s], 0);
   const seatW = 0.5, rowD = 0.85, rise = 0.42;
   const front = { N: H / 2 + 4.2, S: H / 2 + 4.2, E: W / 2 + 4.6, W: W / 2 + 4.6 };
-  const base = modern ? 1.2 : 0.6; // altura da primeira fila
+  const base = pr.base ?? (modern ? 1.2 : 0.6); // altura da primeira fila
+  const isBench = (sd: string) => pr.benches === true || (Array.isArray(pr.benches) && pr.benches.includes(sd as 'N'));
   const seats: { p: THREE.Vector3; ry: number; side: string; row: number; u: number }[] = [];
   let maxRows = 0;
   const concrete = new THREE.MeshStandardMaterial({ color: modern ? '#9aa3ad' : '#b5b0a6', roughness: 0.9 });
@@ -373,7 +374,7 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
         const u = (k - (n - 1) / 2) * seatW;
         const p = sd === 'N' || sd === 'S' ? new THREE.Vector3(u, y, out * (d + 0.3)) : new THREE.Vector3(out * (d + 0.3), y, u);
         // sem cadeiras: sentados no degrau (cimento) ou de pé junto à grade
-        if (pr.benches) p.y -= 0.3;
+        if (isBench(sd)) p.y -= 0.3;
         if (pr.standing) p.y += 0.4;
         seats.push({ p, ry, side: sd, row: rI, u });
       }
@@ -410,13 +411,20 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
   const m4 = new THREE.Matrix4();
   const q = new THREE.Quaternion();
   const one = new THREE.Vector3(1, 1, 1);
-  seats.forEach((s, i) => {
+  let ns = 0;
+  const sc0 = new THREE.Color();
+  seats.forEach((s) => {
+    if (isBench(s.side) || pr.standing) return;
     // as cadeiras viram-se para o campo (de costas para fora)
     q.setFromAxisAngle(new THREE.Vector3(0, 1, 0), s.ry + Math.PI);
     m4.compose(s.p, q, one);
-    seatMesh.setMatrixAt(i, m4);
+    seatMesh.setMatrixAt(ns, m4);
+    if (pr.seatMix) seatMesh.setColorAt(ns, sc0.set(pr.seatMix[Math.floor(r() * pr.seatMix.length)]));
+    ns++;
   });
-  if (!pr.benches && !pr.standing) scene.add(seatMesh);
+  seatMesh.count = ns;
+  if (pr.seatMix) (seatMesh.material as THREE.MeshStandardMaterial).color.set('#ffffff');
+  if (ns) scene.add(seatMesh);
 
   // adeptos: ocupam primeiro os lugares centrais e mais baixos
   const uniforms = { uTime: { value: 0 }, uEx: { value: new THREE.Vector3(0, 0, 0) } };
@@ -500,7 +508,7 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
     }
   }
   // teto
-  const roofMat = new THREE.MeshStandardMaterial({ color: pr.ceilingDark ? '#17191d' : pr.roof === 'laje' ? '#e7e5e4' : '#cbd5e1', roughness: 0.9, side: THREE.DoubleSide });
+  const roofMat = new THREE.MeshStandardMaterial({ color: pr.ceiling ? pr.ceiling : pr.ceilingDark ? '#17191d' : pr.roof === 'laje' ? '#e7e5e4' : '#cbd5e1', roughness: 0.9, side: THREE.DoubleSide });
   if (pr.roof === 'abóbada') {
     // meia abóbada ao longo do comprimento (eixo do cilindro em x, arco para cima)
     const vault = new THREE.Mesh(new THREE.CylinderGeometry(hallD / 2, hallD / 2, hallW, 32, 1, true, 0, Math.PI), roofMat);
@@ -545,6 +553,38 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
       scene.add(l);
     }
   }
+  if (pr.beams) {
+    // vigas grossas de lado a lado (madeira lamelada ou betão)
+    const bm = new THREE.MeshStandardMaterial({ color: pr.beams, roughness: 0.7 });
+    for (let x = -hallW / 2 + 3; x < hallW / 2; x += 5) {
+      const b = new THREE.Mesh(new THREE.BoxGeometry(0.45, 1.0, hallD), bm);
+      b.position.set(x, hallH - 0.5, 0);
+      scene.add(b);
+    }
+  }
+  if (pr.pillars) {
+    const pm = new THREE.MeshStandardMaterial({ color: pr.pillars, roughness: 0.85 });
+    for (const sg of [-1, 1]) for (let x = -hallW / 2 + 3; x < hallW / 2; x += 5) {
+      const p = new THREE.Mesh(new THREE.BoxGeometry(0.6, hallH, 0.5), pm);
+      p.position.set(x, hallH / 2, sg * (hallD / 2 - 0.3));
+      scene.add(p);
+    }
+  }
+  if (pr.banners) {
+    // grandes painéis nas paredes, com anúncios fictícios
+    const bt = canvasTex(1024, 256, (c) => {
+      c.fillStyle = '#f8fafc'; c.fillRect(0, 0, 1024, 256);
+      c.fillStyle = '#1d4ed8'; c.fillRect(0, 200, 1024, 56);
+      c.fillStyle = '#111827'; c.font = 'bold 72px sans-serif'; c.fillText(o.profile.name.replace(/Pavilhão (Municipal )?(de |do |da |dos )?/, '').toUpperCase(), 40, 120, 940);
+      c.fillStyle = '#fff'; c.font = 'bold 34px sans-serif'; c.fillText('DESPORTO PARA TODOS', 40, 240);
+    });
+    for (const sg of [-1, 1]) {
+      const bn = new THREE.Mesh(new THREE.PlaneGeometry(24, 6), new THREE.MeshStandardMaterial({ map: bt }));
+      bn.position.set(sg * 10, hallH * 0.55, sg * (hallD / 2 - 0.06));
+      bn.rotation.y = sg > 0 ? Math.PI : 0;
+      scene.add(bn);
+    }
+  }
   if (pr.skylights) {
     const skyMat = new THREE.MeshBasicMaterial({ color: '#e8f3ff' });
     for (let x = -hallW / 2 + 7; x < hallW / 2 - 4; x += 12) {
@@ -562,7 +602,9 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
       c.fillStyle = pr.wall; c.fillRect(0, 0, 1024, 512);
       c.lineWidth = 5;
       for (let k = 0; k < 26; k++) {
-        c.strokeStyle = k % 3 ? '#c8102e' : '#111111';
+        const cols = Array.isArray(pr.wallArt) ? pr.wallArt : ['#c8102e', '#c8102e', '#111111'];
+        c.strokeStyle = cols[k % cols.length];
+        if (Array.isArray(pr.wallArt)) { c.fillStyle = cols[(k + 1) % cols.length]; c.globalAlpha = 0.35; c.fillRect(20 + r() * 900, 20 + r() * 400, 80 + r() * 200, 60 + r() * 140); c.globalAlpha = 1; }
         const x = 40 + r() * 900, y = 40 + r() * 400, w = 60 + r() * 220, h = 40 + r() * 160;
         if (k % 4 === 0) { c.beginPath(); c.arc(x, y, h / 2, 0, Math.PI * 2); c.stroke(); } else c.strokeRect(x, y, w, h);
       }

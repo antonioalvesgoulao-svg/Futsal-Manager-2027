@@ -22,17 +22,23 @@ export interface ArenaProfile {
   truss?: string; // cor da estrutura metálica do teto
   ceilingDark?: boolean; // teto escuro com grelha de luz LED
   upperTier?: boolean; // segundo anel, com camarotes envidraçados
-  benches?: boolean; // bancadas de cimento, sem cadeiras
+  benches?: boolean | ('N' | 'S' | 'E' | 'W')[]; // bancadas de cimento, sem cadeiras (todas ou só alguns lados)
   standing?: boolean; // adeptos em pé junto à grade
   skylights?: boolean; // claraboias no teto
-  wallArt?: boolean; // desenhos de linhas na parede do topo
+  wallArt?: boolean | string[]; // desenhos de linhas na parede do topo (cores)
   fronts?: { bg: string; fg: string; text: string[] }; // frases nos muros das bancadas
   cube?: boolean; // ecrã suspenso ao centro
+  seatMix?: string[]; // cadeiras de várias cores
+  beams?: string; // vigas grossas no teto (madeira ou betão)
+  pillars?: string; // pilares ao longo das paredes
+  ceiling?: string; // cor do teto
+  base?: number; // altura da primeira fila (bancada elevada)
+  banners?: boolean; // grandes painéis publicitários nas paredes
 }
 
 // Lotações: Wikipédia (listas de pavilhões da Liga Placard 2016/17 e 2025/26). Interiores: João Rocha
-// (Wikimedia Commons), Fidelidade, Braga, Fundão, Porto Salvo e Ferreira do Zêzere (fotos enviadas pelo
-// António). Os restantes são uma aproximação proporcional à lotação.
+// (Wikimedia Commons); Fidelidade, Braga, Fundão, Porto Salvo, Ferreira do Zêzere, Ponte de Sor, Vila do
+// Conde, Venda Nova, Portimão e Famalicão (fotos enviadas pelo António). Os restantes são uma aproximação proporcional à lotação.
 export const ARENAS: Record<string, ArenaProfile> = {
   scp: { name: 'Pavilhão João Rocha', capacity: 3000, capacityReal: true, style: 'moderno', sides: ['N', 'S', 'E', 'W'], seat: '#0a7a46', wall: '#45484d', roof: 'laje', windows: false, ceilingDark: true, upperTier: true, cube: true, floor: { court: '#1f63b5', surround: '#d3542c' } },
   slb: { name: 'Pavilhão Fidelidade', capacity: 2400, capacityReal: true, style: 'moderno', sides: ['N', 'S', 'E', 'W'], seat: '#c8102e', wall: '#d6d8db', roof: 'treliça', windows: false, truss: '#c8102e', skylights: true, cube: true, floor: { court: '#d9c39a', surround: '#c8102e', wood: true }, fronts: { bg: '#f5f5f5', fg: '#c8102e', text: ['E PLURIBUS UNUM', 'SPORT LISBOA E BENFICA', 'FIDELIDADE'] } },
@@ -40,11 +46,11 @@ export const ARENAS: Record<string, ArenaProfile> = {
   fun: { name: 'Pavilhão Municipal do Fundão', capacity: 1056, capacityReal: true, style: 'municipal', sides: ['N', 'E'], seat: '#e4572e', wall: '#eceae4', roof: 'treliça', windows: true, truss: '#c9ced4', floor: { court: '#2f7d4f', surround: '#3a8a5c' } },
   lps: { name: 'Pavilhão dos Leões de Porto Salvo', capacity: 660, capacityReal: true, style: 'clube', sides: ['N', 'S'], seat: '#a8a29e', wall: '#f4f4f2', roof: 'treliça', windows: true, truss: '#b8bec6', benches: true, floor: { court: '#c99a5e', surround: '#c99a5e', wood: true } },
   fzz: { name: 'Pavilhão Municipal de Ferreira do Zêzere', capacity: 600, capacityReal: false, style: 'municipal', sides: ['N'], seat: '#9ca3af', wall: '#f2f0ea', roof: 'treliça', windows: true, truss: '#e3b81f', standing: true, floor: { court: '#c99a5e', surround: '#d9a520', wood: true } },
-  ele: { name: 'Pavilhão Gimnodesportivo de Ponte de Sor', capacity: 720, capacityReal: true, style: 'municipal', sides: ['N', 'S'], seat: '#b91c1c', wall: '#efe9de', roof: 'treliça', windows: true },
-  rav: { name: 'Pavilhão Municipal de Vila do Conde', capacity: 800, capacityReal: true, style: 'municipal', sides: ['N', 'S'], seat: '#16a34a', wall: '#e9e5dc', roof: 'abóbada', windows: true },
-  uvn: { name: 'Pavilhão da Venda Nova', capacity: 500, capacityReal: false, style: 'clube', sides: ['N'], seat: '#eab308', wall: '#f3f0e8', roof: 'laje', windows: true },
-  por: { name: 'Pavilhão Gimnodesportivo de Portimão', capacity: 235, capacityReal: true, style: 'clube', sides: ['N'], seat: '#6b7280', wall: '#efebe3', roof: 'laje', windows: true },
-  fam: { name: 'Pavilhão Municipal de Famalicão', capacity: 1200, capacityReal: false, style: 'municipal', sides: ['N', 'S'], seat: '#1e40af', wall: '#e6e3dc', roof: 'abóbada', windows: true },
+  ele: { name: 'Pavilhão Gimnodesportivo de Ponte de Sor', capacity: 720, capacityReal: true, style: 'municipal', sides: ['N', 'S'], seat: '#1f4d3a', wall: '#ece4d6', roof: 'laje', windows: true, beams: '#c98a4a', pillars: '#b5583a', ceiling: '#f3efe7', floor: { court: '#d49a5c', surround: '#2f6db5', wood: true } },
+  rav: { name: 'Pavilhão Municipal de Vila do Conde', capacity: 800, capacityReal: true, style: 'moderno', sides: ['N', 'S', 'W'], seat: '#1f2a44', wall: '#eef0f2', roof: 'treliça', windows: true, truss: '#8a9099', cube: false, wallArt: ['#2f6b4f', '#1f4d3a', '#e5e7eb'], floor: { court: '#d9b27a', surround: '#d9b27a', wood: true } },
+  uvn: { name: 'Pavilhão da Venda Nova', capacity: 500, capacityReal: false, style: 'municipal', sides: ['N', 'S', 'E'], seat: '#2b4fa8', seatMix: ['#2b4fa8', '#f5f5f5'], wall: '#f1f1ef', roof: 'treliça', windows: true, truss: '#2a3a55', skylights: true, benches: ['N'], floor: { court: '#8a4b2a', surround: '#7a3f22', wood: true } },
+  por: { name: 'Pavilhão Gimnodesportivo de Portimão', capacity: 235, capacityReal: true, style: 'municipal', sides: ['N'], seat: '#f2f2f2', wall: '#f3f4f5', roof: 'laje', windows: true, beams: '#d5d8db', pillars: '#9aa1a8', ceiling: '#c9cdd1', base: 1.6, floor: { court: '#7a3f22', surround: '#7a3f22', wood: true } },
+  fam: { name: 'Pavilhão Municipal de Famalicão', capacity: 1200, capacityReal: false, style: 'municipal', sides: ['N', 'S'], seat: '#eab308', seatMix: ['#eab308', '#dc2626', '#16a34a', '#2563eb', '#f97316'], wall: '#4f7f5a', roof: 'treliça', windows: false, truss: '#2b2f36', ceiling: '#2b2f36', banners: true, floor: { court: '#b5763e', surround: '#b5763e', wood: true } },
   tor: { name: 'Pavilhão Física de Torres Vedras', capacity: 1000, capacityReal: true, style: 'municipal', sides: ['N', 'S'], seat: '#1d4ed8', wall: '#ebe6dd', roof: 'treliça', windows: true },
 };
 
