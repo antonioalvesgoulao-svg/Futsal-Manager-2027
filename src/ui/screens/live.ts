@@ -4,12 +4,12 @@ import { createMatch, LiveSnapshot, Possession } from '../../core/engine/match';
 import type { MatchEvent, MatchResult } from '../../core/engine/types';
 import { matchOptions, setupFor } from '../../core/game';
 import { COMP_NAMES, Fixture } from '../../core/season/types';
-import { SLOTS, Tactics } from '../../core/tactics';
 import type { Club, GameState, Settings } from '../../core/types';
 import { scoreboardHtml } from '../broadcast';
 import { resultHtml } from './friendly';
 import { renderTactics } from './tactics';
-import type { Highlight3D, Moment, MomentType, CameraId } from '../three/highlight3d';
+import type { Highlight3D, CameraId, ActorInfo } from '../three/highlight3d';
+import { Choreo, StartState } from '../../core/visual/choreo';
 
 export const DEFAULT_SETTINGS: Settings = { speed: 'medio', moments3d: 'importantes', scoreboard: 'auto' };
 export const settingsOf = (s: GameState) => (s.settings ??= { ...DEFAULT_SETTINGS });
@@ -25,14 +25,6 @@ function hexDist(a: string, b: string) {
   const p = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
   const [x, y] = [p(a), p(b)];
   return Math.hypot(x[0] - y[0], x[1] - y[1], x[2] - y[2]);
-}
-
-// Posições base (em % do campo, a atacar para a direita)
-function shape(t: Tactics, withBall: boolean): P[] {
-  const slots = SLOTS[t.system];
-  if (withBall) return slots.map((s) => ({ x: Math.min(92, s.x + 14), y: s.y }));
-  const k = { alta: { a: 38, b: 0.55, w: 0.85 }, media: { a: 16, b: 0.5, w: 0.78 }, baixa: { a: 8, b: 0.33, w: 0.7 } }[t.pressure];
-  return slots.map((s) => ({ x: k.a + s.x * k.b, y: 50 + (s.y - 50) * k.w }));
 }
 
 const KEY_TYPES: Record<Settings['moments3d'], string[]> = {
@@ -77,6 +69,7 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
               <g id="dots"></g>
               <circle id="ball" r="4" class="ball2d"/>
             </svg>
+            <div class="cap2d" id="cap2d"></div>
             <div class="flash" id="flash"></div>
             <div class="hl" id="hl" hidden>
               <div class="hl-view" id="hlv"></div>
@@ -108,11 +101,19 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
 
   const $ = <T extends HTMLElement>(sel: string) => content.querySelector<T>(sel)!;
   const dotsG = $('#dots') as unknown as SVGGElement;
-  const ball = $('#ball') as unknown as SVGCircleElement;
+  const ballEl = $('#ball') as unknown as SVGCircleElement;
+
+  // quem é quem (lado, número, guarda-redes)
+  const info: Record<string, ActorInfo> = {};
+  for (const [side, setup] of [[0, hs], [1, as]] as const) for (const p of setup.squad) info[p.id] = { side, number: p.number, gk: p.position === 'GR' };
+  const kit: [[string, string], [string, string]] = [[colors[0], h.colors[1]], [colors[1], colors[1] === a.colors[0] ? a.colors[1] : a.colors[0]]];
 
   let snap: LiveSnapshot = m.snapshot();
-  let display = 0; // tempo de jogo mostrado
+  let display = 0; // tempo de jogo mostrado (relógio)
+  let choreo: Choreo | null = null;
   let poss: Possession | null = null;
+  let ct = 0; // tempo dentro da coreografia (inclui bola parada)
+  let startState: StartState | null = null;
   let paused = false;
   let hold = 0; // pausa curta após golo (segundos reais)
   let done = false;
@@ -120,56 +121,44 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
   const feed: MatchEvent[] = [];
   let revealed = 0;
   let banner = '';
+  let shownScore: [number, number] = [0, 0];
+  let label = '';
 
-  // Posições animadas dos jogadores: [lado][índice] (0 = guarda-redes)
-  const pos: P[][] = [[], []];
+  // posições desenhadas (suavizadas) por jogador
+  const drawn: Record<string, P> = {};
+  let ballP: P = { x: 0, y: 0 };
+  const toSvg = (p: P) => ({ x: (p.x + 20) * 10, y: (p.y + 10) * 10 });
 
-  const attackRight = (side: number, period: number) => (period % 2 === 1 ? side === 0 : side === 1);
-
-  function targets(): { pts: P[][]; ball: P } {
-    const per = snap.period;
-    const pr = poss && poss.end > poss.start ? Math.max(0, Math.min(1, (display - poss.start) / (poss.end - poss.start))) : 0;
-    const attSide = poss ? poss.side : 0;
-    const right = attackRight(attSide, per);
-    const outcome = poss?.events.find((e) => ['golo', 'remate_defendido', 'remate_fora', 'remate_bloqueado', 'poste', 'falta', 'livre_10m', 'penalti', 'canto'].includes(e.type))?.type;
-    const endX = outcome === 'golo' || outcome === 'remate_defendido' || outcome === 'poste' || outcome === 'penalti' || outcome === 'livre_10m' ? 92 : outcome ? 76 : 55 + ((poss?.start ?? 0) % 7) * 3;
-    const fx = 22 + (endX - 22) * pr; // progressão da bola no sentido do ataque
-    const by = 50 + Math.sin(display / 3) * 22 * (1 - pr * 0.6);
-    const ballP = { x: right ? fx : 100 - fx, y: by };
-    const pts: P[][] = [0, 1].map((side) => {
-      const tac = side === 0 ? hs.tactics : as.tactics;
-      const withBall = poss ? side === attSide : false;
-      const base = shape(tac, withBall);
-      const r = attackRight(side, per);
-      const out: P[] = [];
-      const t = snap.teams[side];
-      out.push(t.gk ? { x: r ? 4 : 96, y: 50 + (ballP.y - 50) * 0.15 } : { x: -10, y: -10 });
-      base.forEach((b, i) => {
-        const shiftX = (r ? ballP.x : 100 - ballP.x) - 50;
-        const x = Math.max(3, Math.min(97, b.x + shiftX * 0.25 + Math.sin(display / 2 + i * 1.7) * 2));
-        const y = Math.max(4, Math.min(96, b.y + (ballP.y - 50) * 0.25 + Math.cos(display / 2.3 + i) * 3));
-        out.push({ x: r ? x : 100 - x, y });
-      });
-      if (t.flying) out.push({ x: r ? 70 : 30, y: 50 });
-      return out;
-    });
-    return { pts, ball: ballP };
-  }
-
-  function drawDots() {
+  function drawFrame() {
+    const fr = choreo ? choreo.at(ct) : null;
+    const pos = fr?.pos ?? {};
     let html = '';
-    for (const side of [0, 1]) {
-      const t = snap.teams[side];
-      const list = [t.gk, ...t.court];
-      pos[side].forEach((p, i) => {
-        const pl = list[i];
-        if (!pl || p.x < 0) return;
-        const isGk = i === 0 && t.gk;
-        const fill = isGk ? (side === 0 ? '#0f766e' : '#7c3aed') : colors[side];
-        html += `<g transform="translate(${p.x * 4},${p.y * 2})"><circle r="8" fill="${fill}" stroke="${side === mySide ? '#facc15' : '#111'}" stroke-width="1.5"/><text y="3.5" text-anchor="middle" font-size="9" font-weight="700" fill="${isGk ? '#fff' : textCol(fill)}">${pl.number ?? ''}</text></g>`;
-      });
+    const ids = Object.keys(pos);
+    for (const id of ids) {
+      const target = pos[id];
+      const cur = drawn[id] ?? target;
+      drawn[id] = { x: lerp(cur.x, target.x, 0.35), y: lerp(cur.y, target.y, 0.35) };
+    }
+    for (const id of Object.keys(drawn)) if (!pos[id]) delete drawn[id];
+    for (const id of ids) {
+      const inf = info[id];
+      if (!inf) continue;
+      const p = toSvg(drawn[id]);
+      const fill = inf.gk ? (inf.side === 0 ? '#0f766e' : '#7c3aed') : colors[inf.side];
+      const hasBall = fr?.holder === id;
+      html += `<g transform="translate(${p.x.toFixed(1)},${p.y.toFixed(1)})">${hasBall ? '<circle r="11" fill="none" stroke="#fff" stroke-width="2"/>' : ''}<circle r="8" fill="${fill}" stroke="${inf.side === mySide ? '#facc15' : '#111'}" stroke-width="1.5"/><text y="3.5" text-anchor="middle" font-size="9" font-weight="700" fill="${inf.gk ? '#fff' : textCol(fill)}">${inf.number ?? ''}</text></g>`;
     }
     dotsG.innerHTML = html;
+    if (fr) {
+      // a bola segue a coreografia quase sem atraso (só suaviza mudanças de posse)
+      ballP = { x: lerp(ballP.x, fr.ball.x, 0.6), y: lerp(ballP.y, fr.ball.y, 0.6) };
+      const b = toSvg(ballP);
+      ballEl.setAttribute('cx', b.x.toFixed(1));
+      ballEl.setAttribute('cy', b.y.toFixed(1));
+      ballEl.setAttribute('r', String(3.5 + Math.min(3, fr.ball.z * 2)));
+      label = fr.label || (fr.holder ? `Com bola: ${m.names[fr.holder] ?? ''}` : '');
+    }
+    $('#cap2d').textContent = label;
   }
 
   function drawScoreboard() {
@@ -186,8 +175,6 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
     });
   }
 
-  let shownScore: [number, number] = [0, 0];
-
   function drawSide() {
     const el = $('#lt');
     if (tab === 'feed') {
@@ -201,9 +188,9 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
       const t = snap.teams[mySide];
       const bar = (e: number) => `<span class="ebar"><i style="width:${e}%;background:${e > 70 ? '#4ade80' : e > 50 ? '#facc15' : '#f87171'}"></i></span>`;
       const ps = m.players;
-      el.innerHTML = `<table class="tbl small"><thead><tr><th></th><th>Jogador</th><th>Energia</th><th>Nota</th></tr></thead><tbody>
-        ${[t.gk, ...t.court].filter(Boolean).map((p) => `<tr class="inq"><td>${p!.number ?? ''}</td><td>${p!.name}</td><td>${bar(p!.energy)}</td><td>${ps[p!.id] ? (6 + ps[p!.id].goals * 0.9 + ps[p!.id].assists * 0.5).toFixed(1).replace('.', ',') : ''}</td></tr>`).join('')}
-        ${t.bench.map((p) => `<tr class="${p.sentOff ? 'muted' : ''}"><td>${p.number ?? ''}</td><td>${p.name}${p.sentOff ? ' 🟥' : ''}</td><td>${bar(p.energy)}</td><td></td></tr>`).join('')}
+      el.innerHTML = `<table class="tbl small"><thead><tr><th></th><th>Jogador</th><th>Energia</th><th>G</th></tr></thead><tbody>
+        ${[t.gk, ...t.court].filter(Boolean).map((p) => `<tr class="inq"><td>${p!.number ?? ''}</td><td>${p!.name}</td><td>${bar(p!.energy)}</td><td>${ps[p!.id]?.goals || ''}</td></tr>`).join('')}
+        ${t.bench.map((p) => `<tr class="${p.sentOff ? 'muted' : ''}"><td>${p.number ?? ''}</td><td>${p.name}${p.sentOff ? ' 🟥' : ''}</td><td>${bar(p.energy)}</td><td>${ps[p.id]?.goals || ''}</td></tr>`).join('')}
       </tbody></table><p class="small muted">Em campo a amarelo. Energia baixa rende menos; muda os quintetos ou a rotação nas Táticas.</p>`;
     }
   }
@@ -215,61 +202,26 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
     setTimeout(() => (el.className = 'flash'), 1400);
   }
 
-  // ---- Momentos em 3D ----
+  // ---- Momentos em 3D: a mesma jogada, em 3D ----
   let hl: Highlight3D | null = null;
   let in3d = false;
   let last3d = -999;
   let autoClose: ReturnType<typeof setTimeout> | null = null;
-  const covered = new Set<number>(); // eventos já mostrados num lance 3D
 
-  function sameMoment(i: number) {
-    // eventos do mesmo lance (mesmo instante), para saber o desfecho
-    const e = m.events[i];
-    return m.events.slice(i + 1).filter((x) => Math.abs(x.t - e.t) < 0.01);
+  function keyEventOf(p: Possession) {
+    const types = KEY_TYPES[st.moments3d];
+    const ev = p.events.find((e) => types.includes(e.type));
+    if (!ev) return null;
+    if (ev.type !== 'golo' && ev.t - last3d < 60 && !p.events.some((e) => e.type === 'golo')) return null;
+    return p.events.find((e) => e.type === 'golo') ?? ev;
   }
 
-  function buildMoment(i: number): Moment | null {
-    const e = m.events[i];
-    const next = sameMoment(i);
-    let type = e.type as MomentType;
-    let goal = e.type === 'golo';
-    let saved = e.type === 'remate_defendido';
-    let post = e.type === 'poste';
-    if (e.type === 'golo' && /pen[aá]lti/.test(e.text)) type = 'penalti';
-    else if (e.type === 'golo' && /10 metros/.test(e.text)) type = 'livre_10m';
-    else if (e.type === 'golo' && /canto/.test(e.text)) type = 'canto';
-    if (['penalti', 'livre_10m', 'canto'].includes(e.type)) {
-      goal = next.some((x) => x.type === 'golo');
-      saved = next.some((x) => x.type === 'remate_defendido');
-      post = next.some((x) => x.type === 'poste');
-      next.forEach((x) => covered.add(m.events.indexOf(x)));
-      if (e.type === 'canto' && !goal && !saved && !post && !next.some((x) => x.type === 'remate_fora' || x.type === 'remate_bloqueado')) return null;
-    }
-    if (type === 'gr_avancado_on') return null;
-    // lado que ataca: nos cartões, o evento é da equipa que defende
-    const attSide = e.type === 'vermelho' ? 1 - (e.side ?? 0) : (e.side ?? 0);
-    const shooterId = e.type === 'vermelho' ? null : (e.playerId ?? next.find((x) => x.playerId && x.side === attSide)?.playerId ?? null);
-    const court = (sd: number) => snap.teams[sd].court.map((p) => ({ id: p.id, number: p.number, name: p.name }));
-    const attList = court(attSide);
-    const shooter = attList.find((p) => p.id === shooterId) ?? (shooterId ? { id: shooterId, number: null, name: m.names[shooterId] ?? '' } : attList[0]);
-    const attackers = [shooter, ...attList.filter((p) => p && p.id !== shooter?.id)].filter(Boolean).slice(0, 5);
-    const club = (sd: number) => (sd === 0 ? h : a);
-    return {
-      type, goal, saved, post,
-      attackers, defenders: court(1 - attSide),
-      attColors: [colors[attSide], club(attSide).colors[1]],
-      defColors: [colors[1 - attSide], club(1 - attSide).colors[1]],
-      caption: e.text, arena: h.arena, seed: Math.floor(e.t * 1000) + i,
-    };
-  }
-
-  async function open3d(i: number) {
-    const mo = buildMoment(i);
-    if (!mo) return false;
+  async function open3d(ev: MatchEvent) {
+    if (!choreo) return;
     in3d = true;
-    last3d = m.events[i].t;
+    last3d = ev.t;
     $('#hl').hidden = false;
-    $('#hlcap').textContent = mo.caption.replace(/^\d+:\d+ /, '');
+    $('#hlcap').textContent = ev.text.replace(/^\d+:\d+ /, '');
     if (!hl) {
       const mod = await import('../three/highlight3d');
       hl = new mod.Highlight3D($('#hlv'), h.arena);
@@ -277,8 +229,8 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
     hl.onEnd = () => {
       autoClose = setTimeout(close3d, 2500);
     };
-    hl.play(mo);
-    return true;
+    const total = choreo.duration + choreo.extra;
+    hl.play(choreo, info, kit, Math.max(0, total - Math.max(9, choreo.extra + 6)), total);
   }
 
   function close3d() {
@@ -286,47 +238,66 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
     autoClose = null;
     $('#hl').hidden = true;
     in3d = false;
+    if (choreo) ct = choreo.duration + choreo.extra; // a jogada já foi vista em 3D
+    if (poss) display = poss.end;
     reveal();
   }
 
   function reveal() {
     const evs = m.events;
-    while (!in3d && revealed < evs.length && evs[revealed].t <= display + 0.01) {
-      const idx = revealed++;
-      const e = evs[idx];
+    const playing = choreo ? ct < choreo.duration + choreo.extra - 0.001 : false;
+    while (revealed < evs.length && evs[revealed].t <= display + 0.01) {
+      const e = evs[revealed];
+      // os eventos do fim da posse (remates, golos, bolas paradas) só aparecem quando a jogada lá chega
+      if (poss && playing && e.t >= poss.end - 0.01) break;
+      revealed++;
       feed.push(e);
-      const key = KEY_TYPES[st.moments3d].includes(e.type);
-      // golos mostram-se sempre; outros momentos com intervalo mínimo de 60 s de jogo
-      const want3d = key && !covered.has(idx) && (e.type === 'golo' || e.t - last3d > 60);
       if (e.type === 'golo') {
         shownScore = [e.score[0], e.score[1]];
         flash(`GOLO! ${m.names[e.playerId!] ?? ''}`, e.side === mySide ? 'mine' : 'opp');
         hold = 1.6;
-      } else if (key) {
+      } else if (KEY_TYPES[st.moments3d].includes(e.type)) {
         banner = { penalti: 'Penálti', livre_10m: 'Livre de 10 m', vermelho: 'Expulsão', poste: 'Ao poste!', gr_avancado_on: '5x4', remate_defendido: 'Grande defesa', remate_fora: 'Ocasião', canto: 'Canto' }[e.type as string] ?? '';
         setTimeout(() => (banner = ''), 2500);
-        hold = Math.max(hold, 0.6);
       }
       if (e.type === 'fim_jogo') done = true;
       if (tab === 'feed') drawSide();
-      if (want3d && st.moments3d !== 'nenhum') {
-        in3d = true; // bloqueia já; open3d confirma ou liberta
-        open3d(idx).then((ok) => { if (!ok) { in3d = false; reveal(); } });
-        return;
-      }
     }
   }
 
   function finishUi() {
     done = true;
-    const res = m.result();
     hl?.dispose();
     hl = null;
+    const res = m.result();
     content.innerHTML = `<h2>Resultado final</h2>` + resultHtml(res, h, a) + `<div class="row" style="justify-content:flex-start;margin-top:16px"><button class="btn primary" id="cont">Continuar</button></div>`;
     content.querySelector('#all')?.addEventListener('change', (ev) => {
       content.querySelectorAll<HTMLElement>('.ev.minor').forEach((x) => (x.style.display = (ev.target as HTMLInputElement).checked ? '' : 'none'));
     });
     content.querySelector('#cont')!.addEventListener('click', () => onDone(res));
+  }
+
+  // avança o motor para a posse seguinte e prepara a coreografia
+  function nextPossession(): boolean {
+    const more = m.step();
+    snap = m.snapshot();
+    if (snap.possession) {
+      poss = snap.possession;
+      choreo = new Choreo(poss, [hs.tactics, as.tactics], snap.period, startState, m.names);
+      startState = choreo.end;
+      ct = 0;
+      display = poss.start;
+      const key = st.moments3d !== 'nenhum' ? keyEventOf(poss) : null;
+      if (key) open3d(key);
+    } else {
+      // início/fim de período: bola ao centro
+      display = snap.clock;
+      startState = null;
+      choreo = null;
+      poss = null;
+      reveal();
+    }
+    return more;
   }
 
   let last = performance.now();
@@ -339,47 +310,36 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
       if (hold > 0) hold -= dtReal;
       else {
         let budget = dtReal * RATE[st.speed];
-        while (budget > 0 && !done) {
-          if (display >= snap.clock - 0.001) {
-            const more = m.step();
-            snap = m.snapshot();
-            if (snap.possession) poss = snap.possession;
-            else display = snap.clock; // mudança de período ou fim
+        while (budget > 0 && !done && !in3d) {
+          const total = choreo ? choreo.duration + choreo.extra : 0;
+          if (!choreo || ct >= total - 0.0001) {
+            if (choreo) reveal();
+            if (hold > 0) break;
+            const more = nextPossession();
             if (!more) {
-              display = snap.clock;
               reveal();
-              setTimeout(finishUi, 1200);
               done = true;
+              setTimeout(finishUi, 1200);
               break;
             }
             continue;
           }
-          const stepT = Math.min(budget, snap.clock - display);
-          display += stepT;
+          const stepT = Math.min(budget, total - ct);
+          ct += stepT;
           budget -= stepT;
+          // o relógio só anda durante o jogo corrido (pára nas bolas paradas)
+          if (poss) display = poss.start + Math.min(ct, choreo.duration);
           reveal();
-          if (hold > 0 || in3d) break;
+          if (hold > 0) break;
         }
       }
     }
-    const tg = targets();
-    for (const side of [0, 1]) {
-      tg.pts[side].forEach((p, i) => {
-        const cur = pos[side][i] ?? p;
-        pos[side][i] = { x: lerp(cur.x, p.x, 0.12), y: lerp(cur.y, p.y, 0.12) };
-      });
-      pos[side].length = tg.pts[side].length;
-    }
-    const bx = Number(ball.getAttribute('cx') || 200);
-    const byy = Number(ball.getAttribute('cy') || 100);
-    ball.setAttribute('cx', String(lerp(bx, tg.ball.x * 4, 0.2)));
-    ball.setAttribute('cy', String(lerp(byy, tg.ball.y * 2, 0.2)));
-    drawDots();
+    if (!in3d) drawFrame();
     drawScoreboard();
     sideTimer += dtReal;
     if (sideTimer > 0.5 && tab !== 'feed') { drawSide(); sideTimer = 0; }
     $('#to').toggleAttribute('disabled', !snap.teams[mySide].timeoutAvailable);
-    if (!done || content.querySelector('#pitch')) requestAnimationFrame(frame);
+    requestAnimationFrame(frame);
   }
 
   // Controlos

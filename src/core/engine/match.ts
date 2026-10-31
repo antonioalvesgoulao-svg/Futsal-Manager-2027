@@ -333,6 +333,8 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
   const best = (ls: Live[], f: (l: Live) => number) => [...ls].sort((a, b) => f(b) - f(a))[0];
 
   let setPiece: { q: number; block: number; assist?: Live } | null = null;
+  // Ações da posse em curso (quem passa, remata, rouba), para a visualização 2D/3D
+  let actions: Action[] = [];
 
   function shot(s: Side, kind: 'jogada' | 'contra' | 'livre10' | 'penalti' | 'canto' | 'baliza_aberta', shooterIn?: Live): void {
     const att = teams[s];
@@ -366,23 +368,29 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
       jogada: '', contra: ' em contra-ataque', livre10: ' no livre direto dos 10 metros', penalti: ' de penálti', canto: ' na sequência de um canto', baliza_aberta: ' para a baliza deserta',
     };
 
+    const vk = kind === 'livre10' ? 'free10' : kind === 'penalti' ? 'penalty' : kind === 'canto' ? 'setpiece' : kind === 'baliza_aberta' ? 'open' : kind === 'contra' ? 'counter' : 'play';
     if (r() < pBlock) {
       const blocker = pick(outfield(def), (l) => eff(l, 'desarme') + eff(l, 'posicionamento'));
       pstats[blocker.p.id].tackles++;
+      actions.push({ type: 'shot', side: s, kind: vk, shooter: shooter.p.id, assist: assist?.p.id, result: 'blocked', other: blocker.p.id });
       if (r() < 0.25) corner(s);
       else log('remate_bloqueado', `Remate de ${shooter.p.name} bloqueado por ${blocker.p.name}`, s, shooter.p.id);
       return;
     }
     if (r() > pOn) {
-      if (r() < 0.07) log('poste', `${shooter.p.name} acerta no poste!`, s, shooter.p.id);
+      const post = r() < 0.07;
+      actions.push({ type: 'shot', side: s, kind: vk, shooter: shooter.p.id, assist: assist?.p.id, result: post ? 'post' : 'wide' });
+      if (post) log('poste', `${shooter.p.name} acerta no poste!`, s, shooter.p.id);
       else if (kind !== 'jogada') log('remate_fora', `${shooter.p.name} remata ao lado${how[kind]}`, s, shooter.p.id);
       return;
     }
     tstats[s].onTarget++;
     pstats[shooter.p.id].onTarget++;
     if (r() < pGoal) {
+      actions.push({ type: 'shot', side: s, kind: vk, shooter: shooter.p.id, assist: assist?.p.id, result: 'goal' });
       goal(s, shooter, assist, how[kind]);
     } else if (gk) {
+      actions.push({ type: 'shot', side: s, kind: vk, shooter: shooter.p.id, assist: assist?.p.id, result: 'saved', other: gk.p.id });
       pstats[gk.p.id].saves++;
       if (kind !== 'jogada' || r() < 0.35) log('remate_defendido', `Defesa de ${gk.p.name} a remate de ${shooter.p.name}${kind === 'penalti' ? ' (penálti defendido!)' : kind === 'livre10' ? ' (livre dos 10 m)' : ''}`, s, shooter.p.id);
       if (r() < 0.2) corner(s);
@@ -407,6 +415,7 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     const sp = att.setup.tactics.setPieces;
     const rt = CORNER[sp?.cornerRoutine ?? 'primeiro_poste'];
     const kicker = taker(att, sp?.corner, (l) => eff(l, 'bolasParadas') * 2 + eff(l, 'passe'));
+    actions.push({ type: 'corner', side: s, shooter: kicker.p.id });
     log('canto', `Canto para o ${sideName(s)}, marcado por ${kicker.p.name}`, s);
     // a qualidade do marcador aumenta a hipótese de criar remate
     if (r() < rt.chance + (eff(kicker, 'bolasParadas') - 10) * 0.01) {
@@ -461,7 +470,9 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     else if (r() < 0.11 + (eff(fouler, 'agressividade') - 10) * 0.005) card((1 - s) as Side, fouler, false);
 
     const sp = att.setup.tactics.setPieces;
+    actions.push({ type: 'foul', side: s, shooter: victim.p.id, other: fouler.p.id, kind: n >= 6 ? 'free10' : 'play' });
     if (r() < 0.03) {
+      actions[actions.length - 1].kind = 'penalty';
       log('penalti', `Penálti! Falta de ${fouler.p.name} sobre ${victim.p.name}`, s);
       shot(s, 'penalti', taker(att, sp?.penalty, (l) => eff(l, 'finalizacao') + eff(l, 'compostura')));
     } else if (n >= 6) {
@@ -558,6 +569,7 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     if (roll < pFoul + pLose) {
       const tackler = pick(outfield(def), (l) => eff(l, 'desarme') + eff(l, 'antecipacao'));
       pstats[tackler.p.id].tackles++;
+      actions.push({ type: 'lost', side: s, other: tackler.p.id });
       // 4 segundos (guarda-redes ou reposição): raro
       if (r() < 0.02) log('quatro_segundos', `${sideName(s)} perde a bola por exceder os 4 segundos`, s);
       // perda com guarda-redes avançado: remate à baliza deserta
@@ -638,6 +650,8 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     const start = clock;
     const att = side;
     const wasCounter = counter;
+    actions = [];
+    const holders = [teams[0], teams[1]].map((t) => [t.gk?.p.id ?? null, ...t.court.map((l) => l.p.id)]) as [(string | null)[], (string | null)[]];
     const res = possession(side, counter);
     side = res.next;
     counter = res.counter;
@@ -646,7 +660,7 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
       side = (1 - (last.side as number)) as Side;
       counter = false;
     }
-    lastPossession = { side: att, start, end: clock, counter: wasCounter, events: events.slice(evBefore) };
+    lastPossession = { side: att, start, end: clock, counter: wasCounter, events: events.slice(evBefore), actions, onCourt: holders, flying: [teams[0].flying, teams[1].flying] };
   }
 
   function finish() {
@@ -775,12 +789,25 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
   };
 }
 
+export interface Action {
+  type: 'shot' | 'lost' | 'foul' | 'corner';
+  side: Side; // equipa que ataca nesta ação
+  shooter?: string; // rematador / marcador do canto / vítima da falta
+  assist?: string;
+  other?: string; // quem bloqueia, defende, rouba ou faz a falta
+  kind?: 'play' | 'counter' | 'free10' | 'penalty' | 'setpiece' | 'open';
+  result?: 'goal' | 'saved' | 'post' | 'wide' | 'blocked';
+}
+
 export interface Possession {
   side: Side;
   start: number;
   end: number;
   counter: boolean;
   events: MatchEvent[];
+  actions: Action[];
+  onCourt: [(string | null)[], (string | null)[]]; // [guarda-redes, jogadores de campo] no início da posse
+  flying: [boolean, boolean];
 }
 
 export interface LivePlayer {

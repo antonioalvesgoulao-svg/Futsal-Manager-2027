@@ -1,28 +1,15 @@
-// Momentos importantes em 3D: pavilhão, jogadores, bola, várias câmaras e repetição.
-// O lance é reconstruído a partir do evento do motor (golo, poste, defesa, penálti, livre de 10 m, etc.).
+// Momentos importantes em 3D: a mesma jogada do 2D (coreografia), com pavilhão, jogadores, bola,
+// várias câmaras e repetição. Movimento contínuo, sem cortes.
 import * as THREE from 'three';
 
-export type MomentType = 'golo' | 'poste' | 'remate_defendido' | 'remate_fora' | 'penalti' | 'livre_10m' | 'vermelho' | 'gr_avancado_on' | 'canto';
+import type { Choreo } from '../../core/visual/choreo';
+
 export type CameraId = 'tv' | 'baliza' | 'aerea' | 'jogador';
 
-export interface MomentPlayer {
+export interface ActorInfo {
+  side: 0 | 1;
   number: number | null;
-  name: string;
-}
-
-export interface Moment {
-  type: MomentType;
-  // o lance termina com golo? (penálti/livre/canto podem ou não dar golo)
-  goal: boolean;
-  saved?: boolean;
-  post?: boolean;
-  attackers: MomentPlayer[]; // 4 ou 5 jogadores de campo; o primeiro é quem finaliza
-  defenders: MomentPlayer[];
-  attColors: [string, string];
-  defColors: [string, string];
-  caption: string;
-  arena: string;
-  seed: number;
+  gk: boolean;
 }
 
 // ---------- utilidades ----------
@@ -199,9 +186,8 @@ interface Actor {
   g: THREE.Group;
   legs: THREE.Object3D[];
   arms: THREE.Object3D[];
-  path: { t: number; p: THREE.Vector3 }[];
-  fall?: number; // instante em que cai (falta)
-  dive?: { t: number; dir: number }; // mergulho do guarda-redes
+  prev: THREE.Vector3;
+  heading: number;
 }
 
 function numberTex(n: number | null, color: string, text: string) {
@@ -265,130 +251,25 @@ function makePlayer(shirt: string, shorts: string, number: number | null, skin: 
   return { g, legs, arms };
 }
 
-function samplePath(path: { t: number; p: THREE.Vector3 }[], t: number) {
-  if (t <= path[0].t) return path[0].p.clone();
-  for (let i = 1; i < path.length; i++) {
-    if (t <= path[i].t) {
-      const a = path[i - 1], b = path[i];
-      const k = (t - a.t) / (b.t - a.t);
-      const s = k * k * (3 - 2 * k);
-      return a.p.clone().lerp(b.p, s);
-    }
-  }
-  return path[path.length - 1].p.clone();
-}
-
-// ---------- guião do lance ----------
-interface Script {
-  duration: number;
-  ball: { t: number; p: THREE.Vector3 }[];
-  actors: { side: 'att' | 'def'; idx: number; gk: boolean; path: { t: number; p: THREE.Vector3 }[]; fall?: number; dive?: { t: number; dir: number } }[];
-  shooterIdx: number;
-  shotT: number;
-}
-
-function buildScript(m: Moment): Script {
-  const r = rng(m.seed);
-  const GX = W / 2; // atacam para +x
-  const att = Math.min(5, Math.max(4, m.attackers.length));
-  const actors: Script['actors'] = [];
-  const ball: Script['ball'] = [];
-  const p = (x: number, z: number, y = 0.11) => v3(x, y, z);
-  let shotFrom = p(13, -1.5);
-  let shotT = 4.2;
-  let duration = 7;
-  const target = m.goal
-    ? p(GX + 0.4, -1.2 + r() * 2.4, 0.3 + r() * 1.3)
-    : m.post
-      ? p(GX, 1.5, 0.9)
-      : m.saved
-        ? p(GX - 0.4, -0.6 + r() * 1.2, 0.5 + r() * 0.8)
-        : p(GX + 0.3, (r() < 0.5 ? -1 : 1) * (1.9 + r() * 0.8), 0.4 + r());
-
-  if (m.type === 'penalti' || m.type === 'livre_10m') {
-    const d = m.type === 'penalti' ? 6 : 10;
-    shotFrom = p(GX - d, 0);
-    shotT = 2.4;
-    duration = 5.5;
-    ball.push({ t: 0, p: shotFrom.clone() }, { t: shotT, p: shotFrom.clone() });
-    actors.push({ side: 'att', idx: 0, gk: false, path: [{ t: 0, p: p(GX - d - 3, -0.5, 0) }, { t: 1.6, p: p(GX - d - 2.2, -0.4, 0) }, { t: shotT, p: p(GX - d - 0.3, -0.2, 0) }, { t: duration, p: p(GX - d + 1, 0, 0) }] });
-    for (let i = 1; i < att; i++) actors.push({ side: 'att', idx: i, gk: false, path: [{ t: 0, p: p(GX - d - 4 - i, -6 + i * 3, 0) }] });
-    for (let i = 0; i < 4; i++) actors.push({ side: 'def', idx: i, gk: false, path: [{ t: 0, p: p(GX - d - 4.5 - i * 0.6, 5 - i * 3.4, 0) }] });
-  } else if (m.type === 'canto') {
-    const corner = p(GX - 0.2, H / 2 - 0.2);
-    shotFrom = p(GX - 4.5, -0.8);
-    shotT = 3.2;
-    ball.push({ t: 0, p: corner.clone() }, { t: 1.6, p: corner.clone() }, { t: shotT, p: shotFrom.clone() });
-    actors.push({ side: 'att', idx: 0, gk: false, path: [{ t: 0, p: p(GX - 9, -2, 0) }, { t: shotT - 0.1, p: p(GX - 4.8, -0.9, 0) }, { t: duration, p: p(GX - 3.5, -0.5, 0) }] });
-    actors.push({ side: 'att', idx: 1, gk: false, path: [{ t: 0, p: p(GX - 0.6, H / 2 + 0.3, 0) }] });
-    for (let i = 2; i < att; i++) actors.push({ side: 'att', idx: i, gk: false, path: [{ t: 0, p: p(GX - 7 - i, 3 - i * 2, 0) }, { t: 3, p: p(GX - 5 - i, 2 - i * 2, 0) }] });
-    for (let i = 0; i < 4; i++) actors.push({ side: 'def', idx: i, gk: false, path: [{ t: 0, p: p(GX - 3 - (i % 2) * 2.5, -2.5 + i * 1.6, 0) }, { t: 3, p: p(GX - 3.6 - (i % 2) * 2, -1.8 + i * 1.2, 0) }] });
-  } else if (m.type === 'vermelho') {
-    // falta para expulsão em situação de golo iminente
-    duration = 5;
-    shotT = 99;
-    const foulAt = p(GX - 9, 0.5);
-    ball.push({ t: 0, p: p(GX - 22, 2) }, { t: 2.6, p: foulAt.clone() }, { t: 3.4, p: p(GX - 7, 1.2) }, { t: duration, p: p(GX - 6.5, 1.4) });
-    actors.push({ side: 'att', idx: 0, gk: false, path: [{ t: 0, p: p(GX - 22.5, 2, 0) }, { t: 2.7, p: p(GX - 9.4, 0.5, 0) }, { t: duration, p: p(GX - 8.8, 0.7, 0) }], fall: 2.75 });
-    actors.push({ side: 'def', idx: 0, gk: false, path: [{ t: 0, p: p(GX - 16, -4, 0) }, { t: 2.7, p: p(GX - 9.2, 0.1, 0) }, { t: duration, p: p(GX - 8.6, 0.4, 0) }] });
-    for (let i = 1; i < att; i++) actors.push({ side: 'att', idx: i, gk: false, path: [{ t: 0, p: p(GX - 24 - i * 2, -6 + i * 3, 0) }, { t: duration, p: p(GX - 14 - i * 2, -6 + i * 3, 0) }] });
-    for (let i = 1; i < 4; i++) actors.push({ side: 'def', idx: i, gk: false, path: [{ t: 0, p: p(GX - 14 + i, -6 + i * 3.5, 0) }, { t: duration, p: p(GX - 10 + i, -5 + i * 3, 0) }] });
-  } else {
-    // jogada corrida: 3 passes até ao remate
-    const counter = r() < 0.3;
-    const chain = [p(GX - 21 + r() * 3, -2 + r() * 4), p(GX - 14, -5 + r() * 2), p(GX - 10, 4 - r() * 2), (shotFrom = p(GX - 6.5 - r() * 3, -2 + r() * 4))];
-    const times = counter ? [0, 1.0, 2.0, 3.0] : [0, 1.4, 2.7, 3.8];
-    shotT = times[3] + 0.35;
-    chain.forEach((c, i) => ball.push({ t: times[i], p: c.clone() }));
-    ball.push({ t: shotT, p: shotFrom.clone() });
-    // quem participa na jogada: idx 3,2,1 passam, idx 0 finaliza
-    const order = [3 % att, 2, 1, 0];
-    order.forEach((idx, i) => {
-      const at = chain[i];
-      actors.push({ side: 'att', idx, gk: false, path: [{ t: 0, p: at.clone().add(v3(-3 + i, -0.11, i % 2 ? 1.5 : -1.5)) }, { t: times[i], p: at.clone().setY(0) }, { t: duration, p: at.clone().setY(0).add(v3(3, 0, i % 2 ? -2 : 2)) }] });
-    });
-    if (att === 5) actors.push({ side: 'att', idx: 4, gk: false, path: [{ t: 0, p: p(GX - 16, 6, 0) }, { t: duration, p: p(GX - 9, 5, 0) }] });
-    for (let i = 0; i < 4; i++) {
-      const base = p(GX - 15 + i * 2.6, -5 + i * 3.2, 0);
-      const mark = chain[Math.min(3, i + 1)].clone().setY(0).add(v3(1.8, 0, i % 2 ? 0.9 : -0.9));
-      actors.push({ side: 'def', idx: i, gk: false, path: [{ t: 0, p: base }, { t: times[Math.min(3, i + 1)] + 0.3, p: mark }, { t: duration, p: mark.clone().add(v3(0.6, 0, 0)) }] });
-    }
-  }
-
-  // remate e destino da bola
-  if (shotT < 50) {
-    const flight = m.type === 'penalti' ? 0.45 : 0.55;
-    ball.push({ t: shotT + flight, p: target.clone() });
-    if (m.goal) ball.push({ t: shotT + flight + 0.25, p: target.clone().add(v3(0.6, -0.2, 0)) }, { t: duration, p: p(GX + 0.8, target.z, 0.11) });
-    else if (m.post) ball.push({ t: shotT + flight + 0.8, p: p(GX - 5, 4, 0.5) }, { t: duration, p: p(GX - 7, 6, 0.11) });
-    else if (m.saved) ball.push({ t: shotT + flight + 0.7, p: p(GX - 3, target.z < 0 ? -5 : 5, 0.6) }, { t: duration, p: p(GX - 2, target.z < 0 ? -8 : 8, 0.11) });
-    else ball.push({ t: shotT + flight + 0.6, p: p(GX + 3, target.z * 1.4, 0.3) }, { t: duration, p: p(GX + 3.5, target.z * 1.5, 0.11) });
-  }
-
-  // guarda-redes
-  const gkDiveDir = target.z >= 0 ? 1 : -1;
-  actors.push({
-    side: 'def', idx: -1, gk: true,
-    path: [{ t: 0, p: p(GX - 1.2, 0, 0) }, { t: Math.max(0.1, shotT - 0.3), p: p(GX - 1.6, shotFrom.z * 0.25, 0) }, { t: shotT + 0.5, p: p(GX - 1.4, m.saved ? target.z * 0.8 : shotFrom.z * 0.3 + gkDiveDir * 0.6, 0) }, { t: duration, p: p(GX - 1.4, m.saved ? target.z * 0.8 : gkDiveDir * 0.8, 0) }],
-    dive: shotT < 50 ? { t: shotT + 0.15, dir: gkDiveDir } : undefined,
-  });
-  if (m.type !== 'gr_avancado_on') actors.push({ side: 'att', idx: -1, gk: true, path: [{ t: 0, p: p(-GX + 3, 0, 0) }, { t: duration, p: p(-GX + 6, 0, 0) }] });
-
-  return { duration, ball, actors, shooterIdx: 0, shotT };
-}
-
 // ---------- vista ----------
 export class Highlight3D {
   private renderer: THREE.WebGLRenderer;
   private scene = new THREE.Scene();
-  private camera = new THREE.PerspectiveCamera(42, 16 / 9, 0.1, 200);
+  private camera = new THREE.PerspectiveCamera(40, 16 / 9, 0.1, 200);
   private ballMesh: THREE.Mesh;
-  private actors: Actor[] = [];
-  private script: Script | null = null;
+  private actors = new Map<string, Actor>();
+  private choreo: Choreo | null = null;
+  private info: Record<string, ActorInfo> = {};
+  private colors: [[string, string], [string, string]] = [['#e30613', '#ffffff'], ['#00804a', '#ffffff']];
   private t = 0;
+  private from = 0;
+  private to = 0;
   private speed = 1;
   private raf = 0;
   private last = 0;
+  private camLook = new THREE.Vector3();
+  private snapCamera = true;
+  private lastHolder: string | null = null;
   cameraId: CameraId = 'tv';
   onEnd: (() => void) | null = null;
   private ended = false;
@@ -416,127 +297,132 @@ export class Highlight3D {
 
   private resize = () => {
     const w = this.host.clientWidth || 960;
-    const h = Math.round(w * 9 / 16);
+    const h = this.host.clientHeight || Math.round(w * 9 / 16);
     this.renderer.setSize(w, h);
     this.camera.aspect = w / h;
     this.camera.updateProjectionMatrix();
   };
 
-  play(m: Moment, speed = 1) {
-    for (const a of this.actors) this.scene.remove(a.g);
-    this.actors = [];
-    this.script = buildScript(m);
-    this.t = 0;
+  /** Mostra a jogada entre os instantes `from` e `to` da coreografia (segundos de jogo). */
+  play(choreo: Choreo, info: Record<string, ActorInfo>, colors: [[string, string], [string, string]], from: number, to: number) {
+    this.choreo = choreo;
+    this.info = info;
+    this.colors = colors;
+    this.from = from;
+    this.to = to;
+    for (const a of this.actors.values()) this.scene.remove(a.g);
+    this.actors.clear();
+    this.resize();
+    this.start(1);
+  }
+
+  replay(speed = 0.6) {
+    if (this.choreo) this.start(speed);
+  }
+
+  private start(speed: number) {
+    this.t = this.from;
     this.speed = speed;
     this.ended = false;
-    const skins = ['#f1c27d', '#e0ac69', '#c68642', '#8d5524', '#ffdbac'];
-    for (const a of this.script.actors) {
-      const att = a.side === 'att';
-      const cols = att ? m.attColors : m.defColors;
-      const pl = a.gk ? { number: 1, name: '' } : (att ? m.attackers : m.defenders)[a.idx] ?? { number: null, name: '' };
-      const shirt = a.gk ? (att ? '#0f766e' : '#7c3aed') : cols[0];
-      const shorts = a.gk ? '#111827' : cols[1];
-      const pm = makePlayer(shirt, shorts, pl.number, skins[(a.idx + 7 + (att ? 0 : 3)) % skins.length]);
-      this.scene.add(pm.g);
-      this.actors.push({ g: pm.g, legs: pm.legs, arms: pm.arms, path: a.path, fall: a.fall, dive: a.dive });
-    }
     this.snapCamera = true;
     cancelAnimationFrame(this.raf);
     this.last = performance.now();
     this.raf = requestAnimationFrame(this.frame);
   }
 
-  private snapCamera = false;
-
-  replay(speed = 0.6) {
-    if (!this.script) return;
-    this.t = 0;
-    this.speed = speed;
-    this.ended = false;
-    this.snapCamera = true;
-    cancelAnimationFrame(this.raf);
-    this.last = performance.now();
-    this.raf = requestAnimationFrame(this.frame);
+  private actor(id: string): Actor {
+    let a = this.actors.get(id);
+    if (a) return a;
+    const inf = this.info[id] ?? { side: 0, number: null, gk: false };
+    const cols = this.colors[inf.side];
+    const shirt = inf.gk ? (inf.side === 0 ? '#0f766e' : '#7c3aed') : cols[0];
+    const shorts = inf.gk ? '#111827' : cols[1];
+    const skins = ['#f1c27d', '#e0ac69', '#c68642', '#8d5524', '#ffdbac'];
+    let hsh = 0;
+    for (const ch of id) hsh = (hsh * 31 + ch.charCodeAt(0)) >>> 0;
+    const pm = makePlayer(shirt, shorts, inf.number, skins[hsh % skins.length]);
+    this.scene.add(pm.g);
+    a = { g: pm.g, legs: pm.legs, arms: pm.arms, prev: new THREE.Vector3(), heading: 0 };
+    this.actors.set(id, a);
+    return a;
   }
 
   private frame = (now: number) => {
-    if (!this.host.isConnected || !this.script) return;
-    const dt = Math.max(0, Math.min(0.05, (now - this.last) / 1000)) * this.speed;
+    if (!this.host.isConnected || !this.choreo) return;
+    const dtReal = Math.max(0, Math.min(0.05, (now - this.last) / 1000));
     this.last = now;
-    this.t += dt;
-    const s = this.script;
-    const t = this.t;
-    // bola
-    const b = samplePath(s.ball, t);
-    // arco no ar entre passes
-    for (let i = 1; i < s.ball.length; i++) {
-      if (t > s.ball[i - 1].t && t < s.ball[i].t) {
-        const k = (t - s.ball[i - 1].t) / (s.ball[i].t - s.ball[i - 1].t);
-        const dist = s.ball[i - 1].p.distanceTo(s.ball[i].p);
-        b.y += Math.sin(k * Math.PI) * Math.min(0.6, dist * 0.03);
-      }
-    }
-    this.ballMesh.position.copy(b);
-    this.ballMesh.rotation.x += dt * 12;
-    // jogadores
-    this.actors.forEach((a) => {
-      const prev = a.g.position.clone();
-      const p = samplePath(a.path, t);
-      a.g.position.set(p.x, 0, p.z);
-      const vel = a.g.position.distanceTo(prev) / Math.max(1e-4, dt);
-      // virar para a bola
-      a.g.lookAt(b.x, 0, b.z);
-      const swing = Math.min(1, vel / 4) * Math.sin(t * 14) * 0.7;
+    this.t = Math.min(this.to, this.t + dtReal * this.speed);
+    const f = this.choreo.at(this.t);
+    // bola: x do motor = x do 3D; y do motor = z do 3D
+    this.ballMesh.position.set(f.ball.x, Math.max(0.11, f.ball.z), f.ball.y);
+    this.ballMesh.rotation.x += dtReal * this.speed * 10;
+    const seen = new Set<string>();
+    for (const [id, p] of Object.entries(f.pos)) {
+      seen.add(id);
+      const a = this.actor(id);
+      a.g.visible = true;
+      const target = new THREE.Vector3(p.x, 0, p.y);
+      if (a.prev.lengthSq() === 0) a.g.position.copy(target);
+      const before = a.g.position.clone();
+      a.g.position.lerp(target, 0.5);
+      const vel = before.distanceTo(a.g.position) / Math.max(1e-4, dtReal * this.speed);
+      // virar para a bola, suavemente
+      const want = Math.atan2(f.ball.x - a.g.position.x, f.ball.y - a.g.position.z);
+      let d = want - a.heading;
+      while (d > Math.PI) d -= Math.PI * 2;
+      while (d < -Math.PI) d += Math.PI * 2;
+      a.heading += d * 0.2;
+      a.g.rotation.set(0, a.heading, 0);
+      const swing = Math.min(1, vel / 5) * Math.sin(this.t * 16) * 0.75;
       a.legs[0].rotation.x = swing;
       a.legs[1].rotation.x = -swing;
       a.arms[0].rotation.x = -swing * 0.8;
       a.arms[1].rotation.x = swing * 0.8;
-      a.g.rotation.z = 0;
-      if (a.fall !== undefined && t > a.fall) a.g.rotateZ(Math.min(Math.PI / 2.2, (t - a.fall) * 4));
-      if (a.dive && t > a.dive.t) {
-        const k = Math.min(1, (t - a.dive.t) * 3.5);
-        a.g.rotation.set(0, Math.PI / 2, 0);
-        a.g.rotateZ(-a.dive.dir * k * 1.3);
-        a.g.position.y = Math.sin(Math.min(1, k) * Math.PI) * 0.35;
-        a.arms.forEach((x) => (x.rotation.x = -Math.PI * 0.9));
-      }
-    });
-    this.updateCamera(b);
+      a.prev.copy(a.g.position);
+    }
+    for (const [id, a] of this.actors) if (!seen.has(id)) a.g.visible = false;
+    if (f.holder) this.lastHolder = f.holder;
+    this.updateCamera(f.ball);
     this.renderer.render(this.scene, this.camera);
-    if (t >= s.duration && !this.ended) {
+    if (this.t >= this.to && !this.ended) {
       this.ended = true;
       this.onEnd?.();
     }
-    if (t < s.duration + 2) this.raf = requestAnimationFrame(this.frame);
+    if (!this.ended) this.raf = requestAnimationFrame(this.frame);
   };
 
-  private updateCamera(b: THREE.Vector3) {
-    const s = this.script!;
+  private updateCamera(b: { x: number; y: number; z: number }) {
     const cam = this.camera;
+    const ball = new THREE.Vector3(b.x, 0, b.y);
+    const dir = Math.sign(this.choreo?.attackDirection ?? 1) || 1;
     let pos: THREE.Vector3;
     let look: THREE.Vector3;
     if (this.cameraId === 'baliza') {
-      pos = v3(W / 2 + 1.7, 2.7, b.z * 0.15);
-      look = v3(Math.min(b.x, W / 2 - 4), 0.7, b.z * 0.6);
+      pos = new THREE.Vector3(dir * (W / 2 + 1.7), 2.8, ball.z * 0.15);
+      look = new THREE.Vector3(ball.x - dir * 2, 0.6, ball.z * 0.7);
     } else if (this.cameraId === 'aerea') {
-      pos = v3(b.x - 2, 24, b.z + 8);
-      look = v3(b.x + 1, 0, b.z);
+      pos = new THREE.Vector3(ball.x - dir * 3, 22, ball.z + 9);
+      look = new THREE.Vector3(ball.x + dir * 2, 0, ball.z);
     } else if (this.cameraId === 'jogador') {
-      const sh = this.actors[0]?.g.position ?? b;
-      pos = v3(sh.x - 4.5, 1.9, sh.z * 1.1 - 0.5);
-      look = v3(W / 2, 1, 0);
+      const h = this.lastHolder ? this.actors.get(this.lastHolder)?.g.position : undefined;
+      const sh = h ?? ball;
+      pos = new THREE.Vector3(sh.x - dir * 5, 2.1, sh.z * 1.05);
+      look = new THREE.Vector3(dir * W / 2, 0.8, 0);
     } else {
-      // televisão: lateral elevada que acompanha a bola, um pouco à frente do lance
-      const fx = Math.min(W / 2 - 5, b.x + 3);
-      pos = v3(fx * 0.85, 6.5, H / 2 + 8.5);
-      look = v3(fx, 0.4, b.z * 0.35);
+      // televisão: lateral elevada, acompanha a bola com suavidade (como uma realização real)
+      const fx = Math.max(-W / 2 + 6, Math.min(W / 2 - 6, ball.x + dir * 2));
+      pos = new THREE.Vector3(fx * 0.85, 7, H / 2 + 9);
+      look = new THREE.Vector3(fx, 0.3, ball.z * 0.35);
     }
-    void s;
-    if (this.snapCamera) { cam.position.copy(pos); this.snapCamera = false; }
-    else cam.position.lerp(pos, 0.12);
-    const cur = new THREE.Vector3();
-    cam.getWorldDirection(cur);
-    cam.lookAt(look);
+    if (this.snapCamera) {
+      cam.position.copy(pos);
+      this.camLook.copy(look);
+      this.snapCamera = false;
+    } else {
+      cam.position.lerp(pos, 0.06);
+      this.camLook.lerp(look, 0.08);
+    }
+    cam.lookAt(this.camLook);
   }
 
   dispose() {
