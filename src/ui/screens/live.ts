@@ -9,6 +9,7 @@ import type { Club, GameState, Settings } from '../../core/types';
 import { scoreboardHtml } from '../broadcast';
 import { resultHtml } from './friendly';
 import { renderTactics } from './tactics';
+import type { Highlight3D, Moment, MomentType, CameraId } from '../three/highlight3d';
 
 export const DEFAULT_SETTINGS: Settings = { speed: 'medio', moments3d: 'importantes', scoreboard: 'auto' };
 export const settingsOf = (s: GameState) => (s.settings ??= { ...DEFAULT_SETTINGS });
@@ -37,8 +38,8 @@ function shape(t: Tactics, withBall: boolean): P[] {
 const KEY_TYPES: Record<Settings['moments3d'], string[]> = {
   nenhum: [],
   golos: ['golo'],
-  importantes: ['golo', 'penalti', 'livre_10m', 'vermelho', 'poste', 'gr_avancado_on'],
-  todos: ['golo', 'penalti', 'livre_10m', 'vermelho', 'poste', 'gr_avancado_on', 'remate_defendido', 'remate_fora', 'canto'],
+  importantes: ['golo', 'penalti', 'livre_10m', 'vermelho', 'poste', 'remate_defendido', 'gr_avancado_on'],
+  todos: ['golo', 'penalti', 'livre_10m', 'vermelho', 'poste', 'remate_defendido', 'gr_avancado_on', 'remate_fora', 'canto'],
 };
 
 export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDone: (m: MatchResult) => void) {
@@ -77,6 +78,16 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
               <circle id="ball" r="4" class="ball2d"/>
             </svg>
             <div class="flash" id="flash"></div>
+            <div class="hl" id="hl" hidden>
+              <div class="hl-view" id="hlv"></div>
+              <div class="hl-cap" id="hlcap"></div>
+              <div class="hl-bar">
+                <div class="seg cams">${[['tv', 'TV'], ['baliza', 'Atrás da baliza'], ['aerea', 'Aérea'], ['jogador', 'Jogador']].map(([v, l]) => `<button data-cam="${v}" class="${v === 'tv' ? 'on' : ''}">${l}</button>`).join('')}</div>
+                <span class="spacer"></span>
+                <button class="btn" id="rep">Repetição</button>
+                <button class="btn primary" id="hlc">Continuar</button>
+              </div>
+            </div>
           </div>
           <div class="live-controls">
             <button class="btn" id="pause">⏸ Pausa</button>
@@ -204,28 +215,113 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
     setTimeout(() => (el.className = 'flash'), 1400);
   }
 
+  // ---- Momentos em 3D ----
+  let hl: Highlight3D | null = null;
+  let in3d = false;
+  let last3d = -999;
+  let autoClose: ReturnType<typeof setTimeout> | null = null;
+  const covered = new Set<number>(); // eventos já mostrados num lance 3D
+
+  function sameMoment(i: number) {
+    // eventos do mesmo lance (mesmo instante), para saber o desfecho
+    const e = m.events[i];
+    return m.events.slice(i + 1).filter((x) => Math.abs(x.t - e.t) < 0.01);
+  }
+
+  function buildMoment(i: number): Moment | null {
+    const e = m.events[i];
+    const next = sameMoment(i);
+    let type = e.type as MomentType;
+    let goal = e.type === 'golo';
+    let saved = e.type === 'remate_defendido';
+    let post = e.type === 'poste';
+    if (e.type === 'golo' && /pen[aá]lti/.test(e.text)) type = 'penalti';
+    else if (e.type === 'golo' && /10 metros/.test(e.text)) type = 'livre_10m';
+    else if (e.type === 'golo' && /canto/.test(e.text)) type = 'canto';
+    if (['penalti', 'livre_10m', 'canto'].includes(e.type)) {
+      goal = next.some((x) => x.type === 'golo');
+      saved = next.some((x) => x.type === 'remate_defendido');
+      post = next.some((x) => x.type === 'poste');
+      next.forEach((x) => covered.add(m.events.indexOf(x)));
+      if (e.type === 'canto' && !goal && !saved && !post && !next.some((x) => x.type === 'remate_fora' || x.type === 'remate_bloqueado')) return null;
+    }
+    if (type === 'gr_avancado_on') return null;
+    // lado que ataca: nos cartões, o evento é da equipa que defende
+    const attSide = e.type === 'vermelho' ? 1 - (e.side ?? 0) : (e.side ?? 0);
+    const shooterId = e.type === 'vermelho' ? null : (e.playerId ?? next.find((x) => x.playerId && x.side === attSide)?.playerId ?? null);
+    const court = (sd: number) => snap.teams[sd].court.map((p) => ({ id: p.id, number: p.number, name: p.name }));
+    const attList = court(attSide);
+    const shooter = attList.find((p) => p.id === shooterId) ?? (shooterId ? { id: shooterId, number: null, name: m.names[shooterId] ?? '' } : attList[0]);
+    const attackers = [shooter, ...attList.filter((p) => p && p.id !== shooter?.id)].filter(Boolean).slice(0, 5);
+    const club = (sd: number) => (sd === 0 ? h : a);
+    return {
+      type, goal, saved, post,
+      attackers, defenders: court(1 - attSide),
+      attColors: [colors[attSide], club(attSide).colors[1]],
+      defColors: [colors[1 - attSide], club(1 - attSide).colors[1]],
+      caption: e.text, arena: h.arena, seed: Math.floor(e.t * 1000) + i,
+    };
+  }
+
+  async function open3d(i: number) {
+    const mo = buildMoment(i);
+    if (!mo) return false;
+    in3d = true;
+    last3d = m.events[i].t;
+    $('#hl').hidden = false;
+    $('#hlcap').textContent = mo.caption.replace(/^\d+:\d+ /, '');
+    if (!hl) {
+      const mod = await import('../three/highlight3d');
+      hl = new mod.Highlight3D($('#hlv'), h.arena);
+    }
+    hl.onEnd = () => {
+      autoClose = setTimeout(close3d, 2500);
+    };
+    hl.play(mo);
+    return true;
+  }
+
+  function close3d() {
+    if (autoClose) clearTimeout(autoClose);
+    autoClose = null;
+    $('#hl').hidden = true;
+    in3d = false;
+    reveal();
+  }
+
   function reveal() {
     const evs = m.events;
-    while (revealed < evs.length && evs[revealed].t <= display + 0.01) {
-      const e = evs[revealed++];
+    while (!in3d && revealed < evs.length && evs[revealed].t <= display + 0.01) {
+      const idx = revealed++;
+      const e = evs[idx];
       feed.push(e);
+      const key = KEY_TYPES[st.moments3d].includes(e.type);
+      // golos mostram-se sempre; outros momentos com intervalo mínimo de 60 s de jogo
+      const want3d = key && !covered.has(idx) && (e.type === 'golo' || e.t - last3d > 60);
       if (e.type === 'golo') {
         shownScore = [e.score[0], e.score[1]];
         flash(`GOLO! ${m.names[e.playerId!] ?? ''}`, e.side === mySide ? 'mine' : 'opp');
         hold = 1.6;
-      } else if (KEY_TYPES[st.moments3d].includes(e.type)) {
-        banner = { penalti: 'Penálti', livre_10m: 'Livre de 10 m', vermelho: 'Expulsão', poste: 'Ao poste!', gr_avancado_on: '5x4', remate_defendido: 'Defesa', remate_fora: 'Ocasião', canto: 'Canto' }[e.type as string] ?? '';
+      } else if (key) {
+        banner = { penalti: 'Penálti', livre_10m: 'Livre de 10 m', vermelho: 'Expulsão', poste: 'Ao poste!', gr_avancado_on: '5x4', remate_defendido: 'Grande defesa', remate_fora: 'Ocasião', canto: 'Canto' }[e.type as string] ?? '';
         setTimeout(() => (banner = ''), 2500);
         hold = Math.max(hold, 0.6);
       }
       if (e.type === 'fim_jogo') done = true;
       if (tab === 'feed') drawSide();
+      if (want3d && st.moments3d !== 'nenhum') {
+        in3d = true; // bloqueia já; open3d confirma ou liberta
+        open3d(idx).then((ok) => { if (!ok) { in3d = false; reveal(); } });
+        return;
+      }
     }
   }
 
   function finishUi() {
     done = true;
     const res = m.result();
+    hl?.dispose();
+    hl = null;
     content.innerHTML = `<h2>Resultado final</h2>` + resultHtml(res, h, a) + `<div class="row" style="justify-content:flex-start;margin-top:16px"><button class="btn primary" id="cont">Continuar</button></div>`;
     content.querySelector('#all')?.addEventListener('change', (ev) => {
       content.querySelectorAll<HTMLElement>('.ev.minor').forEach((x) => (x.style.display = (ev.target as HTMLInputElement).checked ? '' : 'none'));
@@ -239,7 +335,7 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
     if (!content.isConnected || !content.querySelector('#pitch')) return; // saiu do ecrã do jogo
     const dtReal = Math.min(0.1, (now - last) / 1000);
     last = now;
-    if (!paused && !done) {
+    if (!paused && !done && !in3d) {
       if (hold > 0) hold -= dtReal;
       else {
         let budget = dtReal * RATE[st.speed];
@@ -262,7 +358,7 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
           display += stepT;
           budget -= stepT;
           reveal();
-          if (hold > 0) break;
+          if (hold > 0 || in3d) break;
         }
       }
     }
@@ -314,7 +410,20 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
   $('#to').addEventListener('click', () => {
     if (m.requestTimeout(mySide)) flash('Desconto de tempo pedido', 'mine');
   });
+  content.querySelectorAll<HTMLButtonElement>('[data-cam]').forEach((b) =>
+    b.addEventListener('click', () => {
+      if (autoClose) { clearTimeout(autoClose); autoClose = null; }
+      if (hl) hl.cameraId = b.dataset.cam as CameraId;
+      content.querySelectorAll('[data-cam]').forEach((x) => x.classList.toggle('on', x === b));
+    })
+  );
+  $('#rep').addEventListener('click', () => {
+    if (autoClose) { clearTimeout(autoClose); autoClose = null; }
+    hl?.replay(0.6);
+  });
+  $('#hlc').addEventListener('click', close3d);
   $('#skip').addEventListener('click', () => {
+    if (in3d) close3d();
     while (m.step());
     finishUi();
   });

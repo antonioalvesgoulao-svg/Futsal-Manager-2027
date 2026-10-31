@@ -14,9 +14,9 @@ export function renderSettings(content: HTMLElement, s: GameState) {
       <label>Velocidade do jogo ao vivo
         <select data-k="speed">${opt('speed', 'lento', 'Lenta (15 s por minuto de jogo, cerca de 10 min por jogo)')}${opt('speed', 'medio', 'Média (7,5 s por minuto, cerca de 5 min) · recomendada')}${opt('speed', 'rapido', 'Rápida (3 s por minuto, cerca de 2 min)')}</select>
       </label>
-      <label>Momentos importantes
-        <select data-k="moments3d">${opt('moments3d', 'nenhum', 'Não destacar')}${opt('moments3d', 'golos', 'Só golos')}${opt('moments3d', 'importantes', 'Golos, penáltis, livres de 10 m, expulsões, postes, 5x4')}${opt('moments3d', 'todos', 'Todas as ocasiões')}</select>
-        <span class="small muted">Nos momentos escolhidos o jogo abranda e destaca o lance. A vista 3D destes momentos chega na próxima fase.</span>
+      <label>Momentos importantes em 3D
+        <select data-k="moments3d">${opt('moments3d', 'nenhum', 'Nenhum (só 2D)')}${opt('moments3d', 'golos', 'Só golos')}${opt('moments3d', 'importantes', 'Golos, grandes defesas, bolas aos postes, penáltis, livres de 10 m, expulsões')}${opt('moments3d', 'todos', 'Todas as ocasiões (inclui remates ao lado e cantos)')}</select>
+        <span class="small muted">O jogo para e mostra o lance em 3D, com 4 câmaras e repetição. Fora os golos, há pelo menos 1 minuto de jogo entre momentos 3D.</span>
       </label>
       <label>Marcador eletrónico
         <select data-k="scoreboard">${opt('scoreboard', 'auto', 'O da competição do jogo')}${opt('scoreboard', 'liga', 'Liga Placard')}${opt('scoreboard', 'taca', 'Taça de Portugal')}${opt('scoreboard', 'tacaLiga', 'Taça da Liga')}${opt('scoreboard', 'supertaca', 'Supertaça')}</select>
