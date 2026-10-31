@@ -15,6 +15,7 @@ export interface TeamSetup {
 
 export type EventType =
   | 'inicio'
+  | 'confronto'
   | 'golo'
   | 'remate_defendido'
   | 'remate_fora'
@@ -88,4 +89,6 @@ export interface MatchOptions {
   needWin?: [boolean, boolean]; // equipa precisa de ganhar (ex.: eliminatória a duas mãos)
   manual?: Side; // equipa controlada pelo jogador no modo ao vivo (sem pedidos de tempo automáticos)
   seed?: string;
+  referees?: { names: [string, string]; tolerance: number; cards: number; harsh: number };
+  importance?: number; // tensão do jogo (0 a 1): dérbis, finais, rivais próximos
 }

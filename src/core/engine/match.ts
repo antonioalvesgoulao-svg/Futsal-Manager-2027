@@ -131,6 +131,7 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     return chosen.slice(0, size);
   }
 
+  const REF = opts.referees ?? { names: ['', ''] as [string, string], tolerance: 1, cards: 1, harsh: 1 };
   const ROT = { curta: { min: 60, energy: 80, max: 180 }, normal: { min: 90, energy: 72, max: 300 }, longa: { min: 120, energy: 62, max: 420 } };
   const PRESS_DRAIN = { alta: 1.15, media: 1, baixa: 0.92 };
 
@@ -458,6 +459,38 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     setPiece = null;
   }
 
+  // ---- Confrontos entre jogadores depois de faltas ----
+  // A tensão sobe com a importância do jogo (dérbis, finais, play-off, rivais próximos) e com um
+  // resultado apertado perto do fim. Em jogos grandes juntam-se mais jogadores. A arbitragem castiga
+  // conforme o temperamento da dupla (cartões e severidade).
+  function tension() {
+    let t = opts.importance ?? 0.15;
+    const remaining = periodStart + periodLen - clock;
+    const close = Math.abs(score[0] - score[1]) <= 1;
+    if (close && period >= 2 && remaining < 600) t += 0.2;
+    if (score[0] === score[1] && period >= 2 && remaining < 300) t += 0.15;
+    return Math.min(1.2, t);
+  }
+
+  function maybeBrawl(s: Side, fouler: Live, victim: Live) {
+    const ten = tension();
+    if (r() > 0.0015 + 0.03 * ten * ten) return;
+    const pool = [...outfield(teams[0]), ...outfield(teams[1])].filter((l) => l !== fouler && l !== victim && !l.sentOff);
+    const extra = Math.min(pool.length, Math.floor(r() * (1 + 4 * ten)));
+    const others = [...pool].sort((a, b) => eff(b, 'agressividade') - eff(a, 'agressividade') + (r() - 0.5) * 8).slice(0, extra);
+    const who = [fouler, victim, ...others];
+    const cards: { id: string; red: boolean }[] = [];
+    log('confronto', `Confronto entre jogadores! ${fouler.p.name} e ${victim.p.name}${others.length ? ` (juntam-se ${others.map((l) => l.p.name).join(', ')})` : ''}`, s);
+    for (const l of who) {
+      const side = (teams[0].court.includes(l) || teams[0].gk === l ? 0 : 1) as Side;
+      const main = l === fouler || l === victim;
+      const hot = (eff(l, 'agressividade') - 10) * 0.02;
+      if (r() < (main ? 0.07 : 0.03) * REF.harsh * (0.6 + ten) + hot * 0.3) { cards.push({ id: l.p.id, red: true }); card(side, l, true); }
+      else if (r() < (main ? 0.55 : 0.28) * REF.cards + hot) { cards.push({ id: l.p.id, red: l.yellow >= 1 }); card(side, l, false); }
+    }
+    actions.push({ type: 'brawl', side: s, players: who.map((l) => l.p.id), cards });
+  }
+
   function foul(s: Side) {
     // s = equipa que ataca e sofre a falta
     const def = teams[1 - s];
@@ -471,12 +504,13 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     pstats[fouler.p.id].fouls++;
     const n = def.fouls[fp];
 
-    const dogso = r() < 0.008;
+    const dogso = r() < 0.004;
     if (dogso) card((1 - s) as Side, fouler, true);
-    else if (r() < 0.11 + (eff(fouler, 'agressividade') - 10) * 0.005) card((1 - s) as Side, fouler, false);
+    else if (r() < (0.22 + (eff(fouler, 'agressividade') - 10) * 0.008) * REF.cards * (fouler.yellow ? 0.35 : 1)) card((1 - s) as Side, fouler, false);
 
     const sp = att.setup.tactics.setPieces;
     actions.push({ type: 'foul', side: s, shooter: victim.p.id, other: fouler.p.id, kind: n >= 6 ? 'free10' : 'play' });
+    maybeBrawl(s, fouler, victim);
     if (r() < 0.03) {
       actions[actions.length - 1].kind = 'penalty';
       log('penalti', `Penálti! Falta de ${fouler.p.name} sobre ${victim.p.name}`, s);
@@ -571,7 +605,7 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
       return { next: (1 - s) as Side, counter: false };
     }
 
-    const pFoul = 0.15 + (avg(outfield(def), ['agressividade']) - 10) * 0.005 + PRESS[dPress].foul + (def.setup.tactics.marking === 'individual' ? 0.02 : 0);
+    const pFoul = (1 / REF.tolerance) * (0.15 + (avg(outfield(def), ['agressividade']) - 10) * 0.005 + PRESS[dPress].foul + (def.setup.tactics.marking === 'individual' ? 0.02 : 0));
     const pLose = Math.max(0.18, Math.min(0.66, 0.4 - diff * 0.03 - (counter ? 0.15 : 0) + PRESS[dPress].lose + tempo.lose));
     const roll = r();
     if (roll < pFoul) {
@@ -847,7 +881,7 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
 }
 
 export interface Action {
-  type: 'shot' | 'lost' | 'foul' | 'corner';
+  type: 'shot' | 'lost' | 'foul' | 'corner' | 'brawl';
   side: Side; // equipa que ataca nesta ação
   shooter?: string; // rematador / marcador do canto / vítima da falta
   assist?: string;
@@ -855,6 +889,8 @@ export interface Action {
   kind?: 'play' | 'counter' | 'free10' | 'penalty' | 'setpiece' | 'open';
   caught?: boolean; // defesa: o GR ficou com a bola
   gkRun?: boolean; // remate do próprio GR, depois de sair a jogar
+  players?: string[]; // confronto: quem se envolve (os dois primeiros começaram)
+  cards?: { id: string; red: boolean }[]; // confronto: castigos da arbitragem
   result?: 'goal' | 'saved' | 'post' | 'wide' | 'blocked';
 }
 

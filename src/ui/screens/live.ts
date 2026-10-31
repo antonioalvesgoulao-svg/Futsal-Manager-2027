@@ -14,6 +14,7 @@ import { Choreo, StartState } from '../../core/visual/choreo';
 import { IntroScene } from '../../core/visual/intro';
 import { attendance } from '../../core/attendance';
 import { lookOf } from '../../core/appearance';
+import { TEMPER_LABEL } from '../../core/referees';
 
 export const DEFAULT_SETTINGS: Settings = { speed: 'medio', moments3d: 'importantes', scoreboard: 'auto' };
 export const settingsOf = (s: GameState) => (s.settings ??= { ...DEFAULT_SETTINGS });
@@ -36,8 +37,8 @@ function hexDist(a: string, b: string) {
 const KEY_TYPES: Record<Settings['moments3d'], string[]> = {
   nenhum: [],
   golos: ['golo'],
-  importantes: ['golo', 'penalti', 'livre_10m', 'vermelho', 'poste', 'remate_defendido', 'gr_avancado_on'],
-  todos: ['golo', 'penalti', 'livre_10m', 'vermelho', 'poste', 'remate_defendido', 'gr_avancado_on', 'remate_fora', 'canto'],
+  importantes: ['golo', 'penalti', 'livre_10m', 'vermelho', 'poste', 'remate_defendido', 'gr_avancado_on', 'confronto'],
+  todos: ['golo', 'penalti', 'livre_10m', 'vermelho', 'poste', 'remate_defendido', 'gr_avancado_on', 'remate_fora', 'canto', 'confronto'],
 };
 
 export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDone: (m: MatchResult) => void) {
@@ -47,7 +48,8 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
   const h = s.clubs.find((c) => c.id === f.home)!;
   const a = s.clubs.find((c) => c.id === f.away)!;
   const mySide = f.home === s.clubId ? 0 : 1;
-  const m = createMatch(hs, as, matchOptions(s, f));
+  const mopts = matchOptions(s, f);
+  const m = createMatch(hs, as, mopts);
   const style = st.scoreboard === 'auto' ? (f.comp === 'playoff' ? 'liga' : f.comp) : st.scoreboard;
   const colors: [string, string] = [h.colors[0], hexDist(h.colors[0], a.colors[0]) < 120 ? (hexDist(h.colors[0], a.colors[1]) < 120 ? '#f5f5f5' : a.colors[1]) : a.colors[0]];
   const textCol = (c: string) => (hexDist(c, '#ffffff') < 200 ? '#111' : '#fff');
@@ -66,7 +68,7 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
       <div class="live-top">
         <div></div>
         <div id="sb"></div>
-        <div class="live-comp small muted">${COMP_NAMES[f.comp]} · ${f.stage}<br>${crowd.arena.name} · ${fmtN(crowd.total)} espetadores${crowd.total >= crowd.arena.capacity ? ' (esgotado)' : ''}</div>
+        <div class="live-comp small muted">${COMP_NAMES[f.comp]} · ${f.stage}<br>${crowd.arena.name} · ${fmtN(crowd.total)} espetadores${crowd.total >= crowd.arena.capacity ? ' (esgotado)' : ''}<br>Árbitros: ${mopts.referees.names[0]} e ${mopts.referees.names[1]} (${TEMPER_LABEL(mopts.referees)})</div>
       </div>
       <div class="live-grid">
         <div>
@@ -124,6 +126,7 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
   // quem é quem (lado, número, guarda-redes)
   const info: Record<string, ActorInfo> = {};
   for (const [side, setup] of [[0, hs], [1, as]] as const) for (const p of setup.squad) info[p.id] = { side, number: p.number, gk: p.position === 'GR', look: lookOf(p) };
+  for (const id of ['arbitro1', 'arbitro2']) info[id] = { side: 0, number: null, gk: false, referee: true, look: lookOf({ id }) };
   const kit: [[string, string], [string, string]] = [[colors[0], h.colors[1]], [colors[1], colors[1] === a.colors[0] ? a.colors[1] : a.colors[0]]];
 
   let snap: LiveSnapshot = m.snapshot();
@@ -168,10 +171,10 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
       let pp = drawn[id];
       if (act?.kind === 'feint') pp = { x: pp.x + Math.cos(act.ang) * Math.sin(act.k * Math.PI * 2) * 0.5, y: pp.y - Math.sin(act.ang) * Math.sin(act.k * Math.PI * 2) * 0.5 };
       const p = toSvg(pp);
-      const fill = inf.gk ? (inf.side === 0 ? '#0f766e' : '#7c3aed') : colors[inf.side];
+      const fill = inf.referee ? '#facc15' : inf.gk ? (inf.side === 0 ? '#0f766e' : '#7c3aed') : colors[inf.side];
       const hasBall = fr?.holder === id;
       let extra = '';
-      let body = `<circle r="8" fill="${fill}" stroke="${inf.side === mySide ? '#facc15' : '#111'}" stroke-width="1.5"/>`;
+      let body = `<circle r="${inf.referee ? 5 : 8}" fill="${fill}" stroke="${inf.side === mySide ? '#facc15' : '#111'}" stroke-width="1.5"/>`;
       if (act) {
         // direção do corpo no SVG (ang = atan2(dx, dy))
         const dx = Math.sin(act.ang), dy = Math.cos(act.ang);
@@ -189,6 +192,8 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
           const a = (Math.atan2(q.y - p.y, q.x - p.x) * 180) / Math.PI;
           const st = Math.sin(Math.min(1, act.k * 2.2) * Math.PI / 2);
           body = `<ellipse rx="${(8 + st * 7).toFixed(1)}" ry="7" transform="rotate(${a.toFixed(0)}) translate(${(st * 4).toFixed(1)},0)" fill="${fill}" stroke="${inf.side === mySide ? '#facc15' : '#111'}" stroke-width="1.5"/>`;
+        } else if (act.kind === 'shove') {
+          extra += `<circle r="10" fill="none" stroke="#ef4444" stroke-width="2.5" opacity="${(0.5 + 0.5 * Math.abs(Math.sin(act.k * 18))).toFixed(2)}"/>`;
         } else if (act.kind === 'tackle') {
           extra += `<circle r="11" fill="none" stroke="#fb923c" stroke-width="2" stroke-dasharray="3 2"/>`;
         } else if (act.kind === 'celebrate') {
@@ -422,7 +427,7 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
         flash(`GOLO! ${m.names[e.playerId!] ?? ''}`, e.side === mySide ? 'mine' : 'opp');
         hold = 1.6;
       } else if (KEY_TYPES[st.moments3d].includes(e.type)) {
-        banner = { penalti: 'Penálti', livre_10m: 'Livre de 10 m', vermelho: 'Expulsão', poste: 'Ao poste!', gr_avancado_on: '5x4', remate_defendido: 'Grande defesa', remate_fora: 'Ocasião', canto: 'Canto' }[e.type as string] ?? '';
+        banner = { penalti: 'Penálti', livre_10m: 'Livre de 10 m', vermelho: 'Expulsão', poste: 'Ao poste!', gr_avancado_on: '5x4', remate_defendido: 'Grande defesa', remate_fora: 'Ocasião', canto: 'Canto', confronto: 'Confronto!' }[e.type as string] ?? '';
         setTimeout(() => (banner = ''), 2500);
       }
       if (e.type === 'fim_jogo') done = true;

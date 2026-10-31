@@ -1,3 +1,4 @@
+import { importanceOf, refereesFor } from './referees';
 // Ciclo de jogo: avançar no calendário, jogar jogos, fim de época
 import { aiTactics } from './coaches';
 import { normalizeTactics } from './tactics';
@@ -49,7 +50,8 @@ export function nextMyFixture(s: GameState) {
 }
 
 export function matchOptions(s: GameState, f: Fixture) {
-  return { knockout: f.knockout, seed: `${f.id}-${s.season.year}`, manual: f.home === s.clubId ? (0 as const) : f.away === s.clubId ? (1 as const) : undefined };
+  const ref = refereesFor(s, f);
+  return { knockout: f.knockout, seed: `${f.id}-${s.season.year}`, manual: f.home === s.clubId ? (0 as const) : f.away === s.clubId ? (1 as const) : undefined, referees: ref, importance: importanceOf(s, f) };
 }
 
 function playFixture(s: GameState, f: Fixture, given?: MatchResult): MatchResult {

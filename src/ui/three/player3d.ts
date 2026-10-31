@@ -436,6 +436,25 @@ export function pose(a: Actor, act: Act | undefined, gk: boolean, near: boolean,
       fore[0].rotation.x = fore[1].rotation.x = -0.1;
       break;
     }
+    case 'shove': {
+      // confronto: peito para a frente, braços a empurrar, de vez em quando um passo atrás
+      const w = Math.sin(k * Math.PI * 6);
+      arm[0].rotation.set(-1.35 - w * 0.2, 0, 0.15);
+      arm[1].rotation.set(-1.35 + w * 0.2, 0, -0.15);
+      fore[0].rotation.x = fore[1].rotation.x = -0.25;
+      body.rotation.x = 0.22 + w * 0.08;
+      thigh[0].rotation.x = -0.35;
+      thigh[1].rotation.x = 0.25;
+      shin[0].rotation.x = 0.3;
+      break;
+    }
+    case 'whistle': {
+      // árbitro: braço no ar e apito
+      arm[1].rotation.set(-2.9, 0, 0.1);
+      arm[0].rotation.set(-0.6, 0, -0.3);
+      fore[0].rotation.x = -1.4;
+      break;
+    }
     case 'catch': {
       thigh[0].rotation.x = thigh[1].rotation.x = -0.5;
       shin[0].rotation.x = shin[1].rotation.x = 0.85;

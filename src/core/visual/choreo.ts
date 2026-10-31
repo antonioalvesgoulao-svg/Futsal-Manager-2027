@@ -17,7 +17,7 @@ import type { Tactics } from '../tactics';
 export interface P2 { x: number; y: number }
 export interface Ball { x: number; y: number; z: number }
 
-export type ActKind = 'pass' | 'shoot' | 'dive' | 'splits' | 'spread' | 'catch' | 'tackle' | 'feint' | 'screen' | 'shield' | 'block' | 'celebrate' | 'fall' | 'run' | 'throw' | 'idle';
+export type ActKind = 'pass' | 'shoot' | 'dive' | 'splits' | 'spread' | 'shove' | 'whistle' | 'catch' | 'tackle' | 'feint' | 'screen' | 'shield' | 'block' | 'celebrate' | 'fall' | 'run' | 'throw' | 'idle';
 export interface Act {
   kind: ActKind;
   k: number; // progresso da ação (0 a 1)
@@ -87,6 +87,8 @@ function rnd(seed: number) {
 }
 
 /** Sentido de ataque: a equipa da casa ataca para +x nas partes ímpares. */
+export const REFS = ['arbitro1', 'arbitro2'];
+
 export const attackDir = (side: number, period: number) => ((period % 2 === 1) === (side === 0) ? 1 : -1);
 
 // ---------- percurso de um jogador ----------
@@ -249,6 +251,8 @@ export class Choreo {
     this.gkA = p.flying[att] ? null : ids[att][0];
     this.gkD = ids[def][0];
     for (const sd of [0, 1]) for (const id of ids[sd]) if (id) { this.sideOf.set(id, sd); this.tr.set(id, new Track()); }
+    // os dois árbitros, um em cada linha lateral, a acompanhar o jogo
+    for (const id of REFS) this.tr.set(id, new Track());
     this.sys = p.flying[att] ? '5x4' : tactics[att].system;
     this.attOut.forEach((id, i) => this.slot.set(id, i % SHAPES[this.sys].length));
 
@@ -462,6 +466,7 @@ export class Choreo {
 
   /** Posição de partida em reposições (pontapé de saída, GR) */
   private restPos(id: string, kind: 'kickoff' | 'gk' | 'live', kicker?: string): P2 {
+    if (REFS.includes(id)) return { x: id === REFS[0] ? -2 : 2, y: id === REFS[0] ? -10.7 : 10.7 };
     const sd = this.sideOf.get(id)!;
     const isAtt = sd === this.att;
     const gk = id === this.p.onCourt[sd][0] && !this.p.flying[sd];
@@ -1048,6 +1053,14 @@ export class Choreo {
         const np = dd > maxd ? { x: prev.x + ((target.x - prev.x) * maxd) / dd, y: prev.y + ((target.y - prev.y) * maxd) / dd } : target;
         this.key(d, t, np);
       }
+      // árbitros: cada um na sua linha lateral, ligeiramente desfasados, a seguir a bola
+      for (const [k, id] of REFS.entries()) {
+        if (this.isFixed(id, t)) continue;
+        const target = { x: clamp(ball.x * 0.85 + (k ? 2.5 : -2.5) * this.dirA, -17, 17), y: k ? 10.7 : -10.7 };
+        const prev = this.P(id, t - dt);
+        const maxd = 6 * dt, dd = dist(prev, target);
+        this.key(id, t, dd > maxd ? { x: prev.x + ((target.x - prev.x) * maxd) / dd, y: target.y } : target);
+      }
       // guarda-redes: na bissetriz entre a bola e a baliza
       if (this.gkD && !this.isFixed(this.gkD, t)) {
         const gp = this.A(40, 0);
@@ -1173,6 +1186,10 @@ export class Choreo {
     let foulPending = ending.kind === 'foul';
     for (let i = 0; i < rest.length; i++) {
       const a = rest[i];
+      if (a.type === 'brawl') {
+        T = this.brawl(T, a);
+        continue;
+      }
       if (a.type === 'corner') {
         const nx = rest[i + 1];
         const withShot = nx && nx.type === 'shot' && nx.side === att && nx.kind === 'setpiece' ? nx : undefined;
@@ -1438,6 +1455,36 @@ export class Choreo {
     return tE;
   }
 
+  /** Confronto depois de uma falta: os jogadores juntam-se, empurram-se, os árbitros entram para separar
+   *  e mostram os cartões. */
+  private brawl(T: number, a: Action): number {
+    const who = (a.players ?? []).filter((id) => this.tr.has(id));
+    if (who.length < 2) return T;
+    const c = this.ballAt(T);
+    const center = { x: clamp(c.x, -15, 15), y: clamp(c.y, -7, 7) };
+    this.phase(T, 'Confronto!');
+    this.label(T + 0.2, `Confronto: ${this.nm(who[0])} e ${this.nm(who[1])}${who.length > 2 ? ` (+${who.length - 2})` : ''}`);
+    who.forEach((id, i) => {
+      const ang = (i / who.length) * Math.PI * 2 + (i % 2 ? 0.4 : 0);
+      const rad = i < 2 ? 0.45 : 0.9 + (i % 3) * 0.35;
+      const spot = { x: center.x + Math.cos(ang) * rad, y: center.y + Math.sin(ang) * rad };
+      this.key(id, T + 1.2 + i * 0.12, spot);
+      this.key(id, T + 3.6, { x: spot.x + Math.cos(ang) * 0.3, y: spot.y + Math.sin(ang) * 0.3 });
+      this.act(id, 'shove', T + 1.0 + i * 0.12, T + 3.4, { face: who[i === 0 ? 1 : 0] });
+    });
+    // os árbitros entram a separar e apitam
+    REFS.forEach((id, k) => {
+      this.key(id, T + 1.6, { x: center.x + (k ? 0.6 : -0.6), y: center.y + (k ? 0.3 : -0.3) });
+      this.key(id, T + 4.0, { x: center.x + (k ? 1.4 : -1.4), y: center.y + (k ? 1.2 : -1.2) });
+      this.act(id, 'whistle', T + 1.6, T + 4.2, { face: who[0] });
+    });
+    for (const [i, cd] of (a.cards ?? []).entries()) this.label(T + 4.2 + i * 0.7, `${cd.red ? 'Cartão vermelho' : 'Cartão amarelo'} para ${this.nm(cd.id)}`);
+    // cada um volta ao seu lugar
+    const back = T + 4.6 + (a.cards?.length ?? 0) * 0.7;
+    for (const id of who) this.key(id, back + 1.2, this.restPos(id, 'gk'));
+    return back + 1.2;
+  }
+
   /** Remate da outra equipa no mesmo lance (contra-ataque após canto, baliza deserta). */
   private oppShot(T: number, a: Action): number {
     const sh = a.shooter!;
@@ -1472,6 +1519,7 @@ export class Choreo {
     this.act(scorer, 'celebrate', T + 0.3, T + 3.4);
     let i = 0;
     for (const [id, s] of this.sideOf) {
+      if (REFS.includes(id)) continue;
       if (id === scorer) continue;
       const p0 = this.P(id, T);
       const gk = id === this.p.onCourt[s][0] && !this.p.flying[s];
