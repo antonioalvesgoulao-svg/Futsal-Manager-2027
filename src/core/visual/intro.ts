@@ -5,7 +5,7 @@ import type { Act, Frame, P2, Scene3D } from './choreo';
 
 const SPEED = 1.8; // m/s (passo de entrada)
 const GAP = 0.45; // segundos entre jogadores à saída do túnel
-const TUNNEL_Y = -17.5; // dentro do corredor que atravessa a bancada (vem dos balneários)
+const TUNNEL_Y = -19.5; // dentro do corredor que atravessa a bancada (vem dos balneários)
 // medidas do pavilhão 3D (arena3d.ts): boca do túnel a 13,4 m do centro, mesa a 12 m (3 m de largura)
 const MOUTH = -13.4;
 const PAST_TABLE = -12.9; // atrás das cadeiras dos auxiliares

@@ -244,7 +244,7 @@ export class Highlight3D {
       const a = this.actor(id);
       a.g.visible = true;
       const before = a.g.position.clone();
-      a.g.position.set(p.x, 0, p.y);
+      a.g.position.set(p.x, this.arena.groundAt(p.x, p.y), p.y);
       if (!a.init) { before.copy(a.g.position); a.init = true; }
       const vx = (a.g.position.x - before.x) / dt, vz = (a.g.position.z - before.z) / dt;
       a.speed = lerp(a.speed, Math.min(9, Math.hypot(vx, vz)), 0.25);
