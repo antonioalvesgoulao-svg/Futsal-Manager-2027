@@ -38,7 +38,7 @@ export interface ArenaProfile {
 
 // Lotações: Wikipédia (listas de pavilhões da Liga Placard 2016/17 e 2025/26). Interiores: João Rocha
 // (Wikimedia Commons); Fidelidade, Braga, Fundão, Porto Salvo, Ferreira do Zêzere, Ponte de Sor, Vila do
-// Conde, Venda Nova, Portimão e Famalicão (fotos enviadas pelo António). Os restantes são uma aproximação proporcional à lotação.
+// Conde, Venda Nova, Portimão, Famalicão, Torres Vedras, Gondomar e Odivelas (fotos enviadas pelo António). Os restantes são uma aproximação proporcional à lotação.
 export const ARENAS: Record<string, ArenaProfile> = {
   scp: { name: 'Pavilhão João Rocha', capacity: 3000, capacityReal: true, style: 'moderno', sides: ['N', 'S', 'E', 'W'], seat: '#0a7a46', wall: '#45484d', roof: 'laje', windows: false, ceilingDark: true, upperTier: true, cube: true, floor: { court: '#1f63b5', surround: '#d3542c' } },
   slb: { name: 'Pavilhão Fidelidade', capacity: 2400, capacityReal: true, style: 'moderno', sides: ['N', 'S', 'E', 'W'], seat: '#c8102e', wall: '#d6d8db', roof: 'treliça', windows: false, truss: '#c8102e', skylights: true, cube: true, floor: { court: '#d9c39a', surround: '#c8102e', wood: true }, fronts: { bg: '#f5f5f5', fg: '#c8102e', text: ['E PLURIBUS UNUM', 'SPORT LISBOA E BENFICA', 'FIDELIDADE'] } },
@@ -51,15 +51,15 @@ export const ARENAS: Record<string, ArenaProfile> = {
   uvn: { name: 'Pavilhão da Venda Nova', capacity: 500, capacityReal: false, style: 'municipal', sides: ['N', 'S', 'E'], seat: '#2b4fa8', seatMix: ['#2b4fa8', '#f5f5f5'], wall: '#f1f1ef', roof: 'treliça', windows: true, truss: '#2a3a55', skylights: true, benches: ['N'], floor: { court: '#8a4b2a', surround: '#7a3f22', wood: true } },
   por: { name: 'Pavilhão Gimnodesportivo de Portimão', capacity: 235, capacityReal: true, style: 'municipal', sides: ['N'], seat: '#f2f2f2', wall: '#f3f4f5', roof: 'laje', windows: true, beams: '#d5d8db', pillars: '#9aa1a8', ceiling: '#c9cdd1', base: 1.6, floor: { court: '#7a3f22', surround: '#7a3f22', wood: true } },
   fam: { name: 'Pavilhão Municipal de Famalicão', capacity: 1200, capacityReal: false, style: 'municipal', sides: ['N', 'S'], seat: '#eab308', seatMix: ['#eab308', '#dc2626', '#16a34a', '#2563eb', '#f97316'], wall: '#4f7f5a', roof: 'treliça', windows: false, truss: '#2b2f36', ceiling: '#2b2f36', banners: true, floor: { court: '#b5763e', surround: '#b5763e', wood: true } },
-  tor: { name: 'Pavilhão Física de Torres Vedras', capacity: 1000, capacityReal: true, style: 'municipal', sides: ['N', 'S'], seat: '#1d4ed8', wall: '#ebe6dd', roof: 'treliça', windows: true },
+  tor: { name: 'Pavilhão Física de Torres Vedras', capacity: 1000, capacityReal: true, style: 'municipal', sides: ['N', 'S'], seat: '#c8202e', wall: '#eeeeec', roof: 'abóbada', windows: true, beams: '#f5f5f4', ceiling: '#f2f2f0', base: 1.6, fronts: { bg: '#f5f5f5', fg: '#c8202e', text: ['SCU TORREENSE', 'FÍSICA', 'TORRES VEDRAS'] }, floor: { court: '#d6a066', surround: '#c0392b', wood: true } },
 };
 
 /** Campos neutros (final eight, finais, Supertaça), indicados pelo António. Gondomar: 3 005 lugares
  *  sentados com a bancada retrátil (apresentação da Câmara de Gondomar, 2018); Vila do Conde: 800
- *  (Wikipédia); Odivelas: lotação não encontrada (estimativa). */
+ *  (Wikipédia); Odivelas: 2 000 (indicada pelo António). */
 export const NEUTRALS: ArenaProfile[] = [
-  { name: 'Pavilhão Multiusos de Gondomar', capacity: 3005, capacityReal: true, style: 'moderno', sides: ['N', 'S', 'E', 'W'], seat: '#1e3a8a', wall: '#dde3ea', roof: 'treliça', windows: false },
-  { name: 'Pavilhão Multiusos de Odivelas', capacity: 2000, capacityReal: false, style: 'moderno', sides: ['N', 'S', 'E'], seat: '#dc2626', wall: '#e3e6ea', roof: 'treliça', windows: false },
+  { name: 'Pavilhão Multiusos de Gondomar', capacity: 3005, capacityReal: true, style: 'moderno', sides: ['N', 'S', 'E', 'W'], seat: '#d9dde2', wall: '#8f959c', roof: 'treliça', windows: false, truss: '#f1f3f5', skylights: true, cube: true, floor: { court: '#c99a5e', surround: '#b9bdc2', wood: true } },
+  { name: 'Pavilhão Multiusos de Odivelas', capacity: 2000, capacityReal: true, style: 'moderno', sides: ['N', 'S', 'E', 'W'], seat: '#3a3f47', wall: '#eef0ea', roof: 'treliça', windows: false, truss: '#9aa1a8', upperTier: true, cube: false, fronts: { bg: '#c6d93a', fg: '#2d3a0a', text: ['MULTIUSOS DE ODIVELAS', 'FUTSAL'] }, floor: { court: '#ddc08e', surround: '#3b3f45', wood: true } },
   { name: 'Pavilhão Municipal de Desportos de Vila do Conde', capacity: 800, capacityReal: true, style: 'municipal', sides: ['N', 'S'], seat: '#16a34a', wall: '#e9e5dc', roof: 'abóbada', windows: true },
 ];
 
