@@ -1,3 +1,4 @@
+import { overall } from './attributes';
 import { importanceOf, refereesFor } from './referees';
 // Ciclo de jogo: avançar no calendário, jogar jogos, fim de época
 import { aiTactics } from './coaches';
@@ -109,9 +110,29 @@ function nextDate(s: GameState) {
   return pending[0];
 }
 
+// Evolução durante a época: no 1.º dia de cada mês (setembro a maio) aplica-se 1/9 da evolução anual
+function monthlyDevelopment(s: GameState, to: string) {
+  const month = to.slice(0, 7);
+  if (s.devMonth === month) return;
+  const m = Number(to.slice(5, 7));
+  if (m >= 6 && m <= 8) return;
+  s.devMonth = month;
+  if ((s.devFrac ?? 0) >= 8 / 9 - 1e-6) return; // o resto fica para o fim da época
+  s.devStart ??= {};
+  for (const p of s.players) {
+    s.devStart[p.id] ??= overall(p.attrs, p.position);
+    if (injuryOf(s, p.id)) continue; // lesionado não evolui (mas também não perde)
+    // minutos até agora projetados para a época inteira
+    const st = s.pstats[p.id] && { ...s.pstats[p.id], minutes: s.pstats[p.id].minutes / ((s.devFrac ?? 0) + 1 / 9) };
+    developPlayer(p, st, s.season.year, trainingBonus(s, p.id, p.position === 'GR'), shootingFocus(s, p.id, p.clubId), { frac: 1 / 9, seed: month, final: false });
+  }
+  s.devFrac = (s.devFrac ?? 0) + 1 / 9;
+}
+
 function trainingNews(s: GameState, from: string, to: string) {
   const days = Math.round((Date.parse(to) - Date.parse(from)) / 864e5);
   if (days > 0 && days <= 60) accumulate(s, days);
+  monthlyDevelopment(s, to);
   const { fresh, healed } = trainingInjuries(s, from, to);
   moraleEvent(s, fresh.filter(([, i]) => i.days > 7).map(([id]) => id), -6);
   const name = (id: string) => s.players.find((p) => p.id === id);
@@ -175,7 +196,8 @@ function endSeason(s: GameState): DevChange[] {
   // evolução
   const changes: DevChange[] = [];
   for (const p of s.players) {
-    const c = developPlayer(p, s.pstats[p.id], old.year, trainingBonus(s, p.id, p.position === 'GR'), shootingFocus(s, p.id, p.clubId));
+    const c = developPlayer(p, s.pstats[p.id], old.year, trainingBonus(s, p.id, p.position === 'GR'), shootingFocus(s, p.id, p.clubId), { frac: Math.max(0, 1 - (s.devFrac ?? 0)), seed: '-fim', final: true });
+    c.before = s.devStart?.[p.id] ?? c.before;
     if (p.clubId === s.clubId) changes.push(c);
   }
   // reformas
@@ -204,6 +226,7 @@ function endSeason(s: GameState): DevChange[] {
   s.pstats = {};
   seasonEndDiscipline(s);
   s.trainLog = {};
+  s.devFrac = 0; s.devStart = {};
   news(s, `Começa a época ${s.season.label}.`);
   return changes;
 }

@@ -21,8 +21,10 @@ export interface DevChange {
  * - 30 a 32: começa o declínio físico (o mental ainda pode subir)
  * - 33 ou mais: declínio físico mais acentuado
  */
-export function developPlayer(p: Player, st: PlayerSeason | undefined, seasonYear: number, train: Partial<Record<'tecnicos' | 'mentais' | 'fisicos' | 'guardaRedes', number>> = {}, shooting = false): DevChange {
-  const r = rng(`dev-${p.id}-${seasonYear}`);
+export function developPlayer(p: Player, st: PlayerSeason | undefined, seasonYear: number, train: Partial<Record<'tecnicos' | 'mentais' | 'fisicos' | 'guardaRedes', number>> = {}, shooting = false,
+  // evolução ao longo da época: aplica uma fração da mudança anual (final = fecho da época: envelhece e revê o potencial)
+  o: { frac: number; seed: string; final: boolean } = { frac: 1, seed: '', final: true }): DevChange {
+  const r = rng(`dev-${p.id}-${seasonYear}${o.seed}`);
   const before = overall(p.attrs, p.position);
   const minutesShare = Math.min(1, (st?.minutes ?? 0) / 60 / 600); // ~600 min = muito utilizado
   const playFactor = 0.5 + 0.5 * minutesShare;
@@ -52,14 +54,15 @@ export function developPlayer(p: Player, st: PlayerSeason | undefined, seasonYea
     // treino (ver training.ts)
     d += train[PHYSICAL.includes(k) ? 'fisicos' : MENTAL.includes(k) ? 'mentais' : GK.includes(k) ? 'guardaRedes' : 'tecnicos'] ?? 0;
     if (shooting && (k === 'remate' || k === 'finalizacao')) d += 0.4;
-    d += gauss(r) * 0.35;
+    d = d * o.frac + gauss(r) * 0.35 * Math.sqrt(o.frac);
     // atributos guardados como inteiros: acumula a parte decimal de forma aleatória
     const v = p.attrs[k] + d;
     const base = Math.floor(v);
     p.attrs[k] = Math.max(1, Math.min(20, base + (r() < v - base ? 1 : 0)));
   }
-  p.age++;
   const after = overall(p.attrs, p.position);
+  if (!o.final) return { id: p.id, name: p.name, before, after };
+  p.age++;
   if (age >= 26) p.potential = Math.max(after, Math.min(p.potential, after + 0.5));
   else p.potential = Math.max(p.potential, after);
   return { id: p.id, name: p.name, before, after };

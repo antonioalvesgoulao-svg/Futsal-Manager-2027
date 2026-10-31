@@ -88,6 +88,9 @@ export interface GameState {
   morale?: Record<string, number>; // moral 0-100 (65 = normal)
   training?: TrainingPlan; // plano de treino do meu clube
   trainLog?: TrainLog; // treino acumulado na época
+  devFrac?: number; // fração da evolução anual já aplicada
+  devMonth?: string; // último mês com evolução
+  devStart?: Record<string, number>; // nível no início da época (resumo do fim de época)
 }
 
 export const SAVE_VERSION = 6;
