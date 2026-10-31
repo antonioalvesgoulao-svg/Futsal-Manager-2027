@@ -184,9 +184,8 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
       if (a.kind === 'shoot' || a.kind === 'dive' || a.kind === 'splits' || a.kind === 'spread') ex = Math.max(ex, 0.9);
       if ((a.kind === 'pass' || a.kind === 'shoot' || a.kind === 'throw') && a.k > 0.35 && a.k < 0.75) {
         const key = `${id}:${a.kind}:${Math.round(fr.ball.x)}:${Math.round(fr.ball.y)}`;
-        if (!heard.has(key)) { heard.add(key); if (a.kind !== 'throw') sound.kick(a.kind === 'shoot'); if (heard.size > 300) heard.clear(); }
+        if (!heard.has(key)) { heard.add(key); if (heard.size > 300) heard.clear(); }
       }
-      if ((a.kind === 'feint' || a.kind === 'tackle') && a.k < 0.2 && Math.random() < 0.05) sound.squeak();
     }
     if (fr.acts && Object.values(fr.acts).some((a) => a.kind === 'celebrate')) ex = 1;
     void dir;
@@ -490,10 +489,12 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
     if (c && g != null && !replayed.has(c)) {
       replayed.add(c);
       $('#hlcap').textContent = 'Repetição';
+      sound.muffle(true);
       hl.replayWindow(Math.max(0, g - 2.6), Math.min(c.total, g + 1.4), 0.4, userCam === 'baliza' ? 'tv' : 'baliza');
       return;
     }
     hl.cameraId = userCam;
+    sound.muffle(false);
     if (tryContinue()) return;
     autoClose = setTimeout(close3d, 2500);
   }
@@ -523,6 +524,7 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
   }
 
   function close3d() {
+    sound.muffle(false);
     if (autoClose) clearTimeout(autoClose);
     autoClose = null;
     $('#hl').hidden = true;
@@ -550,7 +552,7 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
       else if (e.type === 'fim_jogo') { sound.horn(1.8); sound.whistle('triple'); }
       else if (e.type === 'falta' || e.type === 'livre_10m' || e.type === 'penalti' || e.type === 'amarelo') sound.whistle('short');
       else if (e.type === 'vermelho' || e.type === 'confronto') { sound.whistle('short'); sound.boo(); }
-      else if (e.type === 'poste') sound.post();
+      else if (e.type === 'poste') sound.ooh(0.9);
       else if (e.type === 'remate_defendido' || e.type === 'remate_fora') sound.ooh(e.type === 'remate_defendido' ? 1 : 0.7);
       else if (e.type === 'time_out') sound.horn(0.9);
       // comentário: golos, cartões, faltas importantes, confrontos, descontos de tempo, 5x4, fim das partes
@@ -749,6 +751,7 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
   });
   $('#rep').addEventListener('click', () => {
     if (autoClose) { clearTimeout(autoClose); autoClose = null; }
+    sound.muffle(true);
     hl?.replay(0.6);
   });
   $('#hlc').addEventListener('click', () => (introStage >= 0 ? closeIntro() : close3d()));
