@@ -8,7 +8,7 @@ import { contractsSeasonEnd, ensureContracts } from './contracts';
 import { matchRevenue, monthlyFinance, book, PRIZES } from './finance';
 import { aiMarket, endLoans, ensurePool } from './market';
 import { analystBonus, academyIntake, academySeasonEnd, ensureStaff, gkTrainingK, juniorsOf, trainingK } from './staff';
-import { afterMyMatch, aiCoachChanges, onTitle, staffSeasonEnd } from './career';
+import { afterMyMatch, aiCoachChanges, boardAfterMatch, onTitle, staffSeasonEnd } from './career';
 import { applyMorale, moraleEvent } from './morale';
 import { injuryOf, matchInjuries, trainingInjuries } from './injuries';
 import { applyDiscipline, banFor, seasonEndDiscipline } from './discipline';
@@ -84,6 +84,8 @@ export function matchOptions(s: GameState, f: Fixture) {
 function playFixture(s: GameState, f: Fixture, given?: MatchResult): MatchResult {
   const m = given ?? simulateMatch(setupFor(s, f.home, f.comp), setupFor(s, f.away, f.comp), matchOptions(s, f));
   matchRevenue(s, f);
+  // direções: pontos conseguidos vs esperados (força do adversário, casa/fora)
+  boardAfterMatch(s, s.clubs.find((c) => c.id === f.home)!, s.clubs.find((c) => c.id === f.away)!, m.score, m.penalties, importanceOf(s, f), !!f.neutral);
   f.result = {
     score: m.score,
     pens: m.penalties,
@@ -206,9 +208,8 @@ export function playMyMatch(s: GameState, f: Fixture, given?: MatchResult): Matc
   const opp = clubName(s, mySide === 0 ? f.away : f.home);
   const res = a > b || (m.penalties && (mySide === 0 ? m.penalties[0] > m.penalties[1] : m.penalties[1] > m.penalties[0])) ? 'Vitória' : a < b || m.penalties ? 'Derrota' : 'Empate';
   news(s, `${COMP_NAMES[f.comp]}, ${f.stage}: ${res} frente ao ${opp}, ${a}-${b}${m.penalties ? ` (${mySide === 0 ? m.penalties[0] : m.penalties[1]}-${mySide === 0 ? m.penalties[1] : m.penalties[0]} g.p.)` : m.extraTime ? ' (a.p.)' : ''}.`);
-  // direção: confiança conforme o resultado face ao esperado
-  const oppClub = s.clubs.find((c) => c.id === (mySide === 0 ? f.away : f.home))!;
-  for (const t of afterMyMatch(s, res === 'Vitória' ? 'V' : res === 'Empate' ? 'E' : 'D', oppClub.level, importanceOf(s, f))) news(s, t);
+  // reputação e, se a confiança da direção cair demasiado, despedimento
+  for (const t of afterMyMatch(s, res === 'Vitória', res === 'Derrota')) news(s, t);
   playDay(s, f.date);
   return m;
 }
@@ -222,7 +223,7 @@ function playDay(s: GameState, d: string) {
   for (const [comp, w] of Object.entries(s.season.winners)) if (w && before[comp as keyof typeof before] !== w) {
     moraleEvent(s, s.players.filter((p) => p.clubId === w).map((p) => p.id), 10);
     if (PRIZES[comp]) book(s, w, `Prémio: ${COMP_NAMES[comp as keyof typeof COMP_NAMES]}`, PRIZES[comp]);
-    if (w === s.clubId) onTitle(s, comp);
+    onTitle(s, w, comp);
   }
   for (const t of aiCoachChanges(s)) news(s, t);
 }

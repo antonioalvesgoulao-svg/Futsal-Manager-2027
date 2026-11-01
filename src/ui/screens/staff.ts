@@ -1,4 +1,4 @@
-import { poachFee, poachStaff, renewStaff } from '../../core/career';
+import { negotiateStaff, poachFee, poachStaff, staffDemand } from '../../core/career';
 // Ecrãs do Staff e da Formação
 import { overall, starsHtml } from '../../core/attributes';
 import { fmtEur } from '../../core/contracts';
@@ -32,6 +32,7 @@ export function renderStaff(content: HTMLElement, s: GameState, refresh: () => v
   const my = s.clubs.find((c) => c.id === s.clubId)!;
   let role: Role | null = null;
   let open: string | null = null;
+  let nego: string | null = null;
   const draw = () => {
     const free = (s.staff ?? []).filter((x) => x.clubId === null && (!role || x.role === role)).sort((a, b) => b.ability - a.ability);
     const mine = (s.staff ?? []).filter((x) => x.clubId === my.id).sort((a, b) => [...ROLES, ...EXTRA_ROLES].indexOf(a.role) - [...ROLES, ...EXTRA_ROLES].indexOf(b.role) || b.ability - a.ability);
@@ -40,7 +41,10 @@ export function renderStaff(content: HTMLElement, s: GameState, refresh: () => v
     content.innerHTML = `
       <h2>Staff técnico <span class="muted small">${fmtEur(staffBill(s, my.id))}/mês de ${fmtEur(staffBudget(my))} (orçamento)</span></h2>
       <table class="tbl"><thead><tr><th>Função</th><th>Nome</th><th>Capacidade</th><th>Efeito</th><th>Idade</th><th>Salário</th><th></th></tr></thead><tbody>
-      ${mine.map((st) => `<tr><td>${st.func ?? ROLE_NAME[st.role]}</td><td class="click" data-open="${st.id}"><b>${st.name}</b>${st.real ? '' : ' <span class="muted small">(fictício)</span>'}</td><td>${bar(st.ability)}</td><td class="small">${EFFECT[st.role](st.ability)}</td><td>${st.age}</td><td>${fmtEur(st.wage)}<br><span class="small ${st.until <= s.season.year + 1 ? '' : 'muted'}" style="${st.until <= s.season.year + 1 ? 'color:#d9822b' : ''}">até jun ${st.until}</span></td><td>${st.until <= s.season.year + 1 ? `<button class="btn" data-renew="${st.id}">Renovar</button> ` : ''}<button class="btn ghost" data-find="${st.role}">Substituir</button></td></tr>${open === st.id ? `<tr><td colspan="7">${historyHtml(st.history)}</td></tr>` : ''}`).join('')}
+      ${mine.map((st) => `<tr><td>${st.func ?? ROLE_NAME[st.role]}</td><td class="click" data-open="${st.id}"><b>${st.name}</b>${st.real ? '' : ' <span class="muted small">(fictício)</span>'}</td><td>${bar(st.ability)}</td><td class="small">${EFFECT[st.role](st.ability)}</td><td>${st.age}</td><td>${fmtEur(st.wage)}<br><span class="small ${st.until <= s.season.year + 1 ? '' : 'muted'}" style="${st.until <= s.season.year + 1 ? 'color:#d9822b' : ''}">até jun ${st.until}</span></td><td><button class="btn${st.until <= s.season.year + 1 ? '' : ' ghost'}" data-renew="${st.id}">${st.until <= s.season.year + 1 ? 'Renovar' : 'Contrato'}</button> <button class="btn ghost" data-find="${st.role}">Substituir</button></td></tr>${open === st.id ? `<tr><td colspan="7">${historyHtml(st.history)}</td></tr>` : ''}${nego === st.id ? `<tr><td colspan="7"><div class="card" style="padding:8px 12px"><b>Contrato de ${st.name}</b> · atual ${fmtEur(st.wage)}/mês até jun ${st.until}
+        <div class="row" style="justify-content:flex-start;gap:8px;margin-top:6px;flex-wrap:wrap"><label class="small">Salário/mês (€) <input id="nw" type="number" step="50" value="${staffDemand(s, st).wage}" style="width:90px"></label>
+        <label class="small">Anos <select id="ny">${[1, 2, 3].map((y) => `<option ${y === 2 ? 'selected' : ''}>${y}</option>`).join('')}</select></label><button class="btn primary" id="ngo">Propor</button>
+        <span class="small muted" id="nmsg">Pede cerca de ${fmtEur(staffDemand(s, st).wage)}/mês (máx. ${staffDemand(s, st).maxYears} anos). Aceita um pouco menos em troca de mais anos de contrato.</span></div></div></td></tr>` : ''}`).join('')}
       ${vagos.map((r) => `<tr><td>${ROLE_NAME[r]}</td><td class="muted">vago</td><td>${bar(5)}</td><td class="small">${EFFECT[r](5)}</td><td></td><td></td><td><button class="btn ghost" data-find="${r}">Procurar</button></td></tr>`).join('')}
       </tbody></table>
       <p class="muted small">Clica no nome para ver o historial. Equipas técnicas reais dos 12 clubes (futsalportugal.com e zerozero); as funções em falta num clube têm técnicos fictícios. Capacidade calculada do historial (estimativa).</p>
@@ -57,7 +61,14 @@ export function renderStaff(content: HTMLElement, s: GameState, refresh: () => v
     content.querySelectorAll<HTMLElement>('[data-coach]').forEach((b) => (b.onclick = () => { open = open === b.dataset.coach ? null : b.dataset.coach!; draw(); }));
     content.querySelectorAll<HTMLElement>('[data-find]').forEach((b) => (b.onclick = () => { role = b.dataset.find as Role; draw(); }));
     content.querySelector<HTMLSelectElement>('#frole')!.onchange = (e) => { role = ((e.target as HTMLSelectElement).value || null) as Role | null; draw(); };
-    content.querySelectorAll<HTMLElement>('[data-renew]').forEach((b) => (b.onclick = () => { alert(renewStaff(s, s.staff!.find((x) => x.id === b.dataset.renew)!)); draw(); }));
+    content.querySelectorAll<HTMLElement>('[data-renew]').forEach((b) => (b.onclick = () => { nego = nego === b.dataset.renew ? null : b.dataset.renew!; draw(); }));
+    content.querySelector<HTMLElement>('#ngo')?.addEventListener('click', () => {
+      const st = s.staff!.find((x) => x.id === nego)!;
+      const r = negotiateStaff(s, st, Number(content.querySelector<HTMLInputElement>('#nw')!.value), Number(content.querySelector<HTMLSelectElement>('#ny')!.value));
+      if (r.ok) { nego = null; draw(); alert(r.msg); return; }
+      content.querySelector('#nmsg')!.textContent = r.msg;
+      if (r.counter) content.querySelector<HTMLInputElement>('#nw')!.value = String(r.counter);
+    });
     content.querySelectorAll<HTMLElement>('[data-poach]').forEach((b) => (b.onclick = () => {
       const st = s.staff!.find((x) => x.id === b.dataset.poach)!;
       const w = Number(content.querySelector<HTMLInputElement>(`[data-pw="${st.id}"]`)!.value);

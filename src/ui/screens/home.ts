@@ -1,4 +1,5 @@
-import { renderCareer } from './career';
+import { renderCareer, unemployedScreen } from './career';
+import { NO_CLUB } from '../../core/career';
 import { FP_STATS } from '../../core/state';
 import { renderAcademy, renderStaff } from './staff';
 import { renderFinance, renderMarket } from './market';
@@ -96,6 +97,7 @@ const SECTIONS: { id: string; label: string; stage: string }[] = [
 export function homeScreen(root: HTMLElement) {
   const s = getState();
   if (!s) return go('menu');
+  if (s.clubId === NO_CLUB) return unemployedScreen(root, s, () => go('home'), () => go('menu'));
   const club = myClub(s);
   let section = 'inicio';
   let playerId: string | null = null;
@@ -133,6 +135,7 @@ export function homeScreen(root: HTMLElement) {
   }
 
   function renderContent() {
+    if (s!.clubId === NO_CLUB) { go('home'); return; } // despedido: ecrã de quem está sem clube
     const sec = SECTIONS.find((x) => x.id === section)!;
     if (pending) {
       renderMatchDay(
@@ -275,7 +278,7 @@ export function homeScreen(root: HTMLElement) {
   });
 
   el.querySelector('#next')!.addEventListener('click', () => {
-    if (s!.career?.sacked) { section = 'carreira'; renderNav(); renderContent(); alert('Foste despedido: escolhe um clube na Carreira para continuar.'); return; }
+    if (s!.clubId === NO_CLUB) return go('home');
     if (pending) {
       section = 'inicio';
       renderContent();

@@ -1,4 +1,4 @@
-import type { Career } from './career';
+import type { Board, Career } from './career';
 import type { Staff } from './staff';
 import type { MarketState } from './market';
 import type { ClubFinance } from './finance';
@@ -98,6 +98,7 @@ export interface GameState {
   training?: TrainingPlan; // plano de treino do meu clube
   trainLog?: TrainLog; // treino acumulado na época
   devFrac?: number; // fração da evolução anual já aplicada
+  boards?: Record<string, Board>; // confiança da direção de cada clube no seu treinador
   career?: Career; // confiança da direção, reputação, propostas
   staff?: Staff[]; // técnicos (adjunto, preparador físico, GR, fisioterapeuta, formação)
   market?: MarketState; // propostas recebidas, inscrições
