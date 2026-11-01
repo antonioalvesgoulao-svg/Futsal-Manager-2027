@@ -43,15 +43,20 @@ for (let g = 0; g < nGames; g++) {
     start = c.end;
     measurePossession(one, sn.possession, c, prev);
     measurePossession(total, sn.possession, c, prev);
-    const endFrame = c.at(c.lead + c.duration);
-    prev = { p: sn.possession, lostHolder: endFrame.holder };
+    // O portador da perda é o último portador observado em jogo corrido, não o frame final da cena (que pode ser bola parada).
+    let lostHolder: string | null = null;
+    for (let t = 0; t <= c.duration + 1e-6; t += 0.1) {
+      const frame = c.at(c.lead + t);
+      if (!frame.stoppage && frame.holder) lostHolder = frame.holder;
+    }
+    prev = { p: sn.possession, lostHolder };
   }
   const res = m.result();
   perGame.push({ jogo: `${h}-${a}`, resultado: `${res.score[0]}-${res.score[1]}`, m: summarize(one) });
 }
 const summary = summarize(total);
-let commit = '';
-try { commit = execSync('git rev-parse --short HEAD', { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim(); } catch { /* fora do git */ }
+let commit = process.env.GITHUB_SHA ?? '';
+try { commit = execSync('git rev-parse --short HEAD', { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim(); } catch { /* usa GITHUB_SHA quando disponível */ }
 const parametros = { semente: seed, jogos: nGames, confrontos: Array.from({ length: nGames }, (_, i) => PAIRS[i % PAIRS.length]), duracao: { periodos: 2, minutosPorPeriodo: 20 }, limiares: TH };
 const out = { schema: 2, versao: name, commit, data: new Date().toISOString(), parametros, segundos: Math.round((Date.now() - t0) / 1000), resumo: summary, porJogo: perGame };
 mkdirSync('diagnostics', { recursive: true });
