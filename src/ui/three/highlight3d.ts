@@ -224,7 +224,7 @@ export class Highlight3D {
       tag.visible = this.showTags;
       pm.g.add(tag);
     }
-    a = { ...pm, prev: new THREE.Vector3(), heading: 0, phase: (hsh % 10) / 3, speed: 0, init: false };
+    a = { ...pm, prev: new THREE.Vector3(), heading: 0, phase: (hsh % 10) / 3, speed: 0, stride: 0.93 + (hsh % 15) / 100, init: false };
     return a;
   }
 
@@ -290,7 +290,9 @@ export class Highlight3D {
       a.g.position.set(p.x, this.arena.groundAt(p.x, p.y) + podH, p.y);
       if (!a.init) { before.copy(a.g.position); a.init = true; }
       const vx = (a.g.position.x - before.x) / dt, vz = (a.g.position.z - before.z) / dt;
-      a.speed = lerp(a.speed, Math.min(9, Math.hypot(vx, vz)), 0.25);
+      const sp0 = a.speed;
+      a.speed = lerp(a.speed, Math.min(9, Math.hypot(vx, vz)), Math.min(1, dt * 9));
+      a.accel = lerp(a.accel ?? 0, (a.speed - sp0) / Math.max(1e-3, dt), Math.min(1, dt * 4));
       const act = f.acts[id];
       // para onde olha: a ação em curso, a direção da corrida ou a bola
       // no futsal quem não sprinta continua virado para o jogo: recua de costas ou desloca-se de lado (sem rodar o corpo)
@@ -307,16 +309,19 @@ export class Highlight3D {
       let d = want - a.heading;
       while (d > Math.PI) d -= Math.PI * 2;
       while (d < -Math.PI) d += Math.PI * 2;
-      a.heading += d * Math.min(1, dt * 9);
+      const gkAct = act && (act.kind === 'dive' || act.kind === 'splits' || act.kind === 'spread' || act.kind === 'catch');
+      const turn = d * Math.min(1, dt * (gkAct ? 20 : 9));
+      a.heading += turn;
+      a.turn = lerp(a.turn ?? 0, turn / Math.max(1e-3, dt), Math.min(1, dt * 6));
       a.g.rotation.set(0, a.heading, 0);
       // velocidade no referencial do corpo (frente/lado), para as pernas fazerem o passo certo
       const sh = Math.sin(a.heading), ch = Math.cos(a.heading);
-      a.fwd = lerp(a.fwd ?? 0, Math.max(-9, Math.min(9, vx * sh + vz * ch)), 0.25);
-      a.side = lerp(a.side ?? 0, Math.max(-9, Math.min(9, vx * ch - vz * sh)), 0.25);
+      a.fwd = lerp(a.fwd ?? 0, Math.max(-9, Math.min(9, vx * sh + vz * ch)), Math.min(1, dt * 9));
+      a.side = lerp(a.side ?? 0, Math.max(-9, Math.min(9, vx * ch - vz * sh)), Math.min(1, dt * 9));
       let act2 = act;
       if ((act?.kind === 'dive' || act?.kind === 'splits') && act.to) {
         // lado do mergulho, visto pelo guarda-redes
-        const rx = Math.cos(a.heading), rz = -Math.sin(a.heading);
+        const rx = Math.cos(act.ang), rz = -Math.sin(act.ang); // lado pela direção do rematador (estável, não troca a meio do voo)
         const side = (act.to.x - p.x) * rx + (act.to.y - p.y) * rz >= 0 ? 1 : -1;
         act2 = { ...act, side };
       }

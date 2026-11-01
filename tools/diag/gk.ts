@@ -27,15 +27,15 @@ for(let g=0;g<6;g++){const [h,a]=PAIRS[g];const hs=setupFor(s,h),as=setupFor(s,a
    if(prevP){const v=dist(q,prevP)/0.1; A.gkSpd.push(v); A.gkAcc.push(Math.abs(v-prevV)/0.1); prevV=v; if(v<0.3)A.gkStill++;}
    prevP=q;}
   // remates
-  for(const b of c.balls) if(b.k==='fly' && typeof b.from==='string' && c.acts.some((x:any)=>x.kind==='shoot'&&x.id===b.from&&Math.abs(x.t0+0.28-b.t0)<0.01)){
+  for(const b of c.balls) if(b.k==='fly' && typeof b.from==='string' && c.acts.some((x:any)=>x.kind==='shoot'&&x.id===b.from&&b.t0>x.t0&&b.t0<x.t1)){
     const fp=c.tr.get(b.from).at(b.t0); const d=Math.hypot(b.b.x-fp.x,b.b.y-fp.y); A.shotV.push(d/(b.t1-b.t0)); A.shots++;}
   for(const x of P.actions) if(x.type==='shot' && x.result && A.dive[x.result]) {A.dive[x.result][1]++;}
   for(const x of c.acts) if(['dive','splits','spread','catch'].includes(x.kind)){ /* ver início vs remate */
-    const sh=c.acts.find((y:any)=>y.kind==='shoot'&&Math.abs(y.t0+0.28-(x.t0+0.05))<0.02); if(sh) A.preMove++; }
+    const hit=c.balls.find((b:any)=>b.k==='fly'&&typeof b.from==='string'&&c.acts.some((y:any)=>y.kind==='shoot'&&y.id===b.from&&b.t0>y.t0&&b.t0<y.t1)&&b.t0<=x.t0+0.6&&b.t0>=x.t0-1.2); if(hit&&x.t0<=hit.t0+0.01&&!c.isFixed(x.id,hit.t0-0.85)) A.preMove++; }
   // reposições: lançamentos com a mão
   for(const x of c.acts) if(x.kind==='throw'){ const pb=c.balls.find((b:any)=>b.k==='pass'&&b.from===x.id&&b.t0>=x.t0-0.01&&b.t0<=x.t1+0.7);
     if(!pb) continue; const fp=c.tr.get(pb.from).at(pb.t0), tp=c.tr.get(pb.to).at(pb.t1); const d=dist(fp,tp); A.throwD.push(d); A.throwV.push(d/(pb.t1-pb.t0));
-    const f=c.at(c.lead+pb.t1); const side=c.sideOf.get(pb.to); let md=99; for(const [id,q] of Object.entries(f.pos) as any) if(c.sideOf.get(id)===1-side) if(id!==c.p.onCourt[1-side][0]) md=Math.min(md,dist(q,tp)); A.thrRecvFree.push(md);
+    const f=c.at(c.lead+pb.t1); const side=c.sideOf.get(pb.to); let md=99; for(const [id,q] of Object.entries(f.pos) as any) if(c.sideOf.get(id)===1-side) if(id!==c.p.onCourt[1-side][0]) md=Math.min(md,dist(q,tp)); A.thrRecvFree.push(md); (A.thrKind ||= {}); const kk=x.t0<0.2?'reposicao':'agarrou'; (A.thrKind[kk] ||= []).push(md);
     if(x.t0<0.5) A.gkRestartDelay.push(x.t1+c.lead); }
   for(const b of c.balls) if(b.k==='pass'){const fp=c.tr.get(b.from)?.at(b.t0), tp=c.tr.get(b.to)?.at(b.t1); if(fp&&tp) A.passV.push(dist(fp,tp)/(b.t1-b.t0));}
  }}
@@ -49,5 +49,5 @@ console.log('Remates velocidade bola m/s:',st(A.shotV),' km/h med',(q(A.shotV,.5
 console.log('Gesto do GR começa antes/no remate (n):',A.preMove,'de',A.shots);
 console.log('Lançamentos GR distância m:',st(A.throwD),' vel m/s:',st(A.throwV));
 console.log('Recetor do lançamento: adversário mais próximo m:',st(A.thrRecvFree));
-console.log('Reposição: tempo até lançar (s):',st(A.gkRestartDelay));
+for (const k in A.thrKind) console.log('  livre ao receber,',k,st(A.thrKind[k]));
 console.log('Passes velocidade m/s:',st(A.passV));

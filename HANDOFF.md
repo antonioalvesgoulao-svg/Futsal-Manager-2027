@@ -264,3 +264,19 @@ Pedido do António: 3D mais fluido, mais realista e mais próximo do futsal. Op�
 1. Passes que atravessam adversários (20,5%) e linhas de passe obstruídas (39%): a coreografia deve escolher recetores com linha livre e mover o apoio para abrir a linha.
 2. Jogadores sempre em movimento (só 4% do tempo parados; 28 sprints/min sem bola): no futsal real há mais pausas posicionais e arranques no momento certo. Introduzir paragens com timing pela `decisionFactor`.
 3. Intenções táticas (apoio, rotação, ataque ao espaço) com `decisionFactor` e `teamworkFactor`.
+
+## GR, remates, reposições e corrida 3D — 1 novembro 2026 (Claude)
+- Pormenor em `docs/ANALISE_3D.md`; medições com `tools/diag/gk.ts`.
+- `choreo.ts`:
+  - GR na bissetriz dos postes, com reação e passos de ajuste.
+  - Reação ao remate pelos reflexos; sem gesto a remates para fora.
+  - Força dos remates pelo atributo; reposições pela distância e pelo espaço livre.
+  - Novo `attrsOf`/`au()` para ler atributos (0,5 sem dados).
+- `player3d.ts`: corrida nova e agarrar à altura da bola.
+- `highlight3d.ts`:
+  - aceleração e rotação para a inclinação;
+  - lado do voo estável;
+  - o GR vira-se mais depressa durante a defesa.
+- Motor intacto (`npm test`); tsc, build e diag OK.
+- Imagens (Playwright) de corrida, voo e reposição: plausíveis; o gesto do voo ainda precisa de trabalho.
+- Ainda não visto pelo António.

@@ -14,3 +14,14 @@ Medido em 6 jogos (`tools/diag/gk.ts`) e no diagnóstico de 12 jogos, com imagen
 | 8 | Locomoção | Corrigido: passos de costas e laterais (PR #6) | Feito |
 
 Ordem proposta: 1+2+3 (GR) → 4 (remates) → 5 (reposições) → 6 → 7. Tudo na coreografia/3D: o motor de resultados não muda.
+
+## Correções feitas (1/11/2026, PR #6)
+| Área | Antes | Depois |
+|---|---|---|
+| Corrida | cadência fixa por tempo, coxa ±0,58 rad, tronco rígido | cadência pela distância percorrida (ciclo 1,25 m + 0,32 m por m/s, sem pés a deslizar), joelho alto e coxa até ~0,95 rad a sprintar, braços em oposição com cotovelos a 90°, tronco em contra-rotação, inclinação ao acelerar e nas curvas, passada própria por jogador |
+| GR posição | sempre em cima da linha bola–centro, 4 atualizações/s | bissetriz dos postes; profundidade pela distância, pelo ângulo (fechado = junto ao poste) e pelas saídas; reage 0,15 s depois; passos laterais até 4,5 m/s; parado quando está no sítio |
+| GR defesa | gesto antes do remate em 63% | gesto 0,08-0,2 s depois do remate (reflexos); técnica pela distância lateral à bola; sem gesto a bolas que vão para fora; agarra à altura da bola; lado do voo fixo pela direção do rematador |
+| Remates | ~21 m/s sempre | potentes 22-33 m/s ou colocados 14-22 m/s pelo atributo remate e pela distância (med 72 km/h, p90 111 km/h) |
+| Reposições | 0,6 s fixos (até 34 m/s), colega ao acaso | rolada curta ~9 m/s ou lançamento ~15 m/s; colega mais livre; depois de agarrar escolhe entre ala, fixo e lançamento longo pelo espaço (adversário mais próximo med 4,1 → 6,2 m) |
+
+Falta: o gesto do voo do GR (pose), passes por linhas livres, pausas posicionais.
