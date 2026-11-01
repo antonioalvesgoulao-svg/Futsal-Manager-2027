@@ -33,7 +33,7 @@ Estas instruções aplicam-se a qualquer assistente de programação (ChatGPT/Co
 - Preservar a experiência de jogo existente e introduzir mudanças em passos pequenos e verificáveis.
 
 ## Fluxo técnico obrigatório
-1. Criar uma branch descritiva a partir da base correta.
+1. Criar uma branch descritiva a partir da base correta. Se uma alteração depender de uma PR ainda não integrada, criar uma PR empilhada sobre a branch dessa PR e declarar explicitamente a dependência; não abrir uma PR para `main` que esconda essa dependência.
 2. Fazer uma alteração focada, com escopo e risco explícitos.
 3. Executar os comandos de validação disponíveis no projeto (consultar `package.json`); no mínimo `npm run build` e, quando aplicável, `npm run diag -- --seed base --jogos 12 --nome ci`.
 4. Se não for possível executar localmente, dizer isso e não simular resultados.
@@ -57,3 +57,4 @@ Estas instruções aplicam-se a qualquer assistente de programação (ChatGPT/Co
 - `CLAUDE.md` contém contexto histórico detalhado e instruções adicionais.
 - O GitHub é a fonte de verdade. Se houver divergência entre estes documentos e o código/estado atual do GitHub, verificar e atualizar a documentação antes de continuar.
 - A documentação é parte integrante da entrega: uma alteração relevante não está concluída até `HANDOFF.md` e `AGENTS.md` estarem atualizados, juntamente com os documentos técnicos aplicáveis. Não é necessário alterar todos os restantes ficheiros em cada commit; atualizar os que foram afetados.
+- PRs empilhadas devem identificar no título/corpo a PR e branch de que dependem. Não declarar uma PR pronta para merge isoladamente se a sua base ainda não estiver integrada.
