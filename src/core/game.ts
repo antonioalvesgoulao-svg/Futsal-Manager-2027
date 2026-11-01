@@ -11,7 +11,7 @@ import type { CompId } from './season/types';
 import { developPlayer, injuryDecline, retires, youthIntake, DevChange } from './development';
 import { simulateMatch } from './engine/match';
 import type { MatchResult, TeamSetup } from './engine/types';
-import { afterMatchday, createSeason, keyDates, leagueTable, runnerUp } from './season/season';
+import { addDays, afterMatchday, createSeason, keyDates, leagueTable, runnerUp } from './season/season';
 import { COMP_NAMES, Fixture } from './season/types';
 import type { GameState } from './types';
 
@@ -110,30 +110,38 @@ function nextDate(s: GameState) {
   return pending[0];
 }
 
-// Evolução durante a época: no 1.º dia de cada mês (setembro a maio) aplica-se 1/9 da evolução anual
-function monthlyDevelopment(s: GameState, to: string) {
-  const month = to.slice(0, 7);
-  if (s.devMonth === month) return;
-  const m = Number(to.slice(5, 7));
-  if (m >= 6 && m <= 8) return;
-  s.devMonth = month;
-  if ((s.devFrac ?? 0) >= 8 / 9 - 1e-6) return; // o resto fica para o fim da época
+// Evolução contínua, dia a dia: cada intervalo entre duas datas aplica dias/365 da evolução anual.
+// Dias lesionado não contam para evoluir; numa paragem longa esses dias fazem perder (injuryDecline).
+const dayDiff = (a: string, b: string) => Math.round((Date.parse(b) - Date.parse(a)) / 864e5);
+function dailyDevelopment(s: GameState, from: string, to: string) {
+  const days = dayDiff(from, to);
+  if (days <= 0) return;
   s.devStart ??= {};
+  const preseason = !Object.keys(s.pstats).length; // antes do 1.º jogo oficial: sem dados da época
   for (const p of s.players) {
     s.devStart[p.id] ??= overall(p.attrs, p.position);
-    const inj = injuryOf(s, p.id);
-    if (inj) { injuryDecline(p, inj.days, month); continue; } // lesionado não evolui; paragens longas fazem perder físico
+    const inj = s.injuries?.[p.id];
+    let injDays = 0;
+    if (inj) {
+      const start = addDays(inj.until, -inj.days);
+      injDays = Math.max(0, dayDiff(start > from ? start : from, inj.until < to ? inj.until : to));
+      if (injDays) injuryDecline(p, inj.days, injDays / 30, `${from}-${to}`);
+    }
+    const fit = days - injDays;
+    if (fit <= 0) continue;
+    const frac = fit / 365;
     // minutos até agora projetados para a época inteira
-    const st = s.pstats[p.id] && { ...s.pstats[p.id], minutes: s.pstats[p.id].minutes / ((s.devFrac ?? 0) + 1 / 9) };
-    developPlayer(p, st, s.season.year, trainingBonus(s, p.id, p.position === 'GR'), shootingFocus(s, p.id, p.clubId), { frac: 1 / 9, seed: month, final: false });
+    const done = (s.devFrac ?? 0) + days / 365;
+    const st = s.pstats[p.id] && { ...s.pstats[p.id], minutes: s.pstats[p.id].minutes / Math.max(0.15, done) };
+    developPlayer(p, st, s.season.year, trainingBonus(s, p.id, p.position === 'GR'), shootingFocus(s, p.id, p.clubId), { frac, seed: `${from}-${to}`, final: false, preseason });
   }
-  s.devFrac = (s.devFrac ?? 0) + 1 / 9;
+  s.devFrac = (s.devFrac ?? 0) + days / 365;
 }
 
 function trainingNews(s: GameState, from: string, to: string) {
   const days = Math.round((Date.parse(to) - Date.parse(from)) / 864e5);
   if (days > 0 && days <= 60) accumulate(s, days);
-  monthlyDevelopment(s, to);
+  dailyDevelopment(s, from, to);
   const { fresh, healed } = trainingInjuries(s, from, to);
   moraleEvent(s, fresh.filter(([, i]) => i.days > 7).map(([id]) => id), -6);
   const name = (id: string) => s.players.find((p) => p.id === id);
@@ -150,7 +158,9 @@ export type AdvanceResult = { kind: 'match'; fixture: Fixture } | { kind: 'day' 
 export function advance(s: GameState): AdvanceResult {
   const d = nextDate(s);
   if (!d) {
-    s.date = keyDates(s.season.year).end;
+    const end = keyDates(s.season.year).end;
+    dailyDevelopment(s, s.date, end);
+    s.date = end;
     return { kind: 'seasonEnd', changes: endSeason(s) };
   }
   trainingNews(s, s.date, d);
