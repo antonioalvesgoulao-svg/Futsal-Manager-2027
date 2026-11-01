@@ -4,11 +4,12 @@
 import { attendance } from './attendance';
 import { salaryBudget, wageBill } from './contracts';
 import { staffBill } from './staff';
+import { headCoachWage } from './career';
 import type { Fixture } from './season/types';
 import type { GameState } from './types';
 
 export interface Ledger { date: string; text: string; amount: number }
-export interface ClubFinance { balance: number; transferBudget: number; ledger: Ledger[]; month?: string }
+export interface ClubFinance { balance: number; transferBudget: number; ledger: Ledger[]; month?: string; spentSeason?: number }
 
 /** Preço médio do bilhete (€, estimativa): jogos grandes e fases finais mais caros. */
 export function ticketPrice(s: GameState, f: Fixture) {
@@ -37,6 +38,7 @@ export function book(s: GameState, clubId: string, text: string, amount: number,
   const f = financeOf(s, clubId);
   f.balance += amount;
   if (toTransfers) f.transferBudget += amount;
+  if (toTransfers && amount < 0 && /Contrata/.test(text)) f.spentSeason = (f.spentSeason ?? 0) - amount; // gasto em transferências na época
   if (clubId === s.clubId) { f.ledger.unshift({ date: s.date, text, amount }); f.ledger = f.ledger.slice(0, 80); }
 }
 
@@ -58,6 +60,8 @@ export function monthlyFinance(s: GameState, from: string, to: string) {
       book(s, c.id, 'Salários do plantel', -wages);
       const sb = staffBill(s, c.id);
       if (sb) { book(s, c.id, 'Verba do clube para o staff', sb); book(s, c.id, 'Salários do staff', -sb); }
+      const cw = headCoachWage(s, c);
+      if (cw) { book(s, c.id, 'Verba do clube para o treinador', cw); book(s, c.id, 'Salário do treinador principal', -cw); }
     }
   }
 }

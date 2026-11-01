@@ -1,5 +1,5 @@
 // Ecrã da Carreira: confiança da direção, objetivo, reputação, propostas, centro de emprego (todos os clubes) e entrevista
-import { INTERVIEW, boardOf, canApply, careerOf, checkPlan, expectedPos, followMin, interview, objectiveOf, securityOf, takeJob, type StaffPlan } from '../../core/career';
+import { interviewFor, coachMaxPay, coachWage, boardOf, canApply, careerOf, checkPlan, expectedPos, followMin, interview, objectiveOf, securityOf, takeJob, type StaffPlan } from '../../core/career';
 import { fmtEur } from '../../core/contracts';
 import { ROLE_NAME, staffBudget } from '../../core/staff';
 import { advance } from '../../core/game';
@@ -28,7 +28,7 @@ export function renderCareer(content: HTMLElement, s: GameState, onJob: () => vo
       ${club && b ? `<div class="cards">
         <div class="card"><div class="muted small">Confiança da direção</div><div class="big">${meter(b.conf)}</div><div class="small muted">${securityOf(b.conf)} · ${b.pts} pontos em ${b.games} jogos (esperados ${b.exp.toFixed(1)})</div></div>
         <div class="card"><div class="muted small">Objetivo da época</div><div class="big">${objectiveOf(s, club.id).text}</div><div class="small muted">Esperado: ${expectedPos(s, club.id)}.º · Agora: ${t[pos - 1]?.p ? pos + '.º' : 'por começar'}</div></div>
-        <div class="card"><div class="muted small">A tua reputação</div><div class="big">${meter(c.reputation)}</div><div class="small muted">Sobe com vitórias e títulos</div></div>
+        <div class="card"><div class="muted small">A tua reputação · contrato</div><div class="big">${meter(c.reputation)}</div><div class="small muted">${c.contract ? `${fmtEur(c.contract.wage)}/mês até 30/06/${c.contract.until}` : ''}${c.savings ? ` · indemnizações recebidas ${fmtEur(c.savings)}` : ''}</div></div>
       </div>` : `<div class="cards"><div class="card"><div class="muted small">A tua reputação</div><div class="big">${meter(c.reputation)}</div></div></div>`}
       <p class="muted small">Como a direção avalia: em cada jogo compara os pontos conseguidos com os esperados (pela diferença de nível para o adversário e por jogar em casa ou fora), com mais exigência nos clubes grandes e ricos; títulos dão confiança extra; no fim da época conta a posição face ao objetivo. Abaixo de 24, com 10 ou mais jogos, o treinador é despedido. Valores estimados.</p>
       <h3>Propostas</h3>
@@ -55,7 +55,7 @@ export function renderCareer(content: HTMLElement, s: GameState, onJob: () => vo
       interviewing = x.dataset.apply!; result = ''; draw();
     }));
     content.querySelector<HTMLElement>('#ivgo')?.addEventListener('click', () => {
-      const answers = INTERVIEW.map((_, i) => Number((content.querySelector<HTMLInputElement>(`input[name="q${i}"]:checked`)?.value) ?? -1));
+      const answers = interviewFor(s, interviewing!).map((_, i) => Number((content.querySelector<HTMLInputElement>(`input[name="q${i}"]:checked`)?.value) ?? -1));
       if (answers.some((a) => a < 0)) { alert('Responde a todas as perguntas.'); return; }
       const k = s.clubs.find((y) => y.id === interviewing)!;
       (c.applied ??= {})[k.id] = s.date;
@@ -75,7 +75,7 @@ function interviewHtml(s: GameState, clubId: string) {
   const k = s.clubs.find((x) => x.id === clubId)!;
   return `<div class="card" style="margin:6px 0"><b>Entrevista com a direção do ${k.name}</b>
     <p class="small muted">A direção quer perceber se o teu projeto encaixa nos valores do clube.</p>
-    ${INTERVIEW.map((q, i) => `<div style="margin:8px 0"><div><b>${q.q}</b></div>${q.options.map((o, j) => `<label class="small" style="display:block"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('')}</div>`).join('')}
+    ${interviewFor(s, clubId).map((q, i) => `<div style="margin:8px 0"><div><b>${q.q}</b></div>${q.options.map((o, j) => `<label class="small" style="display:block"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('')}</div>`).join('')}
     <button class="btn primary" id="ivgo">Terminar entrevista</button></div>`;
 }
 
@@ -103,7 +103,7 @@ export function renderTransition(content: HTMLElement, s: GameState, clubId: str
   const club = s.clubs.find((x) => x.id === clubId)!;
   const mine = (s.staff ?? []).filter((x) => x.clubId === s.clubId);
   const theirs = (s.staff ?? []).filter((x) => x.clubId === clubId);
-  const plan: StaffPlan = { bring: [], keep: theirs.map((x) => x.id), boardFills: true };
+  const plan: StaffPlan = { bring: [], keep: theirs.map((x) => x.id), boardFills: true, wage: coachWage(careerOf(s).reputation, club), years: 2 };
   const draw = () => {
     const chk = checkPlan(s, clubId, plan);
     const row = (st: typeof mine[0], kind: 'bring' | 'keep') => {
@@ -119,6 +119,10 @@ export function renderTransition(content: HTMLElement, s: GameState, clubId: str
       <table class="tbl small"><thead><tr><th></th><th>Nome</th><th>Função</th><th>Cap.</th><th>Salário no novo clube</th></tr></thead><tbody>${mine.map((x) => row(x, 'bring')).join('')}</tbody></table>` : ''}
       <h3>Equipa técnica atual do ${club.name} (manter)</h3><p class="small muted">Quem não manténs é dispensado e o clube paga metade do que faltava do contrato.</p>
       <table class="tbl small"><thead><tr><th></th><th>Nome</th><th>Função</th><th>Cap.</th><th>Salário</th></tr></thead><tbody>${theirs.map((x) => row(x, 'keep')).join('') || '<tr><td colspan="5" class="muted">Sem equipa técnica (saiu com o treinador anterior).</td></tr>'}</tbody></table>
+      <h3>O teu contrato</h3>
+      <p class="small muted">A direção propõe ${fmtEur(coachWage(careerOf(s).reputation, club))}/mês e paga no máximo ${fmtEur(coachMaxPay(s, club))}/mês (conforme a tua reputação e a riqueza do clube; estimativa).</p>
+      <label class="small">Salário/mês (€) <input id="cw" type="number" step="50" value="${plan.wage}" style="width:90px"></label>
+      <label class="small">Anos <select id="cy">${[1, 2, 3].map((y) => `<option ${y === plan.years ? 'selected' : ''}>${y}</option>`).join('')}</select></label>
       <h3>Funções que fiquem vagas</h3>
       <label class="small" style="display:block"><input type="radio" name="fill" value="1" ${plan.boardFills ? 'checked' : ''}> A direção contrata técnicos livres (dentro do orçamento)</label>
       <label class="small" style="display:block"><input type="radio" name="fill" value="0" ${plan.boardFills ? '' : 'checked'}> Eu escolho a nova equipa técnica (no ecrã Staff)</label>
@@ -133,6 +137,8 @@ export function renderTransition(content: HTMLElement, s: GameState, clubId: str
       draw();
     }));
     content.querySelectorAll<HTMLInputElement>('[data-keep]').forEach((x) => (x.onchange = () => { plan.keep = x.checked ? [...plan.keep, x.dataset.keep!] : plan.keep.filter((k) => k !== x.dataset.keep); draw(); }));
+    content.querySelector<HTMLInputElement>('#cw')!.onchange = (e) => { plan.wage = Number((e.target as HTMLInputElement).value); draw(); };
+    content.querySelector<HTMLSelectElement>('#cy')!.onchange = (e) => { plan.years = Number((e.target as HTMLSelectElement).value); };
     content.querySelectorAll<HTMLInputElement>('input[name="fill"]').forEach((x) => (x.onchange = () => { plan.boardFills = x.value === '1'; }));
     content.querySelector<HTMLElement>('#tgo')!.onclick = () => { alert(takeJob(s, clubId, (cid) => suggestTactics(s.players.filter((p) => p.clubId === cid)), plan)); onJob(); };
   };

@@ -5,7 +5,7 @@
 // - contratos do staff: acabam no fim da época; os clubes renovam ou não; técnicos de outros clubes podem ser contratados
 import { rng } from './attributes';
 import { leagueTable } from './season/season';
-import { fmtEur } from './contracts';
+import { fmtEur, salaryBudget } from './contracts';
 import { book, financeOf } from './finance';
 import { staffBill, staffBudget, staffWage, type Staff } from './staff';
 import type { Club, Coach, GameState } from './types';
@@ -18,7 +18,10 @@ export interface Career {
   offers: { clubId: string; date: string }[];
   unemployed?: boolean; // sem clube: o jogo avança e podes candidatar-te
   applied?: Record<string, string>; // clube -> data da última candidatura (uma por mês)
-  vacancies?: Record<string, string>; // clube sem treinador -> data até à qual espera candidatos
+  vacancies?: Record<string, string>;
+  interim?: Record<string, string>; // clube sem treinador -> adjunto que assume interinamente
+  contract?: { clubId: string; wage: number; until: number }; // o meu contrato
+  savings?: number; // indemnizações recebidas (pessoal) // clube sem treinador -> data até à qual espera candidatos
   sackedSeason?: Record<string, number>;
   history: { season: string; clubId: string; pos?: number; titles: string[] }[];
   confidence?: number; // (antigo)
@@ -45,7 +48,21 @@ export function expectedPoints(home: Club, away: Club, side: 0 | 1, neutral = fa
   return 3 * pWin + pDraw;
 }
 /** Paciência da direção: clubes grandes e ricos exigem mais (reagem mais a cada ponto perdido). */
-const demand = (c: Club) => 0.7 + c.reputation / 100 * 0.5 + c.wealth / 100 * 0.3;
+/** Títulos nacionais (Liga, Taça, Taça da Liga, Supertaça) antes do jogo começar: ordem de grandeza (estimativa). */
+const PAST_TITLES: Record<string, number> = { scp: 60, slb: 35, scb: 4, fun: 1 };
+/** Palmarés do clube: história + títulos ganhos no jogo. */
+export const palmaresOf = (s: GameState, clubId: string) => (PAST_TITLES[clubId] ?? 0) + s.honours.filter((h) => h.winner === clubId).length;
+/**
+ * Exigência da direção (multiplica o efeito de cada ponto acima/abaixo do esperado), pedido do António:
+ * reputação, riqueza, palmarés (cultura de vitória), objetivo da época e dinheiro gasto em transferências nesta época.
+ */
+export function demandOf(s: GameState, c: Club) {
+  const palm = Math.min(1, palmaresOf(s, c.id) / 30);
+  const obj = objectiveOf(s, c.id).pos;
+  const spent = financeOf(s, c.id).spentSeason ?? 0;
+  const spendK = Math.min(0.3, spent / Math.max(1, salaryBudget(c)) * 1.5); // gastar 20% do orçamento anual em reforços = +0,3
+  return 0.6 + c.reputation / 100 * 0.35 + c.wealth / 100 * 0.2 + palm * 0.3 + (obj <= 2 ? 0.2 : obj <= 4 ? 0.1 : 0) + spendK;
+}
 
 /** Depois de cada jogo, para os dois clubes: confiança = pontos conseguidos vs esperados, pesados pela exigência do clube. */
 export function boardAfterMatch(s: GameState, home: Club, away: Club, score: [number, number], pens: [number, number] | undefined, importance: number, neutral = false) {
@@ -58,7 +75,7 @@ export function boardAfterMatch(s: GameState, home: Club, away: Club, score: [nu
     const exp = expectedPoints(home, away, side, neutral);
     b.pts += pts; b.exp += exp; b.games++;
     // cada ponto acima/abaixo do esperado vale ~3 de confiança (×exigência ×importância); volta devagar a 60
-    b.conf = Math.max(0, Math.min(100, b.conf + (pts - exp) * 1.8 * demand(club) * (1 + importance * 0.5) + (60 - b.conf) * 0.03));
+    b.conf = Math.max(0, Math.min(100, b.conf + (pts - exp) * 1.8 * demandOf(s, club) * (1 + importance * 0.5) + (60 - b.conf) * 0.03));
   }
 }
 
@@ -85,14 +102,39 @@ export function afterMyMatch(s: GameState, won: boolean, lost: boolean) {
   return [];
 }
 
+const monthIdx = (d: string) => { const m = Number(d.slice(5, 7)); return m >= 7 ? m - 7 : m + 5; };
+
+/** Salário de um treinador principal (€/mês brutos, estimativa): cresce com a reputação e a riqueza do clube. */
+export const coachWage = (rep: number, club: Club) => Math.max(800, Math.round(600 * Math.exp(rep * 0.03) * (0.4 + club.wealth / 100) / 50) * 50);
+/** O máximo que a direção paga ao treinador (estimativa). */
+/** Garante o meu contrato (jogos novos e gravações antigas): 2 épocas ao salário de mercado. */
+export function ensureMyContract(s: GameState) {
+  const c = careerOf(s);
+  const club = s.clubs.find((x) => x.id === s.clubId);
+  if (club && (!c.contract || c.contract.clubId !== club.id)) c.contract = { clubId: club.id, wage: coachWage(c.reputation, club), until: s.season.year + 2 };
+}
+/** Salário mensal do treinador principal de um clube (o meu contrato, ou estimativa para a IA). */
+export function headCoachWage(s: GameState, club: Club) {
+  if (club.id === s.clubId) return careerOf(s).contract?.wage ?? 0;
+  const co = s.coaches.find((x) => x.clubId === club.id);
+  return co ? coachWage(co.tactical * 5, club) : 0;
+}
+export const coachMaxPay = (s: GameState, club: Club) => coachWage(Math.min(club.reputation, careerOf(s).reputation + 15), club);
+
 function sackMe(s: GameState): string[] {
   const c = careerOf(s);
   const old = s.clubs.find((x) => x.id === s.clubId)!;
   c.reputation = Math.max(1, c.reputation - 6);
   c.unemployed = true; c.offers = [];
+  // indemnização: metade dos salários que faltavam do contrato (estimativa), paga pelo clube
+  const k = c.contract;
+  const months = k ? Math.max(0, (k.until - s.season.year) * 12 + (12 - monthIdx(s.date))) : 0;
+  const comp = k ? Math.round(k.wage * months * 0.5 / 100) * 100 : 0;
+  if (comp) { book(s, old.id, 'Indemnização ao treinador despedido', -comp); c.savings = (c.savings ?? 0) + comp; }
+  c.contract = undefined;
   s.clubId = NO_CLUB;
   openVacancy(s, old.id);
-  return [`A direção do ${old.name} despediu-te. Estás sem clube: vê as vagas na Carreira e candidata-te.`];
+  return [`A direção do ${old.name} despediu-te${comp ? ` (indemnização ${fmtEur(comp)})` : ''}. ${interimOf(s, old.id)!.name.replace(' (interino)', '')} assume a equipa interinamente. Estás sem clube: vê as vagas na Carreira e candidata-te.`];
 }
 
 /** Clube sem treinador: espera 2-4 semanas por candidatos (podes candidatar-te), depois contrata do mercado. */
@@ -102,6 +144,16 @@ function openVacancy(s: GameState, clubId: string) {
   const d = new Date(s.date); d.setDate(d.getDate() + days);
   (c.vacancies ??= {})[clubId] = d.toISOString().slice(0, 10);
   const b = boardOf(s, clubId); b.conf = 60; b.exp = 0; b.pts = 0; b.games = 0; b.coachSince = s.date;
+  // treinador interino: o melhor adjunto que ficou no clube (se não houver, fica "interino" sem dados)
+  const adj = (s.staff ?? []).filter((x) => x.clubId === clubId && x.role === 'adjunto').sort((a, b) => b.ability - a.ability)[0];
+  (c.interim ??= {})[clubId] = adj?.id ?? '';
+}
+/** Interino de um clube sem treinador: nome e conhecimento tático (adjunto: 0,6×capacidade+4; sem adjunto: 10). */
+export function interimOf(s: GameState, clubId: string) {
+  const c = careerOf(s);
+  if (!c.vacancies?.[clubId]) return null;
+  const st = (s.staff ?? []).find((x) => x.id === c.interim?.[clubId] && x.clubId === clubId);
+  return st ? { name: `${st.name} (interino)`, tactical: Math.round(st.ability * 0.6 + 4) } : { name: 'Treinador interino', tactical: 10 };
 }
 
 /** Treinadores livres: o real que saiu do meu clube + alguns fictícios. */
@@ -139,10 +191,17 @@ export function aiCoachChanges(s: GameState): string[] {
       const from = fromC;
       const best = target;
       best.clubId = cid;
-      // leva os adjuntos se couberem no orçamento do staff do novo clube (60% cada)
-      for (const st of (s.staff ?? []).filter((x) => x.clubId === from.id && x.role === 'adjunto')) {
-        if (r() < 0.6 && staffBill(s, cid) + st.wage <= staffBudget(club)) { const cur = (s.staff ?? []).filter((x) => x.clubId === cid && x.role === 'adjunto').sort((a, b) => a.ability - b.ability)[0]; if (cur) cur.clubId = null; st.clubId = cid; }
+      // leva a equipa técnica (70% de cada um aceitar), se couber no orçamento do staff do novo clube (substitui quem lá está na mesma função)
+      const went: string[] = [];
+      for (const st of (s.staff ?? []).filter((x) => x.clubId === from.id && x.role !== 'formacao')) {
+        if (r() > 0.7) continue;
+        const cur = (s.staff ?? []).filter((x) => x.clubId === cid && x.role === st.role).sort((a, b) => a.ability - b.ability)[0];
+        if (staffBill(s, cid) - (cur?.wage ?? 0) + st.wage > staffBudget(club)) continue;
+        if (cur) cur.clubId = null;
+        st.clubId = cid; went.push(st.name);
       }
+      if (went.length) out.push(`${best.name} leva consigo: ${went.join(', ')}.`);
+      fillVacantRoles(s, from);
       out.push(`${best.name} deixa o ${from.name} e é o novo treinador do ${club.name}.`);
       openVacancy(s, from.id);
       out.push(`O ${from.name} fica sem treinador.`);
@@ -170,8 +229,9 @@ export function aiCoachChanges(s: GameState): string[] {
     const old = s.coaches.find((x) => x.clubId === club.id);
     if (old) old.clubId = null;
     if (old) (s as GameState & { lastSacked?: Record<string, string> }).lastSacked = { ...((s as any).lastSacked ?? {}), [club.id]: old.id };
-    out.push(`O ${club.name} despediu ${old?.name ?? 'o treinador'} (confiança da direção ${Math.round(b.conf)}: ${b.pts} pontos em ${b.games} jogos, esperados ${b.exp.toFixed(0)}). O lugar está vago.`);
+    const msg = `O ${club.name} despediu ${old?.name ?? 'o treinador'} (confiança da direção ${Math.round(b.conf)}: ${b.pts} pontos em ${b.games} jogos, esperados ${b.exp.toFixed(0)}).`;
     openVacancy(s, club.id);
+    out.push(`${msg} ${interimOf(s, club.id)!.name.replace(' (interino)', '')} assume a equipa interinamente; o lugar está vago.`);
   }
   return out;
 }
@@ -195,50 +255,68 @@ export function canApply(s: GameState, clubId: string) {
   return { ok: false, why: 'O treinador está seguro no cargo' };
 }
 
-export interface Question { q: string; options: string[] }
-/** Perguntas da entrevista (iguais para todos os clubes; o que conta é o que cada clube valoriza). */
-export const INTERVIEW: Question[] = [
-  { q: 'Que objetivo acha realista para esta época?', options: ['Ser campeão', 'Ficar nos 4 primeiros', 'Chegar ao play-off', 'Uma época tranquila'] },
-  { q: 'Como quer que a equipa jogue?', options: ['Posse de bola e controlo do jogo', 'Pressão alta e muita intensidade', 'Bloco organizado e contra-ataque'] },
-  { q: 'Qual o papel da formação no seu projeto?', options: ['Aposta forte: lançar jovens do clube', 'Equilíbrio entre jovens e experientes', 'A prioridade é ganhar já'] },
-  { q: 'O orçamento atual chega para os objetivos?', options: ['Sim, trabalho com o que há', 'Preciso de reforços (mais orçamento)', 'Consigo fazer mais com menos'] },
-];
+export interface Question { id: string; q: string; options: string[]; score: number[] } // pontuação 0-10 de cada resposta, conforme o clube
 
-/** Valores do clube (estimativa a partir dos dados: reputação, riqueza, qualidade da formação). */
-export function clubValues(s: GameState, clubId: string) {
+/** Perfil do clube para a entrevista (calculado dos dados: plantel, palmarés, reputação, riqueza, formação). */
+export function clubProfile(s: GameState, clubId: string) {
   const club = s.clubs.find((x) => x.id === clubId)!;
-  const obj = objectiveOf(s, clubId).pos;
-  return {
-    objective: obj <= 2 ? 0 : obj <= 4 ? 1 : obj <= 8 ? 2 : 3,
-    style: club.reputation >= 85 ? [0, 1] : club.reputation >= 70 ? [0, 1, 2] : [2, 1],
-    youth: club.id === 'scp' || club.wealth >= 70 ? 1 : club.reputation < 65 ? 0 : 1, // grandes querem equilíbrio; pequenos vivem da formação
-    budget: club.wealth >= 85 ? 1 : 0, // ricos aceitam pedidos de reforço; pequenos querem contas certas
-  };
+  const sq = s.players.filter((p) => p.clubId === clubId);
+  const n = Math.max(1, sq.length);
+  const avgAge = sq.reduce((a, p) => a + p.age, 0) / n;
+  const youth = sq.filter((p) => p.age <= 23).length / n;
+  const foreign = sq.filter((p) => p.nationality !== 'Portugal').length / n;
+  const palm = palmaresOf(s, clubId);
+  const winning = palm >= 10 || club.reputation >= 88; // cultura de vitória
+  const youthPolicy = youth >= 0.35 || clubId === 'scp'; // aposta em jovens (Sporting: formação reconhecida)
+  const spender = (foreign >= 0.3 && club.wealth >= 60) || club.wealth >= 85; // gasta em jogadores feitos, de fora
+  const modest = club.wealth < 50;
+  return { club, avgAge, youth, foreign, palm, winning, youthPolicy, spender, modest, objective: objectiveOf(s, clubId).pos };
 }
 
-/** Avalia as respostas (0-100) e decide. A reputação do treinador face à do clube conta tanto como a entrevista. */
+/** Perguntas da entrevista: umas fixas, outras conforme a cultura, a filosofia e o plantel do clube. */
+export function interviewFor(s: GameState, clubId: string): Question[] {
+  const P = clubProfile(s, clubId);
+  const objIdx = P.objective <= 2 ? 0 : P.objective <= 4 ? 1 : P.objective <= 8 ? 2 : 3;
+  const qs: Question[] = [
+    { id: 'obj', q: 'Que objetivo acha realista para esta época?', options: ['Ser campeão', 'Ficar nos 4 primeiros', 'Chegar ao play-off', 'Uma época tranquila'],
+      score: [0, 1, 2, 3].map((i) => (i === objIdx ? 10 : i === objIdx - 1 ? 8 : i < objIdx ? 3 : 2)) },
+    { id: 'estilo', q: 'Como quer que a equipa jogue?', options: ['Posse de bola e controlo do jogo', 'Pressão alta e muita intensidade', 'Bloco organizado e contra-ataque'],
+      score: P.club.reputation >= 85 ? [10, 9, 3] : P.club.reputation >= 70 ? [8, 9, 7] : [5, 7, 10] },
+    { id: 'formacao', q: 'Qual o papel dos jovens no seu projeto?', options: ['Aposta forte: lançar jovens do clube', 'Equilíbrio entre jovens e experientes', 'A prioridade é ganhar já'],
+      score: P.youthPolicy ? [10, 7, 2] : P.winning ? [4, 9, 8] : [6, 10, 5] },
+    { id: 'reforcos', q: 'Que tipo de reforços procura?', options: ['Jogadores experientes e de nome, de ligas fortes', 'Jovens de alta qualidade, com margem', 'Jogadores acessíveis que encaixem na ideia', 'Nenhum: confio no plantel'],
+      score: P.spender ? [10, 7, 4, 3] : P.youthPolicy ? [4, 10, 7, 6] : P.modest ? [1, 5, 10, 8] : [6, 8, 8, 5] },
+    { id: 'orcamento', q: 'O orçamento atual chega para os objetivos?', options: ['Sim, trabalho com o que há', 'Preciso de mais orçamento para reforços', 'Consigo fazer mais com menos'],
+      score: P.spender ? [8, 8, 6] : P.modest ? [9, 1, 10] : [9, 4, 8] },
+    { id: 'balneario', q: 'Como gere o balneário?', options: ['Disciplina rígida e regras claras', 'Diálogo e proximidade com os jogadores', 'Dou liberdade e responsabilidade'],
+      score: P.winning ? [9, 8, 4] : [7, 9, 6] },
+  ];
+  if (P.winning) qs.push({ id: 'pressao', q: `O ${P.club.name} vive de títulos (${P.palm} conquistados). Como lida com essa pressão?`, options: ['Aqui ganhar é a única opção', 'Construir um projeto; os títulos virão', 'Prefiro trabalhar sem pressão'], score: [10, 6, 1] });
+  if (P.modest) qs.push({ id: 'competir', q: 'Com um orçamento curto, como mantém a equipa competitiva?', options: ['Organização, trabalho e união do grupo', 'Valorizar jovens e vendê-los bem', 'Pedindo reforços à direção'], score: [10, 9, 2] });
+  if (P.avgAge >= 28) qs.push({ id: 'veteranos', q: `O plantel é experiente (média de ${P.avgAge.toFixed(1)} anos). Que papel dá aos veteranos?`, options: ['São a base da equipa', 'Renovação gradual, com eles a ajudar os novos', 'Renovar já o plantel'], score: P.winning ? [9, 9, 3] : [6, 10, 5] });
+  if (P.youth >= 0.35) qs.push({ id: 'jovensPlantel', q: `O plantel tem muitos jovens (${Math.round(P.youth * 100)}% com 23 anos ou menos). Como os vai gerir?`, options: ['Dar-lhes minutos e paciência', 'Juntar-lhes jogadores experientes', 'Emprestar os que não jogam'], score: [10, 8, 5] });
+  if (P.foreign >= 0.35) qs.push({ id: 'estrangeiros', q: `Há muitos jogadores estrangeiros no plantel (${Math.round(P.foreign * 100)}%). O que pensa disso?`, options: ['Contratar os melhores, venham de onde vierem', 'Equilíbrio com jogadores portugueses', 'Dar prioridade aos portugueses'], score: P.spender ? [10, 7, 3] : [6, 9, 7] });
+  if (P.club.reputation >= 70) qs.push({ id: 'adeptos', q: 'Os adeptos exigem um futsal atrativo. Concorda?', options: ['Sim: ganhar e jogar bem', 'O resultado vem primeiro', 'O espetáculo é o mais importante'], score: [10, 6, 5] });
+  return qs;
+}
+
+/** Avalia as respostas e decide (avaliação 0-100 ≥ 55). A reputação do treinador face à do clube pesa 45%. */
 export function interview(s: GameState, clubId: string, answers: number[]): { ok: boolean; score: number; notes: string[] } {
-  const v = clubValues(s, clubId); const club = s.clubs.find((x) => x.id === clubId)!; const c = careerOf(s);
+  const qs = interviewFor(s, clubId); const club = s.clubs.find((x) => x.id === clubId)!; const c = careerOf(s);
   const notes: string[] = []; let sc = 0;
-  const dObj = answers[0] - v.objective;
-  if (dObj === 0) { sc += 30; notes.push('Objetivo alinhado com o da direção.'); }
-  else if (dObj === -1) { sc += 22; notes.push('Ambicioso: a direção gostou.'); }
-  else if (dObj < -1) { sc += 8; notes.push('Objetivo pouco realista para o plantel.'); }
-  else { sc += 5; notes.push('A direção esperava mais ambição.'); }
-  if (v.style.includes(answers[1])) { sc += 25; notes.push('O estilo de jogo encaixa na identidade do clube.'); } else { sc += 8; notes.push('O estilo de jogo não é o que o clube procura.'); }
-  const dy = Math.abs(answers[2] - v.youth);
-  sc += dy === 0 ? 25 : dy === 1 ? 14 : 3; notes.push(dy === 0 ? 'Visão da formação igual à do clube.' : dy === 1 ? 'Visão da formação aceitável.' : 'Visão da formação contrária à do clube.');
-  if (answers[3] === 0 || answers[3] === 2) { sc += v.budget === 0 ? 20 : 15; notes.push('Aceita as condições financeiras.'); }
-  else { sc += v.budget === 1 ? 14 : 2; notes.push(v.budget === 1 ? 'Pedido de reforços compreensível.' : 'O clube não pode aumentar o orçamento.'); }
-  // reputação: até 25 pontos abaixo da do clube ainda é possível com uma boa entrevista
+  qs.forEach((q, i) => {
+    const v = q.score[answers[i]] ?? 0; sc += v;
+    if (v >= 9) notes.push(`✔ ${q.options[answers[i]]}`); else if (v <= 3) notes.push(`✘ ${q.options[answers[i]]}`);
+  });
+  const fit = sc / (qs.length * 10);
   const rep = Math.max(0, Math.min(1, (c.reputation - club.reputation + 30) / 40));
-  const total = sc * 0.55 + rep * 45;
-  notes.push(`Reputação: ${Math.round(c.reputation)} (o clube tem ${club.reputation}).`);
+  const total = fit * 55 + rep * 45;
+  notes.push(`Respostas: ${Math.round(fit * 100)}% alinhadas com o clube · Reputação ${Math.round(c.reputation)} (clube ${club.reputation})`);
   return { ok: total >= 55, score: Math.round(total), notes };
 }
 
 /** Plano de transição da equipa técnica ao mudar de clube. */
-export interface StaffPlan { bring: { id: string; wage: number }[]; keep: string[]; boardFills: boolean }
+export interface StaffPlan { bring: { id: string; wage: number }[]; keep: string[]; boardFills: boolean; wage?: number; years?: number }
 
 /** Quanto aceita ganhar um técnico para seguir o treinador (até 20% menos; estimativa). */
 export const followMin = (st: Staff) => Math.round(st.wage * 0.8 / 50) * 50;
@@ -252,6 +330,7 @@ export function checkPlan(s: GameState, clubId: string, plan: StaffPlan) {
   for (const id of plan.keep) total += s.staff!.find((x) => x.id === id)!.wage;
   const budget = staffBudget(club);
   if (total > budget) errs.push(`Total ${fmtEur(total)}/mês passa o orçamento do staff do ${club.name} (${fmtEur(budget)}/mês).`);
+  if (plan.wage !== undefined && plan.wage > coachMaxPay(s, club)) errs.push(`A direção só paga até ${fmtEur(coachMaxPay(s, club))}/mês ao treinador.`);
   return { ok: errs.length === 0, total, budget, errs };
 }
 
@@ -286,6 +365,8 @@ export function takeJob(s: GameState, clubId: string, suggest: (squadClub: strin
   s.tactics = suggest(clubId);
   s.training = undefined;
   c.offers = []; c.unemployed = false;
+  c.contract = { clubId, wage: plan.wage ?? coachWage(c.reputation, club), until: s.season.year + (plan.years ?? 2) };
+  msgs.push(`Contrato até 30/06/${c.contract.until}, ${fmtEur(c.contract.wage)}/mês.`);
   const b = boardOf(s, clubId); b.conf = 60; b.exp = 0; b.pts = 0; b.games = 0; b.coachSince = s.date;
   return msgs.join(' ');
 }
@@ -364,8 +445,27 @@ export function staffSeasonEnd(s: GameState, endingYear: number): string[] {
       if (f) { f.clubId = c.id; f.wage = staffWage(f.ability, c); f.until = endingYear + 2; }
     }
   }
-  // direções: balanço da época (posição final face ao objetivo); contagem recomeça
   const table = leagueTable(s.season, s.leagues[0].clubIds);
+  // treinadores da IA evoluem com o sucesso: pontos acima do esperado, títulos, posição face ao objetivo (estimativa)
+  const titles: Record<string, number> = {};
+  for (const w of Object.values(s.season.winners)) if (w) titles[w] = (titles[w] ?? 0) + 1;
+  for (const co of s.coaches.filter((x) => x.clubId && !x.clubId.includes('@'))) {
+    const b = boardOf(s, co.clubId!);
+    const pos = table.findIndex((r) => r.club === co.clubId) + 1;
+    const perf = b.games ? (b.pts - b.exp) / b.games : 0; // pontos por jogo acima do esperado
+    const d = Math.max(-0.8, Math.min(0.8, perf * 1.5 + (titles[co.clubId!] ?? 0) * 0.3 + (objectiveOf(s, co.clubId!).pos - pos) * 0.05 + (r() - 0.5) * 0.3));
+    co.tactical = Math.max(5, Math.min(20, Math.round((co.tactical + d) * 10) / 10));
+    co.motivation = Math.max(5, Math.min(20, Math.round((co.motivation + d * 0.7) * 10) / 10));
+  }
+  // o meu contrato: no último ano, a direção renova (2 épocas, +10%) se estiver satisfeita; senão saio
+  const k = careerOf(s).contract;
+  if (k && k.clubId === s.clubId && k.until <= endingYear) {
+    const my = s.clubs.find((x) => x.id === s.clubId)!;
+    if (boardOf(s, s.clubId).conf >= 40) { k.until = endingYear + 2; k.wage = Math.min(coachMaxPay(s, my), Math.round(k.wage * 1.1 / 50) * 50); out.push(`A direção renovou o teu contrato até 30/06/${k.until} (${fmtEur(k.wage)}/mês).`); }
+    else { out.push('O teu contrato terminou e a direção não renovou. Estás sem clube.'); careerOf(s).unemployed = true; careerOf(s).contract = undefined; const old = s.clubId; s.clubId = NO_CLUB; openVacancy(s, old); }
+  }
+  for (const cl of s.clubs) financeOf(s, cl.id).spentSeason = 0;
+  // direções: balanço da época (posição final face ao objetivo); contagem recomeça
   for (const club of s.clubs) {
     const b = boardOf(s, club.id);
     const pos = table.findIndex((r) => r.club === club.id) + 1;

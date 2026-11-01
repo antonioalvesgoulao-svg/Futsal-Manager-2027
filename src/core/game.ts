@@ -8,7 +8,7 @@ import { contractsSeasonEnd, ensureContracts } from './contracts';
 import { matchRevenue, monthlyFinance, book, PRIZES } from './finance';
 import { aiMarket, endLoans, ensurePool } from './market';
 import { analystBonus, academyIntake, academySeasonEnd, ensureStaff, gkTrainingK, juniorsOf, trainingK } from './staff';
-import { afterMyMatch, aiCoachChanges, boardAfterMatch, onTitle, staffSeasonEnd } from './career';
+import { ensureMyContract, interimOf, afterMyMatch, aiCoachChanges, boardAfterMatch, onTitle, staffSeasonEnd } from './career';
 import { applyMorale, moraleEvent } from './morale';
 import { injuryOf, matchInjuries, trainingInjuries } from './injuries';
 import { applyDiscipline, banFor, seasonEndDiscipline } from './discipline';
@@ -44,7 +44,7 @@ export function setupFor(s: GameState, clubId: string, comp?: CompId): TeamSetup
   const coach = s.coaches.find((x) => x.clubId === c.id);
   return {
     clubId: c.id, name: c.name, shortName: c.shortName, squad, tactics: aiTactics(squad, c, coach),
-    coachTactical: (coach?.tactical ?? 11) + analystBonus(s, c.id), morale: s.morale, coachName: coach?.name ?? 'Treinador interino',
+    coachTactical: (coach?.tactical ?? interimOf(s, c.id)?.tactical ?? 11) + analystBonus(s, c.id), morale: s.morale, coachName: coach?.name ?? interimOf(s, c.id)?.name ?? 'Treinador interino',
   };
 }
 
@@ -184,6 +184,7 @@ export type AdvanceResult = { kind: 'match'; fixture: Fixture } | { kind: 'day' 
  */
 export function advance(s: GameState): AdvanceResult {
   ensureContracts(s);
+  ensureMyContract(s);
   if (!s.staff?.length) { ensureStaff(s); for (const c of s.clubs) if (!juniorsOf(s, c.id).length) s.players.push(...academyIntake(s, c, s.season.year)); }
   const d = nextDate(s);
   if (!d) {
