@@ -213,7 +213,8 @@ export function measurePossession(m: Metrics, p: Possession, sc: Scene3D & { dur
       inSprint = sprint;
     }
 
-    // Apoio: janelas não sobrepostas de 1 s; não interfere com a contagem de sprints.
+    // Proxy geométrico de apoio: aproximação em janela de 1 s e corredor livre no frame final.
+    // Não prova que o apoio é seguro, utilizável ou que cria/abre espaço taticamente.
     for (let i = step; i < live.length; i += step) {
       const f = live[i], g = live[i - step], q = f.pos[id], q0 = g.pos[id];
       const h = f.holder && att.includes(f.holder) && f.holder !== id ? f.holder : null;
@@ -273,7 +274,7 @@ export function summarize(m: Metrics) {
     'Desmarcações explícitas da coreografia (por min)': r(perMin(m.runActs), 1),
     'Sprints sem bola (por min)': r(perMin(m.sprints), 1),
     'Rotações / trocas de posição (por min)': r(perMin(m.rotations), 1),
-    'Movimentos de apoio ao portador (por min)': r(perMin(m.supports), 1),
+    'Aproximações ao portador com corredor livre — proxy (por min)': r(perMin(m.supports), 1),
     'Transições analisadas (perdas em jogo corrido)': m.transitions,
     'Transições com janela completa de 3 s': m.transWindowComplete,
     'Transições com janela inferior a 3 s (excluídas das métricas aos 3 s)': m.transWindowIncomplete,
