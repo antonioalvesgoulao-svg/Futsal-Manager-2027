@@ -1,3 +1,4 @@
+import type { CustomPlay } from '../tactics';
 // Motor de jogo de futsal: simulação posse a posse com regras oficiais.
 import { gauss, overall, rng } from '../attributes';
 import { roleFit, SLOTS } from '../tactics';
@@ -465,14 +466,16 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     const att = teams[s];
     tstats[s].corners++;
     const sp = att.setup.tactics.setPieces;
-    const rt = CORNER[sp?.cornerRoutine ?? 'primeiro_poste'];
+    const rt = sp?.cornerRoutine === 'personalizado' ? customRt(sp.customCorner) : CORNER[sp?.cornerRoutine ?? 'primeiro_poste'];
     const kicker = taker(att, sp?.corner, (l) => eff(l, 'bolasParadas') * 2 + eff(l, 'passe'));
     actions.push({ type: 'corner', side: s, shooter: kicker.p.id });
     log('canto', `Canto para o ${sideName(s)}, marcado por ${kicker.p.name}`, s);
     // a qualidade do marcador aumenta a hipótese de criar remate
     if (r() < rt.chance + (eff(kicker, 'bolasParadas') - 10) * 0.01) {
       const others = outfield(att).filter((l) => l !== kicker);
-      const shooter = others.length ? pick(others, rt.target) : kicker;
+      // quem remata: o escolhido pelo treinador (função de rematador / 2.ª posição), se estiver em campo
+      const chosen = others.find((l) => l.p.id === (sp?.cornerRoutine === 'personalizado' ? sp.customCorner?.slots.find((x) => x.role === 'rematador')?.player : sp?.cornerRoles?.[0]));
+      const shooter = chosen ?? (others.length ? pick(others, rt.target) : kicker);
       setPiece = { q: rt.q, block: rt.block, assist: kicker };
       shot(s, 'canto', shooter);
       setPiece = null;
@@ -480,6 +483,14 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
       // perda na bola parada: contra-ataque do adversário
       shot((1 - s) as Side, 'contra');
     }
+  }
+
+  // jogada desenhada: mais movimentos e um bloqueio criam melhores remates; sem equilíbrio, mais contra-ataques (estimativa)
+  function customRt(cp?: CustomPlay) {
+    const runs = Math.min(3, (cp?.paths ?? []).filter((x) => x.kind === 'run').length);
+    const block = cp?.slots.some((x) => x.role === 'bloqueio');
+    const bal = cp?.slots.some((x) => x.role === 'equilibrio');
+    return { chance: 0.3 + runs * 0.03, target: (l: Live) => eff(l, 'finalizacao') + eff(l, 'remate'), q: 0.98 + runs * 0.03 + (block ? 0.05 : 0), block: block ? -0.03 : 0, counter: bal ? 0.04 : 0.11 };
   }
 
   const FREEKICK = {
@@ -492,12 +503,15 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     const att = teams[s];
     const sp = att.setup.tactics.setPieces;
     const kind = sp?.freeKickRoutine ?? 'remate_direto';
-    const rt = FREEKICK[kind];
+    const rt = kind === 'personalizado' ? { chance: customRt(sp?.customFk).chance + 0.15, q: customRt(sp?.customFk).q } : FREEKICK[kind];
     const kicker = taker(att, sp?.freeKick, (l) => eff(l, 'bolasParadas') * 2 + eff(l, 'remate'));
     if (r() > rt.chance + (eff(kicker, 'bolasParadas') - 10) * 0.012) return;
     let shooter = kicker;
     const others = outfield(att).filter((l) => l !== kicker);
-    if (kind === 'cruzamento' && others.length) shooter = best(others, (l) => eff(l, 'finalizacao') + eff(l, 'jogoCostas'));
+    const chosenFk = others.find((l) => l.p.id === (kind === 'personalizado' ? sp?.customFk?.slots.find((x) => x.role === 'rematador')?.player : sp?.fkRoles?.[0]));
+    if (chosenFk && kind !== 'remate_direto') shooter = chosenFk;
+    else if (kind === 'personalizado' && others.length) shooter = pick(others, (l) => eff(l, 'finalizacao') + eff(l, 'remate'));
+    else if (kind === 'cruzamento' && others.length) shooter = best(others, (l) => eff(l, 'finalizacao') + eff(l, 'jogoCostas'));
     else if (kind === 'jogada_ensaiada' && others.length) shooter = pick(others, (l) => eff(l, 'finalizacao') + eff(l, 'remate'));
     setPiece = { q: rt.q, block: 0, assist: shooter === kicker ? undefined : kicker };
     shot(s, 'canto', shooter);

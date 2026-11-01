@@ -1,3 +1,5 @@
+import { setPieceEditor } from '../setPieceEditor';
+import { defaultCustom, SP_ROLE_LABEL, type CustomPlay } from '../../core/tactics';
 import { openPlayerSheet } from '../playerSheet';
 // Quadro tático do teu clube: campo com os quintetos, como no Football Manager.
 // Vistas: com bola, sem bola, 5x4, cantos e livres. A tática escolhida muda o desenho no campo.
@@ -51,6 +53,7 @@ function layout(t: Tactics, v: View): { pts: Pt[]; gk: Pt | null; extra: Pt | nu
       remate_fora: [{ x: 96, y: 6 }, { x: 70, y: 42 }, { x: 87, y: 66 }, { x: 54, y: 74 }],
       bloqueio_pivo: [{ x: 96, y: 6 }, { x: 90, y: 64 }, { x: 80, y: 38 }, { x: 60, y: 54 }],
       curto: [{ x: 96, y: 6 }, { x: 85, y: 18 }, { x: 76, y: 52 }, { x: 58, y: 66 }],
+      personalizado: [{ x: 96, y: 6 }, ...(t.setPieces.customCorner ?? defaultCustom('canto')).slots.map(cpPt)],
     };
     return { pts: pos[r], gk: { x: 30, y: 50 }, extra: null, ball: { x: 99, y: 1 } };
   }
@@ -59,8 +62,16 @@ function layout(t: Tactics, v: View): { pts: Pt[]; gk: Pt | null; extra: Pt | nu
     remate_direto: [{ x: 68, y: 50 }, { x: 86, y: 28 }, { x: 86, y: 72 }, { x: 52, y: 50 }],
     jogada_ensaiada: [{ x: 68, y: 50 }, { x: 80, y: 30 }, { x: 76, y: 70 }, { x: 52, y: 50 }],
     cruzamento: [{ x: 68, y: 36 }, { x: 89, y: 66 }, { x: 80, y: 22 }, { x: 54, y: 52 }],
+    personalizado: [cpPt({ x: 29, y: 6 }), ...(t.setPieces.customFk ?? defaultCustom('livre')).slots.map(cpPt)],
   };
   return { pts: pos[r], gk: { x: 22, y: 50 }, extra: null, ball: { x: 70, y: 46 } };
+}
+
+// jogada desenhada no quadro: metros → percentagem do quadro (ataque para a direita, lado do canto em cima)
+const cpPt = (q: { x: number; y: number }): Pt => ({ x: (q.x / 40) * 100, y: 50 - (q.y / 10) * 44 });
+function customArrows(cp: CustomPlay | undefined, pts: Pt[]) {
+  if (!cp) return '';
+  return cp.paths.map((p) => arrow(pts[p.from + 1] ?? pts[0], cpPt(p.to), p.kind === 'pass' ? 'arr pass' : 'arr run')).join('');
 }
 
 // Setas e desenhos que mostram o efeito da tática
@@ -104,6 +115,7 @@ function overlay(t: Tactics, v: View, pts: Pt[]): string {
     if (r === 'remate_fora') o += arrow(k, a, 'arr pass', 0.1) + arrow(a, { x: 99, y: 50 }, 'arr shot');
     if (r === 'bloqueio_pivo') o += arrow(b, { x: a.x - 3, y: a.y - 6 }, 'arr run') + arrow(k, a, 'arr pass', 0.12) + arrow(a, { x: 99, y: 54 }, 'arr shot');
     if (r === 'curto') o += arrow(k, a, 'arr pass') + arrow(a, b, 'arr pass') + arrow(b, c, 'arr pass');
+    if (r === 'personalizado') o += customArrows(t.setPieces.customCorner, pts);
   }
   if (v === 'livres') {
     const r = t.setPieces.freeKickRoutine;
@@ -111,6 +123,7 @@ function overlay(t: Tactics, v: View, pts: Pt[]): string {
     if (r === 'remate_direto') o += arrow(k, { x: 99, y: 46 }, 'arr shot', 0.06);
     if (r === 'jogada_ensaiada') o += arrow(k, b, 'arr pass') + arrow(b, a, 'arr pass', 0.15) + arrow(a, { x: 99, y: 48 }, 'arr shot');
     if (r === 'cruzamento') o += arrow(k, a, 'arr pass', -0.2) + arrow(a, { x: 99, y: 54 }, 'arr shot');
+    if (r === 'personalizado') o += customArrows(t.setPieces.customFk, pts);
   }
   return o;
 }
@@ -199,12 +212,16 @@ export function renderTactics(content: HTMLElement, s: GameState, clubId: string
     remate_fora: ['Marcador', 'Rematador', 'Recarga', 'Equilíbrio'],
     bloqueio_pivo: ['Marcador', 'Pivô', 'Bloqueio', 'Equilíbrio'],
     curto: ['Marcador', 'Apoio curto', 'Apoio', 'Equilíbrio'],
+    personalizado: ['Marcador', ...(t.setPieces.customCorner ?? defaultCustom('canto')).slots.map((x) => SP_ROLE_LABEL[x.role])],
   };
   const fkLabels: Record<string, string[]> = {
     remate_direto: ['Marcador', 'Recarga', 'Recarga', 'Equilíbrio'],
     jogada_ensaiada: ['Marcador', 'Rematador', 'Apoio', 'Equilíbrio'],
     cruzamento: ['Marcador', 'Finalizador', 'Apoio', 'Equilíbrio'],
+    personalizado: ['Marcador', ...(t.setPieces.customFk ?? defaultCustom('livre')).slots.map((x) => SP_ROLE_LABEL[x.role])],
   };
+  if (t.setPieces.cornerRoutine === 'personalizado') t.setPieces.customCorner ??= defaultCustom('canto');
+  if (t.setPieces.freeKickRoutine === 'personalizado') t.setPieces.customFk ??= defaultCustom('livre');
   const labels = view === 'cantos' ? cornerLabels[t.setPieces.cornerRoutine] : view === 'livres' ? fkLabels[t.setPieces.freeKickRoutine] : view === '5x4' ? ['Organizador', 'Ala E', 'Ala D', 'Pivô'] : slots.map((x) => x.label);
 
   const viewHelp: Record<View, string> = {
@@ -242,6 +259,10 @@ export function renderTactics(content: HTMLElement, s: GameState, clubId: string
         <div class="seg-grid">
           ${view === 'cantos' ? segs('cornerRoutine', 'Jogada de canto', t.setPieces.cornerRoutine, LABELS.cornerRoutine, 'sp') : segs('freeKickRoutine', 'Jogada de livre', t.setPieces.freeKickRoutine, LABELS.freeKickRoutine, 'sp')}
         </div>
+        ${(view === 'cantos' ? t.setPieces.cornerRoutine : t.setPieces.freeKickRoutine) === 'personalizado'
+          ? '<h3>Desenhar a jogada</h3><div id="spedit"></div>'
+          : `<h3>Quem faz o quê</h3><div class="takers">${labels.slice(1, 4).map((lab, i) => `<label class="taker">${lab} <select data-sprole="${i}"><option value="">Automático</option>${out.map((p) => `<option value="${p.id}" ${(view === 'cantos' ? t.setPieces.cornerRoles : t.setPieces.fkRoles)?.[i] === p.id ? 'selected' : ''}>${p.name}</option>`).join('')}</select></label>`).join('')}</div>
+          <p class="small muted">Se um escolhido não estiver em campo, faz a função o mais indicado dos que estão.</p>`}
         <h3>Marcadores de bolas paradas</h3>
         <div class="takers">
           ${takerSel('penalty', 'Penáltis', 'fin')}
@@ -300,6 +321,17 @@ export function renderTactics(content: HTMLElement, s: GameState, clubId: string
     t.setPieces = suggestSetPieces(squad, { cornerRoutine: t.setPieces.cornerRoutine, freeKickRoutine: t.setPieces.freeKickRoutine });
     rerender();
   });
+  content.querySelectorAll<HTMLSelectElement>('[data-sprole]').forEach((el) => el.addEventListener('change', () => {
+    const key = view === 'cantos' ? 'cornerRoles' : 'fkRoles';
+    const arr = (t.setPieces[key] ??= [null, null, null]);
+    arr[Number(el.dataset.sprole)] = el.value || null;
+  }));
+  const spHost = content.querySelector<HTMLElement>('#spedit');
+  if (spHost) {
+    const isC = view === 'cantos';
+    const tk = squad.find((p) => p.id === (isC ? t.setPieces.corner : t.setPieces.freeKick))?.name ?? 'automático';
+    setPieceEditor(spHost, isC ? 'canto' : 'livre', isC ? t.setPieces.customCorner : t.setPieces.customFk, squad, tk, (cp) => { if (isC) t.setPieces.customCorner = cp; else t.setPieces.customFk = cp; });
+  }
   content.querySelector<HTMLSelectElement>('#flyp')?.addEventListener('change', (e) => { t.flyingPlayer = (e.target as HTMLSelectElement).value || undefined; });
   content.querySelectorAll<HTMLSelectElement>('[data-sp]').forEach((el) =>
     el.addEventListener('change', () => { (t.setPieces as unknown as Record<string, string>)[el.dataset.sp!] = el.value; rerender(); })

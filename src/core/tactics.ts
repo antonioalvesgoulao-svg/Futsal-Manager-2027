@@ -9,8 +9,22 @@ export type Marking = 'zona' | 'individual' | 'misto';
 export type FlyingKeeper = 'nunca' | 'auto' | 'agressivo' | 'sempre';
 export type GkStyle = 'classico' | 'construtor' | 'avancado';
 export type Rotation = 'curta' | 'normal' | 'longa' | 'manual';
-export type CornerRoutine = 'primeiro_poste' | 'remate_fora' | 'bloqueio_pivo' | 'curto';
-export type FreeKickRoutine = 'remate_direto' | 'jogada_ensaiada' | 'cruzamento';
+export type CornerRoutine = 'primeiro_poste' | 'remate_fora' | 'bloqueio_pivo' | 'curto' | 'personalizado';
+export type FreeKickRoutine = 'remate_direto' | 'jogada_ensaiada' | 'cruzamento' | 'personalizado';
+/** Jogada desenhada pelo treinador (pedido do António): 3 jogadores com função e posição, setas (movimentos) e tracejados (passes).
+ *  Coordenadas: x = metros desde a própria linha de baliza no sentido do ataque (0-40); y = lateral (-10 a 10), com o canto/livre do lado +y. */
+export type SpRole = 'rematador' | 'apoio' | 'bloqueio' | 'equilibrio';
+export interface CustomPlay {
+  slots: { role: SpRole; x: number; y: number; player?: string }[];
+  paths: { from: number; to: { x: number; y: number }; kind: 'run' | 'pass' }[]; // from: -1 = marcador
+}
+export const SP_ROLE_LABEL: Record<SpRole, string> = { rematador: 'Rematador', apoio: 'Apoio', bloqueio: 'Bloqueio', equilibrio: 'Equilíbrio' };
+export const defaultCustom = (kind: 'canto' | 'livre'): CustomPlay => ({
+  slots: kind === 'canto'
+    ? [{ role: 'rematador', x: 31, y: 3 }, { role: 'bloqueio', x: 36, y: 1 }, { role: 'equilibrio', x: 26, y: -2 }]
+    : [{ role: 'rematador', x: 30, y: 4 }, { role: 'apoio', x: 33, y: -3 }, { role: 'equilibrio', x: 24, y: 0 }],
+  paths: [],
+});
 
 export interface SetPieces {
   penalty: string | null; // penáltis e livres de 10 m (se não estiver em campo, bate o melhor em campo)
@@ -20,6 +34,10 @@ export interface SetPieces {
   kickIn: string | null; // pontapés de linha lateral
   cornerRoutine: CornerRoutine;
   freeKickRoutine: FreeKickRoutine;
+  cornerRoles?: (string | null)[]; // quem faz cada função nas jogadas de canto (2.ª, 3.ª e 4.ª posição do quadro)
+  fkRoles?: (string | null)[];
+  customCorner?: CustomPlay;
+  customFk?: CustomPlay;
 }
 
 export interface Tactics {
@@ -55,8 +73,8 @@ export const LABELS = {
   },
   rotation: { curta: 'Curta (rodar muito)', normal: 'Normal', longa: 'Longa (titulares mais tempo)', manual: 'Manual (só eu substituo)' },
   gkStyle: { classico: 'Clássico (fica na baliza)', construtor: 'Construtor (joga com os pés)', avancado: 'Atacante (sai a jogar e remata)' },
-  cornerRoutine: { primeiro_poste: 'Ao primeiro poste', remate_fora: 'Remate de fora', bloqueio_pivo: 'Bloqueio para o pivô', curto: 'Canto curto' },
-  freeKickRoutine: { remate_direto: 'Remate direto', jogada_ensaiada: 'Jogada ensaiada', cruzamento: 'Cruzamento ao segundo poste' },
+  cornerRoutine: { primeiro_poste: 'Ao primeiro poste', remate_fora: 'Remate de fora', bloqueio_pivo: 'Bloqueio para o pivô', curto: 'Canto curto', personalizado: 'Desenhada por mim' },
+  freeKickRoutine: { remate_direto: 'Remate direto', jogada_ensaiada: 'Jogada ensaiada', cruzamento: 'Cruzamento ao segundo poste', personalizado: 'Desenhada por mim' },
 } as const;
 
 export const DESCRIPTIONS: Record<string, string> = {

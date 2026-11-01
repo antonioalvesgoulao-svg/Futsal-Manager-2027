@@ -1,3 +1,4 @@
+import type { CustomPlay } from '../tactics';
 // Coreografia de uma posse: transforma o que o motor decidiu numa jogada visível e contínua.
 // É a mesma para o 2D e para o 3D.
 //
@@ -1542,10 +1543,12 @@ export class Choreo {
     this.balls.push({ k: 'still', t0: T, at: { x: b0.x, y: b0.y, z: 0.11 } });
     this.balls.push({ k: 'hands', t0: tPick, id: taker, z: 0.95 });
     this.balls.push({ k: 'still', t0: tPlace, at: spot });
-    const NAMES = { primeiro_poste: 'ao primeiro poste', remate_fora: 'remate de fora', bloqueio_pivo: 'bloqueio para o pivô', curto: 'canto curto' };
+    const NAMES = { primeiro_poste: 'ao primeiro poste', remate_fora: 'remate de fora', bloqueio_pivo: 'bloqueio para o pivô', curto: 'canto curto', personalizado: 'jogada desenhada' };
     this.phase(T, `Canto (${NAMES[routine]})`);
     this.label(T + 0.4, `Canto para ${this.nm(taker)} marcar`);
     const others = this.attOut.filter((x) => x !== taker);
+    const cpC = this.tactics[att].setPieces?.customCorner;
+    if (routine === 'personalizado' && cpC) return this.customPlay(T, taker, this.A(40.3, s * 10.35), s, tSet, tKick, sh, cpC);
     const shooter = sh && others.includes(sh.shooter!) ? sh.shooter! : others[Math.floor(r() * others.length)];
     const rest = others.filter((x) => x !== shooter);
     const m = new Map<string, P2>();
@@ -1622,6 +1625,61 @@ export class Choreo {
     return this.shot(tShot, shooter, sh, this.dirA);
   }
 
+  /** Jogada desenhada pelo treinador (cantos e livres): posições, setas (movimentos) e tracejados (passes). */
+  private customPlay(T: number, taker: string, takerAt: P2, s: number, tSet: number, tKick: number, sh: Action | undefined | null, cp: CustomPlay): number {
+    const att = this.att;
+    const others = this.attOut.filter((x) => x !== taker);
+    // jogadores nas funções: o escolhido (se estiver em campo) ou o mais indicado dos restantes
+    const free = [...others];
+    const ids: string[] = cp.slots.map((sl) => {
+      const want = sl.player && free.includes(sl.player) ? sl.player : sl.role === 'rematador' && sh?.shooter && free.includes(sh.shooter) ? sh.shooter : free[0];
+      free.splice(free.indexOf(want), 1);
+      return want;
+    }).filter(Boolean);
+    const P = (q: { x: number; y: number }) => this.A(q.x, s * q.y);
+    const m = new Map<string, P2>();
+    m.set(taker, takerAt);
+    cp.slots.forEach((sl, i) => { if (ids[i]) m.set(ids[i], P(sl)); });
+    free.forEach((id, i) => m.set(id, this.A(22, (i - 0.5) * 6)));
+    if (this.gkA) m.set(this.gkA, this.A(4, 0));
+    // defesa: zona perto da baliza, a acompanhar as posições desenhadas
+    const dIds = [...this.defOut];
+    dIds.forEach((id, i) => { const near = ids[i] ? m.get(ids[i])! : this.A(34, 0); m.set(id, { x: lerp(near.x, this.A(39, 0).x, 0.35), y: near.y * 0.8 }); });
+    if (this.gkD) m.set(this.gkD, this.A(39.5, s * 0.9));
+    this.placeAll(tSet, m);
+    for (const [id, p2] of m) this.key(id, tKick - 0.15, p2, true);
+    this.label(tSet - 1.6, 'Jogada ensaiada desenhada pelo treinador');
+    const tr = tKick + 0.8;
+    // setas: movimentos; o bloqueio faz bloqueio
+    for (const path of cp.paths.filter((x) => x.kind === 'run' && x.from >= 0)) {
+      const id = ids[path.from];
+      if (!id) continue;
+      this.key(id, tr, P(path.to));
+      this.act(id, cp.slots[path.from].role === 'bloqueio' ? 'screen' : 'run', tKick - 0.4, tr, cp.slots[path.from].role === 'bloqueio' ? { face: taker } : { to: P(path.to) });
+    }
+    cp.slots.forEach((sl, i) => { if (sl.role === 'bloqueio' && ids[i] && !cp.paths.some((x) => x.from === i && x.kind === 'run')) this.act(ids[i], 'screen', tKick - 0.3, tr + 0.4, { face: taker }); });
+    // tracejados: passes (o do marcador vai para quem acaba mais perto do fim do tracejado)
+    const pass0 = cp.paths.find((x) => x.kind === 'pass' && x.from === -1);
+    const endOf = (i: number) => { const rp = cp.paths.find((x) => x.kind === 'run' && x.from === i); return P(rp ? rp.to : cp.slots[i]); };
+    const recvIdx = pass0 ? cp.slots.map((_, i) => i).filter((i) => ids[i]).sort((a, b) => dist(endOf(a), P(pass0.to)) - dist(endOf(b), P(pass0.to)))[0] : cp.slots.findIndex((x) => x.role === 'rematador');
+    const receiver = ids[recvIdx] ?? ids[0] ?? others[0];
+    this.key(receiver, tr, endOf(recvIdx));
+    this.pass(taker, receiver, tKick, tr, 0.05);
+    let shooter = receiver, tShot = tr + 0.05;
+    const pass2 = cp.paths.find((x) => x.kind === 'pass' && x.from === recvIdx);
+    if (pass2) {
+      const j = cp.slots.map((_, i) => i).filter((i) => ids[i] && i !== recvIdx).sort((a, b) => dist(endOf(a), P(pass2.to)) - dist(endOf(b), P(pass2.to)))[0];
+      if (j !== undefined && ids[j]) { this.key(ids[j], tr + 0.6, endOf(j)); this.pass(receiver, ids[j], tr + 0.1, tr + 0.6, 0.05); shooter = ids[j]; tShot = tr + 0.65; }
+    }
+    this.label(tKick, `Jogada desenhada: ${this.nm(taker)} para ${this.nm(receiver)}`);
+    if (!sh) { this.attKeysAt(tShot + 1.2, new Set([shooter, taker])); return tShot; }
+    // o motor decide quem remata; se for outro, a bola ainda lhe chega num último passe
+    const realShooter = sh.shooter && this.attOut.includes(sh.shooter) ? sh.shooter : shooter;
+    if (realShooter !== shooter) { const sp = this.P(realShooter, tShot); this.pass(shooter, realShooter, tShot, tShot + 0.5, 0.05); this.key(realShooter, tShot + 0.5, sp); tShot += 0.55; }
+    void att;
+    return this.shot(tShot, realShooter, sh, this.dirA);
+  }
+
   /** A defesa afasta a bola depois de um canto ou livre sem remate. */
   private clearance(T: number): number {
     const def = this.defOut;
@@ -1667,6 +1725,9 @@ export class Choreo {
     this.key(kicker, tPlace, { x: at.x, y: at.y }, true);
     this.balls.push({ k: 'still', t0: tPlace, at: { ...at, z: 0.11 } });
     this.fix(kicker, T, tPlace + 0.1);
+    // jogada desenhada pelo treinador (só quando há remate a sério; livre do lado +y, espelhado se a falta for do outro lado)
+    const cpF = this.tactics[att].setPieces?.customFk;
+    if (routine === 'personalizado' && cpF && sh) { this.key(kicker, tSet, at, true); this.fix(kicker, T, tKick + 0.3); return this.customPlay(T, kicker, at, at.y >= 0 ? 1 : -1, tSet, tKick + 0.4, sh, cpF); }
     const m = new Map<string, P2>();
     const g = this.A(40, 0);
     const gl = dist(at, g) || 1;
