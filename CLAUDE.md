@@ -7,7 +7,7 @@ O António não programa: o Claude escreve o código, testa e envia para o GitHu
 - Comunicar em **português europeu**, de forma concisa; tabelas em vez de texto longo
 - Explicar o essencial do que mudou, sem pormenores técnicos desnecessários
 - Testar sempre antes de entregar: `npx tsc`, `npx vite build` e um teste no browser (Playwright com o Chromium pré-instalado; para WebGL usar `--use-angle=swiftshader`)
-- Fazer commit e push para `main` no fim de cada passo concluído
+- Trabalhar sempre numa branch própria e propor alterações através de Pull Request; nunca fazer merge para `main` sem aprovação explícita do António
 - O António valoriza **realismo**: regras oficiais, competições reais, dados reais. Validar com dados reais sempre que possível
 - O António revê os números; dizer claramente o que é estimativa
 - Experiência de jogo primeiro, grafismo depois
@@ -140,3 +140,14 @@ Real: 6,38 golos/jogo, casa 49,6%, fora 37,0%, empates 13,5%, <3 golos 6,1%. Man
 | 14 2 ligas por continente | |
 
 Recolha de dados: o zerozero bloqueia pedidos diretos; usar o Chrome do António (Claude in Chrome) para ler páginas.
+
+
+## Continuidade entre ferramentas de IA
+- A documentação agnóstica para qualquer assistente está em `AGENTS.md`.
+- Antes de alterar código, ler `HANDOFF.md`, `docs/ARCHITECTURE.md` e `docs/GAMEPLAY_RULES.md`.
+- O GitHub é a fonte de verdade para código, branches, commits, PRs e estado de validação; não assumir que o histórico de conversas está disponível.
+- Confirmar sempre o estado atual do repositório e das PRs antes de continuar: os estados documentados em `HANDOFF.md` podem ter mudado.
+- Não fazer merge para `main` sem aprovação explícita do António.
+- Não declarar testes, builds, validações ou alterações concluídas sem os executar/verificar efetivamente.
+- Preservar o motor de resultados como autoridade dos resultados; alterações visuais/táticas não podem alterar resultados por acidente.
+- O jogo é de futsal 5v5. Não substituir conceitos, regras ou padrões específicos de futsal por futebol de 11.
