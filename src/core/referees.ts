@@ -26,12 +26,31 @@ export const REF_PAIRS: RefPair[] = [
   { id: 'd12', names: ['José Moreira', 'Cristiano Santos'], tolerance: 0.91, cards: 0.9, harsh: 0.84, real: true, top: false },
 ];
 
-// Espanha: duplas com nomes FICTÍCIOS até o António enviar a lista real dos árbitros da Primera División (temperamento sorteado como em Portugal)
-const ES_NAMES = ['Javier Martín', 'Sergio Gómez', 'Daniel Ruiz', 'Alberto Navarro', 'Rubén Torres', 'Pablo Ortega', 'Iván Morales', 'Adrián Castro', 'Óscar Delgado', 'Raúl Herrera', 'Marcos Prieto', 'Víctor Romero', 'Jorge Molina', 'Diego Vidal', 'Hugo Serrano', 'Carlos Iglesias', 'Álvaro Cano', 'Miguel Pascual', 'Fernando Lozano', 'Luis Benítez', 'Antonio Peña', 'David Campos', 'Manuel Vega', 'Francisco Rubio'];
-export const REF_PAIRS_ESP: RefPair[] = Array.from({ length: 12 }, (_, i) => {
-  const h = (k: number) => (((i + 1) * 2654435761 * (k + 3)) >>> 0) / 4294967296;
-  return { id: `e${i + 1}`, names: [ES_NAMES[i * 2], ES_NAMES[i * 2 + 1]] as [string, string], tolerance: Math.round((0.8 + h(1) * 0.38) * 100) / 100, cards: Math.round((0.85 + h(2) * 0.4) * 100) / 100, harsh: Math.round((0.76 + h(3) * 0.48) * 100) / 100, real: false, top: i < 4 };
-});
+// Espanha: os 43 árbitros reais da 1.ª divisão (Guía RFEF 2025/26, futsal.rfef.es), em duplas sorteadas; as 6 duplas com mais
+// épocas na Liga Prime são as de topo. Temperamento sorteado à volta das médias, como em Portugal (estimativa).
+export const REF_PAIRS_ESP: RefPair[] = [
+  { id: 'e1', names: ['Aitor Felipe', 'Alberto Sarabia'], tolerance: 1.13, cards: 1.13, harsh: 1.04, real: true, top: true }, // Vasco / Riojano, 24+6 épocas na 1.ª
+  { id: 'e2', names: ['Fernando Faubell', 'Juan José Cordero'], tolerance: 0.81, cards: 1.13, harsh: 0.93, real: true, top: true }, // Aragonés / Andaluz, 4+23 épocas na 1.ª
+  { id: 'e3', names: ['Héctor Mayo', 'Alejandro Martínez'], tolerance: 0.96, cards: 1.01, harsh: 1.04, real: true, top: true }, // Madrileño / Murciano, 7+19 épocas na 1.ª
+  { id: 'e4', names: ['Pedro Antonio Carrillo', 'Javier Moreno'], tolerance: 0.99, cards: 0.9, harsh: 1.0, real: true, top: true }, // Andaluz / Andaluz, 8+17 épocas na 1.ª
+  { id: 'e5', names: ['Fermin A. Sánchez-Molina', 'Cristian Cubero'], tolerance: 1.09, cards: 1.09, harsh: 1.0, real: true, top: true }, // Castellano - Manchego / Madrileño, 23+2 épocas na 1.ª
+  { id: 'e6', names: ['Francesc García Donas', 'Antonio Pablo Navarro'], tolerance: 1.15, cards: 0.95, harsh: 0.96, real: true, top: true }, // Catalán / Castellano - Leonés, 18+6 épocas na 1.ª
+  { id: 'e7', names: ['David Urdanoz', 'Eder Gómez De Salazar'], tolerance: 1.15, cards: 1.04, harsh: 1.01, real: true, top: false }, // Navarro / Vasco, 20+3 épocas na 1.ª
+  { id: 'e8', names: ['Tomás Santander', 'Sergio Salomé'], tolerance: 0.81, cards: 0.94, harsh: 0.82, real: true, top: false }, // Aragonés / Extremeño, 13+6 épocas na 1.ª
+  { id: 'e9', names: ['Pablo Delgado', 'Víctor Toca'], tolerance: 0.82, cards: 1.13, harsh: 1.19, real: true, top: false }, // Valenciano / Cántabro, 11+6 épocas na 1.ª
+  { id: 'e10', names: ['Carlos Rodrigo', 'Javier Menendez'], tolerance: 0.84, cards: 1.1, harsh: 0.99, real: true, top: false }, // Castellano - Manchego / Gallego, 12+5 épocas na 1.ª
+  { id: 'e11', names: ['Héctor Vilas', 'Diego Martínez'], tolerance: 0.98, cards: 0.94, harsh: 1.19, real: true, top: false }, // Gallego / Balear, 5+11 épocas na 1.ª
+  { id: 'e12', names: ['Carlos Panadero', 'Rubén Ferrero'], tolerance: 1.04, cards: 1.03, harsh: 0.99, real: true, top: false }, // Madrileño / Gallego, 7+7 épocas na 1.ª
+  { id: 'e13', names: ['Jorge González', 'Antonio Jesús García'], tolerance: 1.15, cards: 1.24, harsh: 1.02, real: true, top: false }, // Castellano - Leonés / Andaluz, 11+3 épocas na 1.ª
+  { id: 'e14', names: ['Iván López', 'Luis M. Sánchez'], tolerance: 1.01, cards: 1.12, harsh: 0.91, real: true, top: false }, // Catalán / Castellano - Leonés, 3+11 épocas na 1.ª
+  { id: 'e15', names: ['Carlos Enrique Bustos', 'Andrés Botella'], tolerance: 1.1, cards: 1.05, harsh: 0.99, real: true, top: false }, // Andaluz / Murciano, 8+5 épocas na 1.ª
+  { id: 'e16', names: ['Sergio Sánchez', 'Samuel Gabaldón'], tolerance: 1.14, cards: 1.02, harsh: 0.9, real: true, top: false }, // Cántabro / Valenciano, 6+5 épocas na 1.ª
+  { id: 'e17', names: ['Oscar Ropero', 'Jairo Leiva'], tolerance: 0.9, cards: 0.86, harsh: 1.07, real: true, top: false }, // Valenciano / Andaluz, 8+2 épocas na 1.ª
+  { id: 'e18', names: ['Alberto Carrión', 'Manuel Jesús Barrilero'], tolerance: 1.03, cards: 1.03, harsh: 1.01, real: true, top: false }, // Castellano - Manchego / Andaluz, 4+5 épocas na 1.ª
+  { id: 'e19', names: ['José Lázaro', 'Jesús Almeida'], tolerance: 0.99, cards: 1.22, harsh: 0.88, real: true, top: false }, // Aragonés / Tinerfeño, 4+3 épocas na 1.ª
+  { id: 'e20', names: ['Franciso José Castillo', 'Sergio Toral'], tolerance: 0.98, cards: 1.05, harsh: 1.16, real: true, top: false }, // Murciano / Castellano - Leonés, 5+2 épocas na 1.ª
+  { id: 'e21', names: ['Francisco J. Marazuela', 'David Pizarro'], tolerance: 1.11, cards: 1.07, harsh: 1.2, real: true, top: false }, // Castellano - Leonés / Andaluz, 2+2 épocas na 1.ª
+];
 
 /** Clássicos espanhóis (estimativa): dérbi de Múrcia (ElPozo x Cartagena) e jogos entre os 5 grandes. */
 const ESP_BIG = ['bar', 'epz', 'pal', 'jca', 'int'];

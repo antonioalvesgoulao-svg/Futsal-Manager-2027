@@ -82,8 +82,11 @@ export function nextMyFixture(s: GameState) {
 export function matchOptions(s: GameState, f: Fixture) {
   const ref = refereesFor(s, f);
   // Taça de Portugal (Regulamento 2026/27, Art. 14.4): quartos e meias da Final Eight vão diretos a penáltis; a final tem prolongamento
-  const noExtraTime = f.comp === 'taca' && (f.stage === 'Quartos-de-final' || f.stage === 'Meias-finais');
-  return { knockout: f.knockout, noExtraTime, seed: `${f.id}-${s.season.year}`, manual: f.home === s.clubId ? (0 as const) : f.away === s.clubId ? (1 as const) : undefined, referees: ref, importance: importanceOf(s, f) };
+  // Espanha (normas RFEF 2026/27): Copa de España, quartos e meias da fase final e meias da Supercopa vão diretos a penáltis;
+  // prolongamento de 2 x 3 min. Play-off (melhor de 3): estimativa com o mesmo prolongamento
+  const esp = ['esp', 'espPlayoff', 'copaEsp', 'superEsp', 'copaRey'].includes(f.comp);
+  const noExtraTime = (f.comp === 'taca' || f.comp === 'copaEsp' || f.comp === 'superEsp') && (f.stage === 'Quartos-de-final' || f.stage === 'Meias-finais');
+  return { knockout: f.knockout, noExtraTime, extraTimeLen: esp ? 180 : undefined, seed: `${f.id}-${s.season.year}`, manual: f.home === s.clubId ? (0 as const) : f.away === s.clubId ? (1 as const) : undefined, referees: ref, importance: importanceOf(s, f) };
 }
 
 function playFixture(s: GameState, f: Fixture, given?: MatchResult): MatchResult {
@@ -237,7 +240,7 @@ function playDay(s: GameState, d: string) {
 // Fim de época: palmarés, evolução, reformas, formação e nova época
 function endSeason(s: GameState): DevChange[] {
   const old = s.season;
-  for (const comp of ['supertaca', 'tacaLiga', 'taca', 'liga', 'superEsp', 'copaEsp', 'copaRey', 'esp'] as const) {
+  for (const comp of ['supertaca', 'tacaLiga', 'taca', 'liga', 'superEsp', 'espAp', 'copaEsp', 'espCl', 'esp'] as const) {
     if (old.winners[comp]) s.honours.push({ season: old.label, comp, winner: old.winners[comp]!, runnerUp: runnerUp(old, comp) });
   }
   for (const lg of s.leagues) {
@@ -279,13 +282,13 @@ function endSeason(s: GameState): DevChange[] {
   const ranking = [champ, ...table.filter((c) => c !== champ)];
   const cup = old.winners.taca ?? table[1];
   const second = cup === champ ? runnerUp(old, 'taca') ?? table[1] : cup;
-  // Espanha: Supercopa com campeão, finalista do play-off e vencedores das duas taças (vagas repetidas → seguintes na tabela)
+  // Espanha: Supercopa com os campeões do Apertura e do Clausura, o Supercampeão e o vencedor da Copa (vagas repetidas → seguintes na tabela)
   let espNext: { ranking: string[]; four: string[] } | undefined;
   if (espIds(s).length) {
     const et = old.esp?.regularTable ?? leagueTable(old, espIds(s), 99, 'esp').map((x) => x.club);
     const ec = old.winners.esp ?? et[0];
     const four: string[] = [];
-    for (const c of [ec, runnerUp(old, 'esp'), old.winners.copaEsp, old.winners.copaRey, ...et]) if (c && !four.includes(c) && four.length < 4) four.push(c);
+    for (const c of [old.winners.espAp, old.winners.espCl, ec, old.winners.copaEsp, ...et]) if (c && !four.includes(c) && four.length < 4) four.push(c);
     espNext = { ranking: [ec, ...et.filter((c) => c !== ec)], four };
   }
   s.season = createSeason(old.year + 1, ranking, [champ, second], espNext);

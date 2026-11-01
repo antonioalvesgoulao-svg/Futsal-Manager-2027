@@ -57,6 +57,28 @@ export const ARENAS: Record<string, ArenaProfile> = {
   tor: { name: 'Pavilhão Física de Torres Vedras', capacity: 1000, capacityReal: true, style: 'municipal', sides: ['N', 'S'], seat: '#c8202e', wall: '#eeeeec', roof: 'abóbada', windows: true, truss: '#f5f5f4', structure: 'arcos', ceiling: '#f2f2f0', base: 1.6, fronts: { bg: '#f5f5f5', fg: '#c8202e', text: ['SCU TORREENSE', 'FÍSICA', 'TORRES VEDRAS'] }, floor: { court: '#d6a066', surround: '#c0392b', wood: true } },
 };
 
+// Espanha: lotações oficiais da RFEF (futsal.rfef.es, ficha de cada clube, 2/11/2026) e interiores a partir das fotos da RFEF.
+const ES_COURT = { court: '#2f8fd6', surround: '#1d3f8f' }; // piso azul das transmissões da Liga Prime
+export const ARENAS_ESP: Record<string, ArenaProfile> = {
+  bar: { name: 'Palau Blaugrana', capacity: 7585, capacityReal: true, style: 'moderno', sides: ['N', 'S', 'E', 'W'], seat: '#1d4fb8', wall: '#1b2633', roof: 'treliça', windows: false, ceilingDark: true, upperTier: true, cube: true, structure: 'malha', truss: '#28485e', ceiling: '#1d3a4d', floor: ES_COURT, fronts: { bg: '#a50044', fg: '#ffffff', text: ['FCB', 'PALAU BLAUGRANA'] } },
+  epz: { name: 'Palacio de Deportes de Murcia', capacity: 7500, capacityReal: true, style: 'moderno', sides: ['N', 'S', 'E', 'W'], seat: '#b9161d', seatMix: ['#b9161d', '#d1d5db'], wall: '#7a4a3a', roof: 'treliça', windows: false, upperTier: true, cube: true, truss: '#c9ced4', ceiling: '#3b3f45', floor: { court: '#2563d6', surround: '#2563d6' }, banners: true },
+  pal: { name: "Palau Municipal d'Esports de Son Moix", capacity: 3800, capacityReal: true, style: 'moderno', sides: ['N', 'S', 'E', 'W'], seat: '#1e4f8c', seatMix: ['#1e4f8c', '#f5f5f5'], wall: '#3a4048', roof: 'laje', windows: false, beams: '#6b4a32', ceiling: '#2a2e33', upperTier: true, skylights: true, cube: true, floor: { court: '#3aa6dd', surround: '#1d3f8f' } },
+  jca: { name: 'Palacio de los Deportes de Cartagena', capacity: 4817, capacityReal: true, style: 'moderno', sides: ['N', 'S', 'E', 'W'], seat: '#d32f2f', seatMix: ['#d32f2f', '#c9a36b'], wall: '#e9e6e1', roof: 'abóbada', windows: true, structure: 'arcos', truss: '#7a5a3a', beams: '#7a5a3a', ceiling: '#5c5f63', floor: ES_COURT, wallArt: ['#c62828', '#1e2b3a'] },
+  int: { name: 'Pabellón Jorge Garbajosa', capacity: 3200, capacityReal: true, style: 'municipal', sides: ['N', 'S', 'E', 'W'], seat: '#9aa1a8', wall: '#b5654a', roof: 'treliça', windows: false, truss: '#c62828', structure: 'trelicas', ceiling: '#e5e7eb', benches: true, floor: ES_COURT },
+  jae: { name: 'Olivo Arena', capacity: 6589, capacityReal: true, style: 'moderno', sides: ['N', 'S', 'E', 'W'], seat: '#8a9096', seatMix: ['#8a9096', '#d4b106', '#2e7d32', '#1f2329'], wall: '#2b2f36', roof: 'treliça', windows: false, ceilingDark: true, truss: '#1f2329', upperTier: true, cube: true, floor: ES_COURT },
+  val: { name: 'Pabellón Virgen de la Cabeza', capacity: 2000, capacityReal: true, style: 'municipal', sides: ['N', 'S', 'E', 'W'], seat: '#1e4fb0', wall: '#eef0f2', roof: 'treliça', windows: true, truss: '#d9dde2', structure: 'trelicas', ceiling: '#f3f4f6', skylights: true, floor: { court: '#3aa6dd', surround: '#e2513a' } },
+  man: { name: 'Manzanares Arena', capacity: 1800, capacityReal: true, style: 'moderno', sides: ['N', 'S', 'E', 'W'], seat: '#e53935', seatMix: ['#e53935', '#fbc02d', '#2e7d32', '#1e4fb0', '#f5f5f5'], wall: '#f2f2f0', roof: 'treliça', windows: true, truss: '#e5e7eb', structure: 'trelicas', ceiling: '#f5f5f4', floor: { court: '#9a5a35', surround: '#9a5a35', wood: true } },
+  zar: { name: 'CDM Siglo XXI', capacity: 2900, capacityReal: true, style: 'municipal', sides: ['N', 'S', 'E'], seat: '#9aa1a8', wall: '#d8c6a6', roof: 'treliça', windows: false, truss: '#8f979f', ceiling: '#6b6f75', benches: true, banners: true, floor: { court: '#2245a8', surround: '#d84a2a' } },
+  pen: { name: 'Pabellón Juan Vizcarro', capacity: 1000, capacityReal: true, style: 'municipal', sides: ['N'], seat: '#9ca3af', wall: '#cfd8e6', roof: 'treliça', windows: true, truss: '#e5e7eb', ceiling: '#eceae4', standing: true, benches: true, floor: { court: '#d9a066', surround: '#d9a066', wood: true } },
+  par: { name: 'Polideportivo de A Malata', capacity: 4200, capacityReal: true, style: 'municipal', sides: ['N', 'S', 'E', 'W'], seat: '#2f7fd1', wall: '#e5e2da', roof: 'laje', windows: true, ceiling: '#5a6f8f', benches: ['S'], floor: { court: '#8e9599', surround: '#c62828' }, fronts: { bg: '#2f7fd1', fg: '#ffffff', text: ['FERROL'] } },
+  osa: { name: 'Pabellón Anaitasuna', capacity: 3000, capacityReal: true, style: 'moderno', sides: ['N', 'S', 'E', 'W'], seat: '#1e88c8', seatMix: ['#1e88c8', '#f59e0b'], wall: '#2b3a4a', roof: 'treliça', windows: false, truss: '#2b3a4a', ceilingDark: true, floor: { court: '#f2f4f7', surround: '#2e7d32' } },
+  cor: { name: 'Palacio Municipal de Deportes Vista Alegre', capacity: 3500, capacityReal: true, style: 'municipal', sides: ['N', 'S', 'E', 'W'], seat: '#9aa1a8', wall: '#e6e3dc', roof: 'treliça', windows: true, truss: '#d9dde2', structure: 'trelicas', ceiling: '#f2f2f0', floor: { court: '#2f6fd1', surround: '#d84a2a' }, banners: true },
+  eji: { name: 'Pabellón Municipal de Deportes de El Ejido', capacity: 2000, capacityReal: true, style: 'municipal', sides: ['N', 'S'], seat: '#4b5563', wall: '#e8c547', roof: 'treliça', windows: true, beams: '#b5763e', truss: '#b5763e', ceiling: '#e7dcc6', floor: { court: '#d6aa74', surround: '#d6aa74', wood: true } },
+  noi: { name: 'Pabellón Municipal Agustín Mourís', capacity: 776, capacityReal: true, style: 'clube', sides: ['N', 'S'], seat: '#e5e7eb', seatMix: ['#e5e7eb', '#1e4fb0'], wall: '#f1f1ef', roof: 'treliça', windows: true, truss: '#9aa1a8', banners: true, floor: { court: '#d9a85e', surround: '#d9a85e', wood: true } },
+  stc: { name: 'Pabellón Nuevo de Santa Coloma', capacity: 1500, capacityReal: true, style: 'moderno', sides: ['N', 'S'], seat: '#d1d5db', seatMix: ['#d1d5db', '#c62828'], wall: '#2b2f36', roof: 'treliça', windows: true, truss: '#e5e7eb', structure: 'trelicas', ceiling: '#f5f5f4', floor: { court: '#dcb27c', surround: '#dcb27c', area: '#e53935', wood: true } },
+};
+Object.assign(ARENAS, ARENAS_ESP);
+
 /** Campos neutros (final eight, finais, Supertaça), indicados pelo António. Gondomar: 3 005 lugares
  *  sentados com a bancada retrátil (apresentação da Câmara de Gondomar, 2018); Vila do Conde: 800
  *  (Wikipédia); Odivelas: 2 000 (indicada pelo António). */
@@ -82,11 +104,12 @@ export function neutralFor(comp: string, year: number): ArenaProfile {
 export function arenaOf(s: GameState, f: Fixture): ArenaProfile {
   const c = s.clubs.find((x) => x.id === f.home);
   if (c?.league === 'esp1') {
-    if (!f.neutral) return spanishArena(c);
+    if (!f.neutral) return ARENAS[c.id] ?? spanishArena(c);
     // campo neutro em Espanha: um dos grandes pavilhões, que não seja de quem joga, rodando por época (estimativa)
     const hosts = s.clubs.filter((x) => x.league === 'esp1' && (x.capacity ?? 0) >= 4500 && x.id !== f.home && x.id !== f.away);
     const comps = ['superEsp', 'copaEsp', 'copaRey'];
-    return spanishArena(hosts[(comps.indexOf(f.comp) + s.season.year) % hosts.length] ?? c);
+    const host = hosts[(comps.indexOf(f.comp) + s.season.year) % hosts.length] ?? c;
+    return ARENAS[host.id] ?? spanishArena(host);
   }
   if (f.neutral) return neutralFor(f.comp, s.season.year);
   return ARENAS[f.home] ?? { ...ARENAS.fun, name: c?.arena ?? 'Pavilhão', capacity: 800, capacityReal: false };

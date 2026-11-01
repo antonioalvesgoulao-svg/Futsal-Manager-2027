@@ -3,7 +3,7 @@ import { injuryOf } from '../../core/injuries';
 import { banFor } from '../../core/discipline';
 // Ecrãs da época: início, calendário, competições e dia de jogo
 import { clubName, myFixtures, nextMyFixture, playMyMatch, setupFor } from '../../core/game';
-import { leagueTable } from '../../core/season/season';
+import { leagueTable, spainTable } from '../../core/season/season';
 import { ARENAS, arenaOf } from '../../core/attendance';
 import { refBadgeHtml, refereesFor } from '../../core/referees';
 import { KitChoice, kitsOf, matchGkKits, matchKits, setPendingKit } from '../../core/kits';
@@ -84,34 +84,35 @@ export function renderCalendar(content: HTMLElement, s: GameState) {
     <p class="small muted">C = casa, F = fora, N = campo neutro. Os jogos das rondas seguintes das taças e do play-off aparecem quando se apuram os adversários.</p>`;
 }
 
-export function renderCompetitions(content: HTMLElement, s: GameState, tab = 'liga', round?: number, country?: string) {
+export function renderCompetitions(content: HTMLElement, s: GameState, tab = 'liga', round?: number, country?: string, part: 'apertura' | 'clausura' | 'total' = 'total') {
   const ctry = country ?? countryOf(s, s.clubId);
   const C = COUNTRY_COMPS[ctry];
   const lg = s.leagues.find((l) => l.id === (ctry === 'esp' ? 'esp1' : 'por1')) ?? s.leagues[0];
   // separadores por tipo (os ids antigos 'liga', 'taca'… continuam a funcionar)
   const kindTab: Record<string, string> = { liga: 'league', playoff: 'playoff', taca: 'cup', tacaLiga: 'leagueCup', supertaca: 'super' };
   tab = kindTab[tab] ?? tab;
-  const tabs: [string, string][] = [['league', COMP_NAMES[C.league]], ['playoff', 'Play-off'], ['cup', COMP_NAMES[C.cup]], ['leagueCup', COMP_NAMES[C.leagueCup]], ['super', COMP_NAMES[C.super]], ['palmares', 'Palmarés'], ['marcadores', 'Marcadores']];
+  const tabs: [string, string][] = [['league', COMP_NAMES[C.league]], ['playoff', ctry === 'esp' ? 'Fase final e permanência' : 'Play-off'], ['cup', COMP_NAMES[C.cup]], ...(C.leagueCup !== C.cup ? [['leagueCup', COMP_NAMES[C.leagueCup]] as [string, string]] : []), ['super', COMP_NAMES[C.super]], ['palmares', 'Palmarés'], ['marcadores', 'Marcadores']];
   let body = '';
   const sea = s.season;
   if (tab === 'league') {
-    const t = leagueTable(sea, lg.clubIds, 99, C.league);
+    const t = ctry === 'esp' ? spainTable(sea, lg.clubIds, part) : leagueTable(sea, lg.clubIds, 99, C.league);
     const rounds = Math.max(...sea.fixtures.filter((f) => f.comp === C.league).map((f) => f.round ?? 0));
     const played = Math.max(0, ...sea.fixtures.filter((f) => f.comp === C.league && f.result).map((f) => f.round ?? 0));
     const rd = round ?? Math.max(1, played);
     const games = sea.fixtures.filter((f) => f.comp === C.league && f.round === rd);
     body = `
+      ${ctry === 'esp' ? `<div class="tabs">${([['apertura', 'Apertura'], ['clausura', 'Clausura'], ['total', 'Acumulada']] as const).map(([id, l]) => `<button class="tab ${id === part ? 'on' : ''}" data-part="${id}">${l}</button>`).join('')}</div>` : ''}
       <table class="tbl small table">
         <thead><tr><th>#</th><th>Clube</th><th>J</th><th>V</th><th>E</th><th>D</th><th>GM</th><th>GS</th><th>DG</th><th>Pts</th></tr></thead>
         <tbody>${t
-          .map((r, i) => `<tr class="${r.club === s.clubId ? 'mine' : ''} ${i < 8 ? 'zone-po' : ''}"><td>${i + 1}</td><td>${crestSvg(r.club, 18)} ${clubName(s, r.club)}</td><td>${r.p}</td><td>${r.w}</td><td>${r.d}</td><td>${r.l}</td><td>${r.gf}</td><td>${r.ga}</td><td>${r.gf - r.ga}</td><td><b>${r.pts}</b></td></tr>`)
+          .map((r, i) => `<tr class="${r.club === s.clubId ? 'mine' : ''} ${(ctry === 'esp' ? (part === 'total' ? i < 4 : i < 2) : i < 8) ? 'zone-po' : ''}"><td>${i + 1}</td><td>${crestSvg(r.club, 18)} ${clubName(s, r.club)}</td><td>${r.p}</td><td>${r.w}</td><td>${r.d}</td><td>${r.l}</td><td>${r.gf}</td><td>${r.ga}</td><td>${r.gf - r.ga}</td><td><b>${r.pts}</b></td></tr>`)
           .join('')}</tbody>
       </table>
-      <p class="small muted">Os 8 primeiros (a verde) seguem para o play-off. ${ctry === 'esp' ? 'No real descem os 2 últimos à Segunda División: entra quando essa divisão existir no jogo.' : 'As descidas de divisão entram quando a II Divisão existir no jogo.'}</p>
+      <p class="small muted">${ctry === 'esp' ? 'Apertura (jornadas 1-15) e Clausura (16-30) têm campeão cada. Fase final do Supercampeão: 1.º e 2.º de cada torneio + os melhores da classificação acumulada até 8. Na acumulada, o último desce e o 14.º e o 15.º jogam a permanência (descidas efetivas quando a Segunda existir no jogo). Os 6 primeiros do Apertura vão à fase final da Copa de España.' : 'Os 8 primeiros (a verde) seguem para o play-off. As descidas de divisão entram quando a II Divisão existir no jogo.'}</p>
       <h3>Jornada <select id="rd">${Array.from({ length: rounds }, (_, i) => `<option ${i + 1 === rd ? 'selected' : ''}>${i + 1}</option>`).join('')}</select></h3>
       ${fixturesTable(s, games)}`;
   } else if (tab === 'playoff') {
-    const stages = ['Quartos-de-final', 'Meias-finais', 'Final'];
+    const stages = ['Quartos-de-final', 'Meias-finais', 'Final', 'Permanência'];
     const mine = sea.series.filter((x) => (x.comp ?? 'playoff') === C.playoff);
     body = mine.length
       ? stages
@@ -134,12 +135,12 @@ export function renderCompetitions(content: HTMLElement, s: GameState, tab = 'li
       tacaLiga: 'Final eight com os 8 primeiros no fim da 1.ª volta, em campo neutro, em janeiro.',
       supertaca: 'Campeão nacional contra o vencedor da Taça de Portugal (ou finalista vencido, se for o mesmo clube).',
       copaRey: 'Eliminatórias a uma mão (o pior classificado na época anterior joga em casa), final em campo neutro. No real entram equipas das divisões inferiores: por agora só os 16 da Primera. Datas estimadas.',
-      copaEsp: 'Final eight com os 8 primeiros no fim da 1.ª volta, em campo neutro, em março.',
-      superEsp: 'Final four: campeão, finalista do play-off e vencedores das duas taças (vagas repetidas passam aos seguintes da classificação). Data estimada.',
+      copaEsp: 'Copa de España S.M. el Rey (normas RFEF 2026/27): fase final de 8 em campo neutro (11-14 de março) com os 6 primeiros do Apertura e 2 vindos das eliminatórias (7.º ao 16.º do Apertura; no real também equipas das divisões inferiores, que entram quando existirem no jogo). Quartos e meias vão diretos a penáltis; a final tem prolongamento de 2x3 min.',
+      superEsp: 'Final four a jogo único (normas RFEF): Supercampeão, campeões do Apertura e do Clausura e vencedor da Copa (repetidos: melhores da acumulada). Meias com penáltis diretos. Na 1.ª época, os 4 mais fortes (estimativa). Data estimada.',
     };
     body = `<p class="small muted">${info[comp]}</p>` + (stages.length ? stages.map((st) => `<h3>${st}</h3>${fixturesTable(s, fx.filter((f) => f.stage === st))}`).join('') : '<div class="empty">Ainda sem jogos definidos.</div>');
   } else if (tab === 'palmares') {
-    const hon = s.honours.filter((h) => Object.values(C).includes(h.comp));
+    const hon = s.honours.filter((h) => Object.values(C).includes(h.comp) || (ctry === 'esp' && (h.comp === 'espAp' || h.comp === 'espCl')));
     body = hon.length
       ? `<table class="tbl small"><thead><tr><th>Época</th><th>Competição</th><th>Vencedor</th><th>Finalista</th></tr></thead><tbody>${[...hon]
           .reverse()
@@ -162,7 +163,8 @@ export function renderCompetitions(content: HTMLElement, s: GameState, tab = 'li
     ${body}`;
   content.querySelectorAll<HTMLButtonElement>('[data-tab]').forEach((b) => b.addEventListener('click', () => renderCompetitions(content, s, b.dataset.tab, undefined, ctry)));
   content.querySelectorAll<HTMLButtonElement>('[data-ctry]').forEach((b) => b.addEventListener('click', () => renderCompetitions(content, s, tab, undefined, b.dataset.ctry)));
-  content.querySelector<HTMLSelectElement>('#rd')?.addEventListener('change', (e) => renderCompetitions(content, s, 'league', Number((e.target as HTMLSelectElement).value), ctry));
+  content.querySelector<HTMLSelectElement>('#rd')?.addEventListener('change', (e) => renderCompetitions(content, s, 'league', Number((e.target as HTMLSelectElement).value), ctry, part));
+  content.querySelectorAll<HTMLButtonElement>('[data-part]').forEach((b) => b.addEventListener('click', () => renderCompetitions(content, s, 'league', undefined, ctry, b.dataset.part as 'apertura')));
 }
 
 function fixturesTable(s: GameState, fx: Fixture[]) {

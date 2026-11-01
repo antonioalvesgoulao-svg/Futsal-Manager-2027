@@ -21,8 +21,7 @@ export function ticketPrice(s: GameState, f: Fixture) {
 }
 
 /** Prémios por título (€, estimativa: a FPF não publica valores para o futsal). */
-// Espanha: estimativa (prémios da RFEF não publicados)
-export const PRIZES: Record<string, number> = { liga: 60000, taca: 30000, tacaLiga: 20000, supertaca: 10000, esp: 100000, copaEsp: 50000, copaRey: 30000, superEsp: 20000 };
+export const PRIZES: Record<string, number> = { liga: 60000, taca: 30000, tacaLiga: 20000, supertaca: 10000, esp: 50000, copaEsp: 25000, superEsp: 20000 }; // Espanha: Supercampeão 50 mil e Copa 25 mil (RFEF); Supercopa estimativa
 
 export function financeOf(s: GameState, clubId: string): ClubFinance {
   const all = (s.finance ??= {});

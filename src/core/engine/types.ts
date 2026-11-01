@@ -91,6 +91,7 @@ export interface MatchResult {
 export interface MatchOptions {
   knockout?: boolean; // prolongamento e penáltis em caso de empate
   injuries?: boolean; // false = sem lesões (amigáveis de teste)
+  extraTimeLen?: number; // duração de cada parte do prolongamento (s): 300 em Portugal, 180 em Espanha (RFEF)
   noExtraTime?: boolean; // a eliminar sem prolongamento: empate vai diretamente a penáltis
   needWin?: [boolean, boolean]; // equipa precisa de ganhar (ex.: eliminatória a duas mãos)
   manual?: Side; // equipa controlada pelo jogador no modo ao vivo (sem pedidos de tempo automáticos)

@@ -808,7 +808,7 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     stage++;
     if (stage === 2 && opts.knockout && !opts.noExtraTime && score[0] === score[1]) {
       extraTime = true;
-      plan.push({ p: 3, len: ET, start: first }, { p: 4, len: ET, start: (1 - first) as Side });
+      plan.push({ p: 3, len: opts.extraTimeLen ?? ET, start: first }, { p: 4, len: opts.extraTimeLen ?? ET, start: (1 - first) as Side });
     }
     if (stage < plan.length) {
       beginPeriod(stage);

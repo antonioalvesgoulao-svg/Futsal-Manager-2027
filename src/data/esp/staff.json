@@ -1,5 +1,5 @@
 {
- "_info": "Primera División 2026/27, futsalportugal.com (recolha 2/11/2026, 1 página a cada 7 s). Só os treinadores principais (o site não lista o resto da equipa técnica em Espanha); ability é estimativa.",
+ "_info": "Liga Prime Futsal 2026/27: planteis da RFEF (futsal.rfef.es) + historial do futsalportugal.com (recolha 2/11/2026, 1 página a cada 7 s). Só os treinadores principais (o site não lista o resto da equipa técnica em Espanha); ability é estimativa.",
  "people": [
   {
    "id": "stc-fp286505-adjunto",
@@ -99,8 +99,8 @@
     }
    ],
    "coach": {
-    "tactical": 10,
-    "motivation": 11,
+    "tactical": 12,
+    "motivation": 12,
     "record": {
      "games": 123,
      "wins": 44,
@@ -148,8 +148,8 @@
     }
    ],
    "coach": {
-    "tactical": 10,
-    "motivation": 11,
+    "tactical": 12,
+    "motivation": 12,
     "record": {
      "games": 33,
      "wins": 12,
@@ -289,8 +289,8 @@
     }
    ],
    "coach": {
-    "tactical": 13,
-    "motivation": 12,
+    "tactical": 19,
+    "motivation": 16,
     "record": {
      "games": 579,
      "wins": 289,
@@ -487,12 +487,1222 @@
     }
    ],
    "coach": {
-    "tactical": 11,
-    "motivation": 11,
+    "tactical": 13,
+    "motivation": 12,
     "record": {
      "games": 397,
      "wins": 166,
      "winRate": 0.418,
+     "titlesPts": 0
+    }
+   }
+  },
+  {
+   "id": "int-fp17601-principal",
+   "club": "int",
+   "name": "Alberto Riquer",
+   "func": "Treinador principal",
+   "role": "principal",
+   "nat": "Espanha",
+   "birth": "1974-10-09",
+   "src": "fp",
+   "ability": 10,
+   "fp": {
+    "games": 150,
+    "wins": 63,
+    "notWon": 87,
+    "titles": []
+   },
+   "history": [
+    {
+     "ep": "2026/2027",
+     "club": "Inter FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2025/2026",
+     "club": "Inter FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2024/2025",
+     "club": "Inter FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2023/2024",
+     "club": "Inter FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2021/2022",
+     "club": "Burela FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "coach": {
+    "tactical": 12,
+    "motivation": 12,
+    "record": {
+     "games": 150,
+     "wins": 63,
+     "winRate": 0.42,
+     "titlesPts": 0
+    }
+   }
+  },
+  {
+   "id": "zar-fp26394-principal",
+   "club": "zar",
+   "name": "Jorge Palos",
+   "func": "Treinador principal",
+   "role": "principal",
+   "nat": "Espanha",
+   "birth": "1996-01-05",
+   "src": "fp",
+   "ability": 7,
+   "fp": {
+    "games": 37,
+    "wins": 2,
+    "notWon": 35,
+    "titles": []
+   },
+   "history": [
+    {
+     "ep": "2026/2027",
+     "club": "Wanapix AD Sala 10 Zaragoza",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2024/2025",
+     "club": "Wanapix AD Sala 10 Zaragoza",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2021/2022",
+     "club": "Wanapix AD Sala 10 Zaragoza",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "coach": {
+    "tactical": 9,
+    "motivation": 9,
+    "record": {
+     "games": 37,
+     "wins": 2,
+     "winRate": 0.054,
+     "titlesPts": 0
+    }
+   }
+  },
+  {
+   "id": "jae-fp780-principal",
+   "club": "jae",
+   "name": "Dani Rodríguez",
+   "func": "Treinador principal",
+   "role": "principal",
+   "nat": "Espanha",
+   "birth": "1978-04-02",
+   "src": "fp",
+   "ability": 12,
+   "fp": {
+    "games": 397,
+    "wins": 171,
+    "notWon": 226,
+    "titles": [
+     "Copa de España (2025/2026)"
+    ]
+   },
+   "history": [
+    {
+     "ep": "2026/2027",
+     "club": "Jaén Paraíso Interior",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2025/2026",
+     "club": "Jaén Paraíso Interior",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2024/2025",
+     "club": "Jaén Paraíso Interior",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2023/2024",
+     "club": "Jaén Paraíso Interior",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2022/2023",
+     "club": "Jaén Paraíso Interior",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2021/2022",
+     "club": "Jaén Paraíso Interior",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2020/2021",
+     "club": "Jaén Paraíso Interior",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2019/2020",
+     "club": "Jaén Paraíso Interior",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2018/2019",
+     "club": "Jaén Paraíso Interior",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2017/2018",
+     "club": "Jaén Paraíso Interior",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2016/2017",
+     "club": "Jaén Paraíso Interior",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2015/2016",
+     "club": "Jaén Paraíso Interior",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2014/2015",
+     "club": "Jaén Paraíso Interior",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "coach": {
+    "tactical": 14,
+    "motivation": 12,
+    "record": {
+     "games": 397,
+     "wins": 171,
+     "winRate": 0.431,
+     "titlesPts": 1.5
+    }
+   }
+  },
+  {
+   "id": "pen-fp66413-principal",
+   "club": "pen",
+   "name": "Gerard Pusó",
+   "func": "Treinador principal",
+   "role": "principal",
+   "nat": "Espanha",
+   "birth": "1991-01-22",
+   "src": "fp",
+   "ability": 6,
+   "fp": {
+    "games": 6,
+    "wins": 1,
+    "notWon": 5,
+    "titles": []
+   },
+   "history": [
+    {
+     "ep": "2026/2027",
+     "club": "Peñíscola FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "coach": {
+    "tactical": 10,
+    "motivation": 10,
+    "record": {
+     "games": 6,
+     "wins": 1,
+     "winRate": 0.167,
+     "titlesPts": 0
+    }
+   }
+  },
+  {
+   "id": "epz-fp13835-principal",
+   "club": "epz",
+   "name": "Josan González",
+   "func": "Treinador principal",
+   "role": "principal",
+   "nat": "Espanha",
+   "birth": "1980-10-23",
+   "src": "fp",
+   "ability": 11,
+   "fp": {
+    "games": 197,
+    "wins": 77,
+    "notWon": 120,
+    "titles": [
+     "Supercopa España  (2026/2027)"
+    ]
+   },
+   "history": [
+    {
+     "ep": "2026/2027",
+     "club": "ElPozo Murcia",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2025/2026",
+     "club": "ElPozo Murcia",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2024/2025",
+     "club": "ElPozo Murcia",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2023/2024",
+     "club": "Córdoba Patrimonio",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2022/2023",
+     "club": "Córdoba Patrimonio",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2021/2022",
+     "club": "Córdoba Patrimonio",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2020/2021",
+     "club": "Córdoba Patrimonio",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "coach": {
+    "tactical": 13,
+    "motivation": 12,
+    "record": {
+     "games": 197,
+     "wins": 77,
+     "winRate": 0.391,
+     "titlesPts": 0.6
+    }
+   }
+  },
+  {
+   "id": "jca-fp832-principal",
+   "club": "jca",
+   "name": "Duda",
+   "func": "Treinador principal",
+   "role": "principal",
+   "nat": "Brasil",
+   "birth": "1969-12-08",
+   "src": "fp",
+   "ability": 15,
+   "fp": {
+    "games": 577,
+    "wins": 347,
+    "notWon": 230,
+    "titles": [
+     "Supercopa España  (2023/2024, 2024/2025, 2025/2026)",
+     "RFEF - Primera División de Fútbol Sala (2023/2024, 2024/2025)"
+    ]
+   },
+   "history": [
+    {
+     "ep": "2026/2027",
+     "club": "Jimbee Cartagena FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2025/2026",
+     "club": "Jimbee Cartagena FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2024/2025",
+     "club": "Jimbee Cartagena FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2023/2024",
+     "club": "Jimbee Cartagena FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2022/2023",
+     "club": "Jimbee Cartagena FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2021/2022",
+     "club": "Jimbee Cartagena FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2020/2021",
+     "club": "Jimbee Cartagena FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2019/2020",
+     "club": "Jimbee Cartagena FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2017/2018",
+     "club": "ElPozo Murcia",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2016/2017",
+     "club": "ElPozo Murcia",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2015/2016",
+     "club": "ElPozo Murcia",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2014/2015",
+     "club": "ElPozo Murcia",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2013/2014",
+     "club": "ElPozo Murcia",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2012/2013",
+     "club": "ElPozo Murcia",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2011/2012",
+     "club": "ElPozo Murcia",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2010/2011",
+     "club": "ElPozo Murcia",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2009/2010",
+     "club": "ElPozo Murcia",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2007/2008",
+     "club": "ElPozo Murcia",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2006/2007",
+     "club": "ElPozo Murcia",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2004/2005",
+     "club": "ElPozo Murcia",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "coach": {
+    "tactical": 19,
+    "motivation": 16,
+    "record": {
+     "games": 577,
+     "wins": 347,
+     "winRate": 0.602,
+     "titlesPts": 7.8
+    }
+   }
+  },
+  {
+   "id": "bar-fp5671-principal",
+   "club": "bar",
+   "name": "Javi Rodríguez",
+   "func": "Treinador principal",
+   "role": "principal",
+   "nat": "Espanha",
+   "birth": "1974-03-25",
+   "src": "fp",
+   "ability": 14,
+   "fp": {
+    "games": 318,
+    "wins": 200,
+    "notWon": 117,
+    "titles": [
+     "RFEF - Primera División de Fútbol Sala (2010/2011, 2011/2012, 2025/2026)",
+     "UEFA Futsal Champions League (2001/2002, 2002/2003)"
+    ]
+   },
+   "history": [
+    {
+     "ep": "2026/2027",
+     "club": "FC Barcelona",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2025/2026",
+     "club": "FC Barcelona",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2023/2024",
+     "club": "ElPozo Murcia",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2022/2023",
+     "club": "ElPozo Murcia",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2021/2022",
+     "club": "Industrias Santa Coloma",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2020/2021",
+     "club": "Industrias Santa Coloma",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2019/2020",
+     "club": "Industrias Santa Coloma",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2019/2020",
+     "club": "MFC Kherson",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2017/2018",
+     "club": "Gyori ETO",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "coach": {
+    "tactical": 20,
+    "motivation": 17,
+    "record": {
+     "games": 318,
+     "wins": 200,
+     "winRate": 0.631,
+     "titlesPts": 17
+    }
+   }
+  },
+  {
+   "id": "val-fp21214-principal",
+   "club": "val",
+   "name": "Marlon Velasco",
+   "func": "Treinador principal",
+   "role": "principal",
+   "nat": "Espanha",
+   "birth": "1986-12-28",
+   "src": "fp",
+   "ability": 9,
+   "fp": {
+    "games": 121,
+    "wins": 49,
+    "notWon": 72,
+    "titles": []
+   },
+   "history": [
+    {
+     "ep": "2026/2027",
+     "club": "Viña Albali Valdepeñas",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2025/2026",
+     "club": "Viña Albali Valdepeñas",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2024/2025",
+     "club": "Kairat Almaty",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2023/2024",
+     "club": "Kairat Almaty",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2022/2023",
+     "club": "Noia Portus Apostoli",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2013/2014",
+     "club": "Islas Baleares Palma Futsal",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2011/2012",
+     "club": "Islas Baleares Palma Futsal",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "coach": {
+    "tactical": 12,
+    "motivation": 12,
+    "record": {
+     "games": 121,
+     "wins": 49,
+     "winRate": 0.404,
+     "titlesPts": 0
+    }
+   }
+  },
+  {
+   "id": "cor-fp66381-principal",
+   "club": "cor",
+   "name": "David Fernández",
+   "func": "Treinador principal",
+   "role": "principal",
+   "nat": "Espanha",
+   "birth": "1998-09-28",
+   "src": "fp",
+   "ability": 6,
+   "fp": {
+    "games": 6,
+    "wins": 1,
+    "notWon": 5,
+    "titles": []
+   },
+   "history": [
+    {
+     "ep": "2026/2027",
+     "club": "Córdoba Patrimonio",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "coach": {
+    "tactical": 10,
+    "motivation": 10,
+    "record": {
+     "games": 6,
+     "wins": 1,
+     "winRate": 0.167,
+     "titlesPts": 0
+    }
+   }
+  },
+  {
+   "id": "man-fp6863-principal",
+   "club": "man",
+   "name": "Juanlu Alonso",
+   "func": "Treinador principal",
+   "role": "principal",
+   "nat": "Espanha",
+   "birth": "1976-02-13",
+   "src": "fp",
+   "ability": 13,
+   "fp": {
+    "games": 336,
+    "wins": 116,
+    "notWon": 220,
+    "titles": [
+     "UEFA Futsal Champions League (2008/2009)"
+    ]
+   },
+   "history": [
+    {
+     "ep": "2026/2027",
+     "club": "Quesos El Higaldo Manzanares FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2025/2026",
+     "club": "Quesos El Higaldo Manzanares FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2024/2025",
+     "club": "Quesos El Higaldo Manzanares FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2023/2024",
+     "club": "Quesos El Higaldo Manzanares FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2022/2023",
+     "club": "Quesos El Higaldo Manzanares FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2021/2022",
+     "club": "Quesos El Higaldo Manzanares FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2019/2020",
+     "club": "Peñíscola FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2018/2019",
+     "club": "Peñíscola FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2015/2016",
+     "club": "Burela FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2014/2015",
+     "club": "Burela FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2013/2014",
+     "club": "Burela FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2012/2013",
+     "club": "Burela FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2011/2012",
+     "club": "Benicarló FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2010/2011",
+     "club": "Benicarló FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2008/2009",
+     "club": "Inter FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "coach": {
+    "tactical": 15,
+    "motivation": 13,
+    "record": {
+     "games": 336,
+     "wins": 116,
+     "winRate": 0.346,
+     "titlesPts": 4
+    }
+   }
+  },
+  {
+   "id": "noi-fp27723-principal",
+   "club": "noi",
+   "name": "David Palmas",
+   "func": "Treinador principal",
+   "role": "principal",
+   "nat": "Espanha",
+   "birth": "1986-03-08",
+   "src": "fp",
+   "ability": 7,
+   "fp": {
+    "games": 180,
+    "wins": 74,
+    "notWon": 106,
+    "titles": []
+   },
+   "history": [
+    {
+     "ep": "2026/2027",
+     "club": "Noia Portus Apostoli",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2025/2026",
+     "club": "Noia Portus Apostoli",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2024/2025",
+     "club": "Noia Portus Apostoli",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "coach": {
+    "tactical": 12,
+    "motivation": 12,
+    "record": {
+     "games": 180,
+     "wins": 74,
+     "winRate": 0.411,
+     "titlesPts": 0
+    }
+   }
+  },
+  {
+   "id": "eji-fp66416-principal",
+   "club": "eji",
+   "name": "Guillermo Martínez",
+   "func": "Treinador principal",
+   "role": "principal",
+   "nat": "Espanha",
+   "birth": "1989-12-23",
+   "src": "fp",
+   "ability": 6,
+   "fp": {
+    "games": 7,
+    "wins": 2,
+    "notWon": 5,
+    "titles": []
+   },
+   "history": [
+    {
+     "ep": "2026/2027",
+     "club": "Sur Seeds El Ejido Futsal",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "coach": {
+    "tactical": 11,
+    "motivation": 11,
+    "record": {
+     "games": 7,
+     "wins": 2,
+     "winRate": 0.286,
      "titlesPts": 0
     }
    }

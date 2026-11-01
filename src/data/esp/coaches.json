@@ -1,12 +1,12 @@
 {
-  "_info": "Primera División 2026/27, futsalportugal.com (recolha 2/11/2026, 1 página a cada 7 s). tactical/motivation calculados do historial (vitórias por competição, títulos); discipline/youth estimativa.",
+  "_info": "Liga Prime Futsal 2026/27: planteis da RFEF (futsal.rfef.es) + historial do futsalportugal.com (recolha 2/11/2026, 1 página a cada 7 s). tactical/motivation calculados do historial (vitórias por competição, títulos); discipline/youth estimativa.",
   "coaches": [
     {
       "id": "c_stc",
       "name": "Xavi Closas",
       "clubId": "stc",
-      "tactical": 10,
-      "motivation": 11,
+      "tactical": 12,
+      "motivation": 12,
       "discipline": 14,
       "youth": 12,
       "style": {}
@@ -15,8 +15,8 @@
       "id": "c_par",
       "name": "Gerard Casas",
       "clubId": "par",
-      "tactical": 10,
-      "motivation": 11,
+      "tactical": 12,
+      "motivation": 12,
       "discipline": 14,
       "youth": 12,
       "style": {}
@@ -25,8 +25,8 @@
       "id": "c_pal",
       "name": "Antonio Vadillo",
       "clubId": "pal",
-      "tactical": 13,
-      "motivation": 12,
+      "tactical": 19,
+      "motivation": 16,
       "discipline": 14,
       "youth": 12,
       "style": {}
@@ -35,6 +35,126 @@
       "id": "c_osa",
       "name": "Imanol Arregui Sarasa",
       "clubId": "osa",
+      "tactical": 13,
+      "motivation": 12,
+      "discipline": 14,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_int",
+      "name": "Alberto Riquer",
+      "clubId": "int",
+      "tactical": 12,
+      "motivation": 12,
+      "discipline": 14,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_zar",
+      "name": "Jorge Palos",
+      "clubId": "zar",
+      "tactical": 9,
+      "motivation": 9,
+      "discipline": 14,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_jae",
+      "name": "Dani Rodríguez",
+      "clubId": "jae",
+      "tactical": 14,
+      "motivation": 12,
+      "discipline": 14,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_pen",
+      "name": "Gerard Pusó",
+      "clubId": "pen",
+      "tactical": 10,
+      "motivation": 10,
+      "discipline": 14,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_epz",
+      "name": "Josan González",
+      "clubId": "epz",
+      "tactical": 13,
+      "motivation": 12,
+      "discipline": 14,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_jca",
+      "name": "Duda",
+      "clubId": "jca",
+      "tactical": 19,
+      "motivation": 16,
+      "discipline": 14,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_bar",
+      "name": "Javi Rodríguez",
+      "clubId": "bar",
+      "tactical": 20,
+      "motivation": 17,
+      "discipline": 14,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_val",
+      "name": "Marlon Velasco",
+      "clubId": "val",
+      "tactical": 12,
+      "motivation": 12,
+      "discipline": 14,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_cor",
+      "name": "David Fernández",
+      "clubId": "cor",
+      "tactical": 10,
+      "motivation": 10,
+      "discipline": 14,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_man",
+      "name": "Juanlu Alonso",
+      "clubId": "man",
+      "tactical": 15,
+      "motivation": 13,
+      "discipline": 14,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_noi",
+      "name": "David Palmas",
+      "clubId": "noi",
+      "tactical": 12,
+      "motivation": 12,
+      "discipline": 14,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_eji",
+      "name": "Guillermo Martínez",
+      "clubId": "eji",
       "tactical": 11,
       "motivation": 11,
       "discipline": 14,

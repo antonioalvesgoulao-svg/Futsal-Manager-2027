@@ -1,1918 +1,211 @@
 {
-"_info": "Primera División 2026/27, futsalportugal.com (recolha 2/11/2026, 1 página a cada 7 s). Números de camisola: estimativa (o site não os tem).",
+"_info": "Liga Prime Futsal 2026/27: planteis da RFEF (futsal.rfef.es) + historial do futsalportugal.com (recolha 2/11/2026, 1 página a cada 7 s). Dorsais oficiais da RFEF; ageEstimated = sem data de nascimento encontrada (25 anos, estimativa).",
 "players": [
-{
-"id": "stc01",
-"clubId": "stc",
-"name": "Marcos Ferreyra",
-"position": "GR",
-"number": 1,
-"age": 25,
-"nationality": "Argentina"
-},
-{
-"id": "stc02",
-"clubId": "stc",
-"name": "Pau López",
-"position": "GR",
-"number": 13,
-"age": 22,
-"nationality": "Espanha"
-},
-{
-"id": "stc03",
-"clubId": "stc",
-"name": "Dylan Vargas",
-"position": "ALA",
-"number": 2,
-"age": 29,
-"nationality": "Argentina"
-},
-{
-"id": "stc04",
-"clubId": "stc",
-"name": "Luis Medina",
-"position": "FIX",
-"number": 3,
-"age": 20,
-"nationality": "Espanha"
-},
-{
-"id": "stc05",
-"clubId": "stc",
-"name": "Marc Tolrà",
-"position": "FIX",
-"number": 4,
-"age": 35,
-"nationality": "Espanha"
-},
-{
-"id": "stc06",
-"clubId": "stc",
-"name": "Pol Pacheco",
-"position": "ALA",
-"number": 5,
-"age": 31,
-"nationality": "Espanha"
-},
-{
-"id": "stc07",
-"clubId": "stc",
-"name": "Uri Santos",
-"position": "ALA",
-"number": 6,
-"age": 29,
-"nationality": "Espanha"
-},
-{
-"id": "stc08",
-"clubId": "stc",
-"name": "Víctor Pérez",
-"position": "ALA",
-"number": 7,
-"age": 21,
-"nationality": "Portugal"
-},
-{
-"id": "stc09",
-"clubId": "stc",
-"name": "Víctor Ramos",
-"position": "ALA",
-"number": 8,
-"age": 22,
-"nationality": "Espanha"
-},
-{
-"id": "stc10",
-"clubId": "stc",
-"name": "Eric Pérez",
-"position": "PIV",
-"number": 9,
-"age": 29,
-"nationality": "Espanha"
-},
-{
-"id": "stc11",
-"clubId": "stc",
-"name": "Niel·lo",
-"position": "FIX",
-"number": 10,
-"age": 22,
-"nationality": "Portugal"
-},
-{
-"id": "stc12",
-"clubId": "stc",
-"name": "Sebastián Corso",
-"position": "FIX",
-"number": 11,
-"age": 34,
-"nationality": "Espanha"
-},
-{
-"id": "stc13",
-"clubId": "stc",
-"name": "Aniol",
-"position": "ALA",
-"number": 12,
-"age": 24,
-"nationality": "Espanha"
-},
-{
-"id": "stc14",
-"clubId": "stc",
-"name": "Lucas Granda",
-"position": "PIV",
-"number": 14,
-"age": 19,
-"nationality": "Argentina"
-},
-{
-"id": "stc15",
-"clubId": "stc",
-"name": "Aleix Molist Martinez",
-"position": "ALA",
-"number": 15,
-"age": 25,
-"nationality": "Espanha"
-},
-{
-"id": "par01",
-"clubId": "par",
-"name": "Caio César",
-"position": "GR",
-"number": 1,
-"age": 26,
-"nationality": "Brasil"
-},
-{
-"id": "par02",
-"clubId": "par",
-"name": "Palazón",
-"position": "GR",
-"number": 13,
-"age": 23,
-"nationality": "Espanha"
-},
-{
-"id": "par03",
-"clubId": "par",
-"name": "Canoli",
-"position": "GR",
-"number": 25,
-"age": 21,
-"nationality": "Espanha"
-},
-{
-"id": "par04",
-"clubId": "par",
-"name": "Brayan Oliveira",
-"position": "PIV",
-"number": 2,
-"age": 23,
-"nationality": "Brasil"
-},
-{
-"id": "par05",
-"clubId": "par",
-"name": "David Novoa",
-"position": "ALA",
-"number": 3,
-"age": 24,
-"nationality": "Espanha"
-},
-{
-"id": "par06",
-"clubId": "par",
-"name": "Diogo Schlemper",
-"position": "ALA",
-"number": 4,
-"age": 31,
-"nationality": "Brasil"
-},
-{
-"id": "par07",
-"clubId": "par",
-"name": "Jhoy",
-"position": "ALA",
-"number": 5,
-"age": 25,
-"nationality": "Brasil"
-},
-{
-"id": "par08",
-"clubId": "par",
-"name": "Lucas Farias",
-"position": "FIX",
-"number": 6,
-"age": 24,
-"nationality": "Brasil"
-},
-{
-"id": "par09",
-"clubId": "par",
-"name": "Quelle",
-"position": "FIX",
-"number": 7,
-"age": 23,
-"nationality": "Espanha"
-},
-{
-"id": "par10",
-"clubId": "par",
-"name": "Rikelme",
-"position": "ALA",
-"number": 8,
-"age": 24,
-"nationality": "Brasil"
-},
-{
-"id": "par11",
-"clubId": "par",
-"name": "Rubén Orzáez",
-"position": "FIX",
-"number": 9,
-"age": 33,
-"nationality": "Espanha"
-},
-{
-"id": "par12",
-"clubId": "par",
-"name": "Yan Matheus",
-"position": "ALA",
-"number": 10,
-"age": 30,
-"nationality": "Brasil"
-},
-{
-"id": "par13",
-"clubId": "par",
-"name": "Malaguti",
-"position": "PIV",
-"number": 11,
-"age": 29,
-"nationality": "Espanha"
-},
-{
-"id": "par14",
-"clubId": "par",
-"name": "Lucas Rodríguez",
-"position": "ALA",
-"number": 12,
-"age": 25,
-"nationality": "Espanha"
-},
-{
-"id": "par15",
-"clubId": "par",
-"name": "Turbi",
-"position": "PIV",
-"number": 14,
-"age": 22,
-"nationality": "Espanha"
-},
-{
-"id": "par16",
-"clubId": "par",
-"name": "Gael Sanchez",
-"position": "PIV",
-"number": 15,
-"age": 25,
-"nationality": "Espanha"
-},
-{
-"id": "par17",
-"clubId": "par",
-"name": "Rubén Oliveira",
-"position": "ALA",
-"number": 16,
-"age": 25,
-"nationality": "Espanha"
-},
-{
-"id": "pal01",
-"clubId": "pal",
-"name": "Carlos Barrón",
-"position": "GR",
-"number": 1,
-"age": 38,
-"nationality": "Espanha"
-},
-{
-"id": "pal02",
-"clubId": "pal",
-"name": "Dennis Cavalcanti",
-"position": "GR",
-"number": 13,
-"age": 28,
-"nationality": "Brasil"
-},
-{
-"id": "pal03",
-"clubId": "pal",
-"name": "Luan",
-"position": "GR",
-"number": 25,
-"age": 33,
-"nationality": "Espanha"
-},
-{
-"id": "pal04",
-"clubId": "pal",
-"name": "Alisson",
-"position": "PIV",
-"number": 2,
-"age": 27,
-"nationality": "Brasil"
-},
-{
-"id": "pal05",
-"clubId": "pal",
-"name": "Carlos Gómez",
-"position": "ALA",
-"number": 3,
-"age": 24,
-"nationality": "Portugal"
-},
-{
-"id": "pal06",
-"clubId": "pal",
-"name": "David Peña",
-"position": "ALA",
-"number": 4,
-"age": 26,
-"nationality": "Espanha"
-},
-{
-"id": "pal07",
-"clubId": "pal",
-"name": "Deivão",
-"position": "FIX",
-"number": 5,
-"age": 25,
-"nationality": "Brasil"
-},
-{
-"id": "pal08",
-"clubId": "pal",
-"name": "Ernesto",
-"position": "ALA",
-"number": 6,
-"age": 25,
-"nationality": "Brasil"
-},
-{
-"id": "pal09",
-"clubId": "pal",
-"name": "Fabinho",
-"position": "ALA",
-"number": 7,
-"age": 24,
-"nationality": "Brasil"
-},
-{
-"id": "pal10",
-"clubId": "pal",
-"name": "Julio Cesar Zanotto",
-"position": "ALA",
-"number": 8,
-"age": 30,
-"nationality": "Espanha"
-},
-{
-"id": "pal11",
-"clubId": "pal",
-"name": "Lucão",
-"position": "ALA",
-"number": 9,
-"age": 29,
-"nationality": "Brasil"
-},
-{
-"id": "pal12",
-"clubId": "pal",
-"name": "Machado",
-"position": "FIX",
-"number": 10,
-"age": 29,
-"nationality": "Brasil"
-},
-{
-"id": "pal13",
-"clubId": "pal",
-"name": "Piqueras",
-"position": "FIX",
-"number": 11,
-"age": 29,
-"nationality": "Espanha"
-},
-{
-"id": "pal14",
-"clubId": "pal",
-"name": "Charuto",
-"position": "PIV",
-"number": 12,
-"age": 33,
-"nationality": "Brasil"
-},
-{
-"id": "pal15",
-"clubId": "pal",
-"name": "Diego Nunes",
-"position": "ALA",
-"number": 14,
-"age": 31,
-"nationality": "Brasil"
-},
-{
-"id": "pal16",
-"clubId": "pal",
-"name": "Rodrigo Monteiro",
-"position": "ALA",
-"number": 15,
-"age": 19,
-"nationality": "Portugal"
-},
-{
-"id": "osa01",
-"clubId": "osa",
-"name": "Asier Llamas",
-"position": "GR",
-"number": 1,
-"age": 33,
-"nationality": "Espanha"
-},
-{
-"id": "osa02",
-"clubId": "osa",
-"name": "Miguel Planillo",
-"position": "GR",
-"number": 13,
-"age": 21,
-"nationality": "Espanha"
-},
-{
-"id": "osa03",
-"clubId": "osa",
-"name": "Aimar",
-"position": "ALA",
-"number": 2,
-"age": 17,
-"nationality": "Espanha"
-},
-{
-"id": "osa04",
-"clubId": "osa",
-"name": "Bruno Petry",
-"position": "PIV",
-"number": 3,
-"age": 37,
-"nationality": "Brasil"
-},
-{
-"id": "osa05",
-"clubId": "osa",
-"name": "Ion Cerviño",
-"position": "ALA",
-"number": 4,
-"age": 22,
-"nationality": "Espanha"
-},
-{
-"id": "osa06",
-"clubId": "osa",
-"name": "Joaquín Expósito",
-"position": "ALA",
-"number": 5,
-"age": 21,
-"nationality": "Espanha"
-},
-{
-"id": "osa07",
-"clubId": "osa",
-"name": "Vatamaniuc-Bartha",
-"position": "FIX",
-"number": 6,
-"age": 23,
-"nationality": "Espanha"
-},
-{
-"id": "osa08",
-"clubId": "osa",
-"name": "Zabarbe",
-"position": "FIX",
-"number": 7,
-"age": 19,
-"nationality": "Espanha"
-},
-{
-"id": "osa09",
-"clubId": "osa",
-"name": "Grillo",
-"position": "ALA",
-"number": 8,
-"age": 25,
-"nationality": "Argentina"
-},
-{
-"id": "osa10",
-"clubId": "osa",
-"name": "Josu Mendive",
-"position": "ALA",
-"number": 9,
-"age": 24,
-"nationality": "Espanha"
-},
-{
-"id": "osa11",
-"clubId": "osa",
-"name": "Julen Fernández",
-"position": "PIV",
-"number": 10,
-"age": 17,
-"nationality": "Espanha"
-},
-{
-"id": "osa12",
-"clubId": "osa",
-"name": "Javier Larrea",
-"position": "ALA",
-"number": 11,
-"age": 18,
-"nationality": "Espanha"
-},
-{
-"id": "osa13",
-"clubId": "osa",
-"name": "Campàs",
-"position": "ALA",
-"number": 12,
-"age": 25,
-"nationality": "Espanha"
-},
-{
-"id": "osa14",
-"clubId": "osa",
-"name": "Shunta Uchida",
-"position": "ALA",
-"number": 14,
-"age": 29,
-"nationality": "Japão"
-},
-{
-"id": "osa15",
-"clubId": "osa",
-"name": "Alan Rojas",
-"position": "FIX",
-"number": 15,
-"age": 27,
-"nationality": "Espanha"
-},
-{
-"id": "osa16",
-"clubId": "osa",
-"name": "Oier Amezgaray",
-"position": "ALA",
-"number": 16,
-"age": 17,
-"nationality": "Espanha"
-},
-{
-"id": "int01",
-"clubId": "int",
-"name": "Jesús Herrero",
-"position": "GR",
-"number": 1,
-"age": 39,
-"nationality": "Espanha"
-},
-{
-"id": "int02",
-"clubId": "int",
-"name": "A. Garcia",
-"position": "GR",
-"number": 13,
-"age": 25,
-"nationality": "Espanha"
-},
-{
-"id": "int03",
-"clubId": "int",
-"name": "Jesús García",
-"position": "GR",
-"number": 25,
-"age": 25,
-"nationality": "Espanha"
-},
-{
-"id": "int04",
-"clubId": "int",
-"name": "Oscar Delgado",
-"position": "GR",
-"number": 31,
-"age": 2026,
-"nationality": "Espanha"
-},
-{
-"id": "int05",
-"clubId": "int",
-"name": "Cecílio",
-"position": "ALA",
-"number": 2,
-"age": 33,
-"nationality": "Espanha"
-},
-{
-"id": "int06",
-"clubId": "int",
-"name": "Chaguinha",
-"position": "ALA",
-"number": 3,
-"age": 37,
-"nationality": "Brasil"
-},
-{
-"id": "int07",
-"clubId": "int",
-"name": "Francisco Paniagua",
-"position": "ALA",
-"number": 4,
-"age": 27,
-"nationality": "Espanha"
-},
-{
-"id": "int08",
-"clubId": "int",
-"name": "Harrison",
-"position": "ALA",
-"number": 5,
-"age": 25,
-"nationality": "Brasil"
-},
-{
-"id": "int09",
-"clubId": "int",
-"name": "Javier Mínguez",
-"position": "ALA",
-"number": 6,
-"age": 29,
-"nationality": "Espanha"
-},
-{
-"id": "int10",
-"clubId": "int",
-"name": "Jô Mahrez",
-"position": "ALA",
-"number": 7,
-"age": 28,
-"nationality": "Espanha"
-},
-{
-"id": "int11",
-"clubId": "int",
-"name": "José Antonio Raya",
-"position": "FIX",
-"number": 8,
-"age": 29,
-"nationality": "Espanha"
-},
-{
-"id": "int12",
-"clubId": "int",
-"name": "Marvin Ghislandi",
-"position": "ALA",
-"number": 9,
-"age": 27,
-"nationality": "Espanha"
-},
-{
-"id": "int13",
-"clubId": "int",
-"name": "Pirata",
-"position": "PIV",
-"number": 10,
-"age": 26,
-"nationality": "Espanha"
-},
-{
-"id": "int14",
-"clubId": "int",
-"name": "Raúl Gómez",
-"position": "ALA",
-"number": 11,
-"age": 30,
-"nationality": "Espanha"
-},
-{
-"id": "int15",
-"clubId": "int",
-"name": "Rivillos",
-"position": "ALA",
-"number": 12,
-"age": 36,
-"nationality": "Espanha"
-},
-{
-"id": "int16",
-"clubId": "int",
-"name": "Tony",
-"position": "FIX",
-"number": 14,
-"age": 27,
-"nationality": "Espanha"
-},
-{
-"id": "int17",
-"clubId": "int",
-"name": "Raúl Jiménez",
-"position": "UNI",
-"number": 15,
-"age": 30,
-"nationality": "Espanha"
-},
-{
-"id": "int18",
-"clubId": "int",
-"name": "Gordillo",
-"position": "PIV",
-"number": 16,
-"age": 25,
-"nationality": "Espanha"
-},
-{
-"id": "zar01",
-"clubId": "zar",
-"name": "Jackson Sant'anna",
-"position": "GR",
-"number": 1,
-"age": 23,
-"nationality": "Brasil"
-},
-{
-"id": "zar02",
-"clubId": "zar",
-"name": "B. Aibar",
-"position": "GR",
-"number": 13,
-"age": 25,
-"nationality": "Espanha"
-},
-{
-"id": "zar03",
-"clubId": "zar",
-"name": "H. Campo",
-"position": "GR",
-"number": 25,
-"age": 25,
-"nationality": "Espanha"
-},
-{
-"id": "zar04",
-"clubId": "zar",
-"name": "Iván Bernard",
-"position": "GR",
-"number": 31,
-"age": 31,
-"nationality": "Espanha"
-},
-{
-"id": "zar05",
-"clubId": "zar",
-"name": "Sergio Hernando Lalaguna",
-"position": "GR",
-"number": 33,
-"age": 25,
-"nationality": "Espanha"
-},
-{
-"id": "zar06",
-"clubId": "zar",
-"name": "Adri Ortego",
-"position": "FIX",
-"number": 2,
-"age": 32,
-"nationality": "Espanha"
-},
-{
-"id": "zar07",
-"clubId": "zar",
-"name": "Brasesco",
-"position": "ALA",
-"number": 3,
-"age": 28,
-"nationality": "Argentina"
-},
-{
-"id": "zar08",
-"clubId": "zar",
-"name": "Célio Coque",
-"position": "ALA",
-"number": 4,
-"age": 26,
-"nationality": "Portugal"
-},
-{
-"id": "zar09",
-"clubId": "zar",
-"name": "Oilhaborda",
-"position": "ALA",
-"number": 5,
-"age": 22,
-"nationality": "Argentina"
-},
-{
-"id": "zar10",
-"clubId": "zar",
-"name": "Óscar Villanueva",
-"position": "FIX",
-"number": 6,
-"age": 30,
-"nationality": "Espanha"
-},
-{
-"id": "zar11",
-"clubId": "zar",
-"name": "Richi Felipe",
-"position": "PIV",
-"number": 7,
-"age": 34,
-"nationality": "Espanha"
-},
-{
-"id": "zar12",
-"clubId": "zar",
-"name": "Xuxu",
-"position": "FIX",
-"number": 8,
-"age": 24,
-"nationality": "Brasil"
-},
-{
-"id": "zar13",
-"clubId": "zar",
-"name": "Miguel",
-"position": "ALA",
-"number": 9,
-"age": 20,
-"nationality": "Espanha"
-},
-{
-"id": "zar14",
-"clubId": "zar",
-"name": "Augusto Van De Casteele",
-"position": "PIV",
-"number": 10,
-"age": 28,
-"nationality": "Argentina"
-},
-{
-"id": "zar15",
-"clubId": "zar",
-"name": "Mikel Perez Monfort",
-"position": "ALA",
-"number": 11,
-"age": 25,
-"nationality": "Espanha"
-},
-{
-"id": "zar16",
-"clubId": "zar",
-"name": "Samuel Freire",
-"position": "PIV",
-"number": 12,
-"age": 24,
-"nationality": "Brasil"
-},
-{
-"id": "zar17",
-"clubId": "zar",
-"name": "Kike Liao",
-"position": "ALA",
-"number": 14,
-"age": 20,
-"nationality": "Espanha"
-},
-{
-"id": "zar18",
-"clubId": "zar",
-"name": "Joserru",
-"position": "ALA",
-"number": 15,
-"age": 19,
-"nationality": "Espanha"
-},
-{
-"id": "zar19",
-"clubId": "zar",
-"name": "Quique Hernando",
-"position": "FIX",
-"number": 16,
-"age": 27,
-"nationality": "Espanha"
-},
-{
-"id": "zar20",
-"clubId": "zar",
-"name": "Raúl López",
-"position": "ALA",
-"number": 17,
-"age": 24,
-"nationality": "Espanha"
-},
-{
-"id": "zar21",
-"clubId": "zar",
-"name": "Alegre",
-"position": "ALA",
-"number": 18,
-"age": 24,
-"nationality": "Argentina"
-},
-{
-"id": "jae01",
-"clubId": "jae",
-"name": "João Frezzato",
-"position": "GR",
-"number": 1,
-"age": 24,
-"nationality": "Brasil"
-},
-{
-"id": "jae02",
-"clubId": "jae",
-"name": "Carlos Espíndola",
-"position": "GR",
-"number": 13,
-"age": 32,
-"nationality": "Itália"
-},
-{
-"id": "jae03",
-"clubId": "jae",
-"name": "Hugo Montoro Perez",
-"position": "GR",
-"number": 25,
-"age": 2026,
-"nationality": "Espanha"
-},
-{
-"id": "jae04",
-"clubId": "jae",
-"name": "Alan Brandi",
-"position": "PIV",
-"number": 2,
-"age": 38,
-"nationality": "Argentina"
-},
-{
-"id": "jae05",
-"clubId": "jae",
-"name": "Bynho",
-"position": "ALA",
-"number": 3,
-"age": 33,
-"nationality": "Brasil"
-},
-{
-"id": "jae06",
-"clubId": "jae",
-"name": "Daniel Zurdo",
-"position": "ALA",
-"number": 4,
-"age": 26,
-"nationality": "Espanha"
-},
-{
-"id": "jae07",
-"clubId": "jae",
-"name": "Eloy Rojas",
-"position": "ALA",
-"number": 5,
-"age": 31,
-"nationality": "Espanha"
-},
-{
-"id": "jae08",
-"clubId": "jae",
-"name": "Esteban Guerrero",
-"position": "PIV",
-"number": 6,
-"age": 31,
-"nationality": "Espanha"
-},
-{
-"id": "jae09",
-"clubId": "jae",
-"name": "Lemine",
-"position": "ALA",
-"number": 7,
-"age": 34,
-"nationality": "Espanha"
-},
-{
-"id": "jae10",
-"clubId": "jae",
-"name": "Matías Rosa",
-"position": "PIV",
-"number": 8,
-"age": 30,
-"nationality": "Argentina"
-},
-{
-"id": "jae11",
-"clubId": "jae",
-"name": "Míchel",
-"position": "ALA",
-"number": 9,
-"age": 33,
-"nationality": "Espanha"
-},
-{
-"id": "jae12",
-"clubId": "jae",
-"name": "Fernando Trindade",
-"position": "ALA",
-"number": 10,
-"age": 28,
-"nationality": "Brasil"
-},
-{
-"id": "jae13",
-"clubId": "jae",
-"name": "João Salla",
-"position": "FIX",
-"number": 11,
-"age": 30,
-"nationality": "Brasil"
-},
-{
-"id": "jae14",
-"clubId": "jae",
-"name": "Raggiati \"Power\"",
-"position": "FIX",
-"number": 12,
-"age": 25,
-"nationality": "Argentina"
-},
-{
-"id": "jae15",
-"clubId": "jae",
-"name": "César Velasco",
-"position": "ALA",
-"number": 14,
-"age": 28,
-"nationality": "Espanha"
-},
-{
-"id": "jae16",
-"clubId": "jae",
-"name": "Boyis",
-"position": "FIX",
-"number": 15,
-"age": 36,
-"nationality": "Espanha"
-},
-{
-"id": "pen01",
-"clubId": "pen",
-"name": "Lukas Acosta",
-"position": "GR",
-"number": 1,
-"age": 22,
-"nationality": "Argentina"
-},
-{
-"id": "pen02",
-"clubId": "pen",
-"name": "Gio",
-"position": "GR",
-"number": 13,
-"age": 31,
-"nationality": "Espanha"
-},
-{
-"id": "pen03",
-"clubId": "pen@jun",
-"name": "Álex Cervera",
-"position": "GR",
-"number": null,
-"age": 18,
-"nationality": "Espanha"
-},
-{
-"id": "pen04",
-"clubId": "pen",
-"name": "Bernardo Araya",
-"position": "FIX",
-"number": 2,
-"age": 33,
-"nationality": "Espanha"
-},
-{
-"id": "pen05",
-"clubId": "pen",
-"name": "Carlos Sanz",
-"position": "FIX",
-"number": 3,
-"age": 30,
-"nationality": "Espanha"
-},
-{
-"id": "pen06",
-"clubId": "pen",
-"name": "Diego Quintela",
-"position": "ALA",
-"number": 4,
-"age": 34,
-"nationality": "Espanha"
-},
-{
-"id": "pen07",
-"clubId": "pen",
-"name": "Diego Sancho",
-"position": "PIV",
-"number": 5,
-"age": 27,
-"nationality": "Espanha"
-},
-{
-"id": "pen08",
-"clubId": "pen",
-"name": "Elías Fernández",
-"position": "ALA",
-"number": 6,
-"age": 33,
-"nationality": "Espanha"
-},
-{
-"id": "pen09",
-"clubId": "pen",
-"name": "Jonatan Franco",
-"position": "ALA",
-"number": 7,
-"age": 23,
-"nationality": "Paraguai"
-},
-{
-"id": "pen10",
-"clubId": "pen",
-"name": "Lucas Flores",
-"position": "FIX",
-"number": 8,
-"age": 29,
-"nationality": "Argentina"
-},
-{
-"id": "pen11",
-"clubId": "pen",
-"name": "Saladié",
-"position": "ALA",
-"number": 9,
-"age": 25,
-"nationality": "Espanha"
-},
-{
-"id": "pen12",
-"clubId": "pen",
-"name": "Víctor Pérez",
-"position": "ALA",
-"number": 10,
-"age": 26,
-"nationality": "Espanha"
-},
-{
-"id": "pen13",
-"clubId": "pen",
-"name": "Pablo Muñoz",
-"position": "ALA",
-"number": 11,
-"age": 22,
-"nationality": "Espanha"
-},
-{
-"id": "pen14",
-"clubId": "pen",
-"name": "Yunii",
-"position": "PIV",
-"number": 12,
-"age": 24,
-"nationality": "Espanha"
-},
-{
-"id": "pen15",
-"clubId": "pen",
-"name": "Puigvert",
-"position": "ALA",
-"number": 14,
-"age": 23,
-"nationality": "Espanha"
-},
-{
-"id": "pen16",
-"clubId": "pen",
-"name": "B. Barea",
-"position": "ALA",
-"number": 15,
-"age": 17,
-"nationality": "Espanha"
-},
-{
-"id": "pen17",
-"clubId": "pen",
-"name": "Pablo Garcia Escuder",
-"position": "PIV",
-"number": 16,
-"age": 25,
-"nationality": "Espanha"
-},
-{
-"id": "epz01",
-"clubId": "epz",
-"name": "Antonio Navarro",
-"position": "GR",
-"number": 1,
-"age": 25,
-"nationality": "Espanha"
-},
-{
-"id": "epz02",
-"clubId": "epz",
-"name": "Juanjo Lopez",
-"position": "GR",
-"number": 13,
-"age": 19,
-"nationality": "Espanha"
-},
-{
-"id": "epz03",
-"clubId": "epz",
-"name": "Edu Sousa",
-"position": "GR",
-"number": 25,
-"age": 29,
-"nationality": "Portugal"
-},
-{
-"id": "epz04",
-"clubId": "epz",
-"name": "A. Meseguer",
-"position": "ALA",
-"number": 2,
-"age": 18,
-"nationality": "Espanha"
-},
-{
-"id": "epz05",
-"clubId": "epz",
-"name": "David Álvarez",
-"position": "ALA",
-"number": 3,
-"age": 28,
-"nationality": "Espanha"
-},
-{
-"id": "epz06",
-"clubId": "epz",
-"name": "Dener",
-"position": "PIV",
-"number": 4,
-"age": 30,
-"nationality": "Brasil"
-},
-{
-"id": "epz07",
-"clubId": "epz",
-"name": "Gadeia",
-"position": "ALA",
-"number": 5,
-"age": 38,
-"nationality": "Brasil"
-},
-{
-"id": "epz08",
-"clubId": "epz",
-"name": "Gonzalo Santa Cruz",
-"position": "PIV",
-"number": 6,
-"age": 21,
-"nationality": "Espanha"
-},
-{
-"id": "epz09",
-"clubId": "epz",
-"name": "Pachu",
-"position": "ALA",
-"number": 7,
-"age": 25,
-"nationality": "Espanha"
-},
-{
-"id": "epz10",
-"clubId": "epz",
-"name": "Ricardo",
-"position": "FIX",
-"number": 8,
-"age": 26,
-"nationality": "Espanha"
-},
-{
-"id": "epz11",
-"clubId": "epz",
-"name": "Rivera",
-"position": "ALA",
-"number": 9,
-"age": 24,
-"nationality": "Espanha"
-},
-{
-"id": "epz12",
-"clubId": "epz",
-"name": "Tomáš Drahovský",
-"position": "PIV",
-"number": 10,
-"age": 33,
-"nationality": "Eslováquia"
-},
-{
-"id": "epz13",
-"clubId": "epz",
-"name": "Marcel",
-"position": "ALA",
-"number": 11,
-"age": 29,
-"nationality": "Brasil"
-},
-{
-"id": "epz14",
-"clubId": "epz",
-"name": "Ricardinho",
-"position": "ALA",
-"number": 12,
-"age": 26,
-"nationality": "Brasil"
-},
-{
-"id": "epz15",
-"clubId": "epz",
-"name": "Bebé",
-"position": "FIX",
-"number": 14,
-"age": 36,
-"nationality": "Espanha"
-},
-{
-"id": "epz16",
-"clubId": "epz",
-"name": "Ander Barranco",
-"position": "FIX",
-"number": 15,
-"age": 19,
-"nationality": "Espanha"
-},
-{
-"id": "epz17",
-"clubId": "epz",
-"name": "Guille Tomás",
-"position": "ALA",
-"number": 16,
-"age": 25,
-"nationality": "Espanha"
-},
-{
-"id": "epz18",
-"clubId": "epz",
-"name": "Mario Sánchez",
-"position": "ALA",
-"number": 17,
-"age": 17,
-"nationality": "Espanha"
-},
-{
-"id": "epz19",
-"clubId": "epz",
-"name": "Ligeiro",
-"position": "ALA",
-"number": 18,
-"age": 23,
-"nationality": "Brasil"
-},
-{
-"id": "jca01",
-"clubId": "jca",
-"name": "David Rocha",
-"position": "GR",
-"number": 1,
-"age": 23,
-"nationality": "Brasil"
-},
-{
-"id": "jca02",
-"clubId": "jca",
-"name": "Chemi",
-"position": "GR",
-"number": 13,
-"age": 30,
-"nationality": "Espanha"
-},
-{
-"id": "jca03",
-"clubId": "jca",
-"name": "Chispi",
-"position": "GR",
-"number": 25,
-"age": 28,
-"nationality": "Espanha"
-},
-{
-"id": "jca04",
-"clubId": "jca",
-"name": "Agustín Plaza",
-"position": "FIX",
-"number": 2,
-"age": 26,
-"nationality": "Argentina"
-},
-{
-"id": "jca05",
-"clubId": "jca",
-"name": "Darío Gil",
-"position": "FIX",
-"number": 3,
-"age": 29,
-"nationality": "Espanha"
-},
-{
-"id": "jca06",
-"clubId": "jca",
-"name": "Francisco Tomaz",
-"position": "FIX",
-"number": 4,
-"age": 35,
-"nationality": "Espanha"
-},
-{
-"id": "jca07",
-"clubId": "jca",
-"name": "Muhammad Ossamanmusa",
-"position": "PIV",
-"number": 5,
-"age": 28,
-"nationality": "Espanha"
-},
-{
-"id": "jca08",
-"clubId": "jca",
-"name": "Carlos A.",
-"position": "ALA",
-"number": 6,
-"age": 19,
-"nationality": "Espanha"
-},
-{
-"id": "jca09",
-"clubId": "jca",
-"name": "Gon Castejón",
-"position": "ALA",
-"number": 7,
-"age": 26,
-"nationality": "Espanha"
-},
-{
-"id": "jca10",
-"clubId": "jca",
-"name": "Adri Rubio",
-"position": "ALA",
-"number": 8,
-"age": 25,
-"nationality": "Espanha"
-},
-{
-"id": "jca11",
-"clubId": "jca",
-"name": "Motta",
-"position": "ALA",
-"number": 9,
-"age": 26,
-"nationality": "Brasil"
-},
-{
-"id": "jca12",
-"clubId": "jca",
-"name": "Pablo Ramírez",
-"position": "PIV",
-"number": 10,
-"age": 25,
-"nationality": "Portugal"
-},
-{
-"id": "jca13",
-"clubId": "jca",
-"name": "Cortés",
-"position": "ALA",
-"number": 11,
-"age": 30,
-"nationality": "Espanha"
-},
-{
-"id": "jca14",
-"clubId": "jca",
-"name": "Juninho",
-"position": "FIX",
-"number": 12,
-"age": 26,
-"nationality": "Brasil"
-},
-{
-"id": "jca15",
-"clubId": "jca",
-"name": "Waltinho",
-"position": "PIV",
-"number": 14,
-"age": 34,
-"nationality": "Brasil"
-},
-{
-"id": "jca16",
-"clubId": "jca",
-"name": "Mellado",
-"position": "ALA",
-"number": 15,
-"age": 26,
-"nationality": "Espanha"
-},
-{
-"id": "jca17",
-"clubId": "jca",
-"name": "Carlos Perez",
-"position": "UNI",
-"number": 16,
-"age": 25,
-"nationality": "Espanha"
-},
-{
-"id": "jca18",
-"clubId": "jca",
-"name": "Ruano",
-"position": "PIV",
-"number": 17,
-"age": 19,
-"nationality": "Espanha"
-},
-{
-"id": "jca19",
-"clubId": "jca",
-"name": "Renato",
-"position": "ALA",
-"number": 18,
-"age": 28,
-"nationality": "Cabo Verde"
-},
 {
 "id": "bar01",
 "clubId": "bar",
-"name": "Dídac Plana",
+"name": "Miquel Feixas",
+"fullName": "Miquel Feixas De Jesús",
 "position": "GR",
-"number": 1,
-"age": 36,
+"number": 26,
+"age": 28,
 "nationality": "Espanha"
 },
 {
 "id": "bar02",
 "clubId": "bar",
-"name": "Miquel Feixas",
+"name": "Dídac",
+"fullName": "Dídac Plana Oltra",
 "position": "GR",
-"number": 13,
-"age": 28,
+"number": 21,
+"age": 36,
 "nationality": "Espanha"
 },
 {
 "id": "bar03",
 "clubId": "bar",
-"name": "Iker Abad",
-"position": "GR",
-"number": 25,
-"age": 20,
-"nationality": "Espanha"
+"name": "Mouhoudine",
+"fullName": "Souheil Mouhoudine",
+"position": "FIX",
+"number": 22,
+"age": 31,
+"nationality": "França"
 },
 {
 "id": "bar04",
 "clubId": "bar",
-"name": "Adolfo",
-"position": "ALA",
-"number": 2,
-"age": 33,
+"name": "Antonio",
+"fullName": "Antonio Pérez Ortega",
+"position": "FIX",
+"number": 6,
+"age": 25,
 "nationality": "Espanha"
 },
 {
 "id": "bar05",
 "clubId": "bar",
-"name": "Antonio",
+"name": "Joao Victor",
+"fullName": "Joao Victor Alves Sena",
 "position": "FIX",
-"number": 3,
+"number": 17,
 "age": 25,
-"nationality": "Espanha"
+"nationality": "Brasil"
 },
 {
 "id": "bar06",
 "clubId": "bar",
-"name": "Catela",
-"position": "ALA",
+"name": "Miñano",
+"fullName": "Joel Miñano Correas",
+"position": "FIX",
 "number": 4,
-"age": 31,
+"age": 20,
 "nationality": "Espanha"
 },
 {
 "id": "bar07",
 "clubId": "bar",
-"name": "Eric Martel",
+"name": "Matheus",
+"fullName": "Matheus Rodrigues Cézar Da Silva",
 "position": "ALA",
-"number": 5,
-"age": 34,
-"nationality": "Espanha"
+"number": 3,
+"age": 29,
+"nationality": "Brasil"
 },
 {
 "id": "bar08",
 "clubId": "bar",
-"name": "Higor",
-"position": "PIV",
-"number": 6,
-"age": 27,
-"nationality": "Brasil"
+"name": "Eric Martel",
+"fullName": "Eric Martel García",
+"position": "ALA",
+"number": 14,
+"age": 34,
+"nationality": "Espanha"
 },
 {
 "id": "bar09",
 "clubId": "bar",
-"name": "Joao Victor",
-"position": "FIX",
-"number": 7,
-"age": 25,
-"nationality": "Brasil"
+"name": "Roger",
+"fullName": "Roger García Bernardo",
+"position": "ALA",
+"number": 5,
+"age": 18,
+"nationality": "Espanha"
 },
 {
 "id": "bar10",
 "clubId": "bar",
-"name": "Mamadou Siragassy Toure",
+"name": "Catela",
+"fullName": "Juan José Camacho Pérez",
 "position": "ALA",
-"number": 8,
-"age": 24,
-"nationality": "França"
+"number": 13,
+"age": 31,
+"nationality": "Espanha"
 },
 {
 "id": "bar11",
 "clubId": "bar",
-"name": "Souheil Mouhoudine",
-"position": "FIX",
-"number": 9,
-"age": 31,
-"nationality": "França"
+"name": "Guti",
+"fullName": "Pablo Gutierrez Zamora",
+"position": "ALA",
+"number": 20,
+"age": 19,
+"nationality": "Espanha"
 },
 {
 "id": "bar12",
 "clubId": "bar",
-"name": "Sérgio González",
+"name": "Touré",
+"fullName": "Mamadou Siragassy Touré",
 "position": "ALA",
-"number": 10,
-"age": 29,
-"nationality": "Espanha"
+"number": 11,
+"age": 24,
+"nationality": "França"
 },
 {
 "id": "bar13",
 "clubId": "bar",
-"name": "Pito",
-"position": "PIV",
-"number": 11,
-"age": 34,
-"nationality": "Brasil"
+"name": "L. Gauna",
+"fullName": "Luciano Silvestre Gauna",
+"position": "ALA",
+"number": 23,
+"age": 25,
+"nationality": "Argentina"
 },
 {
 "id": "bar14",
 "clubId": "bar",
-"name": "Roger Garcia",
+"name": "Adolfo",
+"fullName": "Adolfo Fernández Díaz",
 "position": "ALA",
-"number": 12,
-"age": 18,
+"number": 8,
+"age": 33,
 "nationality": "Espanha"
 },
 {
 "id": "bar15",
 "clubId": "bar",
-"name": "Matheus",
+"name": "Sergio González",
+"fullName": "Sergio González Pérez",
 "position": "ALA",
-"number": 14,
+"number": 16,
 "age": 29,
-"nationality": "Brasil"
+"nationality": "Espanha"
 },
 {
 "id": "bar16",
 "clubId": "bar",
-"name": "Miñano",
-"position": "FIX",
-"number": 15,
-"age": 20,
-"nationality": "Espanha"
+"name": "Pito",
+"fullName": "Jean Pierre Guisel Costa",
+"position": "PIV",
+"number": 10,
+"age": 34,
+"nationality": "Brasil"
 },
 {
 "id": "bar17",
 "clubId": "bar",
-"name": "Pablo Guti",
-"position": "ALA",
-"number": 16,
-"age": 19,
-"nationality": "Espanha"
-},
-{
-"id": "bar18",
-"clubId": "bar",
-"name": "Sequero",
-"position": "ALA",
-"number": 17,
-"age": 20,
-"nationality": "Espanha"
-},
-{
-"id": "bar19",
-"clubId": "bar",
-"name": "Luciano Gauna",
-"position": "ALA",
-"number": 18,
-"age": 25,
-"nationality": "Argentina"
-},
-{
-"id": "val01",
-"clubId": "val",
-"name": "Borja Puerta",
-"position": "GR",
-"number": 1,
-"age": 26,
-"nationality": "Espanha"
-},
-{
-"id": "val02",
-"clubId": "val",
-"name": "Pato",
-"position": "GR",
-"number": 13,
-"age": 22,
-"nationality": "Brasil"
-},
-{
-"id": "val03",
-"clubId": "val",
-"name": "Álex Naranjo",
-"position": "ALA",
-"number": 2,
-"age": 24,
-"nationality": "Espanha"
-},
-{
-"id": "val04",
-"clubId": "val",
-"name": "Carlos Bartolomé",
-"position": "ALA",
-"number": 3,
-"age": 27,
-"nationality": "Espanha"
-},
-{
-"id": "val05",
-"clubId": "val",
-"name": "Carrasco",
+"name": "Higor",
+"fullName": "Higor Ribeiro De Souza",
 "position": "PIV",
-"number": 4,
-"age": 23,
-"nationality": "Espanha"
-},
-{
-"id": "val06",
-"clubId": "val",
-"name": "João Victor",
-"position": "FIX",
-"number": 5,
-"age": 24,
-"nationality": "Brasil"
-},
-{
-"id": "val07",
-"clubId": "val",
-"name": "José Mário",
-"position": "ALA",
-"number": 6,
-"age": 27,
-"nationality": "Espanha"
-},
-{
-"id": "val08",
-"clubId": "val",
-"name": "Mateus Torres",
-"position": "ALA",
 "number": 7,
-"age": 28,
+"age": 27,
 "nationality": "Brasil"
-},
-{
-"id": "val09",
-"clubId": "val",
-"name": "Nicolás",
-"position": "PIV",
-"number": 8,
-"age": 24,
-"nationality": "Espanha"
-},
-{
-"id": "val10",
-"clubId": "val",
-"name": "Pablo Otero",
-"position": "ALA",
-"number": 9,
-"age": 24,
-"nationality": "Espanha"
-},
-{
-"id": "val11",
-"clubId": "val",
-"name": "Tapias",
-"position": "FIX",
-"number": 10,
-"age": 22,
-"nationality": "Espanha"
-},
-{
-"id": "val12",
-"clubId": "val",
-"name": "Alex Fonseca",
-"position": "ALA",
-"number": 11,
-"age": 22,
-"nationality": "Brasil"
-},
-{
-"id": "val13",
-"clubId": "val",
-"name": "Lautaro Yáñez",
-"position": "ALA",
-"number": 12,
-"age": 22,
-"nationality": "Argentina"
-},
-{
-"id": "val14",
-"clubId": "val",
-"name": "Rodrigo Álvarez",
-"position": "ALA",
-"number": 14,
-"age": 21,
-"nationality": "Argentina"
-},
-{
-"id": "val15",
-"clubId": "val",
-"name": "Juanan",
-"position": "PIV",
-"number": 15,
-"age": 25,
-"nationality": "Espanha"
-},
-{
-"id": "val16",
-"clubId": "val",
-"name": "Alberto García",
-"position": "FIX",
-"number": 16,
-"age": 28,
-"nationality": "Espanha"
 },
 {
 "id": "cor01",
 "clubId": "cor",
-"name": "Fábio Pérez",
+"name": "Fabio",
+"fullName": "Fabio Alvira Pérez",
 "position": "GR",
-"number": 1,
+"number": 12,
 "age": 35,
 "nationality": "Espanha"
 },
 {
 "id": "cor02",
 "clubId": "cor",
-"name": "Víctor Areales",
-"position": "GR",
-"number": 13,
-"age": 27,
-"nationality": "Espanha"
-},
-{
-"id": "cor03",
-"clubId": "cor",
 "name": "Aguayo",
+"fullName": "Álvaro Aguayo Perez",
 "position": "GR",
 "number": 25,
 "age": 25,
 "nationality": "Espanha"
 },
 {
+"id": "cor03",
+"clubId": "cor",
+"name": "Víctor",
+"fullName": "Víctor Areales Madueño",
+"position": "GR",
+"number": 1,
+"age": 27,
+"nationality": "Espanha"
+},
+{
 "id": "cor04",
 "clubId": "cor",
 "name": "Hugo",
+"fullName": "Hugo Expósito Sicilia",
 "position": "FIX",
 "number": 2,
 "age": 22,
@@ -1921,614 +214,2542 @@
 {
 "id": "cor05",
 "clubId": "cor",
-"name": "Ivi",
-"position": "ALA",
-"number": 3,
-"age": 31,
-"nationality": "Espanha"
+"name": "Murilo",
+"fullName": "Murilo Duarte Da Silva",
+"position": "FIX",
+"number": 23,
+"age": 33,
+"nationality": "Brasil"
 },
 {
 "id": "cor06",
 "clubId": "cor",
-"name": "Miguel Palacio",
-"position": "PIV",
-"number": 4,
-"age": 20,
-"nationality": "Portugal"
+"name": "Perin",
+"fullName": "Lucas Benincasa Perin",
+"position": "ALA",
+"number": 10,
+"age": 28,
+"nationality": "Brasil"
 },
 {
 "id": "cor07",
 "clubId": "cor",
-"name": "Titi",
+"name": "Ivi",
+"fullName": "Iván Fernández Spohr",
 "position": "ALA",
-"number": 5,
-"age": 24,
-"nationality": "Argentina"
+"number": 11,
+"age": 31,
+"nationality": "Espanha"
 },
 {
 "id": "cor08",
 "clubId": "cor",
 "name": "Alvarito",
+"fullName": "Álvaro Quevedo Cuello De Oro",
 "position": "ALA",
-"number": 6,
+"number": 77,
 "age": 29,
 "nationality": "Espanha"
 },
 {
 "id": "cor09",
 "clubId": "cor",
-"name": "Lucas Perin",
+"name": "Diego Tosina",
+"fullName": "Diego Tosina Luque",
 "position": "ALA",
-"number": 7,
-"age": 28,
-"nationality": "Brasil"
+"number": 21,
+"age": 21,
+"nationality": "Espanha"
 },
 {
 "id": "cor10",
 "clubId": "cor",
-"name": "Murilo",
-"position": "FIX",
-"number": 8,
-"age": 33,
-"nationality": "Brasil"
+"name": "Titi Del Rey",
+"fullName": "Agustín del Rey",
+"position": "ALA",
+"number": 22,
+"age": 24,
+"nationality": "Argentina"
 },
 {
 "id": "cor11",
 "clubId": "cor",
-"name": "Pablo Ibarra",
-"position": "PIV",
-"number": 9,
-"age": 31,
+"name": "Pablo Ordóñez",
+"fullName": "Pablo Ordóñez Jiménez",
+"position": "ALA",
+"number": 6,
+"age": 24,
 "nationality": "Espanha"
 },
 {
 "id": "cor12",
 "clubId": "cor",
-"name": "Zequi",
+"name": "Peinado",
+"fullName": "Alberto Peinado López",
 "position": "ALA",
-"number": 10,
-"age": 32,
+"number": 18,
+"age": 24,
 "nationality": "Espanha"
 },
 {
 "id": "cor13",
 "clubId": "cor",
-"name": "Pablo Ordóñez",
+"name": "Zequi",
+"fullName": "Ezequiel Montero Jiménez",
 "position": "ALA",
-"number": 11,
-"age": 24,
+"number": 7,
+"age": 32,
 "nationality": "Espanha"
 },
 {
 "id": "cor14",
 "clubId": "cor",
 "name": "Aranda",
+"fullName": "Javier Aranda Prendes",
 "position": "ALA",
-"number": 12,
+"number": 14,
 "age": 20,
 "nationality": "Espanha"
 },
 {
 "id": "cor15",
 "clubId": "cor",
-"name": "David Fernández",
+"name": "David Fernandez",
+"fullName": "David Fernandez Garcia",
 "position": "ALA",
-"number": 14,
+"number": 8,
 "age": 19,
 "nationality": "Espanha"
 },
 {
 "id": "cor16",
 "clubId": "cor",
-"name": "Diego Tosina",
+"name": "Faly",
+"fullName": "Rafael Teruel Frases",
 "position": "ALA",
-"number": 15,
-"age": 21,
+"number": 5,
+"age": 20,
 "nationality": "Espanha"
 },
 {
 "id": "cor17",
 "clubId": "cor",
-"name": "Faly",
-"position": "ALA",
-"number": 16,
-"age": 20,
-"nationality": "Espanha"
+"name": "Pablo Ibarra",
+"fullName": "Pablo Ibarra Fuertes",
+"position": "PIV",
+"number": 20,
+"age": 31,
+"nationality": "Uruguai"
 },
 {
 "id": "cor18",
 "clubId": "cor",
-"name": "Peinado",
-"position": "ALA",
-"number": 17,
-"age": 24,
-"nationality": "Espanha"
-},
-{
-"id": "man01",
-"clubId": "man",
-"name": "Javi Bule",
-"position": "GR",
-"number": 1,
-"age": 18,
-"nationality": "Espanha"
-},
-{
-"id": "man02",
-"clubId": "man",
-"name": "Schutt",
-"position": "GR",
-"number": 13,
-"age": 28,
-"nationality": "Brasil"
-},
-{
-"id": "man03",
-"clubId": "man@jun",
-"name": "Mario Cerezo",
-"position": "GR",
-"number": null,
-"age": 18,
-"nationality": "Espanha"
-},
-{
-"id": "man04",
-"clubId": "man",
-"name": "Álvaro López",
-"position": "ALA",
-"number": 2,
-"age": 30,
-"nationality": "Espanha"
-},
-{
-"id": "man05",
-"clubId": "man",
-"name": "Bernat Povill",
-"position": "ALA",
-"number": 3,
-"age": 24,
-"nationality": "Espanha"
-},
-{
-"id": "man06",
-"clubId": "man",
-"name": "Daniel",
+"name": "Palacio",
+"fullName": "Miguel Palacio Parada",
 "position": "PIV",
-"number": 4,
-"age": 29,
-"nationality": "Espanha"
-},
-{
-"id": "man07",
-"clubId": "man",
-"name": "Eloy",
-"position": "ALA",
-"number": 5,
-"age": 23,
-"nationality": "Espanha"
-},
-{
-"id": "man08",
-"clubId": "man",
-"name": "Humberto",
-"position": "ALA",
-"number": 6,
-"age": 33,
-"nationality": "Brasil"
-},
-{
-"id": "man09",
-"clubId": "man",
-"name": "Javi Alonso",
-"position": "ALA",
-"number": 7,
-"age": 33,
-"nationality": "Espanha"
-},
-{
-"id": "man10",
-"clubId": "man",
-"name": "Khalid",
-"position": "ALA",
-"number": 8,
-"age": 28,
-"nationality": "Marrocos"
-},
-{
-"id": "man11",
-"clubId": "man",
-"name": "Robles",
-"position": "ALA",
 "number": 9,
 "age": 20,
 "nationality": "Espanha"
 },
 {
-"id": "man12",
-"clubId": "man",
-"name": "Unai Izquierdo",
+"id": "epz01",
+"clubId": "epz",
+"name": "Edu Sousa",
+"fullName": "Eduardo Filipe Sousa Veiga",
+"position": "GR",
+"number": 19,
+"age": 29,
+"nationality": "Portugal"
+},
+{
+"id": "epz02",
+"clubId": "epz",
+"name": "Antonio Navarro",
+"fullName": "Antonio Navarro López",
+"position": "GR",
+"number": 1,
+"age": 25,
+"nationality": "Espanha"
+},
+{
+"id": "epz03",
+"clubId": "epz",
+"name": "Juanjo",
+"fullName": "Juan José López Pérez",
+"position": "GR",
+"number": 38,
+"age": 19,
+"nationality": "Espanha"
+},
+{
+"id": "epz04",
+"clubId": "epz",
+"name": "Ricardo",
+"fullName": "Ricardo Mayor González",
 "position": "FIX",
+"number": 8,
+"age": 26,
+"nationality": "Espanha"
+},
+{
+"id": "epz05",
+"clubId": "epz",
+"name": "Ander",
+"fullName": "Ander Barranco Sanchez",
+"position": "FIX",
+"number": 15,
+"age": 19,
+"nationality": "Espanha"
+},
+{
+"id": "epz06",
+"clubId": "epz",
+"name": "Bebe",
+"fullName": "Rafael García Aguilera",
+"position": "FIX",
+"number": 51,
+"age": 36,
+"nationality": "Espanha"
+},
+{
+"id": "epz07",
+"clubId": "epz",
+"name": "Ricardinho",
+"fullName": "Ricardo Henrique Lemos Diniz",
+"position": "ALA",
 "number": 10,
+"age": 26,
+"nationality": "Brasil"
+},
+{
+"id": "epz08",
+"clubId": "epz",
+"name": "Ligeiro",
+"fullName": "Gabriel Ferreira Santos",
+"position": "ALA",
+"number": 33,
+"age": 23,
+"nationality": "Brasil"
+},
+{
+"id": "epz09",
+"clubId": "epz",
+"name": "Rivera",
+"fullName": "Adrián Rivera González",
+"position": "ALA",
+"number": 9,
+"age": 24,
+"nationality": "Espanha"
+},
+{
+"id": "epz10",
+"clubId": "epz",
+"name": "Gadeia",
+"fullName": "Fabricio Bastezini Spinello",
+"position": "ALA",
+"number": 31,
+"age": 38,
+"nationality": "Brasil"
+},
+{
+"id": "epz11",
+"clubId": "epz",
+"name": "Mario",
+"fullName": "Mario Sanchez Esquiva",
+"position": "ALA",
+"number": 70,
+"age": 17,
+"nationality": "Espanha"
+},
+{
+"id": "epz12",
+"clubId": "epz",
+"name": "Guille",
+"fullName": "Guillermo Tomás Cantó",
+"position": "ALA",
+"number": 4,
+"age": 25,
+"nationality": "Espanha"
+},
+{
+"id": "epz13",
+"clubId": "epz",
+"name": "Pachu",
+"fullName": "Pablo García Lago",
+"position": "ALA",
+"number": 14,
+"age": 25,
+"nationality": "Espanha"
+},
+{
+"id": "epz14",
+"clubId": "epz",
+"name": "David Álvarez",
+"fullName": "David Álvarez Munteis",
+"position": "ALA",
+"number": 16,
+"age": 28,
+"nationality": "Espanha"
+},
+{
+"id": "epz15",
+"clubId": "epz",
+"name": "A. Meseguer",
+"fullName": "Andrés Meseguer Costa",
+"position": "ALA",
+"number": 49,
 "age": 18,
 "nationality": "Espanha"
 },
 {
-"id": "man13",
-"clubId": "man",
-"name": "Leandrinho",
-"position": "PIV",
+"id": "epz16",
+"clubId": "epz",
+"name": "Marcel",
+"fullName": "Marcel De Mendoca Marques",
+"position": "ALA",
 "number": 11,
-"age": 25,
-"nationality": "Brasil"
-},
-{
-"id": "man14",
-"clubId": "man",
-"name": "Ribeirão",
-"position": "FIX",
-"number": 12,
 "age": 29,
 "nationality": "Brasil"
 },
 {
-"id": "man15",
-"clubId": "man",
-"name": "Yann Barbosa",
+"id": "epz17",
+"clubId": "epz",
+"name": "Dener",
+"fullName": "Dener Rodrigo Da Silva",
 "position": "PIV",
-"number": 14,
-"age": 21,
-"nationality": "Brasil"
-},
-{
-"id": "man16",
-"clubId": "man",
-"name": "Pablo Moreno",
-"position": "FIX",
-"number": 15,
-"age": 23,
-"nationality": "Espanha"
-},
-{
-"id": "man17",
-"clubId": "man",
-"name": "Aarón",
-"position": "ALA",
-"number": 16,
-"age": 18,
-"nationality": "Espanha"
-},
-{
-"id": "man18",
-"clubId": "man",
-"name": "Antoñito",
-"position": "ALA",
-"number": 17,
-"age": 35,
-"nationality": "Espanha"
-},
-{
-"id": "man19",
-"clubId": "man@jun",
-"name": "Valladares",
-"position": "PIV",
-"number": null,
-"age": 18,
-"nationality": "Espanha"
-},
-{
-"id": "noi01",
-"clubId": "noi",
-"name": "Di Fanti",
-"position": "GR",
-"number": 1,
-"age": 37,
-"nationality": "Brasil"
-},
-{
-"id": "noi02",
-"clubId": "noi",
-"name": "Giraldo Rodriguez",
-"position": "GR",
-"number": 13,
-"age": 2026,
-"nationality": "Espanha"
-},
-{
-"id": "noi03",
-"clubId": "noi",
-"name": "Peixe",
-"position": "GR",
-"number": 25,
-"age": 28,
-"nationality": "Portugal"
-},
-{
-"id": "noi04",
-"clubId": "noi@jun",
-"name": "Mosquera",
-"position": "GR",
-"number": null,
-"age": 18,
-"nationality": "Espanha"
-},
-{
-"id": "noi05",
-"clubId": "noi",
-"name": "Biel",
-"position": "PIV",
-"number": 2,
+"number": 7,
 "age": 30,
 "nationality": "Brasil"
 },
 {
-"id": "noi06",
-"clubId": "noi",
-"name": "Charly",
-"position": "ALA",
+"id": "epz18",
+"clubId": "epz",
+"name": "Drahovsky",
+"fullName": "Tomas Drahovsky",
+"position": "PIV",
+"number": 18,
+"age": 33,
+"nationality": "Eslováquia"
+},
+{
+"id": "epz19",
+"clubId": "epz",
+"name": "Santa Cruz",
+"fullName": "Gonzalo Santa Cruz Vasallo",
+"position": "PIV",
+"number": 17,
+"age": 21,
+"nationality": "Espanha"
+},
+{
+"id": "pal01",
+"clubId": "pal",
+"name": "Luan Muller",
+"fullName": "Luan Muller Barboza",
+"position": "GR",
 "number": 3,
-"age": 24,
-"nationality": "Espanha"
+"age": 33,
+"nationality": "Arménia"
 },
 {
-"id": "noi07",
-"clubId": "noi",
-"name": "Daniel Colón",
-"position": "PIV",
-"number": 4,
-"age": 22,
-"nationality": "Espanha"
-},
-{
-"id": "noi08",
-"clubId": "noi",
-"name": "Juan Pablo Cuello",
-"position": "FIX",
-"number": 5,
-"age": 29,
-"nationality": "Argentina"
-},
-{
-"id": "noi09",
-"clubId": "noi",
-"name": "Leandro Altamirano",
-"position": "ALA",
-"number": 6,
-"age": 26,
-"nationality": "Argentina"
-},
-{
-"id": "noi10",
-"clubId": "noi",
-"name": "Mykola Mykytiuk",
-"position": "FIX",
-"number": 7,
-"age": 29,
-"nationality": "Espanha"
-},
-{
-"id": "noi11",
-"clubId": "noi",
-"name": "Thierry",
-"position": "ALA",
-"number": 8,
-"age": 21,
-"nationality": "Brasil"
-},
-{
-"id": "noi12",
-"clubId": "noi",
-"name": "Tiago Macedo",
-"position": "ALA",
-"number": 9,
-"age": 21,
-"nationality": "Portugal"
-},
-{
-"id": "noi13",
-"clubId": "noi",
-"name": "Ismael",
-"position": "PIV",
-"number": 10,
-"age": 26,
-"nationality": "Espanha"
-},
-{
-"id": "noi14",
-"clubId": "noi",
-"name": "Mateo Vazquez Seoane",
-"position": "ALA",
-"number": 11,
-"age": 18,
-"nationality": "Espanha"
-},
-{
-"id": "noi15",
-"clubId": "noi",
-"name": "Rubi Lemos",
-"position": "ALA",
-"number": 12,
+"id": "pal02",
+"clubId": "pal",
+"name": "Carlos Barrón",
+"fullName": "Carlos Barrón Redondo",
+"position": "GR",
+"number": 1,
 "age": 38,
 "nationality": "Espanha"
 },
 {
-"id": "noi16",
-"clubId": "noi",
-"name": "David Pazos",
+"id": "pal03",
+"clubId": "pal",
+"name": "Dennis",
+"fullName": "Dennis Vasconcelos Cavalcanti",
+"position": "GR",
+"number": 2,
+"age": 28,
+"nationality": "Brasil"
+},
+{
+"id": "pal04",
+"clubId": "pal",
+"name": "Machado",
+"fullName": "Lucas Leandro Machado",
+"position": "FIX",
+"number": 44,
+"age": 29,
+"nationality": "Brasil"
+},
+{
+"id": "pal05",
+"clubId": "pal",
+"name": "Deivao",
+"fullName": "David Pasinato Beolrini",
+"position": "FIX",
+"number": 20,
+"age": 25,
+"nationality": "Brasil"
+},
+{
+"id": "pal06",
+"clubId": "pal",
+"name": "Piqueras",
+"fullName": "Manuel Piqueras Dólera",
+"position": "FIX",
+"number": 23,
+"age": 29,
+"nationality": "Espanha"
+},
+{
+"id": "pal07",
+"clubId": "pal",
+"name": "Lucão",
+"fullName": "Lucas Vinicius De Santana Brito",
+"position": "ALA",
+"number": 12,
+"age": 29,
+"nationality": "Brasil"
+},
+{
+"id": "pal08",
+"clubId": "pal",
+"name": "Carlos Gómez",
+"fullName": "Carlos Gómez Jerez",
 "position": "ALA",
 "number": 14,
-"age": 32,
-"nationality": "Espanha"
-},
-{
-"id": "noi17",
-"clubId": "noi",
-"name": "Montero",
-"position": "FIX",
-"number": 15,
 "age": 24,
 "nationality": "Espanha"
 },
 {
-"id": "noi18",
-"clubId": "noi",
-"name": "O. Chenel",
+"id": "pal09",
+"clubId": "pal",
+"name": "Rodrigo",
+"fullName": "Rodrigo Gaspar Monteiro",
 "position": "ALA",
-"number": 16,
+"number": 13,
+"age": 19,
+"nationality": "Portugal"
+},
+{
+"id": "pal10",
+"clubId": "pal",
+"name": "Fabinho",
+"fullName": "Fábio Augusto Carneiro Dos Santos",
+"position": "ALA",
+"number": 10,
+"age": 24,
+"nationality": "Brasil"
+},
+{
+"id": "pal11",
+"clubId": "pal",
+"name": "Júlio Zanotto",
+"fullName": "Júlio César Brollo Zanotto",
+"position": "ALA",
+"number": 11,
+"age": 30,
+"nationality": "Arménia"
+},
+{
+"id": "pal12",
+"clubId": "pal",
+"name": "Ernesto",
+"fullName": "Ernesto Claudino Gris",
+"position": "ALA",
+"number": 27,
 "age": 25,
+"nationality": "Brasil"
+},
+{
+"id": "pal13",
+"clubId": "pal",
+"name": "Diego Nunes",
+"fullName": "Diego Nunes de Souza Costa",
+"position": "ALA",
+"number": 17,
+"age": 31,
+"nationality": "Brasil"
+},
+{
+"id": "pal14",
+"clubId": "pal",
+"name": "D. Peña",
+"fullName": "David Peña Romero",
+"position": "ALA",
+"number": 7,
+"age": 26,
 "nationality": "Espanha"
 },
 {
-"id": "noi19",
-"clubId": "noi",
-"name": "Leozin",
+"id": "pal15",
+"clubId": "pal",
+"name": "Charuto",
+"fullName": "Charles Henrique Ferreira",
 "position": "PIV",
-"number": 17,
-"age": 24,
+"number": 9,
+"age": 33,
+"nationality": "Brasil"
+},
+{
+"id": "pal16",
+"clubId": "pal",
+"name": "Alisson Neves",
+"fullName": "Alisson Neves de Lima",
+"position": "PIV",
+"number": 99,
+"age": 27,
 "nationality": "Brasil"
 },
 {
 "id": "eji01",
 "clubId": "eji",
-"name": "Jesús Gómez",
+"name": "Jesús",
+"fullName": "Jesús Gómez Yerpes",
 "position": "GR",
-"number": 1,
+"number": 15,
 "age": 30,
 "nationality": "Espanha"
 },
 {
 "id": "eji02",
 "clubId": "eji",
-"name": "Vandeson Silva",
+"name": "Vandeson",
+"fullName": "Manuel Pereira Da Silva",
 "position": "GR",
-"number": 13,
+"number": 12,
 "age": 24,
 "nationality": "Brasil"
 },
 {
 "id": "eji03",
 "clubId": "eji",
-"name": "Andrés Geragthy",
+"name": "Josete",
+"fullName": "José Manuel Fernández Valor",
+"position": "FIX",
+"number": 3,
+"age": 32,
+"nationality": "Espanha"
+},
+{
+"id": "eji04",
+"clubId": "eji",
+"name": "Dela",
+"fullName": "Daniel De la Peña Sánchez Pacheco",
+"position": "FIX",
+"number": 4,
+"age": 28,
+"nationality": "Espanha"
+},
+{
+"id": "eji05",
+"clubId": "eji",
+"name": "A. Geraghty",
+"fullName": "Andrés Sebastián Geraghty",
 "position": "ALA",
 "number": 2,
 "age": 28,
 "nationality": "Argentina"
 },
 {
-"id": "eji04",
-"clubId": "eji",
-"name": "Beto",
-"position": "ALA",
-"number": 3,
-"age": 27,
-"nationality": "Brasil"
-},
-{
-"id": "eji05",
-"clubId": "eji",
-"name": "Cristian Rubio",
-"position": "PIV",
-"number": 4,
-"age": 29,
-"nationality": "Espanha"
-},
-{
 "id": "eji06",
 "clubId": "eji",
-"name": "Dela",
-"position": "FIX",
-"number": 5,
+"name": "Pope",
+"fullName": "Diego Ezequiel Mercado",
+"position": "ALA",
+"number": 17,
 "age": 28,
-"nationality": "Espanha"
+"nationality": "Argentina"
 },
 {
 "id": "eji07",
 "clubId": "eji",
-"name": "Josete",
-"position": "FIX",
-"number": 6,
-"age": 32,
+"name": "Nacho Gil",
+"fullName": "Ignacio Gil Gómez",
+"position": "ALA",
+"number": 11,
+"age": 40,
 "nationality": "Espanha"
 },
 {
 "id": "eji08",
 "clubId": "eji",
-"name": "Nico Rosa",
+"name": "Arnaldo Báez",
+"fullName": "Arnaldo Enrique Báez Torres",
 "position": "ALA",
 "number": 7,
-"age": 28,
-"nationality": "Argentina"
+"age": 30,
+"nationality": "Paraguai"
 },
 {
 "id": "eji09",
 "clubId": "eji",
-"name": "Pope",
+"name": "Nico Rosa",
+"fullName": "Nicolás Ezequiel Rosa",
 "position": "ALA",
-"number": 8,
+"number": 20,
 "age": 28,
 "nationality": "Argentina"
 },
 {
 "id": "eji10",
 "clubId": "eji",
-"name": "Antonio Juaréz \"Cola\"",
-"position": "PIV",
-"number": 9,
-"age": 23,
+"name": "Isma Vacas",
+"fullName": "Ismael Vacas Carmona",
+"position": "ALA",
+"number": 29,
+"age": 21,
 "nationality": "Espanha"
 },
 {
 "id": "eji11",
 "clubId": "eji",
-"name": "Arnaldo Báez",
+"name": "Beto",
+"fullName": "Roberto Da Fonseca Alves Da Silva",
 "position": "ALA",
-"number": 10,
-"age": 30,
-"nationality": "Espanha"
+"number": 21,
+"age": 27,
+"nationality": "Brasil"
 },
 {
 "id": "eji12",
 "clubId": "eji",
-"name": "Christian Povea",
-"position": "PIV",
-"number": 11,
-"age": 24,
+"name": "Juanico",
+"fullName": "Juan José Moreno López",
+"position": "ALA",
+"number": 14,
+"age": 22,
 "nationality": "Espanha"
 },
 {
 "id": "eji13",
 "clubId": "eji",
 "name": "Rufino",
+"fullName": "Santiago Martín Rufino",
 "position": "PIV",
-"number": 12,
+"number": 10,
 "age": 26,
 "nationality": "Argentina"
 },
 {
 "id": "eji14",
 "clubId": "eji",
-"name": "Isma Vacas",
-"position": "ALA",
-"number": 14,
-"age": 21,
+"name": "Cola",
+"fullName": "Antonio Jesús Molina Juárez",
+"position": "PIV",
+"number": 19,
+"age": 23,
 "nationality": "Espanha"
 },
 {
 "id": "eji15",
 "clubId": "eji",
-"name": "Juanico",
-"position": "ALA",
-"number": 15,
-"age": 22,
+"name": "Povea",
+"fullName": "Cristian Povea Ruiz",
+"position": "PIV",
+"number": 28,
+"age": 24,
 "nationality": "Espanha"
 },
 {
 "id": "eji16",
 "clubId": "eji",
-"name": "Nacho Gil",
+"name": "C. Rubio",
+"fullName": "Cristian Aparicio Gómez",
+"position": "PIV",
+"number": 9,
+"age": 29,
+"nationality": "Espanha"
+},
+{
+"id": "stc01",
+"clubId": "stc",
+"name": "Ferreyra",
+"fullName": "Marcos Elián Ferreyra",
+"position": "GR",
+"number": 25,
+"age": 25,
+"nationality": "Argentina"
+},
+{
+"id": "stc02",
+"clubId": "stc",
+"name": "Pau López",
+"fullName": "Pau López Riera",
+"position": "GR",
+"number": 1,
+"age": 22,
+"nationality": "Espanha"
+},
+{
+"id": "stc03",
+"clubId": "stc",
+"name": "Marc Tolrà",
+"fullName": "Marc Tolrà García",
+"position": "FIX",
+"number": 3,
+"age": 35,
+"nationality": "Espanha"
+},
+{
+"id": "stc04",
+"clubId": "stc",
+"name": "Niel·lo",
+"fullName": "Daniel Bertran Ferrer",
+"position": "FIX",
+"number": 18,
+"age": 22,
+"nationality": "Espanha"
+},
+{
+"id": "stc05",
+"clubId": "stc",
+"name": "S. Corso",
+"fullName": "Sebastián Corso",
+"position": "FIX",
+"number": 17,
+"age": 34,
+"nationality": "Argentina"
+},
+{
+"id": "stc06",
+"clubId": "stc",
+"name": "Medina",
+"fullName": "Luis Miguel Medina Fuste",
+"position": "FIX",
+"number": 28,
+"age": 20,
+"nationality": "Espanha"
+},
+{
+"id": "stc07",
+"clubId": "stc",
+"name": "A. Molist",
+"fullName": "Aleix Molist Martinez",
+"position": "ALA",
+"number": 29,
+"age": 25,
+"nationality": "Espanha"
+},
+{
+"id": "stc08",
+"clubId": "stc",
+"name": "Pol Pacheco",
+"fullName": "Pol Pacheco Gonzalez",
+"position": "ALA",
+"number": 10,
+"age": 31,
+"nationality": "Espanha"
+},
+{
+"id": "stc09",
+"clubId": "stc",
+"name": "Aniol",
+"fullName": "Aniol Vendrell Aldomá",
+"position": "ALA",
+"number": 12,
+"age": 24,
+"nationality": "Espanha"
+},
+{
+"id": "stc10",
+"clubId": "stc",
+"name": "Víctor Pérez",
+"fullName": "Víctor Pérez Pérez",
+"position": "ALA",
+"number": 11,
+"age": 21,
+"nationality": "Espanha"
+},
+{
+"id": "stc11",
+"clubId": "stc",
+"name": "Dylan Vargas",
+"fullName": "Dylan Vargas",
+"position": "ALA",
+"number": 33,
+"age": 29,
+"nationality": "Argentina"
+},
+{
+"id": "stc12",
+"clubId": "stc",
+"name": "V. Ramos",
+"fullName": "Victor Ramos Mora",
+"position": "ALA",
+"number": 7,
+"age": 22,
+"nationality": "Espanha"
+},
+{
+"id": "stc13",
+"clubId": "stc",
+"name": "Uri Santos",
+"fullName": "Oriol Santos Martí",
+"position": "ALA",
+"number": 4,
+"age": 29,
+"nationality": "Espanha"
+},
+{
+"id": "stc14",
+"clubId": "stc",
+"name": "Eric Pérez",
+"fullName": "Eric Pérez Veganzones",
+"position": "PIV",
+"number": 23,
+"age": 29,
+"nationality": "Espanha"
+},
+{
+"id": "stc15",
+"clubId": "stc",
+"name": "Granda",
+"fullName": "Lucas Ezequiel Granda",
+"position": "PIV",
+"number": 8,
+"age": 19,
+"nationality": "Argentina"
+},
+{
+"id": "jae01",
+"clubId": "jae",
+"name": "Hugo Montoro",
+"fullName": "Hugo Montoro Pérez",
+"position": "GR",
+"number": 13,
+"age": 2026,
+"nationality": "Espanha"
+},
+{
+"id": "jae02",
+"clubId": "jae",
+"name": "Espindola",
+"fullName": "Carlos Eduardo Nesello Espindola",
+"position": "GR",
+"number": 1,
+"age": 32,
+"nationality": "Brasil"
+},
+{
+"id": "jae03",
+"clubId": "jae",
+"name": "Frezzatto",
+"fullName": "Joao Marcelo Magalhaes Frezzato",
+"position": "GR",
+"number": 12,
+"age": 24,
+"nationality": "Brasil"
+},
+{
+"id": "jae04",
+"clubId": "jae",
+"name": "Boyis",
+"fullName": "Antonio Manuel Sánchez Tienda",
+"position": "FIX",
+"number": 8,
+"age": 36,
+"nationality": "Espanha"
+},
+{
+"id": "jae05",
+"clubId": "jae",
+"name": "Power Raggiati",
+"fullName": "Agustín Luciano Raggiati",
+"position": "FIX",
+"number": 3,
+"age": 25,
+"nationality": "Argentina"
+},
+{
+"id": "jae06",
+"clubId": "jae",
+"name": "João Salla",
+"fullName": "João Vítor Salla Vivan",
+"position": "FIX",
+"number": 5,
+"age": 30,
+"nationality": "Brasil"
+},
+{
+"id": "jae07",
+"clubId": "jae",
+"name": "César",
+"fullName": "César Velasco López",
+"position": "ALA",
+"number": 29,
+"age": 28,
+"nationality": "Espanha"
+},
+{
+"id": "jae08",
+"clubId": "jae",
+"name": "Bynho",
+"fullName": "Alberto Ferraz Barboza",
+"position": "ALA",
+"number": 17,
+"age": 33,
+"nationality": "Brasil"
+},
+{
+"id": "jae09",
+"clubId": "jae",
+"name": "Míchel",
+"fullName": "Miguel Jesús Moya Hoyo",
+"position": "ALA",
+"number": 21,
+"age": 33,
+"nationality": "Espanha"
+},
+{
+"id": "jae10",
+"clubId": "jae",
+"name": "Eloy Rojas",
+"fullName": "Eloy Ernesto Rojas Gomez",
+"position": "ALA",
+"number": 10,
+"age": 31,
+"nationality": "Espanha"
+},
+{
+"id": "jae11",
+"clubId": "jae",
+"name": "Lemine",
+"fullName": "Alejandro Lemine Luque",
+"position": "ALA",
+"number": 15,
+"age": 34,
+"nationality": "Espanha"
+},
+{
+"id": "jae12",
+"clubId": "jae",
+"name": "Dani Zurdo",
+"fullName": "Daniel López López",
+"position": "ALA",
+"number": 6,
+"age": 26,
+"nationality": "Espanha"
+},
+{
+"id": "jae13",
+"clubId": "jae",
+"name": "Nando",
+"fullName": "Fernando Montardo Trindade",
+"position": "ALA",
+"number": 7,
+"age": 28,
+"nationality": "Brasil"
+},
+{
+"id": "jae14",
+"clubId": "jae",
+"name": "Esteban",
+"fullName": "Esteban Cejudo Guerrero",
+"position": "PIV",
+"number": 4,
+"age": 31,
+"nationality": "Espanha"
+},
+{
+"id": "jae15",
+"clubId": "jae",
+"name": "Mati Rosa",
+"fullName": "Matías Sebastián Rosa",
+"position": "PIV",
+"number": 41,
+"age": 30,
+"nationality": "Argentina"
+},
+{
+"id": "jae16",
+"clubId": "jae",
+"name": "Alan Brandi",
+"fullName": "Alan Brandi Cuaniscú",
+"position": "PIV",
+"number": 14,
+"age": 38,
+"nationality": "Argentina"
+},
+{
+"id": "jca01",
+"clubId": "jca",
+"name": "Chispi",
+"fullName": "José Antonio Guillamón Alcaraz",
+"position": "GR",
+"number": 22,
+"age": 28,
+"nationality": "Espanha"
+},
+{
+"id": "jca02",
+"clubId": "jca",
+"name": "Chemi",
+"fullName": "José Miguel Oliver Solano",
+"position": "GR",
+"number": 1,
+"age": 30,
+"nationality": "Espanha"
+},
+{
+"id": "jca03",
+"clubId": "jca",
+"name": "David",
+"fullName": "David Allan Rocha Allan Rocha",
+"position": "GR",
+"number": 21,
+"age": 23,
+"nationality": "Brasil"
+},
+{
+"id": "jca04",
+"clubId": "jca",
+"name": "Tomaz",
+"fullName": "Francisco Tomaz Braga Nunes Cavalcante",
+"position": "FIX",
+"number": 8,
+"age": 35,
+"nationality": "Espanha"
+},
+{
+"id": "jca05",
+"clubId": "jca",
+"name": "Agustín Plaza",
+"fullName": "Agustín Plaza Teijón",
+"position": "FIX",
+"number": 5,
+"age": 26,
+"nationality": "Argentina"
+},
+{
+"id": "jca06",
+"clubId": "jca",
+"name": "Juninho",
+"fullName": "Cicero Severino Da Silva Junior",
+"position": "FIX",
+"number": 3,
+"age": 26,
+"nationality": "Brasil"
+},
+{
+"id": "jca07",
+"clubId": "jca",
+"name": "Darío",
+"fullName": "Darío Gil Campoy",
+"position": "FIX",
+"number": 23,
+"age": 29,
+"nationality": "Espanha"
+},
+{
+"id": "jca08",
+"clubId": "jca",
+"name": "Renato",
+"fullName": "Renato Lopes Furtado",
+"position": "ALA",
+"number": 12,
+"age": 28,
+"nationality": "Espanha"
+},
+{
+"id": "jca09",
+"clubId": "jca",
+"name": "Gon Castejón",
+"fullName": "Gonzalo Castejón Fluixa",
+"position": "ALA",
+"number": 7,
+"age": 26,
+"nationality": "Espanha"
+},
+{
+"id": "jca10",
+"clubId": "jca",
+"name": "Cortés",
+"fullName": "Francisco José Cortés Hernández",
+"position": "ALA",
+"number": 10,
+"age": 30,
+"nationality": "Espanha"
+},
+{
+"id": "jca11",
+"clubId": "jca",
+"name": "Adri Rubio",
+"fullName": "Adrián Rubio Varea",
+"position": "ALA",
+"number": 77,
+"age": 25,
+"nationality": "Espanha"
+},
+{
+"id": "jca12",
+"clubId": "jca",
+"name": "Mellado",
+"fullName": "Miguel Ángel Cano Mellado",
+"position": "ALA",
+"number": 13,
+"age": 26,
+"nationality": "Espanha"
+},
+{
+"id": "jca13",
+"clubId": "jca",
+"name": "Carlos",
+"fullName": "Carlos Alonso Font",
+"position": "ALA",
+"number": 6,
+"age": 19,
+"nationality": "Espanha"
+},
+{
+"id": "jca14",
+"clubId": "jca",
+"name": "Motta",
+"fullName": "Gabriel Rodrigues Motta",
+"position": "ALA",
+"number": 14,
+"age": 26,
+"nationality": "Itália"
+},
+{
+"id": "jca15",
+"clubId": "jca",
+"name": "Waltinho",
+"fullName": "Walter Fernandes Da Costa Firmino",
+"position": "PIV",
+"number": 11,
+"age": 34,
+"nationality": "Brasil"
+},
+{
+"id": "jca16",
+"clubId": "jca",
+"name": "Dani Ruano",
+"fullName": "Daniel Martinez Ruano",
+"position": "PIV",
+"number": 17,
+"age": 19,
+"nationality": "Espanha"
+},
+{
+"id": "jca17",
+"clubId": "jca",
+"name": "Osamanmusa",
+"fullName": "Muhammad Osamanmusa",
+"position": "PIV",
+"number": 20,
+"age": 28,
+"nationality": "Tailândia"
+},
+{
+"id": "jca18",
+"clubId": "jca",
+"name": "P. Ramírez",
+"fullName": "Pablo Ramírez González",
+"position": "PIV",
+"number": 9,
+"age": 25,
+"nationality": "Espanha"
+},
+{
+"id": "osa01",
+"clubId": "osa",
+"name": "Asier",
+"fullName": "Asier Llamas Echeverria",
+"position": "GR",
+"number": 1,
+"age": 33,
+"nationality": "Espanha"
+},
+{
+"id": "osa02",
+"clubId": "osa",
+"name": "Planillo",
+"fullName": "Miguel Planillo Soler",
+"position": "GR",
+"number": 20,
+"age": 21,
+"nationality": "Espanha"
+},
+{
+"id": "osa03",
+"clubId": "osa",
+"name": "Zabarbe",
+"fullName": "Onaitz Zabarte Ramirez",
+"position": "FIX",
+"number": 29,
+"age": 19,
+"nationality": "Espanha"
+},
+{
+"id": "osa04",
+"clubId": "osa",
+"name": "Vatamaniuc",
+"fullName": "David Vatamaniuc",
+"position": "FIX",
+"number": 3,
+"age": 23,
+"nationality": "Hungria"
+},
+{
+"id": "osa05",
+"clubId": "osa",
+"name": "I. Cerviño",
+"fullName": "Ion Cerviño Pueyo",
+"position": "ALA",
+"number": 7,
+"age": 22,
+"nationality": "Espanha"
+},
+{
+"id": "osa06",
+"clubId": "osa",
+"name": "M. Campás",
+"fullName": "Marc Campás Rigat",
+"position": "ALA",
+"number": 22,
+"age": 25,
+"nationality": "Espanha"
+},
+{
+"id": "osa07",
+"clubId": "osa",
+"name": "Iraurgi",
+"fullName": "Aimar Iraurgi Marcos",
+"position": "ALA",
+"number": 47,
+"age": 17,
+"nationality": "Espanha"
+},
+{
+"id": "osa08",
+"clubId": "osa",
+"name": "Joaquín",
+"fullName": "Joaquín Expósito López",
+"position": "ALA",
+"number": 19,
+"age": 21,
+"nationality": "Espanha"
+},
+{
+"id": "osa09",
+"clubId": "osa",
+"name": "A. Rojas",
+"fullName": "Alan Ruben Rojas Dominguez",
+"position": "ALA",
+"number": 2,
+"age": 27,
+"nationality": "Espanha"
+},
+{
+"id": "osa10",
+"clubId": "osa",
+"name": "Grillo",
+"fullName": "Franco Agustin Grillo",
+"position": "ALA",
+"number": 8,
+"age": 25,
+"nationality": "Argentina"
+},
+{
+"id": "osa11",
+"clubId": "osa",
+"name": "Shunta",
+"fullName": "Shunta Uchida",
+"position": "ALA",
+"number": 14,
+"age": 29,
+"nationality": "Japão"
+},
+{
+"id": "osa12",
+"clubId": "osa",
+"name": "Larrea",
+"fullName": "Javier Larrea Esnaola",
+"position": "ALA",
+"number": 25,
+"age": 18,
+"nationality": "Espanha"
+},
+{
+"id": "osa13",
+"clubId": "osa",
+"name": "Josu",
+"fullName": "Josu Mendive Zalba",
+"position": "ALA",
+"number": 10,
+"age": 24,
+"nationality": "Espanha"
+},
+{
+"id": "osa14",
+"clubId": "osa",
+"name": "Petry",
+"fullName": "Bruno Petry",
+"position": "PIV",
+"number": 30,
+"age": 37,
+"nationality": "Brasil"
+},
+{
+"id": "osa15",
+"clubId": "osa",
+"name": "Julen",
+"fullName": "Julen Fernández Lacunza",
+"position": "PIV",
+"number": 28,
+"age": 17,
+"nationality": "Espanha"
+},
+{
+"id": "osaj01",
+"clubId": "osa@jun",
+"name": "Oier Amezgaray",
+"position": "ALA",
+"number": null,
+"age": 17,
+"nationality": "Espanha"
+},
+{
+"id": "int01",
+"clubId": "int",
+"name": "Raúl Jiménez",
+"fullName": "Raúl Jiménez López",
+"position": "GR",
+"number": 15,
+"age": 30,
+"nationality": "Espanha"
+},
+{
+"id": "int02",
+"clubId": "int",
+"name": "Jesús García",
+"fullName": "Jesús García Roldán",
+"position": "GR",
+"number": 27,
+"age": 25,
+"nationality": "Espanha"
+},
+{
+"id": "int03",
+"clubId": "int",
+"name": "A. Garcia",
+"fullName": "Andres Garcia Barrio-pedro",
+"position": "GR",
+"number": 29,
+"age": 25,
+"nationality": "Espanha"
+},
+{
+"id": "int04",
+"clubId": "int",
+"name": "Jesús Herrero",
+"fullName": "Jesús Herrero Parrón",
+"position": "GR",
+"number": 1,
+"age": 39,
+"nationality": "Espanha"
+},
+{
+"id": "int05",
+"clubId": "int",
+"name": "Óscar",
+"fullName": "Oscar Delgado Trabas",
+"position": "GR",
+"number": null,
+"age": 2026,
+"nationality": "Espanha"
+},
+{
+"id": "int06",
+"clubId": "int",
+"name": "Tony",
+"fullName": "Antonio Escribano Gómez",
+"position": "FIX",
+"number": 4,
+"age": 27,
+"nationality": "Espanha"
+},
+{
+"id": "int07",
+"clubId": "int",
+"name": "Raya",
+"fullName": "José Antonio Fernández Raya",
+"position": "FIX",
+"number": 8,
+"age": 29,
+"nationality": "Espanha"
+},
+{
+"id": "int08",
+"clubId": "int",
+"name": "Paniagua",
+"fullName": "Francisco Javier Paniagua Soler",
+"position": "ALA",
+"number": 11,
+"age": 27,
+"nationality": "Espanha"
+},
+{
+"id": "int09",
+"clubId": "int",
+"name": "Harrison",
+"fullName": "Harrison David Santos Herrera",
+"position": "ALA",
+"number": 7,
+"age": 25,
+"nationality": "Colômbia"
+},
+{
+"id": "int10",
+"clubId": "int",
+"name": "Raúl Gómez",
+"fullName": "Raúl Gómez Del Olmo",
+"position": "ALA",
+"number": 6,
+"age": 30,
+"nationality": "Espanha"
+},
+{
+"id": "int11",
+"clubId": "int",
+"name": "J. Mínguez",
+"fullName": "Javier Mínguez Rubio",
+"position": "ALA",
+"number": 10,
+"age": 29,
+"nationality": "Espanha"
+},
+{
+"id": "int12",
+"clubId": "int",
+"name": "Marvin",
+"fullName": "Marvil Raphael Ghislandi",
+"position": "ALA",
+"number": 99,
+"age": 27,
+"nationality": "Bélgica"
+},
+{
+"id": "int13",
+"clubId": "int",
+"name": "Rivillos",
+"fullName": "Mario Rivillos Plaza",
+"position": "ALA",
+"number": 14,
+"age": 36,
+"nationality": "Espanha"
+},
+{
+"id": "int14",
+"clubId": "int",
+"name": "Chaguinha",
+"fullName": "Bruno Rocha Braga",
+"position": "ALA",
+"number": 5,
+"age": 37,
+"nationality": "Geórgia"
+},
+{
+"id": "int15",
+"clubId": "int",
+"name": "Cecilio",
+"fullName": "Cecilio Morales Barbado",
+"position": "ALA",
+"number": 2,
+"age": 33,
+"nationality": "Espanha"
+},
+{
+"id": "int16",
+"clubId": "int",
+"name": "Jó Mahrez",
+"fullName": "Joao Josemar Cambangula",
+"position": "ALA",
+"number": 12,
+"age": 28,
+"nationality": "Angola"
+},
+{
+"id": "int17",
+"clubId": "int",
+"name": "Jesús Gordillo",
+"fullName": "Jesús García del Pino Gordillo",
+"position": "PIV",
+"number": 39,
+"age": 25,
+"nationality": "Espanha"
+},
+{
+"id": "int18",
+"clubId": "int",
+"name": "Pirata",
+"fullName": "Adrián Rodríguez Mosteirín",
+"position": "PIV",
+"number": 17,
+"age": 26,
+"nationality": "Espanha"
+},
+{
+"id": "noi01",
+"clubId": "noi",
+"name": "I. Lopez",
+"fullName": "Iago",
+"position": "UNI",
+"number": 12,
+"age": 25,
+"nationality": "Espanha",
+"ageEstimated": true
+},
+{
+"id": "noi02",
+"clubId": "noi",
+"name": "Di Fanti",
+"fullName": "Adriano José Fanti",
+"position": "GR",
+"number": 19,
+"age": 37,
+"nationality": "Brasil"
+},
+{
+"id": "noi03",
+"clubId": "noi",
+"name": "Cristian",
+"fullName": "Cristian Giraldo Rodríguez",
+"position": "GR",
+"number": 25,
+"age": 2026,
+"nationality": "Espanha"
+},
+{
+"id": "noi04",
+"clubId": "noi",
+"name": "Peixe",
+"fullName": "Evandro Rafagnin",
+"position": "GR",
+"number": 21,
+"age": 28,
+"nationality": "Brasil"
+},
+{
+"id": "noi05",
+"clubId": "noi",
+"name": "Mosquera",
+"fullName": "Raúl Mosquera Cardeso",
+"position": "GR",
+"number": 26,
+"age": 18,
+"nationality": "Espanha"
+},
+{
+"id": "noi06",
+"clubId": "noi",
+"name": "Mykytiuk",
+"fullName": "Mykola Mykytiuk",
+"position": "FIX",
+"number": 6,
+"age": 29,
+"nationality": "Ucrânia"
+},
+{
+"id": "noi07",
+"clubId": "noi",
+"name": "Juampi Cuello",
+"fullName": "Juan Pablo Cuello",
+"position": "FIX",
+"number": 14,
+"age": 29,
+"nationality": "Argentina"
+},
+{
+"id": "noi08",
+"clubId": "noi",
+"name": "Montero",
+"fullName": "David Montero Domínguez",
+"position": "FIX",
+"number": 5,
+"age": 24,
+"nationality": "Espanha"
+},
+{
+"id": "noi09",
+"clubId": "noi",
+"name": "O. Chenel",
+"fullName": "Oliver Chenel Martinez",
+"position": "ALA",
+"number": 25,
+"age": 25,
+"nationality": "Espanha"
+},
+{
+"id": "noi10",
+"clubId": "noi",
+"name": "Thierry",
+"fullName": "Thierry Henrique Petraça",
+"position": "ALA",
+"number": 23,
+"age": 21,
+"nationality": "Brasil"
+},
+{
+"id": "noi11",
+"clubId": "noi",
+"name": "Charly",
+"fullName": "Carlos Cayado López",
+"position": "ALA",
+"number": 11,
+"age": 24,
+"nationality": "Espanha"
+},
+{
+"id": "noi12",
+"clubId": "noi",
+"name": "Rubi",
+"fullName": "Rubén Lemos Mariño",
+"position": "ALA",
+"number": 77,
+"age": 38,
+"nationality": "Espanha"
+},
+{
+"id": "noi13",
+"clubId": "noi",
+"name": "David Pazos",
+"fullName": "David Pazos Fuentes",
+"position": "ALA",
+"number": 20,
+"age": 32,
+"nationality": "Espanha"
+},
+{
+"id": "noi14",
+"clubId": "noi",
+"name": "Altamirano",
+"fullName": "Leandro Eduardo Altamirano",
+"position": "ALA",
+"number": 7,
+"age": 26,
+"nationality": "Argentina"
+},
+{
+"id": "noi15",
+"clubId": "noi",
+"name": "Koeman",
+"fullName": "Mateo Vázquez Seoane",
+"position": "ALA",
+"number": 13,
+"age": 18,
+"nationality": "Espanha"
+},
+{
+"id": "noi16",
+"clubId": "noi",
+"name": "Tiago Macedo",
+"fullName": "Tiago Manuel Rodrigues Macedo",
+"position": "ALA",
+"number": 10,
+"age": 21,
+"nationality": "Portugal"
+},
+{
+"id": "noi17",
+"clubId": "noi",
+"name": "Biel",
+"fullName": "Gabriel Reis Cardoso",
+"position": "PIV",
+"number": 16,
+"age": 30,
+"nationality": "Brasil"
+},
+{
+"id": "noi18",
+"clubId": "noi",
+"name": "Leozin",
+"fullName": "Leonardo Mateus Periandro Calero Guida",
+"position": "PIV",
+"number": 9,
+"age": 24,
+"nationality": "Brasil"
+},
+{
+"id": "noi19",
+"clubId": "noi",
+"name": "Dani Colón",
+"fullName": "Daniel Colon Martin",
+"position": "PIV",
+"number": 22,
+"age": 22,
+"nationality": "Espanha"
+},
+{
+"id": "noi20",
+"clubId": "noi",
+"name": "Ismael",
+"fullName": "Ismael López Lozano",
+"position": "PIV",
+"number": 24,
+"age": 26,
+"nationality": "Espanha"
+},
+{
+"id": "par01",
+"clubId": "par",
+"name": "G. Sanchez",
+"fullName": "Gael",
+"position": "PIV",
+"number": 4,
+"age": 25,
+"nationality": "Espanha"
+},
+{
+"id": "par02",
+"clubId": "par",
+"name": "A. Palazón",
+"fullName": "Alejandro Palazón González",
+"position": "GR",
+"number": 97,
+"age": 23,
+"nationality": "Espanha"
+},
+{
+"id": "par03",
+"clubId": "par",
+"name": "Caio César",
+"fullName": "Caio César De Paula Silva",
+"position": "GR",
+"number": 28,
+"age": 26,
+"nationality": "Brasil"
+},
+{
+"id": "par04",
+"clubId": "par",
+"name": "Canoli",
+"fullName": "David Barcon Lage",
+"position": "GR",
+"number": 1,
+"age": 21,
+"nationality": "Espanha"
+},
+{
+"id": "par05",
+"clubId": "par",
+"name": "R. Orzáez",
+"fullName": "Rubén Orzáez de la Cruz",
+"position": "FIX",
+"number": 19,
+"age": 33,
+"nationality": "Espanha"
+},
+{
+"id": "par06",
+"clubId": "par",
+"name": "Lucas Farias",
+"fullName": "Lucas Matheus Santos De Farias",
+"position": "FIX",
+"number": 5,
+"age": 24,
+"nationality": "Brasil"
+},
+{
+"id": "par07",
+"clubId": "par",
+"name": "Quelle",
+"fullName": "Jorge Quelle Gómez",
+"position": "FIX",
+"number": 3,
+"age": 23,
+"nationality": "Espanha"
+},
+{
+"id": "par08",
+"clubId": "par",
+"name": "Novoa",
+"fullName": "David Novoa Del Hoyo",
+"position": "ALA",
+"number": 6,
+"age": 24,
+"nationality": "Espanha"
+},
+{
+"id": "par09",
+"clubId": "par",
+"name": "Yan Matheus",
+"fullName": "Yan Matheus De Deus",
+"position": "ALA",
+"number": 9,
+"age": 30,
+"nationality": "Brasil"
+},
+{
+"id": "par10",
+"clubId": "par",
+"name": "Rikelme",
+"fullName": "Rikelme Alves Ribeira",
+"position": "ALA",
+"number": 7,
+"age": 24,
+"nationality": "Brasil"
+},
+{
+"id": "par11",
+"clubId": "par",
+"name": "Jhoy",
+"fullName": "Jonathan Lucas Wartha Balbinot",
+"position": "ALA",
+"number": 12,
+"age": 25,
+"nationality": "Brasil"
+},
+{
+"id": "par12",
+"clubId": "par",
+"name": "Diogo",
+"fullName": "Diogo Da Rosa Schlemper",
+"position": "ALA",
+"number": 11,
+"age": 31,
+"nationality": "Brasil"
+},
+{
+"id": "par13",
+"clubId": "par",
+"name": "Lucas Rodríguez",
+"fullName": "Lucas Rodríguez Crespo",
+"position": "ALA",
+"number": 4,
+"age": 25,
+"nationality": "Espanha"
+},
+{
+"id": "par14",
+"clubId": "par",
+"name": "Brayan",
+"fullName": "Brayan Lucas Silva De Oliveira",
+"position": "PIV",
+"number": 23,
+"age": 23,
+"nationality": "Brasil"
+},
+{
+"id": "par15",
+"clubId": "par",
+"name": "Malaguti",
+"fullName": "Iván De Uña Feliz",
+"position": "PIV",
+"number": 96,
+"age": 29,
+"nationality": "Espanha"
+},
+{
+"id": "par16",
+"clubId": "par",
+"name": "Turbi",
+"fullName": "David Bouzón Doce",
+"position": "PIV",
+"number": 14,
+"age": 22,
+"nationality": "Espanha"
+},
+{
+"id": "man01",
+"clubId": "man",
+"name": "Javi Bule",
+"fullName": "Javier Fernandez Pacheco Serrano",
+"position": "GR",
+"number": 18,
+"age": 18,
+"nationality": "Espanha"
+},
+{
+"id": "man02",
+"clubId": "man",
+"name": "Mario Cerezo",
+"fullName": "Mario Cerezo Cámara",
+"position": "GR",
+"number": 16,
+"age": 18,
+"nationality": "Espanha"
+},
+{
+"id": "man03",
+"clubId": "man",
+"name": "Schütt",
+"fullName": "Vinicius Henrique Schütt",
+"position": "GR",
+"number": 25,
+"age": 28,
+"nationality": "Brasil"
+},
+{
+"id": "man04",
+"clubId": "man",
+"name": "Unai",
+"fullName": "Unai Izquierdo Mondoruza",
+"position": "FIX",
+"number": 3,
+"age": 18,
+"nationality": "Espanha"
+},
+{
+"id": "man05",
+"clubId": "man",
+"name": "Pablo Moreno",
+"fullName": "Pablo Moreno Mazario",
+"position": "FIX",
+"number": 21,
+"age": 23,
+"nationality": "Espanha"
+},
+{
+"id": "man06",
+"clubId": "man",
+"name": "Ribeirâo",
+"fullName": "Jhonata Julio De Oliveira Silva",
+"position": "FIX",
+"number": 5,
+"age": 29,
+"nationality": "Brasil"
+},
+{
+"id": "man07",
+"clubId": "man",
+"name": "Povill",
+"fullName": "Bernat Povill Cerdeira",
+"position": "ALA",
+"number": 2,
+"age": 24,
+"nationality": "Espanha"
+},
+{
+"id": "man08",
+"clubId": "man",
+"name": "Aarón",
+"fullName": "Aarón Canales Avendaño",
+"position": "ALA",
+"number": 20,
+"age": 18,
+"nationality": "Espanha"
+},
+{
+"id": "man09",
+"clubId": "man",
+"name": "Alvaro López",
+"fullName": "Álvaro López Del Pino",
+"position": "ALA",
+"number": 11,
+"age": 30,
+"nationality": "Espanha"
+},
+{
+"id": "man10",
+"clubId": "man",
+"name": "Humberto",
+"fullName": "Humberto Ribeiro Resende",
+"position": "ALA",
+"number": 23,
+"age": 33,
+"nationality": "Brasil"
+},
+{
+"id": "man11",
+"clubId": "man",
+"name": "Robles",
+"fullName": "Pablo Robles Gastellut",
+"position": "ALA",
+"number": 8,
+"age": 20,
+"nationality": "Espanha"
+},
+{
+"id": "man12",
+"clubId": "man",
+"name": "Eloy De Pablos",
+"fullName": "Eloy De Pablos De Diego",
+"position": "ALA",
+"number": 70,
+"age": 23,
+"nationality": "Espanha"
+},
+{
+"id": "man13",
+"clubId": "man",
+"name": "Antoñito",
+"fullName": "Antonio Sierra García",
+"position": "ALA",
+"number": 10,
+"age": 35,
+"nationality": "Espanha"
+},
+{
+"id": "man14",
+"clubId": "man",
+"name": "Khalid",
+"fullName": "Khalid Bouzid Stitou",
+"position": "ALA",
+"number": 22,
+"age": 28,
+"nationality": "Marrocos"
+},
+{
+"id": "man15",
+"clubId": "man",
+"name": "Javi Alonso",
+"fullName": "Javier Alonso Giménez",
+"position": "ALA",
+"number": 7,
+"age": 33,
+"nationality": "Espanha"
+},
+{
+"id": "man16",
+"clubId": "man",
+"name": "Yann",
+"fullName": "Yann Barbosa Santana",
+"position": "PIV",
+"number": 13,
+"age": 21,
+"nationality": "Brasil"
+},
+{
+"id": "man17",
+"clubId": "man",
+"name": "Leandrinho",
+"fullName": "Leandro Ferreira Azevedo",
+"position": "PIV",
+"number": 14,
+"age": 25,
+"nationality": "Brasil"
+},
+{
+"id": "man18",
+"clubId": "man",
+"name": "Valladares",
+"fullName": "Carlos Valladares Gallego",
+"position": "PIV",
+"number": 77,
+"age": 18,
+"nationality": "Espanha"
+},
+{
+"id": "man19",
+"clubId": "man",
+"name": "Daniel",
+"fullName": "Daniel Gabriel García",
+"position": "PIV",
+"number": 9,
+"age": 29,
+"nationality": "Espanha"
+},
+{
+"id": "pen01",
+"clubId": "pen",
+"name": "Cervera",
+"fullName": "Alejandro Cervera Agudelo",
+"position": "GR",
+"number": 28,
+"age": 18,
+"nationality": "Espanha"
+},
+{
+"id": "pen02",
+"clubId": "pen",
+"name": "Gio",
+"fullName": "Giovanni Miguel González Vasquez",
+"position": "GR",
+"number": 12,
+"age": 31,
+"nationality": "Paraguai"
+},
+{
+"id": "pen03",
+"clubId": "pen",
+"name": "Araya",
+"fullName": "Bernardo Jesús Araya Ponce",
+"position": "FIX",
+"number": 16,
+"age": 33,
+"nationality": "Chile"
+},
+{
+"id": "pen04",
+"clubId": "pen",
+"name": "Carlos Sanz",
+"fullName": "Carlos José Sanz Salcedo",
+"position": "FIX",
+"number": 2,
+"age": 30,
+"nationality": "Venezuela"
+},
+{
+"id": "pen05",
+"clubId": "pen",
+"name": "Elías",
+"fullName": "Elías Beltrán Fernández",
+"position": "ALA",
+"number": 18,
+"age": 33,
+"nationality": "Espanha"
+},
+{
+"id": "pen06",
+"clubId": "pen",
+"name": "V. Pérez",
+"fullName": "Víctor Pérez Morales",
+"position": "ALA",
+"number": 14,
+"age": 26,
+"nationality": "Espanha"
+},
+{
+"id": "pen07",
+"clubId": "pen",
+"name": "C. Saladie",
+"fullName": "Carles Saladié Borràs",
+"position": "ALA",
+"number": 11,
+"age": 25,
+"nationality": "Espanha"
+},
+{
+"id": "pen08",
+"clubId": "pen",
+"name": "Pablo Muñoz",
+"fullName": "Pablo Muñoz Moya",
+"position": "ALA",
+"number": 10,
+"age": 22,
+"nationality": "Espanha"
+},
+{
+"id": "pen09",
+"clubId": "pen",
+"name": "Puchy",
+"fullName": "Marc Puigvert Esteve",
+"position": "ALA",
+"number": 32,
+"age": 23,
+"nationality": "Espanha"
+},
+{
+"id": "pen10",
+"clubId": "pen",
+"name": "Quintela",
+"fullName": "Diego Quintela Carril",
+"position": "ALA",
+"number": 23,
+"age": 34,
+"nationality": "Espanha"
+},
+{
+"id": "pen11",
+"clubId": "pen",
+"name": "B. Barea",
+"fullName": "Bruno Barea Llora",
+"position": "ALA",
+"number": 17,
+"age": 17,
+"nationality": "Espanha"
+},
+{
+"id": "pen12",
+"clubId": "pen",
+"name": "Pablo",
+"fullName": "Pablo García Escuder",
+"position": "PIV",
+"number": 7,
+"age": 25,
+"nationality": "Espanha"
+},
+{
+"id": "pen13",
+"clubId": "pen",
+"name": "Yunii",
+"fullName": "Youness Marksi Tabakkouyat",
+"position": "PIV",
+"number": 9,
+"age": 24,
+"nationality": "Marrocos"
+},
+{
+"id": "pen14",
+"clubId": "pen",
+"name": "Diego Sancho",
+"fullName": "Diego Sancho Bonet",
+"position": "PIV",
+"number": 20,
+"age": 27,
+"nationality": "Espanha"
+},
+{
+"id": "val01",
+"clubId": "val",
+"name": "Pato",
+"fullName": "Vitor Springer",
+"position": "GR",
+"number": 25,
+"age": 22,
+"nationality": "Brasil"
+},
+{
+"id": "val02",
+"clubId": "val",
+"name": "Borja Puerta",
+"fullName": "Borja Puerta Sánchez",
+"position": "GR",
+"number": 1,
+"age": 26,
+"nationality": "Espanha"
+},
+{
+"id": "val03",
+"clubId": "val",
+"name": "Alberto",
+"fullName": "Alberto García Delgado",
+"position": "FIX",
+"number": 6,
+"age": 28,
+"nationality": "Espanha"
+},
+{
+"id": "val04",
+"clubId": "val",
+"name": "Joao Silveira",
+"fullName": "Joao Victor César Ferreira da Silva",
+"position": "FIX",
+"number": 8,
+"age": 24,
+"nationality": "Brasil"
+},
+{
+"id": "val05",
+"clubId": "val",
+"name": "Tapias",
+"fullName": "Adrián Tapias Villalba",
+"position": "FIX",
+"number": 17,
+"age": 22,
+"nationality": "Espanha"
+},
+{
+"id": "val06",
+"clubId": "val",
+"name": "C. Bartolomé",
+"fullName": "Carlos Bartolomé García",
+"position": "ALA",
+"number": 20,
+"age": 27,
+"nationality": "Espanha"
+},
+{
+"id": "val07",
+"clubId": "val",
+"name": "Yáñez",
+"fullName": "Lautaro Damián Yáñez",
+"position": "ALA",
+"number": 19,
+"age": 22,
+"nationality": "Argentina"
+},
+{
+"id": "val08",
+"clubId": "val",
+"name": "Alex Fonseca",
+"fullName": "Alex Gabryel Valentim Fonseca",
+"position": "ALA",
+"number": 10,
+"age": 22,
+"nationality": "Brasil"
+},
+{
+"id": "val09",
+"clubId": "val",
+"name": "Torres",
+"fullName": "Mateus Torres Do Reis",
+"position": "ALA",
+"number": 61,
+"age": 28,
+"nationality": "Brasil"
+},
+{
+"id": "val10",
+"clubId": "val",
+"name": "José Mario",
+"fullName": "Jose Mario Cuenca Miranda",
+"position": "ALA",
+"number": 2,
+"age": 27,
+"nationality": "Espanha"
+},
+{
+"id": "val11",
+"clubId": "val",
+"name": "Álex Naranjo",
+"fullName": "Alejandro Naranjo Lerma",
 "position": "ALA",
 "number": 16,
-"age": 40,
+"age": 24,
 "nationality": "Espanha"
+},
+{
+"id": "val12",
+"clubId": "val",
+"name": "Pablo Otero",
+"fullName": "Pablo Otero Trechera",
+"position": "ALA",
+"number": 21,
+"age": 24,
+"nationality": "Espanha"
+},
+{
+"id": "val13",
+"clubId": "val",
+"name": "Álvarez",
+"fullName": "Rodrigo Álvarez",
+"position": "ALA",
+"number": 11,
+"age": 21,
+"nationality": "Argentina"
+},
+{
+"id": "val14",
+"clubId": "val",
+"name": "Carrasco",
+"fullName": "Jorge Carrasco García",
+"position": "PIV",
+"number": 7,
+"age": 23,
+"nationality": "Espanha"
+},
+{
+"id": "val15",
+"clubId": "val",
+"name": "Juanan",
+"fullName": "Juan Antonio Moraleja Ruiz",
+"position": "PIV",
+"number": 77,
+"age": 25,
+"nationality": "Espanha"
+},
+{
+"id": "val16",
+"clubId": "val",
+"name": "Nicolás",
+"fullName": "Nicolás Marrón Bleda",
+"position": "PIV",
+"number": 9,
+"age": 24,
+"nationality": "Espanha"
+},
+{
+"id": "zar01",
+"clubId": "zar",
+"name": "Iván Bernad",
+"fullName": "Iván Bernad Calavia",
+"position": "GR",
+"number": 25,
+"age": 31,
+"nationality": "Espanha"
+},
+{
+"id": "zar02",
+"clubId": "zar",
+"name": "Jackson",
+"fullName": "Jakcson Sant'Anna",
+"position": "GR",
+"number": 2,
+"age": 23,
+"nationality": "Brasil"
+},
+{
+"id": "zar03",
+"clubId": "zar",
+"name": "H. Campo",
+"fullName": "Hector Campo Martinez",
+"position": "GR",
+"number": 25,
+"age": 25,
+"nationality": "Espanha"
+},
+{
+"id": "zar04",
+"clubId": "zar",
+"name": "B. Aibar",
+"fullName": "Benjamin Aibar Soria",
+"position": "GR",
+"number": 25,
+"age": 25,
+"nationality": "Espanha"
+},
+{
+"id": "zar05",
+"clubId": "zar",
+"name": "S. Hernando",
+"fullName": "Sergio Hernando Lalaguna",
+"position": "GR",
+"number": 1,
+"age": 25,
+"nationality": "Espanha"
+},
+{
+"id": "zar06",
+"clubId": "zar",
+"name": "Óscar Vllanueva",
+"fullName": "Óscar Villanueva Guerrero",
+"position": "FIX",
+"number": 4,
+"age": 30,
+"nationality": "Espanha"
+},
+{
+"id": "zar07",
+"clubId": "zar",
+"name": "Adri Ortego",
+"fullName": "Adrián Ortego López",
+"position": "FIX",
+"number": 24,
+"age": 32,
+"nationality": "Espanha"
+},
+{
+"id": "zar08",
+"clubId": "zar",
+"name": "Xuxu",
+"fullName": "Igor Martins Cavalcante",
+"position": "FIX",
+"number": 7,
+"age": 24,
+"nationality": "Brasil"
+},
+{
+"id": "zar09",
+"clubId": "zar",
+"name": "Quique Hernando",
+"fullName": "Enrique Hernando Polo",
+"position": "FIX",
+"number": 9,
+"age": 27,
+"nationality": "Espanha"
+},
+{
+"id": "zar10",
+"clubId": "zar",
+"name": "Raúl López",
+"fullName": "Raúl López Rivas",
+"position": "ALA",
+"number": 10,
+"age": 24,
+"nationality": "Espanha"
+},
+{
+"id": "zar11",
+"clubId": "zar",
+"name": "Alegre",
+"fullName": "Iván Joel Alegre",
+"position": "ALA",
+"number": 3,
+"age": 24,
+"nationality": "Argentina"
+},
+{
+"id": "zar12",
+"clubId": "zar",
+"name": "Célio Coque",
+"fullName": "Célio Alexandre Veiga Coque",
+"position": "ALA",
+"number": 28,
+"age": 26,
+"nationality": "Portugal"
+},
+{
+"id": "zar13",
+"clubId": "zar",
+"name": "Brasesco",
+"fullName": "Juan Bautista Saldivia Brasesco",
+"position": "ALA",
+"number": 5,
+"age": 28,
+"nationality": "Argentina"
+},
+{
+"id": "zar14",
+"clubId": "zar",
+"name": "Oilhaborda",
+"fullName": "Santino Oilhaborda Zachar",
+"position": "ALA",
+"number": 15,
+"age": 22,
+"nationality": "Argentina"
+},
+{
+"id": "zar15",
+"clubId": "zar",
+"name": "M. Perez",
+"fullName": "Mikel Perez Monfort",
+"position": "ALA",
+"number": 11,
+"age": 25,
+"nationality": "Espanha"
+},
+{
+"id": "zar16",
+"clubId": "zar",
+"name": "Kike Liao",
+"fullName": "Enrique Liao Qiu",
+"position": "ALA",
+"number": 16,
+"age": 20,
+"nationality": "Espanha"
+},
+{
+"id": "zar17",
+"clubId": "zar",
+"name": "Joserru",
+"fullName": "Jose Ruben Mendive Iguacel",
+"position": "ALA",
+"number": 9,
+"age": 19,
+"nationality": "Espanha"
+},
+{
+"id": "zar18",
+"clubId": "zar",
+"name": "Miguel",
+"fullName": "Miguel Lahoz Baquero",
+"position": "ALA",
+"number": 11,
+"age": 20,
+"nationality": "Espanha"
+},
+{
+"id": "zar19",
+"clubId": "zar",
+"name": "Augusto",
+"fullName": "Augusto Javier Van De Casteele Bailón",
+"position": "PIV",
+"number": 18,
+"age": 28,
+"nationality": "Argentina"
+},
+{
+"id": "zar20",
+"clubId": "zar",
+"name": "Richi Felipe",
+"fullName": "Ricardo Felipe Pérez",
+"position": "PIV",
+"number": 8,
+"age": 34,
+"nationality": "Espanha"
+},
+{
+"id": "zar21",
+"clubId": "zar",
+"name": "Samu Freire",
+"fullName": "Samuel Da Costa Freire",
+"position": "PIV",
+"number": 33,
+"age": 24,
+"nationality": "Brasil"
 }
 ]
 }

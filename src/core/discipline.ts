@@ -14,8 +14,8 @@ import type { GameState } from './types';
 // Espanha (Código Disciplinario RFEF, estimativa a confirmar): 1 jogo a cada 5 amarelos na liga (ciclos de 5), 2 amarelos = 1 jogo;
 // taças sem acumulação, como em Portugal
 /** Liga e play-off são a mesma competição para efeitos de castigo. */
-export type DComp = Exclude<CompId, 'playoff' | 'espPlayoff'>;
-export const dcomp = (c: CompId): DComp => (c === 'playoff' ? 'liga' : c === 'espPlayoff' ? 'esp' : c);
+export type DComp = Exclude<CompId, 'playoff' | 'espPlayoff' | 'espAp' | 'espCl'>;
+export const dcomp = (c: CompId): DComp => (c === 'playoff' ? 'liga' : c === 'espPlayoff' || c === 'espAp' || c === 'espCl' ? 'esp' : c);
 
 export interface Suspension { comp: DComp; games: number; reason: string; yellowsOnly?: boolean }
 export interface Discipline {

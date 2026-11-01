@@ -1,5 +1,5 @@
 // Tipos da época: calendário, competições, séries de play-off, estatísticas e palmarés
-export type CompId = 'liga' | 'playoff' | 'taca' | 'tacaLiga' | 'supertaca' | 'esp' | 'espPlayoff' | 'copaRey' | 'copaEsp' | 'superEsp';
+export type CompId = 'liga' | 'playoff' | 'taca' | 'tacaLiga' | 'supertaca' | 'esp' | 'espPlayoff' | 'copaRey' | 'copaEsp' | 'superEsp' | 'espAp' | 'espCl';
 
 export const COMP_NAMES: Record<CompId, string> = {
   liga: 'Liga Placard',
@@ -7,8 +7,10 @@ export const COMP_NAMES: Record<CompId, string> = {
   taca: 'Taça de Portugal',
   tacaLiga: 'Taça da Liga',
   supertaca: 'Supertaça',
-  esp: 'Primera División',
-  espPlayoff: 'Primera División (play-off)',
+  esp: 'Liga Prime Futsal',
+  espPlayoff: 'Liga Prime Futsal (fase final)',
+  espAp: 'Liga Prime Futsal (Apertura)',
+  espCl: 'Liga Prime Futsal (Clausura)',
   copaRey: 'Copa del Rey',
   copaEsp: 'Copa de España',
   superEsp: 'Supercopa de España',
@@ -18,13 +20,13 @@ export const COMP_NAMES: Record<CompId, string> = {
 export type CompKind = 'league' | 'playoff' | 'cup' | 'leagueCup' | 'super';
 export const COMP_KIND: Record<CompId, CompKind> = {
   liga: 'league', playoff: 'playoff', taca: 'cup', tacaLiga: 'leagueCup', supertaca: 'super',
-  esp: 'league', espPlayoff: 'playoff', copaRey: 'cup', copaEsp: 'leagueCup', superEsp: 'super',
+  esp: 'league', espPlayoff: 'playoff', copaRey: 'cup', copaEsp: 'leagueCup', superEsp: 'super', espAp: 'leagueCup', espCl: 'leagueCup',
 };
 export const kindOf = (c: CompId) => COMP_KIND[c];
 /** Competições de cada país, pela ordem liga, play-off, taça, taça da liga, supertaça. */
 export const COUNTRY_COMPS: Record<string, { league: CompId; playoff: CompId; cup: CompId; leagueCup: CompId; super: CompId }> = {
   por: { league: 'liga', playoff: 'playoff', cup: 'taca', leagueCup: 'tacaLiga', super: 'supertaca' },
-  esp: { league: 'esp', playoff: 'espPlayoff', cup: 'copaRey', leagueCup: 'copaEsp', super: 'superEsp' },
+  esp: { league: 'esp', playoff: 'espPlayoff', cup: 'copaEsp', leagueCup: 'copaEsp', super: 'superEsp' },
 };
 export const countryOfComp = (c: CompId) => (Object.entries(COUNTRY_COMPS).find(([, v]) => Object.values(v).includes(c))?.[0] ?? 'por');
 

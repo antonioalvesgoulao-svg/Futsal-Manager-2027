@@ -3,19 +3,19 @@ import { crestSvg } from './crest';
 // Inspiração portuguesa (azulejo, calçada, verde e vermelho), desenhado de raiz.
 import type { CompId } from '../core/season/types';
 
-export type ScoreStyle = Exclude<CompId, 'playoff' | 'espPlayoff'>;
+export type ScoreStyle = Exclude<CompId, 'playoff' | 'espPlayoff' | 'espAp' | 'espCl'>;
 export const SCOREBOARD_NAMES: Record<ScoreStyle, string> = {
   liga: 'Liga Placard',
   taca: 'Taça de Portugal',
   tacaLiga: 'Taça da Liga',
   supertaca: 'Supertaça',
-  esp: 'Primera División',
+  esp: 'Liga Prime Futsal',
   copaRey: 'Copa del Rey',
   copaEsp: 'Copa de España',
   superEsp: 'Supercopa',
 };
 /** Marcador da competição de um jogo (o play-off usa o da liga). */
-export const styleOf = (c: CompId): ScoreStyle => (c === 'playoff' ? 'liga' : c === 'espPlayoff' ? 'esp' : c);
+export const styleOf = (c: CompId): ScoreStyle => (c === 'playoff' ? 'liga' : c === 'espPlayoff' || c === 'espAp' || c === 'espCl' ? 'esp' : c);
 
 // Emblema original de cada estilo de marcador (desenho abstrato, sem logótipos reais)
 const EMBLEM: Record<string, string> = {

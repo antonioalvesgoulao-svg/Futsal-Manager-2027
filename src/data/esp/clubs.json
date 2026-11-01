@@ -1,12 +1,12 @@
 {
  "league": {
   "id": "esp1",
-  "name": "Primera División",
+  "name": "Liga Prime Futsal",
   "country": "Espanha",
   "season": "2026/27",
   "teams": 16
  },
- "source": "futsalportugal.com (planteis 2026/27, 2/11); nível/reputação/riqueza: estimativa na escala mundial; orçamentos pelos salários indicados pelo António; lotações: só Palau Blaugrana e Murcia de fonte pública, restantes estimativa",
+ "source": "Planteis, dorsais, pavilhões e lotações: RFEF (futsal.rfef.es, 2/11/2026); historial: futsalportugal.com; nível/reputação/riqueza: estimativa; orçamentos pelos salários indicados pelo António",
  "clubs": [
   {
    "id": "bar",
@@ -33,7 +33,7 @@
    "name": "ElPozo Murcia",
    "shortName": "EPZ",
    "city": "Múrcia",
-   "arena": "Palacio de los Deportes de Murcia",
+   "arena": "Palacio de Deportes de Murcia",
    "capacity": 7500,
    "capacityReal": true,
    "colors": [
@@ -52,9 +52,9 @@
    "name": "Illes Balears Palma Futsal",
    "shortName": "PAL",
    "city": "Palma",
-   "arena": "Palau d’Esports Son Moix",
-   "capacity": 5076,
-   "capacityReal": false,
+   "arena": "Palau Municipal d´Esports de Son Moix",
+   "capacity": 3800,
+   "capacityReal": true,
    "colors": [
     "#ffd200",
     "#000000"
@@ -72,8 +72,8 @@
    "shortName": "JCA",
    "city": "Cartagena",
    "arena": "Palacio de los Deportes de Cartagena",
-   "capacity": 5000,
-   "capacityReal": false,
+   "capacity": 4817,
+   "capacityReal": true,
    "colors": [
     "#000000",
     "#ffffff"
@@ -90,9 +90,9 @@
    "name": "Inter FS",
    "shortName": "INT",
    "city": "Torrejón de Ardoz",
-   "arena": "Pabellón Jorge Garbajosa",
-   "capacity": 3000,
-   "capacityReal": false,
+   "arena": "Jorge Garbajosa",
+   "capacity": 3200,
+   "capacityReal": true,
    "colors": [
     "#0b3d91",
     "#ffffff"
@@ -110,8 +110,8 @@
    "shortName": "JAE",
    "city": "Jaén",
    "arena": "Olivo Arena",
-   "capacity": 6500,
-   "capacityReal": false,
+   "capacity": 6589,
+   "capacityReal": true,
    "colors": [
     "#ffd100",
     "#111111"
@@ -128,9 +128,9 @@
    "name": "Viña Albali Valdepeñas",
    "shortName": "VAL",
    "city": "Valdepeñas",
-   "arena": "Pabellón Virgen de la Cabeza",
-   "capacity": 1500,
-   "capacityReal": false,
+   "arena": "Virgen de la Cabeza",
+   "capacity": 2000,
+   "capacityReal": true,
    "colors": [
     "#7a1f3d",
     "#ffffff"
@@ -147,9 +147,9 @@
    "name": "Manzanares FS",
    "shortName": "MAN",
    "city": "Manzanares",
-   "arena": "Pabellón Municipal de Manzanares",
-   "capacity": 1200,
-   "capacityReal": false,
+   "arena": "Manzanares Arena",
+   "capacity": 1800,
+   "capacityReal": true,
    "colors": [
     "#e30613",
     "#ffffff"
@@ -166,9 +166,9 @@
    "name": "Sala 10 Zaragoza",
    "shortName": "ZAR",
    "city": "Saragoça",
-   "arena": "Pabellón Siglo XXI",
-   "capacity": 2600,
-   "capacityReal": false,
+   "arena": "CDM Siglo XXI",
+   "capacity": 2900,
+   "capacityReal": true,
    "colors": [
     "#d50000",
     "#ffffff"
@@ -185,9 +185,9 @@
    "name": "Peñíscola FS",
    "shortName": "PEN",
    "city": "Peñíscola",
-   "arena": "Pabellón Municipal de Peñíscola",
-   "capacity": 1100,
-   "capacityReal": false,
+   "arena": "Juan Vizcarro",
+   "capacity": 1000,
+   "capacityReal": true,
    "colors": [
     "#1565c0",
     "#ffffff"
@@ -204,9 +204,9 @@
    "name": "O Parrulo Ferrol",
    "shortName": "PAR",
    "city": "Ferrol",
-   "arena": "Pavillón A Malata",
-   "capacity": 4500,
-   "capacityReal": false,
+   "arena": "Polideportivo de A Malata",
+   "capacity": 4200,
+   "capacityReal": true,
    "colors": [
     "#111111",
     "#ffffff"
@@ -223,9 +223,9 @@
    "name": "Osasuna Magna Xota",
    "shortName": "OSA",
    "city": "Pamplona",
-   "arena": "Pabellón Anaitasuna",
+   "arena": "Anaitasuna",
    "capacity": 3000,
-   "capacityReal": false,
+   "capacityReal": true,
    "colors": [
     "#c8102e",
     "#0a2240"
@@ -244,7 +244,7 @@
    "city": "Córdoba",
    "arena": "Palacio Municipal de Deportes Vista Alegre",
    "capacity": 3500,
-   "capacityReal": false,
+   "capacityReal": true,
    "colors": [
     "#00843d",
     "#ffffff"
@@ -261,9 +261,9 @@
    "name": "El Ejido Futsal",
    "shortName": "EJI",
    "city": "El Ejido",
-   "arena": "Pabellón Municipal de El Ejido",
-   "capacity": 1600,
-   "capacityReal": false,
+   "arena": "Pabellón Municipal de Deportes de El Ejido",
+   "capacity": 2000,
+   "capacityReal": true,
    "colors": [
     "#00843d",
     "#ffffff"
@@ -280,9 +280,9 @@
    "name": "Noia Portus Apostoli",
    "shortName": "NOI",
    "city": "Noia",
-   "arena": "Pavillón Municipal de Noia",
-   "capacity": 1200,
-   "capacityReal": false,
+   "arena": "Pabellón Municipal Agustín Mourís",
+   "capacity": 776,
+   "capacityReal": true,
    "colors": [
     "#1e88e5",
     "#ffffff"
@@ -299,9 +299,9 @@
    "name": "Industrias Santa Coloma",
    "shortName": "STC",
    "city": "Santa Coloma de Gramenet",
-   "arena": "Pavelló Municipal Nou",
-   "capacity": 1600,
-   "capacityReal": false,
+   "arena": "Pabellón Nuevo",
+   "capacity": 1500,
+   "capacityReal": true,
    "colors": [
     "#0d47a1",
     "#ffffff"

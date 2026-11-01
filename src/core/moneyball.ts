@@ -51,9 +51,18 @@ export const TEAM_LEVELS: Record<string, number> = {
   // nomes como aparecem no futsalportugal.com (FPF)
   'Sporting CP': 94, 'SL Benfica': 95, 'Leões de Porto Salvo': 70, 'SC Ferreira do Zêzere/Zêzerovo': 60, 'Eléctrico FC': 66, 'Rio Ave FC': 64,
   'UP Venda Nova': 58, 'Portimonense SC': 63, 'SCU Torreense': 62,
+  // Espanha: nomes como aparecem no futsalportugal.com (Liga Prime Futsal e ex-1.ª divisão; estimativa na escala mundial)
+  'FC Barcelona': 97, 'Islas Baleares Palma Futsal': 95, 'Jimbee Cartagena FS': 94, 'ElPozo Murcia': 92, 'Inter FS': 91, 'Jaén Paraíso Interior': 84,
+  'Viña Albali Valdepeñas': 80, 'Peñíscola FS': 78, 'Quesos El Higaldo Manzanares FS': 76, 'Industrias Santa Coloma': 74, 'Osasuna Magna Xota FS': 77,
+  'Noia Portus Apostoli': 74, 'Córdoba Patrimonio': 77, 'Wanapix AD Sala 10 Zaragoza': 77, 'Real Betis Futsal': 76, 'O Parrulo Ferrol': 75,
+  'Levante UD': 80, 'Ribera Navarra FS': 78, 'Sur Seeds El Ejido Futsal': 74, 'BeSoccer CD UMA Antequera': 74, 'Burela FS': 70, 'Alzira FS': 68,
+  // Brasil (LNF), Cazaquistão e outros que aparecem no historial dos jogadores da Liga Prime
+  'Kairat Almaty': 82, Joinville: 78, 'Jaraguá Futsal': 76, 'Pato Futsal': 76, 'Magnus Futsal': 80, 'São José Futsal': 72, 'Foz Cataratas Futsal': 72,
+  'Cascavel Futsal': 76, 'Carlos Barbosa': 78, Corinthians: 76, 'Joaçaba Futsal': 72, 'Santo André': 70, Blumenau: 70, 'Atlântico': 72,
+  'Royal Sporting Anderlecht Futsal': 82, 'Etoile Lavalloise': 70, 'Haladás VSE': 64, 'FK Chrudim': 68, 'Uragan Ivano-Frankivsk': 70, 'MNK Olmissum': 66, ACCS: 66,
   // Estrangeiro
-  Barcelona: 96, 'ElPozo Murcia Costa Cálida': 90, 'Illes Balears Palma': 93, 'Viña Albali Valdepeñas': 84,
-  'Jaén Paraíso Interior': 84, 'Real Betis': 78, Levante: 82, 'Ribera Navarra': 80, 'ETB Calviá': 55, 'Wanapix AD Sala 10': 70,
+  Barcelona: 96, 'ElPozo Murcia Costa Cálida': 90, 'Illes Balears Palma': 93,
+  'Real Betis': 78, Levante: 82, 'Ribera Navarra': 80, 'ETB Calviá': 55, 'Wanapix AD Sala 10': 70,
   'HIT Kiev': 76, Tyumen: 78, Sibiryak: 74, Atyrau: 72, 'Kaspiy Aktau': 70, Ordabasy: 72, Anderlecht: 82, 'Riga FC': 62,
   'Al-Nassr': 60, 'Al-Qadisiyah': 60, 'Al-Tadhamon': 55, 'Al-Ula FC': 62, 'Al-Riyadh': 58, 'Ecocity Genzano': 72,
   'Fortitudo Pomezia': 74, 'Italservice Pesaro': 76, Canosa: 60, Magallanes: 50, 'Nyírbátori': 66, 'Haladás': 64,
@@ -66,6 +75,13 @@ export const TEAM_LEVELS: Record<string, number> = {
  * domina os jogos e os seus jogadores marcam mais com facilidade.
  */
 const LEAGUE_OF: Record<string, number> = {
+  'FC Barcelona': 92, 'Islas Baleares Palma Futsal': 92, 'Jimbee Cartagena FS': 92, 'ElPozo Murcia': 92, 'Inter FS': 92, 'Peñíscola FS': 92,
+  'Quesos El Higaldo Manzanares FS': 92, 'Industrias Santa Coloma': 92, 'Osasuna Magna Xota FS': 92, 'Noia Portus Apostoli': 92, 'Córdoba Patrimonio': 92,
+  'Wanapix AD Sala 10 Zaragoza': 92, 'Real Betis Futsal': 92, 'O Parrulo Ferrol': 92, 'Levante UD': 92, 'Ribera Navarra FS': 92, 'Sur Seeds El Ejido Futsal': 92,
+  'BeSoccer CD UMA Antequera': 92, 'Burela FS': 80, 'Alzira FS': 65,
+  'Kairat Almaty': 70, Joinville: 75, 'Jaraguá Futsal': 75, 'Pato Futsal': 75, 'Magnus Futsal': 75, 'São José Futsal': 75, 'Foz Cataratas Futsal': 75,
+  'Cascavel Futsal': 75, 'Carlos Barbosa': 75, Corinthians: 75, 'Joaçaba Futsal': 75, 'Santo André': 75, Blumenau: 75, 'Atlântico': 75,
+  'Royal Sporting Anderlecht Futsal': 58, 'Etoile Lavalloise': 55, 'Haladás VSE': 55, 'FK Chrudim': 58, 'Uragan Ivano-Frankivsk': 62, 'MNK Olmissum': 55, ACCS: 55,
   // Espanha (a mais forte)
   Barcelona: 92, 'ElPozo Murcia Costa Cálida': 92, 'Illes Balears Palma': 92, 'Viña Albali Valdepeñas': 92, 'Jaén Paraíso Interior': 92,
   'Real Betis': 92, Levante: 92, 'Ribera Navarra': 92, 'Wanapix AD Sala 10': 72, 'ETB Calviá': 50,

@@ -107,22 +107,31 @@ export function createSeason(y: number, ranking: string[], supercup: [string, st
   return season;
 }
 
-// ---------------- Espanha (RFEF / LNFS) ----------------
-// Primera División: 16 clubes, 2 voltas (30 jornadas); play-off com os 8 primeiros (quartos e meias à melhor de 3, final à melhor de 5)
-// Copa de España: final eight com os 8 primeiros no fim da 1.ª volta, em março, campo neutro (jogos únicos)
-// Copa del Rey: eliminatórias a uma mão, o pior classificado em casa; final em campo neutro
-//   (no real entram equipas das divisões inferiores; aqui só os 16 da Primera até essas divisões existirem)
-// Supercopa de España: final four (campeão, finalista do play-off, vencedores das duas taças), no início da época
-// Datas: estimativa a partir dos calendários recentes (por confirmar com o António)
+// ---------------- Espanha (RFEF, Liga Prime Futsal) ----------------
+// Formato novo anunciado pela RFEF (texto enviado pelo António; o site da RFEF já mostra "Apertura" em 2026/27):
+// - Torneio Apertura (set.–8 jan.) e Clausura (15 jan.–22 mai.), 16 equipas, 15 jornadas cada (Clausura = Apertura com casa/fora trocados);
+//   cada torneio tem campeão
+// - Supercampeão: fase final de 8 (29 mai.–30 jun.), eliminatórias à melhor de 3: 1.º e 2.º do Apertura e do Clausura + os melhores da
+//   classificação acumulada até completar 8; prémio 50 000 €
+// - Copa de España S.M. el Rey (normas RFEF 2026/27, Art. 8; 11–14 mar.): fase final de 8 = 6 primeiros do Apertura + 2 vencedores das
+//   eliminatórias, onde o 7.º-16.º entram na 4.ª eliminatória com equipas das divisões inferiores (jogo único, o mais bem classificado no
+//   Apertura em casa entre equipas da Prime). Sem divisões inferiores no jogo: 3 rondas só com o 7.º-16.º (aproximação). 1.º e 2.º do
+//   Apertura em lados diferentes do quadro. Quartos e meias: penáltis diretos; final com prolongamento 2 x 3 min. Prémio 25 000 €
+// - Supercopa (Art. 21-26): final four a jogo único, meias por sorteio (penáltis diretos), final com prolongamento; 2027/28 em diante:
+//   Supercampeão, Apertura, Clausura, Copa (repetidos → melhores da classificação acumulada)
+// - Descidas (acumulado): o último desce; 14.º e 15.º jogam a permanência à melhor de 3 (as descidas efetivas entram com a Segunda División)
+// - Supercopa de España (final four no início da época): não consta do anúncio; mantida com campeões do Apertura, Clausura, Supercampeão e Copa (estimativa)
+// - Vagas na Champions (melhor da classificação acumulada; Supercampeão): entram na etapa 13
+// Datas exatas e ordem dos cruzamentos: estimativa.
 export function spainDates(y: number) {
   const n = y + 1;
   const sat = (d: string) => nextWeekday(d, 6);
   return {
     superSF: addDays(sat(`${y}-09-01`), -1), superF: sat(`${y}-09-01`),
-    leagueStart: sat(`${y}-09-10`),
-    reyR16: nextWeekday(`${y}-11-25`, 3), reyQF: nextWeekday(`${n}-01-20`, 3), reySF: nextWeekday(`${n}-03-31`, 3), reyF: sat(`${n}-04-25`),
-    copaQF: addDays(sat(`${n}-03-12`), -2), copaSF: sat(`${n}-03-12`), copaF: addDays(sat(`${n}-03-12`), 1),
-    playoffQF: sat(`${n}-05-02`), playoffSF: sat(`${n}-05-16`), playoffF: sat(`${n}-05-30`),
+    aperturaStart: sat(`${y}-09-11`), aperturaEnd: `${n}-01-08`, clausuraStart: sat(`${n}-01-15`), clausuraEnd: `${n}-05-22`,
+    qualR1: nextWeekday(`${n}-01-20`, 3), qualR2: nextWeekday(`${n}-02-03`, 3), qualR3: nextWeekday(`${n}-02-17`, 3),
+    copaQF: `${n}-03-11`, copaSF: `${n}-03-13`, copaF: `${n}-03-14`,
+    finalQF: sat(`${n}-05-29`), finalSF: sat(`${n}-06-09`), finalF: sat(`${n}-06-20`), perm: sat(`${n}-05-29`),
   };
 }
 
@@ -130,54 +139,53 @@ function addSpain(s: SeasonState, y: number, ranking: string[], four: string[]) 
   const k = spainDates(y);
   const r = rng('calendario-esp' + y);
   const first = roundRobin([...ranking].sort(() => r() - 0.5));
-  const rounds = [...first, ...first.map((g) => g.map(([a, b]) => [b, a] as [string, string]))];
-  const blocked = (d: string) => (d >= `${y}-12-23` && d <= `${y + 1}-01-04`) || (d >= addDays(k.copaSF, -3) && d <= k.copaF) || d === k.superF;
-  const dates: string[] = [];
-  for (let d = k.leagueStart; dates.length < rounds.length; d = addDays(d, 7)) if (!blocked(d)) dates.push(d);
-  rounds.forEach((games, i) => games.forEach(([h, a]) => s.fixtures.push({ id: newId(y), comp: 'esp', stage: `Jornada ${i + 1}`, round: i + 1, date: dates[i], home: h, away: a, knockout: false })));
-  // Supercopa: meias campeão x 4.º apurado, 2.º x 3.º
+  const blocked = (d: string) => (d >= `${y}-12-23` && d <= `${y + 1}-01-04`) || (d >= addDays(k.copaQF, -3) && d <= addDays(k.copaF, 1)) || d === k.superF;
+  const dates = (from: string, to: string) => { const out: string[] = []; for (let d = from; out.length < first.length && d <= to; d = addDays(d, 7)) if (!blocked(d)) out.push(d); while (out.length < first.length) out.push(addDays(out[out.length - 1], 3)); return out; };
+  const ap = dates(k.aperturaStart, k.aperturaEnd), cl = dates(k.clausuraStart, k.clausuraEnd);
+  first.forEach((games, i) => games.forEach(([h, a]) => s.fixtures.push({ id: newId(y), comp: 'esp', stage: `Apertura - Jornada ${i + 1}`, round: i + 1, date: ap[i], home: h, away: a, knockout: false })));
+  first.forEach((games, i) => games.forEach(([h, a]) => s.fixtures.push({ id: newId(y), comp: 'esp', stage: `Clausura - Jornada ${i + 1}`, round: first.length + i + 1, date: cl[i], home: a, away: h, knockout: false })));
   if (four.length >= 4) {
     s.fixtures.push({ id: newId(y), comp: 'superEsp', stage: 'Meias-finais', date: k.superSF, home: four[0], away: four[3], neutral: true, knockout: true });
     s.fixtures.push({ id: newId(y), comp: 'superEsp', stage: 'Meias-finais', date: k.superSF, home: four[1], away: four[2], neutral: true, knockout: true });
   }
-  // Copa del Rey: oitavos sorteados, o pior classificado da época anterior joga em casa
-  const pool = [...ranking].sort(() => r() - 0.5);
-  for (let i = 0; i < pool.length; i += 2) {
-    const [a, b] = [pool[i], pool[i + 1]];
-    const [h, aw] = ranking.indexOf(a) > ranking.indexOf(b) ? [a, b] : [b, a];
-    s.fixtures.push({ id: newId(y), comp: 'copaRey', stage: 'Oitavos-de-final', date: k.reyR16, home: h, away: aw, knockout: true });
-  }
   s.esp = {};
+}
+
+/** Classificação de um torneio (Apertura = jornadas 1-15, Clausura = 16-30) ou acumulada. */
+export function spainTable(s: SeasonState, clubIds: string[], part: 'apertura' | 'clausura' | 'total', upToRound = 99) {
+  const half = Math.max(0, ...s.fixtures.filter((f) => f.comp === 'esp').map((f) => f.round ?? 0)) / 2;
+  if (part === 'apertura') return leagueTable(s, clubIds, Math.min(half, upToRound), 'esp');
+  if (part === 'total') return leagueTable(s, clubIds, upToRound, 'esp');
+  const all = leagueTable(s, clubIds, upToRound, 'esp'), ap = leagueTable(s, clubIds, half, 'esp');
+  const rows = all.map((r) => { const a = ap.find((x) => x.club === r.club)!; return { ...r, p: r.p - a.p, w: r.w - a.w, d: r.d - a.d, l: r.l - a.l, gf: r.gf - a.gf, ga: r.ga - a.ga, pts: r.pts - a.pts }; });
+  return rows.sort((x, y) => y.pts - x.pts || y.gf - y.ga - (x.gf - x.ga) || y.gf - x.gf || x.club.localeCompare(y.club));
 }
 
 function afterSpain(s: SeasonState, clubIds: string[], name: (id: string) => string, news: string[]) {
   if (!s.esp || !clubIds.length) return;
+  const e = s.esp as NonNullable<SeasonState['esp']> & { clausura?: string[]; total?: string[] };
   const k = spainDates(s.year);
-  const r = rng('sorteio-esp' + s.year + s.fixtures.filter((f) => f.result).length);
-  const rankPrev = (c: string) => clubIds.indexOf(c);
-  // Supercopa
   const ssf = byStage(s, 'superEsp', 'Meias-finais');
   if (done(ssf) && !byStage(s, 'superEsp', 'Final').length) addCupRound(s, 'superEsp', 'Final', k.superF, [[winnerOf(ssf[0])!, winnerOf(ssf[1])!]], true);
-  // Copa del Rey (jogos únicos; o mais fraco na época anterior em casa até às meias; final neutra)
-  const rey = (from: string, to: string, date: string, neutral: boolean) => {
-    const prev = byStage(s, 'copaRey', from);
-    if (!done(prev) || byStage(s, 'copaRey', to).length) return;
-    const ws = (prev.map(winnerOf) as string[]).sort(() => r() - 0.5);
-    const pairs: [string, string][] = [];
-    for (let i = 0; i < ws.length; i += 2) pairs.push(neutral || rankPrev(ws[i]) > rankPrev(ws[i + 1]) ? [ws[i], ws[i + 1]] : [ws[i + 1], ws[i]]);
-    addCupRound(s, 'copaRey', to, date, pairs, neutral);
-  };
-  rey('Oitavos-de-final', 'Quartos-de-final', k.reyQF, false);
-  rey('Quartos-de-final', 'Meias-finais', k.reySF, false);
-  rey('Meias-finais', 'Final', k.reyF, true);
-  // fim da 1.ª volta: Copa de España (1.º x 8.º, 2.º x 7.º… sorteio dos cruzamentos, estimativa)
   const liga = s.fixtures.filter((f) => f.comp === 'esp');
   const half = Math.max(...liga.map((f) => f.round ?? 0)) / 2;
-  if (!s.esp.halfTable && done(liga.filter((f) => (f.round ?? 0) <= half))) {
-    s.esp.halfTable = leagueTable(s, clubIds, half, 'esp').map((x) => x.club);
-    const t = s.esp.halfTable.slice(0, 8);
-    addCupRound(s, 'copaEsp', 'Quartos-de-final', k.copaQF, [[t[0], t[7]], [t[3], t[4]], [t[1], t[6]], [t[2], t[5]]], true);
-    news.push(`Fim da 1.ª volta em Espanha: ${t.map(name).join(', ')} apurados para a Copa de España.`);
+  // fim do Apertura: campeão; Copa de España (6 primeiros) e eliminatórias do 7.º ao 16.º
+  if (!e.halfTable && done(liga.filter((f) => (f.round ?? 0) <= half))) {
+    const t = (e.halfTable = spainTable(s, clubIds, 'apertura').map((x) => x.club));
+    s.winners.espAp = t[0];
+    news.push(`${name(t[0])} vence o Torneio Apertura da Liga Prime Futsal.`);
+    news.push(`Copa de España: ${t.slice(0, 6).map(name).join(', ')} apurados diretamente; do 7.º ao 16.º lutam pelas 2 vagas restantes.`);
+    // 1.ª ronda: 9.º-16.º (o pior classificado em casa)
+    addCupRound(s, 'copaEsp', 'Eliminatória 1', k.qualR1, [[t[8], t[15]], [t[9], t[14]], [t[10], t[13]], [t[11], t[12]]], false);
+  }
+  const q1 = byStage(s, 'copaEsp', 'Eliminatória 1');
+  if (done(q1) && !byStage(s, 'copaEsp', 'Eliminatória 2').length) { const w = q1.map(winnerOf) as string[]; const hb = (a: string, b: string): [string, string] => (e.halfTable!.indexOf(a) < e.halfTable!.indexOf(b) ? [a, b] : [b, a]); addCupRound(s, 'copaEsp', 'Eliminatória 2', k.qualR2, [hb(w[0], w[3]), hb(w[1], w[2])], false); }
+  const q2 = byStage(s, 'copaEsp', 'Eliminatória 2');
+  if (done(q2) && e.halfTable && !byStage(s, 'copaEsp', 'Eliminatória 3').length) { const w = q2.map(winnerOf) as string[]; addCupRound(s, 'copaEsp', 'Eliminatória 3', k.qualR3, [[e.halfTable[6], w[0]], [e.halfTable[7], w[1]]], false); }
+  const q3 = byStage(s, 'copaEsp', 'Eliminatória 3');
+  if (done(q3) && e.halfTable && !byStage(s, 'copaEsp', 'Quartos-de-final').length) {
+    const t = e.halfTable; const w = q3.map(winnerOf) as string[];
+    addCupRound(s, 'copaEsp', 'Quartos-de-final', k.copaQF, [[t[0], w[1]], [t[3], t[4]], [t[1], w[0]], [t[2], t[5]]], true);
   }
   for (const [from, to, d] of [['Quartos-de-final', 'Meias-finais', k.copaSF], ['Meias-finais', 'Final', k.copaF]] as const) {
     const prev = byStage(s, 'copaEsp', from);
@@ -188,34 +196,46 @@ function afterSpain(s: SeasonState, clubIds: string[], name: (id: string) => str
       addCupRound(s, 'copaEsp', to, d, pairs, true);
     }
   }
-  for (const comp of ['copaRey', 'copaEsp', 'superEsp'] as CompId[]) {
+  for (const comp of ['copaEsp', 'superEsp'] as CompId[]) {
     const fin = byStage(s, comp, 'Final')[0];
     if (fin?.result && !s.winners[comp]) {
       s.winners[comp] = winnerOf(fin)!;
-      news.push(`${name(s.winners[comp]!)} vence a ${comp === 'copaRey' ? 'Copa del Rey' : comp === 'copaEsp' ? 'Copa de España' : 'Supercopa de España'}.`);
+      news.push(`${name(s.winners[comp]!)} vence a ${comp === 'copaEsp' ? 'Copa de España' : 'Supercopa de España'}.`);
     }
   }
-  // play-off
-  if (!s.esp.regularTable && done(liga)) {
-    const t = (s.esp.regularTable = leagueTable(s, clubIds, 99, 'esp').map((x) => x.club));
-    news.push(`Fim da fase regular em Espanha: ${name(t[0])} termina em 1.º lugar.`);
-    for (const [a, b] of [[0, 7], [3, 4], [1, 6], [2, 5]]) makeSeries(s, 'Quartos-de-final', t[a], t[b], 3, k.playoffQF, 'espPlayoff');
+  // fim do Clausura: campeão, fase final do Supercampeão e permanência
+  if (!e.regularTable && done(liga)) {
+    const c = spainTable(s, clubIds, 'clausura').map((x) => x.club);
+    const tot = (e.regularTable = spainTable(s, clubIds, 'total').map((x) => x.club));
+    s.winners.espCl = c[0];
+    news.push(`${name(c[0])} vence o Torneio Clausura. ${name(tot[0])} é o melhor da classificação acumulada.`);
+    const eight: string[] = [];
+    for (const x of [e.halfTable![0], e.halfTable![1], c[0], c[1], ...tot]) if (!eight.includes(x) && eight.length < 8) eight.push(x);
+    const seed = [...eight].sort((a, b) => tot.indexOf(a) - tot.indexOf(b)); // cruzamentos pela classificação acumulada (estimativa)
+    news.push(`Fase final do Supercampeão: ${seed.map(name).join(', ')}.`);
+    for (const [a, b] of [[0, 7], [3, 4], [1, 6], [2, 5]]) makeSeries(s, 'Quartos-de-final', seed[a], seed[b], 3, k.finalQF, 'espPlayoff');
+    makeSeries(s, 'Permanência', tot[13], tot[14], 3, k.perm, 'espPlayoff');
+    news.push(`${name(tot[15])} termina em último e desceria à Segunda División; ${name(tot[13])} e ${name(tot[14])} jogam a permanência (as descidas entram quando a Segunda existir no jogo).`);
   }
-  const e = s.esp;
-  const rank = (c: string) => (e.regularTable ?? []).indexOf(c);
+  const rank = (x: string) => (e.regularTable ?? []).indexOf(x);
   const order = (a: string, b: string): [string, string] => (rank(a) <= rank(b) ? [a, b] : [b, a]);
   const ser = (stage: string) => s.series.filter((x) => x.comp === 'espPlayoff' && x.stage === stage);
   const qf = ser('Quartos-de-final');
   if (qf.length === 4 && qf.every((x) => x.winner) && !ser('Meias-finais').length) {
-    makeSeries(s, 'Meias-finais', ...order(qf[0].winner!, qf[1].winner!), 3, k.playoffSF, 'espPlayoff');
-    makeSeries(s, 'Meias-finais', ...order(qf[2].winner!, qf[3].winner!), 3, k.playoffSF, 'espPlayoff');
+    makeSeries(s, 'Meias-finais', ...order(qf[0].winner!, qf[1].winner!), 3, k.finalSF, 'espPlayoff');
+    makeSeries(s, 'Meias-finais', ...order(qf[2].winner!, qf[3].winner!), 3, k.finalSF, 'espPlayoff');
   }
   const sf = ser('Meias-finais');
-  if (sf.length === 2 && sf.every((x) => x.winner) && !ser('Final').length) makeSeries(s, 'Final', ...order(sf[0].winner!, sf[1].winner!), 5, k.playoffF, 'espPlayoff');
+  if (sf.length === 2 && sf.every((x) => x.winner) && !ser('Final').length) makeSeries(s, 'Final', ...order(sf[0].winner!, sf[1].winner!), 3, k.finalF, 'espPlayoff');
   const fin = ser('Final')[0];
   if (fin?.winner && !s.winners.esp) {
     s.winners.esp = fin.winner;
-    news.push(`${name(fin.winner)} é campeão de Espanha!`);
+    news.push(`${name(fin.winner)} é o Supercampeão de Espanha!`);
+  }
+  const perm = ser('Permanência')[0];
+  if (perm?.winner && !(e as { permDone?: boolean }).permDone) {
+    (e as { permDone?: boolean }).permDone = true;
+    news.push(`${name(perm.winner)} garante a permanência; ${name(perm.winner === perm.hi ? perm.lo : perm.hi)} desceria com o último.`);
   }
 }
 

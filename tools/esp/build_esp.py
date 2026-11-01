@@ -62,7 +62,7 @@ for tid, t in TEAMS.items():
         players.append({'id': pid, 'clubId': club + ('@jun' if junior else ''), 'name': name, 'position': pos, 'number': None if junior else num, 'age': age, 'nationality': NAT.get(fp.get('code') or '', fp.get('code') or 'Espanha')})
         per = person(fp['person_id'])
         if not per: continue
-        rows = [r for r in per['rows'] if r['esc'] == '1' and not re.search(r'Sele|National|^España$|^Spain$|^Brasil$|^Brazil$|^Portugal$|^Argentina$', r['team'])]
+        rows = [r for r in per['rows'] if r['esc'] == '1' and r['team'] not in set(NAT.values()) | {'Espanha', 'Spain', 'Brazil'} and not re.search(r'Sele|National', r['team'])]
         recent = [r for r in rows if r['season'] >= '2021/2022']
         seasons = {}
         for r in rows:
@@ -103,8 +103,51 @@ for tid, t in TEAMS.items():
     if best:
         cc = next(x for x in staff if x['club'] == club and x['role'] == 'principal')
         coaches.append({'id': f'c_{club}', 'name': best['per']['name'], 'clubId': club, 'tactical': cc['coach']['tactical'], 'motivation': cc['coach']['motivation'], 'discipline': 14, 'youth': 12, 'style': {}})
-info = 'Primera División 2026/27, futsalportugal.com (recolha 2/11/2026, 1 página a cada 7 s).'
-json.dump({'_info': info + ' Números de camisola: estimativa (o site não os tem).', 'players': players}, open('src/data/esp/players.json', 'w'), ensure_ascii=False, indent=0)
+# ---- planteis oficiais da RFEF (futsal.rfef.es, 2026/27): dorsal, nome, alcunha, nacionalidade, posição; pavilhão e lotação ----
+import difflib, unicodedata
+RF = json.load(open(f'{SRC}/rfef/rfef.json'))
+RF2CLUB = {'18': 'bar', '4': 'cor', '22': 'epz', '30': 'pal', '2883': 'eji', '24': 'stc', '25': 'jae', '21': 'jca', '20': 'osa', '27': 'int', '10': 'noi', '29': 'par', '9': 'man', '31': 'pen', '32': 'val', '23': 'zar'}
+RPOS = {'Portero': 'GR', 'Cierre': 'FIX', 'Ala': 'ALA', 'Pivot': 'PIV', 'Ala/Pivot': 'ALA/PIV', 'Ala/Cierre': 'FIX/ALA', 'Universal': 'UNI'}
+nrm = lambda s: re.sub(r'[^a-z ]', '', unicodedata.normalize('NFD', s).encode('ascii', 'ignore').decode().lower()).split()
+final = []; fstats = {}; nomatch = []
+for rid, team in RF.items():
+    club = RF2CLUB[rid]
+    fpl = [p for p in players if p['clubId'].replace('@jun', '') == club]
+    used = set()
+    for i, rp in enumerate(team['players']):
+        def sc(p):
+            a, b, c = nrm(p['name']), nrm(rp['name']), nrm(rp['nick'])
+            s = max(difflib.SequenceMatcher(None, ' '.join(a), ' '.join(b)).ratio(), difflib.SequenceMatcher(None, ' '.join(a), ' '.join(c)).ratio())
+            if a and (set(a) <= set(b) or set(a) <= set(c)): s = max(s, 0.92)
+            return s
+        cand = max((p for p in fpl if p['id'] not in used), key=sc, default=None)
+        m = cand if cand and sc(cand) >= 0.6 else None
+        pid = f'{club}{i + 1:02d}'
+        if m: used.add(m['id'])
+        else: nomatch.append(f"{club}: {rp['name']}")
+        age = m['age'] if m else 25
+        final.append({'id': pid, 'clubId': club, 'name': rp['nick'] or rp['name'], 'fullName': rp['name'], 'position': RPOS.get(rp['pos'], m['position'] if m else 'UNI'), 'number': rp['num'], 'age': age, 'nationality': NAT.get(rp['nat'], rp['nat'] or 'Espanha'), **({} if m else {'ageEstimated': True})})
+        if m and m['id'] in stats: fstats[pid] = stats[m['id']]
+    # juniores da formação que estavam no site mas não na ficha da RFEF ficam na formação
+    for p in fpl:
+        if p['id'] not in used and p['age'] <= 19:
+            pid = f"{club}j{len([x for x in final if x['clubId'] == club + '@jun']) + 1:02d}"
+            final.append({**p, 'id': pid, 'clubId': club + '@jun', 'number': None})
+            if p['id'] in stats: fstats[pid] = stats[p['id']]
+players, stats = final, fstats
+print('RFEF sem ligação ao futsalportugal (idade estimada 25):', len(nomatch), nomatch[:40])
+# pavilhões e lotações oficiais da RFEF
+cj = json.load(open('src/data/esp/clubs.json'))
+for rid, team in RF.items():
+    c = next(x for x in cj['clubs'] if x['id'] == RF2CLUB[rid])
+    if team['arena']: c['arena'] = team['arena'].strip()
+    if team['capacity'] and team['capacity'].strip().isdigit(): c['capacity'] = int(team['capacity']); c['capacityReal'] = True
+cj['league']['name'] = 'Liga Prime Futsal'
+cj['source'] = 'Planteis, dorsais, pavilhões e lotações: RFEF (futsal.rfef.es, 2/11/2026); historial: futsalportugal.com; nível/reputação/riqueza: estimativa; orçamentos pelos salários indicados pelo António'
+json.dump(cj, open('src/data/esp/clubs.json', 'w'), ensure_ascii=False, indent=1)
+
+info = 'Liga Prime Futsal 2026/27: planteis da RFEF (futsal.rfef.es) + historial do futsalportugal.com (recolha 2/11/2026, 1 página a cada 7 s).'
+json.dump({'_info': info + ' Dorsais oficiais da RFEF; ageEstimated = sem data de nascimento encontrada (25 anos, estimativa).', 'players': players}, open('src/data/esp/players.json', 'w'), ensure_ascii=False, indent=0)
 json.dump({'_info': info + ' Jogos, cartões e golos por época desde 2021/22; títulos.', 'players': stats}, open('src/data/esp/fpstats.json', 'w'), ensure_ascii=False, indent=0)
 json.dump({'_info': info + ' tactical/motivation calculados do historial (vitórias por competição, títulos); discipline/youth estimativa.', 'coaches': coaches}, open('src/data/esp/coaches.json', 'w'), ensure_ascii=False, indent=2)
 json.dump({'_info': info + ' Só os treinadores principais (o site não lista o resto da equipa técnica em Espanha); ability é estimativa.', 'people': staff}, open('src/data/esp/staff.json', 'w'), ensure_ascii=False, indent=1)
