@@ -62,7 +62,8 @@ export interface PlayerStats {
   yellow: number;
   red: boolean;
   injured?: boolean; // lesionou-se e saiu durante o jogo
-  redKind?: 'dogso' | 'brawl' | 'twoYellows'; // motivo da expulsão (castigo)
+  redKind?: 'dogso' | 'brawl' | 'twoYellows' | 'agressao' | 'violento'; // motivo da expulsão (castigo)
+  victim?: string; // agressão / jogo violento: quem foi atingido (castigo maior se ficar lesionado)
   rating: number;
 }
 

@@ -44,7 +44,7 @@ const KEY_TYPES: Record<Settings['moments3d'], string[]> = {
   todos: ['golo', 'penalti', 'livre_10m', 'vermelho', 'poste', 'remate_defendido', 'gr_avancado_on', 'remate_fora', 'canto', 'confronto'],
 };
 
-export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDone: (m: MatchResult) => void) {
+export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDone: (m: MatchResult) => void, onRecord?: (m: MatchResult) => void) {
   const st = settingsOf(s);
   const hs = setupFor(s, f.home, f.comp);
   const as = setupFor(s, f.away, f.comp);
@@ -579,7 +579,8 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
     hl?.dispose();
     hl = null;
     const res = m.result();
-    content.innerHTML = `<h2>Resultado final</h2>` + resultHtml(res, h, a) + `<div class="row" style="justify-content:flex-start;margin-top:16px"><button class="btn primary" id="cont">Continuar</button></div>`;
+    onRecord?.(res); // grava já o resultado (o botão Continuar do topo também segue em frente)
+    content.innerHTML = `<h2>Resultado final</h2><div class="row" style="justify-content:flex-start;margin-bottom:12px"><button class="btn primary" id="cont">Continuar ▸</button></div>` + resultHtml(res, h, a);
     content.querySelector('#all')?.addEventListener('change', (ev) => {
       content.querySelectorAll<HTMLElement>('.ev.minor').forEach((x) => (x.style.display = (ev.target as HTMLInputElement).checked ? '' : 'none'));
     });

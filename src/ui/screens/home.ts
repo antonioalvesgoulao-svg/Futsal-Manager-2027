@@ -127,6 +127,7 @@ export function homeScreen(root: HTMLElement) {
 
   function renderNav() {
     nav.innerHTML =
+      (pending && !pending.result ? `<button class="nav ${section === 'jogo' ? 'on' : ''}" data-s="jogo" style="font-weight:700">⚽ Dia de jogo</button>` : '') +
       SECTIONS.map((x) => `<button class="nav ${x.id === section ? 'on' : ''}" data-s="${x.id}">${x.label}</button>`).join('') +
       `<div class="spacer"></div>
        <button class="nav" data-a="save">Gravar</button>
@@ -136,8 +137,9 @@ export function homeScreen(root: HTMLElement) {
 
   function renderContent() {
     if (s!.clubId === NO_CLUB) { go('home'); return; } // despedido: ecrã de quem está sem clube
-    const sec = SECTIONS.find((x) => x.id === section)!;
-    if (pending) {
+    const sec = SECTIONS.find((x) => x.id === section) ?? SECTIONS[0];
+    if (section === 'jogo' && !pending) section = 'inicio';
+    if (pending && section === 'jogo') {
       renderMatchDay(
         content, s!, pending,
         () => { pending = null; section = 'inicio'; renderNav(); renderContent(); },
@@ -249,7 +251,6 @@ export function homeScreen(root: HTMLElement) {
     const b = (e.target as HTMLElement).closest('button');
     if (!b) return;
     if (b.dataset.s) {
-      if (pending && b.dataset.s !== 'taticas' && b.dataset.s !== 'plantel') return;
       section = b.dataset.s;
       playerId = null;
       renderNav();
@@ -279,15 +280,19 @@ export function homeScreen(root: HTMLElement) {
 
   el.querySelector('#next')!.addEventListener('click', () => {
     if (s!.clubId === NO_CLUB) return go('home');
+    if (pending && pending.result) pending = null; // jogo já jogado e gravado: continua
     if (pending) {
-      section = 'inicio';
+      section = 'jogo'; // tens de jogar o jogo primeiro: volta ao dia de jogo
+      renderNav();
       renderContent();
-      return; // tens de jogar o jogo primeiro
+      return;
     }
     const res = advance(s!);
     renderDate();
     if (res.kind === 'match') {
       pending = res.fixture;
+      section = 'jogo';
+      renderNav();
       renderContent();
     } else if (res.kind === 'seasonEnd') {
       go('home'); // nova época: refaz o ecrã

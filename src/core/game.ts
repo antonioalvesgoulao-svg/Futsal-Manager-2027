@@ -103,13 +103,13 @@ function playFixture(s: GameState, f: Fixture, given?: MatchResult): MatchResult
   // castigos (Regulamento Disciplinar da FPF): notícias só do teu clube
   const mine = (id: string) => s.players.find((p) => p.id === id)?.clubId === s.clubId;
   const pname = (id: string) => s.players.find((p) => p.id === id)?.name ?? id;
+  // lesões no jogo (antes dos castigos: a agressão que lesiona é castigada pelos dias de paragem)
+  const newInj = matchInjuries(s, m, `${f.id}-${s.season.year}`);
   const banned = applyDiscipline(s, f, m, pname);
   for (const t of banned) if (s.players.some((p) => mine(p.id) && t.startsWith(p.name + ':'))) news(s, t);
   // moral (antes das lesões e castigos deste jogo, que a fazem descer)
   for (const t of applyMorale(s, f, m, importanceOf(s, f))) if (/excelente|fraca/.test(t)) news(s, t);
   moraleEvent(s, Object.entries(m.players).filter(([, st]) => st.red).map(([id]) => id), -3);
-  // lesões no jogo
-  const newInj = matchInjuries(s, m, `${f.id}-${s.season.year}`);
   moraleEvent(s, newInj.filter(([, i]) => i.days > 7).map(([id]) => id), -6);
   for (const [id, i] of newInj) if (mine(id)) news(s, `${pname(id)} lesionou-se no jogo: ${i.type.toLowerCase()}, ${i.days} dia${i.days > 1 ? 's' : ''} de paragem.`);
   // estatísticas da época (só competições oficiais)

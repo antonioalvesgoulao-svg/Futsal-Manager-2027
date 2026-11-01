@@ -62,10 +62,24 @@ function roundRobin(ids: string[]): [string, string][][] {
       const a = t[i];
       const b = t[n - 1 - i];
       if (a === '__folga' || b === '__folga') continue;
-      games.push(i === 0 && r % 2 ? [b, a] : (r + i) % 2 ? [b, a] : [a, b]);
+      games.push([a, b]);
     }
     rounds.push(games);
     t.splice(1, 0, t.pop()!);
+  }
+  // casa/fora alternado: em cada jogo joga em casa quem jogou fora na jornada anterior
+  // (desempate: quem tem menos jogos em casa), como nos calendários reais
+  const last: Record<string, 'C' | 'F'> = {};
+  const homes: Record<string, number> = {};
+  for (const games of rounds) {
+    for (let g = 0; g < games.length; g++) {
+      const [a, b] = games[g];
+      const score = (x: string) => (last[x] === 'F' ? 2 : last[x] === 'C' ? -2 : 0) - (homes[x] ?? 0) * 0.1;
+      const [h, w] = score(a) >= score(b) ? [a, b] : [b, a];
+      games[g] = [h, w];
+      last[h] = 'C'; last[w] = 'F';
+      homes[h] = (homes[h] ?? 0) + 1;
+    }
   }
   return rounds;
 }

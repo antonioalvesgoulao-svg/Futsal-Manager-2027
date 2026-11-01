@@ -77,6 +77,21 @@ export function applyDiscipline(s: GameState, f: Fixture, m: MatchResult, name: 
     if (st.red) {
       const k = st.redKind ?? 'twoYellows';
       if (k === 'twoYellows') add(id, 1, 'expulso por 2 amarelos');
+      else if (k === 'agressao' || k === 'violento') {
+        // agressão / jogo violento: castigo conforme o dano (dias de paragem do atingido)
+        const injDays = st.victim ? s.injuries?.[st.victim]?.days ?? 0 : 0;
+        let g: number;
+        if (comp === 'esp') {
+          // RFEF Art. 145: agressão a jogador = grave, 4-12; jogo violento com baixa >2 semanas 4-12, >2 meses 13-24; sem dano até 3
+          if (k === 'violento' && injDays > 60) g = 13 + Math.floor(rnd() * 12);
+          else if (k === 'agressao' || injDays > 14) g = 4 + Math.floor(rnd() * rnd() * 9) + (injDays > 14 ? 2 : 0);
+          else g = 1 + Math.floor(rnd() * 3);
+        } else {
+          // FPF Art. 154: agressão a jogador 2 a 12 jogos (1 a 8 sem lesão); escala com a lesão causada
+          g = injDays > 0 ? Math.min(12, 2 + Math.floor(rnd() * 3) + Math.floor(injDays / 15)) : 1 + Math.floor(rnd() * rnd() * 8);
+        }
+        add(id, Math.min(24, g), k === 'agressao' ? `agressão a adversário${injDays ? `, que ficou ${injDays} dias parado` : ''}` : `entrada violenta${injDays ? `, adversário ${injDays} dias parado` : ''}`);
+      }
       else if (k === 'dogso') add(id, comp === 'esp' ? 1 : rnd() < 0.75 ? 1 : 2, 'vermelho direto: impediu oportunidade de golo');
       else if (comp === 'esp') add(id, 1 + Math.floor(rnd() * rnd() * 3), 'vermelho direto em confronto'); // Art. 145.2: até 3 jogos
       else {

@@ -329,7 +329,7 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     }
   }
 
-  function card(s: Side, l: Live, red: boolean, why: 'dogso' | 'brawl' = 'dogso') {
+  function card(s: Side, l: Live, red: boolean, why: 'dogso' | 'brawl' | 'agressao' | 'violento' = 'dogso') {
     const t = teams[s];
     if (!red) {
       l.yellow++;
@@ -528,7 +528,14 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
       const side = (teams[0].court.includes(l) || teams[0].gk === l ? 0 : 1) as Side;
       const main = l === fouler || l === victim;
       const hot = (eff(l, 'agressividade') - 10) * 0.02;
-      if (r() < (main ? 0.07 : 0.03) * REF.harsh * (0.6 + ten) + hot * 0.3) { cards.push({ id: l.p.id, red: true }); card(side, l, true, 'brawl'); }
+      if (r() < (main ? 0.07 : 0.03) * REF.harsh * (0.6 + ten) + hot * 0.3) {
+        // ~30% dos vermelhos num confronto são agressão a sério (soco, cabeçada; estimativa); às vezes o agredido fica lesionado
+        const target = l === fouler ? victim : l === victim ? fouler : null;
+        const aggr = !!target && r() < 0.3 + hot;
+        cards.push({ id: l.p.id, red: true });
+        card(side, l, true, aggr ? 'agressao' : 'brawl');
+        if (aggr && target) { pstats[l.p.id].victim = target.p.id; if (!target.sentOff && r() < 0.25) injure(teams[(1 - side) as Side], target); }
+      }
       else if (r() < (main ? 0.55 : 0.28) * REF.cards + hot) { cards.push({ id: l.p.id, red: l.yellow >= 1 }); card(side, l, false); }
     }
     actions.push({ type: 'brawl', side: s, players: who.map((l) => l.p.id), cards });
@@ -548,7 +555,10 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     const n = def.fouls[fp];
 
     const dogso = r() < 0.004;
+    // entrada violenta (raro, estimativa ~1 em cada 6 jogos de 25 faltas): vermelho direto e o atingido pode lesionar-se
+    const violent = !dogso && r() < 0.0012 + Math.max(0, eff(fouler, 'agressividade') - 12) * 0.0004;
     if (dogso) card((1 - s) as Side, fouler, true);
+    else if (violent) { card((1 - s) as Side, fouler, true, 'violento'); pstats[fouler.p.id].victim = victim.p.id; if (r() < 0.5) injure(att, victim); }
     else if (r() < (0.22 + (eff(fouler, 'agressividade') - 10) * 0.008) * REF.cards * (fouler.yellow ? 0.35 : 1)) card((1 - s) as Side, fouler, false);
 
     const sp = att.setup.tactics.setPieces;

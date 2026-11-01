@@ -237,16 +237,19 @@ export function renderMatchDay(content: HTMLElement, s: GameState, f: Fixture, o
   });
   drawKits();
   content.querySelector<HTMLSelectElement>('#spd')!.addEventListener('change', (e) => (st.speed = (e.target as HTMLSelectElement).value as typeof st.speed));
+  // o resultado grava-se uma única vez, logo no fim do jogo (não se pode repetir o jogo)
+  const record = (res?: Parameters<typeof playMyMatch>[2]) => (f.result ? null : playMyMatch(s, f, res));
   content.querySelector('#live')!.addEventListener('click', () => {
     renderLive(content, s, f, (res) => {
-      playMyMatch(s, f, res);
+      record(res);
       onDone();
-    });
+    }, record);
   });
   content.querySelector('#play')!.addEventListener('click', () => {
-    const m = playMyMatch(s, f);
+    const m = record();
+    if (!m) return;
     content.querySelectorAll('.row, .form-row, .scoreboard').forEach((x) => x.remove());
-    content.querySelector('#result')!.innerHTML = resultHtml(m, h, a) + `<div class="row" style="justify-content:flex-start;margin-top:16px"><button class="btn primary" id="cont">Continuar</button></div>`;
+    content.querySelector('#result')!.innerHTML = `<div class="row" style="justify-content:flex-start;margin-bottom:12px"><button class="btn primary" id="cont">Continuar ▸</button></div>` + resultHtml(m, h, a);
     content.querySelector('#all')?.addEventListener('change', (e) => {
       content.querySelectorAll<HTMLElement>('.ev.minor').forEach((el) => (el.style.display = (e.target as HTMLInputElement).checked ? '' : 'none'));
     });
