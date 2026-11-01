@@ -395,7 +395,7 @@
   },
   {
    "id": "scb08",
-   "clubId": "scb",
+   "clubId": "scb@jun",
    "name": "Rika",
    "position": "UNI",
    "number": 21,
@@ -458,7 +458,7 @@
   },
   {
    "id": "scb15",
-   "clubId": "scb",
+   "clubId": "scb@jun",
    "name": "André Gomes",
    "position": "ALA",
    "number": 88,
@@ -494,7 +494,7 @@
   },
   {
    "id": "scb19",
-   "clubId": "scb",
+   "clubId": "scb@jun",
    "name": "Bruno Barros",
    "position": "PIV",
    "number": 11,
@@ -503,7 +503,7 @@
   },
   {
    "id": "scb20",
-   "clubId": "scb",
+   "clubId": "scb@jun",
    "name": "Rodrigo Mirancos",
    "position": "PIV",
    "number": 27,
@@ -548,7 +548,7 @@
   },
   {
    "id": "fun05",
-   "clubId": "fun",
+   "clubId": "fun@jun",
    "name": "Guina",
    "position": "FIX",
    "number": 60,
@@ -566,7 +566,7 @@
   },
   {
    "id": "fun07",
-   "clubId": "fun",
+   "clubId": "fun@jun",
    "name": "Artur Vicente",
    "position": "UNI",
    "number": 20,
@@ -913,15 +913,6 @@
    "position": "ALA",
    "number": 2,
    "age": 19,
-   "nationality": "Portugal"
-  },
-  {
-   "id": "fzz09",
-   "clubId": "fzz",
-   "name": "Kaká",
-   "position": "ALA",
-   "number": 8,
-   "age": 27,
    "nationality": "Portugal"
   },
   {
@@ -1537,15 +1528,6 @@
    "nationality": "Brasil"
   },
   {
-   "id": "por12",
-   "clubId": "por",
-   "name": "Montanha",
-   "position": "ALA",
-   "number": 70,
-   "age": 30,
-   "nationality": "Brasil"
-  },
-  {
    "id": "por13",
    "clubId": "por",
    "name": "João Alves",
@@ -1619,7 +1601,7 @@
   },
   {
    "id": "fam03",
-   "clubId": "fam",
+   "clubId": "fam@jun",
    "name": "Miguel Ferreira",
    "position": "GR",
    "number": 16,
@@ -1664,7 +1646,7 @@
   },
   {
    "id": "fam08",
-   "clubId": "fam",
+   "clubId": "fam@jun",
    "name": "Afonso Vieira",
    "position": "ALA",
    "number": 93,
@@ -1700,7 +1682,7 @@
   },
   {
    "id": "fam12",
-   "clubId": "fam",
+   "clubId": "fam@jun",
    "name": "Mathis Pereira",
    "position": "ALA",
    "number": 21,
@@ -1742,15 +1724,6 @@
    "number": 11,
    "age": 34,
    "nationality": "Portugal"
-  },
-  {
-   "id": "fam17",
-   "clubId": "fam",
-   "name": "Guga",
-   "position": "PIV",
-   "number": 39,
-   "age": 24,
-   "nationality": "Brasil"
   },
   {
    "id": "fam18",
@@ -1808,7 +1781,7 @@
   },
   {
    "id": "tor06",
-   "clubId": "tor",
+   "clubId": "tor@jun",
    "name": "Leonardo Hashimoto",
    "position": "FIX",
    "number": 28,
@@ -1889,7 +1862,7 @@
   },
   {
    "id": "tor15",
-   "clubId": "tor",
+   "clubId": "tor@jun",
    "name": "Gonçalo Lima",
    "position": "ALA/PIV",
    "number": 9,
@@ -1922,6 +1895,195 @@
    "number": 90,
    "age": 24,
    "nationality": "Brasil"
+  },
+  {
+   "id": "porf18230",
+   "clubId": "por",
+   "name": "David Grilo",
+   "position": "UNI",
+   "number": 3,
+   "age": 24,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "porf67377",
+   "clubId": "por",
+   "name": "Edgar Senra",
+   "position": "UNI",
+   "number": 4,
+   "age": 29,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "porf25789",
+   "clubId": "por",
+   "name": "Gabriel Boas",
+   "position": "UNI",
+   "number": 5,
+   "age": 30,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "porf28645",
+   "clubId": "por",
+   "name": "Mateus Morais",
+   "position": "UNI",
+   "number": 6,
+   "age": 19,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "porf27748",
+   "clubId": "por",
+   "name": "Miguel Nobre",
+   "position": "UNI",
+   "number": 7,
+   "age": 20,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "porf27663",
+   "clubId": "por",
+   "name": "Pedro Bartolomeu",
+   "position": "GR",
+   "number": 12,
+   "age": 19,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "porf67378",
+   "clubId": "por",
+   "name": "Samuel Andrade",
+   "position": "UNI",
+   "number": 14,
+   "age": 20,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "porf67379",
+   "clubId": "por",
+   "name": "Walter Alves",
+   "position": "UNI",
+   "number": 16,
+   "age": 19,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "slbf44395",
+   "clubId": "slb",
+   "name": "Diego Ferreira",
+   "position": "UNI",
+   "number": 3,
+   "age": 15,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "famf51901",
+   "clubId": "fam",
+   "name": "Gustavo Santos",
+   "position": "PIV",
+   "number": 2,
+   "age": 22,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "uvnf278869",
+   "clubId": "uvn",
+   "name": "Valentin Abrantes",
+   "position": "UNI",
+   "number": 4,
+   "age": 26,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "lpsf18169",
+   "clubId": "lps",
+   "name": "Tomás Guerra",
+   "position": "GR",
+   "number": 2,
+   "age": 18,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "funf17961",
+   "clubId": "fun",
+   "name": "Luis Correia",
+   "position": "UNI",
+   "number": 2,
+   "age": 19,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fzzf44261",
+   "clubId": "fzz",
+   "name": "Gonçalo Marmelo",
+   "position": "UNI",
+   "number": 3,
+   "age": 19,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fzzf48889",
+   "clubId": "fzz",
+   "name": "Hugo Coelho",
+   "position": "UNI",
+   "number": 4,
+   "age": 19,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fzzf2182",
+   "clubId": "fzz",
+   "name": "João Alcobia",
+   "position": "ALA",
+   "number": 5,
+   "age": 34,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fzzf48784",
+   "clubId": "fzz",
+   "name": "Nuno Pinho",
+   "position": "UNI",
+   "number": 6,
+   "age": 19,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fzzf2282",
+   "clubId": "fzz",
+   "name": "Rafael Silva",
+   "position": "ALA",
+   "number": 9,
+   "age": 26,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fzzf17968",
+   "clubId": "fzz",
+   "name": "Ruben Basilio",
+   "position": "FIX",
+   "number": 11,
+   "age": 20,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "scbf27054",
+   "clubId": "scb",
+   "name": "Afonso Ferreira",
+   "position": "UNI",
+   "number": 4,
+   "age": 18,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "scbf1683",
+   "clubId": "scb",
+   "name": "Hugo Neves",
+   "position": "PIV",
+   "number": 5,
+   "age": 26,
+   "nationality": "Portugal"
   }
  ]
 }

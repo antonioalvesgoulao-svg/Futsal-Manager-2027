@@ -48,6 +48,9 @@ export const TEAM_LEVELS: Record<string, number> = {
   'Quinta dos Lombos': 60, 'Modicus Bruval': 60, Modicus: 60, 'CR Candoso/Natcal': 58, 'Nun´Álvares': 58, 'Viseu 2001': 56,
   'Futsal Azeméis': 57, 'ADCR Caxinas Poça Barca': 55, 'AD Jorge Antunes': 52, Burinhosa: 52, Belenenses: 50, AMSAC: 50,
   'CF Sassoeiros': 50, 'Paços de Ferreira Redifogo Futsal': 52, 'Dínamo Sanjoanense': 48, 'CS São João': 48, Marítimo: 50,
+  // nomes como aparecem no futsalportugal.com (FPF)
+  'Sporting CP': 94, 'SL Benfica': 95, 'Leões de Porto Salvo': 70, 'SC Ferreira do Zêzere/Zêzerovo': 60, 'Eléctrico FC': 66, 'Rio Ave FC': 64,
+  'UP Venda Nova': 58, 'Portimonense SC': 63, 'SCU Torreense': 62,
   // Estrangeiro
   Barcelona: 96, 'ElPozo Murcia Costa Cálida': 90, 'Illes Balears Palma': 93, 'Viña Albali Valdepeñas': 84,
   'Jaén Paraíso Interior': 84, 'Real Betis': 78, Levante: 82, 'Ribera Navarra': 80, 'ETB Calviá': 55, 'Wanapix AD Sala 10': 70,

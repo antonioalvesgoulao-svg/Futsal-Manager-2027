@@ -7,6 +7,9 @@ HIST = json.load(open('src/data/por/history.json'))['players']
 TEAM2CLUB = {'Sporting CP': 'scp', 'SL Benfica': 'slb', 'SC Braga': 'scb', 'AD Fundão': 'fun', 'Leões de Porto Salvo': 'lps', 'SC Ferreira do Zêzere/Zêzerovo': 'fzz', 'Eléctrico FC': 'ele', 'Rio Ave FC': 'rav', 'UP Venda Nova': 'uvn', 'Portimonense SC': 'por', 'FC Famalicão': 'fam', 'SCU Torreense': 'tor'}
 norm = lambda n: re.sub(r'[^a-z ]', '', unicodedata.normalize('NFD', n).encode('ascii', 'ignore').decode().lower()).split()
 out = {}; unmatched = []
+import os
+LINKS = json.load(open('tools/staff/manual_links.json')) if os.path.exists('tools/staff/manual_links.json') else {}
+BYFP = {v: k for k, v in LINKS.items()}
 for t in TEAMS.values():
     club = TEAM2CLUB[t['name']]
     ours = [p for p in PL if p['clubId'] == club]
@@ -16,7 +19,7 @@ for t in TEAMS.values():
         cands.append(norm(re.sub(r'"[^"]*"', '', nm)))
         import difflib
         age = None
-        if fp.get('dob'): age = 2026 - int(fp['dob'][:4]) - (1 if fp['dob'][5:] > '07-01' else 0)
+        if fp.get('dob') and fp['dob'][:4] != '2026': age = 2026 - int(fp['dob'][:4]) - (1 if fp['dob'][5:] > '07-01' else 0)
         def score(p):
             a, b = norm(p['name']), cands[-1]
             best = 0
@@ -29,9 +32,11 @@ for t in TEAMS.values():
                 best = max(best, s)
             if age is not None and abs(p['age'] - age) > 1: best -= 0.5
             return best
-        free = [p for p in ours if p['id'] not in out]
-        m = max(free, key=score, default=None)
-        if m and score(m) < 0.75: m = None
+        free = [p for p in ours if p['id'] not in out and p['id'] not in LINKS]
+        m = next((p for p in ours if p['id'] == BYFP.get(fp['person_id'])), None)
+        if not m:
+            m = max(free, key=score, default=None)
+            if m and score(m) < 0.75: m = None
         if not m: unmatched.append(f"{club}: {nm}"); continue
         per = FP.get(str(fp['person_id']))
         if not per: continue

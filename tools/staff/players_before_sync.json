@@ -1,0 +1,1927 @@
+{
+ "source": "zerozero.pt, 30/10/2026",
+ "coaches": {
+  "scp": "Nuno Dias",
+  "slb": "Cassiano Klein",
+  "scb": "Joel Rocha",
+  "fun": "Nuno Couto",
+  "lps": "Miguel Velez",
+  "fzz": "Cristiano Coelho",
+  "ele": "Jorge Monteiro",
+  "rav": "Bruno Guimarães",
+  "uvn": "Alcides Lopes",
+  "por": "José Santos",
+  "fam": "Cláudio Martins",
+  "tor": "Naná"
+ },
+ "players": [
+  {
+   "id": "scp01",
+   "clubId": "scp",
+   "name": "Gonçalo Portugal",
+   "position": "GR",
+   "number": 1,
+   "age": 34,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "scp02",
+   "clubId": "scp",
+   "name": "Bernardo Paçó",
+   "position": "GR",
+   "number": 16,
+   "age": 26,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "scp03",
+   "clubId": "scp",
+   "name": "Oleksandr Sukhov",
+   "position": "GR",
+   "number": 77,
+   "age": 29,
+   "nationality": "Ucrânia"
+  },
+  {
+   "id": "scp04",
+   "clubId": "scp",
+   "name": "Tomás Paçó",
+   "position": "FIX",
+   "number": 4,
+   "age": 26,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "scp05",
+   "clubId": "scp",
+   "name": "Bruno Maior",
+   "position": "FIX",
+   "number": 44,
+   "age": 22,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "scp06",
+   "clubId": "scp",
+   "name": "Wesley",
+   "position": "FIX/ALA",
+   "number": 8,
+   "age": 26,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "scp07",
+   "clubId": "scp",
+   "name": "Erick Mendonça",
+   "position": "UNI",
+   "number": 17,
+   "age": 31,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "scp08",
+   "clubId": "scp",
+   "name": "Diogo Santos",
+   "position": "ALA",
+   "number": 7,
+   "age": 23,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "scp09",
+   "clubId": "scp",
+   "name": "Rúben Teixeira",
+   "position": "ALA",
+   "number": 10,
+   "age": 23,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "scp10",
+   "clubId": "scp",
+   "name": "Ivan Chishkala",
+   "position": "ALA",
+   "number": 11,
+   "age": 31,
+   "nationality": "Rússia"
+  },
+  {
+   "id": "scp11",
+   "clubId": "scp",
+   "name": "Tiaguinho",
+   "position": "ALA",
+   "number": 13,
+   "age": 18,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "scp12",
+   "clubId": "scp",
+   "name": "Felipe Valério",
+   "position": "ALA",
+   "number": 14,
+   "age": 33,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "scp13",
+   "clubId": "scp",
+   "name": "Bruno Pinto",
+   "position": "ALA",
+   "number": 25,
+   "age": 33,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "scp14",
+   "clubId": "scp",
+   "name": "Alex Merlim",
+   "position": "ALA",
+   "number": 29,
+   "age": 40,
+   "nationality": "Itália"
+  },
+  {
+   "id": "scp15",
+   "clubId": "scp",
+   "name": "Rafael Ruela",
+   "position": "PIV",
+   "number": 2,
+   "age": 18,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "scp16",
+   "clubId": "scp",
+   "name": "Zicky Té",
+   "position": "PIV",
+   "number": 6,
+   "age": 25,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "scp17",
+   "clubId": "scp",
+   "name": "Felipe Rufino",
+   "position": "PIV",
+   "number": 30,
+   "age": 20,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "scp18",
+   "clubId": "scp",
+   "name": "Rocha",
+   "position": "PIV",
+   "number": 70,
+   "age": 31,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "slb01",
+   "clubId": "slb",
+   "name": "André Correia",
+   "position": "GR",
+   "number": 1,
+   "age": 28,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "slb02",
+   "clubId": "slb",
+   "name": "Vasco Pinto",
+   "position": "GR",
+   "number": 16,
+   "age": 17,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "slb03",
+   "clubId": "slb",
+   "name": "Léo Gugiel",
+   "position": "GR",
+   "number": 22,
+   "age": 30,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "slb04",
+   "clubId": "slb",
+   "name": "Afonso Jesus",
+   "position": "FIX",
+   "number": 4,
+   "age": 28,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "slb05",
+   "clubId": "slb",
+   "name": "Raúl Moreira",
+   "position": "FIX",
+   "number": 6,
+   "age": 23,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "slb06",
+   "clubId": "slb",
+   "name": "André Coelho",
+   "position": "FIX",
+   "number": 8,
+   "age": 33,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "slb07",
+   "clubId": "slb",
+   "name": "Silvestre Ferreira",
+   "position": "FIX/ALA",
+   "number": 2,
+   "age": 27,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "slb08",
+   "clubId": "slb",
+   "name": "Lúcio Rocha",
+   "position": "ALA",
+   "number": 7,
+   "age": 22,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "slb09",
+   "clubId": "slb",
+   "name": "Arthur",
+   "position": "ALA",
+   "number": 10,
+   "age": 32,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "slb10",
+   "clubId": "slb",
+   "name": "Edmilson Kutchy",
+   "position": "ALA",
+   "number": 14,
+   "age": 24,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "slb11",
+   "clubId": "slb",
+   "name": "Carlos Monteiro",
+   "position": "ALA",
+   "number": 17,
+   "age": 24,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "slb12",
+   "clubId": "slb",
+   "name": "Pany Varela",
+   "position": "ALA",
+   "number": 18,
+   "age": 37,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "slb13",
+   "clubId": "slb",
+   "name": "Anderson Fortes",
+   "position": "ALA",
+   "number": 20,
+   "age": 22,
+   "nationality": "Angola"
+  },
+  {
+   "id": "slb14",
+   "clubId": "slb",
+   "name": "Cléber Souza",
+   "position": "ALA",
+   "number": 77,
+   "age": 29,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "slb15",
+   "clubId": "slb",
+   "name": "Diogo Almeida",
+   "position": "ALA",
+   "number": 5,
+   "age": 19,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "slb16",
+   "clubId": "slb",
+   "name": "Eduardo Tchuda",
+   "position": "PIV",
+   "number": 11,
+   "age": 18,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "slb17",
+   "clubId": "slb",
+   "name": "Rúben Góis",
+   "position": "PIV",
+   "number": 19,
+   "age": 25,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "scb01",
+   "clubId": "scb",
+   "name": "Giovanni Danti",
+   "position": "GR",
+   "number": 1,
+   "age": 30,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "scb02",
+   "clubId": "scb",
+   "name": "Léo Souza",
+   "position": "GR",
+   "number": 2,
+   "age": 24,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "scb03",
+   "clubId": "scb",
+   "name": "Gonçalo Pereira",
+   "position": "GR",
+   "number": 22,
+   "age": 18,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "scb04",
+   "clubId": "scb",
+   "name": "Tiago Sousa",
+   "position": "FIX",
+   "number": 3,
+   "age": 29,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "scb05",
+   "clubId": "scb",
+   "name": "Ricardo Lopes",
+   "position": "FIX",
+   "number": 9,
+   "age": 25,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "scb06",
+   "clubId": "scb",
+   "name": "Peixinho",
+   "position": "FIX",
+   "number": 20,
+   "age": 25,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "scb07",
+   "clubId": "scb",
+   "name": "Ricardo Marques",
+   "position": "FIX/ALA",
+   "number": 8,
+   "age": 22,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "scb08",
+   "clubId": "scb",
+   "name": "Rika",
+   "position": "UNI",
+   "number": 21,
+   "age": 19,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "scb09",
+   "clubId": "scb",
+   "name": "Tiago Brito",
+   "position": "ALA",
+   "number": 6,
+   "age": 35,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "scb10",
+   "clubId": "scb",
+   "name": "Tomás Colaço",
+   "position": "ALA",
+   "number": 7,
+   "age": 22,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "scb11",
+   "clubId": "scb",
+   "name": "Mamadú Turé",
+   "position": "ALA",
+   "number": 10,
+   "age": 28,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "scb12",
+   "clubId": "scb",
+   "name": "Simão Nogueira",
+   "position": "ALA",
+   "number": 12,
+   "age": 20,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "scb13",
+   "clubId": "scb",
+   "name": "Ángel Claudino",
+   "position": "ALA",
+   "number": 17,
+   "age": 30,
+   "nationality": "Argentina"
+  },
+  {
+   "id": "scb14",
+   "clubId": "scb",
+   "name": "Daniel Airoso",
+   "position": "ALA",
+   "number": 90,
+   "age": 27,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "scb15",
+   "clubId": "scb",
+   "name": "André Gomes",
+   "position": "ALA",
+   "number": 88,
+   "age": 18,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "scb16",
+   "clubId": "scb",
+   "name": "Willian Carioca",
+   "position": "PIV",
+   "number": 14,
+   "age": 36,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "scb17",
+   "clubId": "scb",
+   "name": "Luís Fernandes",
+   "position": "PIV",
+   "number": 19,
+   "age": 21,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "scb18",
+   "clubId": "scb",
+   "name": "Barreto",
+   "position": "PIV",
+   "number": 87,
+   "age": 22,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "scb19",
+   "clubId": "scb",
+   "name": "Bruno Barros",
+   "position": "PIV",
+   "number": 11,
+   "age": 17,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "scb20",
+   "clubId": "scb",
+   "name": "Rodrigo Mirancos",
+   "position": "PIV",
+   "number": 27,
+   "age": 18,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fun01",
+   "clubId": "fun",
+   "name": "Gaza",
+   "position": "GR",
+   "number": 14,
+   "age": 34,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fun02",
+   "clubId": "fun",
+   "name": "Martim Borrego",
+   "position": "GR",
+   "number": 24,
+   "age": 19,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fun03",
+   "clubId": "fun",
+   "name": "Jaime Arthur",
+   "position": "GR",
+   "number": 30,
+   "age": 21,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "fun04",
+   "clubId": "fun",
+   "name": "Uesler",
+   "position": "FIX",
+   "number": 6,
+   "age": 33,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "fun05",
+   "clubId": "fun",
+   "name": "Guina",
+   "position": "FIX",
+   "number": 60,
+   "age": 19,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fun06",
+   "clubId": "fun",
+   "name": "Peléh",
+   "position": "FIX/ALA",
+   "number": 12,
+   "age": 27,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "fun07",
+   "clubId": "fun",
+   "name": "Artur Vicente",
+   "position": "UNI",
+   "number": 20,
+   "age": 16,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fun08",
+   "clubId": "fun",
+   "name": "Nuno Miranda",
+   "position": "ALA",
+   "number": 10,
+   "age": 28,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fun09",
+   "clubId": "fun",
+   "name": "Renato Almeida",
+   "position": "ALA",
+   "number": 11,
+   "age": 20,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fun10",
+   "clubId": "fun",
+   "name": "Lourenço Aguiar",
+   "position": "ALA",
+   "number": 13,
+   "age": 21,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fun11",
+   "clubId": "fun",
+   "name": "Mário Freitas",
+   "position": "ALA",
+   "number": 17,
+   "age": 36,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fun12",
+   "clubId": "fun",
+   "name": "Nem",
+   "position": "ALA",
+   "number": 27,
+   "age": 31,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "fun13",
+   "clubId": "fun",
+   "name": "Eduardo Job",
+   "position": "PIV",
+   "number": 9,
+   "age": 19,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fun14",
+   "clubId": "fun",
+   "name": "Landelino Neto",
+   "position": "PIV",
+   "number": 47,
+   "age": 24,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "fun15",
+   "clubId": "fun",
+   "name": "Tiago Tavares",
+   "position": "PIV",
+   "number": 77,
+   "age": 23,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "lps01",
+   "clubId": "lps",
+   "name": "Guilherme Cintra",
+   "position": "GR",
+   "number": 1,
+   "age": 21,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "lps02",
+   "clubId": "lps",
+   "name": "Daniel Osuji",
+   "position": "GR",
+   "number": 21,
+   "age": 21,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "lps03",
+   "clubId": "lps",
+   "name": "Rodrigo Prazeres",
+   "position": "GR",
+   "number": 16,
+   "age": 21,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "lps04",
+   "clubId": "lps",
+   "name": "Rúben Carrilho",
+   "position": "FIX",
+   "number": 6,
+   "age": 21,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "lps05",
+   "clubId": "lps",
+   "name": "Henrique Rodrigues",
+   "position": "FIX",
+   "number": 29,
+   "age": 24,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "lps06",
+   "clubId": "lps",
+   "name": "Tiago Pereira",
+   "position": "FIX",
+   "number": 53,
+   "age": 17,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "lps07",
+   "clubId": "lps",
+   "name": "Machado",
+   "position": "FIX",
+   "number": 70,
+   "age": 26,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "lps08",
+   "clubId": "lps",
+   "name": "Leonildo Injai",
+   "position": "FIX/ALA",
+   "number": 4,
+   "age": 19,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "lps09",
+   "clubId": "lps",
+   "name": "Diego Gabriel",
+   "position": "FIX/ALA",
+   "number": 27,
+   "age": 16,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "lps10",
+   "clubId": "lps",
+   "name": "Simão Fernandes",
+   "position": "ALA",
+   "number": 78,
+   "age": 18,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "lps11",
+   "clubId": "lps",
+   "name": "Fábio Paulo",
+   "position": "ALA",
+   "number": 23,
+   "age": 18,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "lps12",
+   "clubId": "lps",
+   "name": "João Marçal",
+   "position": "ALA",
+   "number": 3,
+   "age": 18,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "lps13",
+   "clubId": "lps",
+   "name": "Bruno Sá",
+   "position": "ALA",
+   "number": 7,
+   "age": 26,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "lps14",
+   "clubId": "lps",
+   "name": "Pedro Marques",
+   "position": "ALA",
+   "number": 10,
+   "age": 21,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "lps15",
+   "clubId": "lps",
+   "name": "Natan Minatti",
+   "position": "ALA",
+   "number": 11,
+   "age": 23,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "lps16",
+   "clubId": "lps",
+   "name": "Ré",
+   "position": "ALA",
+   "number": 14,
+   "age": 41,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "lps17",
+   "clubId": "lps",
+   "name": "Francisco Oliveira",
+   "position": "ALA",
+   "number": 18,
+   "age": 25,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "lps18",
+   "clubId": "lps",
+   "name": "Bruno Marques",
+   "position": "ALA",
+   "number": 8,
+   "age": 19,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "lps19",
+   "clubId": "lps",
+   "name": "Ricardinho",
+   "position": "ALA",
+   "number": 30,
+   "age": 20,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "lps20",
+   "clubId": "lps",
+   "name": "Pedro Santos",
+   "position": "PIV",
+   "number": 9,
+   "age": 21,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "lps21",
+   "clubId": "lps",
+   "name": "Isaías Furtado",
+   "position": "PIV",
+   "number": 99,
+   "age": 26,
+   "nationality": "Cabo Verde"
+  },
+  {
+   "id": "lps22",
+   "clubId": "lps",
+   "name": "Davy Mendes",
+   "position": "PIV",
+   "number": 25,
+   "age": 19,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fzz01",
+   "clubId": "fzz",
+   "name": "Pedro Martinho",
+   "position": "GR",
+   "number": 1,
+   "age": 25,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fzz02",
+   "clubId": "fzz",
+   "name": "Nilton",
+   "position": "GR",
+   "number": 13,
+   "age": 38,
+   "nationality": "São Tomé e Príncipe"
+  },
+  {
+   "id": "fzz03",
+   "clubId": "fzz",
+   "name": "Fábio Madeira",
+   "position": "GR",
+   "number": 14,
+   "age": 24,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fzz04",
+   "clubId": "fzz",
+   "name": "Djaelson",
+   "position": "FIX",
+   "number": 92,
+   "age": 34,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "fzz05",
+   "clubId": "fzz",
+   "name": "Daniel Sodré",
+   "position": "FIX/ALA",
+   "number": 20,
+   "age": 24,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "fzz06",
+   "clubId": "fzz",
+   "name": "Chapinha",
+   "position": "FIX/ALA",
+   "number": 36,
+   "age": 26,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "fzz07",
+   "clubId": "fzz",
+   "name": "Guilherme Canuto",
+   "position": "UNI",
+   "number": 90,
+   "age": 18,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fzz08",
+   "clubId": "fzz",
+   "name": "Afonso Mourinha",
+   "position": "ALA",
+   "number": 2,
+   "age": 19,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fzz09",
+   "clubId": "fzz",
+   "name": "Kaká",
+   "position": "ALA",
+   "number": 8,
+   "age": 27,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fzz10",
+   "clubId": "fzz",
+   "name": "Wendell",
+   "position": "ALA",
+   "number": 10,
+   "age": 31,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "fzz11",
+   "clubId": "fzz",
+   "name": "Leonardo Travessa",
+   "position": "ALA",
+   "number": 19,
+   "age": 21,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fzz12",
+   "clubId": "fzz",
+   "name": "David Costa",
+   "position": "ALA",
+   "number": 23,
+   "age": 28,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fzz13",
+   "clubId": "fzz",
+   "name": "Octávio Alves",
+   "position": "ALA",
+   "number": 31,
+   "age": 26,
+   "nationality": "Cabo Verde"
+  },
+  {
+   "id": "fzz14",
+   "clubId": "fzz",
+   "name": "Sandro Silva",
+   "position": "ALA",
+   "number": 88,
+   "age": 25,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fzz15",
+   "clubId": "fzz",
+   "name": "Rui Fortes",
+   "position": "PIV",
+   "number": 7,
+   "age": 32,
+   "nationality": "Cabo Verde"
+  },
+  {
+   "id": "ele01",
+   "clubId": "ele",
+   "name": "Leonardo Atanásio",
+   "position": "GR",
+   "number": 16,
+   "age": 16,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "ele02",
+   "clubId": "ele",
+   "name": "Kiko",
+   "position": "GR",
+   "number": 88,
+   "age": 20,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "ele03",
+   "clubId": "ele",
+   "name": "Diogo Basílio",
+   "position": "GR",
+   "number": 99,
+   "age": 30,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "ele04",
+   "clubId": "ele",
+   "name": "Ferrugem",
+   "position": "FIX",
+   "number": 5,
+   "age": 38,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "ele05",
+   "clubId": "ele",
+   "name": "Telmo Sousa",
+   "position": "FIX",
+   "number": 33,
+   "age": 26,
+   "nationality": "Angola"
+  },
+  {
+   "id": "ele06",
+   "clubId": "ele",
+   "name": "Mateus Silva",
+   "position": "FIX/ALA",
+   "number": 8,
+   "age": 16,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "ele07",
+   "clubId": "ele",
+   "name": "Gonçalo Paixão",
+   "position": "FIX/ALA",
+   "number": 76,
+   "age": 21,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "ele08",
+   "clubId": "ele",
+   "name": "Miguel Malhão",
+   "position": "ALA",
+   "number": 7,
+   "age": 19,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "ele09",
+   "clubId": "ele",
+   "name": "Thales Alves",
+   "position": "ALA",
+   "number": 10,
+   "age": 25,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "ele10",
+   "clubId": "ele",
+   "name": "Lucas Mestre",
+   "position": "ALA",
+   "number": 15,
+   "age": 22,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "ele11",
+   "clubId": "ele",
+   "name": "Henrique Vicente",
+   "position": "ALA",
+   "number": 20,
+   "age": 28,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "ele12",
+   "clubId": "ele",
+   "name": "Martín Arriagada",
+   "position": "ALA",
+   "number": 21,
+   "age": 19,
+   "nationality": "Chile"
+  },
+  {
+   "id": "ele13",
+   "clubId": "ele",
+   "name": "Gabriel Hoffelder",
+   "position": "ALA",
+   "number": 74,
+   "age": 25,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "ele14",
+   "clubId": "ele",
+   "name": "Arthur Saraiva",
+   "position": "PIV",
+   "number": 14,
+   "age": 20,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "ele15",
+   "clubId": "ele",
+   "name": "Matheus Marqueti",
+   "position": "PIV",
+   "number": 18,
+   "age": 23,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "rav01",
+   "clubId": "rav",
+   "name": "Tomás Ramos",
+   "position": "GR",
+   "number": 1,
+   "age": 19,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "rav02",
+   "clubId": "rav",
+   "name": "Moreira",
+   "position": "GR",
+   "number": 12,
+   "age": 31,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "rav03",
+   "clubId": "rav",
+   "name": "Tiago Sacramento",
+   "position": "GR",
+   "number": 33,
+   "age": 37,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "rav04",
+   "clubId": "rav",
+   "name": "Dinis Ramos",
+   "position": "FIX",
+   "number": 3,
+   "age": 28,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "rav05",
+   "clubId": "rav",
+   "name": "Martim Castela",
+   "position": "FIX",
+   "number": 27,
+   "age": 19,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "rav06",
+   "clubId": "rav",
+   "name": "Pedro Rodrigues",
+   "position": "UNI",
+   "number": 10,
+   "age": 30,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "rav07",
+   "clubId": "rav",
+   "name": "Rúben Freire",
+   "position": "ALA",
+   "number": 7,
+   "age": 28,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "rav08",
+   "clubId": "rav",
+   "name": "Gustavo Rodrigues",
+   "position": "ALA",
+   "number": 8,
+   "age": 25,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "rav09",
+   "clubId": "rav",
+   "name": "Zézinho",
+   "position": "ALA",
+   "number": 11,
+   "age": 26,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "rav10",
+   "clubId": "rav",
+   "name": "Bebé",
+   "position": "ALA",
+   "number": 13,
+   "age": 28,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "rav11",
+   "clubId": "rav",
+   "name": "Miguel Ângelo",
+   "position": "ALA",
+   "number": 14,
+   "age": 32,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "rav12",
+   "clubId": "rav",
+   "name": "Cigano",
+   "position": "ALA",
+   "number": 15,
+   "age": 32,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "rav13",
+   "clubId": "rav",
+   "name": "Serginho",
+   "position": "ALA",
+   "number": 18,
+   "age": 31,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "rav14",
+   "clubId": "rav",
+   "name": "Gonçalo Souto",
+   "position": "ALA",
+   "number": 20,
+   "age": 17,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "rav15",
+   "clubId": "rav",
+   "name": "Francisco Silva",
+   "position": "PIV",
+   "number": 4,
+   "age": 22,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "rav16",
+   "clubId": "rav",
+   "name": "Martín Dorda",
+   "position": "PIV",
+   "number": 19,
+   "age": 28,
+   "nationality": "Argentina"
+  },
+  {
+   "id": "uvn01",
+   "clubId": "uvn",
+   "name": "Afonso Silva",
+   "position": "GR",
+   "number": 31,
+   "age": 17,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "uvn02",
+   "clubId": "uvn",
+   "name": "Luís Correia",
+   "position": "GR",
+   "number": 16,
+   "age": 23,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "uvn03",
+   "clubId": "uvn",
+   "name": "Jackson Ryan",
+   "position": "GR",
+   "number": 30,
+   "age": 24,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "uvn04",
+   "clubId": "uvn",
+   "name": "Rodrigo Costa",
+   "position": "GR",
+   "number": 99,
+   "age": 22,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "uvn05",
+   "clubId": "uvn",
+   "name": "Abel Vaz",
+   "position": "FIX",
+   "number": 2,
+   "age": 21,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "uvn06",
+   "clubId": "uvn",
+   "name": "Tomás Silva",
+   "position": "FIX",
+   "number": 21,
+   "age": 23,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "uvn07",
+   "clubId": "uvn",
+   "name": "David Tavares",
+   "position": "FIX",
+   "number": 59,
+   "age": 18,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "uvn08",
+   "clubId": "uvn",
+   "name": "Vicente Mourato",
+   "position": "FIX/ALA",
+   "number": 6,
+   "age": 22,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "uvn09",
+   "clubId": "uvn",
+   "name": "Rafael Freire",
+   "position": "FIX/ALA",
+   "number": 18,
+   "age": 23,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "uvn10",
+   "clubId": "uvn",
+   "name": "Lucas Santos",
+   "position": "ALA",
+   "number": 7,
+   "age": 32,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "uvn11",
+   "clubId": "uvn",
+   "name": "Sissi",
+   "position": "ALA",
+   "number": 8,
+   "age": 26,
+   "nationality": "Cabo Verde"
+  },
+  {
+   "id": "uvn12",
+   "clubId": "uvn",
+   "name": "Luís Nunes",
+   "position": "ALA",
+   "number": 10,
+   "age": 27,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "uvn13",
+   "clubId": "uvn",
+   "name": "Dura",
+   "position": "ALA",
+   "number": 11,
+   "age": 39,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "uvn14",
+   "clubId": "uvn",
+   "name": "Diogo Silva",
+   "position": "ALA",
+   "number": 17,
+   "age": 22,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "uvn15",
+   "clubId": "uvn",
+   "name": "Lucas Veras",
+   "position": "ALA",
+   "number": 20,
+   "age": 26,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "uvn16",
+   "clubId": "uvn",
+   "name": "Luís Montes",
+   "position": "ALA",
+   "number": 80,
+   "age": 19,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "uvn17",
+   "clubId": "uvn",
+   "name": "Rodrigo Lemos",
+   "position": "ALA",
+   "number": 3,
+   "age": 23,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "uvn18",
+   "clubId": "uvn",
+   "name": "Gerson Sanches",
+   "position": "ALA",
+   "number": 70,
+   "age": 27,
+   "nationality": "Cabo Verde"
+  },
+  {
+   "id": "uvn19",
+   "clubId": "uvn",
+   "name": "Vanilson Nazaré",
+   "position": "PIV",
+   "number": 26,
+   "age": 21,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "uvn20",
+   "clubId": "uvn",
+   "name": "André Galvão",
+   "position": "PIV",
+   "number": 27,
+   "age": 34,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "por01",
+   "clubId": "por",
+   "name": "André Vieira",
+   "position": "GR",
+   "number": 13,
+   "age": 24,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "por02",
+   "clubId": "por",
+   "name": "Juan Pinheiro",
+   "position": "GR",
+   "number": 2,
+   "age": 26,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "por03",
+   "clubId": "por",
+   "name": "Nuno Costa",
+   "position": "GR",
+   "number": 24,
+   "age": 26,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "por04",
+   "clubId": "por",
+   "name": "Tiago Marques",
+   "position": "GR",
+   "number": 31,
+   "age": 16,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "por05",
+   "clubId": "por",
+   "name": "Rui Moreira",
+   "position": "FIX",
+   "number": 18,
+   "age": 25,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "por06",
+   "clubId": "por",
+   "name": "Vitinho",
+   "position": "FIX",
+   "number": 94,
+   "age": 32,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "por07",
+   "clubId": "por",
+   "name": "Gui",
+   "position": "UNI",
+   "number": 51,
+   "age": 27,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "por08",
+   "clubId": "por",
+   "name": "André Silva",
+   "position": "UNI",
+   "number": 88,
+   "age": 17,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "por09",
+   "clubId": "por",
+   "name": "Filipinho",
+   "position": "ALA",
+   "number": 8,
+   "age": 31,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "por10",
+   "clubId": "por",
+   "name": "Tomás Reis",
+   "position": "ALA",
+   "number": 10,
+   "age": 26,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "por11",
+   "clubId": "por",
+   "name": "Adaílton Souza",
+   "position": "ALA",
+   "number": 33,
+   "age": 28,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "por12",
+   "clubId": "por",
+   "name": "Montanha",
+   "position": "ALA",
+   "number": 70,
+   "age": 30,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "por13",
+   "clubId": "por",
+   "name": "João Alves",
+   "position": "ALA",
+   "number": 37,
+   "age": 23,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "por14",
+   "clubId": "por",
+   "name": "Santi",
+   "position": "ALA",
+   "number": 60,
+   "age": 18,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "por15",
+   "clubId": "por",
+   "name": "André Rochato",
+   "position": "PIV",
+   "number": 9,
+   "age": 36,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "por16",
+   "clubId": "por",
+   "name": "Andriy Dzyalo",
+   "position": "PIV",
+   "number": 17,
+   "age": 20,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "por17",
+   "clubId": "por",
+   "name": "Luiggi Baptista",
+   "position": "PIV",
+   "number": 29,
+   "age": 30,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "por18",
+   "clubId": "por",
+   "name": "Afonso Serra",
+   "position": "PIV",
+   "number": 11,
+   "age": 21,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fam01",
+   "clubId": "fam",
+   "name": "Pedro Nunes",
+   "position": "GR",
+   "number": 1,
+   "age": 23,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fam02",
+   "clubId": "fam",
+   "name": "Cláudio Carvalho",
+   "position": "GR",
+   "number": 14,
+   "age": 31,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fam03",
+   "clubId": "fam",
+   "name": "Miguel Ferreira",
+   "position": "GR",
+   "number": 16,
+   "age": 18,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fam04",
+   "clubId": "fam",
+   "name": "Guilherme Rego",
+   "position": "GR",
+   "number": 31,
+   "age": 25,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "fam05",
+   "clubId": "fam",
+   "name": "Filipe Costa",
+   "position": "FIX",
+   "number": 5,
+   "age": 19,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fam06",
+   "clubId": "fam",
+   "name": "Buzuzu",
+   "position": "FIX",
+   "number": 22,
+   "age": 30,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fam07",
+   "clubId": "fam",
+   "name": "Diogo Mesquita",
+   "position": "FIX/ALA",
+   "number": 6,
+   "age": 31,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fam08",
+   "clubId": "fam",
+   "name": "Afonso Vieira",
+   "position": "ALA",
+   "number": 93,
+   "age": 19,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fam09",
+   "clubId": "fam",
+   "name": "Daniel Silva",
+   "position": "ALA",
+   "number": 7,
+   "age": 28,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "fam10",
+   "clubId": "fam",
+   "name": "Simão Cordeiro",
+   "position": "ALA",
+   "number": 8,
+   "age": 20,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fam11",
+   "clubId": "fam",
+   "name": "Rúben Santos",
+   "position": "ALA",
+   "number": 19,
+   "age": 27,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fam12",
+   "clubId": "fam",
+   "name": "Mathis Pereira",
+   "position": "ALA",
+   "number": 21,
+   "age": 18,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fam13",
+   "clubId": "fam",
+   "name": "Gui Torres",
+   "position": "ALA",
+   "number": 28,
+   "age": 25,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fam14",
+   "clubId": "fam",
+   "name": "Jefferson",
+   "position": "ALA",
+   "number": 77,
+   "age": 22,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "fam15",
+   "clubId": "fam",
+   "name": "Ruizinho",
+   "position": "ALA/PIV",
+   "number": 10,
+   "age": 30,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fam16",
+   "clubId": "fam",
+   "name": "João Miguel",
+   "position": "PIV",
+   "number": 11,
+   "age": 34,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "fam17",
+   "clubId": "fam",
+   "name": "Guga",
+   "position": "PIV",
+   "number": 39,
+   "age": 24,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "fam18",
+   "clubId": "fam",
+   "name": "Leandro Ribeiro",
+   "position": "PIV",
+   "number": 97,
+   "age": 20,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "tor01",
+   "clubId": "tor",
+   "name": "Tiago Correia",
+   "position": "GR",
+   "number": 1,
+   "age": 21,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "tor02",
+   "clubId": "tor",
+   "name": "Eurico Cunha",
+   "position": "GR",
+   "number": 13,
+   "age": 20,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "tor03",
+   "clubId": "tor",
+   "name": "André Santos",
+   "position": "GR",
+   "number": 22,
+   "age": 19,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "tor04",
+   "clubId": "tor",
+   "name": "Tiago Reis",
+   "position": "FIX",
+   "number": 2,
+   "age": 21,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "tor05",
+   "clubId": "tor",
+   "name": "Léo Evangelista",
+   "position": "FIX",
+   "number": 4,
+   "age": 30,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "tor06",
+   "clubId": "tor",
+   "name": "Leonardo Hashimoto",
+   "position": "FIX",
+   "number": 28,
+   "age": 18,
+   "nationality": "Espanha"
+  },
+  {
+   "id": "tor07",
+   "clubId": "tor",
+   "name": "Nicolas Tomé",
+   "position": "FIX",
+   "number": 88,
+   "age": 31,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "tor08",
+   "clubId": "tor",
+   "name": "Tomás Silva",
+   "position": "FIX/ALA",
+   "number": 6,
+   "age": 20,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "tor09",
+   "clubId": "tor",
+   "name": "Vicente Guia",
+   "position": "FIX/ALA",
+   "number": 11,
+   "age": 19,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "tor10",
+   "clubId": "tor",
+   "name": "Jair Pereira",
+   "position": "UNI",
+   "number": 7,
+   "age": 29,
+   "nationality": "Cabo Verde"
+  },
+  {
+   "id": "tor11",
+   "clubId": "tor",
+   "name": "Paulo Major",
+   "position": "ALA",
+   "number": 10,
+   "age": 35,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "tor12",
+   "clubId": "tor",
+   "name": "Vitinho",
+   "position": "ALA",
+   "number": 14,
+   "age": 25,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "tor13",
+   "clubId": "tor",
+   "name": "Felipinho",
+   "position": "ALA",
+   "number": 18,
+   "age": 30,
+   "nationality": "Brasil"
+  },
+  {
+   "id": "tor14",
+   "clubId": "tor",
+   "name": "David Gita",
+   "position": "ALA",
+   "number": 20,
+   "age": 20,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "tor15",
+   "clubId": "tor",
+   "name": "Gonçalo Lima",
+   "position": "ALA/PIV",
+   "number": 9,
+   "age": 18,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "tor16",
+   "clubId": "tor",
+   "name": "Edson Patrick",
+   "position": "PIV",
+   "number": 5,
+   "age": 28,
+   "nationality": "Cabo Verde"
+  },
+  {
+   "id": "tor17",
+   "clubId": "tor",
+   "name": "Manuel Monteiro",
+   "position": "PIV",
+   "number": 17,
+   "age": 18,
+   "nationality": "Portugal"
+  },
+  {
+   "id": "tor18",
+   "clubId": "tor",
+   "name": "Tintim",
+   "position": "PIV",
+   "number": 90,
+   "age": 24,
+   "nationality": "Brasil"
+  }
+ ]
+}

@@ -23,9 +23,10 @@ export const FP_STATS = porFp.players as Record<string, { games: number; yellow:
 // Jogadores com atributos gerados (sempre iguais para o mesmo jogador)
 function buildPlayers(): Player[] {
   return (porPlayers.players as RawPlayer[]).map((p) => {
-    const club = DB_CLUBS.find((c) => c.id === p.clubId)!;
+    const club = DB_CLUBS.find((c) => c.id === p.clubId.replace('@jun', ''))!; // Sub-19 não inscritos como seniores ficam na formação
     const key = `${p.clubId}|${p.name}`;
-    const mb = computeMoneyball((HISTORY[p.id] ?? []) as SeasonRow[], p.position, p.age);
+    // historial: zerozero; quem não o tem (jogadores novos do site da FPF) usa as épocas oficiais do futsalportugal.com
+    const mb = computeMoneyball((HISTORY[p.id] ?? FP_STATS[p.id]?.seasons ?? []) as SeasonRow[], p.position, p.age);
     const g = mb
       ? generateAttributes(p as Player, mb.level, BOOST[key] ?? 0, { productivity: mb.productivity, availability: mb.availability })
       : generateAttributes(p as Player, club.level, BOOST[key] ?? 0);

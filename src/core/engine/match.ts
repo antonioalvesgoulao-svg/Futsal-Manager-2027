@@ -394,7 +394,7 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
 
     let pBlock = 0.24 + (defQ - finish) * 0.01;
     let pOn = 0.47 + (finish - 10) * 0.016 + (compo - 10) * 0.006;
-    let pGoal = 0.17 + (finish - gkQ) * 0.022; // calibrado com 5 épocas reais (6,38 golos/jogo)
+    let pGoal = 0.155 + (finish - gkQ) * 0.022; // calibrado com 5 épocas reais (6,38 golos/jogo); 0,155 após os planteis oficiais da FPF (2/11)
     if (kind === 'contra') { pBlock *= 0.5; pOn += 0.08; pGoal += 0.1; }
     if (kind === 'livre10') { pBlock = 0; pOn = 0.72 + (finish - 10) * 0.015; pGoal = 0.42 + (finish - gkQ) * 0.025; }
     if (kind === 'penalti') { pBlock = 0; pOn = 0.86 + (compo - 10) * 0.01; pGoal = 0.78 + (finish - gkQ) * 0.02; }
