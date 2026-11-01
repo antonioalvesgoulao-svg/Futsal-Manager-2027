@@ -1,3 +1,5 @@
+import { LIFT_AT, PODIUM } from '../../core/visual/trophy';
+const podiumHeight = (x: number, z: number) => (x >= PODIUM.x0 && x <= PODIUM.x1 && z >= PODIUM.y0 && z <= PODIUM.y1 ? PODIUM.h : 0);
 // Momentos importantes em 3D: a mesma jogada do 2D (coreografia), no pavilhão do jogo (bancadas,
 // adeptos, publicidade LED), com jogadores de aspeto próprio, várias câmaras e repetição.
 import * as THREE from 'three';
@@ -284,7 +286,8 @@ export class Highlight3D {
       const a = this.actor(id);
       a.g.visible = true;
       const before = a.g.position.clone();
-      a.g.position.set(p.x, this.arena.groundAt(p.x, p.y), p.y);
+      const podH = this.cer ? podiumHeight(p.x, p.y) : 0;
+      a.g.position.set(p.x, this.arena.groundAt(p.x, p.y) + podH, p.y);
       if (!a.init) { before.copy(a.g.position); a.init = true; }
       const vx = (a.g.position.x - before.x) / dt, vz = (a.g.position.z - before.z) / dt;
       a.speed = lerp(a.speed, Math.min(9, Math.hypot(vx, vz)), 0.25);
@@ -308,6 +311,7 @@ export class Highlight3D {
       const inf = this.info[id];
       const near = Math.hypot(f.ball.x - p.x, f.ball.y - p.y) < 16;
       pose(a, act2, !!inf?.gk, near, dt);
+      if (act2?.kind === 'celebrate' && podH) a.g.position.y += podH; // os saltos no palanque partem do palanque
       a.prev.copy(a.g.position);
     }
     for (const [id, a] of this.actors) if (!seen.has(id)) a.g.visible = false;
@@ -322,7 +326,84 @@ export class Highlight3D {
       const k = Math.min(3.2, Math.max(0.8, ac.g.position.distanceTo(this.camera.position) * 0.1));
       tg.scale.set(0.95 * k, 0.24 * k, 1);
     }
+    if (this.cer) this.updateCeremony(dt);
     if (render) this.renderer.render(this.scene, this.camera);
+  }
+
+  // ---------- festa do título (palanque, taça, confetes) ----------
+  private cer: { g: THREE.Group; cup: THREE.Group; conf: THREE.Points; vel: Float32Array; captain: string } | null = null;
+  trophyCeremony(comp: string, captain: string, colors: [string, string], lang: 'pt' | 'es' = 'pt') {
+    this.cer?.g.removeFromParent();
+    const g = new THREE.Group();
+    const P = PODIUM;
+    const w = P.x1 - P.x0, d = P.y1 - P.y0;
+    const front = canvasTex(1024, 128, (c) => {
+      c.fillStyle = '#111827'; c.fillRect(0, 0, 1024, 128);
+      c.fillStyle = '#d4a017'; c.fillRect(0, 0, 1024, 8); c.fillRect(0, 120, 1024, 8);
+      c.fillStyle = '#ffe08a'; c.font = 'bold 64px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(comp.toUpperCase(), 512, 66, 980);
+    });
+    const dark = new THREE.MeshStandardMaterial({ color: '#1f2937', roughness: 0.6 });
+    const box = new THREE.Mesh(new THREE.BoxGeometry(w, P.h, d), [dark, dark, dark, dark, new THREE.MeshStandardMaterial({ map: front, roughness: 0.5 }), dark]);
+    box.position.set((P.x0 + P.x1) / 2, P.h / 2, (P.y0 + P.y1) / 2);
+    box.receiveShadow = true; box.castShadow = true;
+    g.add(box);
+    // painel atrás do palanque: campeões + nome da competição
+    const back = canvasTex(1024, 256, (c) => {
+      const gr = c.createLinearGradient(0, 0, 1024, 0); gr.addColorStop(0, colors[0]); gr.addColorStop(1, colors[1] === '#ffffff' ? '#111827' : colors[1]);
+      c.fillStyle = gr; c.fillRect(0, 0, 1024, 256);
+      c.fillStyle = '#ffe08a'; c.font = 'bold 96px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle';
+      c.fillText(lang === 'es' ? 'CAMPEONES' : 'CAMPEÕES', 512, 92, 980);
+      c.fillStyle = '#ffffff'; c.font = 'bold 46px sans-serif'; c.fillText(comp.toUpperCase(), 512, 190, 980);
+    });
+    const wall = new THREE.Mesh(new THREE.PlaneGeometry(w + 1.5, 3.2), new THREE.MeshStandardMaterial({ map: back, roughness: 0.7, side: THREE.DoubleSide }));
+    wall.position.set((P.x0 + P.x1) / 2, 2.0, P.y0 - 0.3);
+    g.add(wall);
+    // taça (torneada em dourado) com asas
+    const gold = new THREE.MeshStandardMaterial({ color: '#d4a017', metalness: 0.9, roughness: 0.25 });
+    const prof = [[0, 0], [0.12, 0], [0.12, 0.04], [0.05, 0.06], [0.04, 0.2], [0.08, 0.24], [0.17, 0.32], [0.19, 0.45], [0.17, 0.5], [0, 0.5]].map(([x, y]) => new THREE.Vector2(x, y));
+    const cup = new THREE.Group();
+    cup.add(new THREE.Mesh(new THREE.LatheGeometry(prof, 28), gold));
+    for (const s of [-1, 1]) { const h = new THREE.Mesh(new THREE.TorusGeometry(0.07, 0.015, 8, 16, Math.PI), gold); h.position.set(s * 0.19, 0.4, 0); h.rotation.z = s * -Math.PI / 2; cup.add(h); }
+    cup.scale.setScalar(1.7); // bem visível na mão do capitão
+    g.add(cup);
+    // confetes nas cores do clube e dourado
+    const N = 1400;
+    const posA = new Float32Array(N * 3), colA = new Float32Array(N * 3), vel = new Float32Array(N);
+    const cs = [new THREE.Color(colors[0]), new THREE.Color(colors[1]), new THREE.Color('#ffd76a')];
+    for (let i = 0; i < N; i++) {
+      posA[i * 3] = (Math.random() - 0.5) * 22; posA[i * 3 + 1] = Math.random() * 12; posA[i * 3 + 2] = -4 + (Math.random() - 0.5) * 12;
+      const c = cs[i % 3]; colA[i * 3] = c.r; colA[i * 3 + 1] = c.g; colA[i * 3 + 2] = c.b; vel[i] = 0.8 + Math.random() * 1.2;
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(posA, 3));
+    geo.setAttribute('color', new THREE.BufferAttribute(colA, 3));
+    const conf = new THREE.Points(geo, new THREE.PointsMaterial({ size: 0.09, vertexColors: true }));
+    conf.visible = false;
+    g.add(conf);
+    this.scene.add(g);
+    this.cer = { g, cup, conf, vel, captain };
+    this.goalShown = true; // os saltos da festa não são um golo (sem "GOLO!" nas placas)
+  }
+  private updateCeremony(dt: number) {
+    const c = this.cer!;
+    const cap = this.actors.get(c.captain);
+    const lifted = this.t >= LIFT_AT;
+    if (cap) {
+      // antes: segura a taça ao peito; depois: ergue-a acima da cabeça (a balançar)
+      const up = lifted ? 2.15 + Math.sin(this.t * 3) * 0.08 : 1.1;
+      c.cup.position.set(cap.g.position.x, (lifted ? podiumHeight(cap.g.position.x, cap.g.position.z) : cap.g.position.y) + up, cap.g.position.z + 0.18);
+    }
+    c.conf.visible = lifted;
+    if (lifted) {
+      const p = c.conf.geometry.getAttribute('position') as THREE.BufferAttribute;
+      for (let i = 0; i < c.vel.length; i++) {
+        let y = p.getY(i) - c.vel[i] * dt;
+        if (y < 0) y = 10 + Math.random() * 2;
+        p.setY(i, y);
+        p.setX(i, p.getX(i) + Math.sin(this.t * 2 + i) * dt * 0.3);
+      }
+      p.needsUpdate = true;
+    }
   }
 
   /** Câmara fixa num ponto (para ver o pavilhão como numa fotografia); null volta às câmaras normais. */

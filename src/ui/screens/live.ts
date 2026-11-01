@@ -7,7 +7,8 @@ import { overall } from '../../core/attributes';
 import { createMatch, LiveSnapshot, Possession } from '../../core/engine/match';
 import type { MatchEvent, MatchResult } from '../../core/engine/types';
 import { matchOptions, setupFor } from '../../core/game';
-import { COMP_NAMES, Fixture } from '../../core/season/types';
+import { COMP_NAMES, Fixture, countryOfComp, type CompId } from '../../core/season/types';
+import { TrophyScene } from '../../core/visual/trophy';
 import type { Club, GameState, Settings } from '../../core/types';
 import { goalBarHtml, lineupHtml, scoreboardHtml , styleOf } from '../broadcast';
 import { sound } from '../audio';
@@ -48,7 +49,7 @@ const KEY_TYPES: Record<Settings['moments3d'], string[]> = {
   todos: ['golo', 'penalti', 'livre_10m', 'vermelho', 'poste', 'remate_defendido', 'gr_avancado_on', 'remate_fora', 'canto', 'confronto'],
 };
 
-export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDone: (m: MatchResult) => void, onRecord?: (m: MatchResult) => void) {
+export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDone: (m: MatchResult) => void, onRecord?: (m: MatchResult, silent?: boolean) => unknown) {
   const st = settingsOf(s);
   const hs = setupFor(s, f.home, f.comp);
   const as = setupFor(s, f.away, f.comp);
@@ -390,6 +391,7 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
     hl = new mod.Highlight3D($('#hlv'), {
       kits,
       quality: st.quality ?? 'normal',
+      lang: countryOfComp(f.comp) === 'esp' ? 'es' : 'pt', // anúncios e cores do túnel conforme o país da liga
       gkKits,
       refShirt,
       profile: crowd.arena,
@@ -635,13 +637,41 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
     draw();
   }
 
+  // ---- Festa do título em 3D: palanque com o nome da competição, taça, confetes ----
+  let trophyDone = false, inTrophy = false;
+  async function openTrophy3d(comp: CompId) {
+    in3d = true; inTrophy = true;
+    $('#hl').hidden = false;
+    $('#hlcap').textContent = `${s.clubs.find((c) => c.id === s.clubId)!.name}: campeões!`;
+    await ensure3d();
+    if (!hl) return finishUi();
+    const t = snap.teams[mySide], o = snap.teams[1 - mySide];
+    const ids = (x: typeof t) => [x.gk, ...x.court, ...x.bench].filter((p): p is NonNullable<typeof p> => !!p).map((p) => p.id);
+    const win = ids(t);
+    // capitão: o jogador de campo com mais liderança
+    const capId = [...win].sort((x, y) => (s.players.find((p) => p.id === y)?.attrs.lideranca ?? 0) - (s.players.find((p) => p.id === x)?.attrs.lideranca ?? 0))[0];
+    const refs = ['arbitro1', 'arbitro2'];
+    for (const id of refs) info[id] ??= { side: 0, number: null, gk: false, referee: true, look: lookOf({ id }) };
+    const start = choreo ? choreo.at(choreo.total).pos : {};
+    const scene = new TrophyScene(start, [capId, ...win.filter((x) => x !== capId)], ids(o), refs);
+    hl.onEnd = null;
+    hl.setBench([[], []]);
+    hl.play(scene, info, kit, 0, scene.total, [[shownScore[0], shownScore[1]], [shownScore[0], shownScore[1]]]);
+    hl.setTags(false); // sem etiquetas por cima dos campeões
+    hl.trophyCeremony(COMP_NAMES[comp].replace(/ \((play-off|fase final)\)/, ''), capId, kit[mySide], countryOfComp(f.comp) === 'esp' ? 'es' : 'pt');
+    $('#hlc').textContent = 'Continuar ▸';
+  }
+
   function finishUi() {
     done = true;
     sound.stop();
     hl?.dispose();
     hl = null;
     const res = m.result();
-    onRecord?.(res); // grava já o resultado (o botão Continuar do topo também segue em frente)
+    const before = { ...s.season.winners };
+    onRecord?.(res, st.moments3d !== 'nenhum'); // grava já o resultado (com 3D, a festa do título é em 3D)
+    const won = (Object.keys(s.season.winners) as CompId[]).find((c) => s.season.winners[c] === s.clubId && before[c] !== s.clubId);
+    if (won && st.moments3d !== 'nenhum' && !trophyDone) { trophyDone = true; void openTrophy3d(won); return; }
     if (!endTalkDone) { endTalkDone = true; openTalk('fim', () => finishUi()); return; }
     content.innerHTML = `<h2>Resultado final</h2><div class="row" style="justify-content:flex-start;margin-bottom:12px"><button class="btn primary" id="cont">Continuar ▸</button></div>` + resultHtml(res, h, a);
     content.querySelector('#all')?.addEventListener('change', (ev) => {
@@ -823,7 +853,10 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
     sound.muffle(true);
     hl?.replay(0.6);
   });
-  $('#hlc').addEventListener('click', () => (introStage >= 0 ? closeIntro() : close3d()));
+  $('#hlc').addEventListener('click', () => {
+    if (inTrophy) { inTrophy = false; $('#hl').hidden = true; in3d = false; finishUi(); return; }
+    return introStage >= 0 ? closeIntro() : close3d();
+  });
   // clique no ecrã 3D durante a apresentação: passa ao momento seguinte
   $('#hl').addEventListener('click', (e) => {
     if (introStage < 0 || (e.target as HTMLElement).closest('button')) return;

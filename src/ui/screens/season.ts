@@ -264,13 +264,13 @@ export function renderMatchDay(content: HTMLElement, s: GameState, f: Fixture, o
   drawKits();
   content.querySelector<HTMLSelectElement>('#spd')!.addEventListener('change', (e) => (st.speed = (e.target as HTMLSelectElement).value as typeof st.speed));
   // o resultado grava-se uma única vez, logo no fim do jogo (não se pode repetir o jogo)
-  const record = (res?: Parameters<typeof playMyMatch>[2]) => {
+  const record = (res?: Parameters<typeof playMyMatch>[2], silent = false) => {
     if (f.result) return null;
     const before = { ...s.season.winners };
     const m = playMyMatch(s, f, res);
     // título conquistado: festa com o troféu
     const won = (Object.keys(s.season.winners) as CompId[]).find((c) => s.season.winners[c] === s.clubId && before[c] !== s.clubId);
-    if (won) setTimeout(() => showTrophy(s, won), 300);
+    if (won && !silent) setTimeout(() => showTrophy(s, won), 300); // com 3D, a festa é no 3D do jogo ao vivo
     return m;
   };
   content.querySelector('#live')!.addEventListener('click', () => {

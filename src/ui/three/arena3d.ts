@@ -37,6 +37,7 @@ export interface ArenaOpts {
   gkKits?: [KitDef, KitDef]; // guarda-redes
   quality?: 'normal' | 'alta';
   refShirt?: string;
+  lang?: 'pt' | 'es'; // língua dos anúncios e das placas (cada liga na sua)
 }
 
 export function canvasTex(w: number, h: number, draw: (c: CanvasRenderingContext2D) => void) {
@@ -109,7 +110,23 @@ function floorTexture(mainLine: string, fl: { court: string; surround: string; a
 
 // ---------- publicidade ----------
 interface Ad { name: string; tag: string; bg: string; fg: string; accent: string }
-// marcas inventadas (não imitam marcas reais)
+// marcas inventadas (não imitam marcas reais), na língua de cada liga
+const ADS_ES: Ad[] = [
+  { name: 'CAFÉ DE ESQUINA', tag: 'el café del barrio', bg: '#3b1f12', fg: '#f5e6c8', accent: '#d97706' },
+  { name: 'TAPAS Y CAÑAS', tag: 'sabor de siempre', bg: '#b91c1c', fg: '#fff7ed', accent: '#fbbf24' },
+  { name: 'SIERRA CLARA', tag: 'agua de manantial', bg: '#e0f2fe', fg: '#075985', accent: '#38bdf8' },
+  { name: 'OLIVAR DORADO', tag: 'aceite de oliva virgen', bg: '#365314', fg: '#fef9c3', accent: '#facc15' },
+  { name: 'MAREA TELECOM', tag: 'fibra en toda España', bg: '#111827', fg: '#22d3ee', accent: '#f43f5e' },
+  { name: 'ABANICO SEGUROS', tag: 'protegemos tu hogar', bg: '#7c2d12', fg: '#ffffff', accent: '#fdba74' },
+  { name: 'VELERO VIAJES', tag: 'el mundo te espera', bg: '#0e7490', fg: '#ffffff', accent: '#fde047' },
+  { name: 'ARROCES LA HUERTA', tag: 'desde 1952', bg: '#fef3c7', fg: '#92400e', accent: '#ea580c' },
+  { name: 'SOL Y LUZ ENERGÍA', tag: 'tu luz más barata', bg: '#f59e0b', fg: '#1f2937', accent: '#fff7ed' },
+  { name: 'GALERA BANCO', tag: 'hipotecas a tu medida', bg: '#1e3a8a', fg: '#ffffff', accent: '#93c5fd' },
+  { name: 'TORO AUTO', tag: 'taller y neumáticos', bg: '#18181b', fg: '#ffffff', accent: '#dc2626' },
+  { name: 'TURRÓN DEL ABUELO', tag: 'dulces tradicionales', bg: '#fde68a', fg: '#7c2d12', accent: '#b45309' },
+  { name: 'FUTSAL MANAGER 2027', tag: 'el juego de gestión', bg: '#0b1220', fg: '#ffffff', accent: '#22c55e' },
+  { name: 'DEPORTE Y PASIÓN', tag: 'haz deporte', bg: '#be123c', fg: '#ffffff', accent: '#fecdd3' },
+];
 const ADS: Ad[] = [
   { name: 'BICA FORTE', tag: 'café de bairro', bg: '#3b1f12', fg: '#f5e6c8', accent: '#d97706' },
   { name: 'AZULEJO SEGUROS', tag: 'proteção de família', bg: '#1d4ed8', fg: '#ffffff', accent: '#93c5fd' },
@@ -183,7 +200,8 @@ class Led {
         c.textAlign = 'center';
         c.textBaseline = 'middle';
         if (mode === 'ads') {
-          const ad = ADS[Math.floor(this.r() * ADS.length)];
+          const list = this.o.lang === 'es' ? ADS_ES : ADS;
+          const ad = list[Math.floor(this.r() * list.length)];
           c.fillStyle = ad.bg; c.fillRect(x, 0, PANEL_PX, 64);
           c.fillStyle = ad.accent; c.fillRect(x, 54, PANEL_PX, 10);
           c.fillStyle = ad.fg; c.font = 'bold 26px sans-serif';
@@ -192,7 +210,8 @@ class Led {
           c.fillText(ad.tag, cx, 45, PANEL_PX - 20);
         } else if (mode === 'comp') {
           const alt = i % 2 === 0;
-          c.fillStyle = alt ? '#0b3d2e' : '#7a0f1c'; c.fillRect(x, 0, PANEL_PX, 64);
+          const th = compTheme(this.o.comp, this.o.lang);
+          c.fillStyle = alt ? th.bg : shade(th.b); c.fillRect(x, 0, PANEL_PX, 64);
           // padrão de azulejo
           c.strokeStyle = 'rgba(255,255,255,0.12)';
           for (let k = 0; k < PANEL_PX; k += 16) { c.beginPath(); c.moveTo(x + k, 0); c.lineTo(x + k + 32, 64); c.stroke(); }
@@ -215,7 +234,7 @@ class Led {
           c.fillStyle = i % 2 ? t.colors[0] : '#0b1220'; c.fillRect(x, 0, PANEL_PX, 64);
           c.fillStyle = i % 2 ? (t.colors[1] === t.colors[0] ? '#fff' : t.colors[1]) : '#facc15';
           c.font = 'bold 40px sans-serif';
-          c.fillText('GOLO!', cx, 35);
+          c.fillText(this.o.lang === 'es' ? '¡GOL!' : 'GOLO!', cx, 35);
         }
       });
     }
@@ -288,15 +307,25 @@ export interface ArenaHandle {
 }
 
 // cores da mesa e do túnel conforme a competição (as mesmas dos marcadores do jogo)
-function compTheme(comp: string): { bg: string; a: string; b: string } {
+const shade = (hex: string) => { const n = parseInt(hex.slice(1), 16); const f = (v: number) => Math.round(v * 0.55).toString(16).padStart(2, '0'); return `#${f(n >> 16)}${f((n >> 8) & 255)}${f(n & 255)}`; };
+// cores de cada país (túnel, mesa e placas quando a competição não tem cores próprias); as próximas ligas juntam-se aqui
+export const COUNTRY_THEME: Record<string, { bg: string; a: string; b: string }> = {
+  pt: { bg: '#16202c', a: '#00a651', b: '#e30613' },
+  es: { bg: '#14213d', a: '#c60b1e', b: '#ffc400' },
+};
+function compTheme(comp: string, lang = 'pt'): { bg: string; a: string; b: string } {
+  // Espanha: as cores dos marcadores das competições espanholas (vermelho e amarelo)
+  if (/Supercopa/.test(comp)) return { bg: '#111111', a: '#c60b1e', b: '#ffc400' };
+  if (/Copa de Espa/.test(comp)) return { bg: '#8a0f1d', a: '#ffc400', b: '#ffc400' };
+  if (/Liga Prime|Primera/.test(comp)) return { bg: '#14213d', a: '#c60b1e', b: '#ffc400' };
   if (/Taça de Portugal/.test(comp)) return { bg: '#5b0a14', a: '#d4a017', b: '#d4a017' };
   if (/Taça da Liga/.test(comp)) return { bg: '#0b2a6f', a: '#ffffff', b: '#1d4ed8' };
   if (/Supertaça/.test(comp)) return { bg: '#0b0b0b', a: '#d4a017', b: '#d4a017' };
-  return { bg: '#16202c', a: '#00a651', b: '#e30613' };
+  return COUNTRY_THEME[lang] ?? COUNTRY_THEME.pt;
 }
 
 export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
-  const ct = compTheme(o.comp);
+  const ct = compTheme(o.comp, o.lang);
   const pr = o.profile;
   const r = rng(pr.name.length * 131 + pr.capacity);
   const modern = pr.style === 'moderno';
@@ -909,6 +938,8 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
       c.strokeStyle = 'rgba(230,235,240,.55)'; c.lineWidth = 6;
       for (let x = 0; x < 1024; x += 128) { c.beginPath(); c.moveTo(x, 40); c.lineTo(x + 128, 216); c.moveTo(x + 128, 40); c.lineTo(x, 216); c.stroke(); }
       c.fillStyle = ct.bg; c.fillRect(0, 0, 1024, 28);
+      // faixa de baixo nas cores do país/competição (verde e vermelho em Portugal, vermelho e amarelo em Espanha…)
+      c.fillStyle = ct.a; c.fillRect(0, 226, 512, 30); c.fillStyle = ct.b; c.fillRect(512, 226, 512, 30);
       c.fillStyle = '#fff'; c.font = 'bold 22px sans-serif'; c.textBaseline = 'middle';
       for (let x = 20; x < 1024; x += 340) c.fillText(o.comp.toUpperCase(), x, 15);
     });
