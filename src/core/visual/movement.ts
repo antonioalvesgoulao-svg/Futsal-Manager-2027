@@ -71,6 +71,58 @@ export function movementProfile(player: Player): MovementProfile {
   };
 }
 
+export interface MovementPoint { x: number; y: number }
+
+/**
+ * Integra uma trajetória com limites físicos individuais.
+ * A aceleração limita a alteração da velocidade; a agilidade reduz o tempo
+ * de resposta do alvo sem aumentar a aceleração máxima.
+ */
+export function bakeMovementTrajectory(
+  at: (time: number) => MovementPoint,
+  t0: number,
+  t1: number,
+  vmax: number,
+  amax: number,
+  accelerationFactor = 1,
+  agilityFactor = 1,
+  dt = 1 / 30,
+): MovementPoint[] {
+  const clampFactor = (value: number) => clamp(value, 0.82, 1.16);
+  const n = Math.max(2, Math.ceil((t1 - t0) / dt) + 2);
+  const points: MovementPoint[] = [];
+  let position = at(t0);
+  let vx = 0;
+  let vy = 0;
+  const acceleration = amax * clampFactor(accelerationFactor);
+  const responseWindow = 0.28 / clampFactor(agilityFactor);
+
+  for (let i = 0; i < n; i++) {
+    const time = t0 + i * dt;
+    points.push({ x: position.x, y: position.y });
+    const target = at(time + 0.18);
+    let dx = (target.x - position.x) / responseWindow;
+    let dy = (target.y - position.y) / responseWindow;
+    const desiredSpeed = Math.hypot(dx, dy);
+    if (desiredSpeed > vmax) {
+      dx = (dx * vmax) / desiredSpeed;
+      dy = (dy * vmax) / desiredSpeed;
+    }
+    let ax = dx - vx;
+    let ay = dy - vy;
+    const delta = Math.hypot(ax, ay);
+    const maxDelta = acceleration * dt;
+    if (delta > maxDelta) {
+      ax = (ax * maxDelta) / delta;
+      ay = (ay * maxDelta) / delta;
+    }
+    vx += ax;
+    vy += ay;
+    position = { x: position.x + vx * dt, y: position.y + vy * dt };
+  }
+  return points;
+}
+
 /**
  * Fiabilidade da execução de uma intenção tática (0.55–1).
  * Não é probabilidade de sucesso de um passe/remate; mede apenas a qualidade
