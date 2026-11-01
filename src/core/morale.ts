@@ -5,6 +5,7 @@ import { overall } from './attributes';
 import type { MatchResult } from './engine/types';
 import type { Fixture } from './season/types';
 import type { GameState } from './types';
+import { psychK } from './staff';
 
 export const BASE = 65;
 export const moraleOf = (s: GameState, id: string) => s.morale?.[id] ?? BASE;
@@ -42,6 +43,7 @@ export function applyMorale(s: GameState, f: Fixture, m: MatchResult, importance
         if (st.red) d -= 3;
       } else if (st) d -= key ? 2 : 0.3; // convocado sem jogar
       else d -= key ? 1 : 0.4; // fora da convocatória
+      if (d < 0) d *= psychK(s, club); // psicólogo: quedas menores
       d += (BASE - before) * 0.15; // regressa devagar ao normal
       const after = clamp(before + d);
       mor[p.id] = Math.round(after * 10) / 10;
@@ -56,5 +58,8 @@ export function applyMorale(s: GameState, f: Fixture, m: MatchResult, importance
 /** Lesões e castigos tiram moral; títulos dão moral a todo o plantel. */
 export function moraleEvent(s: GameState, ids: string[], delta: number) {
   const mor = (s.morale ??= {});
-  for (const id of ids) mor[id] = clamp((mor[id] ?? BASE) + delta);
+  for (const id of ids) {
+    const club = s.players.find((p) => p.id === id)?.clubId ?? '';
+    mor[id] = clamp((mor[id] ?? BASE) + (delta < 0 ? delta * psychK(s, club) : delta));
+  }
 }

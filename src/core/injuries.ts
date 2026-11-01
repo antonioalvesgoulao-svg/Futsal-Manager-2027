@@ -6,7 +6,7 @@ import { addDays } from './season/season';
 import type { MatchResult } from './engine/types';
 import type { GameState } from './types';
 import { INT_INJ, planOf } from './training';
-import { fitnessInjK, physioK } from './staff';
+import { fitnessInjK, nutritionK, physioK } from './staff';
 /** Fisioterapeuta: encurta (ou alonga) a paragem. */
 function physio(s: GameState, clubId: string, i: Injury): Injury {
   if (i.days > 100) return i; // cirurgias (cruzado) não mudam muito
@@ -91,7 +91,7 @@ export function trainingInjuries(s: GameState, from: string, to: string): { fres
     if (inj[p.id]) continue;
     const plan = planOf(s, p.clubId);
     const f = plan.individual[p.id] ?? plan.focus;
-    const pr = TRAIN_RATE * TRAIN_H_DAY * days * riskOf(p.age, p.attrs.resistencia) * INT_INJ[plan.intensity] * (f === 'recuperacao' ? 0.5 : f === 'fisico' ? 1.15 : 1) * fitnessInjK(s, p.clubId);
+    const pr = TRAIN_RATE * TRAIN_H_DAY * days * riskOf(p.age, p.attrs.resistencia) * INT_INJ[plan.intensity] * (f === 'recuperacao' ? 0.5 : f === 'fisico' ? 1.15 : 1) * fitnessInjK(s, p.clubId) * nutritionK(s, p.clubId);
     if (rnd() < pr) {
       const start = addDays(from, Math.floor(rnd() * days));
       const i = physio(s, p.clubId, draw(rnd, start));

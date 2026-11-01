@@ -1,0 +1,135 @@
+Nuno Dias | 2026/27 | Sporting | Treinador principal | 10 | 8 | 2 | 0 | Supertaça Futsal
+Nuno Dias | 2025/26 | Sporting | Treinador principal | 49 | 38 | 4 | 7 | Liga dos Campeões Futsal, Supertaça Futsal
+Nuno Dias | 2024/25 | Sporting | Treinador principal | 51 | 37 | 7 | 7 | Taça de Portugal Futsal, Taça da Liga Futsal
+Nuno Dias | 2023/24 | Sporting | Treinador principal | 47 | 39 | 3 | 5 | I Divisão Futsal, Taça da Liga Futsal
+Nuno Dias | 2022/23 | Sporting | Treinador principal | 47 | 37 | 7 | 3 | I Divisão Futsal, Supertaça Futsal
+Nuno Dias | 2021/22 | Sporting | Treinador principal | 50 | 45 | 1 | 4 | I Divisão Futsal, Taça de Portugal Futsal, Supertaça Futsal, Taça da Liga Futsal
+Nuno Dias | 2020/21 | Sporting | Treinador principal | 46 | 42 | 3 | 1 | Liga dos Campeões Futsal, I Divisão Futsal, Taça da Liga Futsal
+Nuno Dias | 2019/20 | Sporting | Treinador principal | 35 | 31 | 1 | 3 | Taça de Portugal Futsal, Supertaça Futsal
+Nuno Dias | 2018/19 | Sporting | Treinador principal | 51 | 41 | 4 | 6 | Liga dos Campeões Futsal, Taça de Portugal Futsal, Supertaça Futsal
+Nuno Dias | 2017/18 | Sporting | Treinador principal | 54 | 47 | 3 | 4 | I Divisão Futsal, Taça de Portugal Futsal, Supertaça Futsal, AF Lisboa Futsal Taça de Honra
+Nuno Dias | 2016/17 | Sporting | Treinador principal | 53 | 45 | 5 | 3 | I Divisão Futsal, Taça da Liga Futsal, AF Lisboa Futsal Taça de Honra
+Nuno Dias | 2015/16 | Sporting | Treinador principal | 46 | 41 | 3 | 2 | I Divisão Futsal, Taça de Portugal Futsal, Taça da Liga Futsal, AF Lisboa Futsal Taça de Honra
+Nuno Dias | 2014/15 | Sporting | Treinador principal | 47 | 35 | 4 | 8 | Supertaça Futsal
+Nuno Dias | 2013/14 | Sporting | Treinador principal | 42 | 34 | 5 | 3 | I Divisão Futsal, Supertaça Futsal, AF Lisboa Futsal Taça de Honra
+Nuno Dias | 2012/13 | Sporting | Treinador principal | 39 | 37 | 1 | 1 | I Divisão Futsal, Taça de Portugal Futsal
+Nuno Dias | 2011/12 | CSKA Moskva | Treinador-adjunto | ? | ? | ? | ? | -
+Nuno Dias | 2010/11 | Instituto D. João V | Treinador principal | 34 | 20 | 2 | 12 | -
+Nuno Dias | 2009/10 | Instituto D. João V | Treinador principal | 35 | 19 | 3 | 13 | -
+Nuno Dias | 2008/09 | Instituto D. João V | Treinador principal | 31 | 12 | 6 | 13 | -
+Nuno Dias | 2007/08 | Instituto D. João V | Treinador principal | 31 | 10 | 10 | 11 | -
+Nuno Dias | 2006/07 | Instituto D. João V | Treinador principal | ? | ? | ? | ? | -
+Nuno Dias | 1996/97 | Académica SF [Jun.B S17] | Treinador-adjunto | ? | ? | ? | ? | -
+Paulo Luís | 2012/13-2026/27 | Sporting | Treinador-adjunto principal | ? | ? | ? | ? | -
+Paulo Luís | 2011/12 | Beneditense | Treinador principal | 0 | 0 | 0 | 0 | -
+Paulo Luís | 2010/11 | Externato Benedita | Treinador principal | 0 | 0 | 0 | 0 | -
+Filipe Rodrigues | 2019/20-2026/27 | Sporting | Treinador-adjunto | ? | ? | ? | ? | -
+Filipe Rodrigues | 2015/16-2018/19 | Casal Velho | Treinador-adjunto | ? | ? | ? | ? | -
+Filipe Rodrigues | 2013/14-2014/15 | Olho Marinho | Treinador-adjunto | ? | ? | ? | ? | -
+Diogo Carlos | 2025/26-2026/27 | Sporting | Treinador guarda-redes | ? | ? | ? | ? | -
+Diogo Carlos | 2024/25 | Sporting | Treinador estagiário | ? | ? | ? | ? | -
+Diogo Carlos | 2023/24 | GRCP Casal do Rato [Jun.B S17] | Treinador principal | 25 | 8 | ? | ? | -
+Diogo Carlos | 2022/23 | GRCP Casal do Rato [Jun.B S17] | Treinador principal | ? | ? | ? | ? | -
+Diogo Carlos | 2021/22 | Filipa Lencastre Futsal [Jun.C S15] | Treinador principal | 1 | 0 | ? | ? | -
+Edgar Beldroega | 2026/27 | Sporting | Analista | ? | ? | ? | ? | -
+Edgar Beldroega | 2024/25-2025/26 | Sporting | Treinador-adjunto | ? | ? | ? | ? | -
+Diogo Mendes | 2025/26-2026/27 | Sporting | Scout | ? | ? | ? | ? | -
+Diogo Mendes | 2024/25-2025/26 | Sporting [Jun.A S19] | Treinador-adjunto | ? | ? | ? | ? | I Divisão Juniores A (Sub-19)
+Diogo Mendes | 2024/25 | Sporting [Feminino B] | Preparador físico | ? | ? | ? | ? | -
+Diogo Mendes | 2023/24 | Academia Condeixa [Jun.B S17] | Treinador-adjunto | ? | ? | ? | ? | AF Coimbra Futsal Juniores A
+Diogo Mendes | 2020/21-2022/23 | CS São João [Jun.A S19] | Treinador-adjunto | ? | ? | ? | ? | -
+Diogo Mendes | 2019/20 | CB Oleiros | Coordenador técnico | ? | ? | ? | ? | -
+Diogo Mendes | 2015/16-2018/19 | CB Oleiros / CS São João [jovens] | Treinador principal | ? | ? | ? | ? | AF Castelo Branco Futsal Juniores B, AF Coimbra Futsal Juniores D Taça
+Cassiano Klein | 2026/27 | Benfica | Treinador principal | 8 | 4 | 3 | 1 | -
+Cassiano Klein | 2025/26 | Benfica | Treinador principal | 48 | 40 | 3 | 5 | I Divisão Futsal, Taça da Liga Futsal, Taça de Portugal Futsal
+Cassiano Klein | 2024/25 | Benfica | Treinador principal | 39 | 29 | 5 | 5 | I Divisão Futsal
+Cassiano Klein | 2024 | Joinville | Treinador principal | 30 | 21 | 5 | 4 | Taça Brasil Futsal, Recopa Catarinense de Futsal
+Cassiano Klein | 2023 | Joinville | Treinador principal | 55 | 36 | 13 | 6 | Supercopa Brasil Futsal, Campeonato Catarinense Futsal, Recopa Catarinense de Futsal
+Cassiano Klein | 2022 | Cascavel Futsal | Treinador principal | 35 | 21 | 6 | 8 | -
+Cassiano Klein | 2021 | Cascavel Futsal | Treinador principal | 22 | 15 | 4 | 3 | Liga Nacional Futsal, Campeonato Paranaense Futsal
+Cassiano Klein | 2020 | Cascavel Futsal | Treinador principal | 29 | 15 | 9 | 5 | Campeonato Paranaense Futsal
+Cassiano Klein | 2019 | Cascavel Futsal | Treinador principal | 52 | 28 | 9 | 15 | -
+Cassiano Klein | 2018 | Joaçaba Futsal | Treinador principal | 19 | 8 | 3 | 8 | -
+Cassiano Klein | 2017 | Joaçaba Futsal | Treinador principal | 0 | 0 | 0 | 0 | -
+Estevão Cordovil | 2021/22-2026/27 | Benfica | Treinador-adjunto | ? | ? | ? | ? | 2022/23: I Divisão Feminina Futsal (principal do feminino)
+Estevão Cordovil | 2019-2021 | Arábia Saudita (seleção) | Treinador-adjunto | ? | ? | ? | ? | -
+Estevão Cordovil | 2018/19-2019/20 | Belenenses | Treinador-adjunto | ? | ? | ? | ? | -
+Estevão Cordovil | 2011/12-2015/16 | Al Jaish, Al Yarmouk, Al-Kuwait | Treinador-adjunto | ? | ? | ? | ? | -
+Estevão Cordovil | 2010/11 | Belenenses | Treinador-adjunto | ? | ? | ? | ? | -
+Vítor Hugo | 2025/26-2026/27 | Benfica | Treinador guarda-redes | ? | ? | ? | ? | -
+Vítor Hugo | 2023/24-2024/25 | Dínamo Sanjoanense | Treinador guarda-redes | ? | ? | ? | ? | -
+Vítor Hugo | 2022/23 | Dínamo Sanjoanense | Treinador-adjunto | ? | ? | ? | ? | -
+Raphael Roel | 2024/25-2026/27 | Benfica | Preparador físico | ? | ? | ? | ? | -
+Raphael Roel | 2024 | Joinville | Preparador físico | ? | ? | ? | ? | -
+André Chaveiro | 2024/25-2026/27 | Benfica | Analista | ? | ? | ? | ? | -
+André Chaveiro | 2020/21-2023/24 | Benfica | Observador | ? | ? | ? | ? | -
+Rui Domingos | 2024/25-2026/27 | Benfica (futsal, basquetebol, andebol, voleibol) | Médico | ? | ? | ? | ? | -
+Rui Domingos | 2020/21-2023/24 | Benfica [Basket] | Médico | ? | ? | ? | ? | -
+Fábio Francisco | 2025/26-2026/27 | Benfica | Fisioterapeuta | ? | ? | ? | ? | -
+Ricardo Tavares | 2024/25-2026/27 | Benfica | Fisiologista | ? | ? | ? | ? | -
+Ricardo Tavares | 2011/12-2023/24 | Benfica (hóquei, feminino, Sub-23, juniores) | Preparador físico | ? | ? | ? | ? | -
+Pedro Martins | 2023/24-2026/27 | Benfica | Nutricionista | ? | ? | ? | ? | -
+Joana Araújo | 2021/22-2026/27 | Benfica (futsal, basquetebol, andebol, hóquei) | Psicóloga | ? | ? | ? | ? | -
+Joana Araújo | 2018/19-2020/21 | UD Oliveirense | Psicóloga | ? | ? | ? | ? | -
+Raul Moreira | 2024/25-2026/27 | Benfica | Coordenador geral | ? | ? | ? | ? | -
+Raul Moreira | 2015/16-2022/23 | Caxinas (formação e coordenação) | Treinador principal / Coordenador técnico | ? | ? | ? | ? | I Divisão Juniores A (Sub-19) Futsal (2021/22)
+Raul Moreira | 2014/15 | Rio Ave | Treinador principal | 7 | 1 | 0 | 6 | -
+Raul Moreira | 2013/14 | Rio Ave | Treinador principal | 16 | 5 | 3 | 8 | -
+Raul Moreira | 2012/13 | Rio Ave | Treinador principal | 12 | 6 | 0 | 6 | -
+Raul Moreira | 2011/12 | Rio Ave | Treinador principal | 5 | 5 | 0 | 0 | -
+Raul Moreira | 2007/08 | JuveNorte | Treinador principal | 28 | 12 | 4 | 12 | -
+Raul Moreira | 2006/07-2010/11 | Rio Ave / FJ Antunes | Treinador-adjunto | ? | ? | ? | ? | -
+Tiago Martins | 2020/21-2026/27 | Benfica | Técnico de equipamentos | ? | ? | ? | ? | -
+Joel Rocha | 2026/27 | SC Braga | Treinador principal | 6 | 3 | 1 | 2 | -
+Joel Rocha | 2025/26 | SC Braga | Treinador principal | 31 | 14 | 5 | 12 | -
+Joel Rocha | 2024/25 | SC Braga | Treinador principal | 38 | 22 | 5 | 11 | Supertaça Futsal
+Joel Rocha | 2023/24 | SC Braga | Treinador principal | 37 | 27 | 3 | 7 | Taça de Portugal Futsal
+Joel Rocha | 2022/23 | SC Braga | Treinador principal | 33 | 25 | 3 | 5 | -
+Joel Rocha | 2021/22 | SC Braga/AAUM | Treinador principal | 24 | 8 | ? | ? | -
+Joel Rocha | 2020/21 | Benfica | Treinador principal | 44 | 35 | 4 | 5 | -
+Joel Rocha | 2019/20 | Benfica | Treinador principal | 33 | 25 | 3 | 5 | Taça da Liga Futsal
+Joel Rocha | 2018/19 | Benfica | Treinador principal | 50 | 43 | 3 | 4 | I Divisão Futsal, Taça da Liga Futsal
+Joel Rocha | 2017/18 | Benfica | Treinador principal | 45 | 36 | 3 | 6 | Taça da Liga Futsal
+Joel Rocha | 2016/17 | Benfica | Treinador principal | 39 | 28 | 7 | 4 | Taça de Portugal Futsal, Supertaça Futsal
+Joel Rocha | 2015/16 | Benfica | Treinador principal | 55 | 38 | 6 | 11 | Supertaça Futsal
+Joel Rocha | 2014/15 | Benfica | Treinador principal | 42 | 36 | 5 | 1 | I Divisão Futsal, Taça de Portugal Futsal, AF Lisboa Futsal Taça de Honra
+Joel Rocha | 2013/14 | AD Fundão | Treinador principal | 40 | 20 | 6 | 14 | Taça de Portugal Futsal
+Joel Rocha | 2012/13 | AD Fundão | Treinador principal | 33 | 21 | 3 | 9 | -
+Joel Rocha | 2011/12 | AD Fundão | Treinador principal | 19 | 5 | 3 | 11 | -
+Joel Rocha | 2010/11 | AD Fundão | Treinador principal | 33 | 17 | 2 | 14 | -
+Joel Rocha | 2003/04-2009/10 | AD Fundão, Estação, Carapalha (adjunto, formação e feminino) | Treinador-adjunto | ? | ? | ? | ? | -
+Pedro Holstein | 2021/22-2026/27 | SC Braga | Treinador-adjunto | ? | ? | ? | ? | -
+Pedro Holstein | 2018/19 | Âncora Praia | Treinador principal | 13 | 6 | 0 | 7 | -
+Pedro Holstein | 2015/16-2017/18 | Âncora Praia | Treinador principal | 3 | 3 | 0 | 0 | -
+Pedro Holstein | 2012/13-2014/15 | Lavradas, Ponte da Barca, Santa Luzia | Treinador principal | 5 | 2 | 0 | 3 | AF Viana do Castelo Futsal (2013/14)
+João Silva | 2023/24-2026/27 | SC Braga | Treinador-adjunto | ? | ? | ? | ? | -
+João Silva | 2018/19-2022/23 | Académica, Anadia (formação) | Treinador principal / adjunto | ? | ? | ? | ? | -
+Nuno Couto | 2026/27 | AD Fundão | Treinador principal | 7 | 4 | 0 | 3 | -
+Nuno Couto | 2025/26 | AD Fundão | Treinador principal | 25 | 7 | 7 | 11 | -
+Nuno Couto | 2024/25 | AD Fundão | Treinador principal | 28 | 11 | 4 | 13 | -
+Nuno Couto | 2023/24 | AD Fundão | Treinador principal | 25 | 6 | 5 | 14 | -
+Nuno Couto | 2022/23 | AD Fundão | Treinador principal | 27 | 12 | 2 | 13 | -
+Nuno Couto | 2021/22 | AD Fundão | Treinador principal | 34 | 17 | 6 | 11 | -
+Nuno Couto | 2020/21 | AD Fundão | Treinador principal | 35 | 20 | 6 | 9 | -
+Nuno Couto | 2019/20 | AD Fundão | Treinador principal | 22 | 9 | 3 | 10 | -
+Nuno Couto | 2018/19 | AD Fundão | Treinador principal | 38 | 20 | 4 | 14 | AF Cast. Branco T. Honra Futsal Clubes Nacionais
+Nuno Couto | 2017/18 | AD Fundão | Treinador principal | 19 | 10 | 1 | 8 | -
+Rui Resende | 2026/27 | AD Fundão | Treinador-adjunto | ? | ? | ? | ? | -
+Rui Resende | 2020/21-2024/25 | Bairro Boa Esperança | Treinador principal | 0 | 0 | 0 | 0 | III Divisão Futsal (2022/23)
+Miguel Velez | 2026/27 | Leões Porto Salvo | Treinador principal | 6 | 3 | 1 | 2 | -
+Miguel Velez | 2025/26 | UPVN | Treinador principal | 25 | 16 | 2 | 7 | -
+Miguel Velez | 2024/25 | UPVN / Torreense | Treinador principal | 21 | 6 | 4 | 11 | -
+Miguel Velez | 2023/24 | AMSAC | Treinador principal | 30 | 20 | 0 | 10 | -
+Miguel Velez | 2022/23 | AMSAC | Treinador principal | 30 | 14 | 6 | 10 | -
+Miguel Velez | 2012/13-2021/22 | Sporting e AMSAC (formação) | Treinador principal | ? | ? | ? | ? | Taça Nacional Sub-15 Futsal (2018/19) e títulos regionais de formação
+Gonçalo Farinha | 2026/27 | Leões Porto Salvo | Treinador-adjunto | ? | ? | ? | ? | -
+Gonçalo Farinha | 2023/24-2025/26 | UPVN | Treinador-adjunto | ? | ? | ? | ? | -
+Gonçalo Farinha | 2016/17-2022/23 | Belenenses, Estoril Praia, Benfica [Feminino] | Treinador-adjunto / Preparador físico | ? | ? | ? | ? | -
+Diogo Santos | 2026/27 | Leões Porto Salvo | Treinador-adjunto | ? | ? | ? | ? | -
+Diogo Santos | 2024/25 | UPVN | Treinador-adjunto | ? | ? | ? | ? | -
+João Coelho | 2026/27 | Leões Porto Salvo | Treinador guarda-redes | ? | ? | ? | ? | -
+João Coelho | 2023/24-2025/26 | UPVN, AMSAC | Treinador guarda-redes | ? | ? | ? | ? | -
+José Peixeiro | 2026/27 | Leões Porto Salvo | Analista e scout | ? | ? | ? | ? | -
+José Peixeiro | 2009/10-2024/25 | Infantado, Sporting, AMSAC (formação) | Treinador principal / adjunto | ? | ? | ? | ? | -
+Flávio Fonseca | 2023/24-2026/27 | Leões Porto Salvo | Fisioterapeuta | ? | ? | ? | ? | -
+Flávio Fonseca | 2016/17-2022/23 | Al Yarmouk, Sporting [Feminino/S20], Fut. Benfica [Feminino], Leões Porto Salvo | Fisioterapeuta | ? | ? | ? | ? | -

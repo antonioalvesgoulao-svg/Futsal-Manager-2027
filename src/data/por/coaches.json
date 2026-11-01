@@ -1,5 +1,5 @@
 {
-  "_info": "Treinadores atuais (nomes: zerozero). Atributos 1-20 e estilo são ESTIMATIVAS até haver historial real. tactical: conhecimento tático; motivation: motivação; discipline: disciplina; youth: desenvolvimento de jovens. style vazio = estilo deduzido do plantel.",
+  "_info": "Treinadores atuais (nomes: zerozero). Atributos 1-20 e estilo são ESTIMATIVAS até haver historial real. tactical: conhecimento tático; motivation: motivação; discipline: disciplina; youth: desenvolvimento de jovens. style vazio = estilo deduzido do plantel. Sporting, Benfica, Braga, Fundão e Porto Salvo: tactical/motivation calculados do historial real (staff.json).",
   "coaches": [
     {
       "id": "c_scp",
@@ -15,8 +15,8 @@
       "id": "c_slb",
       "name": "Cassiano Klein",
       "clubId": "slb",
-      "tactical": 17,
-      "motivation": 17,
+      "tactical": 15,
+      "motivation": 14,
       "discipline": 16,
       "youth": 14,
       "style": {}
@@ -25,7 +25,7 @@
       "id": "c_scb",
       "name": "Joel Rocha",
       "clubId": "scb",
-      "tactical": 15,
+      "tactical": 16,
       "motivation": 14,
       "discipline": 14,
       "youth": 15,

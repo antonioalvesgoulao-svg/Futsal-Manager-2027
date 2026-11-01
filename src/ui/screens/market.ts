@@ -1,3 +1,4 @@
+import { seenPotential } from '../../core/staff';
 // Ecrãs do Mercado e das Finanças
 import { overall, starsHtml } from '../../core/attributes';
 import { fmtEur, marketValue, salaryBudget, wageBill } from '../../core/contracts';
@@ -43,7 +44,7 @@ export function renderMarket(content: HTMLElement, s: GameState, refresh: () => 
     </div>
     <div id="neg"></div>
     <table class="tbl small"><thead><tr><th>Nome</th><th>Clube</th><th>Pos.</th><th>Idade</th><th>Nac.</th><th>Atual</th><th>Pot.</th><th>Valor</th><th>Salário</th><th>Contrato</th><th></th></tr></thead><tbody>
-    ${list.map((p) => `<tr><td class="click" data-open="${p.id}"><b>${p.name}</b></td><td>${p.clubId === FREE ? '<span class="muted">Livre</span>' : `${crestSvg(p.clubId, 16)} ${clubName(p.clubId)}${p.loan ? ' <span class="muted small">(emp.)</span>' : ''}`}</td><td>${p.position}</td><td>${p.age}</td><td>${p.nationality}</td><td>${starsHtml(overall(p.attrs, p.position))}</td><td>${starsHtml(p.potential)}</td><td>${fmtEur(valueOf(p))}</td><td>${p.contract ? fmtEur(p.contract.wage) : '-'}</td><td>${p.contract ? 'jun ' + p.contract.until : '-'}</td><td><button class="btn" data-neg="${p.id}">Negociar</button></td></tr>`).join('')}
+    ${list.map((p) => `<tr><td class="click" data-open="${p.id}"><b>${p.name}</b></td><td>${p.clubId === FREE ? '<span class="muted">Livre</span>' : `${crestSvg(p.clubId, 16)} ${clubName(p.clubId)}${p.loan ? ' <span class="muted small">(emp.)</span>' : ''}`}</td><td>${p.position}</td><td>${p.age}</td><td>${p.nationality}</td><td>${starsHtml(overall(p.attrs, p.position))}</td><td>${starsHtml(seenPotential(s, p, my.id))}</td><td>${fmtEur(valueOf(p))}</td><td>${p.contract ? fmtEur(p.contract.wage) : '-'}</td><td>${p.contract ? 'jun ' + p.contract.until : '-'}</td><td><button class="btn" data-neg="${p.id}">Negociar</button></td></tr>`).join('')}
     </tbody></table>
     <h3>O meu plantel</h3>
     <table class="tbl small"><tbody>${mySquad.map((p) => `<tr><td>${p.name}</td><td>${p.position}</td><td>${p.age}</td><td>${p.contract ? fmtEur(p.contract.wage) + '/mês' : ''}</td><td>${isSenior(p) ? 'Sénior' : 'Sub-19'}</td><td>${p.loan ? `<span class="muted">Emprestado pelo ${clubName(p.loan.from)} até jun ${p.loan.until}</span>` : `<span class="small muted">${tierOf(s, p)}</span> <select data-list="${p.id}">${[['', 'Não listado'], ['venda', 'Lista de transferências'], ['emprestimo', 'Lista de empréstimos']].map(([v, l]) => `<option value="${v}" ${(m.listed?.[p.id] ?? '') === v ? 'selected' : ''}>${l}</option>`).join('')}</select> <button class="btn ghost" data-rel="${p.id}">Rescindir (${fmtEur(releaseCost(s, p))})</button>`}</td></tr>`).join('')}</tbody></table>

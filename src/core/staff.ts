@@ -7,12 +7,18 @@
 // A formação é uma equipa à parte (clubId `${clube}@jun`): os juniores treinam e evoluem, sobem ao plantel quando o treinador quiser.
 import { generateAttributes, overall, rng } from './attributes';
 import type { Club, GameState, Player, Position } from './types';
+import REALJSON from '../data/por/staff.json';
+const REAL = REALJSON as unknown as { people: { id: string; club: string; name: string; func: string; role: string; nat: string; birth: string; ability: number; history: StaffSeason[]; coach?: { tactical: number; motivation: number } }[] };
+export const realCoachOf = (clubId: string) => REAL.people.find((p) => p.club === clubId && p.role === 'principal');
 
-export type Role = 'adjunto' | 'fisico' | 'gr' | 'fisio' | 'formacao';
-export const ROLE_NAME: Record<Role, string> = { adjunto: 'Treinador adjunto', fisico: 'Preparador físico', gr: 'Treinador de guarda-redes', fisio: 'Fisioterapeuta', formacao: 'Coordenador da formação' };
+export type Role = 'adjunto' | 'fisico' | 'gr' | 'fisio' | 'formacao' | 'analista' | 'scout' | 'psicologo' | 'nutricionista' | 'coordenador' | 'outro';
+export const ROLE_NAME: Record<Role, string> = { adjunto: 'Treinador adjunto', fisico: 'Preparador físico', gr: 'Treinador de guarda-redes', fisio: 'Fisioterapeuta / médico', formacao: 'Coordenador da formação', analista: 'Analista', scout: 'Scout', psicologo: 'Psicólogo', nutricionista: 'Nutricionista', coordenador: 'Coordenador geral', outro: 'Apoio' };
+/** Funções base (todos os clubes têm alguém) e funções extra (só se existirem na equipa técnica real ou forem contratadas) */
 export const ROLES: Role[] = ['adjunto', 'fisico', 'gr', 'fisio', 'formacao'];
+export const EXTRA_ROLES: Role[] = ['analista', 'scout', 'psicologo', 'nutricionista', 'coordenador', 'outro'];
 
-export interface Staff { id: string; name: string; role: Role; clubId: string | null; ability: number; age: number; wage: number; until: number }
+export interface StaffSeason { ep: string; club: string; func: string; g: string; w: string; d: string; l: string; titles: string }
+export interface Staff { id: string; name: string; role: Role; clubId: string | null; ability: number; age: number; wage: number; until: number; func?: string; nat?: string; history?: StaffSeason[]; real?: boolean }
 
 const FIRST = ['João', 'Rui', 'Paulo', 'Nuno', 'Pedro', 'Ricardo', 'Hugo', 'Carlos', 'Luís', 'Jorge', 'Bruno', 'Sérgio', 'Vítor', 'Fernando', 'Marco', 'Filipe', 'Tiago', 'André', 'Miguel', 'José'];
 const LAST = ['Silva', 'Santos', 'Ferreira', 'Pereira', 'Oliveira', 'Costa', 'Rodrigues', 'Martins', 'Sousa', 'Fernandes', 'Gonçalves', 'Gomes', 'Lopes', 'Marques', 'Alves', 'Almeida', 'Ribeiro', 'Pinto', 'Carvalho', 'Teixeira', 'Moreira', 'Correia', 'Mendes', 'Nunes', 'Vieira', 'Monteiro'];
@@ -20,7 +26,7 @@ const LAST = ['Silva', 'Santos', 'Ferreira', 'Pereira', 'Oliveira', 'Costa', 'Ro
 /** Salário mensal do staff (estimativa): cresce com a capacidade e com a riqueza do clube. */
 export const staffWage = (ability: number, club?: Club) => Math.max(400, Math.round(250 * Math.exp(ability * 0.11) * (club ? 0.3 + club.wealth / 100 : 1) / 50) * 50);
 /** Orçamento mensal do staff (estimativa): o que o clube paga a um staff típico do seu nível, +20%. */
-export const staffBudget = (club: Club) => Math.round(5 * staffWage(6 + club.wealth * 0.11, club) * 1.2);
+export const staffBudget = (club: Club) => club.staffBudget ?? Math.round(5 * staffWage(6 + club.wealth * 0.11, club) * 1.2);
 
 function makeStaff(id: string, role: Role, clubId: string | null, ability: number, r: () => number, year: number, club?: Club): Staff {
   const a = Math.max(1, Math.min(20, Math.round(ability)));
@@ -29,15 +35,25 @@ function makeStaff(id: string, role: Role, clubId: string | null, ability: numbe
 
 /** Garante staff em todos os clubes (nível conforme a riqueza) e uma bolsa de técnicos sem clube. */
 export function ensureStaff(s: GameState) {
-  if (s.staff?.length) return;
+  if (s.staff?.some((x) => x.real)) return;
   const r = rng('staff-ini');
   s.staff = [];
-  for (const c of s.clubs) for (const role of ROLES) s.staff.push(makeStaff(`st-${c.id}-${role}`, role, c.id, 6 + c.wealth * 0.11 + (r() - 0.5) * 5, r, s.season.year, c));
-  for (let i = 0; i < 25; i++) s.staff.push(makeStaff(`st-free-${i}`, ROLES[i % 5], null, 5 + r() * 13, r, s.season.year));
+  // equipas técnicas reais (zerozero); funções base em falta ficam com técnicos fictícios
+  for (const p of REAL.people) {
+    const club = s.clubs.find((c) => c.id === p.club);
+    if (!club || p.role === 'principal') continue;
+    const age = p.birth && p.birth !== '?' ? s.season.year - Number(p.birth.slice(0, 4)) : 40;
+    s.staff.push({ id: `rs-${p.id}`, name: p.name, role: p.role as Role, clubId: p.club, ability: Math.min(20, Math.round(p.ability + club.wealth * 0.035)), age, wage: staffWage(p.ability, club), until: s.season.year + 2, func: p.func, nat: p.nat, history: p.history, real: true });
+  }
+  for (const c of s.clubs) for (const role of ROLES) if (!s.staff.some((x) => x.clubId === c.id && x.role === role)) s.staff.push(makeStaff(`st-${c.id}-${role}`, role, c.id, 4 + c.wealth * 0.09 + (r() - 0.5) * 4, r, s.season.year, c));
+  // orçamento do staff: o maior entre o típico do clube e o que já paga à equipa técnica real (+10%)
+  for (const c of s.clubs) { c.staffBudget = undefined; c.staffBudget = Math.round(Math.max(staffBudget(c), staffBill(s, c.id) * 1.1)); }
+  for (let i = 0; i < 25; i++) s.staff.push(makeStaff(`st-free-${i}`, ROLES[i % 5], null, 4 + r() * 11, r, s.season.year));
   // o meu clube não tem staff pré-definido? tem: herda o do clube (o treinador escolhe se mantém)
 }
 
-export const staffOf = (s: GameState, clubId: string, role: Role) => s.staff?.find((x) => x.clubId === clubId && x.role === role);
+/** O melhor da função no clube (pode haver vários, ex.: dois adjuntos). */
+export const staffOf = (s: GameState, clubId: string, role: Role) => (s.staff ?? []).filter((x) => x.clubId === clubId && x.role === role).sort((a, b) => b.ability - a.ability)[0];
 /** Capacidade (1-20) do staff numa função; sem ninguém conta como 5. */
 export const abilityOf = (s: GameState, clubId: string, role: Role) => staffOf(s, clubId, role)?.ability ?? 5;
 
@@ -46,6 +62,16 @@ export const trainingK = (s: GameState, clubId: string) => 0.85 + abilityOf(s, c
 export const gkTrainingK = (s: GameState, clubId: string) => 0.75 + abilityOf(s, clubId, 'gr') * 0.025; // 10 → 1,0
 export const fitnessInjK = (s: GameState, clubId: string) => 1.3 - abilityOf(s, clubId, 'fisico') * 0.03; // 10 → 1,0
 export const physioK = (s: GameState, clubId: string) => 1.25 - abilityOf(s, clubId, 'fisio') * 0.025; // 10 → 1,0
+// funções extra: sem ninguém = sem efeito
+const extra = (s: GameState, clubId: string, role: Role) => staffOf(s, clubId, role)?.ability ?? 0;
+/** Analista: estudo dos adversários = mais conhecimento tático no jogo (+0 a +1,5). */
+export const analystBonus = (s: GameState, clubId: string) => extra(s, clubId, 'analista') * 0.075;
+/** Psicólogo: as quedas de moral são menores (×1 a ×0,7). */
+export const psychK = (s: GameState, clubId: string) => 1 - extra(s, clubId, 'psicologo') * 0.015;
+/** Nutricionista: menos lesões (×1 a ×0,9). */
+export const nutritionK = (s: GameState, clubId: string) => 1 - extra(s, clubId, 'nutricionista') * 0.005;
+/** Scout: avalia melhor o potencial de jogadores de outros clubes (erro ±2,5 sem scout, ±0,5 com scout 20). */
+export const scoutError = (s: GameState, clubId: string) => 2.5 - extra(s, clubId, 'scout') * 0.1;
 
 export const staffBill = (s: GameState, clubId: string) => (s.staff ?? []).filter((x) => x.clubId === clubId).reduce((a, x) => a + x.wage, 0);
 
@@ -94,6 +120,14 @@ export function academyIntake(s: GameState, club: Club, year: number): Player[] 
 export function scoutedPotential(s: GameState, p: Player, clubId: string) {
   const err = (20 - abilityOf(s, clubId, 'formacao')) / 20 * 2.5;
   const r = rng(`scout-${p.id}-${clubId}`);
+  return Math.max(1, Math.min(20, Math.round((p.potential + (r() * 2 - 1) * err) * 2) / 2));
+}
+
+/** Potencial visto por um clube de um jogador de outro clube (o scout reduz o erro). */
+export function seenPotential(s: GameState, p: Player, viewer: string) {
+  if (p.clubId === viewer) return p.potential;
+  const err = scoutError(s, viewer);
+  const r = rng(`seen-${p.id}-${viewer}`);
   return Math.max(1, Math.min(20, Math.round((p.potential + (r() * 2 - 1) * err) * 2) / 2));
 }
 

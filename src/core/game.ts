@@ -7,7 +7,7 @@ import { accumulate, shootingFocus, trainingBonus } from './training';
 import { contractsSeasonEnd, ensureContracts } from './contracts';
 import { matchRevenue, monthlyFinance, book, PRIZES } from './finance';
 import { aiMarket, endLoans, ensurePool } from './market';
-import { academyIntake, academySeasonEnd, ensureStaff, gkTrainingK, juniorsOf, trainingK } from './staff';
+import { analystBonus, academyIntake, academySeasonEnd, ensureStaff, gkTrainingK, juniorsOf, trainingK } from './staff';
 import { applyMorale, moraleEvent } from './morale';
 import { injuryOf, matchInjuries, trainingInjuries } from './injuries';
 import { applyDiscipline, banFor, seasonEndDiscipline } from './discipline';
@@ -38,12 +38,12 @@ export function setupFor(s: GameState, clubId: string, comp?: CompId): TeamSetup
     normalizeTactics(s.tactics, squad);
     const ok = (ids: string[]) => ids.filter((id) => squad.some((p) => p.id === id));
     const tactics = comp ? { ...s.tactics, q1: ok(s.tactics.q1), q2: ok(s.tactics.q2) } : s.tactics;
-    return { clubId: c.id, name: c.name, shortName: c.shortName, squad, tactics, coachTactical: 12, coachName: s.manager.name, morale: s.morale };
+    return { clubId: c.id, name: c.name, shortName: c.shortName, squad, tactics, coachTactical: 12 + analystBonus(s, c.id), coachName: s.manager.name, morale: s.morale };
   }
   const coach = s.coaches.find((x) => x.clubId === c.id);
   return {
     clubId: c.id, name: c.name, shortName: c.shortName, squad, tactics: aiTactics(squad, c, coach),
-    coachTactical: coach?.tactical ?? 11, morale: s.morale, coachName: coach?.name ?? 'Treinador interino',
+    coachTactical: (coach?.tactical ?? 11) + analystBonus(s, c.id), morale: s.morale, coachName: coach?.name ?? 'Treinador interino',
   };
 }
 

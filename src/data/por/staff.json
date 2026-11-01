@@ -1,0 +1,1785 @@
+{
+ "_info": "Equipas técnicas reais 2026/27 (zerozero, recolha do António com Claude in Chrome, 2/11/2026). ability/coach calculados a partir do historial (estimativa). Clubes em falta: fzz, ele, rav, uvn, por, fam, tor.",
+ "people": [
+  {
+   "id": "scp-nunodias-principal",
+   "club": "scp",
+   "name": "Nuno Dias",
+   "func": "Treinador principal",
+   "role": "principal",
+   "nat": "Portugal",
+   "birth": "1972-12-28",
+   "history": [
+    {
+     "ep": "2026/27",
+     "club": "Sporting",
+     "func": "Treinador principal",
+     "g": "10",
+     "w": "8",
+     "d": "2",
+     "l": "0",
+     "titles": "Supertaça Futsal"
+    },
+    {
+     "ep": "2025/26",
+     "club": "Sporting",
+     "func": "Treinador principal",
+     "g": "49",
+     "w": "38",
+     "d": "4",
+     "l": "7",
+     "titles": "Liga dos Campeões Futsal, Supertaça Futsal"
+    },
+    {
+     "ep": "2024/25",
+     "club": "Sporting",
+     "func": "Treinador principal",
+     "g": "51",
+     "w": "37",
+     "d": "7",
+     "l": "7",
+     "titles": "Taça de Portugal Futsal, Taça da Liga Futsal"
+    },
+    {
+     "ep": "2023/24",
+     "club": "Sporting",
+     "func": "Treinador principal",
+     "g": "47",
+     "w": "39",
+     "d": "3",
+     "l": "5",
+     "titles": "I Divisão Futsal, Taça da Liga Futsal"
+    },
+    {
+     "ep": "2022/23",
+     "club": "Sporting",
+     "func": "Treinador principal",
+     "g": "47",
+     "w": "37",
+     "d": "7",
+     "l": "3",
+     "titles": "I Divisão Futsal, Supertaça Futsal"
+    },
+    {
+     "ep": "2021/22",
+     "club": "Sporting",
+     "func": "Treinador principal",
+     "g": "50",
+     "w": "45",
+     "d": "1",
+     "l": "4",
+     "titles": "I Divisão Futsal, Taça de Portugal Futsal, Supertaça Futsal, Taça da Liga Futsal"
+    },
+    {
+     "ep": "2020/21",
+     "club": "Sporting",
+     "func": "Treinador principal",
+     "g": "46",
+     "w": "42",
+     "d": "3",
+     "l": "1",
+     "titles": "Liga dos Campeões Futsal, I Divisão Futsal, Taça da Liga Futsal"
+    },
+    {
+     "ep": "2019/20",
+     "club": "Sporting",
+     "func": "Treinador principal",
+     "g": "35",
+     "w": "31",
+     "d": "1",
+     "l": "3",
+     "titles": "Taça de Portugal Futsal, Supertaça Futsal"
+    },
+    {
+     "ep": "2018/19",
+     "club": "Sporting",
+     "func": "Treinador principal",
+     "g": "51",
+     "w": "41",
+     "d": "4",
+     "l": "6",
+     "titles": "Liga dos Campeões Futsal, Taça de Portugal Futsal, Supertaça Futsal"
+    },
+    {
+     "ep": "2017/18",
+     "club": "Sporting",
+     "func": "Treinador principal",
+     "g": "54",
+     "w": "47",
+     "d": "3",
+     "l": "4",
+     "titles": "I Divisão Futsal, Taça de Portugal Futsal, Supertaça Futsal, AF Lisboa Futsal Taça de Honra"
+    },
+    {
+     "ep": "2016/17",
+     "club": "Sporting",
+     "func": "Treinador principal",
+     "g": "53",
+     "w": "45",
+     "d": "5",
+     "l": "3",
+     "titles": "I Divisão Futsal, Taça da Liga Futsal, AF Lisboa Futsal Taça de Honra"
+    },
+    {
+     "ep": "2015/16",
+     "club": "Sporting",
+     "func": "Treinador principal",
+     "g": "46",
+     "w": "41",
+     "d": "3",
+     "l": "2",
+     "titles": "I Divisão Futsal, Taça de Portugal Futsal, Taça da Liga Futsal, AF Lisboa Futsal Taça de Honra"
+    },
+    {
+     "ep": "2014/15",
+     "club": "Sporting",
+     "func": "Treinador principal",
+     "g": "47",
+     "w": "35",
+     "d": "4",
+     "l": "8",
+     "titles": "Supertaça Futsal"
+    },
+    {
+     "ep": "2013/14",
+     "club": "Sporting",
+     "func": "Treinador principal",
+     "g": "42",
+     "w": "34",
+     "d": "5",
+     "l": "3",
+     "titles": "I Divisão Futsal, Supertaça Futsal, AF Lisboa Futsal Taça de Honra"
+    },
+    {
+     "ep": "2012/13",
+     "club": "Sporting",
+     "func": "Treinador principal",
+     "g": "39",
+     "w": "37",
+     "d": "1",
+     "l": "1",
+     "titles": "I Divisão Futsal, Taça de Portugal Futsal"
+    },
+    {
+     "ep": "2011/12",
+     "club": "CSKA Moskva",
+     "func": "Treinador-adjunto",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2010/11",
+     "club": "Instituto D. João V",
+     "func": "Treinador principal",
+     "g": "34",
+     "w": "20",
+     "d": "2",
+     "l": "12",
+     "titles": "-"
+    },
+    {
+     "ep": "2009/10",
+     "club": "Instituto D. João V",
+     "func": "Treinador principal",
+     "g": "35",
+     "w": "19",
+     "d": "3",
+     "l": "13",
+     "titles": "-"
+    },
+    {
+     "ep": "2008/09",
+     "club": "Instituto D. João V",
+     "func": "Treinador principal",
+     "g": "31",
+     "w": "12",
+     "d": "6",
+     "l": "13",
+     "titles": "-"
+    },
+    {
+     "ep": "2007/08",
+     "club": "Instituto D. João V",
+     "func": "Treinador principal",
+     "g": "31",
+     "w": "10",
+     "d": "10",
+     "l": "11",
+     "titles": "-"
+    },
+    {
+     "ep": "2006/07",
+     "club": "Instituto D. João V",
+     "func": "Treinador principal",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "1996/97",
+     "club": "Académica SF [Jun.B S17]",
+     "func": "Treinador-adjunto",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "coach": {
+    "tactical": 19,
+    "motivation": 17,
+    "record": {
+     "G": 798,
+     "W": 618,
+     "D": 74,
+     "titlesPts": 61.900000000000006
+    }
+   },
+   "ability": 20
+  },
+  {
+   "id": "scp-pauloluis-adjunto",
+   "club": "scp",
+   "name": "Paulo Luís",
+   "func": "Treinador-adjunto principal",
+   "role": "adjunto",
+   "nat": "Portugal",
+   "birth": "1973-12-28",
+   "history": [
+    {
+     "ep": "2012/13-2026/27",
+     "club": "Sporting",
+     "func": "Treinador-adjunto principal",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2011/12",
+     "club": "Beneditense",
+     "func": "Treinador principal",
+     "g": "0",
+     "w": "0",
+     "d": "0",
+     "l": "0",
+     "titles": "-"
+    },
+    {
+     "ep": "2010/11",
+     "club": "Externato Benedita",
+     "func": "Treinador principal",
+     "g": "0",
+     "w": "0",
+     "d": "0",
+     "l": "0",
+     "titles": "-"
+    }
+   ],
+   "ability": 17
+  },
+  {
+   "id": "scp-filiperodrigues-adjunto",
+   "club": "scp",
+   "name": "Filipe Rodrigues",
+   "func": "Treinador-adjunto",
+   "role": "adjunto",
+   "nat": "Portugal",
+   "birth": "1982-02-16",
+   "history": [
+    {
+     "ep": "2019/20-2026/27",
+     "club": "Sporting",
+     "func": "Treinador-adjunto",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2015/16-2018/19",
+     "club": "Casal Velho",
+     "func": "Treinador-adjunto",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2013/14-2014/15",
+     "club": "Olho Marinho",
+     "func": "Treinador-adjunto",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "ability": 15
+  },
+  {
+   "id": "scp-diogocarlos-gr",
+   "club": "scp",
+   "name": "Diogo Carlos",
+   "func": "Treinador guarda-redes",
+   "role": "gr",
+   "nat": "Portugal",
+   "birth": "2000-03-27",
+   "history": [
+    {
+     "ep": "2025/26-2026/27",
+     "club": "Sporting",
+     "func": "Treinador guarda-redes",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2024/25",
+     "club": "Sporting",
+     "func": "Treinador estagiário",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2023/24",
+     "club": "GRCP Casal do Rato [Jun.B S17]",
+     "func": "Treinador principal",
+     "g": "25",
+     "w": "8",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2022/23",
+     "club": "GRCP Casal do Rato [Jun.B S17]",
+     "func": "Treinador principal",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2021/22",
+     "club": "Filipa Lencastre Futsal [Jun.C S15]",
+     "func": "Treinador principal",
+     "g": "1",
+     "w": "0",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "ability": 9
+  },
+  {
+   "id": "scp-edgarbeldroega-analista",
+   "club": "scp",
+   "name": "Edgar Beldroega",
+   "func": "Analista",
+   "role": "analista",
+   "nat": "Portugal",
+   "birth": "2000-08-05",
+   "history": [
+    {
+     "ep": "2026/27",
+     "club": "Sporting",
+     "func": "Analista",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2024/25-2025/26",
+     "club": "Sporting",
+     "func": "Treinador-adjunto",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "ability": 9
+  },
+  {
+   "id": "scp-diogomendes-scout",
+   "club": "scp",
+   "name": "Diogo Mendes",
+   "func": "Scout",
+   "role": "scout",
+   "nat": "Portugal",
+   "birth": "1995-06-12",
+   "history": [
+    {
+     "ep": "2025/26-2026/27",
+     "club": "Sporting",
+     "func": "Scout",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2024/25-2025/26",
+     "club": "Sporting [Jun.A S19]",
+     "func": "Treinador-adjunto",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "I Divisão Juniores A (Sub-19)"
+    },
+    {
+     "ep": "2024/25",
+     "club": "Sporting [Feminino B]",
+     "func": "Preparador físico",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2023/24",
+     "club": "Academia Condeixa [Jun.B S17]",
+     "func": "Treinador-adjunto",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "AF Coimbra Futsal Juniores A"
+    },
+    {
+     "ep": "2020/21-2022/23",
+     "club": "CS São João [Jun.A S19]",
+     "func": "Treinador-adjunto",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2019/20",
+     "club": "CB Oleiros",
+     "func": "Coordenador técnico",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2015/16-2018/19",
+     "club": "CB Oleiros / CS São João [jovens]",
+     "func": "Treinador principal",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "AF Castelo Branco Futsal Juniores B, AF Coimbra Futsal Juniores D Taça"
+    }
+   ],
+   "ability": 10
+  },
+  {
+   "id": "slb-cassianoklein-principal",
+   "club": "slb",
+   "name": "Cassiano Klein",
+   "func": "Treinador principal",
+   "role": "principal",
+   "nat": "Brasil",
+   "birth": "1982-10-12",
+   "history": [
+    {
+     "ep": "2026/27",
+     "club": "Benfica",
+     "func": "Treinador principal",
+     "g": "8",
+     "w": "4",
+     "d": "3",
+     "l": "1",
+     "titles": "-"
+    },
+    {
+     "ep": "2025/26",
+     "club": "Benfica",
+     "func": "Treinador principal",
+     "g": "48",
+     "w": "40",
+     "d": "3",
+     "l": "5",
+     "titles": "I Divisão Futsal, Taça da Liga Futsal, Taça de Portugal Futsal"
+    },
+    {
+     "ep": "2024/25",
+     "club": "Benfica",
+     "func": "Treinador principal",
+     "g": "39",
+     "w": "29",
+     "d": "5",
+     "l": "5",
+     "titles": "I Divisão Futsal"
+    },
+    {
+     "ep": "2024",
+     "club": "Joinville",
+     "func": "Treinador principal",
+     "g": "30",
+     "w": "21",
+     "d": "5",
+     "l": "4",
+     "titles": "Taça Brasil Futsal, Recopa Catarinense de Futsal"
+    },
+    {
+     "ep": "2023",
+     "club": "Joinville",
+     "func": "Treinador principal",
+     "g": "55",
+     "w": "36",
+     "d": "13",
+     "l": "6",
+     "titles": "Supercopa Brasil Futsal, Campeonato Catarinense Futsal, Recopa Catarinense de Futsal"
+    },
+    {
+     "ep": "2022",
+     "club": "Cascavel Futsal",
+     "func": "Treinador principal",
+     "g": "35",
+     "w": "21",
+     "d": "6",
+     "l": "8",
+     "titles": "-"
+    },
+    {
+     "ep": "2021",
+     "club": "Cascavel Futsal",
+     "func": "Treinador principal",
+     "g": "22",
+     "w": "15",
+     "d": "4",
+     "l": "3",
+     "titles": "Liga Nacional Futsal, Campeonato Paranaense Futsal"
+    },
+    {
+     "ep": "2020",
+     "club": "Cascavel Futsal",
+     "func": "Treinador principal",
+     "g": "29",
+     "w": "15",
+     "d": "9",
+     "l": "5",
+     "titles": "Campeonato Paranaense Futsal"
+    },
+    {
+     "ep": "2019",
+     "club": "Cascavel Futsal",
+     "func": "Treinador principal",
+     "g": "52",
+     "w": "28",
+     "d": "9",
+     "l": "15",
+     "titles": "-"
+    },
+    {
+     "ep": "2018",
+     "club": "Joaçaba Futsal",
+     "func": "Treinador principal",
+     "g": "19",
+     "w": "8",
+     "d": "3",
+     "l": "8",
+     "titles": "-"
+    },
+    {
+     "ep": "2017",
+     "club": "Joaçaba Futsal",
+     "func": "Treinador principal",
+     "g": "0",
+     "w": "0",
+     "d": "0",
+     "l": "0",
+     "titles": "-"
+    }
+   ],
+   "coach": {
+    "tactical": 15,
+    "motivation": 14,
+    "record": {
+     "G": 337,
+     "W": 217,
+     "D": 60,
+     "titlesPts": 14.35
+    }
+   },
+   "ability": 13
+  },
+  {
+   "id": "slb-estevaocordovil-adjunto",
+   "club": "slb",
+   "name": "Estevão Cordovil",
+   "func": "Treinador-adjunto",
+   "role": "adjunto",
+   "nat": "Portugal",
+   "birth": "1983-12-26",
+   "history": [
+    {
+     "ep": "2021/22-2026/27",
+     "club": "Benfica",
+     "func": "Treinador-adjunto",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "2022/23: I Divisão Feminina Futsal (principal do feminino)"
+    },
+    {
+     "ep": "2019-2021",
+     "club": "Arábia Saudita (seleção)",
+     "func": "Treinador-adjunto",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2018/19-2019/20",
+     "club": "Belenenses",
+     "func": "Treinador-adjunto",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2011/12-2015/16",
+     "club": "Al Jaish, Al Yarmouk, Al-Kuwait",
+     "func": "Treinador-adjunto",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2010/11",
+     "club": "Belenenses",
+     "func": "Treinador-adjunto",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "ability": 15
+  },
+  {
+   "id": "slb-vitorhugo-gr",
+   "club": "slb",
+   "name": "Vítor Hugo",
+   "func": "Treinador guarda-redes",
+   "role": "gr",
+   "nat": "Portugal",
+   "birth": "1982-11-30",
+   "history": [
+    {
+     "ep": "2025/26-2026/27",
+     "club": "Benfica",
+     "func": "Treinador guarda-redes",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2023/24-2024/25",
+     "club": "Dínamo Sanjoanense",
+     "func": "Treinador guarda-redes",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2022/23",
+     "club": "Dínamo Sanjoanense",
+     "func": "Treinador-adjunto",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "ability": 9
+  },
+  {
+   "id": "slb-raphaelroel-fisico",
+   "club": "slb",
+   "name": "Raphael Roel",
+   "func": "Preparador físico",
+   "role": "fisico",
+   "nat": "Brasil",
+   "birth": "1986-09-14",
+   "history": [
+    {
+     "ep": "2024/25-2026/27",
+     "club": "Benfica",
+     "func": "Preparador físico",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2024",
+     "club": "Joinville",
+     "func": "Preparador físico",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "ability": 9
+  },
+  {
+   "id": "slb-andrechaveiro-analista",
+   "club": "slb",
+   "name": "André Chaveiro",
+   "func": "Analista",
+   "role": "analista",
+   "nat": "Portugal",
+   "birth": "1990-05-14",
+   "history": [
+    {
+     "ep": "2024/25-2026/27",
+     "club": "Benfica",
+     "func": "Analista",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2020/21-2023/24",
+     "club": "Benfica",
+     "func": "Observador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "ability": 12
+  },
+  {
+   "id": "slb-ruidomingos-fisio",
+   "club": "slb",
+   "name": "Rui Domingos",
+   "func": "Médico",
+   "role": "fisio",
+   "nat": "Portugal",
+   "birth": "1984-12-05",
+   "history": [
+    {
+     "ep": "2024/25-2026/27",
+     "club": "Benfica (futsal, basquetebol, andebol, voleibol)",
+     "func": "Médico",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2020/21-2023/24",
+     "club": "Benfica [Basket]",
+     "func": "Médico",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "ability": 12
+  },
+  {
+   "id": "slb-fabiofrancisco-fisio",
+   "club": "slb",
+   "name": "Fábio Francisco",
+   "func": "Fisioterapeuta",
+   "role": "fisio",
+   "nat": "Portugal",
+   "birth": "1993-01-12",
+   "history": [
+    {
+     "ep": "2025/26-2026/27",
+     "club": "Benfica",
+     "func": "Fisioterapeuta",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "ability": 8
+  },
+  {
+   "id": "slb-ricardotavares-fisico",
+   "club": "slb",
+   "name": "Ricardo Tavares",
+   "func": "Fisiologista",
+   "role": "fisico",
+   "nat": "Portugal",
+   "birth": "1980-07-30",
+   "history": [
+    {
+     "ep": "2024/25-2026/27",
+     "club": "Benfica",
+     "func": "Fisiologista",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2011/12-2023/24",
+     "club": "Benfica (hóquei, feminino, Sub-23, juniores)",
+     "func": "Preparador físico",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "ability": 17
+  },
+  {
+   "id": "slb-pedromartins-nutricionista",
+   "club": "slb",
+   "name": "Pedro Martins",
+   "func": "Nutricionista",
+   "role": "nutricionista",
+   "nat": "Portugal",
+   "birth": "?",
+   "history": [
+    {
+     "ep": "2023/24-2026/27",
+     "club": "Benfica",
+     "func": "Nutricionista",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "ability": 9
+  },
+  {
+   "id": "slb-joanaaraujo-psicologo",
+   "club": "slb",
+   "name": "Joana Araújo",
+   "func": "Psicóloga",
+   "role": "psicologo",
+   "nat": "Portugal",
+   "birth": "?",
+   "history": [
+    {
+     "ep": "2021/22-2026/27",
+     "club": "Benfica (futsal, basquetebol, andebol, hóquei)",
+     "func": "Psicóloga",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2018/19-2020/21",
+     "club": "UD Oliveirense",
+     "func": "Psicóloga",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "ability": 12
+  },
+  {
+   "id": "slb-raulmoreira-coordenador",
+   "club": "slb",
+   "name": "Raul Moreira",
+   "func": "Coordenador geral",
+   "role": "coordenador",
+   "nat": "Portugal",
+   "birth": "1978-04-20",
+   "history": [
+    {
+     "ep": "2024/25-2026/27",
+     "club": "Benfica",
+     "func": "Coordenador geral",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2015/16-2022/23",
+     "club": "Caxinas (formação e coordenação)",
+     "func": "Treinador principal / Coordenador técnico",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "I Divisão Juniores A (Sub-19) Futsal (2021/22)"
+    },
+    {
+     "ep": "2014/15",
+     "club": "Rio Ave",
+     "func": "Treinador principal",
+     "g": "7",
+     "w": "1",
+     "d": "0",
+     "l": "6",
+     "titles": "-"
+    },
+    {
+     "ep": "2013/14",
+     "club": "Rio Ave",
+     "func": "Treinador principal",
+     "g": "16",
+     "w": "5",
+     "d": "3",
+     "l": "8",
+     "titles": "-"
+    },
+    {
+     "ep": "2012/13",
+     "club": "Rio Ave",
+     "func": "Treinador principal",
+     "g": "12",
+     "w": "6",
+     "d": "0",
+     "l": "6",
+     "titles": "-"
+    },
+    {
+     "ep": "2011/12",
+     "club": "Rio Ave",
+     "func": "Treinador principal",
+     "g": "5",
+     "w": "5",
+     "d": "0",
+     "l": "0",
+     "titles": "-"
+    },
+    {
+     "ep": "2007/08",
+     "club": "JuveNorte",
+     "func": "Treinador principal",
+     "g": "28",
+     "w": "12",
+     "d": "4",
+     "l": "12",
+     "titles": "-"
+    },
+    {
+     "ep": "2006/07-2010/11",
+     "club": "Rio Ave / FJ Antunes",
+     "func": "Treinador-adjunto",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "ability": 13
+  },
+  {
+   "id": "slb-tiagomartins-outro",
+   "club": "slb",
+   "name": "Tiago Martins",
+   "func": "Técnico de equipamentos",
+   "role": "outro",
+   "nat": "Portugal",
+   "birth": "?",
+   "history": [
+    {
+     "ep": "2020/21-2026/27",
+     "club": "Benfica",
+     "func": "Técnico de equipamentos",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "ability": 12
+  },
+  {
+   "id": "scb-joelrocha-principal",
+   "club": "scb",
+   "name": "Joel Rocha",
+   "func": "Treinador principal",
+   "role": "principal",
+   "nat": "Portugal",
+   "birth": "1981-10-18",
+   "history": [
+    {
+     "ep": "2026/27",
+     "club": "SC Braga",
+     "func": "Treinador principal",
+     "g": "6",
+     "w": "3",
+     "d": "1",
+     "l": "2",
+     "titles": "-"
+    },
+    {
+     "ep": "2025/26",
+     "club": "SC Braga",
+     "func": "Treinador principal",
+     "g": "31",
+     "w": "14",
+     "d": "5",
+     "l": "12",
+     "titles": "-"
+    },
+    {
+     "ep": "2024/25",
+     "club": "SC Braga",
+     "func": "Treinador principal",
+     "g": "38",
+     "w": "22",
+     "d": "5",
+     "l": "11",
+     "titles": "Supertaça Futsal"
+    },
+    {
+     "ep": "2023/24",
+     "club": "SC Braga",
+     "func": "Treinador principal",
+     "g": "37",
+     "w": "27",
+     "d": "3",
+     "l": "7",
+     "titles": "Taça de Portugal Futsal"
+    },
+    {
+     "ep": "2022/23",
+     "club": "SC Braga",
+     "func": "Treinador principal",
+     "g": "33",
+     "w": "25",
+     "d": "3",
+     "l": "5",
+     "titles": "-"
+    },
+    {
+     "ep": "2021/22",
+     "club": "SC Braga/AAUM",
+     "func": "Treinador principal",
+     "g": "24",
+     "w": "8",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2020/21",
+     "club": "Benfica",
+     "func": "Treinador principal",
+     "g": "44",
+     "w": "35",
+     "d": "4",
+     "l": "5",
+     "titles": "-"
+    },
+    {
+     "ep": "2019/20",
+     "club": "Benfica",
+     "func": "Treinador principal",
+     "g": "33",
+     "w": "25",
+     "d": "3",
+     "l": "5",
+     "titles": "Taça da Liga Futsal"
+    },
+    {
+     "ep": "2018/19",
+     "club": "Benfica",
+     "func": "Treinador principal",
+     "g": "50",
+     "w": "43",
+     "d": "3",
+     "l": "4",
+     "titles": "I Divisão Futsal, Taça da Liga Futsal"
+    },
+    {
+     "ep": "2017/18",
+     "club": "Benfica",
+     "func": "Treinador principal",
+     "g": "45",
+     "w": "36",
+     "d": "3",
+     "l": "6",
+     "titles": "Taça da Liga Futsal"
+    },
+    {
+     "ep": "2016/17",
+     "club": "Benfica",
+     "func": "Treinador principal",
+     "g": "39",
+     "w": "28",
+     "d": "7",
+     "l": "4",
+     "titles": "Taça de Portugal Futsal, Supertaça Futsal"
+    },
+    {
+     "ep": "2015/16",
+     "club": "Benfica",
+     "func": "Treinador principal",
+     "g": "55",
+     "w": "38",
+     "d": "6",
+     "l": "11",
+     "titles": "Supertaça Futsal"
+    },
+    {
+     "ep": "2014/15",
+     "club": "Benfica",
+     "func": "Treinador principal",
+     "g": "42",
+     "w": "36",
+     "d": "5",
+     "l": "1",
+     "titles": "I Divisão Futsal, Taça de Portugal Futsal, AF Lisboa Futsal Taça de Honra"
+    },
+    {
+     "ep": "2013/14",
+     "club": "AD Fundão",
+     "func": "Treinador principal",
+     "g": "40",
+     "w": "20",
+     "d": "6",
+     "l": "14",
+     "titles": "Taça de Portugal Futsal"
+    },
+    {
+     "ep": "2012/13",
+     "club": "AD Fundão",
+     "func": "Treinador principal",
+     "g": "33",
+     "w": "21",
+     "d": "3",
+     "l": "9",
+     "titles": "-"
+    },
+    {
+     "ep": "2011/12",
+     "club": "AD Fundão",
+     "func": "Treinador principal",
+     "g": "19",
+     "w": "5",
+     "d": "3",
+     "l": "11",
+     "titles": "-"
+    },
+    {
+     "ep": "2010/11",
+     "club": "AD Fundão",
+     "func": "Treinador principal",
+     "g": "33",
+     "w": "17",
+     "d": "2",
+     "l": "14",
+     "titles": "-"
+    },
+    {
+     "ep": "2003/04-2009/10",
+     "club": "AD Fundão, Estação, Carapalha (adjunto, formação e feminino)",
+     "func": "Treinador-adjunto",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "coach": {
+    "tactical": 16,
+    "motivation": 14,
+    "record": {
+     "G": 578,
+     "W": 395,
+     "D": 62,
+     "titlesPts": 17.049999999999997
+    }
+   },
+   "ability": 19
+  },
+  {
+   "id": "scb-pedroholstein-adjunto",
+   "club": "scb",
+   "name": "Pedro Holstein",
+   "func": "Treinador-adjunto",
+   "role": "adjunto",
+   "nat": "Portugal",
+   "birth": "1980-12-08",
+   "history": [
+    {
+     "ep": "2021/22-2026/27",
+     "club": "SC Braga",
+     "func": "Treinador-adjunto",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2018/19",
+     "club": "Âncora Praia",
+     "func": "Treinador principal",
+     "g": "13",
+     "w": "6",
+     "d": "0",
+     "l": "7",
+     "titles": "-"
+    },
+    {
+     "ep": "2015/16-2017/18",
+     "club": "Âncora Praia",
+     "func": "Treinador principal",
+     "g": "3",
+     "w": "3",
+     "d": "0",
+     "l": "0",
+     "titles": "-"
+    },
+    {
+     "ep": "2012/13-2014/15",
+     "club": "Lavradas, Ponte da Barca, Santa Luzia",
+     "func": "Treinador principal",
+     "g": "5",
+     "w": "2",
+     "d": "0",
+     "l": "3",
+     "titles": "AF Viana do Castelo Futsal (2013/14)"
+    }
+   ],
+   "ability": 14
+  },
+  {
+   "id": "scb-joaosilva-adjunto",
+   "club": "scb",
+   "name": "João Silva",
+   "func": "Treinador-adjunto",
+   "role": "adjunto",
+   "nat": "Portugal",
+   "birth": "2000-05-22",
+   "history": [
+    {
+     "ep": "2023/24-2026/27",
+     "club": "SC Braga",
+     "func": "Treinador-adjunto",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2018/19-2022/23",
+     "club": "Académica, Anadia (formação)",
+     "func": "Treinador principal / adjunto",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "ability": 10
+  },
+  {
+   "id": "fun-nunocouto-principal",
+   "club": "fun",
+   "name": "Nuno Couto",
+   "func": "Treinador principal",
+   "role": "principal",
+   "nat": "Portugal",
+   "birth": "1984-07-27",
+   "history": [
+    {
+     "ep": "2026/27",
+     "club": "AD Fundão",
+     "func": "Treinador principal",
+     "g": "7",
+     "w": "4",
+     "d": "0",
+     "l": "3",
+     "titles": "-"
+    },
+    {
+     "ep": "2025/26",
+     "club": "AD Fundão",
+     "func": "Treinador principal",
+     "g": "25",
+     "w": "7",
+     "d": "7",
+     "l": "11",
+     "titles": "-"
+    },
+    {
+     "ep": "2024/25",
+     "club": "AD Fundão",
+     "func": "Treinador principal",
+     "g": "28",
+     "w": "11",
+     "d": "4",
+     "l": "13",
+     "titles": "-"
+    },
+    {
+     "ep": "2023/24",
+     "club": "AD Fundão",
+     "func": "Treinador principal",
+     "g": "25",
+     "w": "6",
+     "d": "5",
+     "l": "14",
+     "titles": "-"
+    },
+    {
+     "ep": "2022/23",
+     "club": "AD Fundão",
+     "func": "Treinador principal",
+     "g": "27",
+     "w": "12",
+     "d": "2",
+     "l": "13",
+     "titles": "-"
+    },
+    {
+     "ep": "2021/22",
+     "club": "AD Fundão",
+     "func": "Treinador principal",
+     "g": "34",
+     "w": "17",
+     "d": "6",
+     "l": "11",
+     "titles": "-"
+    },
+    {
+     "ep": "2020/21",
+     "club": "AD Fundão",
+     "func": "Treinador principal",
+     "g": "35",
+     "w": "20",
+     "d": "6",
+     "l": "9",
+     "titles": "-"
+    },
+    {
+     "ep": "2019/20",
+     "club": "AD Fundão",
+     "func": "Treinador principal",
+     "g": "22",
+     "w": "9",
+     "d": "3",
+     "l": "10",
+     "titles": "-"
+    },
+    {
+     "ep": "2018/19",
+     "club": "AD Fundão",
+     "func": "Treinador principal",
+     "g": "38",
+     "w": "20",
+     "d": "4",
+     "l": "14",
+     "titles": "AF Cast. Branco T. Honra Futsal Clubes Nacionais"
+    },
+    {
+     "ep": "2017/18",
+     "club": "AD Fundão",
+     "func": "Treinador principal",
+     "g": "19",
+     "w": "10",
+     "d": "1",
+     "l": "8",
+     "titles": "-"
+    }
+   ],
+   "coach": {
+    "tactical": 12,
+    "motivation": 12,
+    "record": {
+     "G": 260,
+     "W": 116,
+     "D": 38,
+     "titlesPts": 0.25
+    }
+   },
+   "ability": 10
+  },
+  {
+   "id": "fun-ruiresende-adjunto",
+   "club": "fun",
+   "name": "Rui Resende",
+   "func": "Treinador-adjunto",
+   "role": "adjunto",
+   "nat": "Portugal",
+   "birth": "1997-08-07",
+   "history": [
+    {
+     "ep": "2026/27",
+     "club": "AD Fundão",
+     "func": "Treinador-adjunto",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2020/21-2024/25",
+     "club": "Bairro Boa Esperança",
+     "func": "Treinador principal",
+     "g": "0",
+     "w": "0",
+     "d": "0",
+     "l": "0",
+     "titles": "III Divisão Futsal (2022/23)"
+    }
+   ],
+   "ability": 8
+  },
+  {
+   "id": "lps-miguelvelez-principal",
+   "club": "lps",
+   "name": "Miguel Velez",
+   "func": "Treinador principal",
+   "role": "principal",
+   "nat": "Portugal",
+   "birth": "1984-05-03",
+   "history": [
+    {
+     "ep": "2026/27",
+     "club": "Leões Porto Salvo",
+     "func": "Treinador principal",
+     "g": "6",
+     "w": "3",
+     "d": "1",
+     "l": "2",
+     "titles": "-"
+    },
+    {
+     "ep": "2025/26",
+     "club": "UPVN",
+     "func": "Treinador principal",
+     "g": "25",
+     "w": "16",
+     "d": "2",
+     "l": "7",
+     "titles": "-"
+    },
+    {
+     "ep": "2024/25",
+     "club": "UPVN / Torreense",
+     "func": "Treinador principal",
+     "g": "21",
+     "w": "6",
+     "d": "4",
+     "l": "11",
+     "titles": "-"
+    },
+    {
+     "ep": "2023/24",
+     "club": "AMSAC",
+     "func": "Treinador principal",
+     "g": "30",
+     "w": "20",
+     "d": "0",
+     "l": "10",
+     "titles": "-"
+    },
+    {
+     "ep": "2022/23",
+     "club": "AMSAC",
+     "func": "Treinador principal",
+     "g": "30",
+     "w": "14",
+     "d": "6",
+     "l": "10",
+     "titles": "-"
+    },
+    {
+     "ep": "2012/13-2021/22",
+     "club": "Sporting e AMSAC (formação)",
+     "func": "Treinador principal",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "Taça Nacional Sub-15 Futsal (2018/19) e títulos regionais de formação"
+    }
+   ],
+   "coach": {
+    "tactical": 12,
+    "motivation": 12,
+    "record": {
+     "G": 112,
+     "W": 59,
+     "D": 13,
+     "titlesPts": 0.25
+    }
+   },
+   "ability": 10
+  },
+  {
+   "id": "lps-goncalofarinha-adjunto",
+   "club": "lps",
+   "name": "Gonçalo Farinha",
+   "func": "Treinador-adjunto",
+   "role": "adjunto",
+   "nat": "Portugal",
+   "birth": "1976-08-03",
+   "history": [
+    {
+     "ep": "2026/27",
+     "club": "Leões Porto Salvo",
+     "func": "Treinador-adjunto",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2023/24-2025/26",
+     "club": "UPVN",
+     "func": "Treinador-adjunto",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2016/17-2022/23",
+     "club": "Belenenses, Estoril Praia, Benfica [Feminino]",
+     "func": "Treinador-adjunto / Preparador físico",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "ability": 9
+  },
+  {
+   "id": "lps-diogosantos-adjunto",
+   "club": "lps",
+   "name": "Diogo Santos",
+   "func": "Treinador-adjunto",
+   "role": "adjunto",
+   "nat": "Portugal",
+   "birth": "1988-04-12",
+   "history": [
+    {
+     "ep": "2026/27",
+     "club": "Leões Porto Salvo",
+     "func": "Treinador-adjunto",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2024/25",
+     "club": "UPVN",
+     "func": "Treinador-adjunto",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "ability": 7
+  },
+  {
+   "id": "lps-joaocoelho-gr",
+   "club": "lps",
+   "name": "João Coelho",
+   "func": "Treinador guarda-redes",
+   "role": "gr",
+   "nat": "Portugal",
+   "birth": "2003-01-23",
+   "history": [
+    {
+     "ep": "2026/27",
+     "club": "Leões Porto Salvo",
+     "func": "Treinador guarda-redes",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2023/24-2025/26",
+     "club": "UPVN, AMSAC",
+     "func": "Treinador guarda-redes",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "ability": 8
+  },
+  {
+   "id": "lps-josepeixeiro-analista",
+   "club": "lps",
+   "name": "José Peixeiro",
+   "func": "Analista",
+   "role": "analista",
+   "nat": "Portugal",
+   "birth": "1992-09-11",
+   "history": [
+    {
+     "ep": "2026/27",
+     "club": "Leões Porto Salvo",
+     "func": "Analista e scout",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2009/10-2024/25",
+     "club": "Infantado, Sporting, AMSAC (formação)",
+     "func": "Treinador principal / adjunto",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "ability": 10
+  },
+  {
+   "id": "lps-josepeixeiro-scout",
+   "club": "lps",
+   "name": "José Peixeiro",
+   "func": "Scout",
+   "role": "scout",
+   "nat": "Portugal",
+   "birth": "1992-09-11",
+   "history": [
+    {
+     "ep": "2026/27",
+     "club": "Leões Porto Salvo",
+     "func": "Analista e scout",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2009/10-2024/25",
+     "club": "Infantado, Sporting, AMSAC (formação)",
+     "func": "Treinador principal / adjunto",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "ability": 10
+  },
+  {
+   "id": "lps-flaviofonseca-fisio",
+   "club": "lps",
+   "name": "Flávio Fonseca",
+   "func": "Fisioterapeuta",
+   "role": "fisio",
+   "nat": "Portugal",
+   "birth": "1988-03-17",
+   "history": [
+    {
+     "ep": "2023/24-2026/27",
+     "club": "Leões Porto Salvo",
+     "func": "Fisioterapeuta",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2016/17-2022/23",
+     "club": "Al Yarmouk, Sporting [Feminino/S20], Fut. Benfica [Feminino], Leões Porto Salvo",
+     "func": "Fisioterapeuta",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "ability": 9
+  }
+ ]
+}
