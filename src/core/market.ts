@@ -243,6 +243,33 @@ export function acceptOffer(s: GameState, o: Offer): string {
 export function rejectOffer(s: GameState, o: Offer) { const m = marketOf(s); m.offers = m.offers.filter((x) => x.id !== o.id); }
 
 // ---------- clubes do computador ----------
+const ROLE: Record<string, Position[]> = { GR: ['GR'], FIX: ['FIX', 'FIX/ALA', 'UNI'], ALA: ['ALA', 'FIX/ALA', 'ALA/PIV', 'UNI'], PIV: ['PIV', 'ALA/PIV'] };
+const ROLE_MIN: Record<string, number> = { GR: 2, FIX: 3, ALA: 4, PIV: 2 };
+export interface Need { kind: 'posição' | 'qualidade' | 'oportunidade' | 'plantel'; role?: string; min: number }
+const fitsNeed = (n: Need, p: Player) => !n.role || ROLE[n.role].includes(p.position);
+
+/** De que precisa a equipa? null = está servida. */
+export function teamNeed(s: GameState, clubId: string): Need | null {
+  const squad = s.players.filter((p) => p.clubId === clubId && !(s.injuries?.[p.id] && s.injuries[p.id].days > 90));
+  const ov = (p: Player) => overall(p.attrs, p.position);
+  const lv = squad.map(ov).sort((a, b) => b - a);
+  const starters = (lv[0] + lv[1] + lv[2] + lv[3] + lv[4]) / 5 || 10;
+  for (const role of ['GR', 'PIV', 'FIX', 'ALA']) {
+    const inRole = squad.filter((p) => ROLE[role].includes(p.position)).sort((a, b) => ov(b) - ov(a));
+    if (inRole.length < ROLE_MIN[role]) return { kind: 'posição', role, min: starters - 3 };
+    if (ov(inRole[0]) < starters - 2.5) return { kind: 'qualidade', role, min: ov(inRole[0]) + 1 };
+  }
+  if (squad.length < 15) return { kind: 'plantel', min: (lv[11] ?? lv[lv.length - 1] ?? 8) };
+  // sucessão: titular veterano (≥32) sem alternativa à altura na mesma posição
+  const top5 = [...squad].sort((a, b) => ov(b) - ov(a)).slice(0, 5);
+  for (const v of top5.filter((p) => p.age >= 32)) {
+    const role = Object.keys(ROLE).find((k) => ROLE[k].includes(v.position))!;
+    if (!squad.some((p) => p !== v && p.age < 29 && ROLE[role].includes(p.position) && ov(p) >= ov(v) - 1.5)) return { kind: 'qualidade', role, min: ov(v) - 1.5 };
+  }
+  return { kind: 'oportunidade', min: (lv[4] ?? 10) + 0.3 };
+}
+
+
 /** Corre a cada avanço: clubes da IA contratam livres para tapar buracos e, na janela, fazem propostas pelos meus jogadores. */
 export function aiMarket(s: GameState, from: string, to: string): string[] {
   const news: string[] = [];
@@ -262,17 +289,19 @@ export function aiMarket(s: GameState, from: string, to: string): string[] {
       const p = pool.find((x) => marketWage(x, c) <= Math.max(room, 600));
       if (p) { moveTo(s, p, c, marketWage(p, c), p.age >= 30 ? 1 : 2); news.push(`Mercado: ${p.name} (livre) assina pelo ${c.name}.`); const sg = (m.signed ??= {}); sg[`${c.id}@${s.season.year}`] = (sg[`${c.id}@${s.season.year}`] ?? 0) + 1; }
     }
-    // 2) na janela: reforços. Objetivo por época (pedido do António): grandes ~2, meio da tabela 3-4.
-    //    Compra a qualquer clube (também mais prestigiados ou rivais) se pagar o preço pedido; senão vai aos livres.
+    // 2) na janela: reforços só quando a equipa precisa (pedido do António):
+    //    - falta de jogadores numa posição (2 GR, 3 fixos, 4 alas, 2 pivôs) ou plantel curto
+    //    - posição fraca: o melhor dessa posição bem abaixo do nível dos titulares
+    //    - oportunidade clara: alguém pagável que entraria no 5 inicial
+    //    Compra a qualquer clube (também mais prestigiados ou rivais) se pagar o preço pedido; senão livres ou estrangeiro.
     const signed = (m.signed ??= {});
     const key = `${c.id}@${s.season.year}`;
-    const target = c.wealth >= 90 ? 2 : c.wealth >= 70 ? 3 : 3 + (c.id.charCodeAt(0) % 2);
-    // ~70% dos reforços no verão (até 15 set), o resto em janeiro
-    const goal = to.slice(5, 7) === '01' ? target : Math.ceil(target * 0.7);
     // vários dias passam de uma vez (ex.: julho a setembro): uma tentativa por cada ~10 dias
     for (let attempt = 0; attempt < Math.ceil(days / 10); attempt++) {
     const squad = s.players.filter((p) => p.clubId === c.id);
-    if (!(windowOpen(to) && (signed[key] ?? 0) < goal && r() < 0.8)) continue;
+    if (!windowOpen(to) || r() > 0.7) continue;
+    const need = teamNeed(s, c.id);
+    if (!need) continue;
     {
       const fin = financeOf(s, c.id);
       const levels = squad.map((p) => overall(p.attrs, p.position)).sort((a, b) => b - a);
@@ -284,7 +313,7 @@ export function aiMarket(s: GameState, from: string, to: string): string[] {
       // os dois piores podem sair para abrir espaço (rescisão ou venda)
       const room = Math.max(salaryBudget(c) * 1.1 / 12 - wageBill(s, c.id) + (squad.length >= 15 ? worst2.reduce((a, p) => a + (p.contract?.wage ?? 0), 0) : 0), (worst?.contract?.wage ?? 0) + 500);
       const moved = (m.moved ??= {});
-      const t = s.players.filter((p) => p.clubId !== c.id && p.clubId !== s.clubId && !p.loan && moved[p.id] !== s.season.year && overall(p.attrs, p.position) > bar)
+      const t = s.players.filter((p) => p.clubId !== c.id && p.clubId !== s.clubId && !p.loan && moved[p.id] !== s.season.year && fitsNeed(need, p) && overall(p.attrs, p.position) > Math.max(bar, need.min))
         .map((p) => ({ p, ask: p.clubId === FREE ? 0 : askingPrice(s, p, c.id) }))
         .filter((x) => (x.ask === 0 || x.ask <= fin.balance) && wageDemand(s, x.p, c) <= room)
         .filter((x) => !areRivals(x.p.clubId, c.id) || rng(`riv-${c.id}-${s.season.year}`)() < 0.12) // negócio entre rivais: raro (≈1 em 8 épocas por clube), além de caro
@@ -299,11 +328,11 @@ export function aiMarket(s: GameState, from: string, to: string): string[] {
         news.push(seller ? `Mercado: ${t.p.name} troca o ${seller.name} pelo ${c.name} (${fmtEur(t.ask)})${areRivals(seller.id, c.id) ? ', transferência entre rivais' : ''}.` : `Mercado: ${t.p.name} (livre) assina pelo ${c.name}.`);
         // plantel cheio: o pior sai (fica livre, com acordo de rescisão)
         for (const w of worst2.slice(0, 1)) if ((s.players.filter((p) => p.clubId === c.id).length > 17 || wageBill(s, c.id) > salaryBudget(c) * 1.2 / 12) && w !== t.p) { book(s, c.id, `Rescisão com ${w.name}`, -Math.round(releaseCost(s, w) * 0.3)); w.clubId = FREE; w.contract = undefined; }
-      } else if (r() < 0.75) {
+      } else if (r() < (need.kind === 'oportunidade' ? 0.06 : 0.75)) { // oportunidades no estrangeiro são raras; necessidades resolvem-se
         // sem alvo em Portugal: contrata no estrangeiro (Brasil, Espanha…), até haver ligas estrangeiras no jogo (etapa 12)
-        const lvl = levels[Math.min(levels.length - 1, c.wealth >= 90 ? 3 : c.wealth >= 70 ? 5 : 9)] ?? 10;
-        const cand = generateFreeAgents(s, 12, `ext-${c.id}-${to}-${attempt}`, lvl).map((p) => ({ ...p, id: p.id.replace('fa', 'ex') }))
-          .filter((p) => p.nationality !== 'Portugal' && overall(p.attrs, p.position) >= lvl - 1);
+        const lvl = need.kind === 'oportunidade' ? need.min : (levels[Math.min(levels.length - 1, 8)] ?? 10);
+        const cand = generateFreeAgents(s, 16, `ext-${c.id}-${to}-${attempt}`, Math.max(lvl, need.min + 0.5)).map((p) => ({ ...p, id: p.id.replace('fa', 'ex') }))
+          .filter((p) => p.nationality !== 'Portugal' && fitsNeed(need, p) && overall(p.attrs, p.position) > Math.max(lvl - 1, need.min));
         const p = cand.sort((a, b) => overall(b.attrs, b.position) - overall(a.attrs, a.position))[0];
         if (p) {
           // clubes pequenos trazem jogadores baratos (fim de contrato, divisões inferiores): custo baixo (estimativa)
