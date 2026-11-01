@@ -461,7 +461,7 @@ export class Choreo {
     this.sortBalls();
     for (const id of this.attOut) if (id !== this.gkA) this.tr.get(id)?.liven(this.r, 0, D - 0.3, 1.8, (t) => this.isFixed(id, t) || this.holderAt(t) === id);
     for (const id of this.tr.keys()) if (this.sideOf.get(id) === att) {
-      const profile = this.sys === '4-0' ? this.movement.get(id) : undefined;
+      const profile = this.sys === '4-0' && id !== this.gkA ? this.movement.get(id) : undefined;
       this.tr.get(id)!.limit(VMAX);
       this.tr.get(id)!.bake(-this.lead, D + 1, VMAX, AMAX, profile?.accelerationFactor, profile?.agilityFactor);
     }
