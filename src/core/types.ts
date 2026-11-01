@@ -36,6 +36,7 @@ export interface Player {
   attrs: Attributes;
   potential: number;
   contract?: Contract;
+  loan?: { from: string; until: number; share: number }; // emprestado: clube dono, fim (30/06 desse ano), parte do salário paga por quem o tem
 }
 
 export interface League {

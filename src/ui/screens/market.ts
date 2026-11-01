@@ -2,7 +2,7 @@
 import { overall, starsHtml } from '../../core/attributes';
 import { fmtEur, marketValue, salaryBudget, wageBill } from '../../core/contracts';
 import { financeOf } from '../../core/finance';
-import { FREE, acceptOffer, askingPrice, isSenior, marketOf, rejectOffer, release, releaseCost, seniors, tryBuy, wageDemand, windowLabel, windowOpen } from '../../core/market';
+import { FREE, loanOut, tryLoanIn, acceptOffer, askingPrice, isSenior, marketOf, rejectOffer, release, releaseCost, seniors, tryBuy, wageDemand, windowLabel, windowOpen } from '../../core/market';
 import type { GameState, Player } from '../../core/types';
 import { crestSvg } from '../crest';
 
@@ -43,10 +43,11 @@ export function renderMarket(content: HTMLElement, s: GameState, refresh: () => 
     </div>
     <div id="neg"></div>
     <table class="tbl small"><thead><tr><th>Nome</th><th>Clube</th><th>Pos.</th><th>Idade</th><th>Nac.</th><th>Atual</th><th>Pot.</th><th>Valor</th><th>Salário</th><th>Contrato</th><th></th></tr></thead><tbody>
-    ${list.map((p) => `<tr><td class="click" data-open="${p.id}"><b>${p.name}</b></td><td>${p.clubId === FREE ? '<span class="muted">Livre</span>' : `${crestSvg(p.clubId, 16)} ${clubName(p.clubId)}`}</td><td>${p.position}</td><td>${p.age}</td><td>${p.nationality}</td><td>${starsHtml(overall(p.attrs, p.position))}</td><td>${starsHtml(p.potential)}</td><td>${fmtEur(valueOf(p))}</td><td>${p.contract ? fmtEur(p.contract.wage) : '-'}</td><td>${p.contract ? 'jun ' + p.contract.until : '-'}</td><td><button class="btn" data-neg="${p.id}">Negociar</button></td></tr>`).join('')}
+    ${list.map((p) => `<tr><td class="click" data-open="${p.id}"><b>${p.name}</b></td><td>${p.clubId === FREE ? '<span class="muted">Livre</span>' : `${crestSvg(p.clubId, 16)} ${clubName(p.clubId)}${p.loan ? ' <span class="muted small">(emp.)</span>' : ''}`}</td><td>${p.position}</td><td>${p.age}</td><td>${p.nationality}</td><td>${starsHtml(overall(p.attrs, p.position))}</td><td>${starsHtml(p.potential)}</td><td>${fmtEur(valueOf(p))}</td><td>${p.contract ? fmtEur(p.contract.wage) : '-'}</td><td>${p.contract ? 'jun ' + p.contract.until : '-'}</td><td><button class="btn" data-neg="${p.id}">Negociar</button></td></tr>`).join('')}
     </tbody></table>
     <h3>O meu plantel</h3>
-    <table class="tbl small"><tbody>${mySquad.map((p) => `<tr><td>${p.name}</td><td>${p.position}</td><td>${p.age}</td><td>${p.contract ? fmtEur(p.contract.wage) + '/mês' : ''}</td><td>${isSenior(p) ? 'Sénior' : 'Sub-19'}</td><td><button class="btn ghost" data-rel="${p.id}">Rescindir (${fmtEur(releaseCost(s, p))})</button></td></tr>`).join('')}</tbody></table>
+    <table class="tbl small"><tbody>${mySquad.map((p) => `<tr><td>${p.name}</td><td>${p.position}</td><td>${p.age}</td><td>${p.contract ? fmtEur(p.contract.wage) + '/mês' : ''}</td><td>${isSenior(p) ? 'Sénior' : 'Sub-19'}</td><td>${p.loan ? `<span class="muted">Emprestado pelo ${clubName(p.loan.from)} até jun ${p.loan.until}</span>` : `<button class="btn ghost" data-rel="${p.id}">Rescindir (${fmtEur(releaseCost(s, p))})</button> <button class="btn ghost" data-lo="${p.id}">Emprestar</button>`}</td></tr>`).join('')}</tbody></table>
+    ${s.players.some((p) => p.loan?.from === my.id) ? `<h3>Emprestados por mim</h3><table class="tbl small"><tbody>${s.players.filter((p) => p.loan?.from === my.id).map((p) => `<tr><td>${p.name}</td><td>${crestSvg(p.clubId, 16)} ${clubName(p.clubId)}</td><td>até jun ${p.loan!.until}</td><td>pagam ${Math.round(p.loan!.share * 100)}% do salário</td></tr>`).join('')}</tbody></table>` : ''}
     <p class="muted small">Quanto os clubes pedem, os salários pedidos e a data das janelas são estimativas. A cláusula de rescisão é sempre aceite.</p>`;
 
   const $ = <T extends HTMLElement>(q: string) => content.querySelector<T>(q)!;
@@ -62,6 +63,10 @@ export function renderMarket(content: HTMLElement, s: GameState, refresh: () => 
     const p = s.players.find((x) => x.id === el.dataset.rel)!;
     if (confirm(`Rescindir com ${p.name}? Custa ${fmtEur(releaseCost(s, p))} e ele fica livre.`)) { alert(release(s, p)); refresh(); }
   }));
+  content.querySelectorAll<HTMLElement>('[data-lo]').forEach((el) => (el.onclick = () => {
+    const p = s.players.find((x) => x.id === el.dataset.lo)!;
+    if (confirm(`Emprestar ${p.name} até ao fim da época?`)) { alert(loanOut(s, p)); refresh(); }
+  }));
   content.querySelectorAll<HTMLElement>('[data-neg]').forEach((el) => (el.onclick = () => {
     const p = s.players.find((x) => x.id === el.dataset.neg)!;
     const free = p.clubId === FREE;
@@ -73,8 +78,14 @@ export function renderMarket(content: HTMLElement, s: GameState, refresh: () => 
         <label class="small">Salário/mês (€) <input id="nwage" type="number" step="50" value="${want}" style="width:90px"></label>
         <label class="small">Anos <select id="nyears">${[1, 2, 3, 4].map((y) => `<option ${y === 2 ? 'selected' : ''}>${y}</option>`).join('')}</select></label>
         <button class="btn primary" id="ngo">Enviar proposta</button>
+        ${free || p.loan ? '' : `<label class="small">ou empréstimo: pago <select id="lshare">${[0.5, 0.75, 1].map((x) => `<option value="${x}">${x * 100}%</option>`).join('')}</select> do salário</label><button class="btn" id="lgo">Pedir emprestado</button>`}
       </div>
       <div class="small muted" id="nmsg">${free ? '' : `O clube deve pedir cerca de ${fmtEur(ask)} · cláusula ${fmtEur(p.contract?.clause ?? 0)}. `}O jogador deve pedir ~${fmtEur(want)}/mês.${!free && !windowOpen(s.date) ? ' Janela fechada: só depois de abrir.' : ''}</div></div>`;
+    content.querySelector<HTMLElement>('#lgo')?.addEventListener('click', () => {
+      const res = tryLoanIn(s, p, Number($<HTMLSelectElement>('#lshare').value));
+      if (res.ok) { alert(res.msg); refresh(); return; }
+      $('#nmsg').textContent = res.msg;
+    });
     $('#ngo').onclick = () => {
       const fee = free ? 0 : Number($<HTMLInputElement>('#nfee').value);
       const res = tryBuy(s, p, { fee, wage: Number($<HTMLInputElement>('#nwage').value), years: Number($<HTMLSelectElement>('#nyears').value) });

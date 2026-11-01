@@ -155,8 +155,8 @@ export function homeScreen(root: HTMLElement) {
       const status = (inj ? `<div class="card" style="margin:8px 0;padding:8px 12px">🩹 <b>${inj.type}</b> · ${inj.days} dias de paragem · volta a ${inj.until.split('-').reverse().join('/')}<br><span class="small muted">${injuryInfo(inj.type)}</span></div>` : '')
         + bans.map((b) => `<div class="card" style="margin:8px 0;padding:8px 12px">🟥 Castigado: ${b.games} jogo(s) (${b.reason})</div>`).join('');
       const pclub = s!.clubs.find((c) => c.id === pl.clubId)!;
-      const dem = pl.clubId === club.id ? renewalDemand(s!, pl) : { wage: 0, maxYears: 1 };
-      const renew = pl.clubId === club.id ? `<div class="card" style="margin:8px 0 12px;padding:8px 12px"><b>Renovar contrato</b>
+      const dem = pl.clubId === club.id && !pl.loan ? renewalDemand(s!, pl) : { wage: 0, maxYears: 1 };
+      const renew = pl.clubId === club.id && !pl.loan ? `<div class="card" style="margin:8px 0 12px;padding:8px 12px"><b>Renovar contrato</b>
         <div class="row" style="justify-content:flex-start;gap:8px;margin-top:6px;flex-wrap:wrap">
           <label class="small">Salário/mês (€) <input id="rwage" type="number" step="50" min="0" value="${dem.wage}" style="width:90px"></label>
           <label class="small">Anos <select id="ryears">${[1, 2, 3, 4].map((y) => `<option ${y === Math.min(2, dem.maxYears) ? 'selected' : ''}>${y}</option>`).join('')}</select></label>

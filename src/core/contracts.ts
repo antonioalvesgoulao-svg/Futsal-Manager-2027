@@ -97,7 +97,7 @@ export function contractsSeasonEnd(s: GameState, endingYear: number): string[] {
   const out: string[] = [];
   const gone: Player[] = [];
   for (const p of s.players) {
-    if (!p.contract || p.contract.until > endingYear) continue;
+    if (!p.contract || p.contract.until > endingYear || p.loan) continue;
     const club = s.clubs.find((c) => c.id === p.clubId)!;
     if (p.clubId === s.clubId) { gone.push(p); out.push(`${p.name} terminou contrato e deixou o clube.`); continue; }
     // IA: renova quem tem nível para o plantel (os 12 melhores) e não é muito velho
@@ -111,4 +111,8 @@ export function contractsSeasonEnd(s: GameState, endingYear: number): string[] {
 
 export const fmtEur = (x: number) => (x >= 1e6 ? `${(x / 1e6).toFixed(1).replace('.', ',')} M€` : x >= 1e4 ? `${Math.round(x / 1000)} mil €` : `${x.toLocaleString('pt-PT')} €`);
 
-export const wageBill = (s: GameState, clubId: string) => s.players.filter((p) => p.clubId === clubId).reduce((a, p) => a + (p.contract?.wage ?? 0), 0);
+export const wageBill = (s: GameState, clubId: string) => s.players.reduce((a, p) => {
+  const w = p.contract?.wage ?? 0;
+  if (p.loan) return a + (p.clubId === clubId ? w * p.loan.share : p.loan.from === clubId ? w * (1 - p.loan.share) : 0);
+  return a + (p.clubId === clubId ? w : 0);
+}, 0);

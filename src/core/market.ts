@@ -9,7 +9,7 @@ import type { Club, GameState, Player, Position } from './types';
 export const FREE = ''; // clubId dos jogadores livres
 
 export interface Offer { id: string; playerId: string; from: string; fee: number; date: string }
-export interface MarketState { offers: Offer[]; regs: Record<string, number>; seq: number; lastAi?: string; pool?: number }
+export interface MarketState { offers: Offer[]; regs: Record<string, number>; seq: number; lastAi?: string; pool?: number; freeSince?: Record<string, number>; moved?: Record<string, number> }
 
 export const marketOf = (s: GameState): MarketState => (s.market ??= { offers: [], regs: {}, seq: 0 });
 
@@ -60,10 +60,12 @@ export function ensurePool(s: GameState) {
   const m = marketOf(s);
   if (m.pool === s.season.year) return;
   m.pool = s.season.year;
-  // livres há mais de uma época e veteranos sem clube saem do futsal
-  s.players = s.players.filter((p) => p.clubId !== FREE || p.age < 34);
-  const have = s.players.filter((p) => p.clubId === FREE).length;
-  if (have < 40) s.players.push(...generateFreeAgents(s, 40 - have, String(s.season.year)));
+  // livres há duas épocas ou veteranos (≥33) sem clube deixam o futsal
+  const since = (m.freeSince ??= {});
+  for (const p of s.players) if (p.clubId === FREE) since[p.id] ??= s.season.year; else delete since[p.id];
+  s.players = s.players.filter((p) => p.clubId !== FREE || (p.age < 33 && s.season.year - since[p.id] < 2));
+  // no máximo 10 jogadores novos por época (pedido do António); os outros livres são os que acabam contrato
+  s.players.push(...generateFreeAgents(s, 10, String(s.season.year)));
 }
 
 // ---------- negociação ----------
@@ -97,6 +99,7 @@ export function tryBuy(s: GameState, p: Player, bid: Bid): Reply {
   const fin = financeOf(s, my.id);
   const free = p.clubId === FREE;
   if (p.clubId === my.id) return { ok: false, msg: 'Já é teu jogador.' };
+  if (p.loan) return { ok: false, msg: `${p.name} está emprestado pelo ${s.clubs.find((c) => c.id === p.loan!.from)?.name}. Só regressa no fim do empréstimo.` };
   if (!free && !windowOpen(s.date)) return { ok: false, msg: `A janela de transferências está fechada. Só podes contratar jogadores livres.` };
   // limite de inscritos (Art. 52.5)
   const m = marketOf(s);
@@ -140,11 +143,60 @@ export function releaseCost(s: GameState, p: Player) {
 const monthsInto = (d: string) => { const m = Number(d.slice(5, 7)); return m >= 7 ? m - 7 : m + 5; };
 
 export function release(s: GameState, p: Player): string {
+  if (p.loan) return `${p.name} está emprestado: não podes rescindir.`;
   const cost = releaseCost(s, p);
   book(s, p.clubId, `Rescisão com ${p.name}`, -cost);
   p.clubId = FREE; p.contract = undefined;
   s.tactics.q1 = s.tactics.q1.filter((id) => id !== p.id); s.tactics.q2 = s.tactics.q2.filter((id) => id !== p.id);
   return `${p.name} rescindiu (custo ${fmtEur(cost)}) e fica livre.`;
+}
+
+// ---------- empréstimos ----------
+/** Pedir um jogador emprestado (até ao fim da época). O clube só empresta quem não é dos seus 9 melhores. */
+export function tryLoanIn(s: GameState, p: Player, share: number): Reply {
+  const my = s.clubs.find((c) => c.id === s.clubId)!;
+  if (p.clubId === FREE || p.clubId === my.id || p.loan) return { ok: false, msg: 'Este jogador não pode ser emprestado.' };
+  if (!windowOpen(s.date)) return { ok: false, msg: 'A janela de transferências está fechada.' };
+  if (rankIn(s, p) < 9) return { ok: false, msg: `O ${s.clubs.find((c) => c.id === p.clubId)!.name} não empresta: ${p.name} é importante para eles.` };
+  const minShare = my.reputation >= (s.clubs.find((c) => c.id === p.clubId)!.reputation) ? 0.75 : 0.5;
+  if (share < minShare) return { ok: false, counter: minShare, msg: `Querem que pagues pelo menos ${Math.round(minShare * 100)}% do salário (${fmtEur(Math.round((p.contract?.wage ?? 0) * minShare))}/mês).` };
+  if (isSenior(p) && seniors(s, my.id) >= 20) return { ok: false, msg: 'Tens 20 seniores inscritos (Art. 52.5).' };
+  const limit = salaryBudget(my) * 1.1 / 12;
+  if (wageBill(s, my.id) + (p.contract?.wage ?? 0) * share > limit) return { ok: false, msg: 'A direção não aprova: passa o orçamento salarial +10%.' };
+  const from = p.clubId;
+  p.loan = { from, until: s.season.year + 1, share };
+  p.clubId = my.id;
+  const used = new Set(s.players.filter((x) => x.clubId === my.id && x !== p).map((x) => x.number));
+  if (p.number === null || used.has(p.number)) { let n = 2; while (used.has(n)) n++; p.number = n; }
+  return { ok: true, msg: `${p.name} chega por empréstimo até 30/06/${p.loan.until} (pagas ${Math.round(share * 100)}% do salário).` };
+}
+
+/** Emprestar um jogador meu a um clube mais pequeno onde jogue (até ao fim da época; pagam metade do salário). */
+export function loanOut(s: GameState, p: Player): string {
+  if (!windowOpen(s.date)) return 'A janela de transferências está fechada.';
+  if (p.loan) return `${p.name} já está emprestado.`;
+  const my = s.clubs.find((c) => c.id === s.clubId)!;
+  const ov = overall(p.attrs, p.position);
+  const dest = s.clubs.filter((c) => c.id !== my.id && s.players.filter((x) => x.clubId === c.id).length < 20)
+    .map((c) => ({ c, rank: s.players.filter((x) => x.clubId === c.id && overall(x.attrs, x.position) > ov).length }))
+    .filter((x) => x.rank < 10).sort((a, b) => b.c.reputation - a.c.reputation)[0];
+  if (!dest) return `Nenhum clube quer ${p.name} por empréstimo.`;
+  p.loan = { from: my.id, until: s.season.year + 1, share: 0.5 };
+  p.clubId = dest.c.id;
+  s.tactics.q1 = s.tactics.q1.filter((id) => id !== p.id); s.tactics.q2 = s.tactics.q2.filter((id) => id !== p.id);
+  return `${p.name} emprestado ao ${dest.c.name} até 30/06/${p.loan.until} (pagam metade do salário).`;
+}
+
+/** Fim da época: empréstimos acabam e os jogadores voltam ao clube dono. */
+export function endLoans(s: GameState, endingYear: number): string[] {
+  const out: string[] = [];
+  for (const p of s.players) if (p.loan && p.loan.until <= endingYear) {
+    if (p.loan.from === s.clubId || p.clubId === s.clubId) out.push(`${p.name} terminou o empréstimo e volta ao ${s.clubs.find((c) => c.id === p.loan!.from)!.name}.`);
+    p.clubId = p.loan.from; delete p.loan;
+  }
+  s.tactics.q1 = s.tactics.q1.filter((id) => s.players.some((p) => p.id === id && p.clubId === s.clubId));
+  s.tactics.q2 = s.tactics.q2.filter((id) => s.players.some((p) => p.id === id && p.clubId === s.clubId));
+  return out;
 }
 
 // ---------- propostas recebidas ----------
@@ -181,7 +233,39 @@ export function aiMarket(s: GameState, from: string, to: string): string[] {
       const p = pool.find((x) => marketWage(x, c) <= Math.max(room, 600));
       if (p) { moveTo(s, p, c, marketWage(p, c), p.age >= 30 ? 1 : 2); if (r() < 0.5) news.push(`Mercado: ${p.name} (livre) assina pelo ${c.name}.`); }
     }
-    // 2) na janela: proposta por um jogador meu que seria titular lá (≈ 1 por clube a cada ~2 meses)
+    // 2) na janela: compra a outro clube da IA um jogador que seria titular (≈ 1 por clube rico a cada ~3 meses)
+    if (windowOpen(to) && r() < days / 90 * (c.wealth / 100)) {
+      const worstStarter = squad.map((p) => overall(p.attrs, p.position)).sort((a, b) => b - a)[4] ?? 0;
+      const fin = financeOf(s, c.id);
+      const room = salaryBudget(c) * 1.1 / 12 - wageBill(s, c.id);
+      const moved = (m.moved ??= {});
+      const rivals = (a: string, b: string) => [a, b].sort().join() === 'scp,slb'; // venda direta entre Sporting e Benfica: não acontece
+      const t = s.players.filter((p) => p.clubId !== c.id && p.clubId !== s.clubId && p.clubId !== FREE && !p.loan && moved[p.id] !== s.season.year && !rivals(p.clubId, c.id)
+          && overall(p.attrs, p.position) > worstStarter + 0.5 && (s.clubs.find((x) => x.id === p.clubId)!.reputation <= c.reputation + 5))
+        .sort((a, b) => overall(b.attrs, b.position) - overall(a.attrs, a.position))
+        .find((p) => askingPrice(s, p) <= fin.balance && wageDemand(s, p, c) <= room);
+      if (t) {
+        const seller = s.clubs.find((x) => x.id === t.clubId)!;
+        const fee = askingPrice(s, t);
+        book(s, c.id, `Contratação de ${t.name}`, -fee, true); book(s, seller.id, `Venda de ${t.name}`, fee, true);
+        moveTo(s, t, c, wageDemand(s, t, c), t.age >= 30 ? 2 : 3);
+        moved[t.id] = s.season.year;
+        news.push(`Mercado: ${t.name} troca o ${seller.name} pelo ${c.name} (${fmtEur(fee)}).`);
+      }
+    }
+    // 3) no início da época os grandes emprestam jovens que não jogariam (≤21 anos, fora dos 12 melhores) a clubes mais pequenos
+    if (from.slice(5) >= '07-01' && from.slice(5) <= '08-31' && c.wealth >= 70) {
+      const ranked = [...squad].sort((a, b) => overall(b.attrs, b.position) - overall(a.attrs, a.position));
+      for (const y of ranked.slice(12).filter((p) => p.age <= 21 && !p.loan && p.position !== 'GR')) {
+        const dest = s.clubs.filter((x) => x.id !== c.id && x.id !== s.clubId && x.reputation < c.reputation && s.players.filter((p) => p.clubId === x.id).length < 19)
+          .sort(() => r() - 0.5)[0];
+        if (!dest || r() > 0.5) continue;
+        y.loan = { from: c.id, until: s.season.year + 1, share: 0.5 };
+        y.clubId = dest.id;
+        news.push(`Mercado: ${y.name} emprestado pelo ${c.name} ao ${dest.name} até ao fim da época.`);
+      }
+    }
+    // 4) na janela: proposta por um jogador meu que seria titular lá (≈ 1 por clube a cada ~2 meses)
     if (windowOpen(to) && r() < days / 25 * (c.wealth / 100)) {
       const worstStarter = squad.map((p) => overall(p.attrs, p.position)).sort((a, b) => b - a)[4] ?? 0;
       const fin = financeOf(s, c.id);

@@ -6,7 +6,7 @@ import { normalizeTactics } from './tactics';
 import { accumulate, shootingFocus, trainingBonus } from './training';
 import { contractsSeasonEnd, ensureContracts } from './contracts';
 import { matchRevenue, monthlyFinance, book, PRIZES } from './finance';
-import { aiMarket, ensurePool } from './market';
+import { aiMarket, endLoans, ensurePool } from './market';
 import { applyMorale, moraleEvent } from './morale';
 import { injuryOf, matchInjuries, trainingInjuries } from './injuries';
 import { applyDiscipline, banFor, seasonEndDiscipline } from './discipline';
@@ -231,6 +231,7 @@ function endSeason(s: GameState): DevChange[] {
     if (p.clubId === s.clubId) changes.push(c);
   }
   // contratos que acabam (antes das reformas)
+  for (const t of endLoans(s, old.year + 1)) news(s, t);
   for (const t of contractsSeasonEnd(s, old.year + 1)) news(s, t);
   // reformas
   const retired = s.players.filter((p) => retires(p, old.year));
