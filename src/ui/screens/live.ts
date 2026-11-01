@@ -686,7 +686,8 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
     snap = m.snapshot();
     if (snap.possession) {
       poss = snap.possession;
-      choreo = new Choreo(poss, [hs.tactics, as.tactics], snap.period, startState, m.names);
+      const playersById = Object.fromEntries([...hs.squad, ...as.squad].map((player) => [player.id, player]));
+      choreo = new Choreo(poss, [hs.tactics, as.tactics], snap.period, startState, m.names, playersById);
       startState = choreo.end;
       ct = 0;
       display = poss.start;
