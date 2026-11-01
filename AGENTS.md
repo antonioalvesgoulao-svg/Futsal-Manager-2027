@@ -58,3 +58,10 @@ Estas instruções aplicam-se a qualquer assistente de programação (ChatGPT/Co
 - O GitHub é a fonte de verdade. Se houver divergência entre estes documentos e o código/estado atual do GitHub, verificar e atualizar a documentação antes de continuar.
 - A documentação é parte integrante da entrega: uma alteração relevante não está concluída até `HANDOFF.md` e `AGENTS.md` estarem atualizados, juntamente com os documentos técnicos aplicáveis. Não é necessário alterar todos os restantes ficheiros em cada commit; atualizar os que foram afetados.
 - PRs empilhadas devem identificar no título/corpo a PR e branch de que dependem. Não declarar uma PR pronta para merge isoladamente se a sua base ainda não estiver integrada.
+
+
+## Preservação do estado funcional já desenvolvido
+
+- O projeto já contém um conjunto substancial de funcionalidades de manager, competições, mercado, scouting, staff, regras, bolas paradas e apresentação 3D. Não o tratar como um protótipo novo nem limitar a leitura do projeto às PRs de diagnóstico/movimento.
+- Ao retomar trabalho, cruzar o `HANDOFF.md` com o histórico recente de commits e o código atual de `main` e das branches relevantes. O handoff é um mapa de continuidade, não uma lista exaustiva de funcionalidades nem substituto da inspeção do repositório.
+- Preservar funcionalidades existentes ao desenvolver a simulação tática. Validar regressões em áreas adjacentes quando uma alteração as possa afetar.
