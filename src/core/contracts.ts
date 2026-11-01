@@ -15,9 +15,10 @@ const round = (x: number, step: number) => Math.max(step, Math.round(x / step) *
 export function marketWage(p: Player, club: Club) {
   const ov = overall(p.attrs, p.position);
   const base = 850 * Math.exp((ov - 8) * 0.34); // nível 8 ≈ 850 €, 11 ≈ 2,4 mil €, 14 ≈ 6,6 mil €, 17 ≈ 18 mil €
-  const wealth = 0.55 + (club.wealth / 100) * 0.75; // clubes ricos pagam mais
+  // riqueza: curva calibrada com orçamentos reais (Benfica ~2,7 M€ em 2024, Sporting ~2 M€, Fundão ~150 mil €)
+  const wealth = 1.3 * Math.exp((club.wealth - 98) * 0.0296);
   const age = p.age <= 19 ? 0.55 : p.age <= 21 ? 0.75 : p.age >= 34 ? 0.8 : 1;
-  return round(base * wealth * age, 50);
+  return Math.max(400, round(base * wealth * age, 50));
 }
 
 /** Valor de mercado estimado (€). */
@@ -34,10 +35,14 @@ function clauseFor(value: number, club: Club, r: () => number) {
   return round(value * mult, 25000);
 }
 
+// Salários conhecidos pelas notícias (€/mês brutos, ×12)
+// Pany Varela (Benfica): 156 mil € líquidos/ano (notícias da transferência) ≈ 300 mil € brutos/ano (estimativa com IRS + Seg. Social)
+const REAL_WAGE: Record<string, number> = { slb12: 25000 };
+
 export function makeContract(p: Player, club: Club, year: number, seed = ''): Contract {
   const r = rng(`ct-${p.id}-${year}${seed}`);
   const years = p.age >= 33 ? 1 : p.age <= 23 ? 2 + Math.floor(r() * 3) : 1 + Math.floor(r() * 3);
-  const wage = round(marketWage(p, club) * (0.85 + r() * 0.3), 50);
+  const wage = REAL_WAGE[p.id] && seed === '-ini' ? REAL_WAGE[p.id] : round(marketWage(p, club) * (0.85 + r() * 0.3), 50);
   return { wage, until: year + years, clause: clauseFor(marketValue(p, club), club, r) };
 }
 
