@@ -14,6 +14,8 @@ import type { CustomPlay } from '../tactics';
 // Internamente usa-se u (0 = baliza de quem ataca, 40 = baliza de quem defende) e v (largura).
 import type { Action, Possession } from '../engine/match';
 import type { Tactics } from '../tactics';
+import type { Player } from '../types';
+import { movementProfile, type MovementProfile } from './movement';
 
 export interface P2 { x: number; y: number }
 export interface Ball { x: number; y: number; z: number }
@@ -165,7 +167,7 @@ class Track {
   // percurso final, com inércia: velocidade e aceleração máximas (como um jogador real)
   private baked: { t0: number; xs: Float32Array; ys: Float32Array } | null = null;
 
-  bake(t0: number, t1: number, vmax: number, amax: number) {
+  bake(t0: number, t1: number, vmax: number, amax: number, accelerationFactor = 1, agilityFactor = 1) {
     this.baked = null;
     const dt = BAKE_DT;
     const n = Math.max(2, Math.ceil((t1 - t0) / dt) + 2);
@@ -175,12 +177,12 @@ class Track {
     for (let i = 0; i < n; i++) {
       const t = t0 + i * dt;
       xs[i] = p.x; ys[i] = p.y;
-      const g = this.at(t + 0.18);
+      const g = this.at(t + 0.18 / clamp(agilityFactor, 0.82, 1.16));
       let dx = (g.x - p.x) / 0.28, dy = (g.y - p.y) / 0.28;
       const dl = Math.hypot(dx, dy);
       if (dl > vmax) { dx = (dx * vmax) / dl; dy = (dy * vmax) / dl; }
       let ax = dx - vx, ay = dy - vy;
-      const al = Math.hypot(ax, ay), amx = amax * dt;
+      const al = Math.hypot(ax, ay), amx = amax * clamp(accelerationFactor, 0.82, 1.16) * dt;
       if (al > amx) { ax = (ax * amx) / al; ay = (ay * amx) / al; }
       vx += ax; vy += ay;
       p = { x: p.x + vx * dt, y: p.y + vy * dt };
@@ -234,6 +236,7 @@ export class Choreo {
   readonly end: StartState;
 
   private tr = new Map<string, Track>();
+  private movement = new Map<string, MovementProfile>();
   private sideOf = new Map<string, number>();
   private balls: BSeg[] = [];
   private acts: ActRec[] = [];
@@ -260,8 +263,10 @@ export class Choreo {
     private tactics: [Tactics, Tactics],
     period: number,
     start: StartState | null,
-    private names: Record<string, string> = {}
+    private names: Record<string, string> = {},
+    playersById: Readonly<Record<string, Player>> = {}
   ) {
+    for (const [id, player] of Object.entries(playersById)) this.movement.set(id, movementProfile(player));
     this.r = rnd(Math.floor(p.start * 100) + 7);
     const r = this.r;
     const att = (this.att = p.side);
@@ -455,7 +460,11 @@ export class Choreo {
     // ---- defesa (depois de o ataque estar definido) ----
     this.sortBalls();
     for (const id of this.attOut) if (id !== this.gkA) this.tr.get(id)?.liven(this.r, 0, D - 0.3, 1.8, (t) => this.isFixed(id, t) || this.holderAt(t) === id);
-    for (const id of this.tr.keys()) if (this.sideOf.get(id) === att) { this.tr.get(id)!.limit(VMAX); this.tr.get(id)!.bake(-this.lead, D + 1, VMAX, AMAX); }
+    for (const id of this.tr.keys()) if (this.sideOf.get(id) === att) {
+      const profile = this.sys === '4-0' ? this.movement.get(id) : undefined;
+      this.tr.get(id)!.limit(VMAX);
+      this.tr.get(id)!.bake(-this.lead, D + 1, VMAX, AMAX, profile?.accelerationFactor, profile?.agilityFactor);
+    }
     this.sortBalls();
     for (const f of this.later) f();
     this.later = [];
@@ -468,7 +477,13 @@ export class Choreo {
     for (const f of this.later) f();
     for (const tr of this.tr.values()) tr.limit(VMAX * 1.1);
     const gks = new Set([this.p.onCourt[0][0], this.p.onCourt[1][0]]);
-    for (const [id, tr] of this.tr) tr.bake(-this.lead, T + 0.5, gks.has(id) ? VMAX * 1.1 : VMAX, gks.has(id) ? AMAX * 2.2 : this.sideOf.get(id) === att ? AMAX : AMAX * 1.3);
+    for (const [id, tr] of this.tr) {
+      const goalkeeper = gks.has(id);
+      const profile = !goalkeeper && this.sys === '4-0' && this.sideOf.get(id) === att ? this.movement.get(id) : undefined;
+      tr.bake(-this.lead, T + 0.5, goalkeeper ? VMAX * 1.1 : VMAX,
+        goalkeeper ? AMAX * 2.2 : this.sideOf.get(id) === att ? AMAX : AMAX * 1.3,
+        profile?.accelerationFactor, profile?.agilityFactor);
+    }
 
     this.finalT = T;
     this.extra = Math.max(0, T - D);
