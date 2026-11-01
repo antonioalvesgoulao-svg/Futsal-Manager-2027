@@ -1,0 +1,55 @@
+name: Validacao do projeto
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches:
+      - main
+      - 'fix/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validacao-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validar:
+    name: TypeScript, build e diagnóstico tático
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Obter código
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Verificar TypeScript e build de produção
+        run: npm run build
+
+      - name: Executar diagnóstico tático (12 jogos)
+        run: npm run diag -- --seed base --jogos 12 --nome ci
+
+      - name: Guardar relatório do diagnóstico
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: diagnostico-tatico-${{ github.run_number }}
+          path: |
+            diagnostics/ci.json
+            diagnostics/ci.md
+          if-no-files-found: ignore
+          retention-days: 14
