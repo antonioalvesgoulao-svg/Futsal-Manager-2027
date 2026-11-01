@@ -44,6 +44,8 @@ export interface Player {
   potential: number;
   contract?: Contract;
   loan?: { from: string; until: number; share: number }; // emprestado: clube dono, fim (30/06 desse ano), parte do salário paga por quem o tem
+  role?: import('./squadlife').Role; // papel no plantel definido pelo treinador (omisso = pela importância)
+  valueK?: number; // valor de mercado dinâmico (forma e satisfação), 1 = normal
 }
 
 export interface League {
@@ -98,6 +100,7 @@ export interface GameState {
   news: NewsItem[];
   honours: Honour[];
   settings?: Settings;
+  happy?: Record<string, number>; // satisfação dos jogadores 0-100 (65 = normal)
   fitness?: Record<string, number>; // condição física (fadiga) 0-100; omisso = 100
   discipline?: Discipline; // amarelos acumulados e castigos
   injuries?: Record<string, Injury>; // lesões em curso

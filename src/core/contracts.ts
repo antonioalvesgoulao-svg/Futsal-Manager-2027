@@ -1,3 +1,4 @@
+import { renewalSatK, ROLE_WAGE, roleOf, type Role } from './squadlife';
 // Contratos: salário mensal bruto, fim do contrato, cláusula de rescisão, valor de mercado.
 // Referências reais (poucas, o futsal quase não publica salários):
 // - média na Europa ~40 mil €/ano brutos por jogador (Flashscore: 60% de um orçamento médio de 1 M€ em salários)
@@ -42,7 +43,7 @@ export function marketValue(p: Player, club: Club) {
   const ov = overall(p.attrs, p.position);
   const ageF = p.age <= 21 ? 1.6 : p.age <= 24 ? 1.3 : p.age <= 28 ? 1 : p.age <= 31 ? 0.6 : 0.25;
   const pot = 1 + Math.max(0, p.potential - ov) * 0.12;
-  return round(850 * Math.exp((ov - 8) * 0.34) * 12 * 0.9 * ageF * pot * (0.7 + club.reputation / 200), 5000);
+  return round(850 * Math.exp((ov - 8) * 0.34) * 12 * 0.9 * ageF * pot * (0.7 + club.reputation / 200) * (p.valueK ?? 1), 5000);
 }
 
 /** Cláusula de rescisão: os grandes protegem muito mais os seus jogadores. */
@@ -73,22 +74,26 @@ export function ensureContracts(s: GameState) {
 }
 
 /** Pedido do jogador para renovar: salário de mercado, mais alto se estiver insatisfeito ou se o clube for pequeno para ele. */
-export function renewalDemand(s: GameState, p: Player) {
+export function renewalDemand(s: GameState, p: Player, role?: Role) {
   const club = s.clubs.find((c) => c.id === p.clubId)!;
   const mor = s.morale?.[p.id] ?? 65;
-  const wage = marketWage(p, club) * (1 + (65 - mor) / 200) * Math.max(1, (p.contract?.wage ?? 0) / marketWage(p, club));
-  return { wage: round(wage, 50), maxYears: p.age >= 33 ? 1 : p.age >= 30 ? 2 : 4 };
+  const satK = renewalSatK(s, p);
+  const wage = marketWage(p, club) * (1 + (65 - mor) / 200) * Math.max(1, (p.contract?.wage ?? 0) / marketWage(p, club)) * (satK ?? 1.5) * ROLE_WAGE[role ?? roleOf(s, p)];
+  return { wage: round(wage, 50), maxYears: p.age >= 33 ? 1 : p.age >= 30 ? 2 : 4, refuses: satK === null };
 }
 
 /** Proposta de renovação do treinador. Devolve a resposta do jogador. */
-export function offerRenewal(s: GameState, p: Player, wage: number, years: number): { ok: boolean; msg: string } {
-  const d = renewalDemand(s, p);
+export function offerRenewal(s: GameState, p: Player, wage: number, years: number, role?: Role): { ok: boolean; msg: string } {
+  const d = renewalDemand(s, p, role);
+  if (d.refuses) return { ok: false, msg: `${p.name} não quer renovar: está muito insatisfeito (papel e minutos). Melhora-lhe o papel ou vende-o.` };
   if (years > d.maxYears) return { ok: false, msg: `${p.name} só aceita contrato até ${d.maxYears} ano${d.maxYears > 1 ? 's' : ''}.` };
   if (wage < d.wage * 0.95) return { ok: false, msg: `${p.name} recusa: quer pelo menos ${fmtEur(d.wage)}/mês.` };
   const club = s.clubs.find((c) => c.id === p.clubId)!;
   const r = rng(`ren-${p.id}-${s.date}`);
   p.contract = { wage, until: s.season.year + years, clause: clauseFor(marketValue(p, club), club, r) };
+  if (role) p.role = role;
   (s.morale ??= {})[p.id] = Math.min(100, (s.morale[p.id] ?? 65) + 5);
+  (s.happy ??= {})[p.id] = Math.min(100, (s.happy[p.id] ?? 65) + 6);
   return { ok: true, msg: `${p.name} renovou até ${p.contract.until} (${fmtEur(wage)}/mês).` };
 }
 

@@ -1,3 +1,4 @@
+import { afterMatchSatisfaction } from './squadlife';
 import { managerAttrs, mgrK } from './manager';
 import { overall } from './attributes';
 import { importanceOf, refereesFor } from './referees';
@@ -113,6 +114,9 @@ function playFixture(s: GameState, f: Fixture, given?: MatchResult): MatchResult
   moraleEvent(s, Object.entries(m.players).filter(([, st]) => st.red).map(([id]) => id), -3);
   moraleEvent(s, newInj.filter(([, i]) => i.days > 7).map(([id]) => id), -6);
   for (const [id, i] of newInj) if (mine(id)) news(s, `${pname(id)} lesionou-se no jogo: ${i.type.toLowerCase()}, ${i.days} dia${i.days > 1 ? 's' : ''} de paragem.`);
+  // satisfação (papel vs minutos, resultado) e valor de mercado dinâmico
+  const [hg, ag] = m.penalties ?? m.score;
+  for (const t of afterMatchSatisfaction(s, [f.home, f.away], { [f.home]: hg > ag ? 0.5 : hg < ag ? -0.5 : 0, [f.away]: ag > hg ? 0.5 : ag < hg ? -0.5 : 0 })) news(s, t);
   matchFatigue(s, Object.fromEntries(Object.entries(m.players).map(([id, st]) => [id, st.minutes])));
   // estatísticas da época (só competições oficiais)
   for (const [id, st] of Object.entries(m.players)) {

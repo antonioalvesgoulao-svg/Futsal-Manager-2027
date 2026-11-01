@@ -280,3 +280,4 @@ button[disabled] { opacity: .45; cursor: not-allowed; }
 .cal-dot { display: inline-block; min-width: 14px; height: 14px; border-radius: 7px; font-size: 0; vertical-align: middle; cursor: help; }
 .cal-dot.w { background: #22c55e; } .cal-dot.d { background: #eab308; } .cal-dot.l { background: #ef4444; }
 .attr-edit > span:last-child { white-space: nowrap; margin-left: 10px; }
+.badge { display: inline-block; min-width: 18px; padding: 0 5px; border-radius: 9px; background: #e11d48; color: #fff; font-size: 11px; font-weight: 700; text-align: center; margin-left: 4px; }

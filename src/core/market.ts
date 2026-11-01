@@ -1,3 +1,4 @@
+import { priceSatK, ROLE_WAGE, satOf, type Role } from './squadlife';
 import { homeNation } from './names';
 // Mercado de transferências.
 // Regras reais: Regulamento da Liga Placard 2026/27, Art. 52.5 (máx. 20 seniores inscritos; depois do limite, até 5 substituições).
@@ -9,17 +10,36 @@ import type { Club, GameState, Player, Position } from './types';
 
 export const FREE = ''; // clubId dos jogadores livres
 
-export interface Offer { id: string; playerId: string; from: string; fee: number; date: string; kind?: 'venda' | 'emprestimo'; share?: number; years?: number }
-export interface MarketState { offers: Offer[]; regs: Record<string, number>; seq: number; lastAi?: string; pool?: number; freeSince?: Record<string, number>; moved?: Record<string, number>; listed?: Record<string, 'venda' | 'emprestimo'>; signed?: Record<string, number> }
+export interface Offer { id: string; playerId: string; from: string; fee: number; date: string; kind?: 'venda' | 'emprestimo'; share?: number; years?: number; countered?: boolean }
+export interface MarketState { negs?: Record<string, { round: number; last: number }>; offers: Offer[]; regs: Record<string, number>; seq: number; lastAi?: string; pool?: number; freeSince?: Record<string, number>; moved?: Record<string, number>; listed?: Record<string, 'venda' | 'emprestimo'>; signed?: Record<string, number> }
 
 export const marketOf = (s: GameState): MarketState => (s.market ??= { offers: [], regs: {}, seq: 0 });
 
-/** Janelas de transferências (estimativa: 1 jul–15 set e janeiro). Jogadores livres podem assinar a qualquer altura. */
+/** Janelas de transferências: 1 jul–31 ago e 1–31 jan (indicadas pelo António). Livres assinam a qualquer altura. */
 export function windowOpen(date: string) {
   const md = date.slice(5);
-  return (md >= '07-01' && md <= '09-15') || (md >= '01-01' && md <= '01-31');
+  return (md >= '07-01' && md <= '08-31') || (md >= '01-01' && md <= '01-31');
 }
-export const windowLabel = (date: string) => (windowOpen(date) ? 'Janela aberta' : date.slice(5) < '01-01' || date.slice(5) > '09-15' ? 'Janela fechada (abre a 1 de janeiro)' : 'Janela fechada (abre a 1 de julho)');
+export const nextWindow = (date: string) => (date.slice(5) >= '09-01' ? `1 de janeiro de ${Number(date.slice(0, 4)) + 1}` : `1 de julho de ${date.slice(0, 4)}`);
+export const windowLabel = (date: string) => (windowOpen(date) ? `Janela aberta (fecha a ${date.slice(5) <= '01-31' ? '31 de janeiro' : '31 de agosto'})` : `Janela fechada · abre a ${nextWindow(date)}`);
+
+/** Situação de cada jogador no mercado (para os filtros): lista de transferências/empréstimos, livre, fim de contrato (< 1 ano) ou não listado. */
+export type ListStatus = 'venda' | 'emprestimo' | 'livre' | 'fim' | 'nao';
+export function listStatus(s: GameState, p: Player): ListStatus {
+  if (p.clubId === FREE) return 'livre';
+  const mine = marketOf(s).listed?.[p.id];
+  if (mine) return mine;
+  if (p.contract && p.contract.until <= s.season.year + 1) return 'fim';
+  if (p.clubId !== s.clubId && satOf(s, p.id) < 35 && !p.loan) return 'venda'; // insatisfeito força a saída
+  if (p.clubId !== s.clubId && !p.loan) {
+    // clubes da IA: dispensáveis vão para a lista de transferências; jovens fora dos 12 mais importantes, para empréstimo
+    const r = importanceRank(s, p);
+    if (r >= 13 && p.age >= 22) return 'venda';
+    if (r >= 12 && p.age <= 21) return 'emprestimo';
+  }
+  return 'nao';
+}
+export const LIST_LABEL: Record<ListStatus, string> = { venda: 'Lista de transferências', emprestimo: 'Lista de empréstimos', livre: 'Livre', fim: 'Fim de contrato', nao: 'Não listado' };
 
 /** Seniores contam para o limite de 20 (Sub-19 não contam: estimativa por idade). */
 export const isSenior = (p: Player) => p.age >= 19;
@@ -98,11 +118,35 @@ export function askingPrice(s: GameState, p: Player, buyer?: string) {
   const club = s.clubs.find((c) => c.id === p.clubId);
   if (!club) return 0;
   let k = TIER_K[tierOf(s, p)];
-  if (marketOf(s).listed?.[p.id] === 'venda') k = Math.min(k, 0.9);
+  if (marketOf(s).listed?.[p.id] === 'venda' || (p.clubId !== s.clubId && listStatus(s, p) === 'venda')) k = Math.min(k, 0.9);
   if (areRivals(club.id, buyer)) k *= 3;
   const yearsLeft = Math.max(0, (p.contract?.until ?? s.season.year) - s.season.year);
-  const contractK = yearsLeft <= 0 ? 0.35 : yearsLeft === 1 ? 0.8 : 1;
-  return Math.min(p.contract?.clause ?? Infinity, Math.round(marketValue(p, club) * k * contractK / 1000) * 1000);
+  // fim de contrato (menos de um ano): se ainda não renovou é porque o clube ou o jogador não querem; vende-se mais barato
+  const contractK = yearsLeft <= 0 ? 0.35 : yearsLeft === 1 ? 0.55 : 1;
+  return Math.min(p.contract?.clause ?? Infinity, Math.round(marketValue(p, club) * k * contractK * priceSatK(s, p) / 1000) * 1000);
+}
+
+/** Mínimo que o clube vendedor aceita: clubes com pouco dinheiro baixam mais; quem precisa de vender (lista, fim de contrato) também. */
+export function sellerMin(s: GameState, p: Player, ask: number) {
+  const seller = s.clubs.find((c) => c.id === p.clubId);
+  if (!seller) return ask;
+  const bal = financeOf(s, seller.id).balance;
+  const tight = bal < salaryBudget(seller) * 0.05 ? 0.86 : bal < salaryBudget(seller) * 0.15 ? 0.91 : 0.96;
+  const st = listStatus(s, p);
+  return Math.round(ask * tight * (st === 'venda' || st === 'fim' ? 0.92 : 1) / 1000) * 1000;
+}
+
+/** Pedir mais numa proposta recebida: o clube comprador aceita até ao seu máximo, contrapropõe ou desiste. */
+export function counterOffer(s: GameState, o: Offer, ask: number): { done: boolean; msg: string } {
+  const m = marketOf(s);
+  const buyer = s.clubs.find((c) => c.id === o.from)!;
+  const p = s.players.find((x) => x.id === o.playerId)!;
+  const r = rng(`cnt-${o.id}-${o.fee}`);
+  const max = Math.min(financeOf(s, buyer.id).balance + salaryBudget(buyer) * 0.15, o.fee * (1.08 + r() * 0.3));
+  if (ask <= max) { o.fee = Math.round(ask / 1000) * 1000; return { done: true, msg: acceptOffer(s, o) }; }
+  if (ask <= max * 1.2 && !o.countered) { o.fee = Math.round(max / 1000) * 1000; o.countered = true; return { done: false, msg: `O ${buyer.name} sobe a proposta por ${p.name} para ${fmtEur(o.fee)}. É a última oferta.` }; }
+  m.offers = m.offers.filter((x) => x.id !== o.id);
+  return { done: false, msg: `O ${buyer.name} desistiu de ${p.name}: acha o preço demasiado alto.` };
 }
 
 /** Salário que o jogador pede para vir (estimativa): pelo menos o atual +10%; clubes menores que o dele pagam mais. */
@@ -113,7 +157,7 @@ export function wageDemand(s: GameState, p: Player, to: Club) {
   return Math.round(base * (1 + step) / 50) * 50;
 }
 
-export interface Bid { fee: number; wage: number; years: number }
+export interface Bid { fee: number; wage: number; years: number; role?: Role }
 export type Reply = { ok: boolean; msg: string; counter?: number };
 
 /** O meu clube tenta contratar um jogador (fee 0 para livres). Tudo de uma vez: clube, jogador, direção. */
@@ -131,11 +175,22 @@ export function tryBuy(s: GameState, p: Player, bid: Bid): Reply {
   // clube vendedor
   if (!free) {
     const ask = askingPrice(s, p, my.id);
-    if (bid.fee < (p.contract?.clause ?? Infinity) && bid.fee < ask) return { ok: false, counter: ask, msg: `O ${s.clubs.find((c) => c.id === p.clubId)!.name} recusa${tierOf(s, p) === 'fundamental' ? ` (${p.name} é fundamental para eles)` : ''}${areRivals(p.clubId, my.id) ? ' e não facilita a um rival' : ''}. Pede ${fmtEur(ask)} (cláusula: ${fmtEur(p.contract!.clause)}).` };
+    const seller = s.clubs.find((c) => c.id === p.clubId)!;
+    const neg = ((m.negs ??= {})[p.id] ??= { round: 0, last: ask });
+    const min = sellerMin(s, p, ask);
+    if (bid.fee < (p.contract?.clause ?? Infinity) && bid.fee < min) {
+      neg.round++;
+      // negociação: com uma proposta razoável o clube faz contraproposta e vai baixando até ao mínimo (depende das finanças deles)
+      if (bid.fee >= ask * 0.72 && neg.round <= 3) {
+        neg.last = Math.max(min, Math.round((bid.fee + neg.last) / 2 / 1000) * 1000);
+        return { ok: false, counter: neg.last, msg: `O ${seller.name} não aceita ${fmtEur(bid.fee)}, mas faz contraproposta: ${fmtEur(neg.last)}.` };
+      }
+      return { ok: false, counter: neg.last, msg: `O ${seller.name} recusa${tierOf(s, p) === 'fundamental' ? ` (${p.name} é fundamental para eles)` : ''}${areRivals(p.clubId, my.id) ? ' e não facilita a um rival' : ''}. Pede ${fmtEur(neg.last)} (cláusula: ${fmtEur(p.contract!.clause)}).${neg.round > 3 ? ' Já não querem negociar mais esta semana.' : ''}` };
+    }
     if (bid.fee > fin.balance) return { ok: false, msg: `Não tens dinheiro: saldo ${fmtEur(fin.balance)}.` };
   }
   // jogador
-  const want = wageDemand(s, p, my);
+  const want = Math.round(wageDemand(s, p, my) * ROLE_WAGE[bid.role ?? 'titular'] / 50) * 50; // papel prometido conta no salário
   if (bid.wage < want * 0.95) return { ok: false, counter: want, msg: `${p.name} quer pelo menos ${fmtEur(want)}/mês.` };
   if (bid.years > (p.age >= 33 ? 1 : p.age >= 30 ? 2 : 4)) return { ok: false, msg: `${p.name} não aceita contrato tão longo com ${p.age} anos.` };
   // direção: folha salarial até 10% acima do orçamento
@@ -146,6 +201,8 @@ export function tryBuy(s: GameState, p: Player, bid: Bid): Reply {
   if (!free) { book(s, my.id, `Contratação de ${p.name}`, -bid.fee, true); book(s, fromId, `Venda de ${p.name}`, bid.fee, true); }
   if (isSenior(p) && seniors(s, my.id) >= 20) m.regs[s.season.year] = (m.regs[s.season.year] ?? 0) + 1;
   moveTo(s, p, my, bid.wage, bid.years);
+  if (bid.role) p.role = bid.role;
+  (s.happy ??= {})[p.id] = 72; // chegada: entusiasmado
   return { ok: true, msg: `${p.name} assinou até 30/06/${p.contract!.until} (${fmtEur(bid.wage)}/mês)${free ? ', a custo zero' : ` por ${fmtEur(bid.fee)}`}.` };
 }
 
@@ -278,6 +335,8 @@ export function aiMarket(s: GameState, from: string, to: string): string[] {
   ensurePool(s);
   const r = rng(`ai-${from}-${to}`);
   const days = Math.max(1, Math.round((Date.parse(to) - Date.parse(from)) / 864e5));
+  // as negociações recomeçam a cada semana
+  if (from.slice(0, 7) !== to.slice(0, 7) || days >= 7) m.negs = {};
   for (const c of s.clubs) {
     if (c.id === s.clubId) continue;
     const squad = s.players.filter((p) => p.clubId === c.id);

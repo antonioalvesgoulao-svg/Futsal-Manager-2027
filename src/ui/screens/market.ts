@@ -1,3 +1,4 @@
+import { ROLE_LABEL, type Role } from '../../core/squadlife';
 import { headCoachWage } from '../../core/career';
 import { staffBill, staffBudget } from '../../core/staff';
 import { seenPotential } from '../../core/staff';
@@ -5,12 +6,12 @@ import { seenPotential } from '../../core/staff';
 import { overall, starsHtml } from '../../core/attributes';
 import { fmtEur, marketValue, salaryBudget, wageBill } from '../../core/contracts';
 import { financeOf } from '../../core/finance';
-import { FREE, setListed, tierOf, tryLoanIn, acceptOffer, askingPrice, isSenior, marketOf, rejectOffer, release, releaseCost, seniors, tryBuy, wageDemand, windowLabel, windowOpen } from '../../core/market';
+import { counterOffer, LIST_LABEL, listStatus, type ListStatus, FREE, setListed, tierOf, tryLoanIn, acceptOffer, askingPrice, isSenior, marketOf, rejectOffer, release, releaseCost, seniors, tryBuy, wageDemand, windowLabel, windowOpen } from '../../core/market';
 import type { GameState, Player } from '../../core/types';
 import { crestSvg } from '../crest';
 
 const POS = ['GR', 'FIX', 'FIX/ALA', 'UNI', 'ALA', 'ALA/PIV', 'PIV'];
-let filt = { pos: '', who: 'todos', maxAge: 40, q: '' };
+let filt = { pos: '', who: 'todos', maxAge: 40, q: '', nat: '', list: '' as '' | ListStatus };
 
 export function renderMarket(content: HTMLElement, s: GameState, refresh: () => void, openPlayer: (id: string) => void) {
   const my = s.clubs.find((c) => c.id === s.clubId)!;
@@ -21,6 +22,7 @@ export function renderMarket(content: HTMLElement, s: GameState, refresh: () => 
     .filter((p) => p.clubId !== my.id && !p.clubId.includes('@'))
     .filter((p) => (filt.who === 'livres' ? p.clubId === FREE : filt.who === 'clubes' ? p.clubId !== FREE : true))
     .filter((p) => (!filt.pos || p.position === filt.pos) && p.age <= filt.maxAge && (!filt.q || p.name.toLowerCase().includes(filt.q.toLowerCase())))
+    .filter((p) => (!filt.nat || p.nationality === filt.nat) && (!filt.list || listStatus(s, p) === filt.list))
     .sort((a, b) => overall(b.attrs, b.position) - overall(a.attrs, a.position))
     .slice(0, 60);
   const valueOf = (p: Player) => marketValue(p, s.clubs.find((c) => c.id === p.clubId) ?? my);
@@ -29,13 +31,13 @@ export function renderMarket(content: HTMLElement, s: GameState, refresh: () => 
   content.innerHTML = `
     <h2>Mercado</h2>
     <div class="cards">
-      <div class="card"><div class="muted small">Janela de transferências</div><div class="big">${windowLabel(s.date)}</div><div class="small muted">1 jul–15 set e janeiro (estimativa). Livres assinam a qualquer altura.</div></div>
+      <div class="card" ${windowOpen(s.date) ? '' : 'style="border-color:#c0392b"'}><div class="muted small">Janela de transferências</div><div class="big">${windowLabel(s.date)}</div><div class="small muted">1 jul–31 ago e 1–31 jan. Livres assinam a qualquer altura.</div></div>
       <div class="card"><div class="muted small">Saldo para transferências</div><div class="big">${fmtEur(fin.balance)}</div><div class="small muted">Folha ${fmtEur(wageBill(s, my.id))}/mês de ${fmtEur(Math.round(salaryBudget(my) * 1.1 / 12))} permitidos</div></div>
       <div class="card"><div class="muted small">Inscritos (Art. 52.5)</div><div class="big">${seniors(s, my.id)}/20 seniores</div><div class="small muted">Substituições após o limite: ${m.regs[s.season.year] ?? 0}/5</div></div>
     </div>
     ${m.offers.length ? `<h3>Propostas recebidas</h3><table class="tbl"><tbody>${m.offers.map((o) => {
       const p = s.players.find((x) => x.id === o.playerId)!;
-      return `<tr><td>${crestSvg(o.from, 18)} ${s.clubs.find((c) => c.id === o.from)!.name}</td><td><b>${p.name}</b></td><td>${o.kind === 'emprestimo' ? `Empréstimo ${o.years ?? 1} época(s), pagam ${Math.round((o.share ?? 0.5) * 100)}% do salário` : fmtEur(o.fee)}</td><td class="muted small">valor ${fmtEur(marketValue(p, my))}</td><td><button class="btn" data-acc="${o.id}">Aceitar</button> <button class="btn ghost" data-rej="${o.id}">Recusar</button></td></tr>`;
+      return `<tr><td>${crestSvg(o.from, 18)} ${s.clubs.find((c) => c.id === o.from)!.name}</td><td><b>${p.name}</b></td><td>${o.kind === 'emprestimo' ? `Empréstimo ${o.years ?? 1} época(s), pagam ${Math.round((o.share ?? 0.5) * 100)}% do salário` : fmtEur(o.fee)}</td><td class="muted small">valor ${fmtEur(marketValue(p, my))}</td><td><button class="btn" data-acc="${o.id}">Aceitar</button> ${o.kind === 'emprestimo' ? '' : `<input type="number" step="1000" value="${Math.round(o.fee * 1.25 / 1000) * 1000}" data-askv="${o.id}" style="width:100px"> <button class="btn" data-ask="${o.id}">Pedir mais</button>`} <button class="btn ghost" data-rej="${o.id}">Recusar</button></td></tr>`;
     }).join('')}</tbody></table>` : ''}
     <h3>Procurar jogadores</h3>
     <div class="form-row">
@@ -43,15 +45,18 @@ export function renderMarket(content: HTMLElement, s: GameState, refresh: () => 
       <label>Posição<select id="fpos"><option value="">Todas</option>${POS.map((p) => `<option ${filt.pos === p ? 'selected' : ''}>${p}</option>`).join('')}</select></label>
       <label>Idade máx.<input id="fage" type="number" min="17" max="40" value="${filt.maxAge}" style="width:60px"></label>
       <label>Nome<input id="fq" value="${filt.q}" style="width:130px"></label>
+      <label>Nacionalidade<select id="fnat"><option value="">Todas</option>${[...new Set(s.players.map((p) => p.nationality))].sort().map((n) => `<option ${filt.nat === n ? 'selected' : ''}>${n}</option>`).join('')}</select></label>
+      <label>No mercado<select id="flist"><option value="">Todos</option>${(Object.keys(LIST_LABEL) as ListStatus[]).map((k) => `<option value="${k}" ${filt.list === k ? 'selected' : ''}>${LIST_LABEL[k]}</option>`).join('')}</select></label>
     </div>
+    <div id="offmsg"></div>
     <div id="neg"></div>
-    <table class="tbl small"><thead><tr><th>Nome</th><th>Clube</th><th>Pos.</th><th>Idade</th><th>Nac.</th><th>Atual</th><th>Pot.</th><th>Valor</th><th>Salário</th><th>Contrato</th><th></th></tr></thead><tbody>
-    ${list.map((p) => `<tr><td class="click" data-open="${p.id}"><b>${p.name}</b></td><td>${p.clubId === FREE ? '<span class="muted">Livre</span>' : `${crestSvg(p.clubId, 16)} ${clubName(p.clubId)}${p.loan ? ' <span class="muted small">(emp.)</span>' : ''}`}</td><td>${p.position}</td><td>${p.age}</td><td>${p.nationality}</td><td>${starsHtml(overall(p.attrs, p.position))}</td><td>${starsHtml(seenPotential(s, p, my.id))}</td><td>${fmtEur(valueOf(p))}</td><td>${p.contract ? fmtEur(p.contract.wage) : '-'}</td><td>${p.contract ? 'jun ' + p.contract.until : '-'}</td><td><button class="btn" data-neg="${p.id}">Negociar</button></td></tr>`).join('')}
+    <table class="tbl small"><thead><tr><th>Nome</th><th>Clube</th><th>Pos.</th><th>Idade</th><th>Nac.</th><th>Atual</th><th>Pot.</th><th>Valor</th><th>Salário</th><th>Contrato</th><th>Mercado</th><th></th></tr></thead><tbody>
+    ${list.map((p) => `<tr><td class="click" data-open="${p.id}"><b>${p.name}</b></td><td>${p.clubId === FREE ? '<span class="muted">Livre</span>' : `${crestSvg(p.clubId, 16)} ${clubName(p.clubId)}${p.loan ? ' <span class="muted small">(emp.)</span>' : ''}`}</td><td>${p.position}</td><td>${p.age}</td><td>${p.nationality}</td><td>${starsHtml(overall(p.attrs, p.position))}</td><td>${starsHtml(seenPotential(s, p, my.id))}</td><td>${fmtEur(valueOf(p))}</td><td>${p.contract ? fmtEur(p.contract.wage) : '-'}</td><td>${p.contract ? 'jun ' + p.contract.until : '-'}</td><td class="small">${LIST_LABEL[listStatus(s, p)]}</td><td><button class="btn" data-neg="${p.id}">Negociar</button></td></tr>`).join('')}
     </tbody></table>
     <h3>O meu plantel</h3>
     <table class="tbl small"><tbody>${mySquad.map((p) => `<tr><td>${p.name}</td><td>${p.position}</td><td>${p.age}</td><td>${p.contract ? fmtEur(p.contract.wage) + '/mês' : ''}</td><td>${isSenior(p) ? 'Sénior' : 'Sub-19'}</td><td>${p.loan ? `<span class="muted">Emprestado pelo ${clubName(p.loan.from)} até jun ${p.loan.until}</span>` : `<span class="small muted">${tierOf(s, p)}</span> <select data-list="${p.id}">${[['', 'Não listado'], ['venda', 'Lista de transferências'], ['emprestimo', 'Lista de empréstimos']].map(([v, l]) => `<option value="${v}" ${(m.listed?.[p.id] ?? '') === v ? 'selected' : ''}>${l}</option>`).join('')}</select> <button class="btn ghost" data-rel="${p.id}">Rescindir (${fmtEur(releaseCost(s, p))})</button>`}</td></tr>`).join('')}</tbody></table>
     ${s.players.some((p) => p.loan?.from === my.id) ? `<h3>Emprestados por mim</h3><table class="tbl small"><tbody>${s.players.filter((p) => p.loan?.from === my.id).map((p) => `<tr><td>${p.name}</td><td>${crestSvg(p.clubId, 16)} ${clubName(p.clubId)}</td><td>até jun ${p.loan!.until}</td><td>pagam ${Math.round(p.loan!.share * 100)}% do salário</td></tr>`).join('')}</tbody></table>` : ''}
-    <p class="muted small">Quanto os clubes pedem, os salários pedidos e a data das janelas são estimativas. A cláusula de rescisão é sempre aceite.</p>`;
+    <p class="muted small">A cláusula de rescisão é sempre aceite. Os clubes negoceiam: com uma proposta razoável fazem contraproposta e baixam até um mínimo que depende das finanças deles e da situação do jogador (lista de transferências ou fim de contrato saem mais baratos).</p>`;
 
   const $ = <T extends HTMLElement>(q: string) => content.querySelector<T>(q)!;
   const re = () => renderMarket(content, s, refresh, openPlayer);
@@ -59,6 +64,16 @@ export function renderMarket(content: HTMLElement, s: GameState, refresh: () => 
   $<HTMLSelectElement>('#fpos').onchange = (e) => { filt.pos = (e.target as HTMLSelectElement).value; re(); };
   $<HTMLInputElement>('#fage').onchange = (e) => { filt.maxAge = Number((e.target as HTMLInputElement).value) || 40; re(); };
   $<HTMLInputElement>('#fq').onchange = (e) => { filt.q = (e.target as HTMLInputElement).value; re(); };
+  $<HTMLSelectElement>('#fnat').onchange = (e) => { filt.nat = (e.target as HTMLSelectElement).value; re(); };
+  $<HTMLSelectElement>('#flist').onchange = (e) => { filt.list = (e.target as HTMLSelectElement).value as ListStatus | ''; re(); };
+  content.querySelectorAll<HTMLElement>('[data-ask]').forEach((el) => (el.onclick = () => {
+    const o = m.offers.find((x) => x.id === el.dataset.ask)!;
+    const v = Number(content.querySelector<HTMLInputElement>(`[data-askv="${o.id}"]`)!.value);
+    const res = counterOffer(s, o, v);
+    if (res.done) { alert(res.msg); refresh(); return; }
+    re();
+    $('#offmsg').innerHTML = `<div class="flash-msg">${res.msg}</div>`;
+  }));
   content.querySelectorAll<HTMLElement>('[data-open]').forEach((el) => (el.onclick = () => openPlayer(el.dataset.open!)));
   content.querySelectorAll<HTMLElement>('[data-acc]').forEach((el) => (el.onclick = () => { alert(acceptOffer(s, m.offers.find((o) => o.id === el.dataset.acc)!)); refresh(); }));
   content.querySelectorAll<HTMLElement>('[data-rej]').forEach((el) => (el.onclick = () => { rejectOffer(s, m.offers.find((o) => o.id === el.dataset.rej)!); re(); }));
@@ -78,6 +93,7 @@ export function renderMarket(content: HTMLElement, s: GameState, refresh: () => 
       <div class="row" style="justify-content:flex-start;gap:8px;margin-top:6px;flex-wrap:wrap">
         ${free ? '' : `<label class="small">Valor da transferência (€) <input id="nfee" type="number" step="1000" value="${Math.round(ask * 0.8 / 1000) * 1000}" style="width:110px"></label>`}
         <label class="small">Salário/mês (€) <input id="nwage" type="number" step="50" value="${want}" style="width:90px"></label>
+        <label class="small">Papel prometido <select id="nrole">${(['estrela', 'titular', 'rotacao', 'suplente', 'promessa'] as Role[]).map((r) => `<option value="${r}" ${r === 'titular' ? 'selected' : ''}>${ROLE_LABEL[r]}</option>`).join('')}</select></label>
         <label class="small">Anos <select id="nyears">${[1, 2, 3, 4].map((y) => `<option ${y === 2 ? 'selected' : ''}>${y}</option>`).join('')}</select></label>
         <button class="btn primary" id="ngo">Enviar proposta</button>
         ${free || p.loan ? '' : `<label class="small">ou empréstimo: pago <select id="lshare">${[0.5, 0.75, 1].map((x) => `<option value="${x}">${x * 100}%</option>`).join('')}</select> do salário durante <select id="lyears"><option>1</option><option>2</option><option>3</option></select> época(s)</label><button class="btn" id="lgo">Pedir emprestado</button>`}
@@ -90,10 +106,10 @@ export function renderMarket(content: HTMLElement, s: GameState, refresh: () => 
     });
     $('#ngo').onclick = () => {
       const fee = free ? 0 : Number($<HTMLInputElement>('#nfee').value);
-      const res = tryBuy(s, p, { fee, wage: Number($<HTMLInputElement>('#nwage').value), years: Number($<HTMLSelectElement>('#nyears').value) });
+      const res = tryBuy(s, p, { fee, wage: Number($<HTMLInputElement>('#nwage').value), years: Number($<HTMLSelectElement>('#nyears').value), role: $<HTMLSelectElement>('#nrole').value as Role });
       if (res.ok) { alert(res.msg); refresh(); return; }
       $('#nmsg').textContent = res.msg;
-      if (res.counter && !free && /recusa/.test(res.msg)) $<HTMLInputElement>('#nfee').value = String(res.counter);
+      if (res.counter && !free && /recusa|contraproposta/.test(res.msg)) $<HTMLInputElement>('#nfee').value = String(res.counter);
       else if (res.counter) $<HTMLInputElement>('#nwage').value = String(res.counter);
     };
     $('#neg').scrollIntoView({ block: 'nearest' });

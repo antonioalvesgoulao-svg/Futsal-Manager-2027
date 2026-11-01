@@ -1,3 +1,5 @@
+import { ROLE_LABEL, roleOf, satHtml, satLabel, satOf, type Role } from '../../core/squadlife';
+import { marketOf } from '../../core/market';
 import { renderCareer, unemployedScreen } from './career';
 import { NO_CLUB } from '../../core/career';
 import { FP_STATS } from '../../core/state';
@@ -129,7 +131,7 @@ export function homeScreen(root: HTMLElement) {
   function renderNav() {
     nav.innerHTML =
       (pending && !pending.result ? `<button class="nav ${section === 'jogo' ? 'on' : ''}" data-s="jogo" style="font-weight:700">⚽ Dia de jogo</button>` : '') +
-      SECTIONS.map((x) => `<button class="nav ${x.id === section ? 'on' : ''}" data-s="${x.id}">${x.label}</button>`).join('') +
+      SECTIONS.map((x) => `<button class="nav ${x.id === section ? 'on' : ''}" data-s="${x.id}">${x.label}${x.id === 'mercado' && marketOf(s!).offers.length ? ` <span class="badge">${marketOf(s!).offers.length}</span>` : ''}</button>`).join('') +
       `<div class="spacer"></div>
        <button class="nav" data-a="save">Gravar</button>
        <button class="nav" data-a="export">Exportar ficheiro</button>
@@ -167,17 +169,18 @@ export function homeScreen(root: HTMLElement) {
       const status = (inj ? `<div class="card" style="margin:8px 0;padding:8px 12px">🩹 <b>${inj.type}</b> · ${inj.days} dias de paragem · volta a ${inj.until.split('-').reverse().join('/')}<br><span class="small muted">${injuryInfo(inj.type)}</span></div>` : '')
         + bans.map((b) => `<div class="card" style="margin:8px 0;padding:8px 12px">🟥 Castigado: ${b.games} jogo(s) (${b.reason})</div>`).join('');
       const pclub = s!.clubs.find((c) => c.id === pl.clubId)!;
-      const dem = pl.clubId === club.id && !pl.loan ? renewalDemand(s!, pl) : { wage: 0, maxYears: 1 };
+      const dem = pl.clubId === club.id && !pl.loan ? renewalDemand(s!, pl) : { wage: 0, maxYears: 1, refuses: false };
       const renew = pl.clubId === club.id && !pl.loan ? `<div class="card" style="margin:8px 0 12px;padding:8px 12px"><b>Renovar contrato</b>
         <div class="row" style="justify-content:flex-start;gap:8px;margin-top:6px;flex-wrap:wrap">
           <label class="small">Salário/mês (€) <input id="rwage" type="number" step="50" min="0" value="${dem.wage}" style="width:90px"></label>
+          <label class="small">Papel <select id="rrole">${(Object.keys(ROLE_LABEL) as Role[]).map((r) => `<option value="${r}" ${roleOf(s!, pl) === r ? 'selected' : ''}>${ROLE_LABEL[r]}</option>`).join('')}</select></label>
           <label class="small">Anos <select id="ryears">${[1, 2, 3, 4].map((y) => `<option ${y === Math.min(2, dem.maxYears) ? 'selected' : ''}>${y}</option>`).join('')}</select></label>
-          <button class="btn" id="rgo">Propor</button><span class="small muted" id="rmsg">Pede cerca de ${fmtEur(dem.wage)}/mês, até ${dem.maxYears} ano(s).</span>
+          <button class="btn" id="rgo">Propor</button><span class="small muted" id="rmsg">${dem.refuses ? 'Está muito insatisfeito e não quer renovar.' : `Pede cerca de ${fmtEur(dem.wage)}/mês, até ${dem.maxYears} ano(s). Satisfação: ${satLabel(satOf(s!, pl.id)).toLowerCase()}.`}</span>
         </div></div>` : '';
-      content.innerHTML = playerProfile(pl, pl.clubId === club.id, `<p>Moral: ${moraleHtml(moraleOf(s!, pl.id))}</p>` + status, pclub, renew);
+      content.innerHTML = playerProfile(pl, pl.clubId === club.id, `<p>Moral: ${moraleHtml(moraleOf(s!, pl.id))}${pl.clubId === club.id ? ` · Papel: ${ROLE_LABEL[roleOf(s!, pl)]} · Satisfação: ${satHtml(satOf(s!, pl.id))}` : ''}</p>` + status, pclub, renew);
       content.querySelector('#rgo')?.addEventListener('click', () => {
         const w = Number(content.querySelector<HTMLInputElement>('#rwage')!.value), y = Number(content.querySelector<HTMLSelectElement>('#ryears')!.value);
-        const res = offerRenewal(s!, pl, w, y);
+        const res = offerRenewal(s!, pl, w, y, content.querySelector<HTMLSelectElement>('#rrole')!.value as Role);
         if (res.ok) { renderContent(); }
         const m = content.querySelector('#rmsg'); if (m) m.textContent = res.msg;
       });
@@ -199,12 +202,24 @@ export function homeScreen(root: HTMLElement) {
       content.innerHTML = `
         <h2>Plantel <span class="muted small">${squad.length} jogadores · folha salarial ${fmtEur(wageBill(s!, club.id))}/mês (estimativa)</span></h2>
         <table class="tbl">
-          <thead><tr><th title="Comparar">⇄</th><th>Nº</th><th>Nome</th><th>Posição</th><th>Idade</th><th>Nacionalidade</th><th>Atual</th><th>Potencial</th><th>Moral</th><th>Salário/mês</th><th>Contrato</th><th>J</th><th>G</th><th>A</th><th>Nota</th></tr></thead>
+          <thead><tr><th title="Comparar">⇄</th><th>Nº</th><th>Nome</th><th>Posição</th><th>Idade</th><th>Nacionalidade</th><th>Atual</th><th>Potencial</th><th>Moral</th><th>Papel</th><th>Satisfação</th><th>Salário/mês</th><th>Contrato</th><th>J</th><th>G</th><th>A</th><th>Nota</th></tr></thead>
           <tbody>${squad
-            .map((p) => `<tr class="click" data-p="${p.id}"><td><input type="checkbox" data-cmp="${p.id}" ${cmp.includes(p.id) ? 'checked' : ''} title="Comparar"></td><td>${p.number ?? '-'}</td><td>${p.name}${injuryOf(s!, p.id) ? ` <span title="${injuryOf(s!, p.id)!.type} (até ${injuryOf(s!, p.id)!.until})">🩹</span>` : ''}${totalBan(s!, p.id) ? ` <span title="Castigado: ${totalBan(s!, p.id)} jogo(s)">🟥${totalBan(s!, p.id)}</span>` : ''}${(s!.discipline?.yellows[p.id] ?? 0) ? ` <span class="muted small" title="Amarelos na Liga">🟨${s!.discipline!.yellows[p.id]}</span>` : ''}</td><td>${p.position}</td><td>${p.age}</td><td>${p.nationality}</td><td>${starsHtml(overall(p.attrs, p.position))}</td><td>${starsHtml(p.potential)}</td><td>${moraleHtml(moraleOf(s!, p.id))}</td><td>${p.contract ? fmtEur(p.contract.wage) : '-'}</td><td${p.contract && p.contract.until <= s!.season.year + 1 ? ' style="color:#d9822b;font-weight:600"' : ''}>${p.contract ? 'jun ' + p.contract.until : '-'}</td>${statCells(s!.pstats[p.id])}</tr>`)
+            .map((p) => `<tr class="click" data-p="${p.id}"><td><input type="checkbox" data-cmp="${p.id}" ${cmp.includes(p.id) ? 'checked' : ''} title="Comparar"></td><td>${p.number ?? '-'}</td><td>${p.name}${injuryOf(s!, p.id) ? ` <span title="${injuryOf(s!, p.id)!.type} (até ${injuryOf(s!, p.id)!.until})">🩹</span>` : ''}${totalBan(s!, p.id) ? ` <span title="Castigado: ${totalBan(s!, p.id)} jogo(s)">🟥${totalBan(s!, p.id)}</span>` : ''}${(s!.discipline?.yellows[p.id] ?? 0) ? ` <span class="muted small" title="Amarelos na Liga">🟨${s!.discipline!.yellows[p.id]}</span>` : ''}</td><td>${p.position}</td><td>${p.age}</td><td>${p.nationality}</td><td>${starsHtml(overall(p.attrs, p.position))}</td><td>${starsHtml(p.potential)}</td><td>${moraleHtml(moraleOf(s!, p.id))}</td><td><select data-role="${p.id}" class="small">${(Object.keys(ROLE_LABEL) as Role[]).map((r) => `<option value="${r}" ${roleOf(s!, p) === r ? 'selected' : ''}>${ROLE_LABEL[r]}</option>`).join('')}</select></td><td>${satHtml(satOf(s!, p.id))}</td><td>${p.contract ? fmtEur(p.contract.wage) : '-'}</td><td${p.contract && p.contract.until <= s!.season.year + 1 ? ' style="color:#d9822b;font-weight:600"' : ''}>${p.contract ? 'jun ' + p.contract.until : '-'}</td>${statCells(s!.pstats[p.id])}</tr>`)
             .join('')}</tbody>
         </table>
-        <p class="muted small">Clica num jogador para ver os atributos. Marca ⇄ em dois jogadores para os comparar.</p>`;
+        <p class="muted small">Clica num jogador para ver os atributos. Marca ⇄ em dois jogadores para os comparar. O papel diz quanto cada um espera jogar: quem joga menos do que o papel promete fica insatisfeito (joga pior, pede mais para renovar, pode querer sair); baixar o papel também desagrada.</p>`;
+      content.querySelectorAll<HTMLSelectElement>('[data-role]').forEach((sel) => {
+        sel.addEventListener('click', (e) => e.stopPropagation());
+        sel.addEventListener('change', () => {
+          const p = s!.players.find((x) => x.id === sel.dataset.role)!;
+          const order: Role[] = ['dispensavel', 'promessa', 'suplente', 'rotacao', 'titular', 'estrela'];
+          const before = order.indexOf(roleOf(s!, p));
+          p.role = sel.value as Role;
+          // mudar o papel mexe logo com a satisfação: promover agrada, despromover desagrada
+          (s!.happy ??= {})[p.id] = Math.max(0, Math.min(100, satOf(s!, p.id) + (order.indexOf(p.role) - before) * 4));
+          renderContent();
+        });
+      });
       if (cmp.length === 2) {
         const [x, y] = cmp.map((id) => s!.players.find((p) => p.id === id)!);
         if (x && y) {
@@ -310,6 +325,7 @@ export function homeScreen(root: HTMLElement) {
     }
     const res = advance(s!);
     renderDate();
+    renderNav(); // propostas novas aparecem no número a vermelho do Mercado
     if (res.kind === 'match') {
       pending = res.fixture;
       section = 'jogo';
