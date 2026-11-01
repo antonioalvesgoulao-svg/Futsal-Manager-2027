@@ -1,3 +1,4 @@
+import { openPlayerSheet } from '../playerSheet';
 // Quadro tático do teu clube: campo com os quintetos, como no Football Manager.
 // Vistas: com bola, sem bola, 5x4, cantos e livres. A tática escolhida muda o desenho no campo.
 import { overall, starsHtml } from '../../core/attributes';
@@ -182,7 +183,7 @@ export function renderTactics(content: HTMLElement, s: GameState, clubId: string
     const inOther = otherQ.includes(p.id);
     const fit = selected === 'gk' ? (p.position === 'GR' ? 1 : 0) : selRole ? roleFit(selRole, p.position) : null;
     return `<tr class="pl ${inQ ? 'inq' : ''}" data-pid="${p.id}" draggable="true">
-      <td>${p.number ?? '-'}</td><td>${p.name}</td><td>${p.position}</td><td>${ovr(p)}</td><td>${starsHtml(overall(p.attrs, p.position))}</td>
+      <td>${p.number ?? '-'}</td><td>${p.name} <span data-info title="Ver folha do jogador" style="cursor:pointer">ℹ️</span></td><td>${p.position}</td><td>${ovr(p)}</td><td>${starsHtml(overall(p.attrs, p.position))}</td>
       <td>${fit !== null ? `<span class="fitdot ${fitClass(fit)}"></span>` : ''}</td>
       <td class="small muted">${inQ ? (t.gk === p.id ? 'GR' : activeQ === 'q1' ? '1.º' : '2.º') : inOther ? (activeQ === 'q1' ? '2.º' : '1.º') : ''}</td></tr>`;
   };
@@ -257,6 +258,7 @@ export function renderTactics(content: HTMLElement, s: GameState, clubId: string
           ${segs('tempo', 'Ritmo', tv.tempo, LABELS.tempo)}
           ${segs('marking', 'Marcação', tv.marking, LABELS.marking)}
           ${segs('flyingKeeper', 'Guarda-redes avançado', tv.flyingKeeper, LABELS.flyingKeeper)}
+          <label class="taker">Jogador que entra no 5x4 <select id="flyp"><option value="">Automático (melhor passe e decisão)</option>${out.map((p) => `<option value="${p.id}" ${t.flyingPlayer === p.id ? 'selected' : ''}>${p.name} (pas ${p.attrs.passe}, dec ${p.attrs.decisoes})</option>`).join('')}</select></label>
           ${segs('gkStyle', 'Estilo do guarda-redes', tv.gkStyle ?? 'classico', LABELS.gkStyle)}
           ${segs('rotation', 'Rotação de quintetos', tv.rotation, LABELS.rotation)}
         </div>`}
@@ -298,6 +300,7 @@ export function renderTactics(content: HTMLElement, s: GameState, clubId: string
     t.setPieces = suggestSetPieces(squad, { cornerRoutine: t.setPieces.cornerRoutine, freeKickRoutine: t.setPieces.freeKickRoutine });
     rerender();
   });
+  content.querySelector<HTMLSelectElement>('#flyp')?.addEventListener('change', (e) => { t.flyingPlayer = (e.target as HTMLSelectElement).value || undefined; });
   content.querySelectorAll<HTMLSelectElement>('[data-sp]').forEach((el) =>
     el.addEventListener('change', () => { (t.setPieces as unknown as Record<string, string>)[el.dataset.sp!] = el.value; rerender(); })
   );
@@ -332,7 +335,11 @@ export function renderTactics(content: HTMLElement, s: GameState, clubId: string
     });
   });
   content.querySelectorAll<HTMLElement>('[data-pid]').forEach((row) => {
-    row.addEventListener('click', () => { if (selected !== null) place(selected, row.dataset.pid!); });
+    row.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('[data-info]')) return openPlayerSheet(s, row.dataset.pid!);
+      if (selected !== null) place(selected, row.dataset.pid!);
+      else openPlayerSheet(s, row.dataset.pid!); // sem posição escolhida: mostra a folha do jogador
+    });
     row.addEventListener('dragstart', (e) => e.dataTransfer!.setData('text/pid', row.dataset.pid!));
   });
 }

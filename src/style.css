@@ -250,3 +250,6 @@ button[disabled] { opacity: .45; cursor: not-allowed; }
 .comm-now.card { color: #fde047; }
 .comm-now.red { color: #f87171; }
 @keyframes commIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+.talk-box { width: min(760px, 100%); max-height: 88vh; overflow: auto; }
+.talk-opts { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 4px; }

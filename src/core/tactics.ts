@@ -28,6 +28,7 @@ export interface Tactics {
   tempo: Tempo;
   marking: Marking;
   flyingKeeper: FlyingKeeper;
+  flyingPlayer?: string; // jogador de campo que entra para o 5x4 (vazio = o motor escolhe)
   gkStyle?: GkStyle; // estilo do guarda-redes (por omissão, clássico)
   rotation: Rotation;
   gk: string | null; // guarda-redes titular

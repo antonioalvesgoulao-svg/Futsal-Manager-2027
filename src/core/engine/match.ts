@@ -244,7 +244,7 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     const diff = score[s] - score[1 - s];
     const remaining = periodStart + periodLen - clock;
     let want = false;
-    const fk = t.setup.tactics.flyingKeeper;
+    const fk = flyingOverride[s] === true ? 'sempre' : flyingOverride[s] === false ? 'nunca' : t.setup.tactics.flyingKeeper;
     const lastPeriod = period === 2 || period === 4;
     const needWin = opts.needWin?.[s] ?? false;
     if (fk === 'sempre') want = true;
@@ -256,7 +256,9 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
       if (needWin && lastPeriod && diff === 0 && remaining <= 180) want = true;
     }
     if (want && !t.flying && t.gk) {
-      const sub = t.players.filter((l) => !l.onCourt && !l.sentOff && l.p.position !== 'GR').sort((a, b) => eff(b, 'passe') + eff(b, 'decisoes') - eff(a, 'passe') - eff(a, 'decisoes'))[0];
+      const bench = t.players.filter((l) => !l.onCourt && !l.sentOff && l.p.position !== 'GR');
+      const chosen = bench.find((l) => l.p.id === t.setup.tactics.flyingPlayer); // escolhido pelo treinador nas táticas
+      const sub = chosen ?? bench.sort((a, b) => eff(b, 'passe') + eff(b, 'decisoes') - eff(a, 'passe') - eff(a, 'decisoes'))[0];
       if (!sub) return;
       t.gk.onCourt = false;
       t.gk = null;
@@ -720,6 +722,7 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
   let finished = false;
   let lastPossession: Possession | null = null;
   const timeoutRequest: [boolean, boolean] = [false, false];
+  const flyingOverride: [boolean | null, boolean | null] = [null, null];
 
   function beginPeriod(i: number) {
     const pl = plan[i];
@@ -930,6 +933,16 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
       timeoutRequest[s] = true;
       return true;
     },
+    /** Palestra: muda a moral de cada jogador durante o jogo (pontos de moral, como em morale.ts). */
+    talk: (s: Side, deltas: Record<string, number>) => {
+      for (const l of teams[s].players) if (deltas[l.p.id]) l.mor = Math.max(0.9, Math.min(1.1, l.mor + (deltas[l.p.id] / 100) * 0.12));
+    },
+    /** GR avançado pelo treinador: true = lança já, false = tira, null = volta à instrução tática. */
+    setFlying: (s: Side, on: boolean | null) => {
+      flyingOverride[s] = on;
+      if (on === false) removeFlying(s);
+    },
+    flyingNow: (s: Side) => teams[s].flying,
   };
 }
 

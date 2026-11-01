@@ -1,3 +1,7 @@
+import { openPlayerSheet } from '../playerSheet';
+import { TALKS, talkEffect, situationOf, type TalkMoment, type TalkReaction } from '../../core/teamtalk';
+import { moraleHtml } from '../../core/morale';
+import { overall } from '../../core/attributes';
 // Jogo ao vivo em 2D, ao estilo do Football Manager: marcador, quadra com os jogadores em bolinhas,
 // relato, estatísticas, energia, velocidade, pausa, táticas e desconto de tempo durante o jogo.
 import { createMatch, LiveSnapshot, Possession } from '../../core/engine/match';
@@ -127,7 +131,6 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
             <button class="btn" id="pause">⏸ Pausa</button>
             <div class="seg speed">${(['lento', 'medio', 'rapido'] as const).map((v) => `<button data-speed="${v}" class="${st.speed === v ? 'on' : ''}">${{ lento: 'Lenta', medio: 'Média', rapido: 'Rápida' }[v]}</button>`).join('')}</div>
             <button class="btn" id="snd" title="Som: desligado / baixo / médio / alto">🔊</button>
-            <button class="btn" id="subs">Substituições</button>
             <button class="btn" id="tac">Táticas</button>
             <button class="btn" id="to">Pedir desconto de tempo</button>
             <span class="spacer"></span>
@@ -139,8 +142,8 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
           <div id="lt"></div>
         </div>
       </div>
-      <div class="modal" id="msubs" hidden><div class="modal-box subs-box"><div class="row"><b>Substituições e sistema (jogo em pausa)</b><span class="spacer"></span><button class="btn primary" id="closesubs">Voltar ao jogo</button></div><div id="subsbody"></div></div></div>
-      <div class="modal" id="modal" hidden><div class="modal-box"><div class="row"><b>Táticas (jogo em pausa)</b><span class="spacer"></span><button class="btn primary" id="close">Voltar ao jogo</button></div><div id="mtac"></div></div></div>
+      <div class="modal" id="mtalk" hidden><div class="modal-box talk-box"><div id="talkbody"></div></div></div>
+      <div class="modal" id="modal" hidden><div class="modal-box subs-box"><div class="row"><b>Táticas e substituições (jogo em pausa)</b><span class="spacer"></span><button class="btn primary" id="close">Voltar ao jogo</button></div><div id="subsbody"></div><div id="mtac"></div></div></div>
     </div>`;
 
   const $ = <T extends HTMLElement>(sel: string) => content.querySelector<T>(sel)!;
@@ -313,7 +316,7 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
       const ps = m.players;
       el.innerHTML = `<table class="tbl small"><thead><tr><th></th><th>Jogador</th><th>Energia</th><th>G</th></tr></thead><tbody>
         ${[t.gk, ...t.court].filter(Boolean).map((p) => `<tr class="inq"><td>${p!.number ?? ''}</td><td>${p!.name}</td><td>${bar(p!.energy)}</td><td>${ps[p!.id]?.goals || ''}</td></tr>`).join('')}
-        ${t.bench.map((p) => `<tr class="${p.sentOff ? 'muted' : ''}"><td>${p.number ?? ''}</td><td>${p.name}${p.sentOff ? ' 🟥' : ''}</td><td>${bar(p.energy)}</td><td>${ps[p.id]?.goals || ''}</td></tr>`).join('')}
+        ${t.bench.map((p) => `<tr class="${p.sentOff ? 'muted' : ''}"><td>${p.number ?? ''}</td><td>${p.name}${p.sentOff ? ' 🟥' : ''} <span data-sheet="${p.id}" data-en="${p.energy}" title="Ver atributos" style="cursor:pointer">ℹ️</span></td><td>${bar(p.energy)}</td><td>${ps[p.id]?.goals || ''}</td></tr>`).join('')}
       </tbody></table><p class="small muted">Em campo a amarelo. Energia baixa rende menos; muda os quintetos ou a rotação nas Táticas.</p>`;
     }
   }
@@ -569,8 +572,54 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
         setTimeout(() => (banner = ''), 2500);
       }
       if (e.type === 'fim_jogo') done = true;
+      // palestras: intervalo e desconto de tempo pedido por mim
+      if (e.type === 'fim_parte' && e.period === 1) openTalk('intervalo');
+      if (e.type === 'time_out' && e.side === mySide) openTalk('desconto');
       if (tab === 'feed') drawSide();
     }
+  }
+
+  // ---- Palestras (antes, intervalo, desconto de tempo, fim), como no FM: pode-se passar à frente ----
+  let endTalkDone = false;
+  function openTalk(moment: TalkMoment, after?: () => void) {
+    const wasPaused = paused;
+    paused = true;
+    const sc = m.snapshot().score;
+    const sit = situationOf(sc[mySide], sc[1 - mySide]);
+    const me = mySide === 0 ? hs : as, them = mySide === 0 ? as : hs;
+    const lvl = (x: typeof hs) => x.squad.reduce((a, p) => a + overall(p.attrs, p.position), 0) / Math.max(1, x.squad.length);
+    const underdog = lvl(me) < lvl(them) - 0.4;
+    const players = me.squad;
+    const title = { pre: 'Palestra antes do jogo', intervalo: 'Intervalo', desconto: 'Desconto de tempo (1 minuto)', fim: 'Palestra no fim do jogo' }[moment];
+    const close = () => {
+      $('#mtalk').hidden = true;
+      paused = moment === 'fim' ? paused : wasPaused;
+      after?.();
+    };
+    const draw = (reactions?: TalkReaction[], chosen?: string) => {
+      const rx = (id: string) => reactions?.find((x) => x.id === id);
+      $('#talkbody').innerHTML = `
+        <div class="row"><b>${title}</b><span class="small muted" style="margin-left:8px">${hs.shortName} ${sc[0]}-${sc[1]} ${as.shortName}</span><span class="spacer"></span>
+        ${reactions ? `<button class="btn primary" id="talkok">Continuar ▸</button>` : `<button class="btn ghost" id="talkskip">Passar à frente</button>`}</div>
+        ${reactions ? `<p class="small">Disseste: <i>"${TALKS[moment].find((o) => o.id === chosen)!.text}"</i></p>` : `<div class="talk-opts">${TALKS[moment].map((o) => `<button class="btn" data-talk="${o.id}" title="${o.text}">${o.label}</button>`).join('')}</div><p class="small muted">Passa o rato por cima de cada tom para ver o que dizes. As palavras podem subir ou baixar a moral.</p>`}
+        <table class="tbl small"><thead><tr><th>#</th><th>Jogador</th><th>Moral</th><th>${reactions ? 'Reação' : ''}</th></tr></thead><tbody>
+        ${players.map((p) => { const r0 = rx(p.id); const mo = (s.morale?.[p.id] ?? 65); return `<tr><td>${p.number ?? ''}</td><td>${p.name}</td><td>${moraleHtml(mo)}</td><td>${r0 ? `${r0.face} <span class="small ${r0.delta >= 0 ? 'res-w' : 'res-l'}">${r0.delta >= 0 ? 'motivado' : 'abalado'}</span>` : ''}</td></tr>`; }).join('')}
+        </tbody></table>`;
+      $('#talkbody').querySelector('#talkskip')?.addEventListener('click', close);
+      $('#talkbody').querySelector('#talkok')?.addEventListener('click', close);
+      $('#talkbody').querySelectorAll<HTMLElement>('[data-talk]').forEach((b) => b.addEventListener('click', () => {
+        const rs = talkEffect(players, b.dataset.talk!, moment === 'pre' ? (underdog ? 'perder' : 'empatar') : sit, underdog, `${f.id}-${moment}-${s.season.year}`);
+        const deltas = Object.fromEntries(rs.map((x) => [x.id, x.delta]));
+        // no jogo: efeito imediato; fica também uma parte na moral do jogador (toda, no fim do jogo)
+        if (moment !== 'fim') m.talk(mySide as 0 | 1, deltas);
+        const keep = moment === 'fim' ? 1 : moment === 'pre' ? 0.4 : 0.25;
+        s.morale ??= {};
+        for (const x of rs) s.morale[x.id] = Math.max(0, Math.min(100, (s.morale[x.id] ?? 65) + x.delta * keep));
+        draw(rs, b.dataset.talk);
+      }));
+    };
+    $('#mtalk').hidden = false;
+    draw();
   }
 
   function finishUi() {
@@ -580,6 +629,7 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
     hl = null;
     const res = m.result();
     onRecord?.(res); // grava já o resultado (o botão Continuar do topo também segue em frente)
+    if (!endTalkDone) { endTalkDone = true; openTalk('fim', () => finishUi()); return; }
     content.innerHTML = `<h2>Resultado final</h2><div class="row" style="justify-content:flex-start;margin-bottom:12px"><button class="btn primary" id="cont">Continuar ▸</button></div>` + resultHtml(res, h, a);
     content.querySelector('#all')?.addEventListener('change', (ev) => {
       content.querySelectorAll<HTMLElement>('.ev.minor').forEach((x) => (x.style.display = (ev.target as HTMLInputElement).checked ? '' : 'none'));
@@ -669,18 +719,27 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
     })
   );
   // ---- Substituições manuais e sistema, como no FM: pausa, escolhe quem sai e quem entra ----
+  // ℹ️ ao lado de cada jogador (painel lateral e substituições): folha com atributos e energia
+  content.addEventListener('click', (e) => {
+    const el = (e.target as HTMLElement).closest<HTMLElement>('[data-sheet]');
+    if (!el) return;
+    e.stopPropagation();
+    openPlayerSheet(s, el.dataset.sheet!, Number(el.dataset.en));
+  }, true);
   let subOut: string | null = null;
+  let flyMode: boolean | null = null;
   function drawSubs(msg = '') {
     const t = m.snapshot().teams[mySide];
     const bar = (e: number) => `<span class="ebar"><i style="width:${e}%;background:${e > 70 ? '#4ade80' : e > 50 ? '#facc15' : '#f87171'}"></i></span>`;
     const row = (p: { id: string; number: number | null; name: string; energy: number; position?: string; sentOff?: boolean }, where: 'out' | 'in') =>
-      `<tr class="${where === 'out' && subOut === p.id ? 'sel' : ''} ${p.sentOff ? 'muted' : 'pick'}" data-${where}="${p.id}"><td>${p.number ?? ''}</td><td>${p.name}${p.sentOff ? ' 🟥' : ''}</td><td>${p.position ?? ''}</td><td>${bar(Math.round(p.energy))} ${Math.round(p.energy)}%</td></tr>`;
+      `<tr class="${where === 'out' && subOut === p.id ? 'sel' : ''} ${p.sentOff ? 'muted' : 'pick'}" data-${where}="${p.id}"><td>${p.number ?? ''}</td><td>${p.name}${p.sentOff ? ' 🟥' : ''} <span data-sheet="${p.id}" data-en="${p.energy}" title="Ver atributos" style="cursor:pointer">ℹ️</span></td><td>${p.position ?? ''}</td><td>${bar(Math.round(p.energy))} ${Math.round(p.energy)}%</td></tr>`;
     const tac = s.tactics;
     const segBtns = (key: 'system' | 'rotation', opts: Record<string, string>) => Object.entries(opts).map(([v, l]) => `<button class="${(tac as unknown as Record<string, string>)[key] === v ? 'on' : ''}" data-tk="${key}" data-tv="${v}">${l.split(' (')[0]}</button>`).join('');
     $('#subsbody').innerHTML = `
       <div class="subs-top">
         <div><div class="seg-title">Sistema</div><div class="seg">${segBtns('system', { '3-1': '3-1', '4-0': '4-0', '2-2': '2-2', '1-2-1': '1-2-1' })}</div></div>
         <div><div class="seg-title">Rotação automática</div><div class="seg">${segBtns('rotation', { curta: 'Curta', normal: 'Normal', longa: 'Longa', manual: 'Manual (só eu substituo)' })}</div></div>
+        <div><div class="seg-title">Guarda-redes avançado ${m.flyingNow(mySide) ? '(em campo)' : ''}</div><div class="seg"><button data-fly="on" class="${flyMode === true ? 'on' : ''}">Lançar já</button><button data-fly="off" class="${flyMode === false ? 'on' : ''}">Tirar</button><button data-fly="auto" class="${flyMode === null ? 'on' : ''}">Pela tática</button></div></div>
       </div>
       <p class="small muted">1) Clica em quem <b>sai</b> (em campo). 2) Clica em quem <b>entra</b> (banco). As substituições são volantes e ilimitadas; a troca faz-se na jogada seguinte. ${tac.rotation === 'manual' ? 'Rotação manual: o motor não troca ninguém.' : 'Com rotação automática o motor também vai trocando quintetos; escolhe Manual para mandares sozinho.'}</p>
       ${msg ? `<div class="flash-msg">${msg}</div>` : ''}
@@ -696,6 +755,11 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
       snap = m.snapshot();
       drawSubs(err ?? 'Substituição feita.');
     }));
+    $('#subsbody').querySelectorAll<HTMLButtonElement>('[data-fly]').forEach((b) => b.addEventListener('click', () => {
+      flyMode = b.dataset.fly === 'on' ? true : b.dataset.fly === 'off' ? false : null;
+      m.setFlying(mySide as 0 | 1, flyMode);
+      drawSubs(flyMode === true ? 'O guarda-redes avançado entra na próxima jogada.' : flyMode === false ? 'Volta o guarda-redes à baliza.' : 'O 5x4 segue a instrução tática.');
+    }));
     $('#subsbody').querySelectorAll<HTMLButtonElement>('[data-tk]').forEach((b) => b.addEventListener('click', () => {
       const k = b.dataset.tk as 'system' | 'rotation';
       (tac as unknown as Record<string, string>)[k] = b.dataset.tv!;
@@ -703,20 +767,11 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
       drawSubs(k === 'system' ? `Sistema ${tac.system} a partir da próxima jogada.` : '');
     }));
   }
-  $('#subs').addEventListener('click', () => {
-    paused = true;
-    subOut = null;
-    $('#msubs').hidden = false;
-    drawSubs();
-  });
-  $('#closesubs').addEventListener('click', () => {
-    $('#msubs').hidden = true;
-    paused = false;
-    $('#pause').textContent = '⏸ Pausa';
-  });
   $('#tac').addEventListener('click', () => {
     paused = true;
+    subOut = null;
     $('#modal').hidden = false;
+    drawSubs();
     renderTactics($('#mtac'), s, s.clubId);
   });
   $('#close').addEventListener('click', () => {
@@ -769,5 +824,6 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
 
   drawSide();
   requestAnimationFrame(frame);
-  if (st.moments3d !== 'nenhum') openIntro();
+  // palestra antes do jogo; depois a cerimónia 3D (se estiver ligada)
+  openTalk('pre', () => { if (st.moments3d !== 'nenhum') openIntro(); });
 }
