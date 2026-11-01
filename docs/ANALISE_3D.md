@@ -25,3 +25,17 @@ Ordem proposta: 1+2+3 (GR) → 4 (remates) → 5 (reposições) → 6 → 7. Tud
 | Reposições | 0,6 s fixos (até 34 m/s), colega ao acaso | rolada curta ~9 m/s ou lançamento ~15 m/s; colega mais livre; depois de agarrar escolhe entre ala, fixo e lançamento longo pelo espaço (adversário mais próximo med 4,1 → 6,2 m) |
 
 Falta: o gesto do voo do GR (pose), passes por linhas livres, pausas posicionais.
+
+## Enquadramento do GR com a baliza (1/11/2026, feedback do António)
+O António viu nas imagens o GR no meio da área a mergulhar com o rematador ao primeiro poste e a baliza aberta. Causa: a "saída ao encontro do atacante" empurrava o GR em frente (eixo da quadra) e não na direção da bola, e também em ataque organizado.
+
+Correção:
+- `gkSpot` dá a posição de baliza: bissetriz dos postes, nunca à frente da bola (−0,8 m), sempre entre os postes. Usado no jogo corrido, nos remates e nos livres sem barreira.
+- Ângulo fechado: o GR fica no primeiro poste.
+- Saída só no 1x1 (contra-ataque ou nenhum defensor no caminho), proporcional à distância.
+- Antes do remate o GR coloca-se na posição de baliza.
+
+| No instante do remate (364 remates, 6 jogos) | Antes | Depois |
+|---|---|---|
+| Distância do GR ao ponto certo, mediana / p90 | 0,62 / 3,88 m | 0,51 / 1,26 m |
+| GR à frente do rematador | — | 0 |

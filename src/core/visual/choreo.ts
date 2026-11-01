@@ -524,6 +524,20 @@ export class Choreo {
   private phase(t: number, text: string) { this.phases.push({ t, text }); }
   private A(u: number, v: number): P2 { return { x: this.dirA * (u - 20), y: v }; }
   private U(p: P2) { return this.dirA * p.x + 20; }
+  /** Posição de baliza do GR que defende a baliza em x = gx (±20) contra uma bola em b: na bissetriz do ângulo
+   *  dos postes, à profundidade dada (m da linha), mas nunca mais à frente do que a bola (−0,8 m) e sempre entre os
+   *  postes (+0,25 m). Com ângulo fechado fica no primeiro poste. */
+  private gkSpot(gx: number, b: P2, depth: number): P2 {
+    const sg = Math.sign(gx);
+    const u1 = { x: gx - b.x, y: -1.5 - b.y }, u2 = { x: gx - b.x, y: 1.5 - b.y };
+    const l1 = Math.hypot(u1.x, u1.y) || 1, l2 = Math.hypot(u2.x, u2.y) || 1;
+    const bis = { x: u1.x / l1 + u2.x / l2, y: u1.y / l1 + u2.y / l2 };
+    const bdist = Math.abs(gx - b.x);
+    const d = Math.max(0.25, Math.min(depth, bdist - 0.8));
+    const s0 = Math.abs(bis.x) > 0.05 ? (bdist - d) / Math.abs(bis.x) : 0;
+    const q = s0 > 0 ? { x: b.x + bis.x * s0, y: b.y + bis.y * s0 } : { x: gx - sg * d, y: Math.sign(b.y) * 1.3 };
+    return { x: q.x, y: clamp(q.y, -1.75, 1.75) };
+  }
   private P(id: string, t: number): P2 { return this.tr.get(id)?.at(t) ?? { x: 0, y: 0 }; }
   private key(id: string, t: number, p: P2, hold = false) { this.tr.get(id)?.set(t, p, hold); }
   private fix(id: string, t0: number, t1: number) {
@@ -1348,15 +1362,10 @@ export class Choreo {
         let target: P2;
         if (this.U(bl) < 16) target = { x: gx - this.dirA * 3.6, y: clamp(bl.y * 0.12, -1, 1) };
         else {
-          const u1 = { x: gx - bl.x, y: -1.5 - bl.y }, u2 = { x: gx - bl.x, y: 1.5 - bl.y };
-          const l1 = Math.hypot(u1.x, u1.y) || 1, l2 = Math.hypot(u2.x, u2.y) || 1;
-          const bis = { x: u1.x / l1 + u2.x / l2, y: u1.y / l1 + u2.y / l2 };
           const dl = Math.hypot(gx - bl.x, bl.y);
           const tight = clamp(1 - (Math.abs(bl.y) / Math.max(1, dl)) * 0.75, 0.35, 1); // ângulo fechado: fica na linha
           const depth = clamp(0.45 + dl * 0.12, 0.6, 2.4) * tight * (0.85 + this.au(this.gkD, 'saidas') * 0.3);
-          const s0 = Math.abs(bis.x) > 0.05 ? (Math.abs(gx - bl.x) - depth) / Math.abs(bis.x) : 0;
-          target = s0 > 0 ? { x: bl.x + bis.x * s0, y: bl.y + bis.y * s0 } : { x: gx - this.dirA * depth, y: Math.sign(bl.y) * 1.3 };
-          target.y = clamp(target.y, -1.75, 1.75);
+          target = this.gkSpot(gx, bl, depth);
         }
         // passos de ajuste: perto do alvo não se mexe (fica fixo, pronto); longe desloca-se de lado
         const dd = dist(prev, target);
@@ -1384,8 +1393,17 @@ export class Choreo {
     const kPos = kId && !this.p.flying[kSide] ? this.P(kId, T) : null;
     // remate de perto (1x1, contra-ataque): o GR sai ao encontro do atacante e fecha-o em queda (como na liga espanhola)
     const fromDist = Math.hypot(g * 20 - from.x, from.y);
-    const rush = kPos && fromDist < 8.5 && res !== 'blocked' ? clamp((8.5 - fromDist) * 0.45, 0.4, 2.6) : 0;
-    const gkX = kPos ? g * (clamp(Math.abs(kPos.x), 17.4, 19.5) - rush) : g * 19.4;
+    // ângulo fechado (bola perto da linha de fundo, ao lado do poste): o GR fecha o primeiro poste, não sai
+    const tightShot = Math.abs(from.y) > 1.3 && Math.abs(g * 20 - from.x) < Math.abs(from.y) * 1.2;
+    // saída ao encontro do atacante só no 1x1: contra-ataque ou rematador sem nenhum defensor no caminho da baliza
+    const mates = [...this.attOut, ...this.defOut].filter((d) => this.sideOf.get(d) === kSide && d !== kId);
+    const segD = (q: P2) => { const ax = g * 20 - from.x, ay = -from.y, l2 = ax * ax + ay * ay || 1; const k = clamp(((q.x - from.x) * ax + (q.y - from.y) * ay) / l2, 0, 1); return Math.hypot(from.x + ax * k - q.x, from.y + ay * k - q.y); };
+    const oneOnOne = (this.isCounter || !mates.some((d) => segD(this.P(d, T)) < 1.3)) && fromDist < 8.5;
+    const rush = kPos && oneOnOne && !tightShot && res !== 'blocked' ? clamp((8.5 - fromDist) * 0.45, 0.4, 2.6) : 0;
+    // posição de partida da defesa: no ângulo da bola; na saída avança no mesmo caminho até 1-2 m do rematador
+    const kDepth = tightShot ? 0.35 : rush ? clamp(Math.abs(g * 20 - from.x) - 2, 0.6, 1.3 + (8.5 - fromDist) * 0.35) : clamp(0.45 + fromDist * 0.12, 0.6, 2.2);
+    const kBase = kPos ? this.gkSpot(g * 20, from, kDepth) : { x: g * 19.4, y: 0 };
+    const gkX = kBase.x;
     if (res === 'goal') { const v = (r() - 0.5) * 2.5; target = { x: g * 20.35, y: v, z: 0.15 + r() * 1.6 }; after = { x: g * 20.9, y: v * 0.9, z: 0.1 }; }
     else if (res === 'post') { target = { x: g * 19.95, y: side * 1.52, z: 0.3 + r() * 1.4 }; after = { x: g * 15, y: side * 4.5, z: 0.1 }; }
     else if (res === 'wide') { target = { x: g * 20.2, y: side * (1.9 + r() * 1.6), z: 0.2 + r() * 1.8 }; after = { x: g * 21.8, y: side * (3 + r() * 2), z: 0.1 }; }
@@ -1430,7 +1448,7 @@ export class Choreo {
       // espargata; alta e longe em voo; de perto abertura em cruz. O gesto só começa depois do remate (reação pelos reflexos)
       const ty = clamp(target.y, -1.75, 1.75);
       const close = Math.hypot(g * 20 - from.x, from.y) < 7.5;
-      const gPos = kPos ?? { x: gkX, y: 0 };
+      const gPos = kBase;
       const lat = Math.abs(ty - gPos.y);
       let tech: ActKind = lat < 0.45 && target.z < 1.7 ? 'catch' : close && lat < 1.3 ? 'spread' : target.z < 0.55 ? 'splits' : lat > 0.9 || target.z > 1.2 ? 'dive' : 'splits';
       // defesa sem agarrar: tem de se ver o gesto que desvia a bola (nunca a bola a atravessar o GR)
@@ -1441,15 +1459,15 @@ export class Choreo {
       const sy = Math.sign(ty - gPos.y) || 1;
       const reach = tech === 'dive' ? 0.9 : tech === 'splits' ? 0.75 : 0;
       const ky = res === 'saved' || res === 'post' ? ty - sy * reach : tech === 'spread' ? lerp(gPos.y, ty, 0.3) : lerp(gPos.y, ty - sy * reach, res === 'goal' ? 0.55 : 0.7);
-      const tgt = { x: gkX, y: clamp(rush ? lerp(ky, from.y * 0.5, 0.5) : ky, -1.8, 1.8) };
+      const tgt = { x: gkX, y: clamp(rush || tightShot ? lerp(kBase.y, ky, 0.35) : ky, -1.8, 1.8) };
       if (rush) this.label(T - 0.2, `${this.nm(gk)} sai ao encontro do atacante`);
       const tR = T + Math.min(react, Math.max(0, fl - 0.12));
       this.later.push(() => {
         const g0 = this.P(gk, T - 0.15);
         this.fix(gk, T - (rush ? 0.9 : 0.2), T + fl + 1.6);
         // a saída começa antes do remate (lê o 1x1); sem saída fica fixo, apoiado, até reagir
-        if (rush) { const g1 = this.P(gk, T - 0.9); this.key(gk, T - 0.9, g1); this.key(gk, T - 0.05, { x: lerp(g1.x, tgt.x, 0.8), y: lerp(g1.y, tgt.y, 0.6) }); }
-        else { this.key(gk, T - 0.2, g0); this.key(gk, tR, g0); }
+        if (rush) { const g1 = this.P(gk, T - 0.9); this.key(gk, T - 0.9, g1); this.key(gk, T - 0.05, kBase); }
+        else { const set = { x: lerp(g0.x, kBase.x, 0.7), y: lerp(g0.y, kBase.y, 0.7) }; this.key(gk, T - 0.2, set); this.key(gk, tR, set); }
         this.key(gk, T + fl, tgt, true);
         this.key(gk, T + fl + 1.3, tgt);
       });
@@ -1815,7 +1833,8 @@ export class Choreo {
       const a = [...m.entries()].filter(([k]) => this.sideOf.get(k) === att && k !== kicker)[i];
       m.set(id, a ? { x: a[1].x + this.dirA * 1.4, y: a[1].y * 0.9 } : this.A(34, 0));
     });
-    if (this.gkD) m.set(this.gkD, this.A(39.4, clamp(-s * 0.7, -1.3, 1.3)));
+    // com barreira o GR cobre o lado contrário; sem barreira fica no ângulo da bola
+    if (this.gkD) m.set(this.gkD, barrier ? this.A(39.4, clamp(-s * 0.7, -1.3, 1.3)) : this.gkSpot(this.dirA * 20, at, 1.3));
     if (this.gkA) m.set(this.gkA, this.A(4, 0));
     this.placeAll(tSet, m);
     for (const [id, p2] of m) this.key(id, tKick - 0.2, p2, true);

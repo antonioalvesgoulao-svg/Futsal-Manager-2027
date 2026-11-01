@@ -26,6 +26,16 @@ for(let g=0;g<6;g++){const [h,a]=PAIRS[g];const hs=setupFor(s,h),as=setupFor(s,a
    A.gkBisErr.push(Math.abs((qx*by-qy*bx)/L));
    if(prevP){const v=dist(q,prevP)/0.1; A.gkSpd.push(v); A.gkAcc.push(Math.abs(v-prevV)/0.1); prevV=v; if(v<0.3)A.gkStill++;}
    prevP=q;}
+  // enquadramento do GR no instante do remate: distância ao ponto ideal (bissetriz) e primeiro poste aberto
+  for(const x of c.acts) if(x.kind==='shoot'){ const sd=c.sideOf.get(x.id); const gk=c.p.onCourt[1-sd][0]; if(!gk||c.p.flying[1-sd]) continue;
+    const fly=c.balls.find((b:any)=>b.k==='fly'&&b.from===x.id&&b.t0>x.t0&&b.t0<x.t1); if(!fly) continue; const T=fly.t0;
+    const sp=c.tr.get(x.id).at(T), gp=c.tr.get(gk).at(T); const gx=Math.sign(fly.b.x)*20;
+    const dl=Math.hypot(gx-sp.x,sp.y); const ideal=c.gkSpot(gx,sp,Math.abs(sp.y)>1.3&&Math.abs(gx-sp.x)<Math.abs(sp.y)*1.2?0.35:Math.min(2.2,0.45+dl*0.12));
+    (A.frame ||= []).push(dist(gp,ideal)); if(dist(gp,ideal)>2){ const sh=c.p.actions.find((a:any)=>a.type==='shot'&&a.shooter===x.id); const ph=c.phases.filter((q:any)=>q.t<=T).pop()?.text; (A.bad ||= {}); const k=(sh?.kind||'?')+' / '+ph+' / fixo:'+c.isFixed(gk,T-0.5)+' / dist '+Math.round(dl); A.bad[k]=(A.bad[k]||0)+1;  }
+    // poste mais próximo da bola: ângulo livre entre o poste e o GR (visto da bola), em graus
+    const post={x:gx,y:Math.sign(sp.y||1)*1.5}; const aP=Math.atan2(post.y-sp.y,post.x-sp.x), aG=Math.atan2(gp.y-sp.y,gp.x-sp.x);
+    let gap=Math.abs(aP-aG)*180/Math.PI; if(gap>180) gap=360-gap; (A.nearGap ||= []).push(gap);
+    if (Math.abs(gx-gp.x) > Math.abs(gx-sp.x)) A.gkBeyond=(A.gkBeyond||0)+1; A.nShots2=(A.nShots2||0)+1; }
   // remates
   for(const b of c.balls) if(b.k==='fly' && typeof b.from==='string' && c.acts.some((x:any)=>x.kind==='shoot'&&x.id===b.from&&b.t0>x.t0&&b.t0<x.t1)){
     const fp=c.tr.get(b.from).at(b.t0); const d=Math.hypot(b.b.x-fp.x,b.b.y-fp.y); A.shotV.push(d/(b.t1-b.t0)); A.shots++;}
@@ -45,6 +55,8 @@ console.log('GR profundidade (m da linha):',st(A.gkDepth),' fora da área %',(10
 console.log('GR erro lateral à linha bola-centro da baliza (m):',st(A.gkBisErr));
 console.log('GR velocidade m/s:',st(A.gkSpd),' parado %',(100*A.gkStill/A.gkN).toFixed(1));
 console.log('GR aceleração m/s2:',st(A.gkAcc));
+console.log('GR no remate: distância ao ponto certo (m):',st(A.frame),' ângulo livre ao 1.º poste (graus):',st(A.nearGap),' GR à frente do rematador:',A.gkBeyond||0,'de',A.nShots2);
+console.log(JSON.stringify(A.bad,null,0));
 console.log('Remates velocidade bola m/s:',st(A.shotV),' km/h med',(q(A.shotV,.5)*3.6).toFixed(0));
 console.log('Gesto do GR começa antes/no remate (n):',A.preMove,'de',A.shots);
 console.log('Lançamentos GR distância m:',st(A.throwD),' vel m/s:',st(A.throwV));
