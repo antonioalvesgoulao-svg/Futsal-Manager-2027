@@ -105,7 +105,7 @@ export function contractsSeasonEnd(s: GameState, endingYear: number): string[] {
     if (squad.indexOf(p) < 12 && p.age < 36) p.contract = makeContract(p, club, endingYear, '-ren');
     else gone.push(p);
   }
-  s.players = s.players.filter((p) => !gone.includes(p)); // jogadores livres: o mercado chega na etapa 10
+  for (const p of gone) { p.clubId = ''; p.contract = undefined; } // ficam livres no mercado
   return out;
 }
 

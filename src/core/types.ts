@@ -1,3 +1,4 @@
+import type { MarketState } from './market';
 import type { ClubFinance } from './finance';
 import type { Contract } from './contracts';
 // Tipos centrais do jogo. Vão crescer em cada etapa.
@@ -93,6 +94,7 @@ export interface GameState {
   training?: TrainingPlan; // plano de treino do meu clube
   trainLog?: TrainLog; // treino acumulado na época
   devFrac?: number; // fração da evolução anual já aplicada
+  market?: MarketState; // propostas recebidas, inscrições
   finance?: Record<string, ClubFinance>; // finanças do futsal de cada clube (etapa 10, em curso)
   devAttrs?: Record<string, Partial<Record<string, number>>>; // atributos no início da época (travões da evolução)
   devStart?: Record<string, number>; // nível no início da época (resumo do fim de época)

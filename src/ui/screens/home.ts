@@ -1,3 +1,4 @@
+import { renderFinance, renderMarket } from './market';
 import { portraitSvg } from '../portrait';
 import { lookOf } from '../../core/appearance';
 import { crestSvg } from '../crest';
@@ -79,8 +80,8 @@ const SECTIONS: { id: string; label: string; stage: string }[] = [
   { id: 'calendario', label: 'Calendário', stage: '' },
   { id: 'competicoes', label: 'Competições', stage: '' },
   { id: 'treino', label: 'Treino', stage: '' },
-  { id: 'mercado', label: 'Mercado', stage: 'Etapa 10' },
-  { id: 'financas', label: 'Finanças', stage: 'Etapa 10' },
+  { id: 'mercado', label: 'Mercado', stage: '' },
+  { id: 'financas', label: 'Finanças', stage: '' },
   { id: 'staff', label: 'Staff', stage: 'Etapa 11' },
   { id: 'formacao', label: 'Formação', stage: 'Etapa 11' },
   { id: 'definicoes', label: 'Definições', stage: '' },
@@ -154,7 +155,7 @@ export function homeScreen(root: HTMLElement) {
       const status = (inj ? `<div class="card" style="margin:8px 0;padding:8px 12px">🩹 <b>${inj.type}</b> · ${inj.days} dias de paragem · volta a ${inj.until.split('-').reverse().join('/')}<br><span class="small muted">${injuryInfo(inj.type)}</span></div>` : '')
         + bans.map((b) => `<div class="card" style="margin:8px 0;padding:8px 12px">🟥 Castigado: ${b.games} jogo(s) (${b.reason})</div>`).join('');
       const pclub = s!.clubs.find((c) => c.id === pl.clubId)!;
-      const dem = renewalDemand(s!, pl);
+      const dem = pl.clubId === club.id ? renewalDemand(s!, pl) : { wage: 0, maxYears: 1 };
       const renew = pl.clubId === club.id ? `<div class="card" style="margin:8px 0 12px;padding:8px 12px"><b>Renovar contrato</b>
         <div class="row" style="justify-content:flex-start;gap:8px;margin-top:6px;flex-wrap:wrap">
           <label class="small">Salário/mês (€) <input id="rwage" type="number" step="50" min="0" value="${dem.wage}" style="width:90px"></label>
@@ -192,6 +193,10 @@ export function homeScreen(root: HTMLElement) {
             .join('')}</tbody>
         </table>
         <p class="muted small">Clica num jogador para ver os atributos.</p>`;
+    } else if (section === 'mercado') {
+      renderMarket(content, s!, () => renderContent(), (id) => { section = 'plantel'; playerId = id; renderNav(); renderContent(); });
+    } else if (section === 'financas') {
+      renderFinance(content, s!);
     } else if (section === 'treino') {
       const plan = planOf(s!, club.id);
       const order = ['GR', 'FIX', 'FIX/ALA', 'UNI', 'ALA', 'ALA/PIV', 'PIV'];

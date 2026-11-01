@@ -12,7 +12,8 @@ export interface ClubFinance { balance: number; transferBudget: number; ledger: 
 /** Preço médio do bilhete (€, estimativa): jogos grandes e fases finais mais caros. */
 export function ticketPrice(s: GameState, f: Fixture) {
   const h = s.clubs.find((c) => c.id === f.home)!;
-  let p = h.reputation >= 90 ? 8 : h.reputation >= 70 ? 5 : 3;
+  // muitos sócios entram com o bilhete de época ou grátis: preço médio efetivo baixo
+  let p = h.reputation >= 90 ? 4 : h.reputation >= 70 ? 3 : 2;
   if (/Final/.test(f.stage)) p *= 2; else if (/Meias/.test(f.stage) || f.comp === 'playoff') p *= 1.4;
   return p;
 }
@@ -49,8 +50,11 @@ export function monthlyFinance(s: GameState, from: string, to: string) {
       m = mo === 12 ? `${y + 1}-01` : `${y}-${String(mo + 1).padStart(2, '0')}`;
       if (f.month === m) continue;
       f.month = m;
-      book(s, c.id, 'Verba do clube para o futsal', Math.round(salaryBudget(c) / 12));
-      book(s, c.id, 'Salários do plantel', -wageBill(s, c.id));
+      // o clube cobre os salários (até ao orçamento) e dá uma pequena verba para reforços (2% do orçamento/mês, estimativa)
+      const wages = wageBill(s, c.id);
+      book(s, c.id, 'Verba do clube para salários', Math.min(wages, Math.round(salaryBudget(c) / 12)));
+      book(s, c.id, 'Verba do clube para reforços', Math.round(salaryBudget(c) * 0.02 / 12) * 12 / 12, true);
+      book(s, c.id, 'Salários do plantel', -wages);
     }
   }
 }

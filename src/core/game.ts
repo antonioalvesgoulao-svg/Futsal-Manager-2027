@@ -5,6 +5,8 @@ import { aiTactics } from './coaches';
 import { normalizeTactics } from './tactics';
 import { accumulate, shootingFocus, trainingBonus } from './training';
 import { contractsSeasonEnd, ensureContracts } from './contracts';
+import { matchRevenue, monthlyFinance, book, PRIZES } from './finance';
+import { aiMarket, ensurePool } from './market';
 import { applyMorale, moraleEvent } from './morale';
 import { injuryOf, matchInjuries, trainingInjuries } from './injuries';
 import { applyDiscipline, banFor, seasonEndDiscipline } from './discipline';
@@ -57,6 +59,7 @@ export function startFirstSeason(s: GameState) {
   s.date = '2026-07-01';
   s.pstats = {};
   ensureContracts(s);
+  ensurePool(s);
 }
 
 export function myFixtures(s: GameState) {
@@ -76,6 +79,7 @@ export function matchOptions(s: GameState, f: Fixture) {
 
 function playFixture(s: GameState, f: Fixture, given?: MatchResult): MatchResult {
   const m = given ?? simulateMatch(setupFor(s, f.home, f.comp), setupFor(s, f.away, f.comp), matchOptions(s, f));
+  matchRevenue(s, f);
   f.result = {
     score: m.score,
     pens: m.penalties,
@@ -145,6 +149,8 @@ function trainingNews(s: GameState, from: string, to: string) {
   const days = Math.round((Date.parse(to) - Date.parse(from)) / 864e5);
   if (days > 0 && days <= 60) accumulate(s, days);
   dailyDevelopment(s, from, to);
+  monthlyFinance(s, from, to);
+  for (const t of aiMarket(s, from, to)) news(s, t);
   // aviso em janeiro: contratos do meu plantel que acabam no fim da época
   const jan = `${s.season.year + 1}-01-01`;
   if (from < jan && to >= jan) {
@@ -199,7 +205,10 @@ function playDay(s: GameState, d: string) {
   const before = { ...s.season.winners };
   for (const t of afterMatchday(s.season, clubIds, (id) => clubName(s, id))) news(s, t);
   // títulos: todo o plantel ganha moral
-  for (const [comp, w] of Object.entries(s.season.winners)) if (w && before[comp as keyof typeof before] !== w) moraleEvent(s, s.players.filter((p) => p.clubId === w).map((p) => p.id), 10);
+  for (const [comp, w] of Object.entries(s.season.winners)) if (w && before[comp as keyof typeof before] !== w) {
+    moraleEvent(s, s.players.filter((p) => p.clubId === w).map((p) => p.id), 10);
+    if (PRIZES[comp]) book(s, w, `Prémio: ${COMP_NAMES[comp as keyof typeof COMP_NAMES]}`, PRIZES[comp]);
+  }
 }
 
 // Fim de época: palmarés, evolução, reformas, formação e nova época
