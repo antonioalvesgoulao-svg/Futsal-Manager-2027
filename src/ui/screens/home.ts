@@ -7,7 +7,7 @@ import { portraitSvg } from '../portrait';
 import { lookOf } from '../../core/appearance';
 import { crestSvg } from '../crest';
 import { fmtEur, marketValue, offerRenewal, renewalDemand, wageBill } from '../../core/contracts';
-import { FOCUS_LABEL, INT_LABEL, planOf, type Focus, type Intensity } from '../../core/training';
+import { FOCUS_LABEL, INT_LABEL, planOf, type Focus, type Intensity , fitnessOf } from '../../core/training';
 import { moraleHtml, moraleOf } from '../../core/morale';
 import { injuryInfo, injuryOf } from '../../core/injuries';
 import { totalBan } from '../../core/discipline';
@@ -102,6 +102,7 @@ export function homeScreen(root: HTMLElement) {
   let section = 'inicio';
   let playerId: string | null = null;
   let pending: Fixture | null = null; // jogo do teu clube por jogar
+  let cmp: string[] = []; // jogadores escolhidos para comparar
 
   const el = h(`
     <div class="layout">
@@ -198,12 +199,28 @@ export function homeScreen(root: HTMLElement) {
       content.innerHTML = `
         <h2>Plantel <span class="muted small">${squad.length} jogadores · folha salarial ${fmtEur(wageBill(s!, club.id))}/mês (estimativa)</span></h2>
         <table class="tbl">
-          <thead><tr><th>Nº</th><th>Nome</th><th>Posição</th><th>Idade</th><th>Nacionalidade</th><th>Atual</th><th>Potencial</th><th>Moral</th><th>Salário/mês</th><th>Contrato</th><th>J</th><th>G</th><th>A</th><th>Nota</th></tr></thead>
+          <thead><tr><th title="Comparar">⇄</th><th>Nº</th><th>Nome</th><th>Posição</th><th>Idade</th><th>Nacionalidade</th><th>Atual</th><th>Potencial</th><th>Moral</th><th>Salário/mês</th><th>Contrato</th><th>J</th><th>G</th><th>A</th><th>Nota</th></tr></thead>
           <tbody>${squad
-            .map((p) => `<tr class="click" data-p="${p.id}"><td>${p.number ?? '-'}</td><td>${p.name}${injuryOf(s!, p.id) ? ` <span title="${injuryOf(s!, p.id)!.type} (até ${injuryOf(s!, p.id)!.until})">🩹</span>` : ''}${totalBan(s!, p.id) ? ` <span title="Castigado: ${totalBan(s!, p.id)} jogo(s)">🟥${totalBan(s!, p.id)}</span>` : ''}${(s!.discipline?.yellows[p.id] ?? 0) ? ` <span class="muted small" title="Amarelos na Liga">🟨${s!.discipline!.yellows[p.id]}</span>` : ''}</td><td>${p.position}</td><td>${p.age}</td><td>${p.nationality}</td><td>${starsHtml(overall(p.attrs, p.position))}</td><td>${starsHtml(p.potential)}</td><td>${moraleHtml(moraleOf(s!, p.id))}</td><td>${p.contract ? fmtEur(p.contract.wage) : '-'}</td><td${p.contract && p.contract.until <= s!.season.year + 1 ? ' style="color:#d9822b;font-weight:600"' : ''}>${p.contract ? 'jun ' + p.contract.until : '-'}</td>${statCells(s!.pstats[p.id])}</tr>`)
+            .map((p) => `<tr class="click" data-p="${p.id}"><td><input type="checkbox" data-cmp="${p.id}" ${cmp.includes(p.id) ? 'checked' : ''} title="Comparar"></td><td>${p.number ?? '-'}</td><td>${p.name}${injuryOf(s!, p.id) ? ` <span title="${injuryOf(s!, p.id)!.type} (até ${injuryOf(s!, p.id)!.until})">🩹</span>` : ''}${totalBan(s!, p.id) ? ` <span title="Castigado: ${totalBan(s!, p.id)} jogo(s)">🟥${totalBan(s!, p.id)}</span>` : ''}${(s!.discipline?.yellows[p.id] ?? 0) ? ` <span class="muted small" title="Amarelos na Liga">🟨${s!.discipline!.yellows[p.id]}</span>` : ''}</td><td>${p.position}</td><td>${p.age}</td><td>${p.nationality}</td><td>${starsHtml(overall(p.attrs, p.position))}</td><td>${starsHtml(p.potential)}</td><td>${moraleHtml(moraleOf(s!, p.id))}</td><td>${p.contract ? fmtEur(p.contract.wage) : '-'}</td><td${p.contract && p.contract.until <= s!.season.year + 1 ? ' style="color:#d9822b;font-weight:600"' : ''}>${p.contract ? 'jun ' + p.contract.until : '-'}</td>${statCells(s!.pstats[p.id])}</tr>`)
             .join('')}</tbody>
         </table>
-        <p class="muted small">Clica num jogador para ver os atributos.</p>`;
+        <p class="muted small">Clica num jogador para ver os atributos. Marca ⇄ em dois jogadores para os comparar.</p>`;
+      if (cmp.length === 2) {
+        const [x, y] = cmp.map((id) => s!.players.find((p) => p.id === id)!);
+        if (x && y) {
+          const groups = Object.entries(ATTR_GROUPS).filter(([g]) => g !== 'guardaRedes' || x.position === 'GR' || y.position === 'GR');
+          const cell = (a: number, b: number) => `<td class="c ${a > b ? 'res-w' : ''}"><b>${a}</b></td>`;
+          const box = document.createElement('div');
+          box.className = 'card';
+          box.style.margin = '0 0 12px';
+          box.innerHTML = `<div class="row"><b>Comparação</b><span class="spacer"></span><button class="btn ghost" data-cmpclear>Limpar</button></div>
+            <table class="tbl small"><thead><tr><th></th><th class="c">${x.name}<br><span class="muted">${x.position}, ${x.age} anos</span></th><th class="c">${y.name}<br><span class="muted">${y.position}, ${y.age} anos</span></th></tr></thead><tbody>
+            <tr><th>Nível</th>${cell(+overall(x.attrs, x.position).toFixed(1), +overall(y.attrs, y.position).toFixed(1))}${cell(+overall(y.attrs, y.position).toFixed(1), +overall(x.attrs, x.position).toFixed(1))}</tr>
+            ${groups.map(([, g]) => `<tr><th colspan="3" class="muted">${g.label}</th></tr>` + Object.entries(g.attrs).map(([k, l]) => { const a = x.attrs[k as keyof typeof x.attrs], b = y.attrs[k as keyof typeof y.attrs]; return `<tr><td>${l}</td>${cell(a, b)}${cell(b, a)}</tr>`; }).join('')).join('')}
+            </tbody></table>`;
+          content.querySelector('h2')!.after(box);
+        }
+      }
     } else if (section === 'mercado') {
       renderMarket(content, s!, () => renderContent(), (id) => { section = 'plantel'; playerId = id; renderNav(); renderContent(); });
     } else if (section === 'carreira') {
@@ -225,17 +242,17 @@ export function homeScreen(root: HTMLElement) {
           <label>Foco da equipa<select id="tfocus">${opts(plan.focus, FOCUS_LABEL)}</select></label>
           <label>Intensidade<select id="tint">${opts(plan.intensity, INT_LABEL)}</select></label>
         </div>
-        <table class="tbl small" style="margin:10px 0 16px"><tbody>
-          <tr><td>Foco</td><td>Esses atributos evoluem mais no fim da época (até ~+0,5 por atributo com foco total); os outros um pouco menos</td></tr>
-          <tr><td>Intensidade alta</td><td>+25% de evolução, +40% de lesões no treino</td></tr>
-          <tr><td>Intensidade baixa</td><td>-25% de evolução, -30% de lesões no treino</td></tr>
-          <tr><td>Recuperação</td><td>Quase não evolui, metade das lesões no treino</td></tr>
-          <tr><td>Guarda-redes</td><td>Fazem sempre metade do treino específico de GR</td></tr>
+        <table class="tbl small" style="margin:10px 0 16px"><thead><tr><th></th><th>Evolução</th><th>Lesões</th><th>Fadiga</th></tr></thead><tbody>
+          <tr><td>Foco escolhido</td><td>+ nos atributos do foco, − nos outros</td><td></td><td>${plan.focus === 'fisico' ? '+' : ''}</td></tr>
+          <tr><td>Intensidade alta</td><td>+</td><td>+</td><td>++</td></tr>
+          <tr><td>Intensidade normal</td><td>=</td><td>=</td><td>+</td></tr>
+          <tr><td>Intensidade baixa</td><td>−</td><td>−</td><td>=</td></tr>
+          <tr><td>Recuperação</td><td>−−</td><td>−−</td><td>−− (recupera)</td></tr>
         </tbody></table>
-        <p class="muted small">Valores estimados (não há estudos públicos com números do efeito do treino no futsal). Os mais novos evoluem mais; o treino junta-se aos minutos jogados.</p>
+        <p class="muted small">Os guarda-redes fazem sempre metade do treino específico. Os mais novos evoluem mais; o treino junta-se aos minutos jogados. A fadiga baixa a energia com que o jogador entra em campo.</p>
         <h3>Treino individual</h3>
-        <table class="tbl"><thead><tr><th>Nº</th><th>Nome</th><th>Posição</th><th>Idade</th><th>Foco individual</th></tr></thead><tbody>
-        ${squad.map((p) => `<tr><td>${p.number ?? '-'}</td><td>${p.name}${injuryOf(s!, p.id) ? ' 🩹' : ''}</td><td>${p.position}</td><td>${p.age}</td><td><select data-ind="${p.id}">${opts(plan.individual[p.id] ?? '', FOCUS_LABEL, '<option value="">Como a equipa</option>')}</select></td></tr>`).join('')}
+        <table class="tbl"><thead><tr><th>Nº</th><th>Nome</th><th>Posição</th><th>Idade</th><th>Condição</th><th>Foco individual</th></tr></thead><tbody>
+        ${squad.map((p) => `<tr><td>${p.number ?? '-'}</td><td>${p.name}${injuryOf(s!, p.id) ? ' 🩹' : ''}</td><td>${p.position}</td><td>${p.age}</td><td>${(() => { const f = Math.round(fitnessOf(s!, p.id)); return `<span style="color:${f >= 90 ? '#4ade80' : f >= 75 ? '#facc15' : '#f87171'}">${f}%</span>`; })()}</td><td><select data-ind="${p.id}">${opts(plan.individual[p.id] ?? '', FOCUS_LABEL, '<option value="">Como a equipa</option>')}</select></td></tr>`).join('')}
         </tbody></table>`;
       content.querySelector<HTMLSelectElement>('#tfocus')!.onchange = (e) => (plan.focus = (e.target as HTMLSelectElement).value as Focus);
       content.querySelector<HTMLSelectElement>('#tint')!.onchange = (e) => (plan.intensity = (e.target as HTMLSelectElement).value as Intensity);
@@ -268,6 +285,10 @@ export function homeScreen(root: HTMLElement) {
 
   content.addEventListener('click', (e) => {
     const t = e.target as HTMLElement;
+    // comparar jogadores (⇄): no máximo dois
+    const cb = t.closest<HTMLInputElement>('[data-cmp]');
+    if (cb) { const id = cb.dataset.cmp!; cmp = cmp.includes(id) ? cmp.filter((x) => x !== id) : [...cmp.slice(-1), id]; renderContent(); return; }
+    if (t.closest('[data-cmpclear]')) { cmp = []; renderContent(); return; }
     const row = t.closest<HTMLElement>('[data-p]');
     if (row) {
       playerId = row.dataset.p!;

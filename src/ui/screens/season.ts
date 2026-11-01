@@ -62,27 +62,52 @@ export function renderDashboard(content: HTMLElement, s: GameState) {
     <div class="feed">${s.news.slice(0, 25).map((n) => `<div class="ev"><span class="ic small muted">${fmtDate(n.date)}</span>${n.text}</div>`).join('')}</div>`;
 }
 
-export function renderCalendar(content: HTMLElement, s: GameState) {
+export function renderCalendar(content: HTMLElement, s: GameState, month?: string) {
+  // calendário mensal (como no FM): escolher o mês; em cada dia de jogo o emblema do adversário, a competição,
+  // casa 🏠 / fora ✈️ / campo neutro 🏟️ e, depois do jogo, um ponto verde/amarelo/vermelho com o resultado
   const fx = myFixtures(s);
+  const ym = month ?? s.date.slice(0, 7);
+  const months: string[] = [];
+  for (let d = new Date(`${s.season.year}-07-01T12:00:00Z`); months.length < 12; d.setUTCMonth(d.getUTCMonth() + 1)) months.push(d.toISOString().slice(0, 7));
+  const [Y, M] = ym.split('-').map(Number);
+  const first = new Date(Date.UTC(Y, M - 1, 1, 12));
+  const days = new Date(Date.UTC(Y, M, 0, 12)).getUTCDate();
+  const lead = (first.getUTCDay() + 6) % 7; // segunda-feira primeiro
+  const mName = (x: string) => new Date(x + '-15T12:00:00Z').toLocaleDateString('pt-PT', { month: 'long', year: 'numeric' });
+  const SHORT: Record<string, string> = { liga: 'Liga Placard', playoff: 'Play-off', taca: 'Taça de Portugal', tacaLiga: 'Taça da Liga', supertaca: 'Supertaça', esp: 'Liga Prime', espPlayoff: 'Fase final', copaEsp: 'Copa de España', superEsp: 'Supercopa', copaRey: 'Copa del Rey' };
+  const cells: string[] = [];
+  for (let i = 0; i < lead; i++) cells.push('<div class="cal-day empty"></div>');
+  for (let d = 1; d <= days; d++) {
+    const date = `${ym}-${String(d).padStart(2, '0')}`;
+    const f = fx.find((x) => x.date === date);
+    let inner = '';
+    if (f) {
+      const home = f.home === s.clubId;
+      const opp = home ? f.away : f.home;
+      let dot = '';
+      if (f.result) {
+        const [x, y] = f.result.pens ?? f.result.score;
+        const r = home ? x - y : y - x;
+        const [a, b] = home ? f.result.score : [f.result.score[1], f.result.score[0]];
+        dot = `<span class="cal-dot ${r > 0 ? 'w' : r < 0 ? 'l' : 'd'}" title="${clubName(s, f.home)} ${scoreText(f)} ${clubName(s, f.away)}">${a}-${b}</span>`;
+      }
+      inner = `<div class="cal-match" title="${COMP_NAMES[f.comp]} · ${f.stage}">${crestSvg(opp, 30)}<div class="small">${SHORT[f.comp] ?? COMP_NAMES[f.comp]}</div><div>${f.neutral ? '🏟️' : home ? '🏠' : '✈️'} ${dot}</div></div>`;
+    }
+    cells.push(`<div class="cal-day ${date === s.date ? 'today' : ''} ${f ? 'has' : ''}"><span class="cal-n">${d}</span>${inner}</div>`);
+  }
   content.innerHTML = `
     <h2>Calendário <span class="muted small">${s.season.label}</span></h2>
-    <table class="tbl small">
-      <thead><tr><th>Data</th><th>Competição</th><th>Fase</th><th></th><th>Adversário</th><th>Resultado</th></tr></thead>
-      <tbody>${fx
-        .map((f) => {
-          const home = f.home === s.clubId;
-          const opp = home ? f.away : f.home;
-          let cls = '';
-          if (f.result) {
-            const [a, b] = f.result.pens ?? f.result.score;
-            const x = home ? a - b : b - a;
-            cls = x > 0 ? 'res-w' : x < 0 ? 'res-l' : 'res-d';
-          }
-          return `<tr class="${f.date === s.date && !f.result ? 'today' : ''}"><td>${fmtDate(f.date)}</td><td>${COMP_NAMES[f.comp]}</td><td>${f.stage}</td><td>${f.neutral ? 'N' : home ? 'C' : 'F'}</td><td>${clubName(s, opp)}</td><td class="${cls}">${scoreText(f)}</td></tr>`;
-        })
-        .join('')}</tbody>
-    </table>
-    <p class="small muted">C = casa, F = fora, N = campo neutro. Os jogos das rondas seguintes das taças e do play-off aparecem quando se apuram os adversários.</p>`;
+    <div class="row" style="justify-content:flex-start;gap:8px;margin-bottom:10px">
+      <button class="btn" id="mprev">◂</button>
+      <select id="msel">${months.map((x) => `<option value="${x}" ${x === ym ? 'selected' : ''}>${mName(x)}</option>`).join('')}</select>
+      <button class="btn" id="mnext">▸</button>
+    </div>
+    <div class="cal">${['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'].map((x) => `<div class="cal-h">${x}</div>`).join('')}${cells.join('')}</div>
+    <p class="small muted">🏠 casa · ✈️ fora · 🏟️ campo neutro · ponto verde vitória, amarelo empate, vermelho derrota (passa o rato para ver o resultado). Os jogos das rondas seguintes aparecem quando se apuram os adversários.</p>`;
+  const i = months.indexOf(ym);
+  content.querySelector('#msel')!.addEventListener('change', (e) => renderCalendar(content, s, (e.target as HTMLSelectElement).value));
+  content.querySelector('#mprev')!.addEventListener('click', () => renderCalendar(content, s, months[Math.max(0, i - 1)] ?? ym));
+  content.querySelector('#mnext')!.addEventListener('click', () => renderCalendar(content, s, months[Math.min(months.length - 1, i + 1)] ?? ym));
 }
 
 export function renderCompetitions(content: HTMLElement, s: GameState, tab = 'liga', round?: number, country?: string, part: 'apertura' | 'clausura' | 'total' = 'total') {

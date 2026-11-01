@@ -11,6 +11,8 @@ export interface TeamSetup {
   squad: Player[]; // plantel (a convocatória de 14 é feita pelo motor)
   tactics: Tactics;
   coachTactical: number; // conhecimento tático do treinador, 1 a 20
+  fitness?: Record<string, number>; // condição física antes do jogo (fadiga do treino e dos jogos), 0-100
+  cardK?: number; // disciplina do treinador: multiplica a probabilidade de cartão nas faltas (1 = normal)
   morale?: Record<string, number>; // moral dos jogadores (0-100)
 }
 

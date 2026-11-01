@@ -1,9 +1,10 @@
+import { managerAttrs, mgrK } from './manager';
 import { overall } from './attributes';
 import { importanceOf, refereesFor } from './referees';
 // Ciclo de jogo: avançar no calendário, jogar jogos, fim de época
 import { aiTactics } from './coaches';
 import { normalizeTactics } from './tactics';
-import { accumulate, shootingFocus, trainingBonus } from './training';
+import { accumulate, dailyFitness, matchFatigue, shootingFocus, trainingBonus } from './training';
 import { contractsSeasonEnd, ensureContracts } from './contracts';
 import { matchRevenue, monthlyFinance, book, PRIZES } from './finance';
 import { aiMarket, endLoans, ensurePool } from './market';
@@ -42,12 +43,12 @@ export function setupFor(s: GameState, clubId: string, comp?: CompId): TeamSetup
     normalizeTactics(s.tactics, squad);
     const ok = (ids: string[]) => ids.filter((id) => squad.some((p) => p.id === id));
     const tactics = comp ? { ...s.tactics, q1: ok(s.tactics.q1), q2: ok(s.tactics.q2) } : s.tactics;
-    return { clubId: c.id, name: c.name, shortName: c.shortName, squad, tactics, coachTactical: 12 + analystBonus(s, c.id), coachName: s.manager.name, morale: s.morale };
+    return { clubId: c.id, name: c.name, shortName: c.shortName, squad, tactics, coachTactical: managerAttrs(s).tatico + analystBonus(s, c.id), cardK: 2 - mgrK(s, 'disciplina', 0.025), coachName: s.manager.name, morale: s.morale, fitness: s.fitness };
   }
   const coach = s.coaches.find((x) => x.clubId === c.id);
   return {
     clubId: c.id, name: c.name, shortName: c.shortName, squad, tactics: aiTactics(squad, c, coach),
-    coachTactical: (coach?.tactical ?? interimOf(s, c.id)?.tactical ?? 11) + analystBonus(s, c.id), morale: s.morale, coachName: coach?.name ?? interimOf(s, c.id)?.name ?? 'Treinador interino',
+    coachTactical: (coach?.tactical ?? interimOf(s, c.id)?.tactical ?? 11) + analystBonus(s, c.id), morale: s.morale, fitness: s.fitness, coachName: coach?.name ?? interimOf(s, c.id)?.name ?? 'Treinador interino',
   };
 }
 
@@ -112,6 +113,7 @@ function playFixture(s: GameState, f: Fixture, given?: MatchResult): MatchResult
   moraleEvent(s, Object.entries(m.players).filter(([, st]) => st.red).map(([id]) => id), -3);
   moraleEvent(s, newInj.filter(([, i]) => i.days > 7).map(([id]) => id), -6);
   for (const [id, i] of newInj) if (mine(id)) news(s, `${pname(id)} lesionou-se no jogo: ${i.type.toLowerCase()}, ${i.days} dia${i.days > 1 ? 's' : ''} de paragem.`);
+  matchFatigue(s, Object.fromEntries(Object.entries(m.players).map(([id, st]) => [id, st.minutes])));
   // estatísticas da época (só competições oficiais)
   for (const [id, st] of Object.entries(m.players)) {
     if (st.minutes < 30) continue;
@@ -157,7 +159,9 @@ function dailyDevelopment(s: GameState, from: string, to: string) {
     // juniores jogam nos campeonatos de formação: contam como titulares com nota razoável (estimativa)
     const st = junior ? { games: 20, goals: 0, assists: 0, minutes: 600 * 60 * 0.7, ratingSum: 20 * 6.8 } : s.pstats[p.id] && { ...s.pstats[p.id], minutes: s.pstats[p.id].minutes / Math.max(0.15, done) };
     const owner = junior ? p.clubId.slice(0, -4) : p.clubId;
-    const boost = owner ? (p.position === 'GR' ? gkTrainingK(s, owner) : trainingK(s, owner)) : 1;
+    let boost = owner ? (p.position === 'GR' ? gkTrainingK(s, owner) : trainingK(s, owner)) : 1;
+    // atributos do treinador (o meu clube): treino técnico e trabalho com jovens
+    if (owner === s.clubId) boost *= mgrK(s, 'treino', 0.02) * (p.age <= 21 ? mgrK(s, 'jovens', 0.03) : 1);
     developPlayer(p, st, s.season.year, junior ? {} : trainingBonus(s, p.id, p.position === 'GR'), shootingFocus(s, p.id, p.clubId), { frac, seed: `${from}-${to}`, final: false, preseason: preseason && !junior, start, boost });
   }
   s.devFrac = (s.devFrac ?? 0) + days / 365;
@@ -166,6 +170,7 @@ function dailyDevelopment(s: GameState, from: string, to: string) {
 function trainingNews(s: GameState, from: string, to: string) {
   const days = Math.round((Date.parse(to) - Date.parse(from)) / 864e5);
   if (days > 0 && days <= 60) accumulate(s, days);
+  if (days > 0) dailyFitness(s, days);
   dailyDevelopment(s, from, to);
   monthlyFinance(s, from, to);
   for (const t of aiMarket(s, from, to)) news(s, t);

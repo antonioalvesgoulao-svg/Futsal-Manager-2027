@@ -75,3 +75,25 @@ export const shootingFocus = (s: GameState, id: string, clubId: string) => {
   const plan = planOf(s, clubId);
   return (plan.individual[id] ?? plan.focus) === 'finalizacao';
 };
+
+// Fadiga (condição física 0-100, pedido do António): o treino cansa conforme a intensidade e o foco; recupera-se todos os dias
+// (25% do que falta); um jogo inteiro tira ~35. Equilíbrio sem jogos: baixa ~100, normal ~96, alta ~88; com recuperação ~100.
+// Entra no jogo com a energia igual à condição. Estimativa.
+const LOAD: Record<Intensity, number> = { baixa: 0, normal: 1, alta: 3 };
+export const fitnessOf = (s: GameState, id: string) => s.fitness?.[id] ?? 100;
+export function dailyFitness(s: GameState, days: number) {
+  const fit = (s.fitness ??= {});
+  for (const p of s.players) {
+    const plan = planOf(s, p.clubId);
+    const foc = plan.individual[p.id] ?? plan.focus;
+    const load = s.injuries?.[p.id] ? 0 : foc === 'recuperacao' ? 0 : LOAD[plan.intensity] + (foc === 'fisico' ? 1 : 0);
+    let f = fit[p.id] ?? 100;
+    for (let d = 0; d < Math.min(days, 20); d++) f = Math.min(100, f + (100 - f) * 0.25 - load);
+    if (f >= 99.5) delete fit[p.id]; else fit[p.id] = Math.round(f * 10) / 10;
+  }
+}
+/** Depois de um jogo: cansaço pelos minutos jogados (segundos de tempo útil; 2400 = jogo inteiro). */
+export function matchFatigue(s: GameState, minutes: Record<string, number>) {
+  const fit = (s.fitness ??= {});
+  for (const [id, sec] of Object.entries(minutes)) fit[id] = Math.max(30, (fit[id] ?? 100) - 35 * Math.min(1.3, sec / 2400));
+}

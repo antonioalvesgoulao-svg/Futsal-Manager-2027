@@ -619,6 +619,9 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
       $('#talkbody').querySelector('#talkok')?.addEventListener('click', close);
       $('#talkbody').querySelectorAll<HTMLElement>('[data-talk]').forEach((b) => b.addEventListener('click', () => {
         const rs = talkEffect(players, b.dataset.talk!, moment === 'pre' ? (underdog ? 'perder' : 'empatar') : sit, underdog, `${f.id}-${moment}-${s.season.year}`);
+        // motivação do treinador: palestras mais (ou menos) eficazes
+        const mk = 1 + ((s.manager.attrs?.motivacao ?? 10) - 10) * 0.04;
+        for (const x of rs) x.delta = Math.round(x.delta * (x.delta > 0 ? mk : 2 - mk) * 10) / 10;
         const deltas = Object.fromEntries(rs.map((x) => [x.id, x.delta]));
         // no jogo: efeito imediato; fica também uma parte na moral do jogador (toda, no fim do jogo)
         if (moment !== 'fim') m.talk(mySide as 0 | 1, deltas);

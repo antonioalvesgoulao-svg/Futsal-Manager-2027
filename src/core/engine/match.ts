@@ -91,7 +91,7 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     const called = youth.length === 2
       ? [...gkList, ...youth, ...rest.slice(0, MAX_SQUAD + 2 - gkList.length - 2)]
       : [...gkList, ...outList.slice(0, MAX_SQUAD - gkList.length)];
-    const players: Live[] = called.map((p) => ({ p, energy: 100, onCourt: false, sentOff: false, yellow: 0, mor: 1 + (((setup.morale?.[p.id] ?? 65) - 65) / 100) * 0.12 }));
+    const players: Live[] = called.map((p) => ({ p, energy: Math.max(40, setup.fitness?.[p.id] ?? 100), onCourt: false, sentOff: false, yellow: 0, mor: 1 + (((setup.morale?.[p.id] ?? 65) - 65) / 100) * 0.12 }));
     for (const l of players) {
       names[l.p.id] = l.p.name;
       pstats[l.p.id] = { minutes: 0, goals: 0, assists: 0, shots: 0, onTarget: 0, saves: 0, fouls: 0, tackles: 0, yellow: 0, red: false, rating: 6 };
@@ -561,7 +561,7 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     const violent = !dogso && r() < 0.0012 + Math.max(0, eff(fouler, 'agressividade') - 12) * 0.0004;
     if (dogso) card((1 - s) as Side, fouler, true);
     else if (violent) { card((1 - s) as Side, fouler, true, 'violento'); pstats[fouler.p.id].victim = victim.p.id; if (r() < 0.5) injure(att, victim); }
-    else if (r() < (0.22 + (eff(fouler, 'agressividade') - 10) * 0.008) * REF.cards * (fouler.yellow ? 0.35 : 1)) card((1 - s) as Side, fouler, false);
+    else if (r() < (0.22 + (eff(fouler, 'agressividade') - 10) * 0.008) * REF.cards * (def.setup.cardK ?? 1) * (fouler.yellow ? 0.35 : 1)) card((1 - s) as Side, fouler, false);
 
     const sp = att.setup.tactics.setPieces;
     actions.push({ type: 'foul', side: s, shooter: victim.p.id, other: fouler.p.id, kind: n >= 6 ? 'free10' : 'play' });

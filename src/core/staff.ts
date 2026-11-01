@@ -73,7 +73,8 @@ const extra = (s: GameState, clubId: string, role: Role) => staffOf(s, clubId, r
 /** Analista: estudo dos adversários = mais conhecimento tático no jogo (+0 a +1,5). */
 export const analystBonus = (s: GameState, clubId: string) => extra(s, clubId, 'analista') * 0.075;
 /** Psicólogo: as quedas de moral são menores (×1 a ×0,7). */
-export const psychK = (s: GameState, clubId: string) => 1 - extra(s, clubId, 'psicologo') * 0.015;
+// psicólogo e, no meu clube, a gestão de pessoas do treinador: quedas de moral menores
+export const psychK = (s: GameState, clubId: string) => (1 - extra(s, clubId, 'psicologo') * 0.015) * (clubId === s.clubId ? Math.max(0.7, 1 - ((s.manager.attrs?.gestao ?? 10) - 10) * 0.03) : 1);
 /** Nutricionista: menos lesões (×1 a ×0,9). */
 export const nutritionK = (s: GameState, clubId: string) => 1 - extra(s, clubId, 'nutricionista') * 0.005;
 /** Scout: avalia melhor o potencial de jogadores de outros clubes (erro ±2,5 sem scout, ±0,5 com scout 20). */

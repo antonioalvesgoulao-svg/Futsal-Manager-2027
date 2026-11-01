@@ -57,6 +57,8 @@ export interface League {
 export interface Manager {
   name: string;
   nationality: string;
+  attrs?: import('./manager').ManagerAttrs; // atributos do treinador (escolhidos no novo jogo)
+  experience?: string;
 }
 
 export interface Coach {
@@ -96,6 +98,7 @@ export interface GameState {
   news: NewsItem[];
   honours: Honour[];
   settings?: Settings;
+  fitness?: Record<string, number>; // condição física (fadiga) 0-100; omisso = 100
   discipline?: Discipline; // amarelos acumulados e castigos
   injuries?: Record<string, Injury>; // lesões em curso
   morale?: Record<string, number>; // moral 0-100 (65 = normal)
