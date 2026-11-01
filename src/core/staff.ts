@@ -89,6 +89,10 @@ export function hireStaff(s: GameState, st: Staff): string {
   const newWage = staffWage(st.ability, my);
   if (staffBill(s, my.id) - (cur?.wage ?? 0) + newWage > staffBudget(my)) return `A direção não aprova: o staff passaria o orçamento de ${staffBudget(my)} €/mês (${st.name} pede ${newWage} €).`;
   const cost = cur ? Math.round(cur.wage * Math.max(1, (cur.until - s.season.year) * 12) * 0.5) : 0;
+  // técnicos livres muito bons não vão para clubes pequenos nem para treinadores sem reputação (estimativa)
+  const coachRep = s.career?.reputation ?? 35;
+  const need = 30 + (st.ability - 10) * 6; // capacidade 15 → reputação do clube/treinador ~60
+  if (st.ability >= 13 && Math.max(my.reputation, coachRep + 10) < need) return `${st.name} recusa: com a capacidade que tem (${st.ability}/20), procura um clube ou treinador com mais nome.`;
   if (cur) { cur.clubId = null; cur.wage = staffWage(cur.ability); }
   st.clubId = my.id; st.wage = staffWage(st.ability, my); st.until = s.season.year + 2;
   return `${st.name} é o novo ${ROLE_NAME[st.role].toLowerCase()} (${st.wage} €/mês)${cur ? `; ${cur.name} sai (indemnização ${cost} €)` : ''}.`;

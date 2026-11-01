@@ -400,6 +400,18 @@ export function poachStaff(s: GameState, st: Staff, wage: number): string {
   if (!from) return 'Este técnico não tem clube: contrata-o na lista de livres.';
   const want = Math.round(st.wage * (1.1 + Math.max(0, (from.reputation - my.reputation) / 100)) / 50) * 50;
   if (wage < want) return `${st.name} pede pelo menos ${fmtEur(want)}/mês para sair do ${from.name}.`;
+  // como nos jogadores: quem está contente (clube com bons resultados) e num clube maior dificilmente sai (estimativa)
+  const c = careerOf(s);
+  const tries = ((c as { staffTries?: Record<string, string> }).staffTries ??= {});
+  const last = tries[st.id];
+  if (last && (Date.parse(s.date) - Date.parse(last)) / 864e5 < 30) return `${st.name} já recusou há pouco tempo. Tenta outra vez daqui a umas semanas.`;
+  tries[st.id] = s.date;
+  const fromConf = boardOf(s, from.id).conf, myConf = boardOf(s, my.id).conf;
+  const pAccept = Math.max(0.05, Math.min(0.95, 0.45 + (my.reputation - from.reputation) / 60 + (60 - fromConf) / 120 + (myConf - 60) / 200 + (c.reputation - 50) / 200 + (wage / want - 1) * 1.2));
+  if (rng(`poach-${st.id}-${s.date}`)() > pAccept) {
+    const why = from.reputation > my.reputation + 5 ? `não quer trocar o ${from.name} por um clube mais pequeno` : fromConf >= 60 ? `está contente com o projeto do ${from.name}` : 'não está convencido com a proposta';
+    return `${st.name} recusa: ${why}. (Hipótese estimada de aceitar: ${Math.round(pAccept * 100)}%.)`;
+  }
   const fee = poachFee(s, st);
   if (financeOf(s, my.id).balance < fee) return `Não tens saldo para a indemnização de ${fmtEur(fee)}.`;
   if (staffBill(s, my.id) + wage > staffBudget(my)) return `A direção não aprova: o staff passaria o orçamento de ${fmtEur(staffBudget(my))}/mês.`;
