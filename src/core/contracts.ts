@@ -10,15 +10,31 @@ import type { Club, GameState, Player } from './types';
 export interface Contract { wage: number; until: number; clause: number } // until = ano em que acaba (30 de junho)
 
 const round = (x: number, step: number) => Math.max(step, Math.round(x / step) * step);
+const REAL_IDS = new Set(['slb12']);
 
 /** Salário de mercado (€/mês brutos) para um jogador num clube. */
 export function marketWage(p: Player, club: Club) {
   const ov = overall(p.attrs, p.position);
-  const base = 850 * Math.exp((ov - 8) * 0.34); // nível 8 ≈ 850 €, 11 ≈ 2,4 mil €, 14 ≈ 6,6 mil €, 17 ≈ 18 mil €
-  // riqueza: curva calibrada com orçamentos reais (Benfica ~2,7 M€ em 2024, Sporting ~2 M€, Fundão ~150 mil €)
-  const wealth = 1.3 * Math.exp((club.wealth - 98) * 0.0296);
+  const base = 850 * Math.exp((ov - 8) * 0.25); // diferença dentro do plantel; a escala do clube acerta o total
+  // riqueza: escala do clube para a folha salarial bater com o orçamento (salaryBudget)
+  const wealth = club.wageScale ?? 1.3 * Math.exp((club.wealth - 98) * 0.0296);
   const age = p.age <= 19 ? 0.55 : p.age <= 21 ? 0.75 : p.age >= 34 ? 0.8 : 1;
   return Math.max(400, round(base * wealth * age, 50));
+}
+
+/** Orçamento anual do futsal (€), todo para salários (pedido do António).
+ *  Pontos reais: Benfica 2,7 M€ (2024, wealth 98), Sporting ~2 M€ (92), Fundão ~150 mil € (40).
+ *  Os outros saem da curva exponencial que passa por estes três (estimativa): mais estrutura = mais orçamento. */
+export const salaryBudget = (club: Club) => Math.round(2.7e6 * Math.exp((club.wealth - 98) * 0.0498) / 1000) * 1000;
+
+/** Calcula a escala salarial de cada clube para que os salários do plantel somem o orçamento. */
+export function calibrateWages(s: GameState) {
+  for (const c of s.clubs) {
+    const squad = s.players.filter((p) => p.clubId === c.id);
+    c.wageScale = 1;
+    const raw = squad.reduce((a, p) => a + marketWage(p, c), 0) * 12;
+    c.wageScale = raw ? salaryBudget(c) / raw : 1;
+  }
 }
 
 /** Valor de mercado estimado (€). */
@@ -48,6 +64,7 @@ export function makeContract(p: Player, club: Club, year: number, seed = ''): Co
 
 /** Garante que todos os jogadores têm contrato (jogos novos e gravações antigas). */
 export function ensureContracts(s: GameState) {
+  if (s.clubs.some((c) => c.wageScale === undefined)) calibrateWages(s);
   for (const p of s.players) {
     if (p.contract) continue;
     const c = s.clubs.find((x) => x.id === p.clubId);

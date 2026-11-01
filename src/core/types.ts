@@ -11,6 +11,7 @@ export interface Club {
   reputation: number; // prestígio, 1 a 100 (escala mundial)
   level: number; // qualidade atual do plantel, 1 a 100 (escala mundial)
   wealth: number; // poder financeiro e dimensão do clube, 1 a 100 (escala mundial)
+  wageScale?: number; // escala salarial (calculada para a folha bater com o orçamento)
 }
 
 import type { Attributes } from './attributes';
