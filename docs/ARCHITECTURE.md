@@ -50,3 +50,15 @@ O chamador `src/ui/screens/live.ts` tem acesso aos plantéis produzidos por `set
 A `Choreo` converte esses jogadores em `MovementProfile`. Na primeira fase, apenas o ataque organizado em 4-0 aplica os fatores individuais de aceleração e agilidade ao bake das trajetórias dos jogadores de campo da equipa em posse. O guarda-redes, a equipa defensora e os restantes sistemas mantêm os limites anteriores. A velocidade máxima continua global porque o modelo de atributos não contém um atributo de velocidade máxima.
 
 A agilidade influencia o horizonte de antecipação do alvo durante o bake; a aceleração influencia o limite de alteração da velocidade. Estes efeitos são moderados e não representam qualidade de decisão ou sucesso técnico. A próxima validação deve comparar jogadores com atributos físicos contrastantes num cenário 4-0 controlado, confirmando também que o resultado do motor permanece inalterado.
+
+
+## Testabilidade da movimentação física
+
+A integração numérica da trajetória está isolada em `bakeMovementTrajectory` (`src/core/visual/movement.ts`). `Track.bake` delega nesta função e converte os pontos devolvidos para os buffers usados pela coreografia. Isto permite testar a mesma integração sem construir uma posse completa nem acoplar o teste ao renderer.
+
+- Aceleração individual escala o limite de alteração da velocidade.
+- Agilidade individual escala a janela de resposta do alvo.
+- A velocidade máxima continua global.
+- O teste de integração compara trajetórias com perfis físicos contrastantes e verifica que o motor `engine/match.ts` não importa a camada visual.
+
+A validação de branches de feature usa workflow acionado por `push`, uma vez que `main` ainda não inclui CI para `pull_request`. A confirmação deve ser feita pela SHA exata do HEAD, e não por uma execução anterior.
