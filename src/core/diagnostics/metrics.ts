@@ -47,7 +47,8 @@ export interface Metrics {
   longestStill: Acc; // maior período seguido parado, por jogador e posse (s)
   runActs: number; sprints: number; rotations: number; supports: number;
   transitions: number;
-  transPressNow: Acc; transPress3: Acc; // quem perdeu: jogadores perto da bola logo e aos 3 s
+  transWindowComplete: number; transWindowIncomplete: number;
+  transPressNow: Acc; transPress3: Acc; // equipa que perdeu, excluindo o portador que perdeu a bola
   transRetreat: Acc; // quem perdeu: recuo médio (m) do bloco em 3 s
   transProgress: Acc; // quem recuperou: metros que a bola avança para a baliza em 3 s
   transForward: Acc; // quem recuperou: jogadores a atacar o espaço (velocidade para a frente > 2 m/s) no 1.º segundo
@@ -56,7 +57,7 @@ export const emptyMetrics = (): Metrics => ({
   samples: 0, playSeconds: 0, width: acc(), depth: acc(), defWidth: acc(), defDepth: acc(), mateDist: acc(), nearestMate: acc(), defMateDist: acc(),
   defToOpp: acc(), pressOnBall: acc(), linesOffered: acc(), linesCandidates: 0, linesBlocked: 0, passes: 0, passesThrough: 0,
   stillShareAtt: acc(), stillShareDef: acc(), longestStill: acc(), runActs: 0, sprints: 0, rotations: 0, supports: 0,
-  transitions: 0, transPressNow: acc(), transPress3: acc(), transRetreat: acc(), transProgress: acc(), transForward: acc(),
+  transitions: 0, transWindowComplete: 0, transWindowIncomplete: 0, transPressNow: acc(), transPress3: acc(), transRetreat: acc(), transProgress: acc(), transForward: acc(),
 });
 
 const d2 = (a: P2, b: P2) => Math.hypot(a.x - b.x, a.y - b.y);
@@ -75,7 +76,7 @@ function sides(p: Possession) {
 }
 
 /** Mede uma posse (o seu jogo corrido) e soma às métricas. prev = posse anterior (para as transições). */
-export function measurePossession(m: Metrics, p: Possession, sc: Scene3D & { duration: number; lead: number }, prev?: { p: Possession } | null) {
+export function measurePossession(m: Metrics, p: Possession, sc: Scene3D & { duration: number; lead: number }, prev?: { p: Possession; lostHolder: string | null } | null) {
   const dir = sc.attackDirection;
   const U = (q: P2) => dir * q.x + 20;
   const { att, def } = sides(p);
@@ -193,16 +194,25 @@ export function measurePossession(m: Metrics, p: Possession, sc: Scene3D & { dur
   // transição: a posse anterior acabou com perda de bola em jogo corrido
   if (prev && prev.p.side !== p.side && prev.p.actions.some((x) => x.type === 'lost')) {
     m.transitions++;
-    const losers = def; // quem perdeu está agora a defender
+    // Exclui o portador no instante final da posse anterior: foi quem perdeu a bola.
+    const losers = def.filter((id) => id !== prev.lostHolder);
     const winners = att;
-    const f0 = live[0], f1 = live[Math.min(live.length - 1, step)], f3 = live[Math.min(live.length - 1, Math.round(TH.transWin / DT))];
+    const f0 = live[0];
     const near = (f: Frame) => losers.filter((x) => f.pos[x] && d2(f.pos[x], f.ball) < TH.pressR).length;
-    add(m.transPressNow, near(f0)); add(m.transPress3, near(f3));
-    // recuo de quem perdeu: aproximação à própria baliza (na direção de quem agora ataca, u aumenta para lá)
-    const uAvg = (f: Frame, ids: string[]) => { const v = ids.filter((x) => f.pos[x]).map((x) => U(f.pos[x])); return v.reduce((a, b) => a + b, 0) / Math.max(1, v.length); };
-    add(m.transRetreat, uAvg(f3, losers) - uAvg(f0, losers));
-    add(m.transProgress, U(f3.ball) - U(f0.ball));
-    add(m.transForward, winners.filter((x) => f0.pos[x] && f1.pos[x] && U(f1.pos[x]) - U(f0.pos[x]) > 2).length);
+    add(m.transPressNow, near(f0));
+    const complete3s = sc.duration + 1e-6 >= TH.transWin;
+    if (complete3s) {
+      m.transWindowComplete++;
+      const f1 = live[Math.min(live.length - 1, step)], f3 = live[Math.min(live.length - 1, Math.round(TH.transWin / DT))];
+      add(m.transPress3, near(f3));
+      // recuo de quem perdeu: aproximação à própria baliza (na direção de quem agora ataca, u aumenta para lá)
+      const uAvg = (f: Frame, ids: string[]) => { const v = ids.filter((x) => f.pos[x]).map((x) => U(f.pos[x])); return v.reduce((a, b) => a + b, 0) / Math.max(1, v.length); };
+      add(m.transRetreat, uAvg(f3, losers) - uAvg(f0, losers));
+      add(m.transProgress, U(f3.ball) - U(f0.ball));
+      add(m.transForward, winners.filter((x) => f0.pos[x] && f1.pos[x] && U(f1.pos[x]) - U(f0.pos[x]) > 2).length);
+    } else {
+      m.transWindowIncomplete++;
+    }
   }
 }
 
@@ -225,14 +235,16 @@ export function summarize(m: Metrics) {
     'Linhas de passe obstruídas (%)': r(m.linesCandidates ? (m.linesBlocked / m.linesCandidates) * 100 : NaN, 1),
     'Passes por minuto de jogo corrido': r(perMin(m.passes), 1),
     'Passes que atravessam um adversário (%)': r(m.passes ? (m.passesThrough / m.passes) * 100 : NaN, 1),
-    'Tempo parado, jogadores com bola (%)': r(mean(m.stillShareAtt) * 100, 1),
-    'Tempo parado, jogadores sem bola (%)': r(mean(m.stillShareDef) * 100, 1),
+    'Tempo parado, equipa com bola (%)': r(mean(m.stillShareAtt) * 100, 1),
+    'Tempo parado, equipa sem bola (%)': r(mean(m.stillShareDef) * 100, 1),
     'Maior período seguido parado (s, média)': r(mean(m.longestStill)),
     'Desmarcações explícitas da coreografia (por min)': r(perMin(m.runActs), 1),
     'Sprints sem bola (por min)': r(perMin(m.sprints), 1),
     'Rotações / trocas de posição (por min)': r(perMin(m.rotations), 1),
     'Movimentos de apoio ao portador (por min)': r(perMin(m.supports), 1),
     'Transições analisadas (perdas em jogo corrido)': m.transitions,
+    'Transições com janela completa de 3 s': m.transWindowComplete,
+    'Transições com janela inferior a 3 s (excluídas das métricas aos 3 s)': m.transWindowIncomplete,
     'Pós-perda: jogadores perto da bola logo (n.º)': r(mean(m.transPressNow)),
     'Pós-perda: jogadores perto da bola aos 3 s (n.º)': r(mean(m.transPress3)),
     'Pós-perda: recuo do bloco em 3 s (m)': r(mean(m.transRetreat)),
