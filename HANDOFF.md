@@ -121,3 +121,12 @@ https://github.com/antonioalvesgoulao-svg/Futsal-Manager-2027/pull/5
 - PR #3 continua draft e aponta para `main`; PR #5 continua draft e aponta para `feat/attribute-aware-movement-clean` (dependência explícita).
 - Ambas estão reportadas como mergeable, mas mergeable não significa validada nem aprovada.
 - Não fazer merge sem aprovação explícita. A ordem correta é concluir CI/diagnóstico da PR #3, rever/aceitar PR #3 e só depois rever a PR #5 sobre a base integrada.
+
+
+### Atualização após sincronização da base (1 novembro 2026, 22:38 UTC)
+- PR #3 HEAD `ef382e103403ee77ce36b554ce2dfe119375134d`: workflow [41358028406](https://github.com/antonioalvesgoulao-svg/Futsal-Manager-2027/actions/runs/41358028406) terminou com conclusão `success`; build e diagnóstico concluídos.
+- PR #5 foi sincronizada com o HEAD atual da PR #3 através de commit de merge na branch de feature, sem merge de qualquer PR para `main`.
+- Novo HEAD PR #5: `564cc7ff7f10edb62510e9b37f347172367608da`. A comparação confirma 11 commits à frente e zero atrás da branch base; PR voltou a ser reportada como mergeable.
+- Workflow para o novo HEAD PR #5: [41358144794](https://github.com/antonioalvesgoulao-svg/Futsal-Manager-2027/actions/runs/41358144794), ainda em execução na última consulta. Instalação concluída; build em execução; testes e diagnóstico pendentes.
+- O HEAD anterior PR #5 `6618c00770b761196e52768491de0350a8942eff` teve workflow [41358023935](https://github.com/antonioalvesgoulao-svg/Futsal-Manager-2027/actions/runs/41358023935) concluído com sucesso (incluindo build e testes), mas não substitui a validação do novo HEAD.
+- PR #3 e #5 continuam drafts, abertas e sem merge. Motivo: foram criadas deliberadamente como drafts enquanto faltava validação; a PR #5 depende da PR #3. Não fazer merge sem aprovação explícita.
