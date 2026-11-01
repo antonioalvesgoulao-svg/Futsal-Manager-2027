@@ -37,3 +37,7 @@ Jogadores com a mesma intenção podem executá-la de forma diferente. Não torn
 As métricas atuais incluem largura/profundidade, distâncias, linhas de passe, tempo parado, corridas, rotações e transições. Algumas são proxies geométricas, não prova de intenção ou eficácia tática. Comparações exigem seed, parâmetros e schema consistentes.
 
 Comandos conhecidos: `npm ci`, `npm run build`, `npm run diag -- --seed base --jogos 12 --nome ci`. Consultar sempre `package.json` antes de executar.
+
+
+## Dependência de dados para a camada de movimento
+A coreografia `Choreo` recebe atualmente uma `Possession`, táticas, período, estado inicial e nomes. A estrutura `Possession` transporta IDs dos jogadores em campo, não os objetos `Player` nem os atributos. Portanto, `movement.ts` não pode influenciar legitimamente o movimento até que o chamador forneça à coreografia um mapa de jogadores/atributos. Essa passagem deve ser opcional e compatível com os caminhos atuais; não se deve duplicar atributos dentro de cada posse nem alterar o motor de resultados apenas para alimentar a apresentação.
