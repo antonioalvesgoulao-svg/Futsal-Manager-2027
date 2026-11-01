@@ -19,8 +19,6 @@ export type MovementIntent =
   | 'receive';
 
 export interface MovementProfile {
-  /** Multiplicador de velocidade máxima: 0.88–1.12. */
-  speedFactor: number;
   /** Multiplicador de aceleração: 0.82–1.16. */
   accelerationFactor: number;
   /** Multiplicador de resposta nas mudanças de direção: 0.82–1.16. */
@@ -65,7 +63,6 @@ export function movementProfile(player: Player): MovementProfile {
   const teamwork = score(player, { trabalhoEquipa: 3, decisoes: 1, posicionamento: 1 });
 
   return {
-    speedFactor: 0.88 + unit(a.aceleracao) * 0.24,
     accelerationFactor: 0.82 + unit(a.aceleracao) * 0.34,
     agilityFactor: 0.82 + unit(a.agilidade) * 0.34,
     decisionFactor: 0.55 + decision * 0.45,
