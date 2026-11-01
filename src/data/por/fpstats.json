@@ -1,0 +1,7711 @@
+{
+"_info": "Estatísticas oficiais (futsalportugal.com, dados FPF) dos jogadores, seniores, desde 2021/22: jogos, amarelos, vermelhos; jogos e golos por época; títulos. Recolha 1/11/2026.",
+"players": {
+"por11": {
+"fpId": 16330,
+"games": 71,
+"yellow": 20,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Portimonense SC",
+"games": 6,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Viseu 2001",
+"games": 17,
+"goals": 10
+},
+{
+"s": "25",
+"team": "ADCR Caxinas",
+"games": 15,
+"goals": 3
+},
+{
+"s": "24",
+"team": "ADCR Caxinas",
+"games": 7,
+"goals": 4
+},
+{
+"s": "21",
+"team": "SCU Torreense",
+"games": 26,
+"goals": 11
+}
+],
+"titles": []
+},
+"por18": {
+"fpId": 19349,
+"games": 61,
+"yellow": 6,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "Portimonense SC",
+"games": 2,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Portimonense SC",
+"games": 30,
+"goals": 11
+},
+{
+"s": "24",
+"team": "Portimonense SC",
+"games": 15,
+"goals": 9
+},
+{
+"s": "24",
+"team": "AD Fundão",
+"games": 10,
+"goals": 0
+},
+{
+"s": "22",
+"team": "SL Benfica",
+"games": 4,
+"goals": 2
+}
+],
+"titles": [
+"Taça de Portugal (2022/2023, 2022/2023)",
+"Campeonato Nacional Sub 17 (2021/2022)",
+"Campeonato Europa Sub 19 (2023/2024)",
+"2ª Divisão (2025/2026)"
+]
+},
+"por08": {
+"fpId": 49898,
+"games": 1,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Portimonense SC",
+"games": 1,
+"goals": 0
+}
+],
+"titles": []
+},
+"por01": {
+"fpId": 27083,
+"games": 2,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Portimonense SC",
+"games": 1,
+"goals": 0
+},
+{
+"s": "24",
+"team": "CDR Pedra Mourinha",
+"games": 1,
+"goals": 0
+}
+],
+"titles": []
+},
+"por16": {
+"fpId": 10318,
+"games": 96,
+"yellow": 8,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "Portimonense SC",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Leões de Porto Salvo B",
+"games": 6,
+"goals": 6
+},
+{
+"s": "25",
+"team": "Leões de Porto Salvo",
+"games": 31,
+"goals": 3
+},
+{
+"s": "24",
+"team": "Sporting CP",
+"games": 34,
+"goals": 3
+},
+{
+"s": "23",
+"team": "Sporting CP",
+"games": 11,
+"goals": 2
+},
+{
+"s": "22",
+"team": "CCRD Burinhosa",
+"games": 8,
+"goals": 6
+}
+],
+"titles": [
+"Campeonato Nacional Sub 19 (2023/2024, 2023/2024)",
+"Liga Placard (2023/2024, 2023/2024)",
+"Campeonato Europa Sub 19 (2023/2024)",
+"Taça de Portugal (2024/2025)",
+"Taça da Liga (2024/2025)"
+]
+},
+"por09": {
+"fpId": 597,
+"games": 102,
+"yellow": 18,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "Portimonense SC",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Portimonense SC",
+"games": 28,
+"goals": 12
+},
+{
+"s": "24",
+"team": "Albufeira Futsal",
+"games": 24,
+"goals": 15
+},
+{
+"s": "22",
+"team": "Albufeira Futsal",
+"games": 28,
+"goals": 9
+},
+{
+"s": "21",
+"team": "Portimonense SC",
+"games": 16,
+"goals": 7
+}
+],
+"titles": [
+"2ª Divisão (2025/2026)"
+]
+},
+"por13": {
+"fpId": 6179,
+"games": 90,
+"yellow": 35,
+"red": 7,
+"seasons": [
+{
+"s": "25",
+"team": "SC Barbarense",
+"games": 22,
+"goals": 15
+},
+{
+"s": "24",
+"team": "SC Barbarense",
+"games": 23,
+"goals": 9
+},
+{
+"s": "23",
+"team": "Leões de Porto Salvo",
+"games": 1,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Leões de Porto Salvo B",
+"games": 20,
+"goals": 7
+},
+{
+"s": "22",
+"team": "Reguilas de Tires",
+"games": 8,
+"goals": 0
+},
+{
+"s": "22",
+"team": "SC Lusitânia",
+"games": 13,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Sporting CP",
+"games": 3,
+"goals": 0
+}
+],
+"titles": [
+"Liga Placard (2021/2022, 2021/2022)"
+]
+},
+"por02": {
+"fpId": 11569,
+"games": 145,
+"yellow": 15,
+"red": 4,
+"seasons": [
+{
+"s": "26",
+"team": "Portimonense SC",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Portimonense SC",
+"games": 28,
+"goals": 2
+},
+{
+"s": "24",
+"team": "Portimonense SC",
+"games": 26,
+"goals": 2
+},
+{
+"s": "23",
+"team": "AD Fundão",
+"games": 25,
+"goals": 0
+},
+{
+"s": "22",
+"team": "AD Fundão",
+"games": 27,
+"goals": 0
+},
+{
+"s": "21",
+"team": "ACD Ladoeiro",
+"games": 33,
+"goals": 0
+}
+],
+"titles": [
+"2ª Divisão (2020/2021, 2025/2026)"
+]
+},
+"por17": {
+"fpId": 51900,
+"games": 38,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Portimonense SC",
+"games": 6,
+"goals": 2
+},
+{
+"s": "25",
+"team": "Araz Naxçivan",
+"games": 8,
+"goals": 5
+},
+{
+"s": "24",
+"team": "Semey FC",
+"games": 6,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Haladás VSE",
+"games": 6,
+"goals": 1
+},
+{
+"s": "22",
+"team": "Haladás VSE",
+"games": 3,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Haladás VSE",
+"games": 9,
+"goals": 3
+}
+],
+"titles": []
+},
+"por03": {
+"fpId": 9008,
+"games": 133,
+"yellow": 22,
+"red": 6,
+"seasons": [
+{
+"s": "26",
+"team": "Portimonense SC",
+"games": 3,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Rio Ave FC",
+"games": 24,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Rio Ave FC",
+"games": 27,
+"goals": 3
+},
+{
+"s": "23",
+"team": "Rio Ave FC",
+"games": 28,
+"goals": 1
+},
+{
+"s": "22",
+"team": "Rio Ave FC",
+"games": 24,
+"goals": 2
+},
+{
+"s": "21",
+"team": "GRC Dínamo Sanjoanense",
+"games": 14,
+"goals": 0
+},
+{
+"s": "21",
+"team": "AD Fafe",
+"games": 13,
+"goals": 1
+}
+],
+"titles": []
+},
+"por15": {
+"fpId": 1601,
+"games": 100,
+"yellow": 36,
+"red": 3,
+"seasons": [
+{
+"s": "26",
+"team": "Portimonense SC",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Portimonense SC",
+"games": 24,
+"goals": 21
+},
+{
+"s": "24",
+"team": "Albufeira Futsal",
+"games": 24,
+"goals": 44
+},
+{
+"s": "22",
+"team": "Albufeira Futsal",
+"games": 22,
+"goals": 28
+},
+{
+"s": "21",
+"team": "Portimonense SC",
+"games": 24,
+"goals": 8
+}
+],
+"titles": [
+"2ª Divisão (2025/2026)"
+]
+},
+"por05": {
+"fpId": 2550,
+"games": 104,
+"yellow": 14,
+"red": 3,
+"seasons": [
+{
+"s": "26",
+"team": "Portimonense SC",
+"games": 5,
+"goals": 0
+},
+{
+"s": "25",
+"team": "AD Fundão",
+"games": 17,
+"goals": 4
+},
+{
+"s": "24",
+"team": "AD Fundão",
+"games": 12,
+"goals": 1
+},
+{
+"s": "23",
+"team": "AD Fundão",
+"games": 23,
+"goals": 3
+},
+{
+"s": "22",
+"team": "AD Fundão",
+"games": 22,
+"goals": 3
+},
+{
+"s": "21",
+"team": "AD Fundão",
+"games": 25,
+"goals": 2
+}
+],
+"titles": [
+"Campeonato Nacional Sub 17 (2017/2018)",
+"Campeonato Nacional Sub 19 (2018/2019)"
+]
+},
+"por04": {
+"fpId": 20957,
+"games": 2,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Portimonense SC",
+"games": 2,
+"goals": 0
+}
+],
+"titles": []
+},
+"por10": {
+"fpId": 1682,
+"games": 128,
+"yellow": 19,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Portimonense SC",
+"games": 5,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Portimonense SC",
+"games": 30,
+"goals": 25
+},
+{
+"s": "24",
+"team": "Portimonense SC",
+"games": 13,
+"goals": 5
+},
+{
+"s": "23",
+"team": "SCU Torreense",
+"games": 9,
+"goals": 1
+},
+{
+"s": "23",
+"team": "FC Famalicão",
+"games": 17,
+"goals": 7
+},
+{
+"s": "22",
+"team": "Portimonense SC",
+"games": 12,
+"goals": 8
+},
+{
+"s": "22",
+"team": "CRC Quinta dos Lombos",
+"games": 10,
+"goals": 0
+},
+{
+"s": "21",
+"team": "CRC Quinta dos Lombos",
+"games": 32,
+"goals": 4
+}
+],
+"titles": [
+"Campeonato Nacional Sub 17 (2016/2017, 2016/2017)",
+"Campeonato Nacional Sub 19 (2018/2019, 2018/2019)",
+"Taça Nacional Sub 17 (2015/2016)",
+"2ª Divisão (2025/2026)"
+]
+},
+"slb04": {
+"fpId": 375,
+"games": 156,
+"yellow": 30,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "SL Benfica",
+"games": 11,
+"goals": 3
+},
+{
+"s": "25",
+"team": "SL Benfica",
+"games": 40,
+"goals": 12
+},
+{
+"s": "24",
+"team": "SL Benfica",
+"games": 38,
+"goals": 17
+},
+{
+"s": "23",
+"team": "SL Benfica",
+"games": 11,
+"goals": 9
+},
+{
+"s": "22",
+"team": "SL Benfica",
+"games": 10,
+"goals": 1
+},
+{
+"s": "21",
+"team": "SL Benfica",
+"games": 46,
+"goals": 11
+}
+],
+"titles": [
+"Liga Placard (2015/2016, 2018/2019, 2024/2025, 2025/2026)",
+"Campeonato Nacional Sub 19 (2015/2016, 2016/2017, 2017/2018, 2017/2018)",
+"Taça da Liga (2017/2018, 2017/2018, 2019/2020, 2025/2026)",
+"Campeonato do Mundo (2021/2022)",
+"Campeonato da Europa (2021/2022)",
+"Finalíssima (2022/2023)",
+"Taça de Portugal (2025/2026)"
+]
+},
+"slb13": {
+"fpId": 23533,
+"games": 114,
+"yellow": 17,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "SL Benfica",
+"games": 4,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Leões de Porto Salvo",
+"games": 32,
+"goals": 11
+},
+{
+"s": "24",
+"team": "Leões de Porto Salvo B",
+"games": 5,
+"goals": 3
+},
+{
+"s": "24",
+"team": "Leões de Porto Salvo",
+"games": 33,
+"goals": 16
+},
+{
+"s": "23",
+"team": "Leões de Porto Salvo B",
+"games": 22,
+"goals": 23
+},
+{
+"s": "23",
+"team": "Leões de Porto Salvo",
+"games": 17,
+"goals": 6
+},
+{
+"s": "22",
+"team": "Leões de Porto Salvo B",
+"games": 1,
+"goals": 0
+}
+],
+"titles": []
+},
+"slb06": {
+"fpId": 307,
+"games": 225,
+"yellow": 67,
+"red": 3,
+"seasons": [
+{
+"s": "26",
+"team": "SL Benfica",
+"games": 11,
+"goals": 4
+},
+{
+"s": "25",
+"team": "SL Benfica",
+"games": 41,
+"goals": 13
+},
+{
+"s": "24",
+"team": "SL Benfica",
+"games": 37,
+"goals": 12
+},
+{
+"s": "23",
+"team": "FC Barcelona",
+"games": 44,
+"goals": 12
+},
+{
+"s": "22",
+"team": "FC Barcelona",
+"games": 48,
+"goals": 7
+},
+{
+"s": "21",
+"team": "FC Barcelona",
+"games": 44,
+"goals": 13
+}
+],
+"titles": [
+"Taça da Liga (2017/2018, 2018/2019, 2019/2020, 2025/2026)",
+"Liga Placard (2018/2019, 2024/2025, 2025/2026)",
+"RFEF - Primera División de Fútbol Sala (2020/2021, 2021/2022, 2022/2023)",
+"Campeonato da Europa (2017/2018, 2021/2022)",
+"Supercopa España  (2021/2022, 2022/2023)",
+"UEFA Futsal Champions League (2021/2022)",
+"Campeonato do Mundo (2021/2022)",
+"Finalíssima (2022/2023)",
+"Copa de España (2022/2023)",
+"Taça de Portugal (2025/2026)"
+]
+},
+"slb01": {
+"fpId": 155,
+"games": 165,
+"yellow": 18,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "SL Benfica",
+"games": 9,
+"goals": 0
+},
+{
+"s": "25",
+"team": "SL Benfica",
+"games": 30,
+"goals": 1
+},
+{
+"s": "24",
+"team": "SL Benfica",
+"games": 28,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Leões de Porto Salvo",
+"games": 34,
+"goals": 2
+},
+{
+"s": "22",
+"team": "Leões de Porto Salvo",
+"games": 30,
+"goals": 2
+},
+{
+"s": "21",
+"team": "Eléctrico FC",
+"games": 34,
+"goals": 2
+}
+],
+"titles": [
+"Campeonato Nacional Sub 19 (2016/2017, 2016/2017, 2017/2018, 2017/2018)",
+"Taça da Liga (2017/2018, 2017/2018, 2019/2020, 2025/2026)",
+"Taça de Portugal (2016/2017, 2016/2017, 2025/2026)",
+"Liga Placard (2018/2019, 2024/2025, 2025/2026)"
+]
+},
+"slb09": {
+"fpId": 5164,
+"games": 237,
+"yellow": 56,
+"red": 7,
+"seasons": [
+{
+"s": "26",
+"team": "SL Benfica",
+"games": 10,
+"goals": 4
+},
+{
+"s": "25",
+"team": "SL Benfica",
+"games": 47,
+"goals": 32
+},
+{
+"s": "25",
+"team": "Brasil",
+"games": 6,
+"goals": 2
+},
+{
+"s": "24",
+"team": "SL Benfica",
+"games": 36,
+"goals": 18
+},
+{
+"s": "24",
+"team": "Brasil",
+"games": 7,
+"goals": 2
+},
+{
+"s": "23",
+"team": "SL Benfica",
+"games": 41,
+"goals": 35
+},
+{
+"s": "22",
+"team": "SL Benfica",
+"games": 47,
+"goals": 23
+},
+{
+"s": "21",
+"team": "SL Benfica",
+"games": 37,
+"goals": 16
+},
+{
+"s": "21",
+"team": "Brasil",
+"games": 6,
+"goals": 1
+}
+],
+"titles": [
+"Copa de España (2018/2019, 2019/2020)",
+"Taça da Liga (2022/2023, 2025/2026)",
+"Taça de Portugal (2022/2023, 2025/2026)",
+"Liga Placard (2024/2025, 2025/2026)",
+"RFEF - Primera División de Fútbol Sala (2018/2019)",
+"Supercopa España  (2019/2020)",
+"UEFA Futsal Champions League (2019/2020)",
+"Campeonato do Mundo (2024/2025)",
+"Copa América (2025/2026)"
+]
+},
+"slb14": {
+"fpId": 51906,
+"games": 119,
+"yellow": 42,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "SL Benfica",
+"games": 9,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Brasil",
+"games": 5,
+"goals": 3
+},
+{
+"s": "23",
+"team": "Islas Baleares Palma Futsal",
+"games": 42,
+"goals": 13
+},
+{
+"s": "22",
+"team": "Islas Baleares Palma Futsal",
+"games": 44,
+"goals": 23
+},
+{
+"s": "21",
+"team": "Real Betis Futsal",
+"games": 19,
+"goals": 10
+}
+],
+"titles": [
+"UEFA Futsal Champions League (2022/2023, 2023/2024)",
+"Copa América (2025/2026)"
+]
+},
+"slb15": {
+"fpId": 17725,
+"games": 28,
+"yellow": 2,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "SL Benfica B",
+"games": 1,
+"goals": 0
+},
+{
+"s": "26",
+"team": "SL Benfica",
+"games": 11,
+"goals": 0
+},
+{
+"s": "25",
+"team": "SL Benfica",
+"games": 15,
+"goals": 1
+},
+{
+"s": "24",
+"team": "SL Benfica",
+"games": 1,
+"goals": 0
+}
+],
+"titles": [
+"Liga Placard (2024/2025, 2024/2025, 2025/2026, 2025/2026)",
+"Campeonato Nacional Sub 17 (2022/2023, 2023/2024)",
+"Campeonato Nacional Sub 19 (2025/2026, 2025/2026)",
+"Taça de Portugal (2025/2026, 2025/2026)",
+"Campeonato Nacional Sub 15 (2021/2022)"
+]
+},
+"slb10": {
+"fpId": 2521,
+"games": 172,
+"yellow": 29,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "SL Benfica",
+"games": 10,
+"goals": 4
+},
+{
+"s": "25",
+"team": "SL Benfica",
+"games": 43,
+"goals": 21
+},
+{
+"s": "24",
+"team": "SL Benfica",
+"games": 27,
+"goals": 10
+},
+{
+"s": "23",
+"team": "SL Benfica",
+"games": 38,
+"goals": 10
+},
+{
+"s": "22",
+"team": "AD Fundão",
+"games": 25,
+"goals": 13
+},
+{
+"s": "21",
+"team": "AD Fundão",
+"games": 29,
+"goals": 5
+}
+],
+"titles": [
+"Liga Placard (2024/2025, 2025/2026)",
+"Campeonato Nacional Sub 17 (2018/2019)",
+"Supertaça (2023/2024)",
+"Taça da Liga (2025/2026)",
+"Taça de Portugal (2025/2026)"
+]
+},
+"slb16": {
+"fpId": 22429,
+"games": 39,
+"yellow": 6,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "SL Benfica B",
+"games": 1,
+"goals": 0
+},
+{
+"s": "26",
+"team": "SL Benfica",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "SL Benfica",
+"games": 32,
+"goals": 4
+}
+],
+"titles": [
+"Campeonato Nacional Sub 17 (2022/2023, 2023/2024, 2023/2024)",
+"Campeonato Nacional Sub 19 (2025/2026, 2025/2026)",
+"Liga Placard (2025/2026, 2025/2026)",
+"Taça da Liga (2025/2026, 2025/2026)",
+"Taça de Portugal (2025/2026, 2025/2026)",
+"Campeonato Europa Sub 19 (2025/2026)"
+]
+},
+"slb03": {
+"fpId": 5411,
+"games": 188,
+"yellow": 15,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "SL Benfica",
+"games": 11,
+"goals": 1
+},
+{
+"s": "25",
+"team": "SL Benfica",
+"games": 46,
+"goals": 5
+},
+{
+"s": "24",
+"team": "SL Benfica",
+"games": 36,
+"goals": 5
+},
+{
+"s": "23",
+"team": "SL Benfica",
+"games": 43,
+"goals": 6
+},
+{
+"s": "22",
+"team": "SL Benfica",
+"games": 46,
+"goals": 4
+},
+{
+"s": "21",
+"team": "MFK Tyumen",
+"games": 6,
+"goals": 0
+}
+],
+"titles": [
+"Taça da Liga (2022/2023, 2025/2026)",
+"Taça de Portugal (2022/2023, 2025/2026)",
+"Liga Placard (2024/2025, 2025/2026)",
+"Supertaça (2023/2024)"
+]
+},
+"slb08": {
+"fpId": 4219,
+"games": 211,
+"yellow": 31,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "SL Benfica",
+"games": 10,
+"goals": 4
+},
+{
+"s": "25",
+"team": "SL Benfica",
+"games": 43,
+"goals": 15
+},
+{
+"s": "24",
+"team": "SL Benfica",
+"games": 38,
+"goals": 12
+},
+{
+"s": "23",
+"team": "SL Benfica",
+"games": 42,
+"goals": 14
+},
+{
+"s": "22",
+"team": "SL Benfica",
+"games": 43,
+"goals": 6
+},
+{
+"s": "21",
+"team": "ADCR Caxinas",
+"games": 35,
+"goals": 24
+}
+],
+"titles": [
+"Campeonato Nacional Sub 19 (2021/2022, 2021/2022)",
+"2ª Divisão (2021/2022, 2021/2022)",
+"Taça da Liga (2022/2023, 2025/2026)",
+"Taça de Portugal (2022/2023, 2025/2026)",
+"Campeonato Europa Sub 19 (2023/2024, 2023/2024)",
+"Liga Placard (2024/2025, 2025/2026)"
+]
+},
+"slb12": {
+"fpId": 19,
+"games": 181,
+"yellow": 29,
+"red": 3,
+"seasons": [
+{
+"s": "26",
+"team": "SL Benfica",
+"games": 10,
+"goals": 3
+},
+{
+"s": "25",
+"team": "SL Benfica",
+"games": 44,
+"goals": 17
+},
+{
+"s": "23",
+"team": "Sporting CP",
+"games": 49,
+"goals": 17
+},
+{
+"s": "22",
+"team": "Sporting CP",
+"games": 44,
+"goals": 19
+},
+{
+"s": "21",
+"team": "Sporting CP",
+"games": 34,
+"goals": 17
+}
+],
+"titles": [
+"Liga Placard (2008/2009, 2011/2012, 2016/2017, 2017/2018, 2020/2021, 2021/2022, 2022/2023, 2023/2024, 2025/2026)",
+"Taça de Portugal (2008/2009, 2013/2014, 2017/2018, 2018/2019, 2019/2020, 2021/2022, 2025/2026)",
+"Supertaça (2009/2010, 2011/2012, 2017/2018, 2018/2019, 2019/2020, 2021/2022, 2022/2023)",
+"Taça da Liga (2016/2017, 2020/2021, 2021/2022, 2023/2024, 2025/2026)",
+"UEFA Futsal Champions League (2009/2010, 2018/2019, 2020/2021)",
+"Campeonato da Europa (2017/2018, 2021/2022)",
+"Campeonato do Mundo (2021/2022)",
+"Finalíssima (2022/2023)"
+]
+},
+"slb05": {
+"fpId": 2617,
+"games": 160,
+"yellow": 39,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "SL Benfica",
+"games": 9,
+"goals": 2
+},
+{
+"s": "25",
+"team": "SL Benfica",
+"games": 36,
+"goals": 6
+},
+{
+"s": "24",
+"team": "SL Benfica",
+"games": 27,
+"goals": 5
+},
+{
+"s": "23",
+"team": "ADCR Caxinas",
+"games": 28,
+"goals": 11
+},
+{
+"s": "22",
+"team": "ADCR Caxinas",
+"games": 26,
+"goals": 13
+},
+{
+"s": "21",
+"team": "ADCR Caxinas",
+"games": 34,
+"goals": 7
+}
+],
+"titles": [
+"Campeonato Nacional Sub 19 (2021/2022, 2021/2022)",
+"2ª Divisão (2021/2022, 2021/2022)",
+"Liga Placard (2024/2025, 2025/2026)",
+"Taça da Liga (2025/2026)",
+"Taça de Portugal (2025/2026)"
+]
+},
+"slb17": {
+"fpId": 2608,
+"games": 97,
+"yellow": 36,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "SL Benfica",
+"games": 10,
+"goals": 2
+},
+{
+"s": "25",
+"team": "Rio Ave FC",
+"games": 24,
+"goals": 23
+},
+{
+"s": "24",
+"team": "Rio Ave FC",
+"games": 17,
+"goals": 25
+},
+{
+"s": "24",
+"team": "Leões de Porto Salvo B",
+"games": 1,
+"goals": 1
+},
+{
+"s": "24",
+"team": "Leões de Porto Salvo",
+"games": 7,
+"goals": 3
+},
+{
+"s": "23",
+"team": "Leões de Porto Salvo B",
+"games": 5,
+"goals": 6
+},
+{
+"s": "23",
+"team": "Leões de Porto Salvo",
+"games": 27,
+"goals": 7
+},
+{
+"s": "21",
+"team": "ADCR Caxinas",
+"games": 6,
+"goals": 2
+}
+],
+"titles": [
+"2ª Divisão (2021/2022)"
+]
+},
+"slb07": {
+"fpId": 1670,
+"games": 173,
+"yellow": 38,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "SL Benfica",
+"games": 9,
+"goals": 5
+},
+{
+"s": "25",
+"team": "SL Benfica",
+"games": 45,
+"goals": 14
+},
+{
+"s": "24",
+"team": "SL Benfica",
+"games": 26,
+"goals": 8
+},
+{
+"s": "23",
+"team": "SL Benfica",
+"games": 26,
+"goals": 10
+},
+{
+"s": "22",
+"team": "SL Benfica",
+"games": 26,
+"goals": 6
+},
+{
+"s": "21",
+"team": "SL Benfica",
+"games": 41,
+"goals": 11
+}
+],
+"titles": [
+"Liga Placard (2018/2019, 2018/2019, 2024/2025, 2025/2026)",
+"Campeonato Nacional Sub 19 (2016/2017, 2017/2018)",
+"Taça de Portugal (2022/2023, 2025/2026)",
+"Finalíssima (2022/2023)",
+"Taça da Liga (2025/2026)"
+]
+},
+"slb02": {
+"fpId": 26833,
+"games": 12,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "SL Benfica B",
+"games": 5,
+"goals": 1
+},
+{
+"s": "26",
+"team": "SL Benfica",
+"games": 2,
+"goals": 0
+},
+{
+"s": "25",
+"team": "SL Benfica",
+"games": 5,
+"goals": 0
+}
+],
+"titles": [
+"Campeonato Nacional Sub 19 (2025/2026, 2025/2026)",
+"Liga Placard (2025/2026, 2025/2026)"
+]
+},
+"rav10": {
+"fpId": 1156,
+"games": 153,
+"yellow": 23,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "Rio Ave FC",
+"games": 4,
+"goals": 2
+},
+{
+"s": "25",
+"team": "SC Braga",
+"games": 25,
+"goals": 7
+},
+{
+"s": "24",
+"team": "SC Braga",
+"games": 34,
+"goals": 13
+},
+{
+"s": "23",
+"team": "SC Braga",
+"games": 31,
+"goals": 2
+},
+{
+"s": "22",
+"team": "AD Fundão",
+"games": 26,
+"goals": 10
+},
+{
+"s": "21",
+"team": "AD Fundão",
+"games": 33,
+"goals": 11
+}
+],
+"titles": [
+"Taça de Portugal (2023/2024)",
+"Supertaça (2024/2025)"
+]
+},
+"rav04": {
+"fpId": 133,
+"games": 129,
+"yellow": 42,
+"red": 4,
+"seasons": [
+{
+"s": "26",
+"team": "Rio Ave FC",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Rio Ave FC",
+"games": 25,
+"goals": 8
+},
+{
+"s": "24",
+"team": "Rio Ave FC",
+"games": 25,
+"goals": 5
+},
+{
+"s": "23",
+"team": "FC Famalicão",
+"games": 24,
+"goals": 5
+},
+{
+"s": "22",
+"team": "FC Paços de Ferreira Dreamcouch Futsal",
+"games": 29,
+"goals": 5
+},
+{
+"s": "21",
+"team": "FC Paços de Ferreira Dreamcouch Futsal",
+"games": 9,
+"goals": 2
+},
+{
+"s": "21",
+"team": "AD Fafe",
+"games": 11,
+"goals": 6
+}
+],
+"titles": []
+},
+"rav15": {
+"fpId": 17383,
+"games": 112,
+"yellow": 25,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "Rio Ave FC",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Boavista FC",
+"games": 5,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Rio Ave FC",
+"games": 20,
+"goals": 5
+},
+{
+"s": "24",
+"team": "Boavista FC",
+"games": 23,
+"goals": 16
+},
+{
+"s": "23",
+"team": "Boavista FC",
+"games": 25,
+"goals": 14
+},
+{
+"s": "22",
+"team": "Boavista FC",
+"games": 21,
+"goals": 9
+},
+{
+"s": "21",
+"team": "Boavista FC",
+"games": 12,
+"goals": 1
+}
+],
+"titles": []
+},
+"rav14": {
+"fpId": 52811,
+"games": 1,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Rio Ave FC",
+"games": 1,
+"goals": 0
+}
+],
+"titles": []
+},
+"rav08": {
+"fpId": 2367,
+"games": 141,
+"yellow": 29,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "Rio Ave FC",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Rio Ave FC",
+"games": 24,
+"goals": 2
+},
+{
+"s": "24",
+"team": "GRC Dínamo Sanjoanense",
+"games": 12,
+"goals": 4
+},
+{
+"s": "24",
+"team": "SCU Torreense",
+"games": 10,
+"goals": 1
+},
+{
+"s": "23",
+"team": "Eléctrico FC",
+"games": 26,
+"goals": 2
+},
+{
+"s": "22",
+"team": "ADCR Caxinas",
+"games": 27,
+"goals": 4
+},
+{
+"s": "21",
+"team": "Eléctrico FC",
+"games": 36,
+"goals": 4
+}
+],
+"titles": [
+"Campeonato Nacional Sub 19 (2018/2019, 2018/2019)"
+]
+},
+"rav12": {
+"fpId": 140,
+"games": 125,
+"yellow": 19,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "Rio Ave FC",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Rio Ave FC",
+"games": 23,
+"goals": 4
+},
+{
+"s": "24",
+"team": "GRC Dínamo Sanjoanense",
+"games": 25,
+"goals": 1
+},
+{
+"s": "23",
+"team": "GRC Dínamo Sanjoanense",
+"games": 29,
+"goals": 8
+},
+{
+"s": "22",
+"team": "CR Candoso",
+"games": 12,
+"goals": 1
+},
+{
+"s": "21",
+"team": "CR Candoso",
+"games": 30,
+"goals": 0
+}
+],
+"titles": [
+"2ª Divisão (2023/2024)"
+]
+},
+"rav09": {
+"fpId": 2238,
+"games": 147,
+"yellow": 33,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Rio Ave FC",
+"games": 1,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Rio Ave FC",
+"games": 27,
+"goals": 3
+},
+{
+"s": "24",
+"team": "Rio Ave FC",
+"games": 27,
+"goals": 13
+},
+{
+"s": "23",
+"team": "Rio Ave FC",
+"games": 28,
+"goals": 17
+},
+{
+"s": "22",
+"team": "ADCR Caxinas",
+"games": 28,
+"goals": 7
+},
+{
+"s": "21",
+"team": "ADCR Caxinas",
+"games": 36,
+"goals": 7
+}
+],
+"titles": [
+"2ª Divisão (2021/2022)"
+]
+},
+"rav05": {
+"fpId": 17791,
+"games": 31,
+"yellow": 9,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "Rio Ave FC",
+"games": 6,
+"goals": 2
+},
+{
+"s": "25",
+"team": "ADCR Caxinas",
+"games": 20,
+"goals": 3
+},
+{
+"s": "24",
+"team": "ADCR Caxinas",
+"games": 5,
+"goals": 0
+}
+],
+"titles": [
+"Campeonato Europa Sub 19 (2025/2026)"
+]
+},
+"rav16": {
+"fpId": 26718,
+"games": 42,
+"yellow": 10,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "Rio Ave FC",
+"games": 6,
+"goals": 4
+},
+{
+"s": "25",
+"team": "ADCR Caxinas",
+"games": 14,
+"goals": 10
+},
+{
+"s": "24",
+"team": "ADCR Caxinas",
+"games": 22,
+"goals": 11
+}
+],
+"titles": []
+},
+"rav11": {
+"fpId": 168,
+"games": 72,
+"yellow": 15,
+"red": 3,
+"seasons": [
+{
+"s": "26",
+"team": "Rio Ave FC",
+"games": 5,
+"goals": 4
+},
+{
+"s": "22",
+"team": "Sporting CP",
+"games": 28,
+"goals": 7
+},
+{
+"s": "21",
+"team": "Sporting CP",
+"games": 39,
+"goals": 8
+}
+],
+"titles": [
+"Liga Placard (2012/2013, 2012/2013, 2013/2014, 2015/2016, 2018/2019, 2021/2022, 2022/2023)",
+"Taça da Liga (2015/2016, 2017/2018, 2019/2020, 2021/2022)",
+"Supertaça (2013/2014, 2014/2015, 2021/2022)",
+"Taça de Portugal (2015/2016, 2016/2017, 2021/2022)",
+"Campeonato do Mundo (2021/2022)",
+"Campeonato da Europa (2021/2022)"
+]
+},
+"rav02": {
+"fpId": 131,
+"games": 126,
+"yellow": 37,
+"red": 6,
+"seasons": [
+{
+"s": "26",
+"team": "Rio Ave FC",
+"games": 5,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Rio Ave FC",
+"games": 25,
+"goals": 1
+},
+{
+"s": "24",
+"team": "CS Marítimo",
+"games": 22,
+"goals": 1
+},
+{
+"s": "23",
+"team": "CS Marítimo",
+"games": 16,
+"goals": 1
+},
+{
+"s": "22",
+"team": "CS Marítimo",
+"games": 25,
+"goals": 2
+},
+{
+"s": "21",
+"team": "CS Marítimo",
+"games": 33,
+"goals": 7
+}
+],
+"titles": []
+},
+"rav06": {
+"fpId": 7109,
+"games": 121,
+"yellow": 31,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "Rio Ave FC",
+"games": 5,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Rio Ave FC",
+"games": 25,
+"goals": 5
+},
+{
+"s": "24",
+"team": "Rio Ave FC",
+"games": 24,
+"goals": 5
+},
+{
+"s": "23",
+"team": "Rio Ave FC",
+"games": 30,
+"goals": 22
+},
+{
+"s": "22",
+"team": "Rio Ave FC",
+"games": 23,
+"goals": 11
+},
+{
+"s": "21",
+"team": "CA Sangemil",
+"games": 14,
+"goals": 8
+}
+],
+"titles": []
+},
+"rav07": {
+"fpId": 557,
+"games": 141,
+"yellow": 33,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "Rio Ave FC",
+"games": 6,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Sporting CP",
+"games": 13,
+"goals": 2
+},
+{
+"s": "24",
+"team": "Sporting CP",
+"games": 38,
+"goals": 7
+},
+{
+"s": "24",
+"team": "Eléctrico FC",
+"games": 4,
+"goals": 1
+},
+{
+"s": "23",
+"team": "Eléctrico FC",
+"games": 23,
+"goals": 7
+},
+{
+"s": "22",
+"team": "Eléctrico FC",
+"games": 27,
+"goals": 12
+},
+{
+"s": "21",
+"team": "Futsal Cube Azeméis",
+"games": 30,
+"goals": 7
+}
+],
+"titles": [
+"Taça de Portugal (2024/2025)",
+"Taça da Liga (2024/2025)",
+"Supertaça (2025/2026)",
+"UEFA Futsal Champions League (2025/2026)"
+]
+},
+"rav13": {
+"fpId": 11606,
+"games": 139,
+"yellow": 25,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Rio Ave FC",
+"games": 6,
+"goals": 2
+},
+{
+"s": "25",
+"team": "Rio Ave FC",
+"games": 27,
+"goals": 17
+},
+{
+"s": "24",
+"team": "GRC Dínamo Sanjoanense",
+"games": 20,
+"goals": 16
+},
+{
+"s": "23",
+"team": "GRC Dínamo Sanjoanense",
+"games": 28,
+"goals": 30
+},
+{
+"s": "22",
+"team": "GRC Dínamo Sanjoanense",
+"games": 32,
+"goals": 25
+},
+{
+"s": "21",
+"team": "SC Braga",
+"games": 26,
+"goals": 6
+}
+],
+"titles": [
+"2ª Divisão (2023/2024)"
+]
+},
+"rav03": {
+"fpId": 1148,
+"games": 149,
+"yellow": 17,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "Rio Ave FC",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "ADCR Caxinas",
+"games": 25,
+"goals": 0
+},
+{
+"s": "24",
+"team": "ADCR Caxinas",
+"games": 26,
+"goals": 0
+},
+{
+"s": "23",
+"team": "ADCR Caxinas",
+"games": 29,
+"goals": 1
+},
+{
+"s": "22",
+"team": "ADCR Caxinas",
+"games": 27,
+"goals": 0
+},
+{
+"s": "21",
+"team": "ADCR Caxinas",
+"games": 36,
+"goals": 1
+}
+],
+"titles": [
+"2ª Divisão (2021/2022)"
+]
+},
+"rav01": {
+"fpId": 29016,
+"games": 15,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Rio Ave FC",
+"games": 5,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Rio Ave FC",
+"games": 9,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Rio Ave FC",
+"games": 1,
+"goals": 0
+}
+],
+"titles": []
+},
+"ele14": {
+"fpId": 17939,
+"games": 32,
+"yellow": 3,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Eléctrico FC",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "UP Venda Nova",
+"games": 25,
+"goals": 7
+},
+{
+"s": "23",
+"team": "AMSAC",
+"games": 1,
+"goals": 0
+}
+],
+"titles": [
+"Campeonato Nacional Sub 19 (2023/2024, 2024/2025)"
+]
+},
+"ele03": {
+"fpId": 105,
+"games": 150,
+"yellow": 7,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "Eléctrico FC",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Eléctrico FC",
+"games": 28,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Eléctrico FC",
+"games": 27,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Eléctrico FC",
+"games": 25,
+"goals": 1
+},
+{
+"s": "22",
+"team": "Eléctrico FC",
+"games": 28,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Eléctrico FC",
+"games": 36,
+"goals": 0
+}
+],
+"titles": []
+},
+"ele04": {
+"fpId": 1764,
+"games": 129,
+"yellow": 24,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "Eléctrico FC",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Riga FC",
+"games": 5,
+"goals": 1
+},
+{
+"s": "24",
+"team": "Eléctrico FC",
+"games": 25,
+"goals": 4
+},
+{
+"s": "23",
+"team": "Eléctrico FC",
+"games": 25,
+"goals": 4
+},
+{
+"s": "22",
+"team": "Eléctrico FC",
+"games": 28,
+"goals": 4
+},
+{
+"s": "21",
+"team": "Eléctrico FC",
+"games": 33,
+"goals": 8
+},
+{
+"s": "21",
+"team": "Tubarão",
+"games": 7,
+"goals": 1
+}
+],
+"titles": []
+},
+"ele13": {
+"fpId": 51942,
+"games": 5,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Eléctrico FC",
+"games": 5,
+"goals": 0
+}
+],
+"titles": []
+},
+"ele07": {
+"fpId": 6222,
+"games": 77,
+"yellow": 17,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "Eléctrico FC",
+"games": 6,
+"goals": 2
+},
+{
+"s": "25",
+"team": "Eléctrico FC",
+"games": 13,
+"goals": 2
+},
+{
+"s": "25",
+"team": "SC Braga",
+"games": 8,
+"goals": 0
+},
+{
+"s": "24",
+"team": "CRC Quinta dos Lombos",
+"games": 25,
+"goals": 7
+},
+{
+"s": "23",
+"team": "SC Lusitânia",
+"games": 25,
+"goals": 11
+}
+],
+"titles": [
+"Taça Nacional Sub 15 (2017/2018)"
+]
+},
+"ele11": {
+"fpId": 1641,
+"games": 141,
+"yellow": 36,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Eléctrico FC",
+"games": 6,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Eléctrico FC",
+"games": 28,
+"goals": 11
+},
+{
+"s": "24",
+"team": "Eléctrico FC",
+"games": 24,
+"goals": 10
+},
+{
+"s": "23",
+"team": "CRC Quinta dos Lombos",
+"games": 24,
+"goals": 8
+},
+{
+"s": "22",
+"team": "CRC Quinta dos Lombos",
+"games": 28,
+"goals": 15
+},
+{
+"s": "21",
+"team": "CRC Quinta dos Lombos",
+"games": 31,
+"goals": 15
+}
+],
+"titles": []
+},
+"ele01": {
+"fpId": 44396,
+"games": 9,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Eléctrico FC",
+"games": 5,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Eléctrico FC",
+"games": 4,
+"goals": 0
+}
+],
+"titles": []
+},
+"ele10": {
+"fpId": 21490,
+"games": 88,
+"yellow": 16,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "Eléctrico FC",
+"games": 6,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Eléctrico FC",
+"games": 29,
+"goals": 3
+},
+{
+"s": "24",
+"team": "Portimonense SC",
+"games": 24,
+"goals": 8
+},
+{
+"s": "23",
+"team": "Portimonense SC",
+"games": 29,
+"goals": 22
+}
+],
+"titles": []
+},
+"ele12": {
+"fpId": 51940,
+"games": 8,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Eléctrico FC",
+"games": 3,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Chile",
+"games": 5,
+"goals": 0
+}
+],
+"titles": []
+},
+"ele06": {
+"fpId": 52812,
+"games": 3,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Eléctrico FC",
+"games": 3,
+"goals": 0
+}
+],
+"titles": []
+},
+"ele15": {
+"fpId": 51941,
+"games": 5,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Eléctrico FC",
+"games": 5,
+"goals": 0
+}
+],
+"titles": []
+},
+"ele08": {
+"fpId": 44288,
+"games": 9,
+"yellow": 1,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "Eléctrico FC",
+"games": 5,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Sporting CP",
+"games": 4,
+"goals": 0
+}
+],
+"titles": [
+"Campeonato Nacional Sub 19 (2022/2023, 2022/2023, 2023/2024, 2023/2024, 2024/2025)",
+"Campeonato Europa Sub 19 (2025/2026)"
+]
+},
+"ele05": {
+"fpId": 2358,
+"games": 145,
+"yellow": 36,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "Eléctrico FC",
+"games": 6,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Eléctrico FC",
+"games": 28,
+"goals": 7
+},
+{
+"s": "24",
+"team": "Eléctrico FC",
+"games": 27,
+"goals": 10
+},
+{
+"s": "23",
+"team": "CRC Quinta dos Lombos",
+"games": 22,
+"goals": 5
+},
+{
+"s": "22",
+"team": "CRC Quinta dos Lombos",
+"games": 29,
+"goals": 9
+},
+{
+"s": "21",
+"team": "AMSAC",
+"games": 33,
+"goals": 17
+}
+],
+"titles": [
+"Campeonato Nacional Sub 19 (2017/2018, 2017/2018)"
+]
+},
+"ele09": {
+"fpId": 23912,
+"games": 71,
+"yellow": 29,
+"red": 5,
+"seasons": [
+{
+"s": "26",
+"team": "Eléctrico FC",
+"games": 6,
+"goals": 3
+},
+{
+"s": "25",
+"team": "CRC Quinta dos Lombos",
+"games": 19,
+"goals": 7
+},
+{
+"s": "24",
+"team": "ADCR Caxinas",
+"games": 23,
+"goals": 5
+},
+{
+"s": "23",
+"team": "SC Lusitânia",
+"games": 23,
+"goals": 15
+}
+],
+"titles": []
+},
+"fam06": {
+"fpId": 421,
+"games": 139,
+"yellow": 38,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "FC Famalicão",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "FC Famalicão",
+"games": 25,
+"goals": 5
+},
+{
+"s": "24",
+"team": "SC Braga",
+"games": 24,
+"goals": 1
+},
+{
+"s": "23",
+"team": "SC Braga",
+"games": 9,
+"goals": 0
+},
+{
+"s": "23",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 16,
+"goals": 3
+},
+{
+"s": "22",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 25,
+"goals": 4
+},
+{
+"s": "21",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 34,
+"goals": 10
+}
+],
+"titles": [
+"Taça de Portugal (2023/2024)",
+"Supertaça (2024/2025)"
+]
+},
+"fam02": {
+"fpId": 431,
+"games": 111,
+"yellow": 6,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "FC Famalicão",
+"games": 4,
+"goals": 0
+},
+{
+"s": "25",
+"team": "FC Famalicão",
+"games": 15,
+"goals": 0
+},
+{
+"s": "24",
+"team": "FC Famalicão",
+"games": 19,
+"goals": 0
+},
+{
+"s": "23",
+"team": "FC Famalicão",
+"games": 26,
+"goals": 0
+},
+{
+"s": "22",
+"team": "FC Famalicão",
+"games": 25,
+"goals": 0
+},
+{
+"s": "21",
+"team": "FC Famalicão",
+"games": 22,
+"goals": 0
+}
+],
+"titles": [
+"2ª Divisão (2016/2017, 2018/2019, 2024/2025)"
+]
+},
+"fam09": {
+"fpId": 1136,
+"games": 124,
+"yellow": 31,
+"red": 3,
+"seasons": [
+{
+"s": "26",
+"team": "FC Famalicão",
+"games": 6,
+"goals": 2
+},
+{
+"s": "25",
+"team": "ACD Ladoeiro",
+"games": 25,
+"goals": 19
+},
+{
+"s": "24",
+"team": "FC Famalicão",
+"games": 28,
+"goals": 16
+},
+{
+"s": "23",
+"team": "AD Fundão",
+"games": 22,
+"goals": 2
+},
+{
+"s": "22",
+"team": "SC Lusitânia",
+"games": 22,
+"goals": 7
+},
+{
+"s": "21",
+"team": "SC Lusitânia",
+"games": 21,
+"goals": 6
+}
+],
+"titles": [
+"2ª Divisão (2020/2021, 2024/2025)"
+]
+},
+"fam07": {
+"fpId": 23463,
+"games": 81,
+"yellow": 14,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "FC Famalicão",
+"games": 3,
+"goals": 1
+},
+{
+"s": "25",
+"team": "CS São João",
+"games": 12,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Boavista FC",
+"games": 12,
+"goals": 2
+},
+{
+"s": "24",
+"team": "São Martinho de Mouros",
+"games": 12,
+"goals": 1
+},
+{
+"s": "24",
+"team": "Boavista FC",
+"games": 8,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Arsenal da Maia",
+"games": 20,
+"goals": 4
+},
+{
+"s": "22",
+"team": "CS Marítimo",
+"games": 14,
+"goals": 1
+}
+],
+"titles": []
+},
+"fam05": {
+"fpId": 17802,
+"games": 20,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "FC Famalicão",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "ADCR Caxinas",
+"games": 8,
+"goals": 0
+},
+{
+"s": "24",
+"team": "ADC Nogueiró e Tenões",
+"games": 6,
+"goals": 2
+}
+],
+"titles": []
+},
+"fam13": {
+"fpId": 2551,
+"games": 127,
+"yellow": 18,
+"red": 3,
+"seasons": [
+{
+"s": "26",
+"team": "FC Famalicão",
+"games": 3,
+"goals": 1
+},
+{
+"s": "25",
+"team": "AD Fundão",
+"games": 18,
+"goals": 2
+},
+{
+"s": "24",
+"team": "Leões de Porto Salvo B",
+"games": 4,
+"goals": 2
+},
+{
+"s": "24",
+"team": "Leões de Porto Salvo",
+"games": 33,
+"goals": 2
+},
+{
+"s": "23",
+"team": "Leões de Porto Salvo B",
+"games": 6,
+"goals": 3
+},
+{
+"s": "23",
+"team": "Leões de Porto Salvo",
+"games": 26,
+"goals": 3
+},
+{
+"s": "22",
+"team": "Leões de Porto Salvo",
+"games": 7,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Leões de Porto Salvo B",
+"games": 14,
+"goals": 12
+},
+{
+"s": "21",
+"team": "Leões de Porto Salvo B",
+"games": 16,
+"goals": 12
+}
+],
+"titles": [
+"Campeonato Nacional Sub 17 (2016/2017, 2017/2018, 2017/2018)",
+"Taça Nacional Sub 17 (2015/2016)"
+]
+},
+"fam04": {
+"fpId": 19622,
+"games": 126,
+"yellow": 12,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "FC Famalicão",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "FC Famalicão",
+"games": 21,
+"goals": 1
+},
+{
+"s": "24",
+"team": "FC Famalicão",
+"games": 14,
+"goals": 0
+},
+{
+"s": "24",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 14,
+"goals": 0
+},
+{
+"s": "23",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 26,
+"goals": 0
+},
+{
+"s": "22",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 28,
+"goals": 2
+},
+{
+"s": "21",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 17,
+"goals": 2
+}
+],
+"titles": [
+"2ª Divisão (2024/2025)"
+]
+},
+"fam14": {
+"fpId": 51902,
+"games": 5,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "FC Famalicão",
+"games": 5,
+"goals": 0
+}
+],
+"titles": []
+},
+"fam16": {
+"fpId": 9388,
+"games": 60,
+"yellow": 10,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "FC Famalicão",
+"games": 5,
+"goals": 1
+},
+{
+"s": "23",
+"team": "ADCR Caxinas",
+"games": 12,
+"goals": 2
+},
+{
+"s": "23",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 6,
+"goals": 4
+},
+{
+"s": "22",
+"team": "Ribera Navarra FS",
+"games": 5,
+"goals": 1
+},
+{
+"s": "21",
+"team": "Ribera Navarra FS",
+"games": 32,
+"goals": 14
+}
+],
+"titles": []
+},
+"fam18": {
+"fpId": 18107,
+"games": 65,
+"yellow": 8,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "FC Famalicão",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 14,
+"goals": 0
+},
+{
+"s": "25",
+"team": "SC Braga",
+"games": 16,
+"goals": 0
+},
+{
+"s": "24",
+"team": "SC Braga",
+"games": 7,
+"goals": 0
+},
+{
+"s": "23",
+"team": "SC Braga",
+"games": 5,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Futsal Cube Azeméis",
+"games": 17,
+"goals": 0
+}
+],
+"titles": [
+"Taça de Portugal (2023/2024, 2023/2024)",
+"Campeonato Nacional Sub 19 - 2ª DIVISÃO (2023/2024, 2023/2024)",
+"Supertaça (2024/2025, 2024/2025)"
+]
+},
+"fam01": {
+"fpId": 18357,
+"games": 115,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "FC Famalicão",
+"games": 5,
+"goals": 0
+},
+{
+"s": "25",
+"team": "CRC Quinta dos Lombos",
+"games": 24,
+"goals": 1
+},
+{
+"s": "24",
+"team": "AD Fundão",
+"games": 28,
+"goals": 1
+},
+{
+"s": "23",
+"team": "SC Braga",
+"games": 25,
+"goals": 0
+},
+{
+"s": "22",
+"team": "SC Braga",
+"games": 18,
+"goals": 0
+},
+{
+"s": "21",
+"team": "SC Braga",
+"games": 15,
+"goals": 0
+}
+],
+"titles": [
+"Taça de Portugal (2023/2024)"
+]
+},
+"fam11": {
+"fpId": 4998,
+"games": 129,
+"yellow": 35,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "FC Famalicão",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "FC Famalicão",
+"games": 10,
+"goals": 2
+},
+{
+"s": "25",
+"team": "GRC Dínamo Sanjoanense",
+"games": 14,
+"goals": 12
+},
+{
+"s": "24",
+"team": "FC Famalicão",
+"games": 25,
+"goals": 8
+},
+{
+"s": "23",
+"team": "FC Famalicão",
+"games": 26,
+"goals": 9
+},
+{
+"s": "22",
+"team": "FC Famalicão",
+"games": 26,
+"goals": 12
+},
+{
+"s": "21",
+"team": "ACR Lordelo",
+"games": 22,
+"goals": 25
+}
+],
+"titles": [
+"2ª Divisão (2024/2025)"
+]
+},
+"fam10": {
+"fpId": 19342,
+"games": 16,
+"yellow": 3,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "FC Famalicão",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Piast Gliwice Futsal",
+"games": 5,
+"goals": 0
+},
+{
+"s": "24",
+"team": "SL Benfica",
+"games": 5,
+"goals": 0
+}
+],
+"titles": [
+"Liga Placard (2024/2025, 2024/2025)",
+"Campeonato Nacional Sub 17 (2022/2023)",
+"Campeonato Europa Sub 19 (2025/2026)"
+]
+},
+"uvn05": {
+"fpId": 11981,
+"games": 56,
+"yellow": 5,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "UP Venda Nova",
+"games": 5,
+"goals": 0
+},
+{
+"s": "25",
+"team": "UP Venda Nova",
+"games": 21,
+"goals": 5
+},
+{
+"s": "24",
+"team": "AMSAC",
+"games": 26,
+"goals": 5
+},
+{
+"s": "23",
+"team": "Sporting CP",
+"games": 2,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Sporting CP",
+"games": 2,
+"goals": 0
+}
+],
+"titles": [
+"Liga Placard (2022/2023, 2022/2023, 2023/2024, 2023/2024)",
+"Campeonato Nacional Sub 19 (2022/2023, 2022/2023, 2023/2024, 2023/2024)"
+]
+},
+"uvn01": {
+"fpId": 28942,
+"games": 4,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "UP Venda Nova",
+"games": 4,
+"goals": 0
+}
+],
+"titles": []
+},
+"uvn20": {
+"fpId": 1314,
+"games": 96,
+"yellow": 20,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "UP Venda Nova",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "UP Venda Nova",
+"games": 22,
+"goals": 11
+},
+{
+"s": "24",
+"team": "UP Venda Nova",
+"games": 26,
+"goals": 13
+},
+{
+"s": "23",
+"team": "CRC Quinta dos Lombos",
+"games": 18,
+"goals": 2
+},
+{
+"s": "22",
+"team": "UP Venda Nova",
+"games": 17,
+"goals": 14
+},
+{
+"s": "22",
+"team": "Leões de Porto Salvo",
+"games": 7,
+"goals": 0
+}
+],
+"titles": [
+"Liga Placard (2012/2013, 2013/2014)",
+"Taça de Portugal (2012/2013)",
+"2ª Divisão (2017/2018)"
+]
+},
+"uvn07": {
+"fpId": 66428,
+"games": 1,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "UP Venda Nova",
+"games": 1,
+"goals": 0
+}
+],
+"titles": []
+},
+"uvn14": {
+"fpId": 6208,
+"games": 74,
+"yellow": 14,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "UP Venda Nova",
+"games": 4,
+"goals": 0
+},
+{
+"s": "25",
+"team": "UP Venda Nova",
+"games": 12,
+"goals": 10
+},
+{
+"s": "25",
+"team": "AMSAC",
+"games": 12,
+"goals": 11
+},
+{
+"s": "24",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 18,
+"goals": 4
+},
+{
+"s": "23",
+"team": "CRC Quinta dos Lombos",
+"games": 24,
+"goals": 4
+},
+{
+"s": "22",
+"team": "Sporting CP",
+"games": 1,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Sporting CP",
+"games": 3,
+"goals": 0
+}
+],
+"titles": [
+"Liga Placard (2021/2022, 2021/2022, 2022/2023, 2022/2023)",
+"Taça Nacional Sub 15 (2018/2019, 2018/2019)",
+"Campeonato Nacional Sub 19 (2022/2023, 2022/2023)",
+"Campeonato Europa Sub 19 (2023/2024)"
+]
+},
+"uvn13": {
+"fpId": 37,
+"games": 141,
+"yellow": 19,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "UP Venda Nova",
+"games": 6,
+"goals": 2
+},
+{
+"s": "25",
+"team": "UP Venda Nova",
+"games": 22,
+"goals": 6
+},
+{
+"s": "24",
+"team": "UP Venda Nova",
+"games": 29,
+"goals": 11
+},
+{
+"s": "23",
+"team": "UP Venda Nova",
+"games": 25,
+"goals": 18
+},
+{
+"s": "22",
+"team": "UP Venda Nova",
+"games": 33,
+"goals": 27
+},
+{
+"s": "21",
+"team": "Leões de Porto Salvo B",
+"games": 1,
+"goals": 2
+},
+{
+"s": "21",
+"team": "Leões de Porto Salvo",
+"games": 25,
+"goals": 9
+}
+],
+"titles": []
+},
+"uvn18": {
+"fpId": 2313,
+"games": 76,
+"yellow": 12,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "Reguilas de Tires",
+"games": 2,
+"goals": 0
+},
+{
+"s": "25",
+"team": "CF Belenenses",
+"games": 18,
+"goals": 9
+},
+{
+"s": "24",
+"team": "CF Belenenses",
+"games": 25,
+"goals": 8
+},
+{
+"s": "23",
+"team": "CF Belenenses",
+"games": 8,
+"goals": 4
+},
+{
+"s": "22",
+"team": "CF Belenenses",
+"games": 5,
+"goals": 1
+},
+{
+"s": "21",
+"team": "Leões de Porto Salvo",
+"games": 18,
+"goals": 2
+}
+],
+"titles": []
+},
+"uvn03": {
+"fpId": 51930,
+"games": 9,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Juventude AG",
+"games": 3,
+"goals": 0
+},
+{
+"s": "26",
+"team": "UP Venda Nova",
+"games": 6,
+"goals": 0
+}
+],
+"titles": []
+},
+"uvn10": {
+"fpId": 51932,
+"games": 7,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "UP Venda Nova",
+"games": 4,
+"goals": 1
+},
+{
+"s": "21",
+"team": "United Galati",
+"games": 3,
+"goals": 0
+}
+],
+"titles": []
+},
+"uvn15": {
+"fpId": 51931,
+"games": 4,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "UP Venda Nova",
+"games": 4,
+"goals": 3
+}
+],
+"titles": []
+},
+"uvn02": {
+"fpId": 17308,
+"games": 102,
+"yellow": 10,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "UP Venda Nova",
+"games": 3,
+"goals": 0
+},
+{
+"s": "25",
+"team": "UP Venda Nova",
+"games": 9,
+"goals": 0
+},
+{
+"s": "24",
+"team": "AMSAC",
+"games": 23,
+"goals": 3
+},
+{
+"s": "23",
+"team": "UP Venda Nova",
+"games": 24,
+"goals": 1
+},
+{
+"s": "22",
+"team": "SCU Torreense",
+"games": 16,
+"goals": 0
+},
+{
+"s": "22",
+"team": "AMSAC",
+"games": 16,
+"goals": 1
+},
+{
+"s": "21",
+"team": "Sporting CP",
+"games": 11,
+"goals": 0
+}
+],
+"titles": [
+"Liga Placard (2021/2022, 2021/2022, 2021/2022)",
+"Taça de Portugal (2021/2022, 2021/2022, 2021/2022)",
+"2ª Divisão (2022/2023)"
+]
+},
+"uvn16": {
+"fpId": 44358,
+"games": 4,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "UP Venda Nova",
+"games": 2,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Sporting CP",
+"games": 1,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Leões de Porto Salvo",
+"games": 1,
+"goals": 2
+}
+],
+"titles": [
+"Campeonato Nacional Sub 19 (2024/2025, 2024/2025)",
+"Taça Nacional Sub 15 (2021/2022)"
+]
+},
+"uvn12": {
+"fpId": 1667,
+"games": 141,
+"yellow": 28,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "UP Venda Nova",
+"games": 5,
+"goals": 3
+},
+{
+"s": "25",
+"team": "UP Venda Nova",
+"games": 23,
+"goals": 13
+},
+{
+"s": "24",
+"team": "UP Venda Nova",
+"games": 30,
+"goals": 28
+},
+{
+"s": "23",
+"team": "SCU Torreense",
+"games": 10,
+"goals": 3
+},
+{
+"s": "23",
+"team": "CF Belenenses",
+"games": 14,
+"goals": 7
+},
+{
+"s": "22",
+"team": "SCU Torreense",
+"games": 25,
+"goals": 8
+},
+{
+"s": "21",
+"team": "AMSAC",
+"games": 34,
+"goals": 25
+}
+],
+"titles": [
+"Campeonato Nacional Sub 19 (2016/2017, 2017/2018)",
+"2ª Divisão (2022/2023)"
+]
+},
+"uvn09": {
+"fpId": 4948,
+"games": 103,
+"yellow": 23,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "UP Venda Nova",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "UP Venda Nova",
+"games": 23,
+"goals": 8
+},
+{
+"s": "24",
+"team": "AMSAC",
+"games": 25,
+"goals": 12
+},
+{
+"s": "23",
+"team": "CF Belenenses",
+"games": 21,
+"goals": 6
+},
+{
+"s": "22",
+"team": "AD Fundão",
+"games": 27,
+"goals": 2
+},
+{
+"s": "21",
+"team": "SL Benfica",
+"games": 1,
+"goals": 0
+}
+],
+"titles": [
+"Taça Nacional Sub 15 (2017/2018, 2017/2018)",
+"Campeonato Nacional Sub 17 (2018/2019)"
+]
+},
+"uvn04": {
+"fpId": 26276,
+"games": 8,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "UP Venda Nova",
+"games": 3,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Leões de Porto Salvo B",
+"games": 5,
+"goals": 0
+}
+],
+"titles": []
+},
+"uvn17": {
+"fpId": 4946,
+"games": 103,
+"yellow": 16,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "CF Belenenses",
+"games": 5,
+"goals": 2
+},
+{
+"s": "25",
+"team": "UP Venda Nova",
+"games": 26,
+"goals": 12
+},
+{
+"s": "24",
+"team": "CF Sassoeiros",
+"games": 23,
+"goals": 12
+},
+{
+"s": "23",
+"team": "AMSAC",
+"games": 30,
+"goals": 10
+},
+{
+"s": "22",
+"team": "Leões de Porto Salvo B",
+"games": 19,
+"goals": 11
+}
+],
+"titles": [
+"Taça Nacional Sub 15 (2017/2018, 2017/2018)",
+"Campeonato Nacional Sub 17 (2018/2019)"
+]
+},
+"uvn06": {
+"fpId": 6180,
+"games": 116,
+"yellow": 23,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "UP Venda Nova",
+"games": 6,
+"goals": 2
+},
+{
+"s": "25",
+"team": "CRC Quinta dos Lombos",
+"games": 23,
+"goals": 3
+},
+{
+"s": "24",
+"team": "SCU Torreense",
+"games": 16,
+"goals": 1
+},
+{
+"s": "24",
+"team": "CRC Quinta dos Lombos",
+"games": 15,
+"goals": 4
+},
+{
+"s": "23",
+"team": "AMSAC",
+"games": 21,
+"goals": 6
+},
+{
+"s": "22",
+"team": "AMSAC",
+"games": 28,
+"goals": 5
+},
+{
+"s": "21",
+"team": "SL Benfica",
+"games": 7,
+"goals": 1
+}
+],
+"titles": []
+},
+"uvn19": {
+"fpId": 17865,
+"games": 65,
+"yellow": 17,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "UP Venda Nova",
+"games": 4,
+"goals": 0
+},
+{
+"s": "25",
+"team": "AMSAC",
+"games": 25,
+"goals": 13
+},
+{
+"s": "24",
+"team": "UP Venda Nova",
+"games": 22,
+"goals": 4
+},
+{
+"s": "24",
+"team": "AMSAC",
+"games": 2,
+"goals": 0
+},
+{
+"s": "23",
+"team": "AMSAC",
+"games": 12,
+"goals": 0
+}
+],
+"titles": [
+"Campeonato Nacional Sub 19 (2022/2023)"
+]
+},
+"uvn08": {
+"fpId": 6181,
+"games": 84,
+"yellow": 15,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "UP Venda Nova",
+"games": 4,
+"goals": 0
+},
+{
+"s": "25",
+"team": "AMSAC",
+"games": 22,
+"goals": 7
+},
+{
+"s": "24",
+"team": "AMSAC",
+"games": 27,
+"goals": 8
+},
+{
+"s": "23",
+"team": "AMSAC",
+"games": 29,
+"goals": 5
+},
+{
+"s": "22",
+"team": "Sporting CP",
+"games": 1,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Sporting CP",
+"games": 1,
+"goals": 0
+}
+],
+"titles": [
+"Liga Placard (2021/2022, 2021/2022, 2022/2023, 2022/2023)",
+"Taça Nacional Sub 15 (2018/2019, 2018/2019)",
+"Campeonato Nacional Sub 19 (2022/2023, 2022/2023)"
+]
+},
+"uvn11": {
+"fpId": 1671,
+"games": 126,
+"yellow": 44,
+"red": 4,
+"seasons": [
+{
+"s": "26",
+"team": "UP Venda Nova",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "AD Fundão",
+"games": 25,
+"goals": 1
+},
+{
+"s": "24",
+"team": "AD Fundão",
+"games": 26,
+"goals": 3
+},
+{
+"s": "23",
+"team": "SC Lusitânia",
+"games": 23,
+"goals": 10
+},
+{
+"s": "22",
+"team": "ACD Ladoeiro",
+"games": 12,
+"goals": 3
+},
+{
+"s": "22",
+"team": "CCRD Burinhosa",
+"games": 10,
+"goals": 1
+},
+{
+"s": "21",
+"team": "AD Fundão",
+"games": 24,
+"goals": 0
+}
+],
+"titles": [
+"Campeonato Nacional Sub 19 (2017/2018, 2017/2018)"
+]
+},
+"scp14": {
+"fpId": 20,
+"games": 273,
+"yellow": 46,
+"red": 5,
+"seasons": [
+{
+"s": "26",
+"team": "Sporting CP",
+"games": 12,
+"goals": 4
+},
+{
+"s": "25",
+"team": "Sporting CP",
+"games": 49,
+"goals": 26
+},
+{
+"s": "25",
+"team": "Itália",
+"games": 6,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Sporting CP",
+"games": 47,
+"goals": 23
+},
+{
+"s": "24",
+"team": "Itália",
+"games": 4,
+"goals": 1
+},
+{
+"s": "23",
+"team": "Sporting CP",
+"games": 49,
+"goals": 25
+},
+{
+"s": "23",
+"team": "Itália",
+"games": 5,
+"goals": 2
+},
+{
+"s": "22",
+"team": "Sporting CP",
+"games": 44,
+"goals": 18
+},
+{
+"s": "22",
+"team": "Itália",
+"games": 6,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Sporting CP",
+"games": 48,
+"goals": 30
+},
+{
+"s": "21",
+"team": "Itália",
+"games": 3,
+"goals": 1
+}
+],
+"titles": [
+"Liga Placard (2015/2016, 2016/2017, 2017/2018, 2020/2021, 2021/2022, 2022/2023, 2023/2024)",
+"Supertaça (2017/2018, 2018/2019, 2019/2020, 2021/2022, 2022/2023, 2025/2026, 2026/2027)",
+"Taça de Portugal (2015/2016, 2017/2018, 2018/2019, 2019/2020, 2021/2022, 2024/2025)",
+"Taça da Liga (2015/2016, 2016/2017, 2020/2021, 2021/2022, 2023/2024, 2024/2025)",
+"UEFA Futsal Champions League (2018/2019, 2020/2021, 2025/2026)",
+"Campeonato da Europa (2013/2014)"
+]
+},
+"scp02": {
+"fpId": 447,
+"games": 206,
+"yellow": 12,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "Sporting CP",
+"games": 11,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Sporting CP",
+"games": 45,
+"goals": 5
+},
+{
+"s": "24",
+"team": "Sporting CP",
+"games": 44,
+"goals": 3
+},
+{
+"s": "23",
+"team": "Sporting CP",
+"games": 31,
+"goals": 3
+},
+{
+"s": "22",
+"team": "Sporting CP",
+"games": 40,
+"goals": 1
+},
+{
+"s": "21",
+"team": "Sporting CP",
+"games": 35,
+"goals": 1
+}
+],
+"titles": [
+"Liga Placard (2017/2018, 2017/2018, 2020/2021, 2021/2022, 2022/2023, 2023/2024)",
+"Taça de Portugal (2018/2019, 2018/2019, 2019/2020, 2019/2020, 2021/2022, 2024/2025)",
+"Supertaça (2018/2019, 2018/2019, 2022/2023, 2025/2026, 2026/2027)",
+"Taça da Liga (2021/2022, 2023/2024, 2024/2025)",
+"Campeonato Nacional Sub 17 (2016/2017, 2016/2017)",
+"Campeonato Nacional Sub 19 (2018/2019, 2018/2019)",
+"UEFA Futsal Champions League (2020/2021, 2025/2026)",
+"Taça Nacional Sub 17 (2015/2016)"
+]
+},
+"scp05": {
+"fpId": 6215,
+"games": 134,
+"yellow": 19,
+"red": 4,
+"seasons": [
+{
+"s": "26",
+"team": "Sporting CP",
+"games": 12,
+"goals": 2
+},
+{
+"s": "25",
+"team": "Sporting CP",
+"games": 40,
+"goals": 7
+},
+{
+"s": "24",
+"team": "Leões de Porto Salvo",
+"games": 31,
+"goals": 3
+},
+{
+"s": "23",
+"team": "Leões de Porto Salvo",
+"games": 31,
+"goals": 5
+},
+{
+"s": "22",
+"team": "Sporting CP",
+"games": 8,
+"goals": 1
+},
+{
+"s": "21",
+"team": "Sporting CP",
+"games": 12,
+"goals": 0
+}
+],
+"titles": [
+"Liga Placard (2021/2022, 2021/2022, 2022/2023, 2022/2023)",
+"Supertaça (2021/2022, 2021/2022, 2025/2026, 2026/2027)",
+"Taça de Portugal (2021/2022, 2021/2022)",
+"Campeonato Nacional Sub 19 (2022/2023, 2022/2023)",
+"Taça Nacional Sub 15 (2018/2019)",
+"Campeonato Europa Sub 19 (2023/2024)",
+"UEFA Futsal Champions League (2025/2026)"
+]
+},
+"scp13": {
+"fpId": 119,
+"games": 155,
+"yellow": 26,
+"red": 3,
+"seasons": [
+{
+"s": "26",
+"team": "Sporting CP",
+"games": 13,
+"goals": 4
+},
+{
+"s": "25",
+"team": "Sporting CP",
+"games": 51,
+"goals": 56
+},
+{
+"s": "23",
+"team": "Leões de Porto Salvo",
+"games": 32,
+"goals": 22
+},
+{
+"s": "22",
+"team": "Leões de Porto Salvo",
+"games": 29,
+"goals": 19
+},
+{
+"s": "21",
+"team": "Leões de Porto Salvo",
+"games": 30,
+"goals": 24
+}
+],
+"titles": [
+"Supertaça (2025/2026, 2026/2027)",
+"Taça de Portugal (2014/2015)",
+"Liga Placard (2014/2015)",
+"Taça da Liga (2017/2018)",
+"UEFA Futsal Champions League (2025/2026)"
+]
+},
+"scp08": {
+"fpId": 2553,
+"games": 177,
+"yellow": 37,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Sporting CP",
+"games": 11,
+"goals": 5
+},
+{
+"s": "25",
+"team": "Sporting CP",
+"games": 47,
+"goals": 37
+},
+{
+"s": "24",
+"team": "Sporting CP",
+"games": 47,
+"goals": 15
+},
+{
+"s": "23",
+"team": "Sporting CP",
+"games": 39,
+"goals": 18
+},
+{
+"s": "22",
+"team": "Sporting CP",
+"games": 33,
+"goals": 12
+}
+],
+"titles": [
+"Liga Placard (2020/2021, 2020/2021, 2022/2023, 2023/2024)",
+"Taça da Liga (2020/2021, 2020/2021, 2023/2024, 2024/2025)",
+"UEFA Futsal Champions League (2020/2021, 2020/2021, 2025/2026)",
+"Campeonato Nacional Sub 17 (2016/2017, 2017/2018)",
+"Campeonato Nacional Sub 19 (2018/2019, 2018/2019)",
+"Supertaça (2025/2026, 2026/2027)",
+"Taça de Portugal (2024/2025)"
+]
+},
+"scp07": {
+"fpId": 179,
+"games": 201,
+"yellow": 54,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Sporting CP",
+"games": 4,
+"goals": 0
+},
+{
+"s": "25",
+"team": "FC Barcelona",
+"games": 36,
+"goals": 5
+},
+{
+"s": "24",
+"team": "FC Barcelona",
+"games": 33,
+"goals": 3
+},
+{
+"s": "23",
+"team": "FC Barcelona",
+"games": 47,
+"goals": 7
+},
+{
+"s": "22",
+"team": "Sporting CP",
+"games": 44,
+"goals": 9
+},
+{
+"s": "21",
+"team": "Sporting CP",
+"games": 37,
+"goals": 13
+}
+],
+"titles": [
+"Supertaça (2014/2015, 2018/2019, 2019/2020, 2021/2022, 2022/2023)",
+"Taça de Portugal (2018/2019, 2019/2020, 2021/2022)",
+"Liga Placard (2020/2021, 2021/2022, 2022/2023)",
+"UEFA Futsal Champions League (2018/2019, 2020/2021)",
+"Taça da Liga (2020/2021, 2021/2022)",
+"Campeonato do Mundo (2021/2022)",
+"Campeonato da Europa (2021/2022)",
+"Finalíssima (2022/2023)",
+"RFEF - Primera División de Fútbol Sala (2025/2026)"
+]
+},
+"scp17": {
+"fpId": 51936,
+"games": 48,
+"yellow": 7,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Joinville",
+"games": 14,
+"goals": 9
+},
+{
+"s": "26",
+"team": "Sporting CP",
+"games": 12,
+"goals": 5
+},
+{
+"s": "25",
+"team": "Joinville",
+"games": 22,
+"goals": 2
+}
+],
+"titles": [
+"Supertaça (2026/2027)"
+]
+},
+"scp12": {
+"fpId": 5133,
+"games": 211,
+"yellow": 28,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "Sporting CP",
+"games": 12,
+"goals": 7
+},
+{
+"s": "25",
+"team": "Sporting CP",
+"games": 45,
+"goals": 22
+},
+{
+"s": "25",
+"team": "Brasil",
+"games": 6,
+"goals": 1
+},
+{
+"s": "24",
+"team": "ElPozo Murcia",
+"games": 37,
+"goals": 22
+},
+{
+"s": "24",
+"team": "Brasil",
+"games": 7,
+"goals": 3
+},
+{
+"s": "23",
+"team": "ElPozo Murcia",
+"games": 36,
+"goals": 9
+},
+{
+"s": "22",
+"team": "ElPozo Murcia",
+"games": 33,
+"goals": 9
+},
+{
+"s": "21",
+"team": "ElPozo Murcia",
+"games": 35,
+"goals": 13
+}
+],
+"titles": [
+"Campeonato do Mundo (2024/2025)",
+"UEFA Futsal Champions League (2025/2026)",
+"Copa América (2025/2026)",
+"Supertaça (2026/2027)"
+]
+},
+"scp01": {
+"fpId": 3,
+"games": 137,
+"yellow": 3,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "Sporting CP",
+"games": 7,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Sporting CP",
+"games": 28,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Sporting CP",
+"games": 28,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Sporting CP",
+"games": 33,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Sporting CP",
+"games": 17,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Sporting CP",
+"games": 24,
+"goals": 2
+}
+],
+"titles": [
+"Liga Placard (2010/2011, 2010/2011, 2012/2013, 2013/2014, 2015/2016, 2016/2017, 2016/2017, 2017/2018, 2017/2018, 2020/2021, 2021/2022, 2022/2023, 2023/2024)",
+"Taça de Portugal (2012/2013, 2017/2018, 2017/2018, 2018/2019, 2019/2020, 2021/2022, 2024/2025)",
+"Supertaça (2017/2018, 2017/2018, 2018/2019, 2019/2020, 2021/2022, 2025/2026)",
+"Taça da Liga (2016/2017, 2016/2017, 2020/2021, 2023/2024, 2024/2025)",
+"UEFA Futsal Champions League (2018/2019, 2020/2021, 2025/2026)",
+"Taça Nacional Sub 17 (2015/2016)"
+]
+},
+"scp10": {
+"fpId": 4798,
+"games": 195,
+"yellow": 26,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Sporting CP",
+"games": 7,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Sporting CP",
+"games": 23,
+"goals": 5
+},
+{
+"s": "24",
+"team": "SL Benfica",
+"games": 31,
+"goals": 27
+},
+{
+"s": "23",
+"team": "SL Benfica",
+"games": 37,
+"goals": 11
+},
+{
+"s": "22",
+"team": "SL Benfica",
+"games": 42,
+"goals": 21
+},
+{
+"s": "21",
+"team": "SL Benfica",
+"games": 44,
+"goals": 34
+},
+{
+"s": "21",
+"team": "Rússia",
+"games": 11,
+"goals": 10
+}
+],
+"titles": [
+"UEFA Futsal Champions League (2015/2016, 2025/2026)",
+"Taça da Liga (2022/2023)",
+"Taça de Portugal (2022/2023)",
+"Supertaça (2023/2024)",
+"Liga Placard (2024/2025)"
+]
+},
+"scp03": {
+"fpId": 51935,
+"games": 49,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Sporting CP",
+"games": 13,
+"goals": 0
+},
+{
+"s": "26",
+"team": "Ucrânia",
+"games": 1,
+"goals": 0
+},
+{
+"s": "25",
+"team": "FC HIT Kiev",
+"games": 5,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Ucrânia",
+"games": 4,
+"goals": 0
+},
+{
+"s": "24",
+"team": "FC HIT Kiev",
+"games": 3,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Ucrânia",
+"games": 13,
+"goals": 1
+},
+{
+"s": "23",
+"team": "FC HIT Kiev",
+"games": 6,
+"goals": 2
+},
+{
+"s": "23",
+"team": "Ucrânia",
+"games": 2,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Ucrânia",
+"games": 2,
+"goals": 0
+}
+],
+"titles": [
+"Supertaça (2026/2027)"
+]
+},
+"scp15": {
+"fpId": 44340,
+"games": 12,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Sporting CP",
+"games": 10,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Sporting CP",
+"games": 2,
+"goals": 0
+}
+],
+"titles": [
+"Campeonato Nacional Sub 19 (2024/2025, 2024/2025)",
+"Campeonato Nacional Sub 17 (2024/2025, 2024/2025)",
+"Supertaça (2026/2027, 2026/2027)"
+]
+},
+"scp18": {
+"fpId": 5156,
+"games": 189,
+"yellow": 31,
+"red": 5,
+"seasons": [
+{
+"s": "26",
+"team": "Sporting CP",
+"games": 12,
+"goals": 8
+},
+{
+"s": "25",
+"team": "Sporting CP",
+"games": 47,
+"goals": 27
+},
+{
+"s": "25",
+"team": "Brasil",
+"games": 6,
+"goals": 1
+},
+{
+"s": "24",
+"team": "Sporting CP",
+"games": 22,
+"goals": 13
+},
+{
+"s": "23",
+"team": "SL Benfica",
+"games": 25,
+"goals": 19
+},
+{
+"s": "22",
+"team": "SL Benfica",
+"games": 48,
+"goals": 38
+},
+{
+"s": "21",
+"team": "SL Benfica",
+"games": 23,
+"goals": 15
+},
+{
+"s": "21",
+"team": "Brasil",
+"games": 6,
+"goals": 1
+}
+],
+"titles": [
+"Taça de Portugal (2018/2019, 2019/2020, 2022/2023, 2024/2025)",
+"UEFA Futsal Champions League (2018/2019, 2020/2021, 2025/2026)",
+"Supertaça (2019/2020, 2025/2026, 2026/2027)",
+"Taça da Liga (2020/2021, 2022/2023)",
+"Liga Placard (2020/2021)",
+"Copa América (2025/2026)"
+]
+},
+"scp09": {
+"fpId": 2525,
+"games": 143,
+"yellow": 27,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Sporting CP",
+"games": 13,
+"goals": 7
+},
+{
+"s": "25",
+"team": "Leões de Porto Salvo",
+"games": 30,
+"goals": 14
+},
+{
+"s": "24",
+"team": "Leões de Porto Salvo",
+"games": 29,
+"goals": 8
+},
+{
+"s": "23",
+"team": "Leões de Porto Salvo",
+"games": 7,
+"goals": 1
+},
+{
+"s": "22",
+"team": "ADCR Caxinas",
+"games": 27,
+"goals": 6
+},
+{
+"s": "21",
+"team": "ADCR Caxinas",
+"games": 37,
+"goals": 20
+}
+],
+"titles": [
+"Campeonato Nacional Sub 17 (2018/2019)",
+"2ª Divisão (2021/2022)",
+"Supertaça (2026/2027)"
+]
+},
+"scp04": {
+"fpId": 450,
+"games": 214,
+"yellow": 40,
+"red": 3,
+"seasons": [
+{
+"s": "26",
+"team": "Sporting CP",
+"games": 12,
+"goals": 9
+},
+{
+"s": "25",
+"team": "Sporting CP",
+"games": 46,
+"goals": 44
+},
+{
+"s": "24",
+"team": "Sporting CP",
+"games": 31,
+"goals": 15
+},
+{
+"s": "23",
+"team": "Sporting CP",
+"games": 42,
+"goals": 25
+},
+{
+"s": "22",
+"team": "Sporting CP",
+"games": 41,
+"goals": 16
+},
+{
+"s": "21",
+"team": "Sporting CP",
+"games": 42,
+"goals": 12
+}
+],
+"titles": [
+"Taça de Portugal (2019/2020, 2019/2020, 2021/2022, 2024/2025)",
+"Liga Placard (2020/2021, 2021/2022, 2022/2023, 2023/2024)",
+"Taça da Liga (2020/2021, 2021/2022, 2023/2024, 2024/2025)",
+"Supertaça (2021/2022, 2022/2023, 2025/2026, 2026/2027)",
+"UEFA Futsal Champions League (2020/2021, 2025/2026)",
+"Taça Nacional Sub 17 (2015/2016)",
+"Campeonato Nacional Sub 17 (2016/2017)",
+"Campeonato Nacional Sub 19 (2018/2019)",
+"Campeonato do Mundo (2021/2022)",
+"Campeonato da Europa (2021/2022)",
+"Finalíssima (2022/2023)"
+]
+},
+"scp06": {
+"fpId": 9421,
+"games": 222,
+"yellow": 41,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "Sporting CP",
+"games": 13,
+"goals": 8
+},
+{
+"s": "25",
+"team": "Sporting CP",
+"games": 49,
+"goals": 15
+},
+{
+"s": "24",
+"team": "Sporting CP",
+"games": 50,
+"goals": 17
+},
+{
+"s": "23",
+"team": "Sporting CP",
+"games": 49,
+"goals": 9
+},
+{
+"s": "22",
+"team": "Leões de Porto Salvo",
+"games": 30,
+"goals": 6
+},
+{
+"s": "21",
+"team": "Leões de Porto Salvo",
+"games": 31,
+"goals": 10
+}
+],
+"titles": [
+"Taça da Liga (2023/2024, 2024/2025)",
+"Supertaça (2025/2026, 2026/2027)",
+"Campeonato Nacional Sub 19 (2018/2019)",
+"Liga Placard (2023/2024)",
+"Taça de Portugal (2024/2025)",
+"UEFA Futsal Champions League (2025/2026)"
+]
+},
+"scp16": {
+"fpId": 2547,
+"games": 170,
+"yellow": 36,
+"red": 1,
+"seasons": [
+{
+"s": "25",
+"team": "Sporting CP",
+"games": 22,
+"goals": 14
+},
+{
+"s": "24",
+"team": "Sporting CP",
+"games": 33,
+"goals": 27
+},
+{
+"s": "23",
+"team": "Sporting CP",
+"games": 44,
+"goals": 42
+},
+{
+"s": "22",
+"team": "Sporting CP",
+"games": 38,
+"goals": 24
+},
+{
+"s": "21",
+"team": "Sporting CP",
+"games": 33,
+"goals": 11
+}
+],
+"titles": [
+"Taça de Portugal (2019/2020, 2019/2020, 2021/2022, 2024/2025)",
+"Taça da Liga (2020/2021, 2021/2022, 2023/2024, 2024/2025)",
+"Liga Placard (2020/2021, 2021/2022, 2022/2023, 2023/2024)",
+"Campeonato Nacional Sub 17 (2016/2017, 2017/2018)",
+"Campeonato Nacional Sub 19 (2018/2019, 2018/2019)",
+"UEFA Futsal Champions League (2020/2021, 2025/2026)",
+"Supertaça (2021/2022, 2022/2023)",
+"Campeonato do Mundo (2021/2022)",
+"Campeonato da Europa (2021/2022)",
+"Finalíssima (2022/2023)"
+]
+},
+"lps18": {
+"fpId": 19890,
+"games": 56,
+"yellow": 5,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Leões de Porto Salvo B",
+"games": 2,
+"goals": 3
+},
+{
+"s": "26",
+"team": "Leões de Porto Salvo",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Leões de Porto Salvo",
+"games": 19,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Leões de Porto Salvo B",
+"games": 16,
+"goals": 9
+},
+{
+"s": "24",
+"team": "Leões de Porto Salvo B",
+"games": 12,
+"goals": 2
+},
+{
+"s": "23",
+"team": "Leões de Porto Salvo",
+"games": 1,
+"goals": 0
+}
+],
+"titles": [
+"Taça Nacional Sub 15 (2021/2022)"
+]
+},
+"lps13": {
+"fpId": 14116,
+"games": 108,
+"yellow": 15,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "Leões de Porto Salvo",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Leões de Porto Salvo B",
+"games": 3,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Leões de Porto Salvo",
+"games": 31,
+"goals": 8
+},
+{
+"s": "24",
+"team": "AMSAC",
+"games": 27,
+"goals": 17
+},
+{
+"s": "23",
+"team": "UP Venda Nova",
+"games": 15,
+"goals": 9
+},
+{
+"s": "22",
+"team": "GD Estoril Praia",
+"games": 26,
+"goals": 21
+}
+],
+"titles": []
+},
+"lps02": {
+"fpId": 17906,
+"games": 78,
+"yellow": 7,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Leões de Porto Salvo",
+"games": 1,
+"goals": 0
+},
+{
+"s": "25",
+"team": "ADCR Caxinas",
+"games": 16,
+"goals": 0
+},
+{
+"s": "25",
+"team": "SL Benfica",
+"games": 2,
+"goals": 0
+},
+{
+"s": "24",
+"team": "SL Benfica",
+"games": 30,
+"goals": 0
+},
+{
+"s": "23",
+"team": "SL Benfica",
+"games": 27,
+"goals": 0
+},
+{
+"s": "22",
+"team": "SL Benfica",
+"games": 2,
+"goals": 0
+}
+],
+"titles": [
+"Campeonato Nacional Sub 17 (2021/2022, 2021/2022)",
+"Liga Placard (2024/2025)"
+]
+},
+"lps22": {
+"fpId": 26985,
+"games": 20,
+"yellow": 4,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "Leões de Porto Salvo B",
+"games": 3,
+"goals": 4
+},
+{
+"s": "26",
+"team": "Leões de Porto Salvo",
+"games": 2,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Leões de Porto Salvo B",
+"games": 15,
+"goals": 6
+}
+],
+"titles": []
+},
+"lps09": {
+"fpId": 48451,
+"games": 3,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Leões de Porto Salvo B",
+"games": 2,
+"goals": 1
+},
+{
+"s": "26",
+"team": "Leões de Porto Salvo",
+"games": 1,
+"goals": 0
+}
+],
+"titles": []
+},
+"lps11": {
+"fpId": 48670,
+"games": 3,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Leões de Porto Salvo B",
+"games": 2,
+"goals": 1
+},
+{
+"s": "26",
+"team": "Leões de Porto Salvo",
+"games": 1,
+"goals": 0
+}
+],
+"titles": [
+"Taça Nacional Sub 19 (2025/2026)"
+]
+},
+"lps17": {
+"fpId": 31238,
+"games": 146,
+"yellow": 23,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "Leões de Porto Salvo",
+"games": 6,
+"goals": 4
+},
+{
+"s": "25",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 29,
+"goals": 10
+},
+{
+"s": "24",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 28,
+"goals": 6
+},
+{
+"s": "23",
+"team": "ADCR Caxinas",
+"games": 29,
+"goals": 11
+},
+{
+"s": "22",
+"team": "Leões de Porto Salvo",
+"games": 31,
+"goals": 3
+},
+{
+"s": "21",
+"team": "Leões de Porto Salvo B",
+"games": 8,
+"goals": 5
+},
+{
+"s": "21",
+"team": "Leões de Porto Salvo",
+"games": 15,
+"goals": 1
+}
+],
+"titles": []
+},
+"lps01": {
+"fpId": 6218,
+"games": 65,
+"yellow": 11,
+"red": 3,
+"seasons": [
+{
+"s": "26",
+"team": "Leões de Porto Salvo",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "UP Venda Nova",
+"games": 22,
+"goals": 3
+},
+{
+"s": "24",
+"team": "CRC Quinta dos Lombos",
+"games": 30,
+"goals": 1
+},
+{
+"s": "23",
+"team": "Sporting CP",
+"games": 4,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Sporting CP",
+"games": 3,
+"goals": 0
+}
+],
+"titles": [
+"Liga Placard (2022/2023, 2022/2023, 2023/2024, 2023/2024)",
+"Campeonato Nacional Sub 19 (2022/2023, 2022/2023, 2023/2024, 2023/2024)",
+"Taça Nacional Sub 15 (2018/2019, 2018/2019)",
+"Campeonato Europa Sub 19 (2023/2024)"
+]
+},
+"lps05": {
+"fpId": 2732,
+"games": 142,
+"yellow": 26,
+"red": 0,
+"seasons": [
+{
+"s": "25",
+"team": "Leões de Porto Salvo",
+"games": 31,
+"goals": 2
+},
+{
+"s": "24",
+"team": "Leões de Porto Salvo",
+"games": 23,
+"goals": 1
+},
+{
+"s": "23",
+"team": "AMSAC",
+"games": 27,
+"goals": 10
+},
+{
+"s": "22",
+"team": "AMSAC",
+"games": 29,
+"goals": 16
+},
+{
+"s": "21",
+"team": "CCRD Burinhosa",
+"games": 32,
+"goals": 5
+}
+],
+"titles": [
+"Campeonato Nacional Sub 17 (2016/2017, 2017/2018)"
+]
+},
+"lps21": {
+"fpId": 2324,
+"games": 99,
+"yellow": 29,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "Leões de Porto Salvo",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Leões de Porto Salvo B",
+"games": 5,
+"goals": 5
+},
+{
+"s": "25",
+"team": "Leões de Porto Salvo",
+"games": 27,
+"goals": 13
+},
+{
+"s": "24",
+"team": "AD Jorge Antunes",
+"games": 25,
+"goals": 24
+},
+{
+"s": "23",
+"team": "SC Lusitânia",
+"games": 15,
+"goals": 15
+},
+{
+"s": "23",
+"team": "SCU Torreense",
+"games": 8,
+"goals": 1
+},
+{
+"s": "21",
+"team": "ACD Ladoeiro",
+"games": 13,
+"goals": 5
+}
+],
+"titles": []
+},
+"lps12": {
+"fpId": 17781,
+"games": 17,
+"yellow": 6,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Leões de Porto Salvo",
+"games": 1,
+"goals": 0
+},
+{
+"s": "26",
+"team": "Leões de Porto Salvo B",
+"games": 5,
+"goals": 6
+},
+{
+"s": "25",
+"team": "Leões de Porto Salvo B",
+"games": 11,
+"goals": 2
+}
+],
+"titles": []
+},
+"lps08": {
+"fpId": 12522,
+"games": 42,
+"yellow": 7,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Leões de Porto Salvo",
+"games": 6,
+"goals": 2
+},
+{
+"s": "25",
+"team": "Leões de Porto Salvo B",
+"games": 3,
+"goals": 2
+},
+{
+"s": "25",
+"team": "Leões de Porto Salvo",
+"games": 26,
+"goals": 6
+},
+{
+"s": "24",
+"team": "Sporting CP",
+"games": 6,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Sporting CP",
+"games": 1,
+"goals": 0
+}
+],
+"titles": [
+"Campeonato Nacional Sub 19 (2023/2024, 2023/2024, 2024/2025, 2024/2025)",
+"Liga Placard (2023/2024, 2023/2024)",
+"Taça de Portugal (2024/2025, 2024/2025)",
+"Campeonato Europa Sub 19 (2025/2026)"
+]
+},
+"lps07": {
+"fpId": 28966,
+"games": 14,
+"yellow": 7,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Leões de Porto Salvo",
+"games": 5,
+"goals": 0
+},
+{
+"s": "25",
+"team": "ADCR Caxinas",
+"games": 9,
+"goals": 3
+}
+],
+"titles": []
+},
+"lps15": {
+"fpId": 23755,
+"games": 77,
+"yellow": 22,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Leões de Porto Salvo",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "FC Famalicão",
+"games": 20,
+"goals": 8
+},
+{
+"s": "24",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 28,
+"goals": 12
+},
+{
+"s": "23",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 23,
+"goals": 4
+}
+],
+"titles": []
+},
+"lps14": {
+"fpId": 6272,
+"games": 96,
+"yellow": 21,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "Leões de Porto Salvo",
+"games": 3,
+"goals": 2
+},
+{
+"s": "25",
+"team": "AD Fundão",
+"games": 25,
+"goals": 5
+},
+{
+"s": "24",
+"team": "AD Fundão",
+"games": 14,
+"goals": 2
+},
+{
+"s": "24",
+"team": "ADCR Caxinas",
+"games": 15,
+"goals": 2
+},
+{
+"s": "23",
+"team": "AD Fundão",
+"games": 23,
+"goals": 6
+},
+{
+"s": "22",
+"team": "SL Benfica",
+"games": 4,
+"goals": 1
+},
+{
+"s": "21",
+"team": "SL Benfica",
+"games": 12,
+"goals": 0
+}
+],
+"titles": [
+"Campeonato Nacional Sub 17 (2021/2022, 2021/2022, 2021/2022)",
+"Taça de Portugal (2022/2023, 2022/2023)",
+"Campeonato Europa Sub 19 (2023/2024)"
+]
+},
+"lps20": {
+"fpId": 6217,
+"games": 84,
+"yellow": 17,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Leões de Porto Salvo",
+"games": 6,
+"goals": 4
+},
+{
+"s": "25",
+"team": "Eléctrico FC",
+"games": 19,
+"goals": 5
+},
+{
+"s": "25",
+"team": "Sporting CP",
+"games": 3,
+"goals": 1
+},
+{
+"s": "24",
+"team": "Leões de Porto Salvo B",
+"games": 5,
+"goals": 2
+},
+{
+"s": "24",
+"team": "Leões de Porto Salvo",
+"games": 34,
+"goals": 10
+},
+{
+"s": "23",
+"team": "Sporting CP",
+"games": 11,
+"goals": 1
+},
+{
+"s": "22",
+"team": "Sporting CP",
+"games": 2,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Sporting CP",
+"games": 4,
+"goals": 0
+}
+],
+"titles": [
+"Liga Placard (2021/2022, 2021/2022, 2021/2022, 2022/2023, 2022/2023, 2023/2024, 2023/2024)",
+"Campeonato Nacional Sub 19 (2022/2023, 2022/2023, 2023/2024, 2023/2024)",
+"Taça Nacional Sub 15 (2018/2019, 2018/2019)",
+"Campeonato Europa Sub 19 (2023/2024)"
+]
+},
+"lps16": {
+"fpId": 167,
+"games": 132,
+"yellow": 20,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "Leões de Porto Salvo",
+"games": 5,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Leões de Porto Salvo",
+"games": 8,
+"goals": 5
+},
+{
+"s": "24",
+"team": "Leões de Porto Salvo",
+"games": 32,
+"goals": 18
+},
+{
+"s": "23",
+"team": "Leões de Porto Salvo",
+"games": 32,
+"goals": 11
+},
+{
+"s": "22",
+"team": "Leões de Porto Salvo",
+"games": 30,
+"goals": 9
+},
+{
+"s": "21",
+"team": "Leões de Porto Salvo",
+"games": 25,
+"goals": 7
+}
+],
+"titles": [
+"Liga Placard (2009/2010, 2014/2015)",
+"Taça de Portugal (2014/2015, 2016/2017)",
+"Supertaça (2015/2016, 2016/2017)",
+"2ª Divisão (2010/2011)"
+]
+},
+"lps03": {
+"fpId": 17965,
+"games": 75,
+"yellow": 5,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "Leões de Porto Salvo B",
+"games": 2,
+"goals": 0
+},
+{
+"s": "26",
+"team": "Leões de Porto Salvo",
+"games": 5,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Leões de Porto Salvo B",
+"games": 1,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Leões de Porto Salvo",
+"games": 4,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Leões de Porto Salvo B",
+"games": 19,
+"goals": 4
+},
+{
+"s": "24",
+"team": "Leões de Porto Salvo",
+"games": 28,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Leões de Porto Salvo",
+"games": 3,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Leões de Porto Salvo B",
+"games": 6,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Leões de Porto Salvo B",
+"games": 7,
+"goals": 0
+}
+],
+"titles": []
+},
+"lps04": {
+"fpId": 21502,
+"games": 120,
+"yellow": 34,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "Leões de Porto Salvo",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Leões de Porto Salvo B",
+"games": 4,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Leões de Porto Salvo",
+"games": 30,
+"goals": 6
+},
+{
+"s": "24",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 28,
+"goals": 4
+},
+{
+"s": "23",
+"team": "Leões de Porto Salvo",
+"games": 18,
+"goals": 2
+},
+{
+"s": "23",
+"team": "Leões de Porto Salvo B",
+"games": 21,
+"goals": 11
+},
+{
+"s": "22",
+"team": "Leões de Porto Salvo",
+"games": 9,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Leões de Porto Salvo B",
+"games": 4,
+"goals": 2
+}
+],
+"titles": [
+"Campeonato Europa Sub 19 (2023/2024)"
+]
+},
+"lps10": {
+"fpId": 17780,
+"games": 5,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Leões de Porto Salvo B",
+"games": 2,
+"goals": 0
+},
+{
+"s": "26",
+"team": "Leões de Porto Salvo",
+"games": 1,
+"goals": 0
+},
+{
+"s": "25",
+"team": "AMSAC",
+"games": 2,
+"goals": 0
+}
+],
+"titles": [
+"Campeonato Nacional Sub 15 (2022/2023)"
+]
+},
+"lps06": {
+"fpId": 21764,
+"games": 11,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Leões de Porto Salvo B",
+"games": 3,
+"goals": 0
+},
+{
+"s": "26",
+"team": "Leões de Porto Salvo",
+"games": 1,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Leões de Porto Salvo B",
+"games": 7,
+"goals": 0
+}
+],
+"titles": [
+"Taça Nacional Sub 15 (2021/2022)"
+]
+},
+"fun13": {
+"fpId": 30580,
+"games": 8,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "AD Fundão",
+"games": 7,
+"goals": 0
+},
+{
+"s": "25",
+"team": "GD Mata/AAUBI",
+"games": 1,
+"goals": 0
+}
+],
+"titles": []
+},
+"fun03": {
+"fpId": 27662,
+"games": 45,
+"yellow": 6,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "AD Fundão",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "AD Fundão",
+"games": 25,
+"goals": 4
+},
+{
+"s": "24",
+"team": "AD Fundão",
+"games": 14,
+"goals": 2
+}
+],
+"titles": []
+},
+"fun14": {
+"fpId": 26055,
+"games": 49,
+"yellow": 16,
+"red": 3,
+"seasons": [
+{
+"s": "26",
+"team": "AD Fundão",
+"games": 7,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Leões de Porto Salvo",
+"games": 23,
+"goals": 3
+},
+{
+"s": "24",
+"team": "SC Lusitânia",
+"games": 19,
+"goals": 15
+}
+],
+"titles": []
+},
+"fun10": {
+"fpId": 17915,
+"games": 53,
+"yellow": 12,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "AD Fundão",
+"games": 7,
+"goals": 0
+},
+{
+"s": "25",
+"team": "ADCR Caxinas",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 15,
+"goals": 2
+},
+{
+"s": "24",
+"team": "AMSAC",
+"games": 25,
+"goals": 15
+}
+],
+"titles": []
+},
+"fun11": {
+"fpId": 166,
+"games": 147,
+"yellow": 17,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "AD Fundão",
+"games": 7,
+"goals": 0
+},
+{
+"s": "25",
+"team": "AD Fundão",
+"games": 27,
+"goals": 8
+},
+{
+"s": "24",
+"team": "AD Fundão",
+"games": 27,
+"goals": 4
+},
+{
+"s": "23",
+"team": "AD Fundão",
+"games": 25,
+"goals": 1
+},
+{
+"s": "22",
+"team": "AD Fundão",
+"games": 27,
+"goals": 10
+},
+{
+"s": "21",
+"team": "AD Fundão",
+"games": 34,
+"goals": 15
+}
+],
+"titles": [
+"Taça de Portugal (2010/2011, 2013/2014, 2016/2017)",
+"Liga Placard (2010/2011)",
+"Supertaça (2015/2016)",
+"Finalíssima (2022/2023)"
+]
+},
+"fun02": {
+"fpId": 27927,
+"games": 28,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "AD Fundão",
+"games": 5,
+"goals": 0
+},
+{
+"s": "25",
+"team": "AD Fundão",
+"games": 23,
+"goals": 0
+}
+],
+"titles": []
+},
+"fun12": {
+"fpId": 1545,
+"games": 106,
+"yellow": 18,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "AD Fundão",
+"games": 7,
+"goals": 2
+},
+{
+"s": "23",
+"team": "Jaén Paraíso Interior",
+"games": 37,
+"goals": 3
+},
+{
+"s": "22",
+"team": "Jaén Paraíso Interior",
+"games": 32,
+"goals": 5
+},
+{
+"s": "21",
+"team": "AD Fundão",
+"games": 30,
+"goals": 16
+}
+],
+"titles": [
+"Copa de España Feminino (2022/2023)"
+]
+},
+"fun08": {
+"fpId": 6561,
+"games": 107,
+"yellow": 22,
+"red": 4,
+"seasons": [
+{
+"s": "26",
+"team": "AD Fundão",
+"games": 7,
+"goals": 1
+},
+{
+"s": "25",
+"team": "SCU Torreense",
+"games": 9,
+"goals": 4
+},
+{
+"s": "24",
+"team": "SCU Torreense",
+"games": 22,
+"goals": 9
+},
+{
+"s": "23",
+"team": "SCU Torreense",
+"games": 27,
+"goals": 10
+},
+{
+"s": "22",
+"team": "Levante UD",
+"games": 15,
+"goals": 1
+},
+{
+"s": "21",
+"team": "Portimonense SC",
+"games": 27,
+"goals": 17
+}
+],
+"titles": []
+},
+"fun06": {
+"fpId": 4556,
+"games": 112,
+"yellow": 30,
+"red": 4,
+"seasons": [
+{
+"s": "26",
+"team": "AD Fundão",
+"games": 7,
+"goals": 8
+},
+{
+"s": "25",
+"team": "SL Benfica",
+"games": 21,
+"goals": 7
+},
+{
+"s": "24",
+"team": "AD Fundão",
+"games": 26,
+"goals": 17
+},
+{
+"s": "22",
+"team": "Levante UD",
+"games": 27,
+"goals": 5
+},
+{
+"s": "21",
+"team": "AD Fundão",
+"games": 31,
+"goals": 9
+}
+],
+"titles": [
+"Liga Placard (2025/2026)",
+"Taça de Portugal (2025/2026)"
+]
+},
+"fun09": {
+"fpId": 17956,
+"games": 55,
+"yellow": 10,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "AD Fundão",
+"games": 7,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Eléctrico FC",
+"games": 23,
+"goals": 8
+},
+{
+"s": "24",
+"team": "Sporting CP",
+"games": 20,
+"goals": 1
+},
+{
+"s": "23",
+"team": "Sporting CP",
+"games": 5,
+"goals": 1
+}
+],
+"titles": [
+"Campeonato Nacional Sub 19 (2023/2024, 2023/2024, 2024/2025, 2024/2025)",
+"Liga Placard (2023/2024, 2023/2024)",
+"Taça de Portugal (2024/2025, 2024/2025)",
+"Taça da Liga (2024/2025, 2024/2025)",
+"Campeonato Europa Sub 19 (2025/2026)"
+]
+},
+"fun15": {
+"fpId": 7891,
+"games": 154,
+"yellow": 45,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "AD Fundão",
+"games": 7,
+"goals": 1
+},
+{
+"s": "25",
+"team": "AD Fundão",
+"games": 25,
+"goals": 5
+},
+{
+"s": "24",
+"team": "SC Lusitânia",
+"games": 9,
+"goals": 2
+},
+{
+"s": "24",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 11,
+"goals": 3
+},
+{
+"s": "23",
+"team": "Leões de Porto Salvo B",
+"games": 23,
+"goals": 26
+},
+{
+"s": "23",
+"team": "Leões de Porto Salvo",
+"games": 22,
+"goals": 3
+},
+{
+"s": "22",
+"team": "Leões de Porto Salvo",
+"games": 22,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Leões de Porto Salvo B",
+"games": 19,
+"goals": 31
+},
+{
+"s": "21",
+"team": "Leões de Porto Salvo B",
+"games": 16,
+"goals": 2
+}
+],
+"titles": []
+},
+"fun04": {
+"fpId": 541,
+"games": 119,
+"yellow": 30,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "AD Fundão",
+"games": 6,
+"goals": 2
+},
+{
+"s": "25",
+"team": "AD Fundão",
+"games": 21,
+"goals": 5
+},
+{
+"s": "24",
+"team": "AD Fundão",
+"games": 20,
+"goals": 5
+},
+{
+"s": "23",
+"team": "AD Fundão",
+"games": 22,
+"goals": 10
+},
+{
+"s": "22",
+"team": "AD Fundão",
+"games": 24,
+"goals": 8
+},
+{
+"s": "21",
+"team": "AD Módicus",
+"games": 26,
+"goals": 9
+}
+],
+"titles": []
+},
+"tor03": {
+"fpId": 27137,
+"games": 2,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "SCU Torreense",
+"games": 2,
+"goals": 0
+}
+],
+"titles": []
+},
+"tor14": {
+"fpId": 12088,
+"games": 27,
+"yellow": 2,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "SCU Torreense",
+"games": 3,
+"goals": 0
+},
+{
+"s": "25",
+"team": "CRC Quinta dos Lombos",
+"games": 24,
+"goals": 7
+}
+],
+"titles": [
+"Campeonato Nacional Sub 19 (2023/2024, 2024/2025)"
+]
+},
+"tor16": {
+"fpId": 1558,
+"games": 90,
+"yellow": 29,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "SCU Torreense",
+"games": 4,
+"goals": 0
+},
+{
+"s": "24",
+"team": "ADCR Caxinas",
+"games": 23,
+"goals": 6
+},
+{
+"s": "23",
+"team": "CF Belenenses",
+"games": 21,
+"goals": 5
+},
+{
+"s": "22",
+"team": "CF Belenenses",
+"games": 23,
+"goals": 8
+},
+{
+"s": "21",
+"team": "Reguilas de Tires",
+"games": 19,
+"goals": 11
+}
+],
+"titles": []
+},
+"tor02": {
+"fpId": 24183,
+"games": 30,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "SCU Torreense",
+"games": 5,
+"goals": 0
+},
+{
+"s": "25",
+"team": "AMSAC",
+"games": 23,
+"goals": 1
+},
+{
+"s": "24",
+"team": "Sporting CP",
+"games": 2,
+"goals": 0
+}
+],
+"titles": [
+"Campeonato Nacional Sub 19 (2024/2025, 2024/2025)",
+"Campeonato Europa Sub 19 (2025/2026)"
+]
+},
+"tor13": {
+"fpId": 51926,
+"games": 14,
+"yellow": 4,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "SCU Torreense",
+"games": 4,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Santo André",
+"games": 10,
+"goals": 0
+}
+],
+"titles": []
+},
+"tor10": {
+"fpId": 6954,
+"games": 101,
+"yellow": 22,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "SCU Torreense",
+"games": 5,
+"goals": 0
+},
+{
+"s": "25",
+"team": "UP Venda Nova",
+"games": 22,
+"goals": 2
+},
+{
+"s": "24",
+"team": "UP Venda Nova",
+"games": 28,
+"goals": 10
+},
+{
+"s": "23",
+"team": "Leões de Porto Salvo",
+"games": 12,
+"goals": 2
+},
+{
+"s": "22",
+"team": "SC Lusitânia",
+"games": 34,
+"goals": 17
+}
+],
+"titles": [
+"Liga Placard (2014/2015)",
+"Campeonato Nacional Sub 19 (2016/2017)"
+]
+},
+"tor18": {
+"fpId": 27899,
+"games": 40,
+"yellow": 15,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "SCU Torreense",
+"games": 5,
+"goals": 5
+},
+{
+"s": "25",
+"team": "Praia Clube",
+"games": 9,
+"goals": 1
+},
+{
+"s": "25",
+"team": "SCU Torreense",
+"games": 26,
+"goals": 14
+}
+],
+"titles": []
+},
+"tor17": {
+"fpId": 26239,
+"games": 18,
+"yellow": 2,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "SCU Torreense",
+"games": 5,
+"goals": 0
+},
+{
+"s": "25",
+"team": "SCU Torreense",
+"games": 11,
+"goals": 0
+},
+{
+"s": "24",
+"team": "ADCR Caxinas",
+"games": 2,
+"goals": 0
+}
+],
+"titles": []
+},
+"tor07": {
+"fpId": 5602,
+"games": 148,
+"yellow": 42,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "SCU Torreense",
+"games": 5,
+"goals": 0
+},
+{
+"s": "25",
+"team": "SCU Torreense",
+"games": 27,
+"goals": 6
+},
+{
+"s": "24",
+"team": "SCU Torreense",
+"games": 24,
+"goals": 7
+},
+{
+"s": "23",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 28,
+"goals": 14
+},
+{
+"s": "22",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 27,
+"goals": 19
+},
+{
+"s": "21",
+"team": "CS Marítimo",
+"games": 37,
+"goals": 23
+}
+],
+"titles": []
+},
+"tor11": {
+"fpId": 6527,
+"games": 137,
+"yellow": 26,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "SCU Torreense",
+"games": 5,
+"goals": 1
+},
+{
+"s": "25",
+"team": "SCU Torreense",
+"games": 26,
+"goals": 7
+},
+{
+"s": "24",
+"team": "Portimonense SC",
+"games": 25,
+"goals": 13
+},
+{
+"s": "23",
+"team": "Portimonense SC",
+"games": 21,
+"goals": 21
+},
+{
+"s": "22",
+"team": "SCU Torreense",
+"games": 29,
+"goals": 12
+},
+{
+"s": "21",
+"team": "AMSAC",
+"games": 31,
+"goals": 14
+}
+],
+"titles": [
+"2ª Divisão (2022/2023)"
+]
+},
+"tor01": {
+"fpId": 17145,
+"games": 107,
+"yellow": 5,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "SCU Torreense",
+"games": 5,
+"goals": 0
+},
+{
+"s": "25",
+"team": "SC Barbarense",
+"games": 26,
+"goals": 0
+},
+{
+"s": "24",
+"team": "SCU Torreense",
+"games": 23,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Vitória FC",
+"games": 26,
+"goals": 1
+},
+{
+"s": "22",
+"team": "Vitória FC",
+"games": 27,
+"goals": 0
+}
+],
+"titles": []
+},
+"tor04": {
+"fpId": 10390,
+"games": 65,
+"yellow": 7,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "SCU Torreense",
+"games": 5,
+"goals": 1
+},
+{
+"s": "25",
+"team": "SCU Torreense",
+"games": 17,
+"goals": 7
+},
+{
+"s": "25",
+"team": "Eléctrico FC",
+"games": 3,
+"goals": 0
+},
+{
+"s": "24",
+"team": "SL Benfica",
+"games": 38,
+"goals": 4
+},
+{
+"s": "23",
+"team": "SL Benfica",
+"games": 2,
+"goals": 0
+}
+],
+"titles": [
+"Campeonato Nacional Sub 17 (2021/2022, 2021/2022)",
+"Liga Placard (2024/2025)"
+]
+},
+"tor08": {
+"fpId": 11959,
+"games": 16,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "SCU Torreense",
+"games": 2,
+"goals": 0
+},
+{
+"s": "25",
+"team": "SCU Torreense",
+"games": 9,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Sporting CP",
+"games": 5,
+"goals": 0
+}
+],
+"titles": [
+"Campeonato Nacional Sub 19 (2023/2024, 2024/2025, 2024/2025)"
+]
+},
+"tor09": {
+"fpId": 27577,
+"games": 34,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "SCU Torreense",
+"games": 5,
+"goals": 0
+},
+{
+"s": "25",
+"team": "SCU Torreense",
+"games": 24,
+"goals": 0
+},
+{
+"s": "24",
+"team": "SCU Torreense",
+"games": 5,
+"goals": 0
+}
+],
+"titles": []
+},
+"fzz08": {
+"fpId": 17728,
+"games": 8,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "SL Benfica",
+"games": 2,
+"goals": 1
+}
+],
+"titles": [
+"Campeonato Nacional Sub 17 (2021/2022, 2021/2022, 2022/2023, 2023/2024)",
+"Campeonato Nacional Sub 15 (2021/2022, 2021/2022)",
+"Campeonato Nacional Sub 19 (2025/2026, 2025/2026)",
+"Taça de Portugal (2025/2026, 2025/2026)",
+"Campeonato Europa Sub 19 (2025/2026)"
+]
+},
+"fzz05": {
+"fpId": 15902,
+"games": 35,
+"yellow": 10,
+"red": 3,
+"seasons": [
+{
+"s": "26",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 4,
+"goals": 0
+},
+{
+"s": "25",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 24,
+"goals": 3
+},
+{
+"s": "21",
+"team": "Minas",
+"games": 7,
+"goals": 0
+}
+],
+"titles": []
+},
+"fzz12": {
+"fpId": 110,
+"games": 141,
+"yellow": 24,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "CRC Quinta dos Lombos",
+"games": 16,
+"goals": 2
+},
+{
+"s": "24",
+"team": "CRC Quinta dos Lombos",
+"games": 32,
+"goals": 12
+},
+{
+"s": "23",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 28,
+"goals": 14
+},
+{
+"s": "22",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 25,
+"goals": 5
+},
+{
+"s": "21",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 34,
+"goals": 8
+}
+],
+"titles": [
+"Taça Nacional Sub 19 (2017/2018, 2017/2018)"
+]
+},
+"fzz04": {
+"fpId": 16237,
+"games": 112,
+"yellow": 33,
+"red": 3,
+"seasons": [
+{
+"s": "26",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 6,
+"goals": 2
+},
+{
+"s": "25",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 27,
+"goals": 10
+},
+{
+"s": "24",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 26,
+"goals": 11
+},
+{
+"s": "22",
+"team": "Leões de Porto Salvo",
+"games": 29,
+"goals": 6
+},
+{
+"s": "21",
+"team": "SCU Torreense",
+"games": 24,
+"goals": 9
+}
+],
+"titles": []
+},
+"fzz03": {
+"fpId": 23587,
+"games": 93,
+"yellow": 4,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "CS São João",
+"games": 25,
+"goals": 2
+},
+{
+"s": "24",
+"team": "CS São João",
+"games": 28,
+"goals": 3
+},
+{
+"s": "23",
+"team": "CS São João",
+"games": 26,
+"goals": 5
+},
+{
+"s": "22",
+"team": "CS São João",
+"games": 8,
+"goals": 1
+}
+],
+"titles": []
+},
+"fzz07": {
+"fpId": 44410,
+"games": 6,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 6,
+"goals": 0
+}
+],
+"titles": []
+},
+"fzz11": {
+"fpId": 10389,
+"games": 51,
+"yellow": 5,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "UP Venda Nova",
+"games": 21,
+"goals": 7
+},
+{
+"s": "24",
+"team": "SC Lusitânia",
+"games": 24,
+"goals": 1
+}
+],
+"titles": [
+"Campeonato Nacional Sub 17 (2021/2022, 2021/2022)"
+]
+},
+"fzz06": {
+"fpId": 27893,
+"games": 31,
+"yellow": 11,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 2,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Joaçaba Futsal",
+"games": 10,
+"goals": 5
+},
+{
+"s": "25",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 19,
+"goals": 5
+}
+],
+"titles": []
+},
+"fzz02": {
+"fpId": 1303,
+"games": 143,
+"yellow": 12,
+"red": 3,
+"seasons": [
+{
+"s": "25",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 29,
+"goals": 1
+},
+{
+"s": "24",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 16,
+"goals": 0
+},
+{
+"s": "24",
+"team": "SC Lusitânia",
+"games": 11,
+"goals": 0
+},
+{
+"s": "23",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 29,
+"goals": 4
+},
+{
+"s": "22",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 27,
+"goals": 0
+},
+{
+"s": "21",
+"team": "ABC Nelas",
+"games": 31,
+"goals": 3
+}
+],
+"titles": [
+"2ª Divisão (2017/2018)"
+]
+},
+"fzz13": {
+"fpId": 14184,
+"games": 143,
+"yellow": 19,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 6,
+"goals": 3
+},
+{
+"s": "25",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 30,
+"goals": 6
+},
+{
+"s": "24",
+"team": "CCRD Burinhosa",
+"games": 28,
+"goals": 33
+},
+{
+"s": "23",
+"team": "CCRD Burinhosa",
+"games": 27,
+"goals": 30
+},
+{
+"s": "22",
+"team": "CCRD Burinhosa",
+"games": 18,
+"goals": 11
+},
+{
+"s": "22",
+"team": "FC Monfortense",
+"games": 13,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Leões de Porto Salvo",
+"games": 2,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Leões de Porto Salvo B",
+"games": 19,
+"goals": 10
+}
+],
+"titles": []
+},
+"fzz01": {
+"fpId": 4504,
+"games": 145,
+"yellow": 10,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 30,
+"goals": 0
+},
+{
+"s": "24",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 29,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Leões de Porto Salvo",
+"games": 19,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Leões de Porto Salvo",
+"games": 31,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Leões de Porto Salvo B",
+"games": 3,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Leões de Porto Salvo",
+"games": 27,
+"goals": 0
+}
+],
+"titles": [
+"Campeonato Nacional Sub 19 (2017/2018, 2017/2018, 2017/2018)"
+]
+},
+"fzz15": {
+"fpId": 1580,
+"games": 145,
+"yellow": 40,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 6,
+"goals": 4
+},
+{
+"s": "25",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 27,
+"goals": 16
+},
+{
+"s": "24",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 27,
+"goals": 8
+},
+{
+"s": "23",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 28,
+"goals": 7
+},
+{
+"s": "22",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 25,
+"goals": 8
+},
+{
+"s": "21",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 32,
+"goals": 23
+}
+],
+"titles": []
+},
+"fzz14": {
+"fpId": 2517,
+"games": 126,
+"yellow": 23,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "UP Venda Nova",
+"games": 24,
+"goals": 10
+},
+{
+"s": "24",
+"team": "SC Lusitânia",
+"games": 21,
+"goals": 6
+},
+{
+"s": "23",
+"team": "AMSAC",
+"games": 29,
+"goals": 25
+},
+{
+"s": "22",
+"team": "AMSAC",
+"games": 27,
+"goals": 10
+},
+{
+"s": "21",
+"team": "Leões de Porto Salvo B",
+"games": 19,
+"goals": 16
+}
+],
+"titles": []
+},
+"fzz10": {
+"fpId": 708,
+"games": 91,
+"yellow": 33,
+"red": 3,
+"seasons": [
+{
+"s": "26",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 6,
+"goals": 2
+},
+{
+"s": "23",
+"team": "Leões de Porto Salvo",
+"games": 31,
+"goals": 6
+},
+{
+"s": "22",
+"team": "Leões de Porto Salvo",
+"games": 30,
+"goals": 15
+},
+{
+"s": "21",
+"team": "Portimonense SC",
+"games": 24,
+"goals": 10
+}
+],
+"titles": []
+},
+"scb13": {
+"fpId": 4975,
+"games": 123,
+"yellow": 22,
+"red": 3,
+"seasons": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 6,
+"goals": 4
+},
+{
+"s": "25",
+"team": "Riga FC",
+"games": 7,
+"goals": 4
+},
+{
+"s": "25",
+"team": "Argentina",
+"games": 6,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Riga FC",
+"games": 5,
+"goals": 2
+},
+{
+"s": "24",
+"team": "Argentina",
+"games": 7,
+"goals": 3
+},
+{
+"s": "23",
+"team": "Ribera Navarra FS",
+"games": 24,
+"goals": 9
+},
+{
+"s": "22",
+"team": "Viña Albali Valdepeñas",
+"games": 32,
+"goals": 8
+},
+{
+"s": "22",
+"team": "Argentina",
+"games": 4,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Wanapix AD Sala 10 Zaragoza",
+"games": 26,
+"goals": 10
+},
+{
+"s": "21",
+"team": "Argentina",
+"games": 6,
+"goals": 5
+}
+],
+"titles": []
+},
+"scb18": {
+"fpId": 27639,
+"games": 48,
+"yellow": 14,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "SC Braga",
+"games": 12,
+"goals": 4
+},
+{
+"s": "25",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 15,
+"goals": 6
+},
+{
+"s": "24",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 15,
+"goals": 5
+}
+],
+"titles": []
+},
+"scb14": {
+"fpId": 10670,
+"games": 77,
+"yellow": 15,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 6,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Riga FC",
+"games": 6,
+"goals": 3
+},
+{
+"s": "24",
+"team": "Riga FC",
+"games": 5,
+"goals": 2
+},
+{
+"s": "22",
+"team": "Eléctrico FC",
+"games": 26,
+"goals": 11
+},
+{
+"s": "21",
+"team": "Eléctrico FC",
+"games": 34,
+"goals": 15
+}
+],
+"titles": []
+},
+"scb06": {
+"fpId": 8200,
+"games": 142,
+"yellow": 40,
+"red": 4,
+"seasons": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 5,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Rio Ave FC",
+"games": 25,
+"goals": 9
+},
+{
+"s": "24",
+"team": "Leões de Porto Salvo",
+"games": 32,
+"goals": 7
+},
+{
+"s": "23",
+"team": "Leões de Porto Salvo",
+"games": 27,
+"goals": 5
+},
+{
+"s": "22",
+"team": "Eléctrico FC",
+"games": 21,
+"goals": 3
+},
+{
+"s": "21",
+"team": "Eléctrico FC",
+"games": 32,
+"goals": 9
+}
+],
+"titles": []
+},
+"scb01": {
+"fpId": 51913,
+"games": 10,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 2,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Royal Sporting Anderlecht Futsal",
+"games": 2,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Royal Sporting Anderlecht Futsal",
+"games": 6,
+"goals": 0
+}
+],
+"titles": []
+},
+"scb03": {
+"fpId": 25734,
+"games": 13,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "SC Braga",
+"games": 2,
+"goals": 0
+},
+{
+"s": "24",
+"team": "SC Braga",
+"games": 1,
+"goals": 0
+},
+{
+"s": "23",
+"team": "SC Braga",
+"games": 4,
+"goals": 0
+}
+],
+"titles": [
+"Taça Nacional Sub 17 (2023/2024, 2023/2024)"
+]
+},
+"scb02": {
+"fpId": 51914,
+"games": 4,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 4,
+"goals": 0
+}
+],
+"titles": []
+},
+"scb17": {
+"fpId": 6216,
+"games": 64,
+"yellow": 14,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "SC Braga",
+"games": 30,
+"goals": 10
+},
+{
+"s": "24",
+"team": "AD Fundão",
+"games": 26,
+"goals": 11
+},
+{
+"s": "23",
+"team": "Sporting CP",
+"games": 2,
+"goals": 0
+}
+],
+"titles": [
+"Campeonato Nacional Sub 19 (2022/2023, 2023/2024, 2023/2024)",
+"Liga Placard (2023/2024, 2023/2024)",
+"Taça Nacional Sub 15 (2018/2019)"
+]
+},
+"scb11": {
+"fpId": 17,
+"games": 160,
+"yellow": 34,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 6,
+"goals": 2
+},
+{
+"s": "25",
+"team": "SC Braga",
+"games": 30,
+"goals": 9
+},
+{
+"s": "24",
+"team": "Leões de Porto Salvo",
+"games": 34,
+"goals": 19
+},
+{
+"s": "23",
+"team": "Leões de Porto Salvo",
+"games": 33,
+"goals": 18
+},
+{
+"s": "22",
+"team": "Leões de Porto Salvo",
+"games": 30,
+"goals": 7
+},
+{
+"s": "21",
+"team": "Viseu 2001 B",
+"games": 1,
+"goals": 1
+},
+{
+"s": "21",
+"team": "Viseu 2001",
+"games": 26,
+"goals": 20
+}
+],
+"titles": [
+"Liga Placard (2016/2017, 2016/2017, 2020/2021)",
+"Campeonato Nacional Sub 19 (2015/2016)",
+"Taça da Liga (2020/2021)",
+"UEFA Futsal Champions League (2020/2021)"
+]
+},
+"scb05": {
+"fpId": 6821,
+"games": 156,
+"yellow": 56,
+"red": 3,
+"seasons": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "SC Braga",
+"games": 29,
+"goals": 3
+},
+{
+"s": "24",
+"team": "SC Braga",
+"games": 29,
+"goals": 6
+},
+{
+"s": "23",
+"team": "SC Braga",
+"games": 34,
+"goals": 4
+},
+{
+"s": "22",
+"team": "SC Braga",
+"games": 29,
+"goals": 5
+},
+{
+"s": "21",
+"team": "SC Braga",
+"games": 29,
+"goals": 5
+}
+],
+"titles": [
+"Taça Nacional Sub 19 (2018/2019, 2018/2019)",
+"Taça Nacional Sub 17 (2016/2017)",
+"Taça de Portugal (2023/2024)",
+"Supertaça (2024/2025)"
+]
+},
+"scb07": {
+"fpId": 5007,
+"games": 114,
+"yellow": 22,
+"red": 4,
+"seasons": [
+{
+"s": "25",
+"team": "ADCR Caxinas",
+"games": 23,
+"goals": 6
+},
+{
+"s": "24",
+"team": "ADCR Caxinas",
+"games": 24,
+"goals": 3
+},
+{
+"s": "23",
+"team": "ADCR Caxinas",
+"games": 25,
+"goals": 1
+},
+{
+"s": "22",
+"team": "ADCR Caxinas",
+"games": 16,
+"goals": 0
+},
+{
+"s": "21",
+"team": "ADCR Caxinas",
+"games": 26,
+"goals": 4
+}
+],
+"titles": [
+"Campeonato Nacional Sub 19 (2021/2022, 2021/2022)",
+"2ª Divisão (2021/2022, 2021/2022)",
+"Campeonato Europa Sub 19 (2023/2024)"
+]
+},
+"scb12": {
+"fpId": 26246,
+"games": 65,
+"yellow": 8,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 5,
+"goals": 0
+},
+{
+"s": "25",
+"team": "SC Braga",
+"games": 29,
+"goals": 1
+},
+{
+"s": "24",
+"team": "SC Braga",
+"games": 7,
+"goals": 0
+},
+{
+"s": "23",
+"team": "GCR Nun’Álvares",
+"games": 24,
+"goals": 2
+}
+],
+"titles": []
+},
+"scb09": {
+"fpId": 311,
+"games": 157,
+"yellow": 29,
+"red": 6,
+"seasons": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 6,
+"goals": 5
+},
+{
+"s": "25",
+"team": "SC Braga",
+"games": 24,
+"goals": 4
+},
+{
+"s": "24",
+"team": "SC Braga",
+"games": 33,
+"goals": 22
+},
+{
+"s": "23",
+"team": "SC Braga",
+"games": 37,
+"goals": 21
+},
+{
+"s": "22",
+"team": "SC Braga",
+"games": 26,
+"goals": 12
+},
+{
+"s": "21",
+"team": "SC Braga",
+"games": 31,
+"goals": 16
+}
+],
+"titles": [
+"Taça da Liga (2017/2018, 2018/2019, 2019/2020)",
+"Campeonato da Europa (2017/2018, 2021/2022)",
+"Liga Placard (2018/2019)",
+"Campeonato do Mundo (2021/2022)",
+"Taça de Portugal (2023/2024)",
+"Supertaça (2024/2025)"
+]
+},
+"scb04": {
+"fpId": 556,
+"games": 167,
+"yellow": 28,
+"red": 4,
+"seasons": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "SC Braga",
+"games": 30,
+"goals": 7
+},
+{
+"s": "24",
+"team": "SC Braga",
+"games": 34,
+"goals": 15
+},
+{
+"s": "23",
+"team": "SC Braga",
+"games": 38,
+"goals": 11
+},
+{
+"s": "22",
+"team": "SC Braga",
+"games": 31,
+"goals": 6
+},
+{
+"s": "21",
+"team": "Futsal Cube Azeméis",
+"games": 28,
+"goals": 10
+}
+],
+"titles": [
+"Taça de Portugal (2023/2024, 2023/2024)",
+"Supertaça (2024/2025)"
+]
+},
+"scb10": {
+"fpId": 6223,
+"games": 100,
+"yellow": 13,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 2,
+"goals": 0
+},
+{
+"s": "25",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 14,
+"goals": 3
+},
+{
+"s": "25",
+"team": "ADCR Caxinas",
+"games": 14,
+"goals": 0
+},
+{
+"s": "24",
+"team": "ADCR Caxinas",
+"games": 25,
+"goals": 2
+},
+{
+"s": "23",
+"team": "CRC Quinta dos Lombos",
+"games": 22,
+"goals": 6
+},
+{
+"s": "22",
+"team": "SL Benfica",
+"games": 9,
+"goals": 0
+},
+{
+"s": "22",
+"team": "AD Fundão",
+"games": 13,
+"goals": 1
+},
+{
+"s": "21",
+"team": "SL Benfica",
+"games": 1,
+"goals": 0
+}
+],
+"titles": [
+"Taça Nacional Sub 15 (2017/2018)",
+"Campeonato Europa Sub 19 (2023/2024)"
+]
+},
+"scb16": {
+"fpId": 829,
+"games": 132,
+"yellow": 47,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "SC Braga",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "SC Braga",
+"games": 19,
+"goals": 8
+},
+{
+"s": "24",
+"team": "CRC Quinta dos Lombos",
+"games": 27,
+"goals": 26
+},
+{
+"s": "23",
+"team": "CRC Quinta dos Lombos",
+"games": 22,
+"goals": 20
+},
+{
+"s": "22",
+"team": "CRC Quinta dos Lombos",
+"games": 26,
+"goals": 16
+},
+{
+"s": "21",
+"team": "CRC Quinta dos Lombos",
+"games": 32,
+"goals": 22
+}
+],
+"titles": []
+}
+}
+}

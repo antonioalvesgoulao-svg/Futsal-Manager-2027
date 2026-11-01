@@ -8,7 +8,7 @@
 import { generateAttributes, overall, rng } from './attributes';
 import type { Club, GameState, Player, Position } from './types';
 import REALJSON from '../data/por/staff.json';
-const REAL = REALJSON as unknown as { people: { id: string; club: string; name: string; func: string; role: string; nat: string; birth: string; ability: number; history: StaffSeason[]; coach?: { tactical: number; motivation: number } }[] };
+const REAL = REALJSON as unknown as { people: { id: string; club: string; name: string; func: string; role: string; nat: string; birth: string; ability: number; history: StaffSeason[]; coach?: { tactical: number; motivation: number }; fp?: { games: number; wins: number; notWon: number; titles: string[] } }[] };
 export const realCoachOf = (clubId: string) => REAL.people.find((p) => p.club === clubId && p.role === 'principal');
 
 export type Role = 'adjunto' | 'fisico' | 'gr' | 'fisio' | 'formacao' | 'analista' | 'scout' | 'psicologo' | 'nutricionista' | 'coordenador' | 'outro';

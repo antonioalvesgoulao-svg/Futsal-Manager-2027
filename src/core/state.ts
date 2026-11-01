@@ -3,6 +3,7 @@ import { Club, GameState, League, Player, SAVE_VERSION } from './types';
 import porData from '../data/por/clubs.json';
 import porPlayers from '../data/por/players.json';
 import porOverrides from '../data/por/overrides.json';
+import porFp from '../data/por/fpstats.json';
 import { generateAttributes } from './attributes';
 import porHistory from '../data/por/history.json';
 import { computeMoneyball, SeasonRow } from './moneyball';
@@ -17,6 +18,7 @@ type RawPlayer = Omit<Player, 'attrs' | 'potential'>;
 const BOOST = porOverrides.boost as Record<string, number>;
 const HISTORY = porHistory.players as Record<string, SeasonRow[]>;
 const ATTR_OVERRIDES = porOverrides.attrs as Record<string, Partial<Player['attrs']>>;
+export const FP_STATS = porFp.players as Record<string, { games: number; yellow: number; red: number; seasons: { s: string; team: string; games: number; goals: number }[]; titles: string[] }>;
 
 // Jogadores com atributos gerados (sempre iguais para o mesmo jogador)
 function buildPlayers(): Player[] {
@@ -27,6 +29,12 @@ function buildPlayers(): Player[] {
     const g = mb
       ? generateAttributes(p as Player, mb.level, BOOST[key] ?? 0, { productivity: mb.productivity, availability: mb.availability })
       : generateAttributes(p as Player, club.level, BOOST[key] ?? 0);
+    // agressividade pelos cartões reais (FPF, desde 2021/22): média da Liga 0,21 cartões/jogo (amarelo=1, vermelho=2)
+    const fp = FP_STATS[p.id];
+    if (fp && fp.games >= 15) {
+      const rate = (fp.yellow + 2 * fp.red) / fp.games;
+      g.attrs.agressividade = Math.max(1, Math.min(20, Math.round(g.attrs.agressividade + Math.max(-4, Math.min(4, (rate / 0.21 - 1) * 3)))));
+    }
     return { ...p, attrs: { ...g.attrs, ...(ATTR_OVERRIDES[key] ?? {}) }, potential: g.potential };
   });
 }

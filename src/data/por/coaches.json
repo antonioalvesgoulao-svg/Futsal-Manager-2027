@@ -1,5 +1,5 @@
 {
-  "_info": "Treinadores atuais (nomes: zerozero). Atributos 1-20 e estilo são ESTIMATIVAS até haver historial real. tactical: conhecimento tático; motivation: motivação; discipline: disciplina; youth: desenvolvimento de jovens. style vazio = estilo deduzido do plantel. Sporting, Benfica, Braga, Fundão e Porto Salvo: tactical/motivation calculados do historial real (staff.json).",
+  "_info": "Treinadores atuais. tactical/motivation calculados do historial real (futsalportugal.com: % de vitórias por competição e títulos; zerozero nos 5 clubes com historial completo). discipline/youth: estimativa. style vazio = estilo deduzido do plantel.",
   "coaches": [
     {
       "id": "c_scp",
@@ -55,7 +55,7 @@
       "id": "c_fzz",
       "name": "Cristiano Coelho",
       "clubId": "fzz",
-      "tactical": 11,
+      "tactical": 10,
       "motivation": 11,
       "discipline": 12,
       "youth": 12,
@@ -65,7 +65,7 @@
       "id": "c_ele",
       "name": "Jorge Monteiro",
       "clubId": "ele",
-      "tactical": 12,
+      "tactical": 11,
       "motivation": 11,
       "discipline": 12,
       "youth": 12,
@@ -75,7 +75,7 @@
       "id": "c_rav",
       "name": "Bruno Guimarães",
       "clubId": "rav",
-      "tactical": 12,
+      "tactical": 11,
       "motivation": 11,
       "discipline": 12,
       "youth": 12,
@@ -85,7 +85,7 @@
       "id": "c_uvn",
       "name": "Alcides Lopes",
       "clubId": "uvn",
-      "tactical": 11,
+      "tactical": 12,
       "motivation": 11,
       "discipline": 12,
       "youth": 12,
@@ -93,10 +93,10 @@
     },
     {
       "id": "c_por",
-      "name": "José Santos",
+      "name": "José Manuel Almeida Santos",
       "clubId": "por",
-      "tactical": 12,
-      "motivation": 11,
+      "tactical": 11,
+      "motivation": 12,
       "discipline": 12,
       "youth": 12,
       "style": {}

@@ -1,3 +1,4 @@
+import { FP_STATS } from '../../core/state';
 import { renderAcademy, renderStaff } from './staff';
 import { renderFinance, renderMarket } from './market';
 import { portraitSvg } from '../portrait';
@@ -48,6 +49,8 @@ function playerProfile(p: Player, mine = false, status = '', club?: Club, renew 
       ${p.contract ? `<tr><th>Salário</th><td>${fmtEur(p.contract.wage)}/mês</td><th>Contrato até</th><td>30/06/${p.contract.until}</td></tr>
       <tr><th>Cláusula</th><td>${fmtEur(p.contract.clause)}</td><th>Valor de mercado</th><td>${fmtEur(marketValue(p, club ?? ({ reputation: 60 } as Club)))}</td></tr>` : ''}
     </table>
+    ${FP_STATS[p.id] ? `<h3>Dados oficiais FPF (futsalportugal.com, desde 2021/22)</h3>
+    <p class="small">${FP_STATS[p.id].games} jogos · ${FP_STATS[p.id].yellow} amarelos · ${FP_STATS[p.id].red} vermelhos${FP_STATS[p.id].titles.length ? `<br>Títulos: ${FP_STATS[p.id].titles.join(' · ')}` : ''}</p>` : ''}
     ${(HIST[p.id] ?? []).length ? `<h3>Historial (zerozero)</h3>
     <table class="tbl small" style="max-width:520px;margin-bottom:16px">
       <thead><tr><th>Época</th><th>Equipa</th><th>Jogos</th><th>Golos</th></tr></thead>
