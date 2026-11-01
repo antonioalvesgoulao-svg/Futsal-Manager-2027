@@ -115,6 +115,7 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
             <div class="gbar-host" id="gbar"></div>
             <div class="hl" id="hl" hidden>
               <div class="hl-view" id="hlv"></div>
+              <div class="hl-sb" id="hlsb"></div>
               <div class="hl-cap" id="hlcap"></div>
               <div class="hl-lu" id="hllu"></div>
               <div class="hl-bar">
@@ -291,7 +292,7 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
     const per = snap.period;
     const inPeriod = Math.max(0, Math.min(snap.periodLen, display - snap.periodStart));
     const note = snap.teams.some((t) => t.flying) ? '5x4' : snap.teams.some((t) => t.short) ? 'Inferioridade numérica' : banner;
-    $('#sb').innerHTML = scoreboardHtml({
+    const sbHtml = scoreboardHtml({
       style,
       home: { id: h.id, short: h.shortName, color: colors[0], score: shownScore[0], fouls: snap.teams[0].fouls },
       away: { id: a.id, short: a.shortName, color: colors[1], score: shownScore[1], fouls: snap.teams[1].fouls },
@@ -299,7 +300,13 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
       period: per === 1 ? '1.ª P' : per === 2 ? '2.ª P' : per <= 4 ? 'Prol.' : 'Pen.',
       note,
     });
+    if (sbHtml !== lastSb) {
+      lastSb = sbHtml;
+      $('#sb').innerHTML = sbHtml;
+      $('#hlsb').innerHTML = sbHtml; // o 3D em ecrã inteiro também mostra o marcador
+    }
   }
+  let lastSb = '';
 
   function drawSide() {
     const el = $('#lt');
@@ -365,10 +372,13 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
 
   function keyEventOf(p: Possession) {
     const types = KEY_TYPES[st.moments3d];
-    const ev = p.events.find((e) => types.includes(e.type));
+    // remate à baliza deserta (5x4 perdido): lance perigosíssimo, mostra-se sempre que o 3D vai além dos golos
+    const open = st.moments3d !== 'golos' && p.actions.some((x) => x.type === 'shot' && x.kind === 'open');
+    const ev = p.events.find((e) => types.includes(e.type)) ?? (open ? p.events.find((e) => /^remate|poste|golo/.test(e.type)) : undefined);
     if (!ev) return null;
-    // golos e confrontos são sempre mostrados (o 3D começa no lance que os provoca)
-    const must = p.events.find((e) => e.type === 'golo' || e.type === 'confronto');
+    // golos, confrontos, penáltis, livres de 10 m, expulsões e baliza deserta mostram-se sempre (sem o intervalo mínimo entre lances 3D)
+    const MUST = ['golo', 'confronto', 'penalti', 'livre_10m', 'vermelho'];
+    const must = p.events.find((e) => MUST.includes(e.type) && (types.includes(e.type) || e.type === 'golo' || e.type === 'confronto')) ?? (open ? ev : undefined);
     if (!must && ev.t - last3d < 60) return null;
     return p.events.find((e) => e.type === 'golo') ?? must ?? ev;
   }

@@ -476,7 +476,7 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
   const base = pr.base ?? (modern ? 1.2 : 0.6); // altura da primeira fila
   const isBench = (sd: string, row = 99) => pr.benches === true || (Array.isArray(pr.benches) && pr.benches.includes(sd as 'N')) || (!!pr.lowerBenches && row < splitAt(rowsBySide[sd] ?? 99));
   const splitAt = (rows: number) => (pr.upperTier ? Math.ceil(rows * (pr.tierSplit ?? 0.55)) : 99);
-  const upD = pr.tierGap === 'corredor' ? 0.9 : 1.4, upY = pr.tierGap === 'corredor' ? 0.9 : 2.2; // recuo e subida do 2.º anel
+  const upD = pr.overhang ? -2.6 : pr.tierGap === 'corredor' ? 0.9 : 1.4, upY = pr.overhang ? 3.2 : pr.tierGap === 'corredor' ? 0.9 : 2.2; // recuo e subida do 2.º anel (em consola: avança por cima do 1.º)
   // letras nas cadeiras (ex.: FCB, FERROL): máscara desenhada num canvas pequeno
   let textMask: ((u: number, row: number, rows: number, len: number) => boolean) | null = null;
   if (pr.seatText) {
@@ -514,10 +514,13 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
       const y = base + rI * rise + (up ? upY : 0);
       if (rI === split && pr.tierGap === 'corredor') {
         // corredor entre anéis: só a frente do 2.º anel (parapeito), sem vidros
-        const par = new THREE.Mesh(new THREE.BoxGeometry(sideLen[sd], 0.9, 0.15), concrete);
+        const par = pr.tierAds
+          ? new THREE.Mesh(new THREE.BoxGeometry(sideLen[sd], 0.9, 0.15), [concrete, concrete, concrete, concrete, boardMat(sideLen[sd], (sd.charCodeAt(0) * 5) % PANELS), concrete])
+          : new THREE.Mesh(new THREE.BoxGeometry(sideLen[sd], 0.9, 0.15), concrete);
         const gy = y - 0.2;
         if (sd === 'N' || sd === 'S') par.position.set(0, gy, out * (d - 0.1));
-        else { par.rotation.y = Math.PI / 2; par.position.set(out * (d - 0.1), gy, 0); }
+        else par.position.set(out * (d - 0.1), gy, 0);
+        par.rotation.y = sd === 'N' ? 0 : sd === 'S' ? Math.PI : sd === 'E' ? -Math.PI / 2 : Math.PI / 2; // placas viradas para o campo
         scene.add(par);
       } else if (rI === split) {
         const glass = new THREE.Mesh(new THREE.BoxGeometry(sideLen[sd], 1.7, 0.25), new THREE.MeshStandardMaterial({ color: '#9fc3d9', emissive: '#3b5568', roughness: 0.15, metalness: 0.3 }));
@@ -537,11 +540,14 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
         scene.add(fill);
       }
       const pieces: [number, number][] = gap ? [[-(sideLen[sd] + gap) / 4, (sideLen[sd] - gap) / 2], [(sideLen[sd] + gap) / 4, (sideLen[sd] - gap) / 2]] : [[0, sideLen[sd]]];
+      // 2.º anel em consola: os degraus são uma laje suspensa (por baixo continuam as filas do 1.º anel)
+      const slab = up && pr.overhang;
+      const sh = slab ? 0.6 : y + 0.01, sy = slab ? y - 0.29 : (y + 0.01) / 2;
       for (const [c0, len0] of pieces) {
-        const step = new THREE.Mesh(new THREE.BoxGeometry(len0, y + 0.01, rowD), concrete);
+        const step = new THREE.Mesh(new THREE.BoxGeometry(len0, sh, rowD), concrete);
         step.receiveShadow = true;
-        if (sd === 'N' || sd === 'S') step.position.set(c0, (y + 0.01) / 2, out * (d + rowD / 2));
-        else { step.rotation.y = Math.PI / 2; step.position.set(out * (d + rowD / 2), (y + 0.01) / 2, c0); }
+        if (sd === 'N' || sd === 'S') step.position.set(c0, sy, out * (d + rowD / 2));
+        else { step.rotation.y = Math.PI / 2; step.position.set(out * (d + rowD / 2), sy, c0); }
         scene.add(step);
       }
       const n = Math.min(perRow, left);
@@ -610,10 +616,11 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
           const r0 = dX + (dZ - dX) * (am / (Math.PI / 2)) + rI * rowD + (up ? upD : 0);
           const rm = r0 + rowD / 2;
           const len = rm * (a1 - a0) + 0.05;
-          const g = new THREE.BoxGeometry(len, y + 0.01, rowD);
+          const slab = up && pr.overhang;
+          const g = new THREE.BoxGeometry(len, slab ? 0.6 : y + 0.01, rowD);
           const ox = Math.cos(am) * sx, oz = Math.sin(am) * sz; // direção para fora
           g.rotateY(Math.atan2(-ox, -oz));
-          g.translate(P.x + ox * rm, (y + 0.01) / 2, P.y + oz * rm);
+          g.translate(P.x + ox * rm, slab ? y - 0.29 : (y + 0.01) / 2, P.y + oz * rm);
           stepGeos.push(g);
         }
         // lugares ao longo do arco

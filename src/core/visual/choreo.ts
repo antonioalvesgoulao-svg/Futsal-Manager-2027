@@ -1228,7 +1228,8 @@ export class Choreo {
   private fouled(holder: string, T: number, D: number, f: Action) {
     this.replan(T);
     const hp = this.P(holder, T);
-    const drive = this.A(clamp(this.U(hp) + 3, 6, 33), hp.y * 0.8);
+    // penálti: a falta é sempre dentro da área (o portador entra na área e é derrubado)
+    const drive = f.kind === 'penalty' ? this.A(35.2 + this.r() * 1.6, clamp(hp.y * 0.5, -4, 4)) : this.A(clamp(this.U(hp) + 3, 6, 33), hp.y * 0.8);
     this.key(holder, D, drive);
     this.attKeysAt(D, new Set([holder]));
     this.act(holder, 'fall', D, D + 1.4);
@@ -1236,10 +1237,12 @@ export class Choreo {
     const fouler = f.other;
     if (fouler && this.tr.has(fouler)) {
       this.later.push(() => {
-        const hp2 = this.P(holder, D);
-        this.fix(fouler, D - 0.8, D + 0.7);
-        this.key(fouler, D - 0.5, { x: hp2.x + this.dirA * 1.5, y: hp2.y - 0.7 });
-        this.key(fouler, D, { x: hp2.x + this.dirA * 0.6, y: hp2.y - 0.3 });
+        // quem faz a falta persegue o portador durante ~2 s e só o toca quando está colado a ele (nada de rasteiras à distância)
+        this.fix(fouler, D - 2.4, D + 0.7);
+        for (const [dt, gap] of [[1.8, 2.6], [1.2, 1.6], [0.7, 0.9], [0.3, 0.55], [0, 0.35]] as const) {
+          const hp2 = this.P(holder, D - dt);
+          this.key(fouler, D - dt, { x: hp2.x + this.dirA * gap * 0.8, y: hp2.y - Math.sign(hp2.y || 1) * gap * 0.5 });
+        }
       });
       this.act(fouler, 'tackle', D - 0.4, D + 0.15, { face: holder });
     }
@@ -1737,7 +1740,7 @@ export class Choreo {
     const att = this.att;
     const at = this.A(40 - d, 0);
     const kicker = a.shooter!;
-    const tSet = T + 3.0;
+    const tSet = T + (pen ? 5.0 : 3.0); // no penálti os jogadores ainda vão até ao meio-campo
     const tKick = tSet + 1.0;
     this.phase(T, pen ? 'Penálti' : 'Livre direto de 10 metros');
     this.label(T + 0.3, pen ? `Penálti: ${this.nm(kicker)}` : `Livre de 10 m: ${this.nm(kicker)} na marca`);
@@ -1750,7 +1753,9 @@ export class Choreo {
     let li = 0;
     for (const id of [...this.attOut.filter((x) => x !== kicker), ...this.defOut]) {
       const v = lanes[li++ % lanes.length];
-      m.set(id, this.A(line - (this.sideOf.get(id) === att ? 1.2 : 0) - (li > 4 ? 2 : 0), v + (this.sideOf.get(id) === att ? 0.6 : -0.6)));
+      // penálti: os outros esperam na linha do meio-campo (pedido do António); livre de 10 m: atrás da bola, a 5 m (regra)
+      if (pen) m.set(id, this.A(-0.6 - (li % 2) * 0.8, ((li % 2 ? -1 : 1) * (1.5 + Math.floor(li / 2) * 2.4))));
+      else m.set(id, this.A(line - (this.sideOf.get(id) === att ? 1.2 : 0) - (li > 4 ? 2 : 0), v + (this.sideOf.get(id) === att ? 0.6 : -0.6)));
     }
     // penálti: GR sobre a linha de golo (regra); livre de 10 m: o GR sai 1,5-3 m para reduzir o ângulo (pode ir até 5 m da bola)
     if (this.gkD) m.set(this.gkD, pen ? this.A(39.75, 0) : this.A(40 - (1.5 + this.r() * 1.5), 0));
@@ -1760,8 +1765,8 @@ export class Choreo {
     this.key(kicker, tKick, this.A(40 - d - 0.4, 0.15));
     this.balls.push({ k: 'foot', t0: tKick - 0.05, id: kicker });
     const tE = this.shot(tKick, kicker, a, this.dirA);
-    // depois do remate todos entram para a recarga
-    for (const id of [...this.attOut, ...this.defOut]) if (id !== kicker) this.key(id, tKick + 1.0, { x: m.get(id)!.x + this.dirA * 1.8, y: m.get(id)!.y * 0.7 });
+    // depois do remate todos entram para a recarga (no penálti vêm de longe)
+    for (const id of [...this.attOut, ...this.defOut]) if (id !== kicker) this.key(id, tKick + (pen ? 1.6 : 1.0), { x: m.get(id)!.x + this.dirA * (pen ? 6 : 1.8), y: m.get(id)!.y * 0.7 });
     return tE;
   }
 
@@ -1840,7 +1845,7 @@ export class Choreo {
     const corner = { x: dir * 16, y: (sp.y >= 0 ? 1 : -1) * 9.6 };
     this.phase(T, 'Golo!');
     this.key(scorer, T + 2.2, corner);
-    this.act(scorer, 'celebrate', T + 0.3, T + 3.4);
+    this.act(scorer, 'celebrate', T + 0.3, T + 6.2);
     let i = 0;
     for (const [id, s] of this.sideOf) {
       if (REFS.includes(id)) continue;
@@ -1850,11 +1855,13 @@ export class Choreo {
       if (s === side && !gk) {
         const a = (i++ / 3) * Math.PI;
         this.key(id, T + 2.6, { x: corner.x - dir * (1 + Math.cos(a)), y: corner.y - Math.sign(corner.y) * (0.8 + Math.sin(a) * 1.2) });
-        this.act(id, 'celebrate', T + 2.0, T + 3.4);
-      } else if (!gk) this.key(id, T + 3.2, { x: lerp(p0.x, 0, 0.25), y: p0.y * 0.8 });
-      else this.key(id, T + 3.2, p0, true);
+        // abraço: juntam-se ao marcador e ficam a festejar
+        this.key(id, T + 4.2, { x: corner.x - dir * (0.5 + Math.cos(a) * 0.4), y: corner.y - Math.sign(corner.y) * (0.5 + Math.sin(a) * 0.5) });
+        this.act(id, 'celebrate', T + 2.0, T + 6.2);
+      } else if (!gk) this.key(id, T + 4.5, { x: lerp(p0.x, 0, 0.35), y: p0.y * 0.7 }); // quem sofreu volta, cabisbaixo, para o meio-campo
+      else this.key(id, T + 4.5, p0, true);
     }
-    return T + 3.4;
+    return T + 6.4;
   }
 
   // ---------- consulta ----------

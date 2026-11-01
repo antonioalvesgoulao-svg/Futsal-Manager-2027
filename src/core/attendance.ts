@@ -38,6 +38,8 @@ export interface ArenaProfile {
   // forma das bancadas (vista nas fotos)
   corners?: boolean; // cantos fechados: as bancadas ligam-se em curva (bacia), sem espaços entre elas
   tierGap?: 'camarotes' | 'corredor'; // entre o 1.º e o 2.º anel: camarotes envidraçados ou só um corredor
+  tierAds?: boolean; // placas LED de publicidade na frente do 2.º anel
+  overhang?: boolean; // o 2.º anel avança por cima das últimas filas do 1.º (o 1.º anel "entra" debaixo do 2.º)
   tierSplit?: number; // fração das filas no 1.º anel (0,55 por omissão)
   lowerBenches?: boolean; // 1.º anel em degraus de cimento sem cadeiras, 2.º anel com cadeiras
   aisles?: number; // escadas: um corredor a cada N lugares
@@ -68,7 +70,7 @@ export const ARENAS: Record<string, ArenaProfile> = {
 // Espanha: lotações oficiais da RFEF (futsal.rfef.es, ficha de cada clube, 2/11/2026) e interiores a partir das fotos da RFEF.
 const ES_COURT = { court: '#2f8fd6', surround: '#1d3f8f' }; // piso azul das transmissões da Liga Prime
 export const ARENAS_ESP: Record<string, ArenaProfile> = {
-  bar: { name: 'Palau Blaugrana', capacity: 7585, capacityReal: true, style: 'moderno', sides: ['N', 'S', 'E', 'W'], seat: '#1d4fb8', wall: '#1b2633', roof: 'treliça', windows: false, ceilingDark: true, upperTier: true, cube: true, structure: 'malha', truss: '#28485e', ceiling: '#1d3a4d', floor: ES_COURT, fronts: { bg: '#a50044', fg: '#ffffff', text: ['FCB', 'PALAU BLAUGRANA'] } , corners: true, tierGap: 'corredor', tierSplit: 0.5, rake: 0.48, aisles: 16, seatText: { side: 'N', text: 'F C B', color: '#f2c21b' } },
+  bar: { name: 'Palau Blaugrana', capacity: 7585, capacityReal: true, style: 'moderno', sides: ['N', 'S', 'E', 'W'], seat: '#1d4fb8', wall: '#1b2633', roof: 'treliça', windows: false, ceilingDark: true, upperTier: true, cube: true, structure: 'malha', truss: '#28485e', ceiling: '#1d3a4d', floor: ES_COURT, fronts: { bg: '#a50044', fg: '#ffffff', text: ['FCB', 'PALAU BLAUGRANA'] } , corners: true, tierGap: 'corredor', tierAds: true, overhang: true, tierSplit: 0.5, rake: 0.48, aisles: 16, seatText: { side: 'N', text: 'F C B', color: '#f2c21b' } },
   epz: { name: 'Palacio de Deportes de Murcia', capacity: 7500, capacityReal: true, style: 'moderno', sides: ['N', 'S', 'E', 'W'], seat: '#b9161d', seatMix: ['#b9161d', '#d1d5db'], wall: '#7a4a3a', roof: 'treliça', windows: false, upperTier: true, cube: true, truss: '#c9ced4', ceiling: '#3b3f45', floor: { court: '#2563d6', surround: '#2563d6' }, banners: true , corners: true, rake: 0.5, aisles: 16 },
   pal: { name: "Palau Municipal d'Esports de Son Moix", capacity: 3800, capacityReal: true, style: 'moderno', sides: ['N', 'S', 'E', 'W'], seat: '#1e4f8c', seatMix: ['#1e4f8c', '#f5f5f5'], wall: '#3a4048', roof: 'laje', windows: false, beams: '#6b4a32', ceiling: '#2a2e33', upperTier: true, skylights: true, cube: true, floor: { court: '#3aa6dd', surround: '#1d3f8f' } , corners: true, aisles: 12, rake: 0.46 },
   jca: { name: 'Palacio de los Deportes de Cartagena', capacity: 4817, capacityReal: true, style: 'moderno', sides: ['N', 'S', 'E', 'W'], seat: '#d32f2f', seatMix: ['#d32f2f', '#c9a36b'], wall: '#e9e6e1', roof: 'abóbada', windows: true, structure: 'arcos', truss: '#7a5a3a', beams: '#7a5a3a', ceiling: '#5c5f63', floor: ES_COURT, wallArt: ['#c62828', '#1e2b3a'] , corners: true, aisles: 14 },

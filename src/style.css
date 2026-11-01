@@ -253,3 +253,13 @@ button[disabled] { opacity: .45; cursor: not-allowed; }
 
 .talk-box { width: min(760px, 100%); max-height: 88vh; overflow: auto; }
 .talk-opts { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 4px; }
+.hl-sb { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); z-index: 3; pointer-events: none; }
+.trophy-ov { position: fixed; inset: 0; z-index: 200; background: radial-gradient(circle at 50% 40%, rgba(40,30,10,.92), rgba(0,0,0,.96)); display: grid; place-items: center; overflow: hidden; }
+.trophy-box { position: relative; z-index: 2; text-align: center; color: #fff; max-width: 760px; padding: 16px; animation: tIn .8s ease-out both; }
+.trophy-box h1 { font-size: 54px; margin: 6px 0; color: #ffd76a; text-shadow: 0 4px 20px rgba(255,200,60,.5); letter-spacing: .04em; }
+.trophy-row { display: flex; align-items: center; justify-content: center; gap: 30px; }
+.trophy-row .cup { animation: lift 2.4s ease-in-out infinite alternate; filter: drop-shadow(0 0 22px rgba(255,210,90,.7)); }
+.confetti i { position: absolute; top: -12px; width: 9px; height: 14px; border-radius: 2px; opacity: .9; animation: fall linear infinite; }
+@keyframes fall { to { transform: translateY(105vh) rotate(540deg); } }
+@keyframes lift { from { transform: translateY(14px) rotate(-3deg); } to { transform: translateY(-16px) rotate(3deg); } }
+@keyframes tIn { from { opacity: 0; transform: scale(.85); } to { opacity: 1; transform: none; } }
