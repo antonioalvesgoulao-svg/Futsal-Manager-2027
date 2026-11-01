@@ -48,14 +48,20 @@ https://github.com/antonioalvesgoulao-svg/Futsal-Manager-2027/pull/3
 ### Main
 SHA base conhecido: `15a3bb3ca4f450c09395f35e621220e9dc23697d`. Confirmar o SHA atual; não assumir que continua igual.
 
+## Verificações técnicas feitas na continuação (1/11/2026)
+- `Player.position` é a união `GR | FIX | FIX/ALA | ALA | ALA/PIV | PIV | UNI`; os papéis usados em `movementRoleFit` correspondem aos tipos.
+- `Player.attrs` usa `Attributes`, escala numérica 1–20. Todas as chaves usadas em `movement.ts` existem: `visao`, `decisoes`, `posicionamento`, `trabalhoEquipa`, `antecipacao`, `aceleracao`, `agilidade`, `resistencia`, `agressividade` e `rececao`.
+- O HEAD da PR #3 continua `ac61e633...`, aberta, draft, não merged e mergeable. A consulta de runs associados a este SHA não devolveu execuções.
+- O caminho `.github/workflows/validacao.yml` não existe na `main` consultada. A CI mencionada na PR #1 está na branch/PR de diagnóstico, não se pode assumir que valide a PR #3. Não foi possível confirmar build/diagnóstico executados para a PR #3.
+- `Choreo` recebe atualmente `Possession`, táticas, período, estado inicial e nomes. `Possession` contém IDs de jogadores em campo, mas não contém atributos nem objetos `Player`. A futura integração exige fornecer um mapa de jogadores/atributos à coreografia a partir do ponto de chamada, sem alterar o resultado do motor.
+
 ## Próximos passos
-1. Verificar estado atual da PR #3 e checks do SHA exato `ac61e633...`.
-2. Inspecionar `src/core/types.ts` e validar atributos/posições usados por `movement.ts`.
-3. Corrigir tipos e limites numéricos na mesma branch/PR, se necessário.
-4. Inspecionar a interface entre `choreo.ts` e a renderização.
-5. Integrar primeiro num cenário controlado de ataque organizado 4-0, sem alterar o resultado decidido pelo motor.
-6. Comparar jogadores com atributos altos/baixos sob a mesma intenção; a diferença deve ser visível, moderada e coerente.
-7. Validar build, diagnóstico e observação visual; registar limitações.
+1. Localizar todos os pontos que instanciam `Choreo` e identificar onde existe acesso aos plantéis/objetos `Player`.
+2. Desenhar uma passagem explícita e opcional de dados dos jogadores à coreografia, mantendo compatibilidade com bolas paradas e cenários sem dados.
+3. Integrar primeiro uma única intenção de ataque organizado 4-0 (apoio ou ataque ao espaço), não todas de uma vez.
+4. Aplicar os atributos ao timing, aceleração, agilidade e coordenação, sem alterar as ações/resultados decididos pelo motor.
+5. Criar um cenário comparativo repetível com dois jogadores de atributos diferentes e validar visualmente e por métricas.
+6. Confirmar uma via de build/CI disponível para estas branches; não afirmar validação sem execução.
 
 ## Comandos conhecidos
 Consultar `package.json`:
