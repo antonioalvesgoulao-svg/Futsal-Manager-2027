@@ -89,6 +89,7 @@ export interface GameState {
   training?: TrainingPlan; // plano de treino do meu clube
   trainLog?: TrainLog; // treino acumulado na época
   devFrac?: number; // fração da evolução anual já aplicada
+  devAttrs?: Record<string, Partial<Record<string, number>>>; // atributos no início da época (travões da evolução)
   devStart?: Record<string, number>; // nível no início da época (resumo do fim de época)
 }
 

@@ -120,6 +120,7 @@ function dailyDevelopment(s: GameState, from: string, to: string) {
   const preseason = !Object.keys(s.pstats).length; // antes do 1.º jogo oficial: sem dados da época
   for (const p of s.players) {
     s.devStart[p.id] ??= overall(p.attrs, p.position);
+    const start = ((s.devAttrs ??= {})[p.id] ??= { ...p.attrs });
     const inj = s.injuries?.[p.id];
     let injDays = 0;
     if (inj) {
@@ -133,7 +134,7 @@ function dailyDevelopment(s: GameState, from: string, to: string) {
     // minutos até agora projetados para a época inteira
     const done = (s.devFrac ?? 0) + days / 365;
     const st = s.pstats[p.id] && { ...s.pstats[p.id], minutes: s.pstats[p.id].minutes / Math.max(0.15, done) };
-    developPlayer(p, st, s.season.year, trainingBonus(s, p.id, p.position === 'GR'), shootingFocus(s, p.id, p.clubId), { frac, seed: `${from}-${to}`, final: false, preseason });
+    developPlayer(p, st, s.season.year, trainingBonus(s, p.id, p.position === 'GR'), shootingFocus(s, p.id, p.clubId), { frac, seed: `${from}-${to}`, final: false, preseason, start });
   }
   s.devFrac = (s.devFrac ?? 0) + days / 365;
 }
@@ -207,7 +208,7 @@ function endSeason(s: GameState): DevChange[] {
   // evolução
   const changes: DevChange[] = [];
   for (const p of s.players) {
-    const c = developPlayer(p, s.pstats[p.id], old.year, trainingBonus(s, p.id, p.position === 'GR'), shootingFocus(s, p.id, p.clubId), { frac: Math.max(0, 1 - (s.devFrac ?? 0)), seed: '-fim', final: true });
+    const c = developPlayer(p, s.pstats[p.id], old.year, trainingBonus(s, p.id, p.position === 'GR'), shootingFocus(s, p.id, p.clubId), { frac: Math.max(0, 1 - (s.devFrac ?? 0)), seed: '-fim', final: true, start: s.devAttrs?.[p.id] });
     c.before = s.devStart?.[p.id] ?? c.before;
     if (p.clubId === s.clubId) changes.push(c);
   }
@@ -237,7 +238,7 @@ function endSeason(s: GameState): DevChange[] {
   s.pstats = {};
   seasonEndDiscipline(s);
   s.trainLog = {};
-  s.devFrac = 0; s.devStart = {};
+  s.devFrac = 0; s.devStart = {}; s.devAttrs = {};
   news(s, `Começa a época ${s.season.label}.`);
   return changes;
 }

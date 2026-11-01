@@ -23,7 +23,7 @@ export interface DevChange {
  */
 export function developPlayer(p: Player, st: PlayerSeason | undefined, seasonYear: number, train: Partial<Record<'tecnicos' | 'mentais' | 'fisicos' | 'guardaRedes', number>> = {}, shooting = false,
   // evolução ao longo da época: aplica uma fração da mudança anual (final = fecho da época: envelhece e revê o potencial)
-  o: { frac: number; seed: string; final: boolean; preseason?: boolean } = { frac: 1, seed: '', final: true }): DevChange {
+  o: { frac: number; seed: string; final: boolean; preseason?: boolean; start?: Partial<Record<AttrKey, number>> } = { frac: 1, seed: '', final: true }): DevChange {
   const r = rng(`dev-${p.id}-${seasonYear}${o.seed}`);
   const before = overall(p.attrs, p.position);
   const minutesShare = Math.min(1, (st?.minutes ?? 0) / 60 / 600); // ~600 min = muito utilizado
@@ -58,9 +58,17 @@ export function developPlayer(p: Player, st: PlayerSeason | undefined, seasonYea
     // atributos guardados como inteiros: acumula a parte decimal de forma aleatória
     const v = p.attrs[k] + d;
     const base = Math.floor(v);
-    p.attrs[k] = Math.max(1, Math.min(20, base + (r() < v - base ? 1 : 0)));
+    let nv = Math.max(1, Math.min(20, base + (r() < v - base ? 1 : 0)));
+    // travões (a evolução é diária): por época, cada atributo sobe no máximo +3 (até 21 anos), +2 (22-25) ou +1 (26+)
+    const s0 = o.start?.[k];
+    if (s0 !== undefined) nv = Math.min(nv, s0 + (age <= 21 ? 3 : age <= 25 ? 2 : 1));
+    p.attrs[k] = nv;
   }
-  const after = overall(p.attrs, p.position);
+  // o nível não passa o potencial em mais de 1 durante a época (só uma grande época sobe o potencial, no fim)
+  let after = overall(p.attrs, p.position);
+  if (after > p.potential + 1 && after > before) {
+    for (const k of ALL_ATTRS) if (o.start?.[k] !== undefined && p.attrs[k] > o.start[k]!) { p.attrs[k]--; after = overall(p.attrs, p.position); if (after <= p.potential + 1) break; }
+  }
   if (!o.final) return { id: p.id, name: p.name, before, after };
   p.age++;
   // potencial dinâmico: grandes épocas dos jovens sobem-no; jovens que não jogam perdem margem
