@@ -5,3 +5,4 @@ diagnostics/.run.mjs
 .tmp-movement.test.mjs
 .tmp-*.mjs
 diagnostics/.gk.mjs
+diagnostics/.season.mjs

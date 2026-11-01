@@ -1,0 +1,75 @@
+{
+ "jogos": 132,
+ "golosPorJogo": 6.71,
+ "minutosJogoCorrido": 5292,
+ "segundos": 199,
+ "velocidades": {
+  "parado": 8.9,
+  "andar": 44.1,
+  "trote": 26.9,
+  "corrida": 8.5,
+  "rapida": 5,
+  "sprint": 6.6
+ },
+ "metrosPorMinutoJogador": 151,
+ "saltosPorJogo": 0,
+ "foraDoCampoPorJogo": 19.4,
+ "sobreposicoesSegPorJogo": 268.7,
+ "bolaSoltaSegPorJogo": 0,
+ "bolaAltaSegPorJogo": 0,
+ "possesPorJogo": 109,
+ "duracaoPosse": {
+  "med": 21.65,
+  "p90": 34.02
+ },
+ "passesPorPosse": {
+  "med": 14,
+  "p90": 22
+ },
+ "portadorDefensorMaisProximo": {
+  "med": 1.14,
+  "p10": 0.7,
+  "p90": 4.85
+ },
+ "rematesPorJogo": 64.5,
+ "distanciaRemate": {
+  "med": 8.43,
+  "p10": 4.11,
+  "p90": 12.25
+ },
+ "rematadorDefensorMaisProximo": {
+  "med": 1.48,
+  "p10": 0.89,
+  "p90": 4.2
+ },
+ "rematesComDefensorNoCaminho": 82.8,
+ "grErroNoRemate": {
+  "med": 0.49,
+  "p90": 1.2
+ },
+ "sobreposicoesTipo": {
+  "adversarios": 68.6,
+  "adversarioPortador": 19.6,
+  "colegas": 165.5,
+  "comGR": 14.9
+ },
+ "acoesPorJogo": {
+  "pass": 1436.6,
+  "run": 764.2,
+  "shield": 226.3,
+  "fall": 21.2,
+  "tackle": 35.6,
+  "shoot": 64.5,
+  "spread": 4.4,
+  "throw": 38.8,
+  "screen": 45.9,
+  "feint": 92.6,
+  "splits": 8.4,
+  "catch": 6.1,
+  "block": 12.7,
+  "dive": 9.8,
+  "celebrate": 27.1,
+  "shove": 0.1,
+  "whistle": 0.1
+ }
+}

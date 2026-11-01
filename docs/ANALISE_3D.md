@@ -39,3 +39,19 @@ Correção:
 |---|---|---|
 | Distância do GR ao ponto certo, mediana / p90 | 0,62 / 3,88 m | 0,51 / 1,26 m |
 | GR à frente do rematador | — | 0 |
+
+## Época completa (1/11/2026)
+Os 132 jogos da Liga Placard (2 voltas, todos os confrontos) passaram pela coreografia do 3D, com atributos: 5 292 min de jogo corrido. Ferramenta: `tools/diag/season.ts`; resultados em `diagnostics/epoca.json`. Foram também vistos 12 fotogramas 3D de um Sporting–Braga. Referências reais = estimativas.
+
+| # | Problema | Medido | Referência real (estimativa) | Prioridade |
+|---|---|---|---|---|
+| 1 | Jogadores atravessam-se (corpos sobrepostos, <0,4 m) | 268 s por jogo: colegas 166 s, adversários 69 s, portador 20 s, GR 15 s | ~0 (encostam, não se atravessam) | Muito alta |
+| 2 | Correm demais | 151 m/min por jogador | ~115-120 m/min (estudos de elite) | Alta |
+| 3 | Marcação colada a todos (pares 1x1 em todo o campo) | Defensor mais próximo do portador: 1,1 m (mediana) | Zona: bloco compacto, só o portador apertado | Alta |
+| 4 | Passes que atravessam adversários | 20,5% | ~0 | Alta |
+| 5 | Ações repetitivas: proteções de bola e fintas | 226 proteções e 93 fintas por jogo | Muito menos (estimativa) | Média |
+| 6 | Voo do GR parece um salto para cima | Imagens | — | Média |
+| 7 | Jogadores fora do campo em jogo corrido | ~2 s por jogo | 0 | Baixa |
+| 8 | Árbitro/jogador junto à câmara TV tapa a imagem | Imagens | — | Baixa |
+
+Está bem (manter): GR enquadrado no remate (0,49 m da posição certa); sem saltos de posição; bola nunca solta do portador; distância dos remates (mediana 8,4 m); 83% dos remates com defensor no caminho.
