@@ -300,6 +300,15 @@ export function interviewFor(s: GameState, clubId: string): Question[] {
   return qs;
 }
 
+/** Decisão a partir das notas de cada pergunta (0-10): encaixe 55% + reputação 45%; aceita com ≥55. */
+export function interviewDecision(s: GameState, clubId: string, scores: number[]) {
+  const club = s.clubs.find((x) => x.id === clubId)!; const c = careerOf(s);
+  const fit = scores.reduce((a, b) => a + b, 0) / (scores.length * 10);
+  const rep = Math.max(0, Math.min(1, (c.reputation - club.reputation + 30) / 40));
+  const total = Math.round(fit * 55 + rep * 45);
+  return { ok: total >= 55, score: total, fit: Math.round(fit * 100), note: `Reputação ${Math.round(c.reputation)} (clube ${club.reputation})` };
+}
+
 /** Avalia as respostas e decide (avaliação 0-100 ≥ 55). A reputação do treinador face à do clube pesa 45%. */
 export function interview(s: GameState, clubId: string, answers: number[]): { ok: boolean; score: number; notes: string[] } {
   const qs = interviewFor(s, clubId); const club = s.clubs.find((x) => x.id === clubId)!; const c = careerOf(s);

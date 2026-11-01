@@ -1,3 +1,4 @@
+import { getApiKey, setApiKey } from '../interviewAi';
 // Definições do jogo ao vivo e da transmissão
 import type { GameState, Settings } from '../../core/types';
 import { scoreboardHtml } from '../broadcast';
@@ -10,6 +11,10 @@ export function renderSettings(content: HTMLElement, s: GameState) {
     scoreboardHtml({ style, home: { short: 'SLB', color: '#e30613', score: 3, fouls: 2 }, away: { short: 'SCP', color: '#00804a', score: 3, fouls: 5 }, clock: '09:03', period: '2.ª P' });
   content.innerHTML = `
     <h2>Definições</h2>
+    <div class="card" style="margin-bottom:12px"><b>Entrevistas com IA (opcional)</b>
+      <p class="small muted">Com a tua chave da API Anthropic, as respostas que escreves nas entrevistas de emprego são avaliadas pelo Claude, como uma direção a sério. A chave fica só neste browser (não vai para as gravações nem para o GitHub) e cada entrevista gasta uma pequena quantia da tua conta Anthropic. Sem chave, as respostas escritas são avaliadas por palavras-chave.</p>
+      <input id="apikey" type="password" placeholder="sk-ant-..." value="${getApiKey() ? '••••••••' : ''}" style="width:260px"> <button class="btn" id="apisave">Guardar</button> <button class="btn ghost" id="apiclear">Apagar</button> <span class="small muted" id="apimsg">${getApiKey() ? 'Chave guardada.' : 'Sem chave.'}</span>
+    </div>
     <div class="tac-grid">
       <label>Velocidade do jogo ao vivo
         <select data-k="speed">${opt('speed', 'lento', 'Lenta (cerca de 23 min por jogo)')}${opt('speed', 'medio', 'Média (cerca de 11 min por jogo) · recomendada')}${opt('speed', 'rapido', 'Rápida (cerca de 5 min por jogo)')}</select>
@@ -32,6 +37,8 @@ export function renderSettings(content: HTMLElement, s: GameState) {
     <h3>Marcadores</h3>
     <div class="sb-demo">${demo('liga')}${demo('taca')}${demo('tacaLiga')}${demo('supertaca')}</div>
     <p class="small muted">Grafismo original do jogo, de inspiração portuguesa. As definições ficam guardadas com o jogo.</p>`;
+  content.querySelector('#apisave')!.addEventListener('click', () => { const v = content.querySelector<HTMLInputElement>('#apikey')!.value.trim(); if (v && !v.startsWith('•')) { setApiKey(v); content.querySelector('#apimsg')!.textContent = 'Chave guardada.'; } });
+  content.querySelector('#apiclear')!.addEventListener('click', () => { setApiKey(''); content.querySelector<HTMLInputElement>('#apikey')!.value = ''; content.querySelector('#apimsg')!.textContent = 'Sem chave.'; });
   content.querySelectorAll<HTMLSelectElement>('[data-k]').forEach((el) =>
     el.addEventListener('change', () => {
       (st as unknown as Record<string, string>)[el.dataset.k!] = el.value;

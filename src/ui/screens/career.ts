@@ -1,5 +1,6 @@
+import { evaluateAnswers, getApiKey, type Answer } from '../interviewAi';
 // Ecrã da Carreira: confiança da direção, objetivo, reputação, propostas, centro de emprego (todos os clubes) e entrevista
-import { interviewFor, coachMaxPay, coachWage, boardOf, canApply, careerOf, checkPlan, expectedPos, followMin, interview, objectiveOf, securityOf, takeJob, type StaffPlan } from '../../core/career';
+import { interviewDecision, interviewFor, coachMaxPay, coachWage, boardOf, canApply, careerOf, checkPlan, expectedPos, followMin, interview, objectiveOf, securityOf, takeJob, type StaffPlan } from '../../core/career';
 import { fmtEur } from '../../core/contracts';
 import { ROLE_NAME, staffBudget } from '../../core/staff';
 import { advance } from '../../core/game';
@@ -54,16 +55,25 @@ export function renderCareer(content: HTMLElement, s: GameState, onJob: () => vo
       if (last && (Date.parse(s.date) - Date.parse(last)) / 864e5 < 30) { result = '<p class="muted">Já te candidataste a este clube há menos de um mês.</p>'; draw(); return; }
       interviewing = x.dataset.apply!; result = ''; draw();
     }));
-    content.querySelector<HTMLElement>('#ivgo')?.addEventListener('click', () => {
-      const answers = interviewFor(s, interviewing!).map((_, i) => Number((content.querySelector<HTMLInputElement>(`input[name="q${i}"]:checked`)?.value) ?? -1));
-      if (answers.some((a) => a < 0)) { alert('Responde a todas as perguntas.'); return; }
+    content.querySelectorAll<HTMLTextAreaElement>('[data-tq]').forEach((ta) => (ta.oninput = () => { const r = content.querySelector<HTMLInputElement>(`input[name="q${ta.dataset.tq}"][value="w"]`); if (r) r.checked = true; }));
+    content.querySelector<HTMLElement>('#ivgo')?.addEventListener('click', async () => {
+      const qs = interviewFor(s, interviewing!);
+      const answers: Answer[] = qs.map((_, i) => {
+        const v = content.querySelector<HTMLInputElement>(`input[name="q${i}"]:checked`)?.value;
+        const text = content.querySelector<HTMLTextAreaElement>(`[data-tq="${i}"]`)?.value ?? '';
+        return { option: v === undefined || v === 'w' ? null : Number(v), text: v === 'w' || v === undefined ? text : '' };
+      });
+      if (answers.some((a) => a.option === null && !a.text.trim())) { alert('Responde a todas as perguntas (escolhe uma opção ou escreve).'); return; }
       const k = s.clubs.find((y) => y.id === interviewing)!;
       (c.applied ??= {})[k.id] = s.date;
-      const r = interview(s, k.id, answers);
+      const btn = content.querySelector<HTMLButtonElement>('#ivgo')!; btn.disabled = true; btn.textContent = 'A direção está a avaliar…';
+      const ev = await evaluateAnswers(s, k.id, qs, answers);
+      const r = interviewDecision(s, k.id, ev.scores);
       interviewing = null;
-      if (r.ok) {
-        result = `<div class="card" style="border-color:#2e9e5b"><b>O ${k.name} aceita-te como treinador!</b> (avaliação ${r.score}/100)<br><span class="small">${r.notes.join(' · ')}</span><br><button class="btn primary" data-sign="${k.id}" style="margin-top:8px">Assinar contrato</button></div>`;
-      } else result = `<div class="card" style="border-color:#c0392b"><b>O ${k.name} escolheu outro caminho.</b> (avaliação ${r.score}/100; precisava de 55)<br><span class="small">${r.notes.join(' · ')}</span></div>`;
+      const detail = `<ul class="small" style="margin:6px 0">${qs.map((q, i) => `<li>${q.q} <b>${ev.scores[i]}/10</b>${ev.comments[i] ? ` · <i>${ev.comments[i]}</i>` : ''}</li>`).join('')}</ul><span class="small">${ev.verdict ? ev.verdict + ' · ' : ''}Respostas ${r.fit}% alinhadas com o clube · ${r.note}${ev.byAi ? ' · avaliado por IA' : ''}</span>`;
+      result = r.ok
+        ? `<div class="card" style="border-color:#2e9e5b"><b>O ${k.name} aceita-te como treinador!</b> (avaliação ${r.score}/100)${detail}<br><button class="btn primary" data-sign="${k.id}" style="margin-top:8px">Assinar contrato</button></div>`
+        : `<div class="card" style="border-color:#c0392b"><b>O ${k.name} escolheu outro caminho.</b> (avaliação ${r.score}/100; precisava de 55)${detail}</div>`;
       draw();
       content.querySelector<HTMLElement>('[data-sign]')?.addEventListener('click', () => renderTransition(content, s, k.id, onJob));
     });
@@ -75,7 +85,8 @@ function interviewHtml(s: GameState, clubId: string) {
   const k = s.clubs.find((x) => x.id === clubId)!;
   return `<div class="card" style="margin:6px 0"><b>Entrevista com a direção do ${k.name}</b>
     <p class="small muted">A direção quer perceber se o teu projeto encaixa nos valores do clube.</p>
-    ${interviewFor(s, clubId).map((q, i) => `<div style="margin:8px 0"><div><b>${q.q}</b></div>${q.options.map((o, j) => `<label class="small" style="display:block"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('')}</div>`).join('')}
+    ${interviewFor(s, clubId).map((q, i) => `<div style="margin:8px 0"><div><b>${q.q}</b></div>${q.options.map((o, j) => `<label class="small" style="display:block"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('')}<label class="small" style="display:block"><input type="radio" name="q${i}" value="w"> Escrever a minha resposta:</label><textarea data-tq="${i}" rows="2" style="width:100%;max-width:640px" placeholder="Responde como responderias à direção..."></textarea></div>`).join('')}
+    <p class="small muted">${getApiKey() ? 'As respostas escritas são avaliadas pela IA (Claude), como uma direção a sério.' : 'As respostas escritas são avaliadas por palavras-chave. Para avaliação com IA, põe a tua chave da API Anthropic nas Definições.'}</p>
     <button class="btn primary" id="ivgo">Terminar entrevista</button></div>`;
 }
 
