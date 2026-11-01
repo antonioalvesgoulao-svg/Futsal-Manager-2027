@@ -200,7 +200,7 @@ export function measurePossession(m: Metrics, p: Possession, sc: Scene3D & { dur
     const f0 = live[0];
     const near = (f: Frame) => losers.filter((x) => f.pos[x] && d2(f.pos[x], f.ball) < TH.pressR).length;
     add(m.transPressNow, near(f0));
-    const complete3s = sc.duration + 1e-6 >= TH.transWin;
+    const complete3s = (live.length - 1) * DT + 1e-6 >= TH.transWin;
     if (complete3s) {
       m.transWindowComplete++;
       const f1 = live[Math.min(live.length - 1, step)], f3 = live[Math.min(live.length - 1, Math.round(TH.transWin / DT))];
