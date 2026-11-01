@@ -1,7 +1,9 @@
 // Aspeto de cada jogador para o 3D: tom de pele, cabelo, barba, altura e cor das sapatilhas.
 // Sem fotos (não se usam fotos reais): é gerado de forma fixa a partir do jogador, com
 // probabilidades conforme a nacionalidade e a idade, e é sempre o mesmo em todos os jogos.
+// Jogadores reais: traços descritos a partir das fotos do zerozero (src/data/por/looks.json, recolha de 2/11/2026).
 // Para acertar um jogador concreto basta acrescentá-lo a LOOKS.
+import REAL from '../data/por/looks.json';
 
 export type HairStyle = 'rapado' | 'curto' | 'degrade' | 'encaracolado' | 'afro' | 'comprido' | 'apanhado' | 'crista' | 'careca';
 export type Beard = 'nenhuma' | 'curta' | 'cheia' | 'bigode';
@@ -13,6 +15,19 @@ export interface Look {
   beard: Beard;
   height: number; // metros
   boots: [string, string]; // cor das sapatilhas e dos pormenores (sola, risca)
+  face?: 'redonda' | 'oval' | 'comprida' | 'quadrada';
+  marks?: string[]; // rastas, tranças, pera, franja, entradas, brinco, olhosClaros, sobrancelhas, descolorado, tatuagem
+}
+
+interface RealLook { skin: number; hair?: keyof typeof HAIR; style: HairStyle; beard?: Beard; face?: Look['face']; notes?: string }
+const REAL_LOOKS = REAL as Record<string, RealLook>;
+
+function marksOf(notes = '', style: HairStyle) {
+  const n = notes.toLowerCase(), m: string[] = [];
+  const k: [RegExp, string][] = [[/rastas/, 'rastas'], [/tran[çc]as/, 'trancas'], [/pera/, 'pera'], [/franja/, 'franja'], [/entradas/, 'entradas'], [/brinco/, 'brinco'], [/olhos claros/, 'olhosClaros'], [/sobrancelhas/, 'sobrancelhas'], [/descolorad/, 'descolorado'], [/tatuage/, 'tatuagem'], [/brancos/, 'barbaGrisalha'], [/arruivad/, 'barbaRuiva'], [/para tr[áa]s/, 'paraTras'], [/ondulado/, 'ondulado']];
+  for (const [re, v] of k) if (re.test(n)) m.push(v);
+  if (style === 'comprido' && /rastas|tran/.test(n) && !m.includes('rastas')) m.push('rastas');
+  return m;
 }
 
 const BOOTS: [string, string][] = [
@@ -76,5 +91,12 @@ export function lookOf(p: { id: string; nationality?: string; age?: number; posi
   const height = Math.round((1.77 + (r() + r() + r() - 1.5) * 0.07 + (gk ? 0.06 : 0)) * 100) / 100;
   // sapatilhas: cada jogador tem as suas cores
   const boots = BOOTS[Math.floor(r() * BOOTS.length)];
-  return { skin: SKINS[si], hair, style, beard, height, boots, ...LOOKS[p.id] };
+  const real = REAL_LOOKS[p.id];
+  if (real) {
+    const rl: Partial<Look> = { skin: SKINS[Math.max(0, Math.min(7, real.skin - 1))], style: real.style, face: real.face, marks: marksOf(real.notes, real.style) };
+    if (real.hair) rl.hair = HAIR[real.hair];
+    if (real.beard) rl.beard = real.beard;
+    return { skin: SKINS[si], hair, style, beard, height, boots, face: 'oval', marks: [], ...rl, ...LOOKS[p.id] };
+  }
+  return { skin: SKINS[si], hair, style, beard, height, boots, face: r() < 0.6 ? 'oval' : (['redonda', 'comprida', 'quadrada'] as const)[Math.floor(r() * 3)], marks: [], ...LOOKS[p.id] };
 }

@@ -1,3 +1,5 @@
+import { portraitSvg } from '../portrait';
+import { lookOf } from '../../core/appearance';
 import { crestSvg } from '../crest';
 import { fmtEur, marketValue, offerRenewal, renewalDemand, wageBill } from '../../core/contracts';
 import { FOCUS_LABEL, INT_LABEL, planOf, type Focus, type Intensity } from '../../core/training';
@@ -31,7 +33,10 @@ function playerProfile(p: Player, mine = false, status = '', club?: Club, renew 
   const groups = Object.entries(ATTR_GROUPS).filter(([g]) => (p.position === 'GR' ? true : g !== 'guardaRedes'));
   return `
     <button class="btn ghost" data-back>◂ Plantel</button>
-    <h2 style="margin-top:12px">${p.number ?? '-'} · ${p.name}</h2>${status}
+    <div class="row" style="justify-content:flex-start;gap:16px;align-items:flex-start;margin-top:12px">
+      <div class="portrait-box">${portraitSvg(lookOf(p), club ? [club.colors[0], club.colors[1]] : ['#2a6', '#fff'], 130, p.number)}</div>
+      <div><h2 style="margin:0">${p.number ?? '-'} · ${p.name}</h2>${status}</div>
+    </div>
     ${mine ? `<div class="row" style="justify-content:flex-start;gap:8px;margin-bottom:12px"><label class="small">Número da camisola <input id="pnum" type="number" min="1" max="99" value="${p.number ?? ''}" style="width:64px"></label><span class="muted small" id="pnummsg">Se o número já estiver ocupado, os dois jogadores trocam.</span></div>` : ''}
     ${renew}
     <table class="tbl" style="margin-bottom:16px">
