@@ -3,6 +3,7 @@
 // Estimativas minhas: preço médio do bilhete, prémios por competição, verba inicial para transferências.
 import { attendance } from './attendance';
 import { salaryBudget, wageBill } from './contracts';
+import { staffBill } from './staff';
 import type { Fixture } from './season/types';
 import type { GameState } from './types';
 
@@ -55,6 +56,8 @@ export function monthlyFinance(s: GameState, from: string, to: string) {
       book(s, c.id, 'Verba do clube para salários', Math.min(wages, Math.round(salaryBudget(c) / 12)));
       book(s, c.id, 'Verba do clube para reforços', Math.round(salaryBudget(c) * 0.02 / 12) * 12 / 12, true);
       book(s, c.id, 'Salários do plantel', -wages);
+      const sb = staffBill(s, c.id);
+      if (sb) { book(s, c.id, 'Verba do clube para o staff', sb); book(s, c.id, 'Salários do staff', -sb); }
     }
   }
 }

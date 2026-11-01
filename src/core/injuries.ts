@@ -6,6 +6,13 @@ import { addDays } from './season/season';
 import type { MatchResult } from './engine/types';
 import type { GameState } from './types';
 import { INT_INJ, planOf } from './training';
+import { fitnessInjK, physioK } from './staff';
+/** Fisioterapeuta: encurta (ou alonga) a paragem. */
+function physio(s: GameState, clubId: string, i: Injury): Injury {
+  if (i.days > 100) return i; // cirurgias (cruzado) não mudam muito
+  const days = Math.max(1, Math.round(i.days * physioK(s, clubId)));
+  return { ...i, days, until: addDays(i.until, days - i.days) };
+}
 
 export interface Injury { type: string; until: string; days: number }
 
@@ -64,7 +71,7 @@ export function matchInjuries(s: GameState, m: MatchResult, seed: string): [stri
   for (const [id, st] of Object.entries(m.players)) {
     const p = s.players.find((x) => x.id === id);
     if (!p || injuryOf(s, id)) continue;
-    if (st.injured) out.push([id, draw(rnd, s.date)]); // o motor decide quem se lesiona (taxa MATCH_RATE)
+    if (st.injured) out.push([id, physio(s, p.clubId, draw(rnd, s.date))]); // o motor decide quem se lesiona (taxa MATCH_RATE)
   }
   (s.injuries ??= {});
   for (const [id, i] of out) s.injuries[id] = i;
@@ -84,10 +91,10 @@ export function trainingInjuries(s: GameState, from: string, to: string): { fres
     if (inj[p.id]) continue;
     const plan = planOf(s, p.clubId);
     const f = plan.individual[p.id] ?? plan.focus;
-    const pr = TRAIN_RATE * TRAIN_H_DAY * days * riskOf(p.age, p.attrs.resistencia) * INT_INJ[plan.intensity] * (f === 'recuperacao' ? 0.5 : f === 'fisico' ? 1.15 : 1);
+    const pr = TRAIN_RATE * TRAIN_H_DAY * days * riskOf(p.age, p.attrs.resistencia) * INT_INJ[plan.intensity] * (f === 'recuperacao' ? 0.5 : f === 'fisico' ? 1.15 : 1) * fitnessInjK(s, p.clubId);
     if (rnd() < pr) {
       const start = addDays(from, Math.floor(rnd() * days));
-      const i = draw(rnd, start);
+      const i = physio(s, p.clubId, draw(rnd, start));
       if (i.until > to) { inj[p.id] = i; fresh.push([p.id, i]); }
     }
   }

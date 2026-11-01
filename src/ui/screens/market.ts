@@ -15,7 +15,7 @@ export function renderMarket(content: HTMLElement, s: GameState, refresh: () => 
   const m = marketOf(s);
   const clubName = (id: string) => (id === FREE ? 'Livre' : s.clubs.find((c) => c.id === id)?.shortName ?? id);
   const list = s.players
-    .filter((p) => p.clubId !== my.id)
+    .filter((p) => p.clubId !== my.id && !p.clubId.includes('@'))
     .filter((p) => (filt.who === 'livres' ? p.clubId === FREE : filt.who === 'clubes' ? p.clubId !== FREE : true))
     .filter((p) => (!filt.pos || p.position === filt.pos) && p.age <= filt.maxAge && (!filt.q || p.name.toLowerCase().includes(filt.q.toLowerCase())))
     .sort((a, b) => overall(b.attrs, b.position) - overall(a.attrs, a.position))

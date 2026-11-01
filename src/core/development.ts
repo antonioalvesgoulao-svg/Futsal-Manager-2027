@@ -23,7 +23,7 @@ export interface DevChange {
  */
 export function developPlayer(p: Player, st: PlayerSeason | undefined, seasonYear: number, train: Partial<Record<'tecnicos' | 'mentais' | 'fisicos' | 'guardaRedes', number>> = {}, shooting = false,
   // evolução ao longo da época: aplica uma fração da mudança anual (final = fecho da época: envelhece e revê o potencial)
-  o: { frac: number; seed: string; final: boolean; preseason?: boolean; start?: Partial<Record<AttrKey, number>> } = { frac: 1, seed: '', final: true }): DevChange {
+  o: { frac: number; seed: string; final: boolean; preseason?: boolean; start?: Partial<Record<AttrKey, number>>; boost?: number } = { frac: 1, seed: '', final: true }): DevChange {
   const r = rng(`dev-${p.id}-${seasonYear}${o.seed}`);
   const before = overall(p.attrs, p.position);
   const minutesShare = Math.min(1, (st?.minutes ?? 0) / 60 / 600); // ~600 min = muito utilizado
@@ -54,6 +54,7 @@ export function developPlayer(p: Player, st: PlayerSeason | undefined, seasonYea
     // treino (ver training.ts)
     d += train[PHYSICAL.includes(k) ? 'fisicos' : MENTAL.includes(k) ? 'mentais' : GK.includes(k) ? 'guardaRedes' : 'tecnicos'] ?? 0;
     if (shooting && (k === 'remate' || k === 'finalizacao')) d += 0.4;
+    if (d > 0 && o.boost) d *= o.boost; // qualidade do staff (adjunto / treinador de GR)
     d = d * o.frac + gauss(r) * 0.35 * Math.sqrt(o.frac);
     // atributos guardados como inteiros: acumula a parte decimal de forma aleatória
     const v = p.attrs[k] + d;

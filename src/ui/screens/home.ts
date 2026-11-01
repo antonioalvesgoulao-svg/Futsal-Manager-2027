@@ -1,3 +1,4 @@
+import { renderAcademy, renderStaff } from './staff';
 import { renderFinance, renderMarket } from './market';
 import { portraitSvg } from '../portrait';
 import { lookOf } from '../../core/appearance';
@@ -82,8 +83,8 @@ const SECTIONS: { id: string; label: string; stage: string }[] = [
   { id: 'treino', label: 'Treino', stage: '' },
   { id: 'mercado', label: 'Mercado', stage: '' },
   { id: 'financas', label: 'Finanças', stage: '' },
-  { id: 'staff', label: 'Staff', stage: 'Etapa 11' },
-  { id: 'formacao', label: 'Formação', stage: 'Etapa 11' },
+  { id: 'staff', label: 'Staff', stage: '' },
+  { id: 'formacao', label: 'Formação', stage: '' },
   { id: 'definicoes', label: 'Definições', stage: '' },
 ];
 
@@ -195,6 +196,10 @@ export function homeScreen(root: HTMLElement) {
         <p class="muted small">Clica num jogador para ver os atributos.</p>`;
     } else if (section === 'mercado') {
       renderMarket(content, s!, () => renderContent(), (id) => { section = 'plantel'; playerId = id; renderNav(); renderContent(); });
+    } else if (section === 'staff') {
+      renderStaff(content, s!, () => renderContent());
+    } else if (section === 'formacao') {
+      renderAcademy(content, s!, () => renderContent());
     } else if (section === 'financas') {
       renderFinance(content, s!);
     } else if (section === 'treino') {

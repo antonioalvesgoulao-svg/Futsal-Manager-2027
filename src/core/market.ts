@@ -313,7 +313,7 @@ export function aiMarket(s: GameState, from: string, to: string): string[] {
       // os dois piores podem sair para abrir espaço (rescisão ou venda)
       const room = Math.max(salaryBudget(c) * 1.1 / 12 - wageBill(s, c.id) + (squad.length >= 15 ? worst2.reduce((a, p) => a + (p.contract?.wage ?? 0), 0) : 0), (worst?.contract?.wage ?? 0) + 500);
       const moved = (m.moved ??= {});
-      const t = s.players.filter((p) => p.clubId !== c.id && p.clubId !== s.clubId && !p.loan && moved[p.id] !== s.season.year && fitsNeed(need, p) && overall(p.attrs, p.position) > Math.max(bar, need.min))
+      const t = s.players.filter((p) => p.clubId !== c.id && p.clubId !== s.clubId && !p.clubId.includes('@') && !p.loan && moved[p.id] !== s.season.year && fitsNeed(need, p) && overall(p.attrs, p.position) > Math.max(bar, need.min))
         .map((p) => ({ p, ask: p.clubId === FREE ? 0 : askingPrice(s, p, c.id) }))
         .filter((x) => (x.ask === 0 || x.ask <= fin.balance) && wageDemand(s, x.p, c) <= room)
         .filter((x) => !areRivals(x.p.clubId, c.id) || rng(`riv-${c.id}-${s.season.year}`)() < 0.12) // negócio entre rivais: raro (≈1 em 8 épocas por clube), além de caro

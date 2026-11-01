@@ -7,6 +7,7 @@ import { accumulate, shootingFocus, trainingBonus } from './training';
 import { contractsSeasonEnd, ensureContracts } from './contracts';
 import { matchRevenue, monthlyFinance, book, PRIZES } from './finance';
 import { aiMarket, endLoans, ensurePool } from './market';
+import { academyIntake, academySeasonEnd, ensureStaff, gkTrainingK, juniorsOf, trainingK } from './staff';
 import { applyMorale, moraleEvent } from './morale';
 import { injuryOf, matchInjuries, trainingInjuries } from './injuries';
 import { applyDiscipline, banFor, seasonEndDiscipline } from './discipline';
@@ -60,6 +61,8 @@ export function startFirstSeason(s: GameState) {
   s.pstats = {};
   ensureContracts(s);
   ensurePool(s);
+  ensureStaff(s);
+  for (const c of s.clubs) if (!juniorsOf(s, c.id).length) s.players.push(...academyIntake(s, c, s.season.year));
 }
 
 export function myFixtures(s: GameState) {
@@ -139,8 +142,12 @@ function dailyDevelopment(s: GameState, from: string, to: string) {
     const frac = fit / 365;
     // minutos até agora projetados para a época inteira
     const done = (s.devFrac ?? 0) + days / 365;
-    const st = s.pstats[p.id] && { ...s.pstats[p.id], minutes: s.pstats[p.id].minutes / Math.max(0.15, done) };
-    developPlayer(p, st, s.season.year, trainingBonus(s, p.id, p.position === 'GR'), shootingFocus(s, p.id, p.clubId), { frac, seed: `${from}-${to}`, final: false, preseason, start });
+    const junior = p.clubId.endsWith('@jun');
+    // juniores jogam nos campeonatos de formação: contam como titulares com nota razoável (estimativa)
+    const st = junior ? { games: 20, goals: 0, assists: 0, minutes: 600 * 60 * 0.7, ratingSum: 20 * 6.8 } : s.pstats[p.id] && { ...s.pstats[p.id], minutes: s.pstats[p.id].minutes / Math.max(0.15, done) };
+    const owner = junior ? p.clubId.slice(0, -4) : p.clubId;
+    const boost = owner ? (p.position === 'GR' ? gkTrainingK(s, owner) : trainingK(s, owner)) : 1;
+    developPlayer(p, st, s.season.year, junior ? {} : trainingBonus(s, p.id, p.position === 'GR'), shootingFocus(s, p.id, p.clubId), { frac, seed: `${from}-${to}`, final: false, preseason: preseason && !junior, start, boost });
   }
   s.devFrac = (s.devFrac ?? 0) + days / 365;
 }
@@ -172,6 +179,7 @@ export type AdvanceResult = { kind: 'match'; fixture: Fixture } | { kind: 'day' 
  */
 export function advance(s: GameState): AdvanceResult {
   ensureContracts(s);
+  if (!s.staff?.length) { ensureStaff(s); for (const c of s.clubs) if (!juniorsOf(s, c.id).length) s.players.push(...academyIntake(s, c, s.season.year)); }
   const d = nextDate(s);
   if (!d) {
     const end = keyDates(s.season.year).end;
@@ -239,9 +247,11 @@ function endSeason(s: GameState): DevChange[] {
   s.players = s.players.filter((p) => !retired.includes(p));
   s.tactics.q1 = s.tactics.q1.filter((id) => s.players.some((p) => p.id === id));
   s.tactics.q2 = s.tactics.q2.filter((id) => s.players.some((p) => p.id === id));
-  // formação
+  // formação: juniores chegam, os de 19 anos sobem ou saem; se faltar gente ao plantel, sobe a formação antiga
+  for (const t of academySeasonEnd(s, old.year + 1)) news(s, t);
   for (const c of s.clubs) {
     const squad = s.players.filter((p) => p.clubId === c.id);
+    if (squad.length >= 12) continue;
     const youth = youthIntake(c, squad, old.year + 1);
     s.players.push(...youth);
     if (c.id === s.clubId && youth.length) news(s, `Sobem da formação: ${youth.map((p) => `${p.name} (${p.position})`).join(', ')}.`);
