@@ -41,3 +41,12 @@ Comandos conhecidos: `npm ci`, `npm run build`, `npm run diag -- --seed base --j
 
 ## Dependência de dados para a camada de movimento
 A coreografia `Choreo` recebe atualmente uma `Possession`, táticas, período, estado inicial e nomes. A estrutura `Possession` transporta IDs dos jogadores em campo, não os objetos `Player` nem os atributos. Portanto, `movement.ts` não pode influenciar legitimamente o movimento até que o chamador forneça à coreografia um mapa de jogadores/atributos. Essa passagem deve ser opcional e compatível com os caminhos atuais; não se deve duplicar atributos dentro de cada posse nem alterar o motor de resultados apenas para alimentar a apresentação.
+
+
+## Primeira integração de atributos físicos (PR #5)
+
+O chamador `src/ui/screens/live.ts` tem acesso aos plantéis produzidos por `setupFor`. Passa à coreografia um mapa opcional `playersById`, sem acrescentar objetos Player à estrutura `Possession` nem alterar o motor de resultados.
+
+A `Choreo` converte esses jogadores em `MovementProfile`. Na primeira fase, apenas o ataque organizado em 4-0 aplica os fatores individuais de aceleração e agilidade ao bake das trajetórias dos jogadores de campo da equipa em posse. O guarda-redes, a equipa defensora e os restantes sistemas mantêm os limites anteriores. A velocidade máxima continua global porque o modelo de atributos não contém um atributo de velocidade máxima.
+
+A agilidade influencia o horizonte de antecipação do alvo durante o bake; a aceleração influencia o limite de alteração da velocidade. Estes efeitos são moderados e não representam qualidade de decisão ou sucesso técnico. A próxima validação deve comparar jogadores com atributos físicos contrastantes num cenário 4-0 controlado, confirmando também que o resultado do motor permanece inalterado.
