@@ -41,7 +41,7 @@ Estas instruções aplicam-se a qualquer assistente de programação (ChatGPT/Co
 6. Commitar na branch e abrir/atualizar uma PR para `main`.
 7. Reportar SHA, branch, PR, testes efetivamente executados e limitações.
 8. Aguardar aprovação explícita antes de qualquer merge.
-9. Atualizar `HANDOFF.md` após cada marco técnico. Atualizar também `docs/ARCHITECTURE.md` quando mudar a arquitetura/fronteira entre módulos, `docs/GAMEPLAY_RULES.md` quando mudar regras ou princípios de jogo, `CLAUDE.md` quando mudar instruções específicas do Claude e `README.md` quando mudar a navegação/documentação pública. Atualizar `AGENTS.md` quando mudar o processo comum a agentes ou algum princípio inegociável.
+9. Em cada marco técnico relevante, atualizar obrigatoriamente tanto `HANDOFF.md` como este `AGENTS.md`: o primeiro regista o estado concreto do projeto e o segundo mantém atuais as instruções para os agentes seguintes. Atualizar ainda `docs/ARCHITECTURE.md` quando mudar a arquitetura/fronteira entre módulos, `docs/GAMEPLAY_RULES.md` quando mudar regras ou princípios de jogo, `CLAUDE.md` quando mudar instruções específicas do Claude e `README.md` quando mudar a navegação/documentação pública.
 
 ## Diagnóstico e calibração
 - Métricas geométricas são proxies; não as apresentar como prova de intenção tática.
@@ -56,4 +56,4 @@ Estas instruções aplicam-se a qualquer assistente de programação (ChatGPT/Co
 - `docs/GAMEPLAY_RULES.md` regista os princípios e regras específicas de futsal.
 - `CLAUDE.md` contém contexto histórico detalhado e instruções adicionais.
 - O GitHub é a fonte de verdade. Se houver divergência entre estes documentos e o código/estado atual do GitHub, verificar e atualizar a documentação antes de continuar.
-- A documentação é parte integrante da entrega: uma alteração relevante não está concluída até o `HANDOFF.md` e os documentos técnicos aplicáveis estarem atualizados. Não é necessário alterar todos os ficheiros em cada commit; atualizar apenas os que foram afetados.
+- A documentação é parte integrante da entrega: uma alteração relevante não está concluída até `HANDOFF.md` e `AGENTS.md` estarem atualizados, juntamente com os documentos técnicos aplicáveis. Não é necessário alterar todos os restantes ficheiros em cada commit; atualizar os que foram afetados.
