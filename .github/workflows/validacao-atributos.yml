@@ -5,6 +5,7 @@ on:
     branches:
       - feat/attribute-aware-movement-clean
       - feat/integrate-attribute-movement
+      - claude/awesome-hypatia-l5i9xc
   workflow_dispatch:
 
 permissions:
@@ -26,7 +27,7 @@ jobs:
       - name: TypeScript e build de producao
         run: npm run build
       - name: Testes de movimento (apenas branch de integracao)
-        if: github.ref == 'refs/heads/feat/integrate-attribute-movement'
+        if: github.ref != 'refs/heads/feat/attribute-aware-movement-clean'
         run: npm test
       - name: Diagnostico tatico
         run: npm run diag

@@ -65,3 +65,8 @@ Estas instruções aplicam-se a qualquer assistente de programação (ChatGPT/Co
 - O projeto já contém um conjunto substancial de funcionalidades de manager, competições, mercado, scouting, staff, regras, bolas paradas e apresentação 3D. Não o tratar como um protótipo novo nem limitar a leitura do projeto às PRs de diagnóstico/movimento.
 - Ao retomar trabalho, cruzar o `HANDOFF.md` com o histórico recente de commits e o código atual de `main` e das branches relevantes. O handoff é um mapa de continuidade, não uma lista exaustiva de funcionalidades nem substituto da inspeção do repositório.
 - Preservar funcionalidades existentes ao desenvolver a simulação tática. Validar regressões em áreas adjacentes quando uma alteração as possa afetar.
+
+## Testes e diagnóstico com atributos (1/11/2026)
+- `npm test` corre os testes do movimento e o cenário 4-0 de jogo completo (`tools/tests/scenario40.test.ts`). O cenário confirma que o motor dá o mesmo jogo com e sem dados dos jogadores na coreografia.
+- `npm run diag -- ... --atributos` mede a coreografia como o jogo ao vivo. Sem `--atributos`, os números continuam comparáveis com `diagnostics/atual.json`. Comparar sempre versões corridas com a mesma opção.
+- Os GR e os defensores mudam quando os atacantes mudam: reagem ao lance e as posses encadeiam-se. Não exigir trajetórias iguais fora dos jogadores alterados.

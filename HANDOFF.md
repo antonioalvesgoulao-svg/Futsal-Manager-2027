@@ -195,3 +195,42 @@ Esta secção é a atualização mais recente deste documento e prevalece sobre 
 ### Instrução para a próxima IA
 
 O estado correto não é simplesmente “retomar a tarefa indicada num handoff antigo”. Primeiro compara este snapshot com o GitHub atual e com os commits mais recentes. Usa este documento como mapa, não como substituto da inspeção do código. Continua o trabalho já desenvolvido, sem reconstruir funcionalidades existentes, sem apagar decisões anteriores e sem fazer merge para `main` sem autorização.
+
+---
+
+## Cenário 4-0 com atributos contrastantes — 1 novembro 2026 (Claude)
+
+Branch `claude/awesome-hypatia-l5i9xc`: PR empilhada sobre a PR #5 (`feat/integrate-attribute-movement`). Inclui também, por merge, os commits de documentação da PR #4 (`docs/ai-handoff`), para ter os documentos atuais. Não houve merge para `main`.
+
+### O que foi feito
+- `tools/tests/scenario40.test.ts`: jogo completo Benfica–Sporting (semente `cenario-40`, as duas equipas em 4-0), corrido 3 vezes:
+  - sem dados dos jogadores;
+  - com um jogador de campo do Benfica com aceleração/agilidade 5/5;
+  - com o mesmo jogador a 18/18.
+
+  Faz parte do `npm test`.
+- `tools/diag/run.ts`: nova opção `--atributos`, que passa os jogadores à coreografia como o jogo ao vivo.
+  - Sem a opção, o resumo é igual ao da linha de base `diagnostics/atual.json` (verificado).
+  - O JSON regista `atributos: true|false`.
+- `diagnostics/com-atributos.{json,md}`: diagnóstico de 12 jogos com `--atributos`.
+- O workflow `validacao-atributos.yml` corre também nesta branch, com os testes.
+
+### Resultados
+Executados localmente: `npx tsc`, `npx vite build`, `npm test`, `npm run diag`.
+
+| Verificação | Resultado |
+|---|---|
+| Motor: jogo sem dados / lento / rápido (todas as posses e resultado) | idêntico nos três casos |
+| Jogador lento 5/5: aceleração p95, velocidade média, velocidade p95 | 7,99 m/s²; 2,76 m/s; 7,27 m/s |
+| Jogador rápido 18/18: aceleração p95, velocidade média, velocidade p95 | 10,05 m/s² (+26%); 2,79 m/s; 7,40 m/s |
+| GR entre os casos lento e rápido | até 4 m de diferença: reagem ao lance e as posses encadeiam-se (esperado, não é falha) |
+| Diagnóstico de 12 jogos, com vs sem atributos | diferenças ≤0,1 em todas as métricas |
+
+### Conclusões
+- O efeito físico existe e é moderado nas arrancadas (+26% de aceleração). Quase não muda a velocidade média, porque a velocidade máxima é igual para todos (decisão anterior: não há atributo de velocidade máxima).
+- No diagnóstico global o efeito é quase nulo: só conta no ataque organizado 4-0, e a maioria das equipas da amostra não joga em 4-0 (tática por omissão 3-1).
+- Sem teste visual no browser: nenhum ficheiro do jogo foi alterado neste marco, só testes e diagnóstico.
+
+### Próximo passo
+1. Decisão de gameplay pedida ao António: alargar a física individual a todos os sistemas e à defesa (pressão, recuperação), ou manter só no 4-0 até haver validação visual.
+2. Depois: intenções táticas explícitas (apoio, rotação, ataque ao espaço) com `decisionFactor` e `teamworkFactor`, em passos pequenos.
