@@ -8,8 +8,8 @@ import type { Club, GameState, Player, Position } from './types';
 
 export const FREE = ''; // clubId dos jogadores livres
 
-export interface Offer { id: string; playerId: string; from: string; fee: number; date: string }
-export interface MarketState { offers: Offer[]; regs: Record<string, number>; seq: number; lastAi?: string; pool?: number; freeSince?: Record<string, number>; moved?: Record<string, number> }
+export interface Offer { id: string; playerId: string; from: string; fee: number; date: string; kind?: 'venda' | 'emprestimo'; share?: number; years?: number }
+export interface MarketState { offers: Offer[]; regs: Record<string, number>; seq: number; lastAi?: string; pool?: number; freeSince?: Record<string, number>; moved?: Record<string, number>; listed?: Record<string, 'venda' | 'emprestimo'> }
 
 export const marketOf = (s: GameState): MarketState => (s.market ??= { offers: [], regs: {}, seq: 0 });
 
@@ -69,14 +69,36 @@ export function ensurePool(s: GameState) {
 }
 
 // ---------- negociação ----------
-const rankIn = (s: GameState, p: Player) => s.players.filter((x) => x.clubId === p.clubId).sort((a, b) => overall(b.attrs, b.position) - overall(a.attrs, a.position)).indexOf(p);
+/** Rivais diretos: negoceiam, mas a preços muito mais altos (estimativa ×3). */
+export const RIVALS: [string, string][] = [['scp', 'slb']];
+export const areRivals = (a?: string, b?: string) => !!a && !!b && RIVALS.some(([x, y]) => (x === a && y === b) || (x === b && y === a));
 
-/** Quanto o clube pede pelo jogador (estimativa): titulares e clubes grandes pedem mais; a cláusula resolve sempre. */
-export function askingPrice(s: GameState, p: Player) {
+/** Importância no plantel (0 = mais importante): minutos jogados, nota média, golos e assistências da época; no início da época conta mais o nível. */
+export function importanceRank(s: GameState, p: Player) {
+  const squad = s.players.filter((x) => x.clubId === p.clubId);
+  const maxMin = Math.max(1, ...squad.map((x) => s.pstats[x.id]?.minutes ?? 0));
+  const games = Math.max(0, ...squad.map((x) => s.pstats[x.id]?.games ?? 0));
+  const w = Math.min(1, games / 8); // peso das estatísticas cresce com os jogos da época
+  const score = (x: Player) => {
+    const st = s.pstats[x.id];
+    const lvl = overall(x.attrs, x.position) / 20;
+    if (!st) return lvl * (1 - w);
+    const stat = 0.55 * (st.minutes / maxMin) + 0.25 * Math.max(0, (st.ratingSum / Math.max(1, st.games) - 5.5) / 3) + 0.2 * Math.min(1, (st.goals + st.assists) / Math.max(1, st.games));
+    return lvl * (1 - w) + stat * w;
+  };
+  return [...squad].sort((a, b) => score(b) - score(a)).indexOf(p);
+}
+export type Tier = 'fundamental' | 'importante' | 'rotação' | 'dispensável';
+export const tierOf = (s: GameState, p: Player): Tier => { const r = importanceRank(s, p); return r < 5 ? 'fundamental' : r < 9 ? 'importante' : r < 13 ? 'rotação' : 'dispensável'; };
+const TIER_K: Record<Tier, number> = { fundamental: 2.6, importante: 1.7, 'rotação': 1.1, 'dispensável': 0.8 };
+
+/** Quanto o clube pede pelo jogador (estimativa): conforme a importância no plantel, o contrato e a rivalidade; listado para venda pede menos. A cláusula resolve sempre. */
+export function askingPrice(s: GameState, p: Player, buyer?: string) {
   const club = s.clubs.find((c) => c.id === p.clubId);
   if (!club) return 0;
-  const rank = rankIn(s, p);
-  const k = rank < 5 ? 2.2 : rank < 9 ? 1.6 : 1.15;
+  let k = TIER_K[tierOf(s, p)];
+  if (marketOf(s).listed?.[p.id] === 'venda') k = Math.min(k, 0.9);
+  if (areRivals(club.id, buyer)) k *= 3;
   const yearsLeft = Math.max(0, (p.contract?.until ?? s.season.year) - s.season.year);
   const contractK = yearsLeft <= 0 ? 0.35 : yearsLeft === 1 ? 0.8 : 1;
   return Math.min(p.contract?.clause ?? Infinity, Math.round(marketValue(p, club) * k * contractK / 1000) * 1000);
@@ -107,8 +129,8 @@ export function tryBuy(s: GameState, p: Player, bid: Bid): Reply {
   if (isSenior(p) && seniors(s, my.id) >= 20) return { ok: false, msg: 'Tens 20 seniores inscritos (limite do Art. 52.5). Dispensa ou vende um jogador para abrir vaga.' };
   // clube vendedor
   if (!free) {
-    const ask = askingPrice(s, p);
-    if (bid.fee < (p.contract?.clause ?? Infinity) && bid.fee < ask) return { ok: false, counter: ask, msg: `O ${s.clubs.find((c) => c.id === p.clubId)!.name} recusa. Pede ${fmtEur(ask)} (cláusula: ${fmtEur(p.contract!.clause)}).` };
+    const ask = askingPrice(s, p, my.id);
+    if (bid.fee < (p.contract?.clause ?? Infinity) && bid.fee < ask) return { ok: false, counter: ask, msg: `O ${s.clubs.find((c) => c.id === p.clubId)!.name} recusa${tierOf(s, p) === 'fundamental' ? ` (${p.name} é fundamental para eles)` : ''}${areRivals(p.clubId, my.id) ? ' e não facilita a um rival' : ''}. Pede ${fmtEur(ask)} (cláusula: ${fmtEur(p.contract!.clause)}).` };
     if (bid.fee > fin.balance) return { ok: false, msg: `Não tens dinheiro: saldo ${fmtEur(fin.balance)}.` };
   }
   // jogador
@@ -153,38 +175,39 @@ export function release(s: GameState, p: Player): string {
 
 // ---------- empréstimos ----------
 /** Pedir um jogador emprestado (até ao fim da época). O clube só empresta quem não é dos seus 9 melhores. */
-export function tryLoanIn(s: GameState, p: Player, share: number): Reply {
+export function tryLoanIn(s: GameState, p: Player, share: number, years = 1): Reply {
   const my = s.clubs.find((c) => c.id === s.clubId)!;
   if (p.clubId === FREE || p.clubId === my.id || p.loan) return { ok: false, msg: 'Este jogador não pode ser emprestado.' };
   if (!windowOpen(s.date)) return { ok: false, msg: 'A janela de transferências está fechada.' };
-  if (rankIn(s, p) < 9) return { ok: false, msg: `O ${s.clubs.find((c) => c.id === p.clubId)!.name} não empresta: ${p.name} é importante para eles.` };
-  const minShare = my.reputation >= (s.clubs.find((c) => c.id === p.clubId)!.reputation) ? 0.75 : 0.5;
+  const owner = s.clubs.find((c) => c.id === p.clubId)!;
+  const tier = tierOf(s, p);
+  if (tier === 'fundamental' || tier === 'importante') return { ok: false, msg: `O ${owner.name} não empresta: ${p.name} é ${tier} para eles.` };
+  if (areRivals(owner.id, my.id) && share < 1) return { ok: false, counter: 1, msg: 'Ao rival só emprestam se pagares 100% do salário.' };
+  // mais de uma época: só jovens (≤23) ou dispensáveis, e nunca para lá do contrato
+  const maxYears = Math.max(1, Math.min((p.contract?.until ?? s.season.year + 1) - s.season.year, p.age <= 23 || tier === 'dispensável' ? 3 : 1));
+  if (years > maxYears) return { ok: false, msg: `O ${owner.name} só aceita ${maxYears} época${maxYears > 1 ? 's' : ''} de empréstimo.` };
+  const minShare = my.reputation >= owner.reputation ? 0.75 : 0.5;
   if (share < minShare) return { ok: false, counter: minShare, msg: `Querem que pagues pelo menos ${Math.round(minShare * 100)}% do salário (${fmtEur(Math.round((p.contract?.wage ?? 0) * minShare))}/mês).` };
   if (isSenior(p) && seniors(s, my.id) >= 20) return { ok: false, msg: 'Tens 20 seniores inscritos (Art. 52.5).' };
   const limit = salaryBudget(my) * 1.1 / 12;
   if (wageBill(s, my.id) + (p.contract?.wage ?? 0) * share > limit) return { ok: false, msg: 'A direção não aprova: passa o orçamento salarial +10%.' };
-  const from = p.clubId;
-  p.loan = { from, until: s.season.year + 1, share };
-  p.clubId = my.id;
-  const used = new Set(s.players.filter((x) => x.clubId === my.id && x !== p).map((x) => x.number));
-  if (p.number === null || used.has(p.number)) { let n = 2; while (used.has(n)) n++; p.number = n; }
-  return { ok: true, msg: `${p.name} chega por empréstimo até 30/06/${p.loan.until} (pagas ${Math.round(share * 100)}% do salário).` };
+  doLoan(s, p, my.id, share, years);
+  return { ok: true, msg: `${p.name} chega por empréstimo até 30/06/${p.loan!.until} (pagas ${Math.round(share * 100)}% do salário).` };
 }
 
-/** Emprestar um jogador meu a um clube mais pequeno onde jogue (até ao fim da época; pagam metade do salário). */
-export function loanOut(s: GameState, p: Player): string {
-  if (!windowOpen(s.date)) return 'A janela de transferências está fechada.';
-  if (p.loan) return `${p.name} já está emprestado.`;
-  const my = s.clubs.find((c) => c.id === s.clubId)!;
-  const ov = overall(p.attrs, p.position);
-  const dest = s.clubs.filter((c) => c.id !== my.id && s.players.filter((x) => x.clubId === c.id).length < 20)
-    .map((c) => ({ c, rank: s.players.filter((x) => x.clubId === c.id && overall(x.attrs, x.position) > ov).length }))
-    .filter((x) => x.rank < 10).sort((a, b) => b.c.reputation - a.c.reputation)[0];
-  if (!dest) return `Nenhum clube quer ${p.name} por empréstimo.`;
-  p.loan = { from: my.id, until: s.season.year + 1, share: 0.5 };
-  p.clubId = dest.c.id;
+function doLoan(s: GameState, p: Player, to: string, share: number, years: number) {
+  p.loan = { from: p.clubId, until: s.season.year + years, share };
+  p.clubId = to;
+  delete marketOf(s).listed?.[p.id];
+  const used = new Set(s.players.filter((x) => x.clubId === to && x !== p).map((x) => x.number));
+  if (p.number === null || used.has(p.number)) { let n = 2; while (used.has(n)) n++; p.number = n; }
   s.tactics.q1 = s.tactics.q1.filter((id) => id !== p.id); s.tactics.q2 = s.tactics.q2.filter((id) => id !== p.id);
-  return `${p.name} emprestado ao ${dest.c.name} até 30/06/${p.loan.until} (pagam metade do salário).`;
+}
+
+/** Pôr um jogador meu na lista de transferências ou de empréstimos (os clubes fazem propostas). */
+export function setListed(s: GameState, p: Player, kind: 'venda' | 'emprestimo' | null) {
+  const l = (marketOf(s).listed ??= {});
+  if (kind) l[p.id] = kind; else delete l[p.id];
 }
 
 /** Fim da época: empréstimos acabam e os jogadores voltam ao clube dono. */
@@ -206,6 +229,12 @@ export function acceptOffer(s: GameState, o: Offer): string {
   const p = s.players.find((x) => x.id === o.playerId);
   const buyer = s.clubs.find((c) => c.id === o.from)!;
   if (!p || p.clubId !== s.clubId) return 'A proposta já não é válida.';
+  if (o.kind === 'emprestimo') {
+    doLoan(s, p, buyer.id, o.share ?? 0.5, o.years ?? 1);
+    m.offers = m.offers.filter((x) => x.playerId !== p.id);
+    return `${p.name} emprestado ao ${buyer.name} até 30/06/${p.loan!.until} (pagam ${Math.round((o.share ?? 0.5) * 100)}% do salário).`;
+  }
+  delete m.listed?.[p.id];
   book(s, s.clubId, `Venda de ${p.name} ao ${buyer.name}`, o.fee, true);
   book(s, buyer.id, `Contratação de ${p.name}`, -o.fee, true);
   moveTo(s, p, buyer, wageDemand(s, { ...p, clubId: s.clubId }, buyer), p.age >= 30 ? 2 : 3);
@@ -233,49 +262,65 @@ export function aiMarket(s: GameState, from: string, to: string): string[] {
       const p = pool.find((x) => marketWage(x, c) <= Math.max(room, 600));
       if (p) { moveTo(s, p, c, marketWage(p, c), p.age >= 30 ? 1 : 2); if (r() < 0.5) news.push(`Mercado: ${p.name} (livre) assina pelo ${c.name}.`); }
     }
-    // 2) na janela: compra a outro clube da IA um jogador que seria titular (≈ 1 por clube rico a cada ~3 meses)
+    // 2) na janela: compra um jogador que seria titular a qualquer clube (também a mais prestigiados ou rivais), se o dono aceitar o preço
     if (windowOpen(to) && r() < days / 90 * (c.wealth / 100)) {
       const worstStarter = squad.map((p) => overall(p.attrs, p.position)).sort((a, b) => b - a)[4] ?? 0;
       const fin = financeOf(s, c.id);
       const room = salaryBudget(c) * 1.1 / 12 - wageBill(s, c.id);
       const moved = (m.moved ??= {});
-      const rivals = (a: string, b: string) => [a, b].sort().join() === 'scp,slb'; // venda direta entre Sporting e Benfica: não acontece
-      const t = s.players.filter((p) => p.clubId !== c.id && p.clubId !== s.clubId && p.clubId !== FREE && !p.loan && moved[p.id] !== s.season.year && !rivals(p.clubId, c.id)
-          && overall(p.attrs, p.position) > worstStarter + 0.5 && (s.clubs.find((x) => x.id === p.clubId)!.reputation <= c.reputation + 5))
-        .sort((a, b) => overall(b.attrs, b.position) - overall(a.attrs, a.position))
-        .find((p) => askingPrice(s, p) <= fin.balance && wageDemand(s, p, c) <= room);
+      const t = s.players.filter((p) => p.clubId !== c.id && p.clubId !== s.clubId && p.clubId !== FREE && !p.loan && moved[p.id] !== s.season.year
+          && overall(p.attrs, p.position) > worstStarter + 0.5)
+        .map((p) => ({ p, ask: askingPrice(s, p, c.id) }))
+        .filter((x) => x.ask <= fin.balance && wageDemand(s, x.p, c) <= room && (wageDemand(s, x.p, c) > 0))
+        .filter((x) => !areRivals(x.p.clubId, c.id) || r() < 0.15) // negócio entre rivais: raro, além de caro
+        // o jogador só aceita descer de clube se o salário compensar (já incluído no pedido); prefere o melhor por euro
+        .sort((a, b) => overall(b.p.attrs, b.p.position) / Math.sqrt(b.ask + 5000) - overall(a.p.attrs, a.p.position) / Math.sqrt(a.ask + 5000))[0];
       if (t) {
-        const seller = s.clubs.find((x) => x.id === t.clubId)!;
-        const fee = askingPrice(s, t);
-        book(s, c.id, `Contratação de ${t.name}`, -fee, true); book(s, seller.id, `Venda de ${t.name}`, fee, true);
-        moveTo(s, t, c, wageDemand(s, t, c), t.age >= 30 ? 2 : 3);
-        moved[t.id] = s.season.year;
-        news.push(`Mercado: ${t.name} troca o ${seller.name} pelo ${c.name} (${fmtEur(fee)}).`);
+        const seller = s.clubs.find((x) => x.id === t.p.clubId)!;
+        book(s, c.id, `Contratação de ${t.p.name}`, -t.ask, true); book(s, seller.id, `Venda de ${t.p.name}`, t.ask, true);
+        moveTo(s, t.p, c, wageDemand(s, t.p, c), t.p.age >= 30 ? 2 : 3);
+        moved[t.p.id] = s.season.year;
+        news.push(`Mercado: ${t.p.name} troca o ${seller.name} pelo ${c.name} (${fmtEur(t.ask)})${areRivals(seller.id, c.id) ? ', transferência entre rivais' : ''}.`);
       }
     }
-    // 3) no início da época os grandes emprestam jovens que não jogariam (≤21 anos, fora dos 12 melhores) a clubes mais pequenos
+    // 3) no início da época os grandes emprestam jovens que não jogariam (≤21 anos, fora dos 12 mais importantes) a clubes mais pequenos, 1 ou 2 épocas
     if (from.slice(5) >= '07-01' && from.slice(5) <= '08-31' && c.wealth >= 70) {
-      const ranked = [...squad].sort((a, b) => overall(b.attrs, b.position) - overall(a.attrs, a.position));
-      for (const y of ranked.slice(12).filter((p) => p.age <= 21 && !p.loan && p.position !== 'GR')) {
+      for (const y of squad.filter((p) => p.age <= 21 && !p.loan && p.position !== 'GR' && importanceRank(s, p) >= 12)) {
         const dest = s.clubs.filter((x) => x.id !== c.id && x.id !== s.clubId && x.reputation < c.reputation && s.players.filter((p) => p.clubId === x.id).length < 19)
           .sort(() => r() - 0.5)[0];
         if (!dest || r() > 0.5) continue;
-        y.loan = { from: c.id, until: s.season.year + 1, share: 0.5 };
-        y.clubId = dest.id;
-        news.push(`Mercado: ${y.name} emprestado pelo ${c.name} ao ${dest.name} até ao fim da época.`);
+        doLoan(s, y, dest.id, 0.5, r() < 0.3 ? 2 : 1);
+        news.push(`Mercado: ${y.name} emprestado pelo ${c.name} ao ${dest.name} até 30/06/${y.loan!.until}.`);
       }
     }
-    // 4) na janela: proposta por um jogador meu que seria titular lá (≈ 1 por clube a cada ~2 meses)
-    if (windowOpen(to) && r() < days / 25 * (c.wealth / 100)) {
-      const worstStarter = squad.map((p) => overall(p.attrs, p.position)).sort((a, b) => b - a)[4] ?? 0;
+    // 4) propostas pelos meus jogadores
+    if (windowOpen(to)) {
       const fin = financeOf(s, c.id);
-      const target = s.players.filter((p) => p.clubId === s.clubId && overall(p.attrs, p.position) > worstStarter + 0.5)
-        .sort(() => r() - 0.5).find((p) => askingPrice(s, p) * 0.8 <= fin.balance + salaryBudget(c) * 0.15);
-      if (target && !m.offers.some((o) => o.playerId === target.id && o.from === c.id)) {
-        const my = s.clubs.find((x) => x.id === s.clubId)!;
-        const fee = Math.min(target.contract?.clause ?? Infinity, Math.round(marketValue(target, my) * (0.9 + r() * 0.8) / 1000) * 1000);
-        m.offers.push({ id: `of${++m.seq}`, playerId: target.id, from: c.id, fee, date: to });
-        news.push(`Proposta do ${c.name} por ${target.name}: ${fmtEur(fee)}. Responde no Mercado.`);
+      const my = s.clubs.find((x) => x.id === s.clubId)!;
+      const ranked = squad.map((p) => overall(p.attrs, p.position)).sort((a, b) => b - a);
+      const placeIn = (p: Player) => ranked.filter((v) => v > overall(p.attrs, p.position)).length; // lugar que teria no plantel deles
+      const listed = m.listed ?? {};
+      for (const p of s.players.filter((x) => x.clubId === s.clubId && !x.loan)) {
+        if (m.offers.some((o) => o.playerId === p.id && o.from === c.id) || m.offers.filter((o) => o.playerId === p.id).length >= 3) continue;
+        const kind = listed[p.id];
+        if (kind === 'emprestimo') {
+          // empréstimo: clubes onde ele jogaria (top 10) propõem; mais épocas para jovens
+          if (placeIn(p) < 10 && r() < days / 70) {
+            const share = [0.5, 0.75, 1][Math.floor(r() * 3)];
+            const years = Math.min(p.age <= 23 && r() < 0.4 ? 2 : 1, Math.max(1, (p.contract?.until ?? s.season.year + 1) - s.season.year));
+            m.offers.push({ id: `of${++m.seq}`, playerId: p.id, from: c.id, fee: 0, date: to, kind: 'emprestimo', share, years });
+            news.push(`Proposta de empréstimo do ${c.name} por ${p.name} (${years} época${years > 1 ? 's' : ''}, pagam ${share * 100}% do salário). Responde no Mercado.`);
+          }
+          continue;
+        }
+        // venda: se estiver na lista, mais clubes interessados e preços normais; se não, só quem o quer como titular e paga para convencer
+        const want = kind === 'venda' ? placeIn(p) < 12 && r() < days / 70 : placeIn(p) < 5 && r() < days / 25 * (c.wealth / 100) * 0.4 * (areRivals(c.id, s.clubId) ? 0.3 : 1);
+        if (!want) continue;
+        const base = kind === 'venda' ? marketValue(p, my) * (0.7 + r() * 0.5) : askingPrice(s, p, c.id) * (0.55 + r() * 0.55);
+        const fee = Math.min(p.contract?.clause ?? Infinity, Math.round(base / 1000) * 1000);
+        if (fee > fin.balance + salaryBudget(c) * 0.15) continue;
+        m.offers.push({ id: `of${++m.seq}`, playerId: p.id, from: c.id, fee, date: to, kind: 'venda' });
+        news.push(`Proposta do ${c.name} por ${p.name}: ${fmtEur(fee)}${areRivals(c.id, my.id) ? ' (do rival!)' : ''}. Responde no Mercado.`);
       }
     }
   }
