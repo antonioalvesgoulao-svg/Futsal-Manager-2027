@@ -449,7 +449,7 @@ export class Choreo {
     this.sortBalls();
     for (const id of this.attOut) if (id !== this.gkA) this.tr.get(id)?.liven(this.r, 0, D - 0.3, 1.8, (t) => this.isFixed(id, t) || this.holderAt(t) === id);
     for (const id of this.tr.keys()) if (this.sideOf.get(id) === att) {
-      const profile = this.sys === '4-0' && id !== this.gkA ? this.movement.get(id) : undefined;
+      const profile = id !== this.gkA ? this.movement.get(id) : undefined; // física individual em todos os sistemas
       this.tr.get(id)!.limit(VMAX);
       this.tr.get(id)!.bake(-this.lead, D + 1, VMAX, AMAX, profile?.accelerationFactor, profile?.agilityFactor);
     }
@@ -467,7 +467,7 @@ export class Choreo {
     const gks = new Set([this.p.onCourt[0][0], this.p.onCourt[1][0]]);
     for (const [id, tr] of this.tr) {
       const goalkeeper = gks.has(id);
-      const profile = !goalkeeper && this.sys === '4-0' && this.sideOf.get(id) === att ? this.movement.get(id) : undefined;
+      const profile = !goalkeeper ? this.movement.get(id) : undefined; // atacantes e defensores (pressão, recuperação)
       tr.bake(-this.lead, T + 0.5, goalkeeper ? VMAX * 1.1 : VMAX,
         goalkeeper ? AMAX * 2.2 : this.sideOf.get(id) === att ? AMAX : AMAX * 1.3,
         profile?.accelerationFactor, profile?.agilityFactor);

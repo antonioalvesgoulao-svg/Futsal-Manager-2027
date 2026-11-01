@@ -293,14 +293,26 @@ export class Highlight3D {
       a.speed = lerp(a.speed, Math.min(9, Math.hypot(vx, vz)), 0.25);
       const act = f.acts[id];
       // para onde olha: a ação em curso, a direção da corrida ou a bola
+      // no futsal quem não sprinta continua virado para o jogo: recua de costas ou desloca-se de lado (sem rodar o corpo)
       let want = Math.atan2(f.ball.x - p.x, f.ball.y - p.y);
       if (act && (act.kind !== 'run' && act.kind !== 'celebrate' && act.kind !== 'fall')) want = act.ang;
-      else if (a.speed > 3.2) want = Math.atan2(vx, vz);
+      else if (a.speed > 3.2) {
+        const run = Math.atan2(vx, vz);
+        let off = run - want;
+        while (off > Math.PI) off -= Math.PI * 2;
+        while (off < -Math.PI) off += Math.PI * 2;
+        // a sprintar (ou a correr para a frente) olha para onde corre; abaixo de ~5,5 m/s em recuo/lado mantém o olhar no jogo
+        if (a.speed > 5.5 || Math.abs(off) < 1.75 || act?.kind === 'run' || f.holder === id) want = run;
+      }
       let d = want - a.heading;
       while (d > Math.PI) d -= Math.PI * 2;
       while (d < -Math.PI) d += Math.PI * 2;
       a.heading += d * Math.min(1, dt * 9);
       a.g.rotation.set(0, a.heading, 0);
+      // velocidade no referencial do corpo (frente/lado), para as pernas fazerem o passo certo
+      const sh = Math.sin(a.heading), ch = Math.cos(a.heading);
+      a.fwd = lerp(a.fwd ?? 0, Math.max(-9, Math.min(9, vx * sh + vz * ch)), 0.25);
+      a.side = lerp(a.side ?? 0, Math.max(-9, Math.min(9, vx * ch - vz * sh)), 0.25);
       let act2 = act;
       if ((act?.kind === 'dive' || act?.kind === 'splits') && act.to) {
         // lado do mergulho, visto pelo guarda-redes

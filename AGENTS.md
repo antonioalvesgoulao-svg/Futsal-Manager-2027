@@ -70,3 +70,5 @@ Estas instruções aplicam-se a qualquer assistente de programação (ChatGPT/Co
 - `npm test` corre os testes do movimento e o cenário 4-0 de jogo completo (`tools/tests/scenario40.test.ts`). O cenário confirma que o motor dá o mesmo jogo com e sem dados dos jogadores na coreografia.
 - `npm run diag -- ... --atributos` mede a coreografia como o jogo ao vivo. Sem `--atributos`, os números continuam comparáveis com `diagnostics/atual.json`. Comparar sempre versões corridas com a mesma opção.
 - Os GR e os defensores mudam quando os atacantes mudam: reagem ao lance e as posses encadeiam-se. Não exigir trajetórias iguais fora dos jogadores alterados.
+- Locomoção 3D (`pose` em player3d): a passada depende de `Actor.fwd`/`Actor.side` (frente, costas, lado). Não voltar a rodar o corpo para a direção da corrida a baixa velocidade. Os defensores olham para o jogo.
+- Física individual (aceleração/agilidade) aplica-se a todos os jogadores de campo em todos os sistemas. Os GR mantêm os seus limites.

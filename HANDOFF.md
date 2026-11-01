@@ -88,7 +88,7 @@ https://github.com/antonioalvesgoulao-svg/Futsal-Manager-2027/pull/5
 - HEAD conhecido: `fea819c794d85102642bc1bb3f68cb110afc9d15`.
 - A PR #5 depende da PR #3; manter essa relação explícita e não alterar a base sem rever a dependência.
 - `live.ts` constrói um mapa de jogadores a partir de `hs.squad` e `as.squad` e passa-o opcionalmente a `Choreo`.
-- `Choreo` calcula os perfis físicos por jogador. Apenas os jogadores de campo da equipa em posse, quando o sistema ofensivo é 4-0, recebem aceleração e agilidade individuais no bake das trajetórias.
+- `Choreo` calcula os perfis físicos por jogador. (Atualizado: agora todos os jogadores de campo, em todos os sistemas, recebem) aceleração e agilidade individuais no bake das trajetórias.
 - O guarda-redes é excluído. Outros sistemas e jogadores defensores mantêm os parâmetros anteriores.
 - Foi removido `speedFactor` do perfil: o modelo não tem atributo explícito de velocidade máxima e não devemos inferi-lo a partir de aceleração.
 - Decisão, trabalho de equipa, resistência e adequação posicional ainda não alteram a coreografia. Precisam de intenções táticas explícitas e de uma integração própria.
@@ -234,3 +234,33 @@ Executados localmente: `npx tsc`, `npx vite build`, `npm test`, `npm run diag`.
 ### Próximo passo
 1. Decisão de gameplay pedida ao António: alargar a física individual a todos os sistemas e à defesa (pressão, recuperação), ou manter só no 4-0 até haver validação visual.
 2. Depois: intenções táticas explícitas (apoio, rotação, ataque ao espaço) com `decisionFactor` e `teamworkFactor`, em passos pequenos.
+
+## Locomoção 3D e física individual em todos os sistemas — 1 novembro 2026 (Claude)
+
+Pedido do António: 3D mais fluido, mais realista e mais próximo do futsal. Opção A aprovada implicitamente ("faz o que for necessário").
+
+### Alterações
+- `src/ui/three/highlight3d.ts`:
+  - Abaixo de ~5,5 m/s, quem se desloca de costas ou de lado em relação à bola continua virado para o jogo. Antes rodava o corpo a partir de 3,2 m/s.
+  - Calcula a velocidade no referencial do corpo (`Actor.fwd` e `Actor.side`).
+- `src/ui/three/player3d.ts` (`pose`): passada conforme a direção.
+  - Para a frente: igual a antes.
+  - De costas: passada invertida, mais curta e mais baixa.
+  - De lado: abre e fecha as pernas (passo lateral), joelhos fletidos e braços abertos.
+
+  Antes as pernas faziam sempre a passada de frente e o corpo deslizava.
+- `src/core/visual/choreo.ts`: aceleração e agilidade individuais em todos os sistemas (3-1, 4-0, 2-2, 5x4) e também nos defensores. Os GR ficam excluídos.
+
+### Medições
+| Medição | Resultado |
+|---|---|
+| Lance SCP–SLB (Playwright + swiftshader): tempo dos defensores a 1-5,5 m/s | 41% de frente, 39% de costas, 20% de lado |
+| Esse mesmo tempo antes da alteração | 59% era deslizar com a passada de frente |
+| Diagnóstico de 12 jogos com `--atributos` vs `atual` | diferenças ≤0,2 |
+| Motor e `npm test` | resultados iguais; testes OK |
+| `tsc` e `vite build` | OK |
+
+### Próximo passo (gameplay tático, por ordem)
+1. Passes que atravessam adversários (20,5%) e linhas de passe obstruídas (39%): a coreografia deve escolher recetores com linha livre e mover o apoio para abrir a linha.
+2. Jogadores sempre em movimento (só 4% do tempo parados; 28 sprints/min sem bola): no futsal real há mais pausas posicionais e arranques no momento certo. Introduzir paragens com timing pela `decisionFactor`.
+3. Intenções táticas (apoio, rotação, ataque ao espaço) com `decisionFactor` e `teamworkFactor`.

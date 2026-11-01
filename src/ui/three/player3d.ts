@@ -20,6 +20,8 @@ export interface Actor {
   heading: number;
   phase: number; // ciclo da corrida
   speed: number;
+  fwd?: number; // velocidade para a frente no referencial do corpo (negativa = de costas)
+  side?: number; // velocidade lateral (positiva = para a direita do jogador, lado +x)
   init: boolean;
 }
 
@@ -355,22 +357,34 @@ export function pose(a: Actor, act: Act | undefined, gk: boolean, near: boolean,
   a.g.position.y = 0;
   for (const o of [...thigh, ...shin, ...arm, ...fore]) o.rotation.set(0, 0, 0);
   const sp = a.speed;
-  // cadência de corrida: ~2,8 passadas por segundo a sprintar, mais lenta a andar
-  a.phase += dt * (5 + sp * 1.25);
-  const amp = Math.min(1, sp / 7);
+  // direção do passo em relação ao corpo: frente, costas ou lado (passo lateral do futsal)
+  const fr = sp > 0.3 ? Math.max(-1, Math.min(1, (a.fwd ?? sp) / sp)) : 1;
+  const sr = sp > 0.3 ? Math.max(-1, Math.min(1, (a.side ?? 0) / sp)) : 0;
+  const lateral = Math.min(1, Math.abs(sr) * 1.3) * (1 - Math.max(0, fr)); // 1 = passo lateral puro
+  const back = Math.max(0, -fr); // 1 = recuo de costas
+  // cadência de corrida: ~2,8 passadas por segundo a sprintar, mais lenta a andar; passos laterais mais curtos e rápidos
+  a.phase += dt * (5 + sp * 1.25 + lateral * 3);
+  const amp = Math.min(1, sp / 7) * (1 - 0.45 * lateral) * (1 - 0.35 * back);
   const walk = Math.min(1, sp / 2);
+  const stride = fr >= 0 ? 1 - lateral : -back; // sinal: de costas a passada inverte-se
   for (let i = 0; i < 2; i++) {
     const ph = a.phase + i * Math.PI;
-    const hip = -(0.08 + 0.5 * amp) * Math.sin(ph) * walk - 0.06 * amp; // passada (ligeiramente à frente)
-    thigh[i].rotation.x = hip;
+    const hip = -(0.08 + 0.5 * amp) * Math.sin(ph) * walk * stride - 0.06 * amp * Math.max(0, fr); // passada
+    thigh[i].rotation.x = hip - 0.25 * lateral * walk; // a deslizar de lado as coxas ficam fletidas
+    // abre e fecha as pernas no passo lateral (a perna do lado para onde vai abre primeiro)
+    const outSign = i ? 1 : -1;
+    const lead = Math.sign(sr) === outSign ? 1 : 0.45;
+    thigh[i].rotation.z = outSign * (0.06 + 0.3 * lateral * walk * lead * (0.5 + 0.5 * Math.sin(ph)));
     // o joelho dobra sobretudo quando a perna vem de trás para a frente
-    shin[i].rotation.x = (0.08 + (0.25 + 1.35 * amp) * Math.pow(Math.max(0, Math.cos(ph)), 1.3)) * walk + 0.06;
-    arm[i].rotation.x = -hip * 0.85;
-    arm[i].rotation.z = i ? 0.1 : -0.1; // braços ligeiramente afastados do corpo
+    shin[i].rotation.x = (0.08 + (0.25 + 1.35 * amp) * Math.pow(Math.max(0, Math.cos(ph)), 1.3)) * walk + 0.06 + 0.45 * lateral * walk;
+    arm[i].rotation.x = -hip * 0.85 * (1 - lateral);
+    arm[i].rotation.z = outSign * (0.1 + 0.35 * lateral * walk); // braços abertos a defender de lado
     fore[i].rotation.x = -(0.35 + 0.95 * amp);
   }
-  body.rotation.x = amp * 0.18;
-  body.position.y = HIP - 0.015 - Math.abs(Math.cos(a.phase)) * 0.035 * amp;
+  // inclinação: para a frente a correr, quase direito de costas; mais baixo (posição defensiva) de lado e de costas
+  body.rotation.x = amp * 0.18 * Math.max(0, fr) + 0.12 * (lateral + back) * walk;
+  body.rotation.z = -0.06 * sr * walk;
+  body.position.y = HIP - 0.015 - Math.abs(Math.cos(a.phase)) * 0.035 * amp - 0.07 * Math.max(lateral, back) * walk;
   if (gk && near && !act && sp < 2.5) {
     // guarda-redes em posição de espera: pernas fletidas, peso à frente, braços abertos
     thigh[0].rotation.set(-0.6, 0, -0.12);
