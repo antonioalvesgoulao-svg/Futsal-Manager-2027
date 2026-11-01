@@ -1,3 +1,6 @@
+import { knowledge, observe, seenAttr, seenLevel } from '../../core/scouting';
+import { ATTR_GROUPS } from '../../core/attributes';
+const lvlTxt = (l: { lo: number; hi: number }) => (l.hi - l.lo < 0.8 ? ((l.lo + l.hi) / 2).toFixed(1) : `${l.lo.toFixed(0)}-${l.hi.toFixed(0)}`);
 import { ROLE_LABEL, type Role } from '../../core/squadlife';
 import { headCoachWage } from '../../core/career';
 import { staffBill, staffBudget } from '../../core/staff';
@@ -11,7 +14,7 @@ import type { GameState, Player } from '../../core/types';
 import { crestSvg } from '../crest';
 
 const POS = ['GR', 'FIX', 'FIX/ALA', 'UNI', 'ALA', 'ALA/PIV', 'PIV'];
-let filt = { pos: '', who: 'todos', maxAge: 40, q: '', nat: '', list: '' as '' | ListStatus };
+let filt = { pos: '', who: 'todos', maxAge: 40, q: '', nat: '', list: '' as '' | ListStatus, attr: '', min: 12 };
 
 export function renderMarket(content: HTMLElement, s: GameState, refresh: () => void, openPlayer: (id: string) => void) {
   const my = s.clubs.find((c) => c.id === s.clubId)!;
@@ -23,7 +26,9 @@ export function renderMarket(content: HTMLElement, s: GameState, refresh: () => 
     .filter((p) => (filt.who === 'livres' ? p.clubId === FREE : filt.who === 'clubes' ? p.clubId !== FREE : true))
     .filter((p) => (!filt.pos || p.position === filt.pos) && p.age <= filt.maxAge && (!filt.q || p.name.toLowerCase().includes(filt.q.toLowerCase())))
     .filter((p) => (!filt.nat || p.nationality === filt.nat) && (!filt.list || listStatus(s, p) === filt.list))
-    .sort((a, b) => overall(b.attrs, b.position) - overall(a.attrs, a.position))
+    // filtro por atributo: só entram jogadores já observados (conhecimento ≥ 70) e pelo valor mínimo que o olheiro garante
+    .filter((p) => !filt.attr || (knowledge(s, p) >= 70 && Number(seenAttr(s, p, filt.attr, (p.attrs as unknown as Record<string, number>)[filt.attr]).split('-')[0]) >= filt.min))
+    .sort((a, b) => seenLevel(s, b).hi + seenLevel(s, b).lo - seenLevel(s, a).hi - seenLevel(s, a).lo)
     .slice(0, 60);
   const valueOf = (p: Player) => marketValue(p, s.clubs.find((c) => c.id === p.clubId) ?? my);
   const mySquad = s.players.filter((p) => p.clubId === my.id);
@@ -46,12 +51,14 @@ export function renderMarket(content: HTMLElement, s: GameState, refresh: () => 
       <label>Idade máx.<input id="fage" type="number" min="17" max="40" value="${filt.maxAge}" style="width:60px"></label>
       <label>Nome<input id="fq" value="${filt.q}" style="width:130px"></label>
       <label>Nacionalidade<select id="fnat"><option value="">Todas</option>${[...new Set(s.players.map((p) => p.nationality))].sort().map((n) => `<option ${filt.nat === n ? 'selected' : ''}>${n}</option>`).join('')}</select></label>
+      <label>Atributo<select id="fattr"><option value="">—</option>${Object.values(ATTR_GROUPS).flatMap((g) => Object.entries(g.attrs)).map(([k, l]) => `<option value="${k}" ${filt.attr === k ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
+      <label>mín.<input id="fmin" type="number" min="1" max="20" value="${filt.min}" style="width:50px"></label>
       <label>No mercado<select id="flist"><option value="">Todos</option>${(Object.keys(LIST_LABEL) as ListStatus[]).map((k) => `<option value="${k}" ${filt.list === k ? 'selected' : ''}>${LIST_LABEL[k]}</option>`).join('')}</select></label>
     </div>
     <div id="offmsg"></div>
     <div id="neg"></div>
-    <table class="tbl small"><thead><tr><th>Nome</th><th>Clube</th><th>Pos.</th><th>Idade</th><th>Nac.</th><th>Atual</th><th>Pot.</th><th>Valor</th><th>Salário</th><th>Contrato</th><th>Mercado</th><th></th></tr></thead><tbody>
-    ${list.map((p) => `<tr><td class="click" data-open="${p.id}"><b>${p.name}</b></td><td>${p.clubId === FREE ? '<span class="muted">Livre</span>' : `${crestSvg(p.clubId, 16)} ${clubName(p.clubId)}${p.loan ? ' <span class="muted small">(emp.)</span>' : ''}`}</td><td>${p.position}</td><td>${p.age}</td><td>${p.nationality}</td><td>${starsHtml(overall(p.attrs, p.position))}</td><td>${starsHtml(seenPotential(s, p, my.id))}</td><td>${fmtEur(valueOf(p))}</td><td>${p.contract ? fmtEur(p.contract.wage) : '-'}</td><td>${p.contract ? 'jun ' + p.contract.until : '-'}</td><td class="small">${LIST_LABEL[listStatus(s, p)]}</td><td><button class="btn" data-neg="${p.id}">Negociar</button></td></tr>`).join('')}
+    <table class="tbl small"><thead><tr><th>Nome</th><th>Clube</th><th>Pos.</th><th>Idade</th><th>Nac.</th><th>Nível</th><th>Pot.</th><th>Valor</th><th>Salário</th><th>Contrato</th><th>Mercado</th><th></th></tr></thead><tbody>
+    ${list.map((p) => `<tr><td class="click" data-open="${p.id}"><b>${p.name}</b></td><td>${p.clubId === FREE ? '<span class="muted">Livre</span>' : `${crestSvg(p.clubId, 16)} ${clubName(p.clubId)}${p.loan ? ' <span class="muted small">(emp.)</span>' : ''}`}</td><td>${p.position}</td><td>${p.age}</td><td>${p.nationality}</td><td>${lvlTxt(seenLevel(s, p))}</td><td>${lvlTxt(seenLevel(s, p, true))}</td><td>${fmtEur(valueOf(p))}</td><td>${p.contract ? fmtEur(p.contract.wage) : '-'}</td><td>${p.contract ? 'jun ' + p.contract.until : '-'}</td><td class="small">${LIST_LABEL[listStatus(s, p)]}</td><td><button class="btn" data-neg="${p.id}">Negociar</button> ${knowledge(s, p) < 100 ? `<button class="btn ghost" data-obs="${p.id}" title="Pôr o olheiro a observar">Observar</button>` : ''}</td></tr>`).join('')}
     </tbody></table>
     <h3>O meu plantel</h3>
     <table class="tbl small"><tbody>${mySquad.map((p) => `<tr><td>${p.name}</td><td>${p.position}</td><td>${p.age}</td><td>${p.contract ? fmtEur(p.contract.wage) + '/mês' : ''}</td><td>${isSenior(p) ? 'Sénior' : 'Sub-19'}</td><td>${p.loan ? `<span class="muted">Emprestado pelo ${clubName(p.loan.from)} até jun ${p.loan.until}</span>` : `<span class="small muted">${tierOf(s, p)}</span> <select data-list="${p.id}">${[['', 'Não listado'], ['venda', 'Lista de transferências'], ['emprestimo', 'Lista de empréstimos']].map(([v, l]) => `<option value="${v}" ${(m.listed?.[p.id] ?? '') === v ? 'selected' : ''}>${l}</option>`).join('')}</select> <button class="btn ghost" data-rel="${p.id}">Rescindir (${fmtEur(releaseCost(s, p))})</button>`}</td></tr>`).join('')}</tbody></table>
@@ -64,6 +71,9 @@ export function renderMarket(content: HTMLElement, s: GameState, refresh: () => 
   $<HTMLSelectElement>('#fpos').onchange = (e) => { filt.pos = (e.target as HTMLSelectElement).value; re(); };
   $<HTMLInputElement>('#fage').onchange = (e) => { filt.maxAge = Number((e.target as HTMLInputElement).value) || 40; re(); };
   $<HTMLInputElement>('#fq').onchange = (e) => { filt.q = (e.target as HTMLInputElement).value; re(); };
+  $<HTMLSelectElement>('#fattr').onchange = (e) => { filt.attr = (e.target as HTMLSelectElement).value; re(); };
+  $<HTMLInputElement>('#fmin').onchange = (e) => { filt.min = Number((e.target as HTMLInputElement).value) || 1; re(); };
+  content.querySelectorAll<HTMLElement>('[data-obs]').forEach((el) => (el.onclick = () => { $('#offmsg').innerHTML = `<div class="flash-msg">${observe(s, el.dataset.obs!)}</div>`; }));
   $<HTMLSelectElement>('#fnat').onchange = (e) => { filt.nat = (e.target as HTMLSelectElement).value; re(); };
   $<HTMLSelectElement>('#flist').onchange = (e) => { filt.list = (e.target as HTMLSelectElement).value as ListStatus | ''; re(); };
   content.querySelectorAll<HTMLElement>('[data-ask]').forEach((el) => (el.onclick = () => {

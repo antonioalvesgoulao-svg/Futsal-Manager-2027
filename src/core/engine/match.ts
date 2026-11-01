@@ -623,6 +623,20 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     return { att, def };
   }
 
+  // Marcação vs sistema do ataque: individual anula o pivô do 3-1 mas sofre com a mobilidade do 4-0 e no 5x4;
+  // zona fecha o 4-0 e o 5x4 mas deixa o pivô receber; mista é intermédia e exige concentração e trabalho de equipa.
+  const MARK_VS: Record<string, Record<string, number>> = {
+    individual: { '3-1': 0.35, '4-0': -0.4, '2-2': 0, '1-2-1': 0.1, flying: -0.45 },
+    zona: { '3-1': -0.3, '4-0': 0.3, '2-2': 0.1, '1-2-1': 0, flying: 0.3 },
+    misto: { '3-1': 0.15, '4-0': -0.05, '2-2': 0.2, '1-2-1': 0.1, flying: 0 },
+  };
+  function markingVs(def: TeamState, att: TeamState) {
+    const mk = def.setup.tactics.marking;
+    let v = MARK_VS[mk]?.[att.flying ? 'flying' : att.setup.tactics.system] ?? 0;
+    if (mk === 'misto') v += (avg(outfield(def), ['concentracao', 'trabalhoEquipa']) - 11) * 0.06;
+    return v;
+  }
+
   // Uma posse de bola
   function possession(s: Side, counter = false): { next: Side; counter: boolean } {
     const att = teams[s];
@@ -635,6 +649,8 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     if (att.flying) diff += 1.5;
     // táticas e treinadores
     diff += tacticalMods(att).att - tacticalMods(def).def;
+    // marcação contra o sistema do adversário (estimativa, pedido do António): cada marcação tem bónus e penalizações
+    diff -= markingVs(def, att);
     diff += (att.setup.coachTactical - 10) * 0.07 - (def.setup.coachTactical - 10) * 0.07;
     const tempo = TEMPO[att.setup.tactics.tempo];
     const dPress = def.setup.tactics.pressure;

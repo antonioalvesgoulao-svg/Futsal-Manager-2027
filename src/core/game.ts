@@ -1,3 +1,4 @@
+import { scoutDays } from './scouting';
 import { afterMatchSatisfaction } from './squadlife';
 import { managerAttrs, mgrK } from './manager';
 import { overall } from './attributes';
@@ -19,11 +20,16 @@ import { developPlayer, injuryDecline, retires, youthIntake, DevChange } from '.
 import { simulateMatch } from './engine/match';
 import type { MatchResult, TeamSetup } from './engine/types';
 import { addDays, afterMatchday, createSeason, keyDates, leagueTable, runnerUp } from './season/season';
-import { COMP_NAMES, Fixture } from './season/types';
+import { COMP_NAMES, Fixture, type TacSum } from './season/types';
 import type { GameState } from './types';
 
 /** Clubes da Primera División (vazio em gravações antigas, sem Espanha). */
 export const espIds = (s: GameState) => s.leagues.find((l) => l.id === 'esp1')?.clubIds ?? [];
+
+/** Tipo de golo pelo texto do relato (relatórios do analista). */
+export function goalKind(t: string) {
+  return /contra-ataque/.test(t) ? 'contra' : /canto/.test(t) ? 'canto' : /10 metros/.test(t) ? 'livre10' : /penálti/.test(t) ? 'penalti' : /deserta/.test(t) ? 'baliza deserta' : /recarga/.test(t) ? 'recarga' : 'jogada';
+}
 
 export function clubName(s: GameState, id: string) {
   return s.clubs.find((c) => c.id === id)?.name ?? id;
@@ -92,7 +98,8 @@ export function matchOptions(s: GameState, f: Fixture) {
 }
 
 function playFixture(s: GameState, f: Fixture, given?: MatchResult): MatchResult {
-  const m = given ?? simulateMatch(setupFor(s, f.home, f.comp), setupFor(s, f.away, f.comp), matchOptions(s, f));
+  const hsu = setupFor(s, f.home, f.comp), asu = setupFor(s, f.away, f.comp);
+  const m = given ?? simulateMatch(hsu, asu, matchOptions(s, f));
   matchRevenue(s, f);
   // direções: pontos conseguidos vs esperados (força do adversário, casa/fora)
   boardAfterMatch(s, s.clubs.find((c) => c.id === f.home)!, s.clubs.find((c) => c.id === f.away)!, m.score, m.penalties, importanceOf(s, f), !!f.neutral);
@@ -100,7 +107,9 @@ function playFixture(s: GameState, f: Fixture, given?: MatchResult): MatchResult
     score: m.score,
     pens: m.penalties,
     et: m.extraTime,
-    scorers: m.events.filter((e) => e.type === 'golo').map((e) => ({ id: e.playerId!, side: e.side!, min: Math.floor(e.t / 60) + 1 })),
+    scorers: m.events.filter((e) => e.type === 'golo').map((e) => ({ id: e.playerId!, side: e.side!, min: Math.floor(e.t / 60) + 1, kind: goalKind(e.text) })),
+    // táticas usadas (para os relatórios do analista)
+    tac: [hsu, asu].map((x) => ({ sys: x.tactics.system, press: x.tactics.pressure, mark: x.tactics.marking, fly: x.tactics.flyingKeeper })) as [TacSum, TacSum],
   };
   // castigos (Regulamento Disciplinar da FPF): notícias só do teu clube
   const mine = (id: string) => s.players.find((p) => p.id === id)?.clubId === s.clubId;
@@ -175,6 +184,7 @@ function trainingNews(s: GameState, from: string, to: string) {
   const days = Math.round((Date.parse(to) - Date.parse(from)) / 864e5);
   if (days > 0 && days <= 60) accumulate(s, days);
   if (days > 0) dailyFitness(s, days);
+  if (days > 0) for (const t of scoutDays(s, days)) news(s, t);
   dailyDevelopment(s, from, to);
   monthlyFinance(s, from, to);
   for (const t of aiMarket(s, from, to)) news(s, t);

@@ -34,13 +34,16 @@ export interface Scorer {
   id: string;
   side: 0 | 1;
   min: number;
+  kind?: string; // jogada, contra, canto, livre10, penalti, baliza deserta, recarga
 }
+export interface TacSum { sys: string; press: string; mark: string; fly: string }
 
 export interface FixtureResult {
   score: [number, number];
   pens?: [number, number];
   et?: boolean;
   scorers: Scorer[];
+  tac?: [TacSum, TacSum];
 }
 
 export interface Fixture {

@@ -100,6 +100,7 @@ export interface GameState {
   news: NewsItem[];
   honours: Honour[];
   settings?: Settings;
+  scout?: import('./scouting').ScoutState; // observação de jogadores (olheiro)
   happy?: Record<string, number>; // satisfação dos jogadores 0-100 (65 = normal)
   fitness?: Record<string, number>; // condição física (fadiga) 0-100; omisso = 100
   discipline?: Discipline; // amarelos acumulados e castigos

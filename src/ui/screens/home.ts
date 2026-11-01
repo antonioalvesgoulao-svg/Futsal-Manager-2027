@@ -1,3 +1,5 @@
+import { renderScouting } from './scouting';
+import { knowledge, observe, seenAttr, seenLevel } from '../../core/scouting';
 import { ROLE_LABEL, roleOf, satHtml, satLabel, satOf, type Role } from '../../core/squadlife';
 import { marketOf } from '../../core/market';
 import { renderCareer, unemployedScreen } from './career';
@@ -36,7 +38,7 @@ function attrClass(v: number) {
   return v >= 16 ? 'a4' : v >= 13 ? 'a3' : v >= 10 ? 'a2' : 'a1';
 }
 
-function playerProfile(p: Player, mine = false, status = '', club?: Club, renew = '') {
+function playerProfile(p: Player, mine = false, status = '', club?: Club, renew = '', seen?: (k: string, v: number) => string, lvl?: string, pot?: string) {
   const groups = Object.entries(ATTR_GROUPS).filter(([g]) => (p.position === 'GR' ? true : g !== 'guardaRedes'));
   return `
     <button class="btn ghost" data-back>◂ Plantel</button>
@@ -48,8 +50,8 @@ function playerProfile(p: Player, mine = false, status = '', club?: Club, renew 
     ${renew}
     <table class="tbl" style="margin-bottom:16px">
       <tr><th>Posição</th><td>${POS_NAME[p.position]}</td><th>Idade</th><td>${p.age}</td></tr>
-      <tr><th>Nacionalidade</th><td>${p.nationality}</td><th>Valor atual</th><td>${starsHtml(overall(p.attrs, p.position))}</td></tr>
-      <tr><th></th><td></td><th>Potencial</th><td>${starsHtml(p.potential)}</td></tr>
+      <tr><th>Nacionalidade</th><td>${p.nationality}</td><th>Valor atual</th><td>${lvl ?? starsHtml(overall(p.attrs, p.position))}</td></tr>
+      <tr><th></th><td></td><th>Potencial</th><td>${pot ?? starsHtml(p.potential)}</td></tr>
       ${p.contract ? `<tr><th>Salário</th><td>${fmtEur(p.contract.wage)}/mês</td><th>Contrato até</th><td>30/06/${p.contract.until}</td></tr>
       <tr><th>Cláusula</th><td>${fmtEur(p.contract.clause)}</td><th>Valor de mercado</th><td>${fmtEur(marketValue(p, club ?? ({ reputation: 60 } as Club)))}</td></tr>` : ''}
     </table>
@@ -66,7 +68,8 @@ function playerProfile(p: Player, mine = false, status = '', club?: Club, renew 
           ([, g]) => `<div class="attr-col"><h3>${g.label}</h3>${Object.entries(g.attrs)
             .map(([k, label]) => {
               const v = p.attrs[k as keyof Player['attrs']];
-              return `<div class="attr"><span>${label}</span><b class="${attrClass(v)}">${v}</b></div>`;
+              const sv = seen ? seen(k, v) : String(v);
+              return `<div class="attr"><span>${label}</span><b class="${sv === String(v) ? attrClass(v) : 'a-unk'}">${sv}</b></div>`;
             })
             .join('')}</div>`
         )
@@ -89,6 +92,7 @@ const SECTIONS: { id: string; label: string; stage: string }[] = [
   { id: 'competicoes', label: 'Competições', stage: '' },
   { id: 'treino', label: 'Treino', stage: '' },
   { id: 'mercado', label: 'Mercado', stage: '' },
+  { id: 'observacao', label: 'Observação', stage: '' },
   { id: 'financas', label: 'Finanças', stage: '' },
   { id: 'staff', label: 'Staff', stage: '' },
   { id: 'formacao', label: 'Formação', stage: '' },
@@ -177,7 +181,11 @@ export function homeScreen(root: HTMLElement) {
           <label class="small">Anos <select id="ryears">${[1, 2, 3, 4].map((y) => `<option ${y === Math.min(2, dem.maxYears) ? 'selected' : ''}>${y}</option>`).join('')}</select></label>
           <button class="btn" id="rgo">Propor</button><span class="small muted" id="rmsg">${dem.refuses ? 'Está muito insatisfeito e não quer renovar.' : `Pede cerca de ${fmtEur(dem.wage)}/mês, até ${dem.maxYears} ano(s). Satisfação: ${satLabel(satOf(s!, pl.id)).toLowerCase()}.`}</span>
         </div></div>` : '';
-      content.innerHTML = playerProfile(pl, pl.clubId === club.id, `<p>Moral: ${moraleHtml(moraleOf(s!, pl.id))}${pl.clubId === club.id ? ` · Papel: ${ROLE_LABEL[roleOf(s!, pl)]} · Satisfação: ${satHtml(satOf(s!, pl.id))}` : ''}</p>` + status, pclub, renew);
+      const other = pl.clubId !== club.id && knowledge(s!, pl) < 100;
+      const rngTxt = (l: { lo: number; hi: number }) => (l.hi - l.lo < 0.8 ? ((l.lo + l.hi) / 2).toFixed(1) : `${l.lo.toFixed(0)}-${l.hi.toFixed(0)} <span class="small muted">(observação ${Math.round(knowledge(s!, pl))}%)</span>`);
+      const scoutBtn = pl.clubId !== club.id ? `<button class="btn" id="obsme">Observar</button> <span class="small muted" id="obsmsg"></span>` : '';
+      content.innerHTML = playerProfile(pl, pl.clubId === club.id, scoutBtn + `<p>Moral: ${moraleHtml(moraleOf(s!, pl.id))}${pl.clubId === club.id ? ` · Papel: ${ROLE_LABEL[roleOf(s!, pl)]} · Satisfação: ${satHtml(satOf(s!, pl.id))}` : ''}</p>` + status, pclub, renew, pl.clubId !== club.id ? (k, v) => seenAttr(s!, pl, k, v) : undefined, other ? rngTxt(seenLevel(s!, pl)) : undefined, other ? rngTxt(seenLevel(s!, pl, true)) : undefined);
+      content.querySelector('#obsme')?.addEventListener('click', () => { content.querySelector('#obsmsg')!.textContent = observe(s!, pl.id); });
       content.querySelector('#rgo')?.addEventListener('click', () => {
         const w = Number(content.querySelector<HTMLInputElement>('#rwage')!.value), y = Number(content.querySelector<HTMLSelectElement>('#ryears')!.value);
         const res = offerRenewal(s!, pl, w, y, content.querySelector<HTMLSelectElement>('#rrole')!.value as Role);
@@ -238,6 +246,8 @@ export function homeScreen(root: HTMLElement) {
       }
     } else if (section === 'mercado') {
       renderMarket(content, s!, () => renderContent(), (id) => { section = 'plantel'; playerId = id; renderNav(); renderContent(); });
+    } else if (section === 'observacao') {
+      renderScouting(content, s!);
     } else if (section === 'carreira') {
       renderCareer(content, s!, () => go('home'));
     } else if (section === 'staff') {
