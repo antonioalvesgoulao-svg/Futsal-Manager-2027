@@ -29,7 +29,8 @@ function buildPlayers(): Player[] {
     const mb = computeMoneyball((HISTORY[p.id] ?? FP_STATS[p.id]?.seasons ?? []) as SeasonRow[], p.position, p.age);
     const g = mb
       ? generateAttributes(p as Player, mb.level, BOOST[key] ?? 0, { productivity: mb.productivity, availability: mb.availability })
-      : generateAttributes(p as Player, club.level, BOOST[key] ?? 0);
+      // sem nenhum dado (nem zerozero nem FPF): gerado como jogador de rotação, abaixo do nível do clube, e sem o acaso de talento a puxar para cima
+      : generateAttributes(p as Player, club.level - 10, (BOOST[key] ?? 0) - 0.8);
     // agressividade pelos cartões reais (FPF, desde 2021/22): média da Liga 0,21 cartões/jogo (amarelo=1, vermelho=2)
     const fp = FP_STATS[p.id];
     if (fp && fp.games >= 15) {
