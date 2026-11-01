@@ -19,6 +19,23 @@ export const KITS: Record<string, ClubKits> = {
   por: { home: k('#111111', '#111111', '#ffffff', 'riscas', '#ffffff'), away: k('#facc15', '#facc15', '#facc15', 'liso', '#ffffff'), confirmed: true },
   fam: { home: k('#ffffff', '#ffffff', '#ffffff', 'metade', '#18214e'), away: k('#cee5d4', '#cee5d4', '#cee5d4', 'liso', '#ffffff'), confirmed: true },
   tor: { home: k('#881732', '#34497e', '#881732', 'metade', '#34497e'), away: k('#cbd9e6', '#cbd9e6', '#cbd9e6', 'riscas', '#d6e0ea'), confirmed: true },
+  // Espanha: cores principais dos clubes; equipamentos por confirmar com o António (confirmed: false)
+  bar: { home: k('#a50044', '#004d98', '#004d98', 'riscas', '#004d98'), away: k('#f5e04c', '#f5e04c', '#f5e04c'), confirmed: false },
+  epz: { home: k('#d50000', '#d50000', '#d50000'), away: k('#ffffff', '#ffffff', '#ffffff'), confirmed: false },
+  pal: { home: k('#ffd200', '#000000', '#ffd200'), away: k('#000000', '#000000', '#000000'), confirmed: false },
+  jca: { home: k('#000000', '#000000', '#000000', 'riscas', '#ffffff'), away: k('#ffffff', '#ffffff', '#ffffff'), confirmed: false },
+  int: { home: k('#0b3d91', '#0b3d91', '#0b3d91'), away: k('#ffffff', '#ffffff', '#ffffff'), confirmed: false },
+  jae: { home: k('#ffd100', '#111111', '#ffd100'), away: k('#111111', '#111111', '#111111'), confirmed: false },
+  val: { home: k('#7a1f3d', '#7a1f3d', '#7a1f3d'), away: k('#ffffff', '#ffffff', '#ffffff'), confirmed: false },
+  man: { home: k('#e30613', '#ffffff', '#e30613'), away: k('#111111', '#111111', '#111111'), confirmed: false },
+  zar: { home: k('#d50000', '#ffffff', '#d50000'), away: k('#111111', '#111111', '#111111'), confirmed: false },
+  pen: { home: k('#1565c0', '#1565c0', '#1565c0'), away: k('#ffffff', '#ffffff', '#ffffff'), confirmed: false },
+  par: { home: k('#111111', '#111111', '#111111'), away: k('#ffffff', '#ffffff', '#ffffff'), confirmed: false },
+  osa: { home: k('#c8102e', '#0a2240', '#c8102e'), away: k('#ffffff', '#ffffff', '#ffffff'), confirmed: false },
+  cor: { home: k('#00843d', '#ffffff', '#00843d', 'riscas', '#ffffff'), away: k('#111111', '#111111', '#111111'), confirmed: false },
+  eji: { home: k('#00843d', '#00843d', '#00843d'), away: k('#ffffff', '#ffffff', '#ffffff'), confirmed: false },
+  noi: { home: k('#1e88e5', '#1e88e5', '#1e88e5'), away: k('#ffffff', '#ffffff', '#ffffff'), confirmed: false },
+  stc: { home: k('#0d47a1', '#ffffff', '#0d47a1'), away: k('#e30613', '#e30613', '#e30613'), confirmed: false },
 };
 
 export type KitChoice = 'auto' | 'home' | 'away';

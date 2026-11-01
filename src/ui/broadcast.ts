@@ -3,12 +3,19 @@ import { crestSvg } from './crest';
 // Inspiração portuguesa (azulejo, calçada, verde e vermelho), desenhado de raiz.
 import type { CompId } from '../core/season/types';
 
-export const SCOREBOARD_NAMES: Record<Exclude<CompId, 'playoff'>, string> = {
+export type ScoreStyle = Exclude<CompId, 'playoff' | 'espPlayoff'>;
+export const SCOREBOARD_NAMES: Record<ScoreStyle, string> = {
   liga: 'Liga Placard',
   taca: 'Taça de Portugal',
   tacaLiga: 'Taça da Liga',
   supertaca: 'Supertaça',
+  esp: 'Primera División',
+  copaRey: 'Copa del Rey',
+  copaEsp: 'Copa de España',
+  superEsp: 'Supercopa',
 };
+/** Marcador da competição de um jogo (o play-off usa o da liga). */
+export const styleOf = (c: CompId): ScoreStyle => (c === 'playoff' ? 'liga' : c === 'espPlayoff' ? 'esp' : c);
 
 // Emblema original de cada estilo de marcador (desenho abstrato, sem logótipos reais)
 const EMBLEM: Record<string, string> = {
@@ -16,10 +23,15 @@ const EMBLEM: Record<string, string> = {
   taca: `<svg viewBox="0 0 40 40" class="emb"><path d="M11 8h18v6a9 9 0 0 1-18 0z" fill="#d4a017"/><path d="M8 9h4v4a3 3 0 0 1-4-1zM32 9h-4v4a3 3 0 0 0 4-1z" fill="#d4a017"/><rect x="18" y="22" width="4" height="7" fill="#d4a017"/><rect x="13" y="29" width="14" height="4" rx="1" fill="#d4a017"/></svg>`,
   tacaLiga: `<svg viewBox="0 0 40 40" class="emb"><rect x="6" y="6" width="28" height="28" rx="3" fill="#fff"/><path d="M20 8 L32 20 L20 32 L8 20 Z" fill="#1d4ed8"/><circle cx="20" cy="20" r="5" fill="#fff"/><circle cx="20" cy="20" r="2.4" fill="#1d4ed8"/></svg>`,
   supertaca: `<svg viewBox="0 0 40 40" class="emb"><path d="M20 4 L24 15 L36 15 L26 22 L30 34 L20 27 L10 34 L14 22 L4 15 L16 15 Z" fill="#d4a017"/></svg>`,
+  // Espanha: desenhos próprios (leque, coroa simples, troféu, estrela), sem logótipos reais
+  esp: `<svg viewBox="0 0 40 40" class="emb"><circle cx="20" cy="20" r="17" fill="#c60b1e"/><rect x="3" y="14" width="34" height="12" fill="#ffc400"/><circle cx="20" cy="20" r="5" fill="#fff"/></svg>`,
+  copaRey: `<svg viewBox="0 0 40 40" class="emb"><path d="M8 26 L10 12 L16 19 L20 9 L24 19 L30 12 L32 26 Z" fill="#e9b949"/><rect x="8" y="28" width="24" height="4" rx="1" fill="#e9b949"/></svg>`,
+  copaEsp: `<svg viewBox="0 0 40 40" class="emb"><path d="M11 8h18v6a9 9 0 0 1-18 0z" fill="#fff"/><rect x="18" y="22" width="4" height="7" fill="#fff"/><rect x="13" y="29" width="14" height="4" rx="1" fill="#fff"/></svg>`,
+  superEsp: `<svg viewBox="0 0 40 40" class="emb"><path d="M20 4 L24 15 L36 15 L26 22 L30 34 L20 27 L10 34 L14 22 L4 15 L16 15 Z" fill="#c60b1e"/></svg>`,
 };
 
 export interface ScoreboardData {
-  style: Exclude<CompId, 'playoff'>;
+  style: ScoreStyle;
   home: { short: string; color: string; score: number; fouls: number; id?: string };
   away: { short: string; color: string; score: number; fouls: number; id?: string };
   clock: string; // tempo decorrido na parte
@@ -50,7 +62,7 @@ export function scoreboardHtml(d: ScoreboardData) {
 }
 
 export interface LineupData {
-  style: Exclude<CompId, 'playoff'>;
+  style: ScoreStyle;
   team: { name: string; short: string; color: string };
   players: { number: number | null; name: string; pos: string }[]; // cinco iniciais (GR primeiro) ou suplentes
   title: string;
@@ -74,7 +86,7 @@ export function lineupHtml(d: LineupData) {
 }
 
 export interface GoalBarData {
-  style: Exclude<CompId, 'playoff'>;
+  style: ScoreStyle;
   team: { short: string; color: string };
   scorer: { number: number | null; name: string };
   assist?: string;
@@ -110,6 +122,33 @@ export const broadcastCss = `
 .sb-taca .gb-main { background: linear-gradient(90deg, #5b0a14, #7a1420); }
 .sb-tacaLiga .gb-main { background: #0b2a6f; }
 .sb-supertaca .gb-main { background: #0b0b0b; }
+.sb-esp .gb-main, .sb-esp .lu-row { background: #14213d; }
+.sb-copaRey .gb-main, .sb-copaRey .lu-row { background: #3b0d4a; }
+.sb-copaEsp .gb-main, .sb-copaEsp .lu-row { background: #8a0f1d; }
+.sb-superEsp .gb-main, .sb-superEsp .lu-row { background: #111; }
+.sb-esp .sb-row { background: #14213d; color: #fff; border-bottom: 3px solid; border-image: linear-gradient(90deg, #c60b1e 33%, #ffc400 33% 66%, #c60b1e 66%) 1; }
+.sb-esp .sb-score { background: #fff; color: #14213d; }
+.sb-esp .sb-mid { background: repeating-linear-gradient(90deg, #1d2d50 0 8px, #14213d 8px 16px); color: #ffc400; }
+.sb-esp .sb-sub { background: #f3f4f6; color: #14213d; }
+.sb-esp .sb-period { background: #c60b1e; color: #fff; }
+.sb-copaRey .sb-row { background: linear-gradient(90deg, #3b0d4a, #5b1a6e); color: #fff; border-bottom: 3px solid #e9b949; }
+.sb-copaRey .sb-score { background: #fff8e6; color: #3b0d4a; }
+.sb-copaRey .sb-mid { background: #22062b; color: #e9b949; }
+.sb-copaRey .sb-sub { background: #22062b; color: #fff8e6; }
+.sb-copaRey .sb-period { background: #e9b949; color: #22062b; }
+.sb-copaEsp .sb-row { background: #8a0f1d; color: #fff; border-bottom: 3px solid #ffc400; }
+.sb-copaEsp .sb-score { background: #ffc400; color: #5a0812; }
+.sb-copaEsp .sb-mid { background: repeating-conic-gradient(#a3121f 0 25%, #8a0f1d 0 50%) 0 0 / 12px 12px; color: #fff; }
+.sb-copaEsp .sb-sub { background: #fff4d6; color: #5a0812; }
+.sb-copaEsp .sb-period { background: #c60b1e; color: #fff; }
+.sb-superEsp .sb-row { background: #111; color: #fff; border-bottom: 3px solid #c60b1e; }
+.sb-superEsp .sb-score { background: #c60b1e; color: #fff; }
+.sb-superEsp .sb-mid { background: repeating-linear-gradient(45deg, #111 0 6px, #1e1e1e 6px 12px); color: #ffc400; }
+.sb-superEsp .sb-sub { background: #1a1a1a; color: #f5f5f5; }
+.sb-superEsp .sb-period { background: #ffc400; color: #111; }
+.sb-esp .fouls i, .sb-copaEsp .fouls i { background: rgba(0,0,0,.15); }
+.sb-esp .fouls i.on, .sb-copaEsp .fouls i.on { background: #eab308; }
+.sb-esp .fouls i.max, .sb-copaEsp .fouls i.max { background: #dc2626; }
 @keyframes gbIn { from { opacity: 0; transform: translateY(24px); clip-path: inset(0 100% 0 0); } to { opacity: 1; transform: none; clip-path: inset(0 0 0 0); } }
 @keyframes gbOut { to { opacity: 0; transform: translateY(18px); } }
 @media (max-width: 600px) { .gbar { grid-template-columns: 70px 44px 1fr; height: 50px; } .gb-res { display: none; } .gb-name { font-size: 16px; } }

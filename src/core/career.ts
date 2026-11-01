@@ -5,6 +5,8 @@
 // - contratos do staff: acabam no fim da época; os clubes renovam ou não; técnicos de outros clubes podem ser contratados
 import { rng } from './attributes';
 import { leagueTable } from './season/season';
+import { kindOf, type CompId } from './season/types';
+import { homeNation } from './names';
 import { fmtEur, salaryBudget } from './contracts';
 import { book, financeOf } from './finance';
 import { staffBill, staffBudget, staffWage, type Staff } from './staff';
@@ -31,11 +33,13 @@ export const boardOf = (s: GameState, clubId: string): Board => ((s.boards ??= {
 
 /** Posição esperada na Liga: ordem do nível dos clubes (estimativa da direção). */
 export function expectedPos(s: GameState, clubId: string) {
-  return [...s.clubs].sort((a, b) => b.level - a.level).findIndex((c) => c.id === clubId) + 1;
+  const lg = s.leagues.find((l) => l.clubIds.includes(clubId)) ?? s.leagues[0];
+  return lg.clubIds.map((id) => s.clubs.find((c) => c.id === id)!).sort((a, b) => b.level - a.level).findIndex((c) => c.id === clubId) + 1;
 }
 export function objectiveOf(s: GameState, clubId: string) {
   const e = expectedPos(s, clubId);
-  return e <= 2 ? { text: 'Ser campeão e ganhar troféus', pos: 2 } : e <= 4 ? { text: 'Ficar nos 4 primeiros', pos: 4 } : e <= 8 ? { text: 'Chegar ao play-off (8 primeiros)', pos: 8 } : { text: 'Fazer uma época tranquila (fora dos 2 últimos)', pos: 10 };
+  const n = (s.leagues.find((l) => l.clubIds.includes(clubId)) ?? s.leagues[0]).clubIds.length;
+  return e <= 2 ? { text: 'Ser campeão e ganhar troféus', pos: 2 } : e <= 4 ? { text: 'Ficar nos 4 primeiros', pos: 4 } : e <= 8 ? { text: 'Chegar ao play-off (8 primeiros)', pos: 8 } : { text: 'Fazer uma época tranquila (fora dos 2 últimos)', pos: n - 2 };
 }
 
 /**
@@ -49,7 +53,8 @@ export function expectedPoints(home: Club, away: Club, side: 0 | 1, neutral = fa
 }
 /** Paciência da direção: clubes grandes e ricos exigem mais (reagem mais a cada ponto perdido). */
 /** Títulos nacionais (Liga, Taça, Taça da Liga, Supertaça) antes do jogo começar: ordem de grandeza (estimativa). */
-const PAST_TITLES: Record<string, number> = { scp: 60, slb: 35, scb: 4, fun: 1 };
+// Espanha (Liga, Copa de España, Copa del Rey, Supercopa; ordem de grandeza, estimativa): Inter, Barça e ElPozo os mais titulados
+const PAST_TITLES: Record<string, number> = { scp: 60, slb: 35, scb: 4, fun: 1, int: 35, bar: 18, epz: 16, jca: 4, pal: 3, jae: 3, val: 1 };
 /** Palmarés do clube: história + títulos ganhos no jogo. */
 export const palmaresOf = (s: GameState, clubId: string) => (PAST_TITLES[clubId] ?? 0) + s.honours.filter((h) => h.winner === clubId).length;
 /**
@@ -87,7 +92,8 @@ const SACK_AT = 24; // abaixo disto, e com pelo menos 10 jogos, a direção desp
 const MIN_GAMES = 10;
 
 export function onTitle(s: GameState, clubId: string, comp: string) {
-  const w = comp === 'liga' ? 30 : comp === 'taca' ? 18 : comp === 'tacaLiga' ? 12 : 6;
+  const k = kindOf(comp as CompId);
+  const w = k === 'league' ? 30 : k === 'cup' ? 18 : k === 'leagueCup' ? 12 : 6;
   const b = boardOf(s, clubId); b.conf = Math.min(100, b.conf + w);
   if (clubId === s.clubId) { const c = careerOf(s); c.reputation = Math.min(100, c.reputation + w / 3); }
 }
@@ -264,7 +270,7 @@ export function clubProfile(s: GameState, clubId: string) {
   const n = Math.max(1, sq.length);
   const avgAge = sq.reduce((a, p) => a + p.age, 0) / n;
   const youth = sq.filter((p) => p.age <= 23).length / n;
-  const foreign = sq.filter((p) => p.nationality !== 'Portugal').length / n;
+  const foreign = sq.filter((p) => p.nationality !== homeNation(club)).length / n;
   const palm = palmaresOf(s, clubId);
   const winning = palm >= 10 || club.reputation >= 88; // cultura de vitória
   const youthPolicy = youth >= 0.35 || clubId === 'scp'; // aposta em jovens (Sporting: formação reconhecida)
@@ -445,13 +451,14 @@ export function staffSeasonEnd(s: GameState, endingYear: number): string[] {
       if (f) { f.clubId = c.id; f.wage = staffWage(f.ability, c); f.until = endingYear + 2; }
     }
   }
-  const table = leagueTable(s.season, s.leagues[0].clubIds);
+  const table = s.leagues.flatMap((l) => leagueTable(s.season, l.clubIds, 99, l.id === 'esp1' ? 'esp' : 'liga'));
+  const posIn = (id: string) => { const lg = s.leagues.find((l) => l.clubIds.includes(id)); const t = lg ? table.filter((r) => lg.clubIds.includes(r.club)) : []; return t.findIndex((r) => r.club === id) + 1; };
   // treinadores da IA evoluem com o sucesso: pontos acima do esperado, títulos, posição face ao objetivo (estimativa)
   const titles: Record<string, number> = {};
   for (const w of Object.values(s.season.winners)) if (w) titles[w] = (titles[w] ?? 0) + 1;
   for (const co of s.coaches.filter((x) => x.clubId && !x.clubId.includes('@'))) {
     const b = boardOf(s, co.clubId!);
-    const pos = table.findIndex((r) => r.club === co.clubId) + 1;
+    const pos = posIn(co.clubId!);
     const perf = b.games ? (b.pts - b.exp) / b.games : 0; // pontos por jogo acima do esperado
     const d = Math.max(-0.8, Math.min(0.8, perf * 1.5 + (titles[co.clubId!] ?? 0) * 0.3 + (objectiveOf(s, co.clubId!).pos - pos) * 0.05 + (r() - 0.5) * 0.3));
     co.tactical = Math.max(5, Math.min(20, Math.round((co.tactical + d) * 10) / 10));
@@ -468,7 +475,7 @@ export function staffSeasonEnd(s: GameState, endingYear: number): string[] {
   // direções: balanço da época (posição final face ao objetivo); contagem recomeça
   for (const club of s.clubs) {
     const b = boardOf(s, club.id);
-    const pos = table.findIndex((r) => r.club === club.id) + 1;
+    const pos = posIn(club.id);
     b.conf = Math.max(0, Math.min(100, b.conf + (objectiveOf(s, club.id).pos - pos) * 3));
     b.exp = 0; b.pts = 0; b.games = 0;
     if (club.id === s.clubId) { const c = careerOf(s); c.reputation = Math.max(1, Math.min(100, c.reputation + (objectiveOf(s, club.id).pos - pos) * 0.8)); }

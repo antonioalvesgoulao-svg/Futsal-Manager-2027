@@ -8,7 +8,9 @@
 import { generateAttributes, overall, rng } from './attributes';
 import type { Club, GameState, Player, Position } from './types';
 import REALJSON from '../data/por/staff.json';
-const REAL = REALJSON as unknown as { people: { id: string; club: string; name: string; func: string; role: string; nat: string; birth: string; ability: number; history: StaffSeason[]; coach?: { tactical: number; motivation: number }; fp?: { games: number; wins: number; notWon: number; titles: string[] } }[] };
+import REALESP from '../data/esp/staff.json';
+import { isSpanish, spanishName, spanishYouth } from './names';
+const REAL = { people: [...REALJSON.people, ...REALESP.people] } as unknown as { people: { id: string; club: string; name: string; func: string; role: string; nat: string; birth: string; ability: number; history: StaffSeason[]; coach?: { tactical: number; motivation: number }; fp?: { games: number; wins: number; notWon: number; titles: string[] } }[] };
 export const realCoachOf = (clubId: string) => REAL.people.find((p) => p.club === clubId && p.role === 'principal');
 
 export type Role = 'adjunto' | 'fisico' | 'gr' | 'fisio' | 'formacao' | 'analista' | 'scout' | 'psicologo' | 'nutricionista' | 'coordenador' | 'outro';
@@ -30,7 +32,8 @@ export const staffBudget = (club: Club) => club.staffBudget ?? Math.round(5 * st
 
 function makeStaff(id: string, role: Role, clubId: string | null, ability: number, r: () => number, year: number, club?: Club): Staff {
   const a = Math.max(1, Math.min(20, Math.round(ability)));
-  return { id, name: `${FIRST[Math.floor(r() * FIRST.length)]} ${LAST[Math.floor(r() * LAST.length)]}`, role, clubId, ability: a, age: 30 + Math.floor(r() * 28), wage: staffWage(a, club), until: year + 1 + Math.floor(r() * 3) };
+  const name = isSpanish(club) ? spanishName(r) : `${FIRST[Math.floor(r() * FIRST.length)]} ${LAST[Math.floor(r() * LAST.length)]}`;
+  return { id, name, ...(isSpanish(club) ? { nat: 'Espanha' } : {}), role, clubId, ability: a, age: 30 + Math.floor(r() * 28), wage: staffWage(a, club), until: year + 1 + Math.floor(r() * 3) };
 }
 
 /** Garante staff em todos os clubes (nível conforme a riqueza) e uma bolsa de técnicos sem clube. */
@@ -49,6 +52,9 @@ export function ensureStaff(s: GameState) {
   // orçamento do staff: o maior entre o típico do clube e o que já paga à equipa técnica real (+10%)
   for (const c of s.clubs) { c.staffBudget = undefined; c.staffBudget = Math.round(Math.max(staffBudget(c), staffBill(s, c.id) * 1.1)); }
   for (let i = 0; i < 25; i++) s.staff.push(makeStaff(`st-free-${i}`, ROLES[i % 5], null, 4 + r() * 11, r, s.season.year));
+  // técnicos livres espanhóis
+  const esp = s.clubs.find((c) => c.league === 'esp1');
+  if (esp) for (let i = 0; i < 15; i++) s.staff.push(makeStaff(`st-freeES-${i}`, ROLES[i % 5], null, 4 + r() * 11, r, s.season.year, { ...esp, wealth: 55 }));
   // o meu clube não tem staff pré-definido? tem: herda o do clube (o treinador escolhe se mantém)
 }
 
@@ -107,7 +113,8 @@ export function academyIntake(s: GameState, club: Club, year: number): Player[] 
   const out: Player[] = [];
   for (let i = 0; i < n; i++) {
     const pos: Position = i === 0 && r() < 0.35 ? 'GR' : (['FIX', 'ALA', 'ALA', 'PIV', 'UNI', 'FIX/ALA', 'ALA/PIV'] as Position[])[Math.floor(r() * 7)];
-    const base: Player = { id: `${club.id}j${year}${i}`, clubId: juniorsId(club.id), name: `${PFIRST[Math.floor(r() * PFIRST.length)]} ${LAST[Math.floor(r() * LAST.length)]}`, position: pos, number: null, age: 16 + Math.floor(r() * 2), nationality: r() < 0.9 ? 'Portugal' : 'Cabo Verde', attrs: {} as Player['attrs'], potential: 0 };
+    const who = isSpanish(club) ? spanishYouth(r) : { name: `${PFIRST[Math.floor(r() * PFIRST.length)]} ${LAST[Math.floor(r() * LAST.length)]}`, nationality: r() < 0.9 ? 'Portugal' : 'Cabo Verde' };
+    const base: Player = { id: `${club.id}j${year}${i}`, clubId: juniorsId(club.id), name: who.name, position: pos, number: null, age: 16 + Math.floor(r() * 2), nationality: who.nationality, attrs: {} as Player['attrs'], potential: 0 };
     const g = generateAttributes(base, 38 + lvl * 1.6, 0);
     // talentos raros: mais frequentes nas melhores formações
     const gem = r() < 0.04 + lvl * 0.006 ? 2 + r() * 4 : 0;

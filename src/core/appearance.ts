@@ -52,6 +52,8 @@ const SKIN_BY: Record<string, number[]> = {
   Espanha: [1, 1, 2, 2],
   Argentina: [0, 1, 1, 2, 2],
   Chile: [1, 2, 2, 3],
+  Marrocos: [2, 3, 3, 4], Paraguai: [1, 2, 3, 3], Uruguai: [0, 1, 1, 2], Venezuela: [1, 2, 3, 4, 5], Colômbia: [1, 2, 3, 4, 5],
+  Japão: [1, 1, 2], Irão: [1, 2, 2, 3], França: [0, 1, 2, 4, 6], Croácia: [0, 0, 1], Cazaquistão: [1, 2], Peru: [2, 3, 3], Equador: [2, 3, 4],
 };
 
 /** Correções manuais (jogador -> aspeto), quando se souber como é na realidade. */

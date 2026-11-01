@@ -1,3 +1,4 @@
+import { homeNation } from './names';
 // Mercado de transferências.
 // Regras reais: Regulamento da Liga Placard 2026/27, Art. 52.5 (máx. 20 seniores inscritos; depois do limite, até 5 substituições).
 // Estimativas minhas: datas das janelas, comportamento dos clubes (quanto pedem, quando vendem), jogadores livres gerados.
@@ -70,7 +71,7 @@ export function ensurePool(s: GameState) {
 
 // ---------- negociação ----------
 /** Rivais diretos: negoceiam, mas a preços muito mais altos (estimativa ×3). */
-export const RIVALS: [string, string][] = [['scp', 'slb']];
+export const RIVALS: [string, string][] = [['scp', 'slb'], ['epz', 'jca']]; // Espanha: dérbi de Múrcia
 export const areRivals = (a?: string, b?: string) => !!a && !!b && RIVALS.some(([x, y]) => (x === a && y === b) || (x === b && y === a));
 
 /** Importância no plantel (0 = mais importante): minutos jogados, nota média, golos e assistências da época; no início da época conta mais o nível. */
@@ -332,7 +333,7 @@ export function aiMarket(s: GameState, from: string, to: string): string[] {
         // sem alvo em Portugal: contrata no estrangeiro (Brasil, Espanha…), até haver ligas estrangeiras no jogo (etapa 12)
         const lvl = need.kind === 'oportunidade' ? need.min : (levels[Math.min(levels.length - 1, 8)] ?? 10);
         const cand = generateFreeAgents(s, 16, `ext-${c.id}-${to}-${attempt}`, Math.max(lvl, need.min + 0.5)).map((p) => ({ ...p, id: p.id.replace('fa', 'ex') }))
-          .filter((p) => p.nationality !== 'Portugal' && fitsNeed(need, p) && overall(p.attrs, p.position) > Math.max(lvl - 1, need.min));
+          .filter((p) => p.nationality !== homeNation(c) && fitsNeed(need, p) && overall(p.attrs, p.position) > Math.max(lvl - 1, need.min));
         const p = cand.sort((a, b) => overall(b.attrs, b.position) - overall(a.attrs, a.position))[0];
         if (p) {
           // clubes pequenos trazem jogadores baratos (fim de contrato, divisões inferiores): custo baixo (estimativa)

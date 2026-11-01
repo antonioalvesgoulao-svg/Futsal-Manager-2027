@@ -1,0 +1,2658 @@
+{
+"_info": "Primera División 2026/27, futsalportugal.com (recolha 2/11/2026, 1 página a cada 7 s). Jogos, cartões e golos por época desde 2021/22; títulos.",
+"players": {
+"stc01": {
+"fpId": 27581,
+"games": 36,
+"yellow": 5,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "Industrias Santa Coloma",
+"games": 7,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Industrias Santa Coloma",
+"games": 27,
+"goals": 1
+},
+{
+"s": "24",
+"team": "Real Betis Futsal",
+"games": 2,
+"goals": 0
+}
+],
+"titles": []
+},
+"stc02": {
+"fpId": 23800,
+"games": 55,
+"yellow": 4,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Industrias Santa Coloma",
+"games": 7,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Ribera Navarra FS",
+"games": 30,
+"goals": 0
+},
+{
+"s": "24",
+"team": "FC Barcelona",
+"games": 14,
+"goals": 0
+},
+{
+"s": "23",
+"team": "FC Barcelona",
+"games": 4,
+"goals": 0
+}
+],
+"titles": []
+},
+"stc03": {
+"fpId": 25529,
+"games": 29,
+"yellow": 5,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Industrias Santa Coloma",
+"games": 7,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Riga FC",
+"games": 7,
+"goals": 4
+},
+{
+"s": "24",
+"team": "Riga FC",
+"games": 6,
+"goals": 3
+},
+{
+"s": "23",
+"team": "Riga FC",
+"games": 9,
+"goals": 2
+}
+],
+"titles": []
+},
+"stc04": {
+"fpId": 28929,
+"games": 23,
+"yellow": 2,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Industrias Santa Coloma",
+"games": 7,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Industrias Santa Coloma",
+"games": 16,
+"goals": 2
+}
+],
+"titles": []
+},
+"stc05": {
+"fpId": 461,
+"games": 157,
+"yellow": 27,
+"red": 5,
+"seasons": [
+{
+"s": "26",
+"team": "Industrias Santa Coloma",
+"games": 7,
+"goals": 2
+},
+{
+"s": "25",
+"team": "Industrias Santa Coloma",
+"games": 30,
+"goals": 15
+},
+{
+"s": "24",
+"team": "Industrias Santa Coloma",
+"games": 24,
+"goals": 6
+},
+{
+"s": "23",
+"team": "Industrias Santa Coloma",
+"games": 28,
+"goals": 9
+},
+{
+"s": "22",
+"team": "Levante UD",
+"games": 27,
+"goals": 6
+},
+{
+"s": "21",
+"team": "Levante UD",
+"games": 36,
+"goals": 11
+},
+{
+"s": "21",
+"team": "Espanha",
+"games": 5,
+"goals": 1
+}
+],
+"titles": [
+"RFEF - Primera División de Fútbol Sala (2011/2012, 2012/2013)",
+"UEFA Futsal Champions League (2011/2012)",
+"Copa de España (2017/2018)",
+"Liga Placard (2018/2019)",
+"Taça da Liga (2018/2019)"
+]
+},
+"stc06": {
+"fpId": 642,
+"games": 172,
+"yellow": 31,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "Industrias Santa Coloma",
+"games": 7,
+"goals": 4
+},
+{
+"s": "25",
+"team": "FC Barcelona",
+"games": 22,
+"goals": 2
+},
+{
+"s": "24",
+"team": "Viña Albali Valdepeñas",
+"games": 30,
+"goals": 21
+},
+{
+"s": "24",
+"team": "Espanha",
+"games": 4,
+"goals": 3
+},
+{
+"s": "23",
+"team": "Viña Albali Valdepeñas",
+"games": 33,
+"goals": 16
+},
+{
+"s": "22",
+"team": "Viña Albali Valdepeñas",
+"games": 11,
+"goals": 5
+},
+{
+"s": "22",
+"team": "Inter FS",
+"games": 25,
+"goals": 8
+},
+{
+"s": "22",
+"team": "Espanha",
+"games": 5,
+"goals": 1
+},
+{
+"s": "21",
+"team": "Inter FS",
+"games": 35,
+"goals": 19
+}
+],
+"titles": [
+"RFEF - Primera División de Fútbol Sala (2025/2026)"
+]
+},
+"stc07": {
+"fpId": 6585,
+"games": 101,
+"yellow": 19,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "Industrias Santa Coloma",
+"games": 7,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Industrias Santa Coloma",
+"games": 10,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Industrias Santa Coloma",
+"games": 16,
+"goals": 3
+},
+{
+"s": "23",
+"team": "Industrias Santa Coloma",
+"games": 12,
+"goals": 5
+},
+{
+"s": "22",
+"team": "Industrias Santa Coloma",
+"games": 29,
+"goals": 6
+},
+{
+"s": "21",
+"team": "Industrias Santa Coloma",
+"games": 27,
+"goals": 2
+}
+],
+"titles": []
+},
+"stc08": {
+"fpId": 22406,
+"games": 45,
+"yellow": 4,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Industrias Santa Coloma",
+"games": 7,
+"goals": 3
+},
+{
+"s": "25",
+"team": "FC Barcelona",
+"games": 4,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Industrias Santa Coloma",
+"games": 27,
+"goals": 2
+},
+{
+"s": "23",
+"team": "Industrias Santa Coloma",
+"games": 4,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Industrias Santa Coloma",
+"games": 3,
+"goals": 0
+}
+],
+"titles": [
+"RFEF - Primera División de Fútbol Sala (2025/2026)"
+]
+},
+"stc09": {
+"fpId": 23770,
+"games": 81,
+"yellow": 4,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Industrias Santa Coloma",
+"games": 7,
+"goals": 2
+},
+{
+"s": "25",
+"team": "Industrias Santa Coloma",
+"games": 23,
+"goals": 7
+},
+{
+"s": "24",
+"team": "Industrias Santa Coloma",
+"games": 24,
+"goals": 4
+},
+{
+"s": "23",
+"team": "Industrias Santa Coloma",
+"games": 27,
+"goals": 4
+}
+],
+"titles": []
+},
+"stc10": {
+"fpId": 13851,
+"games": 160,
+"yellow": 33,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Industrias Santa Coloma",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Ribera Navarra FS",
+"games": 23,
+"goals": 7
+},
+{
+"s": "24",
+"team": "Ribera Navarra FS",
+"games": 30,
+"goals": 9
+},
+{
+"s": "23",
+"team": "ElPozo Murcia",
+"games": 40,
+"goals": 3
+},
+{
+"s": "23",
+"team": "Espanha",
+"games": 2,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Real Betis Futsal",
+"games": 29,
+"goals": 12
+},
+{
+"s": "21",
+"team": "Real Betis Futsal",
+"games": 29,
+"goals": 5
+},
+{
+"s": "21",
+"team": "Espanha",
+"games": 1,
+"goals": 2
+}
+],
+"titles": []
+},
+"stc11": {
+"fpId": 22407,
+"games": 85,
+"yellow": 5,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Industrias Santa Coloma",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Industrias Santa Coloma",
+"games": 28,
+"goals": 1
+},
+{
+"s": "24",
+"team": "Industrias Santa Coloma",
+"games": 28,
+"goals": 1
+},
+{
+"s": "23",
+"team": "Industrias Santa Coloma",
+"games": 16,
+"goals": 1
+},
+{
+"s": "22",
+"team": "Industrias Santa Coloma",
+"games": 7,
+"goals": 0
+}
+],
+"titles": []
+},
+"stc12": {
+"fpId": 644,
+"games": 143,
+"yellow": 39,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Industrias Santa Coloma",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Industrias Santa Coloma",
+"games": 24,
+"goals": 2
+},
+{
+"s": "24",
+"team": "Industrias Santa Coloma",
+"games": 27,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Industrias Santa Coloma",
+"games": 27,
+"goals": 4
+},
+{
+"s": "22",
+"team": "Industrias Santa Coloma",
+"games": 29,
+"goals": 4
+},
+{
+"s": "21",
+"team": "Industrias Santa Coloma",
+"games": 30,
+"goals": 5
+}
+],
+"titles": []
+},
+"stc13": {
+"fpId": 25266,
+"games": 48,
+"yellow": 9,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Industrias Santa Coloma",
+"games": 5,
+"goals": 2
+},
+{
+"s": "25",
+"team": "Industrias Santa Coloma",
+"games": 30,
+"goals": 5
+},
+{
+"s": "24",
+"team": "FC Barcelona",
+"games": 3,
+"goals": 0
+},
+{
+"s": "23",
+"team": "FC Barcelona",
+"games": 10,
+"goals": 0
+}
+],
+"titles": []
+},
+"stc14": {
+"fpId": 28933,
+"games": 9,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Industrias Santa Coloma",
+"games": 3,
+"goals": 0
+},
+{
+"s": "25",
+"team": "FC Barcelona",
+"games": 6,
+"goals": 2
+}
+],
+"titles": [
+"RFEF - Primera División de Fútbol Sala (2025/2026)"
+]
+},
+"stc15": {
+"fpId": 66407,
+"games": 1,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Industrias Santa Coloma",
+"games": 1,
+"goals": 0
+}
+],
+"titles": []
+},
+"par01": {
+"fpId": 28936,
+"games": 36,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "O Parrulo Ferrol",
+"games": 7,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Santo André",
+"games": 17,
+"goals": 1
+},
+{
+"s": "25",
+"team": "O Parrulo Ferrol",
+"games": 12,
+"goals": 0
+}
+],
+"titles": []
+},
+"par02": {
+"fpId": 15483,
+"games": 94,
+"yellow": 5,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "O Parrulo Ferrol",
+"games": 4,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Osasuna Magna Xota FS",
+"games": 24,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Osasuna Magna Xota FS",
+"games": 30,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Osasuna Magna Xota FS",
+"games": 29,
+"goals": 0
+},
+{
+"s": "22",
+"team": "ElPozo Murcia",
+"games": 7,
+"goals": 0
+}
+],
+"titles": [
+"Campeonato Europa Sub 19 (2022/2023)"
+]
+},
+"par03": {
+"fpId": 66409,
+"games": 3,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "O Parrulo Ferrol",
+"games": 3,
+"goals": 0
+}
+],
+"titles": []
+},
+"par04": {
+"fpId": 66423,
+"games": 39,
+"yellow": 15,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "Pato Futsal",
+"games": 14,
+"goals": 1
+},
+{
+"s": "26",
+"team": "O Parrulo Ferrol",
+"games": 7,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Pato Futsal",
+"games": 18,
+"goals": 3
+}
+],
+"titles": []
+},
+"par05": {
+"fpId": 27902,
+"games": 42,
+"yellow": 9,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "O Parrulo Ferrol",
+"games": 7,
+"goals": 7
+},
+{
+"s": "26",
+"team": "Espanha",
+"games": 1,
+"goals": 0
+},
+{
+"s": "25",
+"team": "O Parrulo Ferrol",
+"games": 28,
+"goals": 10
+},
+{
+"s": "25",
+"team": "Espanha",
+"games": 6,
+"goals": 1
+}
+],
+"titles": [
+"Campeonato da Europa (2025/2026)"
+]
+},
+"par06": {
+"fpId": 11030,
+"games": 53,
+"yellow": 13,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "O Parrulo Ferrol",
+"games": 7,
+"goals": 1
+},
+{
+"s": "25",
+"team": "O Parrulo Ferrol",
+"games": 30,
+"goals": 22
+},
+{
+"s": "24",
+"team": "Haladás VSE",
+"games": 3,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Blumenau",
+"games": 13,
+"goals": 1
+}
+],
+"titles": []
+},
+"par07": {
+"fpId": 16182,
+"games": 39,
+"yellow": 13,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "O Parrulo Ferrol",
+"games": 7,
+"goals": 0
+},
+{
+"s": "25",
+"team": "O Parrulo Ferrol",
+"games": 30,
+"goals": 9
+},
+{
+"s": "21",
+"team": "Jaraguá Futsal",
+"games": 2,
+"goals": 3
+}
+],
+"titles": []
+},
+"par08": {
+"fpId": 15757,
+"games": 46,
+"yellow": 10,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "O Parrulo Ferrol",
+"games": 7,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Joinville",
+"games": 19,
+"goals": 8
+},
+{
+"s": "25",
+"team": "Jimbee Cartagena FS",
+"games": 20,
+"goals": 3
+}
+],
+"titles": []
+},
+"par09": {
+"fpId": 13870,
+"games": 40,
+"yellow": 6,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "O Parrulo Ferrol",
+"games": 7,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Burela FS",
+"games": 29,
+"goals": 1
+},
+{
+"s": "22",
+"team": "Real Betis Futsal",
+"games": 3,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Real Betis Futsal",
+"games": 1,
+"goals": 0
+}
+],
+"titles": []
+},
+"par10": {
+"fpId": 15822,
+"games": 94,
+"yellow": 12,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "O Parrulo Ferrol",
+"games": 7,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Jaén Paraíso Interior",
+"games": 32,
+"goals": 4
+},
+{
+"s": "24",
+"team": "Burela FS",
+"games": 29,
+"goals": 10
+},
+{
+"s": "21",
+"team": "Burela FS",
+"games": 15,
+"goals": 4
+},
+{
+"s": "21",
+"team": "Juventude AG",
+"games": 11,
+"goals": 10
+}
+],
+"titles": [
+"Copa de España (2025/2026, 2025/2026)"
+]
+},
+"par11": {
+"fpId": 737,
+"games": 37,
+"yellow": 17,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "O Parrulo Ferrol",
+"games": 7,
+"goals": 4
+},
+{
+"s": "25",
+"team": "O Parrulo Ferrol",
+"games": 30,
+"goals": 8
+}
+],
+"titles": [
+"RFEF - Primera División de Fútbol Sala (2013/2014, 2014/2015)"
+]
+},
+"par12": {
+"fpId": 66410,
+"games": 36,
+"yellow": 4,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "O Parrulo Ferrol",
+"games": 7,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Jaraguá Futsal",
+"games": 29,
+"goals": 15
+}
+],
+"titles": [
+"LNF (2025/2026)"
+]
+},
+"par13": {
+"fpId": 26386,
+"games": 61,
+"yellow": 21,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "O Parrulo Ferrol",
+"games": 6,
+"goals": 2
+},
+{
+"s": "25",
+"team": "O Parrulo Ferrol",
+"games": 12,
+"goals": 2
+},
+{
+"s": "25",
+"team": "Ribera Navarra FS",
+"games": 14,
+"goals": 1
+},
+{
+"s": "24",
+"team": "Ribera Navarra FS",
+"games": 16,
+"goals": 7
+},
+{
+"s": "24",
+"team": "Burela FS",
+"games": 13,
+"goals": 3
+}
+],
+"titles": []
+},
+"par14": {
+"fpId": 66411,
+"games": 5,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "O Parrulo Ferrol",
+"games": 5,
+"goals": 0
+}
+],
+"titles": []
+},
+"par15": {
+"fpId": 27903,
+"games": 28,
+"yellow": 6,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "O Parrulo Ferrol",
+"games": 5,
+"goals": 0
+},
+{
+"s": "25",
+"team": "O Parrulo Ferrol",
+"games": 23,
+"goals": 6
+}
+],
+"titles": []
+},
+"par16": {
+"fpId": 66425,
+"games": 1,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "O Parrulo Ferrol",
+"games": 1,
+"goals": 0
+}
+],
+"titles": []
+},
+"par17": {
+"fpId": 66426,
+"games": 1,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "O Parrulo Ferrol",
+"games": 1,
+"goals": 0
+}
+],
+"titles": []
+},
+"pal01": {
+"fpId": 653,
+"games": 207,
+"yellow": 22,
+"red": 6,
+"seasons": [
+{
+"s": "26",
+"team": "Islas Baleares Palma Futsal",
+"games": 10,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Islas Baleares Palma Futsal",
+"games": 48,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Islas Baleares Palma Futsal",
+"games": 44,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Islas Baleares Palma Futsal",
+"games": 40,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Islas Baleares Palma Futsal",
+"games": 35,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Islas Baleares Palma Futsal",
+"games": 30,
+"goals": 2
+}
+],
+"titles": [
+"UEFA Futsal Champions League (2022/2023, 2023/2024, 2024/2025)"
+]
+},
+"pal02": {
+"fpId": 5080,
+"games": 92,
+"yellow": 9,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Islas Baleares Palma Futsal",
+"games": 10,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Islas Baleares Palma Futsal",
+"games": 46,
+"goals": 3
+},
+{
+"s": "24",
+"team": "Kairat Almaty",
+"games": 8,
+"goals": 3
+},
+{
+"s": "23",
+"team": "Kairat Almaty",
+"games": 9,
+"goals": 1
+},
+{
+"s": "22",
+"team": "Kairat Almaty",
+"games": 6,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Joinville",
+"games": 13,
+"goals": 0
+}
+],
+"titles": []
+},
+"pal03": {
+"fpId": 5196,
+"games": 185,
+"yellow": 20,
+"red": 3,
+"seasons": [
+{
+"s": "25",
+"team": "Islas Baleares Palma Futsal",
+"games": 25,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Islas Baleares Palma Futsal",
+"games": 40,
+"goals": 4
+},
+{
+"s": "23",
+"team": "Islas Baleares Palma Futsal",
+"games": 41,
+"goals": 2
+},
+{
+"s": "23",
+"team": "Arménia",
+"games": 5,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Islas Baleares Palma Futsal",
+"games": 43,
+"goals": 1
+},
+{
+"s": "22",
+"team": "Arménia",
+"games": 4,
+"goals": 2
+},
+{
+"s": "21",
+"team": "AD Fundão",
+"games": 24,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Arménia",
+"games": 3,
+"goals": 0
+}
+],
+"titles": [
+"UEFA Futsal Champions League (2022/2023, 2023/2024, 2024/2025)"
+]
+},
+"pal04": {
+"fpId": 6584,
+"games": 122,
+"yellow": 10,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "Islas Baleares Palma Futsal",
+"games": 10,
+"goals": 7
+},
+{
+"s": "25",
+"team": "Islas Baleares Palma Futsal",
+"games": 44,
+"goals": 19
+},
+{
+"s": "24",
+"team": "Kairat Almaty",
+"games": 8,
+"goals": 6
+},
+{
+"s": "23",
+"team": "Kairat Almaty",
+"games": 9,
+"goals": 4
+},
+{
+"s": "22",
+"team": "Noia Portus Apostoli",
+"games": 28,
+"goals": 5
+},
+{
+"s": "21",
+"team": "Real Betis Futsal",
+"games": 13,
+"goals": 1
+},
+{
+"s": "21",
+"team": "Magnus Futsal",
+"games": 10,
+"goals": 3
+}
+],
+"titles": [
+"LNF (2020/2021)"
+]
+},
+"pal05": {
+"fpId": 15041,
+"games": 146,
+"yellow": 8,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Islas Baleares Palma Futsal",
+"games": 10,
+"goals": 2
+},
+{
+"s": "25",
+"team": "Córdoba Patrimonio",
+"games": 30,
+"goals": 13
+},
+{
+"s": "24",
+"team": "Viña Albali Valdepeñas",
+"games": 30,
+"goals": 8
+},
+{
+"s": "23",
+"team": "Alzira FS",
+"games": 30,
+"goals": 8
+},
+{
+"s": "22",
+"team": "Islas Baleares Palma Futsal",
+"games": 33,
+"goals": 2
+},
+{
+"s": "21",
+"team": "Islas Baleares Palma Futsal",
+"games": 13,
+"goals": 1
+}
+],
+"titles": [
+"UEFA Futsal Champions League (2022/2023)"
+]
+},
+"pal06": {
+"fpId": 11135,
+"games": 191,
+"yellow": 23,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "Islas Baleares Palma Futsal",
+"games": 10,
+"goals": 2
+},
+{
+"s": "25",
+"team": "Islas Baleares Palma Futsal",
+"games": 48,
+"goals": 6
+},
+{
+"s": "24",
+"team": "Islas Baleares Palma Futsal",
+"games": 46,
+"goals": 8
+},
+{
+"s": "23",
+"team": "Industrias Santa Coloma",
+"games": 28,
+"goals": 15
+},
+{
+"s": "22",
+"team": "Industrias Santa Coloma",
+"games": 30,
+"goals": 5
+},
+{
+"s": "21",
+"team": "Industrias Santa Coloma",
+"games": 29,
+"goals": 7
+}
+],
+"titles": [
+"Campeonato Europa Sub 19 (2019/2020)",
+"Montaigu Futsal Cup (2019/2020)",
+"UEFA Futsal Champions League (2024/2025)"
+]
+},
+"pal07": {
+"fpId": 15865,
+"games": 79,
+"yellow": 13,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "Islas Baleares Palma Futsal",
+"games": 10,
+"goals": 2
+},
+{
+"s": "25",
+"team": "Atlântico",
+"games": 10,
+"goals": 6
+},
+{
+"s": "25",
+"team": "Islas Baleares Palma Futsal",
+"games": 46,
+"goals": 8
+},
+{
+"s": "21",
+"team": "Campo Mourão",
+"games": 13,
+"goals": 3
+}
+],
+"titles": []
+},
+"pal08": {
+"fpId": 15752,
+"games": 127,
+"yellow": 19,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Islas Baleares Palma Futsal",
+"games": 10,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Islas Baleares Palma Futsal",
+"games": 48,
+"goals": 19
+},
+{
+"s": "24",
+"team": "Islas Baleares Palma Futsal",
+"games": 41,
+"goals": 8
+},
+{
+"s": "23",
+"team": "Islas Baleares Palma Futsal",
+"games": 19,
+"goals": 7
+},
+{
+"s": "21",
+"team": "Joaçaba Futsal",
+"games": 9,
+"goals": 3
+}
+],
+"titles": [
+"UEFA Futsal Champions League (2023/2024, 2024/2025)"
+]
+},
+"pal09": {
+"fpId": 15811,
+"games": 155,
+"yellow": 38,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "Islas Baleares Palma Futsal",
+"games": 10,
+"goals": 6
+},
+{
+"s": "25",
+"team": "Islas Baleares Palma Futsal",
+"games": 45,
+"goals": 28
+},
+{
+"s": "24",
+"team": "Islas Baleares Palma Futsal",
+"games": 41,
+"goals": 35
+},
+{
+"s": "23",
+"team": "Islas Baleares Palma Futsal",
+"games": 36,
+"goals": 14
+},
+{
+"s": "22",
+"team": "Islas Baleares Palma Futsal",
+"games": 15,
+"goals": 2
+},
+{
+"s": "21",
+"team": "Joinville",
+"games": 8,
+"goals": 0
+}
+],
+"titles": [
+"UEFA Futsal Champions League (2022/2023, 2023/2024, 2024/2025)"
+]
+},
+"pal10": {
+"fpId": 5139,
+"games": 27,
+"yellow": 6,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Islas Baleares Palma Futsal",
+"games": 10,
+"goals": 2
+},
+{
+"s": "25",
+"team": "Kairat Almaty",
+"games": 6,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Kairat Almaty",
+"games": 8,
+"goals": 2
+},
+{
+"s": "23",
+"team": "Arménia",
+"games": 3,
+"goals": 2
+}
+],
+"titles": []
+},
+"pal11": {
+"fpId": 8870,
+"games": 184,
+"yellow": 25,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "Islas Baleares Palma Futsal",
+"games": 10,
+"goals": 6
+},
+{
+"s": "25",
+"team": "Islas Baleares Palma Futsal",
+"games": 48,
+"goals": 17
+},
+{
+"s": "24",
+"team": "Inter FS",
+"games": 35,
+"goals": 2
+},
+{
+"s": "23",
+"team": "Jimbee Cartagena FS",
+"games": 29,
+"goals": 12
+},
+{
+"s": "22",
+"team": "Jimbee Cartagena FS",
+"games": 29,
+"goals": 20
+},
+{
+"s": "21",
+"team": "Jimbee Cartagena FS",
+"games": 33,
+"goals": 13
+}
+],
+"titles": [
+"Copa de España (2024/2025, 2024/2025)",
+"RFEF - Primera División de Fútbol Sala (2023/2024)",
+"Supercopa España  (2023/2024)",
+"Copa América (2025/2026)"
+]
+},
+"pal12": {
+"fpId": 5084,
+"games": 171,
+"yellow": 32,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "Islas Baleares Palma Futsal",
+"games": 10,
+"goals": 2
+},
+{
+"s": "25",
+"team": "Islas Baleares Palma Futsal",
+"games": 43,
+"goals": 10
+},
+{
+"s": "24",
+"team": "Islas Baleares Palma Futsal",
+"games": 43,
+"goals": 9
+},
+{
+"s": "23",
+"team": "Noia Portus Apostoli",
+"games": 23,
+"goals": 6
+},
+{
+"s": "22",
+"team": "Noia Portus Apostoli",
+"games": 30,
+"goals": 10
+},
+{
+"s": "21",
+"team": "Inter FS",
+"games": 12,
+"goals": 1
+},
+{
+"s": "21",
+"team": "Joinville",
+"games": 10,
+"goals": 2
+}
+],
+"titles": [
+"UEFA Futsal Champions League (2024/2025)"
+]
+},
+"pal13": {
+"fpId": 1920,
+"games": 153,
+"yellow": 62,
+"red": 5,
+"seasons": [
+{
+"s": "26",
+"team": "Islas Baleares Palma Futsal",
+"games": 10,
+"goals": 2
+},
+{
+"s": "25",
+"team": "Islas Baleares Palma Futsal",
+"games": 24,
+"goals": 2
+},
+{
+"s": "24",
+"team": "Islas Baleares Palma Futsal",
+"games": 28,
+"goals": 9
+},
+{
+"s": "24",
+"team": "Espanha",
+"games": 1,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Real Betis Futsal",
+"games": 30,
+"goals": 11
+},
+{
+"s": "22",
+"team": "Real Betis Futsal",
+"games": 30,
+"goals": 12
+},
+{
+"s": "21",
+"team": "Wanapix AD Sala 10 Zaragoza",
+"games": 30,
+"goals": 10
+}
+],
+"titles": [
+"UEFA Futsal Champions League (2024/2025)"
+]
+},
+"pal14": {
+"fpId": 5417,
+"games": 91,
+"yellow": 20,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "Islas Baleares Palma Futsal",
+"games": 9,
+"goals": 7
+},
+{
+"s": "25",
+"team": "Islas Baleares Palma Futsal",
+"games": 46,
+"goals": 25
+},
+{
+"s": "24",
+"team": "Islas Baleares Palma Futsal",
+"games": 25,
+"goals": 2
+},
+{
+"s": "21",
+"team": "Magnus Futsal",
+"games": 11,
+"goals": 5
+}
+],
+"titles": [
+"LNF (2020/2021)",
+"UEFA Futsal Champions League (2024/2025)"
+]
+},
+"pal15": {
+"fpId": 4628,
+"games": 191,
+"yellow": 31,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "Islas Baleares Palma Futsal",
+"games": 8,
+"goals": 4
+},
+{
+"s": "25",
+"team": "SL Benfica",
+"games": 38,
+"goals": 21
+},
+{
+"s": "24",
+"team": "SL Benfica",
+"games": 33,
+"goals": 16
+},
+{
+"s": "23",
+"team": "SL Benfica",
+"games": 42,
+"goals": 24
+},
+{
+"s": "22",
+"team": "SL Benfica",
+"games": 40,
+"goals": 20
+},
+{
+"s": "21",
+"team": "Islas Baleares Palma Futsal",
+"games": 30,
+"goals": 14
+}
+],
+"titles": [
+"Taça da Liga (2022/2023, 2025/2026)",
+"Taça de Portugal (2022/2023, 2025/2026)",
+"Liga Placard (2024/2025, 2025/2026)",
+"Supertaça (2023/2024)"
+]
+},
+"pal16": {
+"fpId": 24160,
+"games": 48,
+"yellow": 10,
+"red": 0,
+"seasons": [
+{
+"s": "25",
+"team": "SC Ferreira do Zêzere/Zêzerovo",
+"games": 26,
+"goals": 6
+},
+{
+"s": "24",
+"team": "CCRD Burinhosa",
+"games": 22,
+"goals": 12
+}
+],
+"titles": [
+"Campeonato Europa Sub 19 (2025/2026)"
+]
+},
+"osa01": {
+"fpId": 674,
+"games": 150,
+"yellow": 31,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "Osasuna Magna Xota FS",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Osasuna Magna Xota FS",
+"games": 30,
+"goals": 1
+},
+{
+"s": "24",
+"team": "Osasuna Magna Xota FS",
+"games": 31,
+"goals": 2
+},
+{
+"s": "24",
+"team": "Espanha",
+"games": 1,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Osasuna Magna Xota FS",
+"games": 29,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Osasuna Magna Xota FS",
+"games": 23,
+"goals": 1
+},
+{
+"s": "21",
+"team": "Osasuna Magna Xota FS",
+"games": 30,
+"goals": 1
+}
+],
+"titles": []
+},
+"osa02": {
+"fpId": 22408,
+"games": 16,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Osasuna Magna Xota FS",
+"games": 6,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Osasuna Magna Xota FS",
+"games": 8,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Osasuna Magna Xota FS",
+"games": 2,
+"goals": 0
+}
+],
+"titles": []
+},
+"osa03": {
+"fpId": 27963,
+"games": 21,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Osasuna Magna Xota FS",
+"games": 6,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Osasuna Magna Xota FS",
+"games": 15,
+"goals": 0
+}
+],
+"titles": []
+},
+"osa04": {
+"fpId": 5173,
+"games": 81,
+"yellow": 15,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Osasuna Magna Xota FS",
+"games": 6,
+"goals": 0
+},
+{
+"s": "25",
+"team": "São Lourenço",
+"games": 1,
+"goals": 0
+},
+{
+"s": "24",
+"team": "MNK Olmissum",
+"games": 5,
+"goals": 3
+},
+{
+"s": "23",
+"team": "Geórgia",
+"games": 3,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Ribera Navarra FS",
+"games": 30,
+"goals": 6
+},
+{
+"s": "22",
+"team": "Geórgia",
+"games": 4,
+"goals": 5
+},
+{
+"s": "21",
+"team": "Jaén Paraíso Interior",
+"games": 28,
+"goals": 7
+},
+{
+"s": "21",
+"team": "Geórgia",
+"games": 4,
+"goals": 2
+}
+],
+"titles": []
+},
+"osa05": {
+"fpId": 11465,
+"games": 135,
+"yellow": 38,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "Osasuna Magna Xota FS",
+"games": 6,
+"goals": 4
+},
+{
+"s": "25",
+"team": "Osasuna Magna Xota FS",
+"games": 26,
+"goals": 6
+},
+{
+"s": "24",
+"team": "Osasuna Magna Xota FS",
+"games": 29,
+"goals": 11
+},
+{
+"s": "23",
+"team": "Osasuna Magna Xota FS",
+"games": 16,
+"goals": 1
+},
+{
+"s": "22",
+"team": "Osasuna Magna Xota FS",
+"games": 28,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Osasuna Magna Xota FS",
+"games": 30,
+"goals": 1
+}
+],
+"titles": [
+"Campeonato Europa Sub 19 (2022/2023)"
+]
+},
+"osa06": {
+"fpId": 66422,
+"games": 7,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Osasuna Magna Xota FS",
+"games": 6,
+"goals": 1
+},
+{
+"s": "24",
+"team": "Jaén Paraíso Interior",
+"games": 1,
+"goals": 0
+}
+],
+"titles": []
+},
+"osa07": {
+"fpId": 17557,
+"games": 33,
+"yellow": 3,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Osasuna Magna Xota FS",
+"games": 6,
+"goals": 0
+},
+{
+"s": "26",
+"team": "Hungria",
+"games": 2,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Hungria",
+"games": 4,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Haladás VSE",
+"games": 3,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Hungria",
+"games": 3,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Haladás VSE",
+"games": 6,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Haladás VSE",
+"games": 3,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Haladás VSE",
+"games": 6,
+"goals": 1
+}
+],
+"titles": []
+},
+"osa08": {
+"fpId": 66388,
+"games": 6,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Osasuna Magna Xota FS",
+"games": 6,
+"goals": 0
+}
+],
+"titles": []
+},
+"osa09": {
+"fpId": 66389,
+"games": 5,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Osasuna Magna Xota FS",
+"games": 5,
+"goals": 0
+}
+],
+"titles": []
+},
+"osa10": {
+"fpId": 26391,
+"games": 63,
+"yellow": 2,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Osasuna Magna Xota FS",
+"games": 5,
+"goals": 2
+},
+{
+"s": "25",
+"team": "Osasuna Magna Xota FS",
+"games": 30,
+"goals": 5
+},
+{
+"s": "24",
+"team": "Osasuna Magna Xota FS",
+"games": 28,
+"goals": 1
+}
+],
+"titles": []
+},
+"osa11": {
+"fpId": 66391,
+"games": 5,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Osasuna Magna Xota FS",
+"games": 5,
+"goals": 0
+}
+],
+"titles": []
+},
+"osa12": {
+"fpId": 28261,
+"games": 6,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Osasuna Magna Xota FS",
+"games": 4,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Osasuna Magna Xota FS",
+"games": 2,
+"goals": 0
+}
+],
+"titles": []
+},
+"osa13": {
+"fpId": 21377,
+"games": 28,
+"yellow": 5,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "Osasuna Magna Xota FS",
+"games": 3,
+"goals": 2
+},
+{
+"s": "24",
+"team": "Ribera Navarra FS",
+"games": 15,
+"goals": 1
+},
+{
+"s": "23",
+"team": "Royal Sporting Anderlecht Futsal",
+"games": 9,
+"goals": 0
+},
+{
+"s": "22",
+"team": "FC Barcelona",
+"games": 1,
+"goals": 0
+}
+],
+"titles": [
+"RFEF - Primera División de Fútbol Sala (2022/2023)"
+]
+},
+"osa14": {
+"fpId": 25807,
+"games": 21,
+"yellow": 2,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Osasuna Magna Xota FS",
+"games": 3,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Peñíscola FS",
+"games": 13,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Japão",
+"games": 2,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Burela FS",
+"games": 3,
+"goals": 0
+}
+],
+"titles": []
+},
+"osa15": {
+"fpId": 16990,
+"games": 20,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Osasuna Magna Xota FS",
+"games": 2,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Paraguai",
+"games": 5,
+"goals": 0
+},
+{
+"s": "23",
+"team": "FC Differdange 03",
+"games": 3,
+"goals": 1
+},
+{
+"s": "22",
+"team": "Paraguai",
+"games": 4,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Paraguai",
+"games": 6,
+"goals": 0
+}
+],
+"titles": []
+},
+"osa16": {
+"fpId": 23798,
+"games": 9,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Osasuna Magna Xota FS",
+"games": 1,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Osasuna Magna Xota FS",
+"games": 8,
+"goals": 0
+}
+],
+"titles": []
+},
+"int02": {
+"fpId": 66408,
+"games": 3,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Inter FS",
+"games": 3,
+"goals": 0
+}
+],
+"titles": []
+},
+"int03": {
+"fpId": 14930,
+"games": 165,
+"yellow": 4,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Inter FS",
+"games": 1,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Inter FS",
+"games": 34,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Inter FS",
+"games": 34,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Inter FS",
+"games": 24,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Inter FS",
+"games": 38,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Inter FS",
+"games": 34,
+"goals": 0
+}
+],
+"titles": [
+"Copa de España (2020/2021, 2020/2021, 2020/2021, 2024/2025, 2024/2025)",
+"RFEF - Primera División de Fútbol Sala (2017/2018)"
+]
+},
+"int05": {
+"fpId": 717,
+"games": 202,
+"yellow": 49,
+"red": 4,
+"seasons": [
+{
+"s": "26",
+"team": "Inter FS",
+"games": 7,
+"goals": 4
+},
+{
+"s": "25",
+"team": "Inter FS",
+"games": 33,
+"goals": 19
+},
+{
+"s": "25",
+"team": "Espanha",
+"games": 6,
+"goals": 2
+},
+{
+"s": "24",
+"team": "Inter FS",
+"games": 34,
+"goals": 25
+},
+{
+"s": "24",
+"team": "Espanha",
+"games": 6,
+"goals": 3
+},
+{
+"s": "23",
+"team": "Inter FS",
+"games": 31,
+"goals": 14
+},
+{
+"s": "23",
+"team": "Espanha",
+"games": 2,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Inter FS",
+"games": 39,
+"goals": 16
+},
+{
+"s": "22",
+"team": "Espanha",
+"games": 1,
+"goals": 1
+},
+{
+"s": "21",
+"team": "Inter FS",
+"games": 35,
+"goals": 20
+},
+{
+"s": "21",
+"team": "Espanha",
+"games": 8,
+"goals": 3
+}
+],
+"titles": [
+"Copa de España (2020/2021, 2020/2021, 2020/2021, 2024/2025, 2024/2025)",
+"Supercopa España  (2020/2021)",
+"Campeonato da Europa (2025/2026)"
+]
+},
+"int06": {
+"fpId": 162,
+"games": 191,
+"yellow": 29,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Inter FS",
+"games": 7,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Inter FS",
+"games": 31,
+"goals": 4
+},
+{
+"s": "24",
+"team": "Inter FS",
+"games": 32,
+"goals": 13
+},
+{
+"s": "23",
+"team": "Islas Baleares Palma Futsal",
+"games": 46,
+"goals": 8
+},
+{
+"s": "23",
+"team": "Geórgia",
+"games": 4,
+"goals": 1
+},
+{
+"s": "22",
+"team": "Islas Baleares Palma Futsal",
+"games": 41,
+"goals": 7
+},
+{
+"s": "22",
+"team": "Geórgia",
+"games": 4,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Islas Baleares Palma Futsal",
+"games": 22,
+"goals": 4
+},
+{
+"s": "21",
+"team": "Geórgia",
+"games": 4,
+"goals": 0
+}
+],
+"titles": [
+"Taça de Portugal (2014/2015, 2016/2017)",
+"Liga Placard (2014/2015, 2018/2019)",
+"Supertaça (2015/2016, 2016/2017)",
+"Taça da Liga (2018/2019, 2019/2020)",
+"UEFA Futsal Champions League (2022/2023, 2023/2024)",
+"Copa de España (2024/2025, 2024/2025)"
+]
+},
+"int07": {
+"fpId": 752,
+"games": 97,
+"yellow": 14,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Inter FS",
+"games": 7,
+"goals": 3
+},
+{
+"s": "25",
+"team": "Inter FS",
+"games": 32,
+"goals": 14
+},
+{
+"s": "24",
+"team": "Peñíscola FS",
+"games": 26,
+"goals": 24
+},
+{
+"s": "24",
+"team": "Espanha",
+"games": 1,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Peñíscola FS",
+"games": 30,
+"goals": 27
+},
+{
+"s": "22",
+"team": "Peñíscola FS",
+"games": 1,
+"goals": 0
+}
+],
+"titles": []
+},
+"int08": {
+"fpId": 21376,
+"games": 68,
+"yellow": 13,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "Inter FS",
+"games": 7,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Inter FS",
+"games": 31,
+"goals": 12
+},
+{
+"s": "25",
+"team": "Colômbia",
+"games": 5,
+"goals": 1
+},
+{
+"s": "23",
+"team": "FC Barcelona",
+"games": 16,
+"goals": 1
+},
+{
+"s": "22",
+"team": "FC Barcelona",
+"games": 9,
+"goals": 0
+}
+],
+"titles": [
+"RFEF - Primera División de Fútbol Sala (2022/2023)"
+]
+},
+"int09": {
+"fpId": 617,
+"games": 138,
+"yellow": 35,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Inter FS",
+"games": 7,
+"goals": 4
+},
+{
+"s": "25",
+"team": "Inter FS",
+"games": 33,
+"goals": 27
+},
+{
+"s": "24",
+"team": "Inter FS",
+"games": 27,
+"goals": 10
+},
+{
+"s": "24",
+"team": "Espanha",
+"games": 1,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Jimbee Cartagena FS",
+"games": 28,
+"goals": 9
+},
+{
+"s": "22",
+"team": "Jimbee Cartagena FS",
+"games": 28,
+"goals": 7
+},
+{
+"s": "21",
+"team": "Jimbee Cartagena FS",
+"games": 14,
+"goals": 11
+}
+],
+"titles": [
+"Copa de España (2024/2025, 2024/2025)",
+"RFEF - Primera División de Fútbol Sala (2023/2024)"
+]
+},
+"int18": {
+"fpId": 11160,
+"games": 120,
+"yellow": 23,
+"red": 0,
+"seasons": [
+{
+"s": "25",
+"team": "Espanha",
+"games": 6,
+"goals": 1
+},
+{
+"s": "24",
+"team": "Islas Baleares Palma Futsal",
+"games": 39,
+"goals": 15
+},
+{
+"s": "24",
+"team": "Espanha",
+"games": 7,
+"goals": 4
+},
+{
+"s": "23",
+"team": "Islas Baleares Palma Futsal",
+"games": 40,
+"goals": 17
+},
+{
+"s": "23",
+"team": "Espanha",
+"games": 4,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Islas Baleares Palma Futsal",
+"games": 5,
+"goals": 4
+},
+{
+"s": "21",
+"team": "Islas Baleares Palma Futsal",
+"games": 19,
+"goals": 3
+}
+],
+"titles": [
+"UEFA Futsal Champions League (2023/2024, 2024/2025)",
+"Campeonato Europa Sub 19 (2019/2020)",
+"Montaigu Futsal Cup (2019/2020)",
+"Campeonato da Europa (2025/2026)"
+]
+}
+}
+}

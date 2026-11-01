@@ -8,7 +8,8 @@ import { ARENAS, arenaOf } from '../../core/attendance';
 import { refBadgeHtml, refereesFor } from '../../core/referees';
 import { KitChoice, kitsOf, matchGkKits, matchKits, setPendingKit } from '../../core/kits';
 import { kitSvg } from '../kitSvg';
-import { COMP_NAMES, CompId, Fixture } from '../../core/season/types';
+import { COMP_NAMES, COUNTRY_COMPS, CompId, Fixture } from '../../core/season/types';
+import { countryOf, leagueOf } from '../../core/state';
 import type { GameState } from '../../core/types';
 import { resultHtml } from './friendly';
 import { tacticsSummary } from './tactics';
@@ -26,7 +27,8 @@ function scoreText(f: Fixture) {
 export function renderDashboard(content: HTMLElement, s: GameState) {
   const club = s.clubs.find((c) => c.id === s.clubId)!;
   const next = nextMyFixture(s);
-  const table = leagueTable(s.season, s.leagues[0].clubIds);
+  const lg = leagueOf(s, s.clubId);
+  const table = leagueTable(s.season, lg.clubIds, 99, lg.id === 'esp1' ? 'esp' : 'liga');
   const pos = table.findIndex((r) => r.club === s.clubId) + 1;
   const row = table[pos - 1];
   const last = myFixtures(s).filter((f) => f.result).slice(-5);
@@ -45,14 +47,14 @@ export function renderDashboard(content: HTMLElement, s: GameState) {
         <div class="small muted">${COMP_NAMES[next.comp]} · ${next.stage} · ${fmtDate(next.date)}</div>` : '<div class="big">Sem jogos marcados</div>'}
       </div>
       <div class="card">
-        <div class="muted small">Liga Placard</div>
+        <div class="muted small">${lg.name}</div>
         <div class="big">${row && row.p ? `${pos}.º lugar · ${row.pts} pts` : 'Ainda não começou'}</div>
         <div class="small">${form.join('') || '<span class="muted">Sem jogos</span>'}</div>
       </div>
       <div class="card">
         <div class="muted small">Clube</div>
         <div class="big">${crestSvg(club.id, 26)} ${club.name}</div>
-        <div class="small muted">${ARENAS[club.id]?.name ?? club.arena} · reputação ${club.reputation} · poder financeiro ${club.wealth}</div>
+        <div class="small muted">${ARENAS[club.id]?.name ?? club.arena}${club.capacity ? ` (${club.capacity.toLocaleString('pt-PT')} lugares${club.capacityReal ? '' : ', estimativa'})` : ''} · reputação ${club.reputation} · poder financeiro ${club.wealth}</div>
       </div>
     </div>
     <h3>Notícias</h3>
@@ -82,16 +84,22 @@ export function renderCalendar(content: HTMLElement, s: GameState) {
     <p class="small muted">C = casa, F = fora, N = campo neutro. Os jogos das rondas seguintes das taças e do play-off aparecem quando se apuram os adversários.</p>`;
 }
 
-export function renderCompetitions(content: HTMLElement, s: GameState, tab = 'liga', round?: number) {
-  const tabs: [string, string][] = [['liga', 'Liga Placard'], ['playoff', 'Play-off'], ['taca', 'Taça de Portugal'], ['tacaLiga', 'Taça da Liga'], ['supertaca', 'Supertaça'], ['palmares', 'Palmarés'], ['marcadores', 'Marcadores']];
+export function renderCompetitions(content: HTMLElement, s: GameState, tab = 'liga', round?: number, country?: string) {
+  const ctry = country ?? countryOf(s, s.clubId);
+  const C = COUNTRY_COMPS[ctry];
+  const lg = s.leagues.find((l) => l.id === (ctry === 'esp' ? 'esp1' : 'por1')) ?? s.leagues[0];
+  // separadores por tipo (os ids antigos 'liga', 'taca'… continuam a funcionar)
+  const kindTab: Record<string, string> = { liga: 'league', playoff: 'playoff', taca: 'cup', tacaLiga: 'leagueCup', supertaca: 'super' };
+  tab = kindTab[tab] ?? tab;
+  const tabs: [string, string][] = [['league', COMP_NAMES[C.league]], ['playoff', 'Play-off'], ['cup', COMP_NAMES[C.cup]], ['leagueCup', COMP_NAMES[C.leagueCup]], ['super', COMP_NAMES[C.super]], ['palmares', 'Palmarés'], ['marcadores', 'Marcadores']];
   let body = '';
   const sea = s.season;
-  if (tab === 'liga') {
-    const t = leagueTable(sea, s.leagues[0].clubIds);
-    const rounds = Math.max(...sea.fixtures.filter((f) => f.comp === 'liga').map((f) => f.round ?? 0));
-    const played = Math.max(0, ...sea.fixtures.filter((f) => f.comp === 'liga' && f.result).map((f) => f.round ?? 0));
+  if (tab === 'league') {
+    const t = leagueTable(sea, lg.clubIds, 99, C.league);
+    const rounds = Math.max(...sea.fixtures.filter((f) => f.comp === C.league).map((f) => f.round ?? 0));
+    const played = Math.max(0, ...sea.fixtures.filter((f) => f.comp === C.league && f.result).map((f) => f.round ?? 0));
     const rd = round ?? Math.max(1, played);
-    const games = sea.fixtures.filter((f) => f.comp === 'liga' && f.round === rd);
+    const games = sea.fixtures.filter((f) => f.comp === C.league && f.round === rd);
     body = `
       <table class="tbl small table">
         <thead><tr><th>#</th><th>Clube</th><th>J</th><th>V</th><th>E</th><th>D</th><th>GM</th><th>GS</th><th>DG</th><th>Pts</th></tr></thead>
@@ -99,15 +107,16 @@ export function renderCompetitions(content: HTMLElement, s: GameState, tab = 'li
           .map((r, i) => `<tr class="${r.club === s.clubId ? 'mine' : ''} ${i < 8 ? 'zone-po' : ''}"><td>${i + 1}</td><td>${crestSvg(r.club, 18)} ${clubName(s, r.club)}</td><td>${r.p}</td><td>${r.w}</td><td>${r.d}</td><td>${r.l}</td><td>${r.gf}</td><td>${r.ga}</td><td>${r.gf - r.ga}</td><td><b>${r.pts}</b></td></tr>`)
           .join('')}</tbody>
       </table>
-      <p class="small muted">Os 8 primeiros (a verde) seguem para o play-off. As descidas de divisão entram quando a II Divisão existir no jogo.</p>
+      <p class="small muted">Os 8 primeiros (a verde) seguem para o play-off. ${ctry === 'esp' ? 'No real descem os 2 últimos à Segunda División: entra quando essa divisão existir no jogo.' : 'As descidas de divisão entram quando a II Divisão existir no jogo.'}</p>
       <h3>Jornada <select id="rd">${Array.from({ length: rounds }, (_, i) => `<option ${i + 1 === rd ? 'selected' : ''}>${i + 1}</option>`).join('')}</select></h3>
       ${fixturesTable(s, games)}`;
   } else if (tab === 'playoff') {
     const stages = ['Quartos-de-final', 'Meias-finais', 'Final'];
-    body = sea.series.length
+    const mine = sea.series.filter((x) => (x.comp ?? 'playoff') === C.playoff);
+    body = mine.length
       ? stages
           .map((st) => {
-            const ser = sea.series.filter((x) => x.stage === st);
+            const ser = mine.filter((x) => x.stage === st);
             if (!ser.length) return '';
             return `<h3>${st} <span class="muted small">(melhor de ${ser[0].bestOf})</span></h3>${ser
               .map((x) => `<div class="series ${x.winner ? 'done' : ''}"><b class="${x.winner === x.hi ? 'win' : ''}">${clubName(s, x.hi)}</b> ${x.wins[0]} - ${x.wins[1]} <b class="${x.winner === x.lo ? 'win' : ''}">${clubName(s, x.lo)}</b>
@@ -116,24 +125,29 @@ export function renderCompetitions(content: HTMLElement, s: GameState, tab = 'li
           })
           .join('')
       : '<div class="empty">O play-off começa no fim da fase regular.</div>';
-  } else if (tab === 'taca' || tab === 'tacaLiga' || tab === 'supertaca') {
-    const fx = sea.fixtures.filter((f) => f.comp === tab);
+  } else if (tab === 'cup' || tab === 'leagueCup' || tab === 'super') {
+    const comp = C[tab as 'cup'];
+    const fx = sea.fixtures.filter((f) => f.comp === comp);
     const stages = [...new Set(fx.map((f) => f.stage))];
     const info: Record<string, string> = {
       taca: 'Eliminatória inicial entre os classificados de 5.º a 12.º; final eight em campo neutro (Gondomar) em abril.',
       tacaLiga: 'Final eight com os 8 primeiros no fim da 1.ª volta, em campo neutro, em janeiro.',
       supertaca: 'Campeão nacional contra o vencedor da Taça de Portugal (ou finalista vencido, se for o mesmo clube).',
+      copaRey: 'Eliminatórias a uma mão (o pior classificado na época anterior joga em casa), final em campo neutro. No real entram equipas das divisões inferiores: por agora só os 16 da Primera. Datas estimadas.',
+      copaEsp: 'Final eight com os 8 primeiros no fim da 1.ª volta, em campo neutro, em março.',
+      superEsp: 'Final four: campeão, finalista do play-off e vencedores das duas taças (vagas repetidas passam aos seguintes da classificação). Data estimada.',
     };
-    body = `<p class="small muted">${info[tab]}</p>` + (stages.length ? stages.map((st) => `<h3>${st}</h3>${fixturesTable(s, fx.filter((f) => f.stage === st))}`).join('') : '<div class="empty">Ainda sem jogos definidos.</div>');
+    body = `<p class="small muted">${info[comp]}</p>` + (stages.length ? stages.map((st) => `<h3>${st}</h3>${fixturesTable(s, fx.filter((f) => f.stage === st))}`).join('') : '<div class="empty">Ainda sem jogos definidos.</div>');
   } else if (tab === 'palmares') {
-    body = s.honours.length
-      ? `<table class="tbl small"><thead><tr><th>Época</th><th>Competição</th><th>Vencedor</th><th>Finalista</th></tr></thead><tbody>${[...s.honours]
+    const hon = s.honours.filter((h) => Object.values(C).includes(h.comp));
+    body = hon.length
+      ? `<table class="tbl small"><thead><tr><th>Época</th><th>Competição</th><th>Vencedor</th><th>Finalista</th></tr></thead><tbody>${[...hon]
           .reverse()
           .map((h) => `<tr class="${h.winner === s.clubId ? 'mine' : ''}"><td>${h.season}</td><td>${COMP_NAMES[h.comp as CompId].replace(' (play-off)', '')}</td><td>${clubName(s, h.winner)}</td><td>${h.runnerUp ? clubName(s, h.runnerUp) : '-'}</td></tr>`)
           .join('')}</tbody></table>`
       : '<div class="empty">O palmarés começa a ser preenchido no fim da primeira época.</div>';
   } else if (tab === 'marcadores') {
-    const top = Object.entries(s.pstats).sort((a, b) => b[1].goals - a[1].goals || b[1].assists - a[1].assists).slice(0, 20);
+    const top = Object.entries(s.pstats).filter(([id]) => { const p = s.players.find((x) => x.id === id); return p && lg.clubIds.includes(p.clubId); }).sort((a, b) => b[1].goals - a[1].goals || b[1].assists - a[1].assists).slice(0, 20);
     body = `<table class="tbl small"><thead><tr><th>#</th><th>Jogador</th><th>Clube</th><th>J</th><th>Golos</th><th>Assist.</th><th>Nota média</th></tr></thead><tbody>${top
       .map(([id, st], i) => {
         const p = s.players.find((x) => x.id === id);
@@ -141,11 +155,14 @@ export function renderCompetitions(content: HTMLElement, s: GameState, tab = 'li
       })
       .join('')}</tbody></table><p class="small muted">Todas as competições oficiais da época.</p>`;
   }
+  const countries = s.leagues.length > 1 ? `<div class="tabs">${[['por', 'Portugal'], ['esp', 'Espanha']].map(([id, l]) => `<button class="tab ${id === ctry ? 'on' : ''}" data-ctry="${id}">${l}</button>`).join('')}</div>` : '';
   content.innerHTML = `<h2>Competições <span class="muted small">${sea.label}</span></h2>
+    ${countries}
     <div class="tabs">${tabs.map(([id, l]) => `<button class="tab ${id === tab ? 'on' : ''}" data-tab="${id}">${l}</button>`).join('')}</div>
     ${body}`;
-  content.querySelectorAll<HTMLButtonElement>('[data-tab]').forEach((b) => b.addEventListener('click', () => renderCompetitions(content, s, b.dataset.tab)));
-  content.querySelector<HTMLSelectElement>('#rd')?.addEventListener('change', (e) => renderCompetitions(content, s, 'liga', Number((e.target as HTMLSelectElement).value)));
+  content.querySelectorAll<HTMLButtonElement>('[data-tab]').forEach((b) => b.addEventListener('click', () => renderCompetitions(content, s, b.dataset.tab, undefined, ctry)));
+  content.querySelectorAll<HTMLButtonElement>('[data-ctry]').forEach((b) => b.addEventListener('click', () => renderCompetitions(content, s, tab, undefined, b.dataset.ctry)));
+  content.querySelector<HTMLSelectElement>('#rd')?.addEventListener('change', (e) => renderCompetitions(content, s, 'league', Number((e.target as HTMLSelectElement).value), ctry));
 }
 
 function fixturesTable(s: GameState, fx: Fixture[]) {
@@ -181,7 +198,7 @@ export function renderMatchDay(content: HTMLElement, s: GameState, f: Fixture, o
     <div class="coaches small muted" style="margin-top:8px"><span>${hs.coachName} · ${tacticsSummary(hs.tactics)}</span><span>${as.coachName} · ${tacticsSummary(as.tactics)}</span></div>
     ${banLine(s, f)}
     <div class="form-row" style="margin-top:16px">
-      <label>Marcador<select id="sbs">${[['auto', 'Da competição'], ['liga', 'Liga Placard'], ['taca', 'Taça de Portugal'], ['tacaLiga', 'Taça da Liga'], ['supertaca', 'Supertaça']].map(([v, l]) => `<option value="${v}" ${settingsOf(s).scoreboard === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
+      <label>Marcador<select id="sbs">${[['auto', 'Da competição'], ['liga', 'Liga Placard'], ['taca', 'Taça de Portugal'], ['tacaLiga', 'Taça da Liga'], ['supertaca', 'Supertaça'], ['esp', 'Primera División'], ['copaRey', 'Copa del Rey'], ['copaEsp', 'Copa de España'], ['superEsp', 'Supercopa de España']].map(([v, l]) => `<option value="${v}" ${settingsOf(s).scoreboard === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
       <label>Velocidade<select id="spd">${[['lento', 'Lenta'], ['medio', 'Média'], ['rapido', 'Rápida']].map(([v, l]) => `<option value="${v}" ${settingsOf(s).speed === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
     </div>
     <h3 style="margin-top:14px">Equipamentos</h3>

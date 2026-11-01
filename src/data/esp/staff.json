@@ -1,0 +1,501 @@
+{
+ "_info": "Primera División 2026/27, futsalportugal.com (recolha 2/11/2026, 1 página a cada 7 s). Só os treinadores principais (o site não lista o resto da equipa técnica em Espanha); ability é estimativa.",
+ "people": [
+  {
+   "id": "stc-fp286505-adjunto",
+   "club": "stc",
+   "name": "Jorge Vargas Perez",
+   "func": "Treinador-adjunto",
+   "role": "adjunto",
+   "nat": "Espanha",
+   "birth": "?",
+   "src": "fp",
+   "ability": 6,
+   "fp": {
+    "games": 2,
+    "wins": 0,
+    "notWon": 2,
+    "titles": []
+   },
+   "history": [
+    {
+     "ep": "2026/2027",
+     "club": "Industrias Santa Coloma",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ]
+  },
+  {
+   "id": "stc-fp21211-principal",
+   "club": "stc",
+   "name": "Xavi Closas",
+   "func": "Treinador principal",
+   "role": "principal",
+   "nat": "Espanha",
+   "birth": "1978-07-28",
+   "src": "fp",
+   "ability": 8,
+   "fp": {
+    "games": 123,
+    "wins": 44,
+    "notWon": 79,
+    "titles": []
+   },
+   "history": [
+    {
+     "ep": "2026/2027",
+     "club": "Industrias Santa Coloma",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2025/2026",
+     "club": "Industrias Santa Coloma",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2024/2025",
+     "club": "Industrias Santa Coloma",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2023/2024",
+     "club": "Industrias Santa Coloma",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2022/2023",
+     "club": "Industrias Santa Coloma",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "coach": {
+    "tactical": 10,
+    "motivation": 11,
+    "record": {
+     "games": 123,
+     "wins": 44,
+     "winRate": 0.358,
+     "titlesPts": 0
+    }
+   }
+  },
+  {
+   "id": "par-fp27900-principal",
+   "club": "par",
+   "name": "Gerard Casas",
+   "func": "Treinador principal",
+   "role": "principal",
+   "nat": "Espanha",
+   "birth": "1989-02-07",
+   "src": "fp",
+   "ability": 7,
+   "fp": {
+    "games": 33,
+    "wins": 12,
+    "notWon": 21,
+    "titles": []
+   },
+   "history": [
+    {
+     "ep": "2026/2027",
+     "club": "O Parrulo Ferrol",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2025/2026",
+     "club": "O Parrulo Ferrol",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "coach": {
+    "tactical": 10,
+    "motivation": 11,
+    "record": {
+     "games": 33,
+     "wins": 12,
+     "winRate": 0.364,
+     "titlesPts": 0
+    }
+   }
+  },
+  {
+   "id": "pal-fp779-principal",
+   "club": "pal",
+   "name": "Antonio Vadillo",
+   "func": "Treinador principal",
+   "role": "principal",
+   "nat": "Espanha",
+   "birth": "1977-03-27",
+   "src": "fp",
+   "ability": 15,
+   "fp": {
+    "games": 579,
+    "wins": 289,
+    "notWon": 289,
+    "titles": [
+     "UEFA Futsal Champions League (2022/2023, 2023/2024, 2024/2025)"
+    ]
+   },
+   "history": [
+    {
+     "ep": "2026/2027",
+     "club": "Islas Baleares Palma Futsal",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2025/2026",
+     "club": "Islas Baleares Palma Futsal",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2024/2025",
+     "club": "Islas Baleares Palma Futsal",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2023/2024",
+     "club": "Islas Baleares Palma Futsal",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2022/2023",
+     "club": "Islas Baleares Palma Futsal",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2021/2022",
+     "club": "Islas Baleares Palma Futsal",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2020/2021",
+     "club": "Islas Baleares Palma Futsal",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2019/2020",
+     "club": "Islas Baleares Palma Futsal",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2018/2019",
+     "club": "Islas Baleares Palma Futsal",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2017/2018",
+     "club": "Islas Baleares Palma Futsal",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2016/2017",
+     "club": "Islas Baleares Palma Futsal",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "coach": {
+    "tactical": 13,
+    "motivation": 12,
+    "record": {
+     "games": 579,
+     "wins": 289,
+     "winRate": 0.501,
+     "titlesPts": 12
+    }
+   }
+  },
+  {
+   "id": "osa-fp67601-adjunto",
+   "club": "osa",
+   "name": "Gonzalo Iglesias Alonso",
+   "func": "Treinador-adjunto",
+   "role": "adjunto",
+   "nat": "Espanha",
+   "birth": "?",
+   "src": "fp",
+   "ability": 6,
+   "fp": {
+    "games": 2,
+    "wins": 1,
+    "notWon": 1,
+    "titles": []
+   },
+   "history": [
+    {
+     "ep": "2026/2027",
+     "club": "Osasuna Magna Xota FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ]
+  },
+  {
+   "id": "osa-fp772-principal",
+   "club": "osa",
+   "name": "Imanol Arregui Sarasa",
+   "func": "Treinador principal",
+   "role": "principal",
+   "nat": "Espanha",
+   "birth": "1971-12-07",
+   "src": "fp",
+   "ability": 12,
+   "fp": {
+    "games": 397,
+    "wins": 166,
+    "notWon": 231,
+    "titles": []
+   },
+   "history": [
+    {
+     "ep": "2026/2027",
+     "club": "Osasuna Magna Xota FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2022/2023",
+     "club": "Osasuna Magna Xota FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2021/2022",
+     "club": "Osasuna Magna Xota FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2020/2021",
+     "club": "Osasuna Magna Xota FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2019/2020",
+     "club": "Osasuna Magna Xota FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2018/2019",
+     "club": "Osasuna Magna Xota FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2017/2018",
+     "club": "Osasuna Magna Xota FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2016/2017",
+     "club": "Osasuna Magna Xota FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2015/2016",
+     "club": "Osasuna Magna Xota FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2014/2015",
+     "club": "Osasuna Magna Xota FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2013/2014",
+     "club": "Osasuna Magna Xota FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2012/2013",
+     "club": "Osasuna Magna Xota FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2011/2012",
+     "club": "Osasuna Magna Xota FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    },
+    {
+     "ep": "2010/2011",
+     "club": "Osasuna Magna Xota FS",
+     "func": "Treinador",
+     "g": "?",
+     "w": "?",
+     "d": "?",
+     "l": "?",
+     "titles": "-"
+    }
+   ],
+   "coach": {
+    "tactical": 11,
+    "motivation": 11,
+    "record": {
+     "games": 397,
+     "wins": 166,
+     "winRate": 0.418,
+     "titlesPts": 0
+    }
+   }
+  }
+ ]
+}

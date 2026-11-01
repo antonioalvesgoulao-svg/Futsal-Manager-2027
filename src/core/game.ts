@@ -20,6 +20,9 @@ import { addDays, afterMatchday, createSeason, keyDates, leagueTable, runnerUp }
 import { COMP_NAMES, Fixture } from './season/types';
 import type { GameState } from './types';
 
+/** Clubes da Primera División (vazio em gravações antigas, sem Espanha). */
+export const espIds = (s: GameState) => s.leagues.find((l) => l.id === 'esp1')?.clubIds ?? [];
+
 export function clubName(s: GameState, id: string) {
   return s.clubs.find((c) => c.id === id)?.name ?? id;
 }
@@ -56,8 +59,10 @@ function news(s: GameState, text: string) {
 // Primeira época: classificação e Supertaça reais da época anterior (2025/26)
 export function startFirstSeason(s: GameState) {
   // ordem final 2025/26 aproximada pelos níveis atuais; Supertaça real: Benfica (campeão e vencedor da Taça) x Sporting (finalista)
-  const ranking = [...s.clubs].sort((a, b) => b.level - a.level).map((c) => c.id);
-  s.season = createSeason(2026, ranking, ['slb', 'scp']);
+  const ranking = s.leagues[0].clubIds.map((id) => s.clubs.find((c) => c.id === id)!).sort((a, b) => b.level - a.level).map((c) => c.id);
+  // Espanha: ordem 2025/26 aproximada pelos níveis atuais (estimativa); Supercopa com os 4 primeiros dessa ordem
+  const esp = espIds(s).map((id) => s.clubs.find((c) => c.id === id)!).sort((a, b) => b.level - a.level).map((c) => c.id);
+  s.season = createSeason(2026, ranking, ['slb', 'scp'], esp.length ? { ranking: esp, four: esp.slice(0, 4) } : undefined);
   s.date = '2026-07-01';
   s.pstats = {};
   ensureContracts(s);
@@ -219,7 +224,7 @@ function playDay(s: GameState, d: string) {
   for (const f of s.season.fixtures.filter((x) => x.date === d && !x.result && !x.cancelled)) playFixture(s, f);
   const clubIds = s.leagues[0].clubIds;
   const before = { ...s.season.winners };
-  for (const t of afterMatchday(s.season, clubIds, (id) => clubName(s, id))) news(s, t);
+  for (const t of afterMatchday(s.season, clubIds, (id) => clubName(s, id), espIds(s))) news(s, t);
   // títulos: todo o plantel ganha moral
   for (const [comp, w] of Object.entries(s.season.winners)) if (w && before[comp as keyof typeof before] !== w) {
     moraleEvent(s, s.players.filter((p) => p.clubId === w).map((p) => p.id), 10);
@@ -232,13 +237,13 @@ function playDay(s: GameState, d: string) {
 // Fim de época: palmarés, evolução, reformas, formação e nova época
 function endSeason(s: GameState): DevChange[] {
   const old = s.season;
-  for (const comp of ['supertaca', 'tacaLiga', 'taca', 'liga'] as const) {
+  for (const comp of ['supertaca', 'tacaLiga', 'taca', 'liga', 'superEsp', 'copaEsp', 'copaRey', 'esp'] as const) {
     if (old.winners[comp]) s.honours.push({ season: old.label, comp, winner: old.winners[comp]!, runnerUp: runnerUp(old, comp) });
   }
-  const top = Object.entries(s.pstats).sort((a, b) => b[1].goals - a[1].goals)[0];
-  if (top) {
-    const p = s.players.find((x) => x.id === top[0]);
-    if (p) news(s, `Melhor marcador ${old.label}: ${p.name} (${clubName(s, p.clubId)}), ${top[1].goals} golos.`);
+  for (const lg of s.leagues) {
+    const top = Object.entries(s.pstats).filter(([id]) => lg.clubIds.includes(s.players.find((x) => x.id === id)?.clubId ?? '')).sort((a, b) => b[1].goals - a[1].goals)[0];
+    const p = top && s.players.find((x) => x.id === top[0]);
+    if (p) news(s, `Melhor marcador ${lg.name} ${old.label}: ${p.name} (${clubName(s, p.clubId)}), ${top[1].goals} golos.`);
   }
 
   // evolução
@@ -274,8 +279,17 @@ function endSeason(s: GameState): DevChange[] {
   const ranking = [champ, ...table.filter((c) => c !== champ)];
   const cup = old.winners.taca ?? table[1];
   const second = cup === champ ? runnerUp(old, 'taca') ?? table[1] : cup;
-  s.season = createSeason(old.year + 1, ranking, [champ, second]);
-  s.leagues[0].season = s.season.label;
+  // Espanha: Supercopa com campeão, finalista do play-off e vencedores das duas taças (vagas repetidas → seguintes na tabela)
+  let espNext: { ranking: string[]; four: string[] } | undefined;
+  if (espIds(s).length) {
+    const et = old.esp?.regularTable ?? leagueTable(old, espIds(s), 99, 'esp').map((x) => x.club);
+    const ec = old.winners.esp ?? et[0];
+    const four: string[] = [];
+    for (const c of [ec, runnerUp(old, 'esp'), old.winners.copaEsp, old.winners.copaRey, ...et]) if (c && !four.includes(c) && four.length < 4) four.push(c);
+    espNext = { ranking: [ec, ...et.filter((c) => c !== ec)], four };
+  }
+  s.season = createSeason(old.year + 1, ranking, [champ, second], espNext);
+  for (const l of s.leagues) l.season = s.season.label;
   s.date = `${old.year + 1}-07-01`;
   s.pstats = {};
   ensureContracts(s);

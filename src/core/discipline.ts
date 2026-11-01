@@ -11,9 +11,11 @@ import type { MatchResult } from './engine/types';
 import type { CompId, Fixture } from './season/types';
 import type { GameState } from './types';
 
-/** Liga e play-off são a mesma competição (Liga Placard) para efeitos de castigo. */
-export type DComp = 'liga' | 'taca' | 'tacaLiga' | 'supertaca';
-export const dcomp = (c: CompId): DComp => (c === 'playoff' ? 'liga' : c);
+// Espanha (Código Disciplinario RFEF, estimativa a confirmar): 1 jogo a cada 5 amarelos na liga (ciclos de 5), 2 amarelos = 1 jogo;
+// taças sem acumulação, como em Portugal
+/** Liga e play-off são a mesma competição para efeitos de castigo. */
+export type DComp = Exclude<CompId, 'playoff' | 'espPlayoff'>;
+export const dcomp = (c: CompId): DComp => (c === 'playoff' ? 'liga' : c === 'espPlayoff' ? 'esp' : c);
 
 export interface Suspension { comp: DComp; games: number; reason: string; yellowsOnly?: boolean }
 export interface Discipline {
@@ -80,9 +82,10 @@ export function applyDiscipline(s: GameState, f: Fixture, m: MatchResult, name: 
       }
     }
     // acumulação de amarelos (só Liga Placard; os 2 amarelos da expulsão não contam)
-    if (comp === 'liga' && st.yellow > 0 && !(st.red && (st.redKind ?? 'twoYellows') === 'twoYellows')) {
-      const n = (d.yellows[id] = (d.yellows[id] ?? 0) + st.yellow);
-      if (THRESH(n)) { d.sanctioned[id] = n; add(id, 1, `${n}.º amarelo`, true); }
+    if ((comp === 'liga' || comp === 'esp') && st.yellow > 0 && !(st.red && (st.redKind ?? 'twoYellows') === 'twoYellows')) {
+      const before = d.yellows[id] ?? 0;
+      const n = (d.yellows[id] = before + st.yellow);
+      if (comp === 'liga' ? THRESH(n) : Math.floor(n / 5) > Math.floor(before / 5)) { d.sanctioned[id] = n; add(id, 1, `${n}.º amarelo`, true); }
     }
   }
   // 3) Art. 40.2: castigo por vermelho numa competição onde a equipa já não joga → passa para outra competição dessa época

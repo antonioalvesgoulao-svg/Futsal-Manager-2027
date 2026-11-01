@@ -1,0 +1,45 @@
+{
+  "_info": "Primera División 2026/27, futsalportugal.com (recolha 2/11/2026, 1 página a cada 7 s). tactical/motivation calculados do historial (vitórias por competição, títulos); discipline/youth estimativa.",
+  "coaches": [
+    {
+      "id": "c_stc",
+      "name": "Xavi Closas",
+      "clubId": "stc",
+      "tactical": 10,
+      "motivation": 11,
+      "discipline": 14,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_par",
+      "name": "Gerard Casas",
+      "clubId": "par",
+      "tactical": 10,
+      "motivation": 11,
+      "discipline": 14,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_pal",
+      "name": "Antonio Vadillo",
+      "clubId": "pal",
+      "tactical": 13,
+      "motivation": 12,
+      "discipline": 14,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_osa",
+      "name": "Imanol Arregui Sarasa",
+      "clubId": "osa",
+      "tactical": 11,
+      "motivation": 11,
+      "discipline": 14,
+      "youth": 12,
+      "style": {}
+    }
+  ]
+}

@@ -25,7 +25,7 @@ export function marketWage(p: Player, club: Club) {
 /** Orçamento anual do futsal (€), todo para salários (pedido do António).
  *  Pontos reais: Benfica 2,7 M€ (2024, wealth 98), Sporting ~2 M€ (92), Fundão ~150 mil € (40).
  *  Os outros saem da curva exponencial que passa por estes três (estimativa): mais estrutura = mais orçamento. */
-export const salaryBudget = (club: Club) => Math.round(2.7e6 * Math.exp((club.wealth - 98) * 0.0498) / 1000) * 1000;
+export const salaryBudget = (club: Club) => club.budget ?? Math.round(2.7e6 * Math.exp((club.wealth - 98) * 0.0498) / 1000) * 1000;
 
 /** Calcula a escala salarial de cada clube para que os salários do plantel somem o orçamento. */
 export function calibrateWages(s: GameState) {

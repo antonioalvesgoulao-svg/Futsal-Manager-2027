@@ -19,6 +19,23 @@ const CRESTS: Record<string, Crest> = {
   por: { shape: 'escudo', c1: '#111111', c2: '#ffffff', edge: '#ffffff', pat: 'riscas', sym: 'ancora', symC: '#d4af37' },
   fam: { shape: 'redondo', c1: '#18214e', c2: '#ffffff', edge: '#ffffff', pat: 'metade', sym: 'bola', symC: '#ffffff' },
   tor: { shape: 'escudo', c1: '#881732', c2: '#34497e', edge: '#ffffff', pat: 'metade', sym: 'torre', symC: '#ffffff' },
+  // Espanha: cores dos clubes + símbolo ligado à terra (porto, castelo, rio, leão de Saragoça…), desenho próprio
+  bar: { shape: 'redondo', c1: '#a50044', c2: '#004d98', edge: '#edbb00', pat: 'riscas', sym: 'estrela', symC: '#edbb00' },
+  epz: { shape: 'losango', c1: '#d50000', c2: '#ffffff', edge: '#ffffff', pat: 'metade', sym: 'estrela', symC: '#111111' },
+  pal: { shape: 'frances', c1: '#ffd200', c2: '#000000', edge: '#000000', pat: 'banda', sym: 'ondas', symC: '#000000' },
+  jca: { shape: 'escudo', c1: '#000000', c2: '#ffffff', edge: '#ffffff', pat: 'riscas', sym: 'ancora', symC: '#d4af37' },
+  int: { shape: 'redondo', c1: '#0b3d91', c2: '#ffffff', edge: '#ffffff', pat: 'liso', sym: 'estrela', symC: '#ffffff' },
+  jae: { shape: 'escudo', c1: '#ffd100', c2: '#111111', edge: '#111111', pat: 'faixa', sym: 'castelo', symC: '#111111' },
+  val: { shape: 'frances', c1: '#7a1f3d', c2: '#ffffff', edge: '#ffffff', pat: 'liso', sym: 'estrela', symC: '#ffffff' },
+  man: { shape: 'escudo', c1: '#e30613', c2: '#ffffff', edge: '#ffffff', pat: 'banda', sym: 'torre', symC: '#ffffff' },
+  zar: { shape: 'escudo', c1: '#d50000', c2: '#ffffff', edge: '#d4af37', pat: 'liso', sym: 'leao', symC: '#ffffff' },
+  pen: { shape: 'redondo', c1: '#1565c0', c2: '#ffffff', edge: '#ffffff', pat: 'liso', sym: 'castelo', symC: '#ffffff' },
+  par: { shape: 'escudo', c1: '#111111', c2: '#ffffff', edge: '#ffffff', pat: 'faixa', sym: 'ancora', symC: '#ffffff' },
+  osa: { shape: 'frances', c1: '#c8102e', c2: '#0a2240', edge: '#ffffff', pat: 'banda', sym: 'bola', symC: '#ffffff' },
+  cor: { shape: 'escudo', c1: '#00843d', c2: '#ffffff', edge: '#ffffff', pat: 'riscas', sym: 'torre', symC: '#ffffff' },
+  eji: { shape: 'losango', c1: '#00843d', c2: '#ffffff', edge: '#ffffff', pat: 'liso', sym: 'raio', symC: '#ffffff' },
+  noi: { shape: 'redondo', c1: '#1e88e5', c2: '#ffffff', edge: '#ffffff', pat: 'liso', sym: 'ondas', symC: '#ffffff' },
+  stc: { shape: 'escudo', c1: '#0d47a1', c2: '#ffffff', edge: '#ffffff', pat: 'metade', sym: 'bola', symC: '#d4af37' },
 };
 
 // contornos no espaço 100 x 120

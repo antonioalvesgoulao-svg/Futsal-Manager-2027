@@ -11,18 +11,25 @@ import porCoaches from '../data/por/coaches.json';
 import { suggestTactics } from './tactics';
 import type { Coach } from './types';
 import { startFirstSeason } from './game';
+import espData from '../data/esp/clubs.json';
+import espPlayers from '../data/esp/players.json';
+import espFp from '../data/esp/fpstats.json';
+import espCoaches from '../data/esp/coaches.json';
 
 // Base de dados: cada liga é um ficheiro em src/data/<país>/clubs.json
-export const DB_CLUBS: Club[] = porData.clubs.map(({ check, ...c }) => ({ ...c, colors: c.colors as [string, string] }));
+export const DB_CLUBS: Club[] = [
+  ...porData.clubs.map(({ check, ...c }) => ({ ...c, colors: c.colors as [string, string] })),
+  ...espData.clubs.map(({ fp, ...c }) => ({ ...c, colors: c.colors as [string, string] })),
+];
 type RawPlayer = Omit<Player, 'attrs' | 'potential'>;
 const BOOST = porOverrides.boost as Record<string, number>;
 const HISTORY = porHistory.players as Record<string, SeasonRow[]>;
 const ATTR_OVERRIDES = porOverrides.attrs as Record<string, Partial<Player['attrs']>>;
-export const FP_STATS = porFp.players as Record<string, { games: number; yellow: number; red: number; seasons: { s: string; team: string; games: number; goals: number }[]; titles: string[] }>;
+export const FP_STATS = { ...porFp.players, ...espFp.players } as Record<string, { games: number; yellow: number; red: number; seasons: { s: string; team: string; games: number; goals: number }[]; titles: string[] }>;
 
 // Jogadores com atributos gerados (sempre iguais para o mesmo jogador)
 function buildPlayers(): Player[] {
-  return (porPlayers.players as RawPlayer[]).map((p) => {
+  return ([...porPlayers.players, ...espPlayers.players] as RawPlayer[]).map((p) => {
     const club = DB_CLUBS.find((c) => c.id === p.clubId.replace('@jun', ''))!; // Sub-19 não inscritos como seniores ficam na formação
     const key = `${p.clubId}|${p.name}`;
     // historial: zerozero; quem não o tem (jogadores novos do site da FPF) usa as épocas oficiais do futsalportugal.com
@@ -41,10 +48,18 @@ function buildPlayers(): Player[] {
   });
 }
 export const DB_PLAYERS: Player[] = buildPlayers();
-export const DB_COACHES: Coach[] = porCoaches.coaches as Coach[];
+export const DB_COACHES: Coach[] = [...porCoaches.coaches, ...espCoaches.coaches] as Coach[];
 export const DB_LEAGUES: League[] = [
   { ...porData.league, clubIds: porData.clubs.map((c) => c.id) },
+  { ...espData.league, clubIds: espData.clubs.map((c) => c.id) },
 ];
+
+/** Liga de um clube (os clubes sem `league` são da Liga Placard). */
+export function leagueOf(s: GameState, clubId: string): League {
+  const c = s.clubs.find((x) => x.id === clubId.replace('@jun', ''));
+  return s.leagues.find((l) => l.id === (c?.league ?? 'por1')) ?? s.leagues[0];
+}
+export const countryOf = (s: GameState, clubId: string) => (leagueOf(s, clubId).id === 'esp1' ? 'esp' : 'por');
 
 let current: GameState | null = null;
 const listeners = new Set<() => void>();

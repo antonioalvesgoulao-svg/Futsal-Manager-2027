@@ -16,12 +16,13 @@ export function ticketPrice(s: GameState, f: Fixture) {
   const h = s.clubs.find((c) => c.id === f.home)!;
   // muitos sócios entram com o bilhete de época ou grátis: preço médio efetivo baixo
   let p = h.reputation >= 90 ? 4 : h.reputation >= 70 ? 3 : 2;
-  if (/Final/.test(f.stage)) p *= 2; else if (/Meias/.test(f.stage) || f.comp === 'playoff') p *= 1.4;
+  if (/Final/.test(f.stage)) p *= 2; else if (/Meias/.test(f.stage) || f.comp === 'playoff' || f.comp === 'espPlayoff') p *= 1.4;
   return p;
 }
 
 /** Prémios por título (€, estimativa: a FPF não publica valores para o futsal). */
-export const PRIZES: Record<string, number> = { liga: 60000, taca: 30000, tacaLiga: 20000, supertaca: 10000 };
+// Espanha: estimativa (prémios da RFEF não publicados)
+export const PRIZES: Record<string, number> = { liga: 60000, taca: 30000, tacaLiga: 20000, supertaca: 10000, esp: 100000, copaEsp: 50000, copaRey: 30000, superEsp: 20000 };
 
 export function financeOf(s: GameState, clubId: string): ClubFinance {
   const all = (s.finance ??= {});

@@ -1,5 +1,5 @@
 // Tipos da época: calendário, competições, séries de play-off, estatísticas e palmarés
-export type CompId = 'liga' | 'playoff' | 'taca' | 'tacaLiga' | 'supertaca';
+export type CompId = 'liga' | 'playoff' | 'taca' | 'tacaLiga' | 'supertaca' | 'esp' | 'espPlayoff' | 'copaRey' | 'copaEsp' | 'superEsp';
 
 export const COMP_NAMES: Record<CompId, string> = {
   liga: 'Liga Placard',
@@ -7,7 +7,26 @@ export const COMP_NAMES: Record<CompId, string> = {
   taca: 'Taça de Portugal',
   tacaLiga: 'Taça da Liga',
   supertaca: 'Supertaça',
+  esp: 'Primera División',
+  espPlayoff: 'Primera División (play-off)',
+  copaRey: 'Copa del Rey',
+  copaEsp: 'Copa de España',
+  superEsp: 'Supercopa de España',
 };
+
+/** Tipo de cada competição, igual em todos os países: liga, play-off, taça (todos), taça da liga (final eight), supertaça. */
+export type CompKind = 'league' | 'playoff' | 'cup' | 'leagueCup' | 'super';
+export const COMP_KIND: Record<CompId, CompKind> = {
+  liga: 'league', playoff: 'playoff', taca: 'cup', tacaLiga: 'leagueCup', supertaca: 'super',
+  esp: 'league', espPlayoff: 'playoff', copaRey: 'cup', copaEsp: 'leagueCup', superEsp: 'super',
+};
+export const kindOf = (c: CompId) => COMP_KIND[c];
+/** Competições de cada país, pela ordem liga, play-off, taça, taça da liga, supertaça. */
+export const COUNTRY_COMPS: Record<string, { league: CompId; playoff: CompId; cup: CompId; leagueCup: CompId; super: CompId }> = {
+  por: { league: 'liga', playoff: 'playoff', cup: 'taca', leagueCup: 'tacaLiga', super: 'supertaca' },
+  esp: { league: 'esp', playoff: 'espPlayoff', cup: 'copaRey', leagueCup: 'copaEsp', super: 'superEsp' },
+};
+export const countryOfComp = (c: CompId) => (Object.entries(COUNTRY_COMPS).find(([, v]) => Object.values(v).includes(c))?.[0] ?? 'por');
 
 export interface Scorer {
   id: string;
@@ -40,6 +59,7 @@ export interface Fixture {
 export interface Series {
   id: string;
   stage: string;
+  comp?: CompId; // play-off a que pertence (omisso = Liga Placard)
   hi: string; // melhor classificado (fator casa)
   lo: string;
   bestOf: number;
@@ -55,6 +75,7 @@ export interface SeasonState {
   series: Series[];
   halfTable?: string[]; // classificação no fim da 1.ª volta (Taça da Liga)
   regularTable?: string[]; // classificação final da fase regular
+  esp?: { halfTable?: string[]; regularTable?: string[] }; // o mesmo para a Primera División
   winners: Partial<Record<CompId, string>>;
   finished: boolean;
 }

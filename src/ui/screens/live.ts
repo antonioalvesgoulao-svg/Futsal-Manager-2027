@@ -5,7 +5,7 @@ import type { MatchEvent, MatchResult } from '../../core/engine/types';
 import { matchOptions, setupFor } from '../../core/game';
 import { COMP_NAMES, Fixture } from '../../core/season/types';
 import type { Club, GameState, Settings } from '../../core/types';
-import { goalBarHtml, lineupHtml, scoreboardHtml } from '../broadcast';
+import { goalBarHtml, lineupHtml, scoreboardHtml , styleOf } from '../broadcast';
 import { sound } from '../audio';
 import type { Frame } from '../../core/visual/choreo';
 import { resultHtml } from './friendly';
@@ -53,7 +53,7 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
   const mySide = f.home === s.clubId ? 0 : 1;
   const mopts = matchOptions(s, f);
   const m = createMatch(hs, as, mopts);
-  const style = st.scoreboard === 'auto' ? (f.comp === 'playoff' ? 'liga' : f.comp) : st.scoreboard;
+  const style = st.scoreboard === 'auto' ? styleOf(f.comp) : st.scoreboard;
   const kits = matchKits(h, a, mySide, pendingKit);
   setPendingKit('auto');
   const gkKits = matchGkKits(h.id, a.id, kits);
@@ -68,7 +68,7 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
   // (dérbi entre os dois ou finais das competições)
   const BIG = ['slb', 'scp'];
   const derby = BIG.includes(f.home) && BIG.includes(f.away);
-  const finalGame = f.comp !== 'liga' && /Final/.test(f.stage) && !/Meias|Quartos/.test(f.stage);
+  const finalGame = f.comp !== 'liga' && f.comp !== 'esp' && /Final/.test(f.stage) && !/Meias|Quartos/.test(f.stage);
   const bigGame = derby || finalGame;
   // som: o clique em "Jogar ao vivo" permite ao browser tocar som
   sound.setVolume(st.sound ?? 'mid');
@@ -289,7 +289,7 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
     const inPeriod = Math.max(0, Math.min(snap.periodLen, display - snap.periodStart));
     const note = snap.teams.some((t) => t.flying) ? '5x4' : snap.teams.some((t) => t.short) ? 'Inferioridade numérica' : banner;
     $('#sb').innerHTML = scoreboardHtml({
-      style: style as 'liga',
+      style,
       home: { id: h.id, short: h.shortName, color: colors[0], score: shownScore[0], fouls: snap.teams[0].fouls },
       away: { id: a.id, short: a.shortName, color: colors[1], score: shownScore[1], fouls: snap.teams[1].fouls },
       clock: fmt(inPeriod),
@@ -332,7 +332,7 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
     const per = e.period === 1 ? '1.ª parte' : e.period === 2 ? '2.ª parte' : 'Prolongamento';
     const el = $('#gbar');
     el.innerHTML = goalBarHtml({
-      style: style as 'liga',
+      style,
       team: { short: sd === 0 ? h.shortName : a.shortName, color: colors[sd] },
       scorer: { number: sq?.number ?? null, name: m.names[e.playerId!] ?? '' },
       assist: e.assistId ? m.names[e.assistId] : undefined,
@@ -417,7 +417,7 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
       const setup = sd ? as : hs;
       const list = subs ? t.bench : [t.gk, ...t.court];
       return lineupHtml({
-        style: style as 'liga',
+        style,
         team: { name: club.name, short: club.shortName, color: kit[sd][0] },
         title: subs ? 'Suplentes' : 'Cinco inicial',
         compact: subs,

@@ -16,7 +16,8 @@ const fmtD = (d: string) => d.split('-').reverse().join('/');
 export function renderCareer(content: HTMLElement, s: GameState, onJob: () => void) {
   const c = careerOf(s);
   const club = s.clubs.find((x) => x.id === s.clubId);
-  const t = leagueTable(s.season, s.leagues[0].clubIds);
+  const myLg = club ? s.leagues.find((l) => l.clubIds.includes(club.id)) ?? s.leagues[0] : s.leagues[0];
+  const t = leagueTable(s.season, myLg.clubIds, 99, myLg.id === 'esp1' ? 'esp' : 'liga');
   let interviewing: string | null = null;
   let result = '';
   const draw = () => {
@@ -34,12 +35,12 @@ export function renderCareer(content: HTMLElement, s: GameState, onJob: () => vo
       <h3>Propostas</h3>
       ${c.offers.length ? `<table class="tbl"><tbody>${c.offers.map((o) => { const k = s.clubs.find((x) => x.id === o.clubId)!; return `<tr><td>${crestSvg(k.id, 20)} <b>${k.name}</b></td><td class="small muted">${fmtD(o.date)} · reputação ${k.reputation} · ${objectiveOf(s, k.id).text}</td><td><button class="btn primary" data-job="${k.id}">Aceitar</button> <button class="btn ghost" data-no="${k.id}">Recusar</button></td></tr>`; }).join('')}</tbody></table>` : '<p class="muted">Sem propostas.</p>'}
       <h3>Clubes e treinadores</h3>
-      <table class="tbl small"><thead><tr><th>Clube</th><th>Treinador</th><th>Confiança da direção</th><th>Segurança</th><th></th></tr></thead><tbody>
+      <table class="tbl small"><thead><tr><th>Clube</th><th>Liga</th><th>Treinador</th><th>Confiança da direção</th><th>Segurança</th><th></th></tr></thead><tbody>
       ${s.clubs.map((k) => {
         const coach = k.id === s.clubId ? `${s.manager.name} (tu)` : s.coaches.find((x) => x.clubId === k.id)?.name ?? '<span style="color:#c0392b">vago</span>';
         const bb = boardOf(s, k.id); const ap = canApply(s, k.id);
         const vac = c.vacancies?.[k.id];
-        return `<tr><td>${crestSvg(k.id, 18)} ${k.name}</td><td>${coach}</td><td>${vac ? '' : meter(bb.conf)}</td><td>${vac ? `Sem treinador até ${fmtD(vac)}` : securityOf(bb.conf)}</td><td>${ap.ok ? `<button class="btn" data-apply="${k.id}">Candidatar</button>` : ''}</td></tr>${interviewing === k.id ? `<tr><td colspan="5">${interviewHtml(s, k.id)}</td></tr>` : ''}`;
+        return `<tr><td>${crestSvg(k.id, 18)} ${k.name}</td><td class="muted">${k.league === 'esp1' ? 'Espanha' : 'Portugal'}</td><td>${coach}</td><td>${vac ? '' : meter(bb.conf)}</td><td>${vac ? `Sem treinador até ${fmtD(vac)}` : securityOf(bb.conf)}</td><td>${ap.ok ? `<button class="btn" data-apply="${k.id}">Candidatar</button>` : ''}</td></tr>${interviewing === k.id ? `<tr><td colspan="6">${interviewHtml(s, k.id)}</td></tr>` : ''}`;
       }).join('')}
       </tbody></table>
       ${result}`;

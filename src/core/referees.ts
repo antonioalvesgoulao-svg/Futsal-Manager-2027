@@ -5,7 +5,7 @@
 //  - tolerance: aceita mais contacto (>1 = menos faltas assinaladas)
 //  - cards: tendência para mostrar cartões (>1 = mais)
 //  - harsh: severidade nos confrontos (>1 = mais vermelhos)
-import type { Fixture } from './season/types';
+import { kindOf, type Fixture } from './season/types';
 import { leagueTable } from './season/season';
 import type { GameState } from './types';
 
@@ -26,6 +26,16 @@ export const REF_PAIRS: RefPair[] = [
   { id: 'd12', names: ['José Moreira', 'Cristiano Santos'], tolerance: 0.91, cards: 0.9, harsh: 0.84, real: true, top: false },
 ];
 
+// Espanha: duplas com nomes FICTÍCIOS até o António enviar a lista real dos árbitros da Primera División (temperamento sorteado como em Portugal)
+const ES_NAMES = ['Javier Martín', 'Sergio Gómez', 'Daniel Ruiz', 'Alberto Navarro', 'Rubén Torres', 'Pablo Ortega', 'Iván Morales', 'Adrián Castro', 'Óscar Delgado', 'Raúl Herrera', 'Marcos Prieto', 'Víctor Romero', 'Jorge Molina', 'Diego Vidal', 'Hugo Serrano', 'Carlos Iglesias', 'Álvaro Cano', 'Miguel Pascual', 'Fernando Lozano', 'Luis Benítez', 'Antonio Peña', 'David Campos', 'Manuel Vega', 'Francisco Rubio'];
+export const REF_PAIRS_ESP: RefPair[] = Array.from({ length: 12 }, (_, i) => {
+  const h = (k: number) => (((i + 1) * 2654435761 * (k + 3)) >>> 0) / 4294967296;
+  return { id: `e${i + 1}`, names: [ES_NAMES[i * 2], ES_NAMES[i * 2 + 1]] as [string, string], tolerance: Math.round((0.8 + h(1) * 0.38) * 100) / 100, cards: Math.round((0.85 + h(2) * 0.4) * 100) / 100, harsh: Math.round((0.76 + h(3) * 0.48) * 100) / 100, real: false, top: i < 4 };
+});
+
+/** Clássicos espanhóis (estimativa): dérbi de Múrcia (ElPozo x Cartagena) e jogos entre os 5 grandes. */
+const ESP_BIG = ['bar', 'epz', 'pal', 'jca', 'int'];
+
 export const TEMPER_LABEL = (p: RefPair) =>
   `${p.tolerance >= 1.1 ? 'deixa jogar' : p.tolerance <= 0.9 ? 'apita muito' : 'critério médio'}, ${p.cards >= 1.15 ? 'cartões fáceis' : p.cards <= 0.9 ? 'poucos cartões' : 'cartões normais'}`;
 
@@ -40,11 +50,14 @@ export function importanceOf(s: GameState, f: Fixture): number {
   let imp = 0.15;
   const big = ['slb', 'scp'];
   if (big.includes(f.home) && big.includes(f.away)) imp += 0.5;
+  else if ([f.home, f.away].sort().join('-') === 'epz-jca') imp += 0.45;
+  else if (ESP_BIG.includes(f.home) && ESP_BIG.includes(f.away)) imp += 0.3;
   if (/Final/.test(f.stage) && !/Meias|Quartos/.test(f.stage)) imp += 0.45;
-  else if (f.comp === 'playoff') imp += 0.25;
+  else if (kindOf(f.comp) === 'playoff') imp += 0.25;
   else if (f.knockout) imp += 0.15;
-  if (f.comp === 'liga') {
-    const t = leagueTable(s.season, s.clubs.map((c) => c.id));
+  if (kindOf(f.comp) === 'league') {
+    const lg = s.leagues.find((l) => l.clubIds.includes(f.home));
+    const t = leagueTable(s.season, lg?.clubIds ?? [], 99, f.comp);
     const ph = t.findIndex((r) => r.club === f.home), pa = t.findIndex((r) => r.club === f.away);
     if (ph >= 0 && pa >= 0 && t[0].p > 2) {
       const gap = Math.abs(t[ph].pts - t[pa].pts);
@@ -58,7 +71,8 @@ export function importanceOf(s: GameState, f: Fixture): number {
 /** Dupla nomeada: os jogos grandes vão para as duplas de topo. */
 export function refereesFor(s: GameState, f: Fixture): RefPair {
   const imp = importanceOf(s, f);
-  const pool = imp >= 0.5 ? REF_PAIRS.filter((p) => p.top) : REF_PAIRS;
+  const all = f.comp === 'esp' || f.comp === 'espPlayoff' || f.comp === 'copaRey' || f.comp === 'copaEsp' || f.comp === 'superEsp' ? REF_PAIRS_ESP : REF_PAIRS;
+  const pool = imp >= 0.5 ? all.filter((p) => p.top) : all;
   return pool[Math.floor(hash(f.id + s.season.year) * pool.length)];
 }
 
@@ -71,10 +85,13 @@ export function severity(p: RefPair) {
 // bandeira de Portugal (desenho simples: verde, vermelho e esfera amarela)
 const FLAG_PT = `<svg viewBox="0 0 30 20" width="21" height="14" style="vertical-align:-2px;border-radius:2px"><rect width="12" height="20" fill="#046a38"/><rect x="12" width="18" height="20" fill="#da291c"/><circle cx="12" cy="10" r="4.2" fill="#ffe900"/><circle cx="12" cy="10" r="2.4" fill="#da291c"/></svg>`;
 
+const FLAG_ES = `<svg viewBox="0 0 30 20" width="21" height="14" style="vertical-align:-2px;border-radius:2px"><rect width="30" height="20" fill="#c60b1e"/><rect y="5" width="30" height="10" fill="#ffc400"/></svg>`;
+
 /** Dupla de arbitragem com a bandeira e uma barra de severidade (verde, pouco cheia → vermelha, cheia). */
 export function refBadgeHtml(p: RefPair) {
   const sv = severity(p);
   const w = Math.round(12 + sv * 88);
   const col = `hsl(${Math.round(120 - sv * 120)}, 75%, 45%)`;
-  return `<span class="refb">${FLAG_PT} ${p.names[0]} ${FLAG_PT} ${p.names[1]} <span class="refbar" title="Severidade: ${TEMPER_LABEL(p)}"><i style="width:${w}%;background:${col}"></i></span> <span class="small muted">${TEMPER_LABEL(p)}</span></span>`;
+  const FL = p.id.startsWith('e') ? FLAG_ES : FLAG_PT;
+  return `<span class="refb">${FL} ${p.names[0]} ${FL} ${p.names[1]}${p.real ? '' : ' <span class="small muted">(nomes fictícios)</span>'} <span class="refbar" title="Severidade: ${TEMPER_LABEL(p)}"><i style="width:${w}%;background:${col}"></i></span> <span class="small muted">${TEMPER_LABEL(p)}</span></span>`;
 }

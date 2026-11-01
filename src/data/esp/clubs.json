@@ -1,0 +1,316 @@
+{
+ "league": {
+  "id": "esp1",
+  "name": "Primera División",
+  "country": "Espanha",
+  "season": "2026/27",
+  "teams": 16
+ },
+ "source": "futsalportugal.com (planteis 2026/27, 2/11); nível/reputação/riqueza: estimativa na escala mundial; orçamentos pelos salários indicados pelo António; lotações: só Palau Blaugrana e Murcia de fonte pública, restantes estimativa",
+ "clubs": [
+  {
+   "id": "bar",
+   "fp": 44,
+   "name": "FC Barcelona",
+   "shortName": "BAR",
+   "city": "Barcelona",
+   "arena": "Palau Blaugrana",
+   "capacity": 7585,
+   "capacityReal": true,
+   "colors": [
+    "#a50044",
+    "#004d98"
+   ],
+   "reputation": 98,
+   "level": 96,
+   "wealth": 100,
+   "budget": 3200000,
+   "league": "esp1"
+  },
+  {
+   "id": "epz",
+   "fp": 42,
+   "name": "ElPozo Murcia",
+   "shortName": "EPZ",
+   "city": "Múrcia",
+   "arena": "Palacio de los Deportes de Murcia",
+   "capacity": 7500,
+   "capacityReal": true,
+   "colors": [
+    "#d50000",
+    "#ffffff"
+   ],
+   "reputation": 94,
+   "level": 92,
+   "wealth": 88,
+   "budget": 2300000,
+   "league": "esp1"
+  },
+  {
+   "id": "pal",
+   "fp": 33,
+   "name": "Illes Balears Palma Futsal",
+   "shortName": "PAL",
+   "city": "Palma",
+   "arena": "Palau d’Esports Son Moix",
+   "capacity": 5076,
+   "capacityReal": false,
+   "colors": [
+    "#ffd200",
+    "#000000"
+   ],
+   "reputation": 95,
+   "level": 95,
+   "wealth": 86,
+   "budget": 2100000,
+   "league": "esp1"
+  },
+  {
+   "id": "jca",
+   "fp": 43,
+   "name": "Jimbee Cartagena",
+   "shortName": "JCA",
+   "city": "Cartagena",
+   "arena": "Palacio de los Deportes de Cartagena",
+   "capacity": 5000,
+   "capacityReal": false,
+   "colors": [
+    "#000000",
+    "#ffffff"
+   ],
+   "reputation": 92,
+   "level": 94,
+   "wealth": 85,
+   "budget": 2100000,
+   "league": "esp1"
+  },
+  {
+   "id": "int",
+   "fp": 36,
+   "name": "Inter FS",
+   "shortName": "INT",
+   "city": "Torrejón de Ardoz",
+   "arena": "Pabellón Jorge Garbajosa",
+   "capacity": 3000,
+   "capacityReal": false,
+   "colors": [
+    "#0b3d91",
+    "#ffffff"
+   ],
+   "reputation": 93,
+   "level": 90,
+   "wealth": 84,
+   "budget": 1900000,
+   "league": "esp1"
+  },
+  {
+   "id": "jae",
+   "fp": 39,
+   "name": "Jaén Paraíso Interior",
+   "shortName": "JAE",
+   "city": "Jaén",
+   "arena": "Olivo Arena",
+   "capacity": 6500,
+   "capacityReal": false,
+   "colors": [
+    "#ffd100",
+    "#111111"
+   ],
+   "reputation": 82,
+   "level": 84,
+   "wealth": 60,
+   "budget": 550000,
+   "league": "esp1"
+  },
+  {
+   "id": "val",
+   "fp": 439,
+   "name": "Viña Albali Valdepeñas",
+   "shortName": "VAL",
+   "city": "Valdepeñas",
+   "arena": "Pabellón Virgen de la Cabeza",
+   "capacity": 1500,
+   "capacityReal": false,
+   "colors": [
+    "#7a1f3d",
+    "#ffffff"
+   ],
+   "reputation": 78,
+   "level": 80,
+   "wealth": 58,
+   "budget": 550000,
+   "league": "esp1"
+  },
+  {
+   "id": "man",
+   "fp": 843,
+   "name": "Manzanares FS",
+   "shortName": "MAN",
+   "city": "Manzanares",
+   "arena": "Pabellón Municipal de Manzanares",
+   "capacity": 1200,
+   "capacityReal": false,
+   "colors": [
+    "#e30613",
+    "#ffffff"
+   ],
+   "reputation": 72,
+   "level": 76,
+   "wealth": 55,
+   "budget": 550000,
+   "league": "esp1"
+  },
+  {
+   "id": "zar",
+   "fp": 38,
+   "name": "Sala 10 Zaragoza",
+   "shortName": "ZAR",
+   "city": "Saragoça",
+   "arena": "Pabellón Siglo XXI",
+   "capacity": 2600,
+   "capacityReal": false,
+   "colors": [
+    "#d50000",
+    "#ffffff"
+   ],
+   "reputation": 74,
+   "level": 77,
+   "wealth": 55,
+   "budget": 450000,
+   "league": "esp1"
+  },
+  {
+   "id": "pen",
+   "fp": 41,
+   "name": "Peñíscola FS",
+   "shortName": "PEN",
+   "city": "Peñíscola",
+   "arena": "Pabellón Municipal de Peñíscola",
+   "capacity": 1100,
+   "capacityReal": false,
+   "colors": [
+    "#1565c0",
+    "#ffffff"
+   ],
+   "reputation": 74,
+   "level": 78,
+   "wealth": 55,
+   "budget": 450000,
+   "league": "esp1"
+  },
+  {
+   "id": "par",
+   "fp": 32,
+   "name": "O Parrulo Ferrol",
+   "shortName": "PAR",
+   "city": "Ferrol",
+   "arena": "Pavillón A Malata",
+   "capacity": 4500,
+   "capacityReal": false,
+   "colors": [
+    "#111111",
+    "#ffffff"
+   ],
+   "reputation": 70,
+   "level": 75,
+   "wealth": 52,
+   "budget": 450000,
+   "league": "esp1"
+  },
+  {
+   "id": "osa",
+   "fp": 35,
+   "name": "Osasuna Magna Xota",
+   "shortName": "OSA",
+   "city": "Pamplona",
+   "arena": "Pabellón Anaitasuna",
+   "capacity": 3000,
+   "capacityReal": false,
+   "colors": [
+    "#c8102e",
+    "#0a2240"
+   ],
+   "reputation": 72,
+   "level": 77,
+   "wealth": 56,
+   "budget": 450000,
+   "league": "esp1"
+  },
+  {
+   "id": "cor",
+   "fp": 656,
+   "name": "Córdoba Patrimonio",
+   "shortName": "COR",
+   "city": "Córdoba",
+   "arena": "Palacio Municipal de Deportes Vista Alegre",
+   "capacity": 3500,
+   "capacityReal": false,
+   "colors": [
+    "#00843d",
+    "#ffffff"
+   ],
+   "reputation": 72,
+   "level": 77,
+   "wealth": 54,
+   "budget": 450000,
+   "league": "esp1"
+  },
+  {
+   "id": "eji",
+   "fp": 3603,
+   "name": "El Ejido Futsal",
+   "shortName": "EJI",
+   "city": "El Ejido",
+   "arena": "Pabellón Municipal de El Ejido",
+   "capacity": 1600,
+   "capacityReal": false,
+   "colors": [
+    "#00843d",
+    "#ffffff"
+   ],
+   "reputation": 66,
+   "level": 74,
+   "wealth": 50,
+   "budget": 450000,
+   "league": "esp1"
+  },
+  {
+   "id": "noi",
+   "fp": 1015,
+   "name": "Noia Portus Apostoli",
+   "shortName": "NOI",
+   "city": "Noia",
+   "arena": "Pavillón Municipal de Noia",
+   "capacity": 1200,
+   "capacityReal": false,
+   "colors": [
+    "#1e88e5",
+    "#ffffff"
+   ],
+   "reputation": 68,
+   "level": 74,
+   "wealth": 50,
+   "budget": 350000,
+   "league": "esp1"
+  },
+  {
+   "id": "stc",
+   "fp": 31,
+   "name": "Industrias Santa Coloma",
+   "shortName": "STC",
+   "city": "Santa Coloma de Gramenet",
+   "arena": "Pavelló Municipal Nou",
+   "capacity": 1600,
+   "capacityReal": false,
+   "colors": [
+    "#0d47a1",
+    "#ffffff"
+   ],
+   "reputation": 70,
+   "level": 74,
+   "wealth": 50,
+   "budget": 350000,
+   "league": "esp1"
+  }
+ ]
+}

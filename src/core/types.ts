@@ -17,6 +17,10 @@ export interface Club {
   wealth: number; // poder financeiro e dimensão do clube, 1 a 100 (escala mundial)
   staffBudget?: number; // orçamento mensal do staff
   wageScale?: number; // escala salarial (calculada para a folha bater com o orçamento)
+  league?: string; // id da liga (omisso = Liga Placard)
+  budget?: number; // orçamento anual do futsal (€) quando há dados (Espanha: valores do António)
+  capacity?: number; // lotação do pavilhão (Espanha)
+  capacityReal?: boolean;
 }
 
 import type { Attributes } from './attributes';
@@ -69,7 +73,7 @@ export interface Coach {
 export interface Settings {
   speed: 'lento' | 'medio' | 'rapido';
   moments3d: 'nenhum' | 'golos' | 'importantes' | 'todos';
-  scoreboard: 'auto' | 'liga' | 'taca' | 'tacaLiga' | 'supertaca';
+  scoreboard: 'auto' | 'liga' | 'taca' | 'tacaLiga' | 'supertaca' | 'esp' | 'copaRey' | 'copaEsp' | 'superEsp';
   quality?: 'normal' | 'alta';
   sound?: 'off' | 'low' | 'mid' | 'high'; // volume do som do jogo
   chantWords?: boolean; // letra dos cânticos dita pela voz do sistema
@@ -107,4 +111,4 @@ export interface GameState {
   devStart?: Record<string, number>; // nível no início da época (resumo do fim de época)
 }
 
-export const SAVE_VERSION = 6;
+export const SAVE_VERSION = 7;

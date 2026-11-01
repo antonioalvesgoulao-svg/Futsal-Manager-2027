@@ -1,3 +1,4 @@
+import type { ScoreStyle } from '../broadcast';
 // Definições do jogo ao vivo e da transmissão
 import type { GameState, Settings } from '../../core/types';
 import { scoreboardHtml } from '../broadcast';
@@ -6,7 +7,7 @@ import { settingsOf } from './live';
 export function renderSettings(content: HTMLElement, s: GameState) {
   const st = settingsOf(s);
   const opt = <K extends keyof Settings>(k: K, v: string, l: string) => `<option value="${v}" ${st[k] === v ? 'selected' : ''}>${l}</option>`;
-  const demo = (style: 'liga' | 'taca' | 'tacaLiga' | 'supertaca') =>
+  const demo = (style: ScoreStyle) =>
     scoreboardHtml({ style, home: { short: 'SLB', color: '#e30613', score: 3, fouls: 2 }, away: { short: 'SCP', color: '#00804a', score: 3, fouls: 5 }, clock: '09:03', period: '2.ª P' });
   content.innerHTML = `
     <h2>Definições</h2>
@@ -26,11 +27,11 @@ export function renderSettings(content: HTMLElement, s: GameState) {
         <select data-k="quality">${opt('quality', 'normal', 'Normal (mais fluido) · recomendada')}${opt('quality', 'alta', 'Alta (reflexos no piso, sombras mais finas; precisa de um computador mais rápido)')}</select>
       </label>
       <label>Marcador eletrónico
-        <select data-k="scoreboard">${opt('scoreboard', 'auto', 'O da competição do jogo')}${opt('scoreboard', 'liga', 'Liga Placard')}${opt('scoreboard', 'taca', 'Taça de Portugal')}${opt('scoreboard', 'tacaLiga', 'Taça da Liga')}${opt('scoreboard', 'supertaca', 'Supertaça')}</select>
+        <select data-k="scoreboard">${opt('scoreboard', 'auto', 'O da competição do jogo')}${opt('scoreboard', 'liga', 'Liga Placard')}${opt('scoreboard', 'taca', 'Taça de Portugal')}${opt('scoreboard', 'tacaLiga', 'Taça da Liga')}${opt('scoreboard', 'supertaca', 'Supertaça')}${opt('scoreboard', 'esp', 'Primera División')}${opt('scoreboard', 'copaRey', 'Copa del Rey')}${opt('scoreboard', 'copaEsp', 'Copa de España')}${opt('scoreboard', 'superEsp', 'Supercopa de España')}</select>
       </label>
     </div>
     <h3>Marcadores</h3>
-    <div class="sb-demo">${demo('liga')}${demo('taca')}${demo('tacaLiga')}${demo('supertaca')}</div>
+    <div class="sb-demo">${demo('liga')}${demo('taca')}${demo('tacaLiga')}${demo('supertaca')}${demo('esp')}${demo('copaRey')}${demo('copaEsp')}${demo('superEsp')}</div>
     <p class="small muted">Grafismo original do jogo, de inspiração portuguesa. As definições ficam guardadas com o jogo.</p>`;
   content.querySelectorAll<HTMLSelectElement>('[data-k]').forEach((el) =>
     el.addEventListener('change', () => {
