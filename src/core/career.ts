@@ -139,6 +139,10 @@ export function aiCoachChanges(s: GameState): string[] {
       const from = fromC;
       const best = target;
       best.clubId = cid;
+      // leva os adjuntos se couberem no orçamento do staff do novo clube (60% cada)
+      for (const st of (s.staff ?? []).filter((x) => x.clubId === from.id && x.role === 'adjunto')) {
+        if (r() < 0.6 && staffBill(s, cid) + st.wage <= staffBudget(club)) { const cur = (s.staff ?? []).filter((x) => x.clubId === cid && x.role === 'adjunto').sort((a, b) => a.ability - b.ability)[0]; if (cur) cur.clubId = null; st.clubId = cid; }
+      }
       out.push(`${best.name} deixa o ${from.name} e é o novo treinador do ${club.name}.`);
       openVacancy(s, from.id);
       out.push(`O ${from.name} fica sem treinador.`);
@@ -233,21 +237,69 @@ export function interview(s: GameState, clubId: string, answers: number[]): { ok
   return { ok: total >= 55, score: Math.round(total), notes };
 }
 
-/** Assinar por um clube (proposta aceite, entrevista bem sucedida ou depois de despedido). */
-export function takeJob(s: GameState, clubId: string, suggest: (squadClub: string) => GameState['tactics']): string {
+/** Plano de transição da equipa técnica ao mudar de clube. */
+export interface StaffPlan { bring: { id: string; wage: number }[]; keep: string[]; boardFills: boolean }
+
+/** Quanto aceita ganhar um técnico para seguir o treinador (até 20% menos; estimativa). */
+export const followMin = (st: Staff) => Math.round(st.wage * 0.8 / 50) * 50;
+
+/** Verifica um plano: salários aceites e total dentro do orçamento do staff do novo clube. */
+export function checkPlan(s: GameState, clubId: string, plan: StaffPlan) {
+  const club = s.clubs.find((x) => x.id === clubId)!;
+  const errs: string[] = [];
+  let total = 0;
+  for (const b of plan.bring) { const st = s.staff!.find((x) => x.id === b.id)!; if (b.wage < followMin(st)) errs.push(`${st.name} não aceita menos de ${fmtEur(followMin(st))}/mês.`); total += b.wage; }
+  for (const id of plan.keep) total += s.staff!.find((x) => x.id === id)!.wage;
+  const budget = staffBudget(club);
+  if (total > budget) errs.push(`Total ${fmtEur(total)}/mês passa o orçamento do staff do ${club.name} (${fmtEur(budget)}/mês).`);
+  return { ok: errs.length === 0, total, budget, errs };
+}
+
+/** Assinar por um clube com o plano da equipa técnica. */
+export function takeJob(s: GameState, clubId: string, suggest: (squadClub: string) => GameState['tactics'], plan: StaffPlan = { bring: [], keep: (s.staff ?? []).filter((x) => x.clubId === clubId).map((x) => x.id), boardFills: true }): string {
   const c = careerOf(s);
   const old = s.clubs.find((x) => x.id === s.clubId);
   const club = s.clubs.find((x) => x.id === clubId)!;
   const theirs = s.coaches.find((x) => x.clubId === clubId);
   if (theirs) theirs.clubId = null;
   delete c.vacancies?.[clubId];
-  if (old) openVacancy(s, old.id);
+  const msgs: string[] = [`És o novo treinador do ${club.name}.`];
+  // equipa técnica do novo clube que não fica: dispensada (o clube paga metade do que faltava)
+  for (const st of (s.staff ?? []).filter((x) => x.clubId === clubId && !plan.keep.includes(x.id))) {
+    const fee = Math.round(st.wage * Math.max(1, (st.until - s.season.year) * 12) * 0.5 / 100) * 100;
+    book(s, clubId, `Rescisão com ${st.name} (staff)`, -fee); st.clubId = null;
+    msgs.push(`${st.name} sai (indemnização ${fmtEur(fee)}).`);
+  }
+  // a minha equipa técnica que vem comigo
+  for (const b of plan.bring) {
+    const st = s.staff!.find((x) => x.id === b.id)!;
+    st.clubId = clubId; st.wage = b.wage; st.until = Math.max(st.until, s.season.year + 2);
+    msgs.push(`${st.name} vem contigo (${fmtEur(b.wage)}/mês).`);
+  }
+  if (old) {
+    openVacancy(s, old.id);
+    // o antigo clube preenche as vagas que deixei com técnicos livres
+    fillVacantRoles(s, old);
+  }
+  if (plan.boardFills) { const n = fillVacantRoles(s, club); if (n.length) msgs.push(`A direção contratou: ${n.join(', ')}.`); }
   s.clubId = clubId;
   s.tactics = suggest(clubId);
   s.training = undefined;
   c.offers = []; c.unemployed = false;
   const b = boardOf(s, clubId); b.conf = 60; b.exp = 0; b.pts = 0; b.games = 0; b.coachSince = s.date;
-  return `És o novo treinador do ${club.name}.`;
+  return msgs.join(' ');
+}
+
+/** A direção preenche as funções base vagas com técnicos livres, dentro do orçamento do staff. */
+export function fillVacantRoles(s: GameState, club: Club): string[] {
+  const out: string[] = [];
+  for (const role of ['adjunto', 'fisico', 'gr', 'fisio', 'formacao'] as const) {
+    if ((s.staff ?? []).some((x) => x.clubId === club.id && x.role === role)) continue;
+    const room = staffBudget(club) - staffBill(s, club.id);
+    const f = (s.staff ?? []).filter((x) => !x.clubId && x.role === role && staffWage(x.ability, club) <= room).sort((a, b) => b.ability - a.ability)[0];
+    if (f) { f.clubId = club.id; f.wage = staffWage(f.ability, club); f.until = s.season.year + 2; out.push(`${f.name} (${f.role})`); }
+  }
+  return out;
 }
 
 // ---------- mercado de staff ----------

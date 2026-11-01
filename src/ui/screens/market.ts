@@ -1,3 +1,4 @@
+import { staffBill, staffBudget } from '../../core/staff';
 import { seenPotential } from '../../core/staff';
 // Ecrãs do Mercado e das Finanças
 import { overall, starsHtml } from '../../core/attributes';
@@ -107,7 +108,9 @@ export function renderFinance(content: HTMLElement, s: GameState) {
     <h2>Finanças do futsal</h2>
     <div class="cards">
       <div class="card"><div class="muted small">Saldo</div><div class="big">${fmtEur(fin.balance)}</div><div class="small muted">Disponível para transferências e rescisões</div></div>
-      <div class="card"><div class="muted small">Orçamento anual (salários)</div><div class="big">${fmtEur(salaryBudget(my))}</div><div class="small muted">Folha atual ${fmtEur(bill)}/mês = ${fmtEur(bill * 12)}/ano</div></div>
+      <div class="card"><div class="muted small">Folha dos jogadores</div><div class="big">${fmtEur(bill)}/mês</div><div class="small muted">Orçamento ${fmtEur(Math.round(salaryBudget(my) / 12))}/mês (${fmtEur(salaryBudget(my))}/ano)</div></div>
+      <div class="card"><div class="muted small">Folha do staff técnico</div><div class="big">${fmtEur(staffBill(s, my.id))}/mês</div><div class="small muted">Orçamento ${fmtEur(staffBudget(my))}/mês</div></div>
+      <div class="card"><div class="muted small">Total de salários</div><div class="big">${fmtEur(bill + staffBill(s, my.id))}/mês</div><div class="small muted">${fmtEur((bill + staffBill(s, my.id)) * 12)}/ano · as duas folhas contam para o saldo</div></div>
       <div class="card"><div class="muted small">Recentes</div><div class="small">Bilheteira ${fmtEur(sum(/Bilheteira/))} · Prémios ${fmtEur(sum(/Prémio/))} · Transferências ${fmtEur(sum(/Venda|Contratação/))}</div></div>
     </div>
     <table class="tbl small" style="margin-top:12px"><thead><tr><th>Data</th><th>Movimento</th><th style="text-align:right">Valor</th></tr></thead><tbody>

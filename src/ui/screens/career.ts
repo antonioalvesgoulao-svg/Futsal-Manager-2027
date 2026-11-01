@@ -1,5 +1,7 @@
 // Ecrã da Carreira: confiança da direção, objetivo, reputação, propostas, centro de emprego (todos os clubes) e entrevista
-import { INTERVIEW, boardOf, canApply, careerOf, expectedPos, interview, objectiveOf, securityOf, takeJob } from '../../core/career';
+import { INTERVIEW, boardOf, canApply, careerOf, checkPlan, expectedPos, followMin, interview, objectiveOf, securityOf, takeJob, type StaffPlan } from '../../core/career';
+import { fmtEur } from '../../core/contracts';
+import { ROLE_NAME, staffBudget } from '../../core/staff';
 import { advance } from '../../core/game';
 import { leagueTable } from '../../core/season/season';
 import { saveToSlot } from '../../core/save';
@@ -44,8 +46,7 @@ export function renderCareer(content: HTMLElement, s: GameState, onJob: () => vo
     content.querySelectorAll<HTMLElement>('[data-job]').forEach((x) => (x.onclick = () => {
       const k = s.clubs.find((y) => y.id === x.dataset.job)!;
       if (!confirm(`Aceitar o convite do ${k.name}${club ? ` e deixar o ${club.name}` : ''}?`)) return;
-      alert(takeJob(s, k.id, (cid) => suggestTactics(s.players.filter((p) => p.clubId === cid))));
-      onJob();
+      renderTransition(content, s, k.id, onJob);
     }));
     content.querySelectorAll<HTMLElement>('[data-no]').forEach((x) => (x.onclick = () => { c.offers = c.offers.filter((o) => o.clubId !== x.dataset.no); draw(); }));
     content.querySelectorAll<HTMLElement>('[data-apply]').forEach((x) => (x.onclick = () => {
@@ -64,7 +65,7 @@ export function renderCareer(content: HTMLElement, s: GameState, onJob: () => vo
         result = `<div class="card" style="border-color:#2e9e5b"><b>O ${k.name} aceita-te como treinador!</b> (avaliação ${r.score}/100)<br><span class="small">${r.notes.join(' · ')}</span><br><button class="btn primary" data-sign="${k.id}" style="margin-top:8px">Assinar contrato</button></div>`;
       } else result = `<div class="card" style="border-color:#c0392b"><b>O ${k.name} escolheu outro caminho.</b> (avaliação ${r.score}/100; precisava de 55)<br><span class="small">${r.notes.join(' · ')}</span></div>`;
       draw();
-      content.querySelector<HTMLElement>('[data-sign]')?.addEventListener('click', () => { alert(takeJob(s, k.id, (cid) => suggestTactics(s.players.filter((p) => p.clubId === cid)))); onJob(); });
+      content.querySelector<HTMLElement>('[data-sign]')?.addEventListener('click', () => renderTransition(content, s, k.id, onJob));
     });
   };
   draw();
@@ -94,5 +95,46 @@ export function unemployedScreen(root: HTMLElement, s: GameState, onJob: () => v
   el.querySelector('#next')!.addEventListener('click', () => { advance(s); if (!careerOf(s).unemployed) onJob(); else draw(); });
   el.querySelector('#save')!.addEventListener('click', () => { const n = Number(prompt('Gravar em que espaço? (1, 2, 3)', '1')); if ([1, 2, 3].includes(n)) alert(saveToSlot(n, s) ? 'Jogo gravado.' : 'Erro ao gravar.'); });
   el.querySelector('#menu')!.addEventListener('click', toMenu);
+  draw();
+}
+
+/** Transição da equipa técnica: levar a minha (ajustando salários), manter a do novo clube, e quem preenche as vagas. */
+export function renderTransition(content: HTMLElement, s: GameState, clubId: string, onJob: () => void) {
+  const club = s.clubs.find((x) => x.id === clubId)!;
+  const mine = (s.staff ?? []).filter((x) => x.clubId === s.clubId);
+  const theirs = (s.staff ?? []).filter((x) => x.clubId === clubId);
+  const plan: StaffPlan = { bring: [], keep: theirs.map((x) => x.id), boardFills: true };
+  const draw = () => {
+    const chk = checkPlan(s, clubId, plan);
+    const row = (st: typeof mine[0], kind: 'bring' | 'keep') => {
+      const on = kind === 'bring' ? plan.bring.some((b) => b.id === st.id) : plan.keep.includes(st.id);
+      const w = plan.bring.find((b) => b.id === st.id)?.wage ?? st.wage;
+      return `<tr><td><input type="checkbox" data-${kind}="${st.id}" ${on ? 'checked' : ''}></td><td>${st.name}</td><td>${st.func ?? ROLE_NAME[st.role]}</td><td>${st.ability}</td><td>${kind === 'bring' ? `<input type="number" step="50" data-w="${st.id}" value="${w}" style="width:80px"> <span class="small muted">mín. ${fmtEur(followMin(st))}</span>` : fmtEur(st.wage)}</td></tr>`;
+    };
+    content.innerHTML = `
+      <h2>Transição da equipa técnica · ${club.name}</h2>
+      <div class="cards"><div class="card"><div class="muted small">Orçamento do staff do ${club.name}</div><div class="big">${fmtEur(staffBudget(club))}/mês</div></div>
+        <div class="card"><div class="muted small">Total escolhido</div><div class="big" style="color:${chk.ok ? '#2e9e5b' : '#c0392b'}">${fmtEur(chk.total)}/mês</div><div class="small muted">${chk.ok ? 'Cabe no orçamento' : chk.errs.join(' ')}</div></div></div>
+      ${mine.length ? `<h3>A tua equipa técnica (levar comigo)</h3><p class="small muted">Para caber no orçamento podes baixar salários: aceitam até 20% menos para te seguir (estimativa). Quem não levas fica no clube antigo.</p>
+      <table class="tbl small"><thead><tr><th></th><th>Nome</th><th>Função</th><th>Cap.</th><th>Salário no novo clube</th></tr></thead><tbody>${mine.map((x) => row(x, 'bring')).join('')}</tbody></table>` : ''}
+      <h3>Equipa técnica atual do ${club.name} (manter)</h3><p class="small muted">Quem não manténs é dispensado e o clube paga metade do que faltava do contrato.</p>
+      <table class="tbl small"><thead><tr><th></th><th>Nome</th><th>Função</th><th>Cap.</th><th>Salário</th></tr></thead><tbody>${theirs.map((x) => row(x, 'keep')).join('') || '<tr><td colspan="5" class="muted">Sem equipa técnica (saiu com o treinador anterior).</td></tr>'}</tbody></table>
+      <h3>Funções que fiquem vagas</h3>
+      <label class="small" style="display:block"><input type="radio" name="fill" value="1" ${plan.boardFills ? 'checked' : ''}> A direção contrata técnicos livres (dentro do orçamento)</label>
+      <label class="small" style="display:block"><input type="radio" name="fill" value="0" ${plan.boardFills ? '' : 'checked'}> Eu escolho a nova equipa técnica (no ecrã Staff)</label>
+      <button class="btn primary" id="tgo" style="margin-top:10px" ${chk.ok ? '' : 'disabled'}>Assinar e começar</button>`;
+    content.querySelectorAll<HTMLInputElement>('[data-bring]').forEach((x) => (x.onchange = () => {
+      const id = x.dataset.bring!; const st = mine.find((m) => m.id === id)!;
+      if (x.checked) plan.bring.push({ id, wage: st.wage }); else plan.bring = plan.bring.filter((b) => b.id !== id);
+      draw();
+    }));
+    content.querySelectorAll<HTMLInputElement>('[data-w]').forEach((x) => (x.onchange = () => {
+      const b = plan.bring.find((y) => y.id === x.dataset.w); if (b) b.wage = Number(x.value); else { plan.bring.push({ id: x.dataset.w!, wage: Number(x.value) }); }
+      draw();
+    }));
+    content.querySelectorAll<HTMLInputElement>('[data-keep]').forEach((x) => (x.onchange = () => { plan.keep = x.checked ? [...plan.keep, x.dataset.keep!] : plan.keep.filter((k) => k !== x.dataset.keep); draw(); }));
+    content.querySelectorAll<HTMLInputElement>('input[name="fill"]').forEach((x) => (x.onchange = () => { plan.boardFills = x.value === '1'; }));
+    content.querySelector<HTMLElement>('#tgo')!.onclick = () => { alert(takeJob(s, clubId, (cid) => suggestTactics(s.players.filter((p) => p.clubId === cid)), plan)); onJob(); };
+  };
   draw();
 }
