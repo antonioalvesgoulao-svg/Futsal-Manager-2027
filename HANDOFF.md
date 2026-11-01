@@ -100,3 +100,24 @@ https://github.com/antonioalvesgoulao-svg/Futsal-Manager-2027/pull/5
 2. Obter uma execução real de build/CI para a branch de integração; a CI não pode ser presumida a partir de outras branches.
 3. Criar um cenário repetível 4-0 com dois jogadores de aceleração/agilidade muito diferentes e comparar trajetórias/timing, garantindo que os resultados do motor permanecem idênticos.
 4. Rever se o efeito físico é visualmente perceptível mas moderado; só depois avançar para tagging de intenções (apoio, rotação, ataque ao espaço).
+
+
+## Testes físicos e CI inicial (1 novembro 2026)
+
+### Alterações na PR #5
+- Extraída a integração da trajetória para `bakeMovementTrajectory` em `src/core/visual/movement.ts`. A função é usada pelo `Track.bake` em `choreo.ts`, pelo que os testes exercitam o mesmo integrador que alimenta as trajetórias renderizadas.
+- A aceleração limita a alteração de velocidade; a agilidade reduz a janela de resposta do alvo. Não é introduzida velocidade máxima individual.
+- Criado `tools/tests/movement.test.ts`: compara trajetórias sintéticas com aceleração 5 vs 18 e agilidade 5 vs 18, e confirma estruturalmente que `src/core/engine/match.ts` não depende da camada visual.
+- Adicionado `npm test` e workflow `.github/workflows/validacao-atributos.yml` com push nas branches PR #3/#5, workflow_dispatch, `npm ci`, `npm run build`, testes (PR #5) e `npm run diag`.
+- O workflow foi colocado nas branches de feature, porque `main` ainda não contém workflow CI para eventos pull_request.
+
+### Execuções CI observadas
+- PR #3 HEAD `ef382e103403ee77ce36b554ce2dfe119375134d`: run [41358028406](https://github.com/antonioalvesgoulao-svg/Futsal-Manager-2027/actions/runs/41358028406). `npm ci` e `npm run build` concluídos com sucesso; diagnóstico ainda estava em execução na última consulta.
+- PR #5 HEAD `6618c00770b761196e52768491de0350a8942eff`: run [41358023935](https://github.com/antonioalvesgoulao-svg/Futsal-Manager-2027/actions/runs/41358023935). `npm ci`, `npm run build` e `npm test` concluídos com sucesso; diagnóstico ainda estava em execução na última consulta.
+- Run [41358019952](https://github.com/antonioalvesgoulao-svg/Futsal-Manager-2027/actions/runs/41358019952) pertence ao commit anterior `ab2efe1210f9d2d61b6b29850cacd8175ddde45b`, não deve ser apresentado como validação do HEAD atual.
+- As execuções ainda não tinham conclusão global quando esta nota foi escrita. Atualizar este estado após nova consulta.
+
+### Estado e sequência de PRs
+- PR #3 continua draft e aponta para `main`; PR #5 continua draft e aponta para `feat/attribute-aware-movement-clean` (dependência explícita).
+- Ambas estão reportadas como mergeable, mas mergeable não significa validada nem aprovada.
+- Não fazer merge sem aprovação explícita. A ordem correta é concluir CI/diagnóstico da PR #3, rever/aceitar PR #3 e só depois rever a PR #5 sobre a base integrada.
