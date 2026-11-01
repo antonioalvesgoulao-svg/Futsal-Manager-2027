@@ -90,7 +90,7 @@ const md = [
   `## Por jogo`,
   `| Jogo | Resultado | Largura c/ bola | Linhas livres | Obstruídas % | Passes/min | Atravessam % | Parado c/ bola % |`,
   `|---|---|---|---|---|---|---|---|`,
-  ...perGame.map((x) => `| ${x.jogo} | ${x.resultado} | ${x.m['Largura da equipa com bola (m)']} | ${x.m['Linhas de passe livres por instante']} | ${x.m['Linhas de passe obstruídas (%)']} | ${x.m['Passes por minuto de jogo corrido']} | ${x.m['Passes que atravessam um adversário (%)']} | ${x.m['Tempo parado, jogadores com bola (%)']} |`),
+  ...perGame.map((x) => `| ${x.jogo} | ${x.resultado} | ${x.m['Largura da equipa com bola (m)']} | ${x.m['Linhas de passe livres por instante']} | ${x.m['Linhas de passe obstruídas (%)']} | ${x.m['Passes por minuto de jogo corrido']} | ${x.m['Passes que atravessam um adversário (%)']} | ${x.m['Tempo parado, equipa com bola (%)']} |`),
   ``,
   `Definições: ${JSON.stringify(TH)}`,
 ].join('\n');
