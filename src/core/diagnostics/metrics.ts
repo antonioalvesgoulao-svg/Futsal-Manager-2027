@@ -189,7 +189,8 @@ export function measurePossession(m: Metrics, p: Possession, sc: Scene3D & { dur
     add(att.includes(id) ? m.stillShareAtt : m.stillShareDef, s.n / s.tot);
     add(m.longestStill, s.best);
   }
-  // desmarcações por sprint e movimentos de apoio (janelas de 1 s, sem bola)
+  // Desmarcações por sprint: janelas móveis de 1 s, sem bola.
+  // Mantém esta contagem isolada da deteção de apoios para não saltar janelas de sprint.
   const step = Math.round(1 / DT);
   for (const id of att) {
     let inSprint = false;
@@ -201,12 +202,16 @@ export function measurePossession(m: Metrics, p: Possession, sc: Scene3D & { dur
       const sprint = v >= TH.sprint && (fwd > 1.5 || Math.abs(q.y - q0.y) > 2.5);
       if (sprint && !inSprint) m.sprints++;
       inSprint = sprint;
-      // apoio: aproxima-se do portador e fica a 3-8 m com linha livre
+    }
+
+    // Apoio: janelas não sobrepostas de 1 s; não interfere com a contagem de sprints.
+    for (let i = step; i < live.length; i += step) {
+      const f = live[i], g = live[i - step], q = f.pos[id], q0 = g.pos[id];
       const h = f.holder && att.includes(f.holder) && f.holder !== id ? f.holder : null;
-      if (h && g.pos[h] && f.pos[h]) {
-        const before = d2(q0, g.pos[h]), now = d2(q, f.pos[h]);
-        if (before - now >= TH.supportGain && now >= TH.supportMin && now <= TH.supportMax && !def.some((x) => f.pos[x] && segDist(f.pos[x], f.pos[h], q) < TH.blockR)) { m.supports++; i += step; }
-      }
+      if (!h || !q || !q0 || !g.pos[h] || !f.pos[h]) continue;
+      const before = d2(q0, g.pos[h]), now = d2(q, f.pos[h]);
+      const freeLane = !def.some((x) => f.pos[x] && segDist(f.pos[x], f.pos[h], q) < TH.blockR);
+      if (before - now >= TH.supportGain && now >= TH.supportMin && now <= TH.supportMax && freeLane) m.supports++;
     }
   }
   // transição: a posse anterior acabou com perda de bola em jogo corrido
