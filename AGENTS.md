@@ -8,6 +8,7 @@ Estas instruções aplicam-se a qualquer assistente de programação (ChatGPT/Co
 3. Ler também `CLAUDE.md` para o contexto funcional e histórico mais extenso.
 4. Verificar o estado real do GitHub: branch atual, commits recentes, PRs abertas/fechadas e checks CI. A documentação pode estar desatualizada.
 5. Inspecionar os ficheiros relevantes antes de propor ou alterar código. Não assumir que uma descrição antiga corresponde à implementação atual.
+6. Antes de terminar qualquer etapa relevante, atualizar a documentação afetada e o `HANDOFF.md` com o estado real, decisões, ficheiros, SHA/PR, validações executadas e próximo passo. Não deixar a documentação para uma futura sessão.
 
 ## Regras de colaboração com o António
 - Comunicar em português europeu, de forma clara, direta e prática.
@@ -40,6 +41,7 @@ Estas instruções aplicam-se a qualquer assistente de programação (ChatGPT/Co
 6. Commitar na branch e abrir/atualizar uma PR para `main`.
 7. Reportar SHA, branch, PR, testes efetivamente executados e limitações.
 8. Aguardar aprovação explícita antes de qualquer merge.
+9. Atualizar `HANDOFF.md` após cada marco técnico. Atualizar também `docs/ARCHITECTURE.md` quando mudar a arquitetura/fronteira entre módulos, `docs/GAMEPLAY_RULES.md` quando mudar regras ou princípios de jogo, `CLAUDE.md` quando mudar instruções específicas do Claude e `README.md` quando mudar a navegação/documentação pública. Atualizar `AGENTS.md` quando mudar o processo comum a agentes ou algum princípio inegociável.
 
 ## Diagnóstico e calibração
 - Métricas geométricas são proxies; não as apresentar como prova de intenção tática.
@@ -54,3 +56,4 @@ Estas instruções aplicam-se a qualquer assistente de programação (ChatGPT/Co
 - `docs/GAMEPLAY_RULES.md` regista os princípios e regras específicas de futsal.
 - `CLAUDE.md` contém contexto histórico detalhado e instruções adicionais.
 - O GitHub é a fonte de verdade. Se houver divergência entre estes documentos e o código/estado atual do GitHub, verificar e atualizar a documentação antes de continuar.
+- A documentação é parte integrante da entrega: uma alteração relevante não está concluída até o `HANDOFF.md` e os documentos técnicos aplicáveis estarem atualizados. Não é necessário alterar todos os ficheiros em cada commit; atualizar apenas os que foram afetados.
