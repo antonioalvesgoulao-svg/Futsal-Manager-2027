@@ -8,7 +8,7 @@ import { applyMorale, moraleEvent } from './morale';
 import { injuryOf, matchInjuries, trainingInjuries } from './injuries';
 import { applyDiscipline, banFor, seasonEndDiscipline } from './discipline';
 import type { CompId } from './season/types';
-import { developPlayer, retires, youthIntake, DevChange } from './development';
+import { developPlayer, injuryDecline, retires, youthIntake, DevChange } from './development';
 import { simulateMatch } from './engine/match';
 import type { MatchResult, TeamSetup } from './engine/types';
 import { afterMatchday, createSeason, keyDates, leagueTable, runnerUp } from './season/season';
@@ -121,7 +121,8 @@ function monthlyDevelopment(s: GameState, to: string) {
   s.devStart ??= {};
   for (const p of s.players) {
     s.devStart[p.id] ??= overall(p.attrs, p.position);
-    if (injuryOf(s, p.id)) continue; // lesionado não evolui (mas também não perde)
+    const inj = injuryOf(s, p.id);
+    if (inj) { injuryDecline(p, inj.days, month); continue; } // lesionado não evolui; paragens longas fazem perder físico
     // minutos até agora projetados para a época inteira
     const st = s.pstats[p.id] && { ...s.pstats[p.id], minutes: s.pstats[p.id].minutes / ((s.devFrac ?? 0) + 1 / 9) };
     developPlayer(p, st, s.season.year, trainingBonus(s, p.id, p.position === 'GR'), shootingFocus(s, p.id, p.clubId), { frac: 1 / 9, seed: month, final: false });

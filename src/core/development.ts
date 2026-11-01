@@ -30,22 +30,22 @@ export function developPlayer(p: Player, st: PlayerSeason | undefined, seasonYea
   const playFactor = 0.5 + 0.5 * minutesShare;
   const age = p.age;
 
-  let growth = 0; // técnico e mental
+  // Evolução dinâmica (estimativa, ao estilo FM/FIFA):
+  // - quem tem mais margem até ao potencial cresce mais, sobretudo nos mais novos
+  // - a qualidade da época (nota média) também conta: uma grande época faz crescer mesmo quem tem pouco potencial
+  const games = st?.games ?? 0;
+  const avgRating = games ? st!.ratingSum / games : 0;
+  const perf = games >= 4 ? Math.max(-1, Math.min(1.5, avgRating - 6.6)) : 0;
+  const gap = Math.max(0, p.potential - before);
+  const ageRate = age <= 19 ? 0.45 : age <= 21 ? 0.38 : age <= 23 ? 0.3 : age <= 25 ? 0.2 : age <= 27 ? 0.1 : 0;
+  const perfGrowth = age <= 29 ? perf * 0.35 * (0.4 + 0.6 * minutesShare) : perf * 0.15;
+  let growth = gap * ageRate * (0.8 + r() * 0.4) * playFactor + perfGrowth; // técnico e mental
   let physical = 0;
-  if (age <= 23) {
-    const gap = Math.max(0, p.potential - before);
-    growth = gap * (0.25 + r() * 0.25) * playFactor;
-    physical = growth * 0.6;
-  } else if (age <= 29) {
-    growth = (r() - 0.4) * 0.6 + minutesShare * 0.2;
-    physical = (r() - 0.5) * 0.4;
-  } else if (age <= 32) {
-    growth = (r() - 0.5) * 0.4;
-    physical = -(0.3 + r() * 0.5);
-  } else {
-    growth = -(0.1 + r() * 0.4);
-    physical = -(0.6 + r() * 0.8 + (age - 33) * 0.15);
-  }
+  if (age <= 23) physical = growth * 0.6;
+  else if (age <= 29) { growth += (r() - 0.5) * 0.3; physical = (r() - 0.5) * 0.4; }
+  else if (age <= 32) { growth += (r() - 0.5) * 0.4; physical = -(0.3 + r() * 0.5); }
+  else { growth += -(0.1 + r() * 0.4); physical = -(0.6 + r() * 0.8 + (age - 33) * 0.15); }
+  if (age <= 23 && games < 2) growth -= 0.15; // jovem sem jogar estagna
 
   for (const k of ALL_ATTRS) {
     if (p.position !== 'GR' && GK.includes(k)) continue;
@@ -63,9 +63,27 @@ export function developPlayer(p: Player, st: PlayerSeason | undefined, seasonYea
   const after = overall(p.attrs, p.position);
   if (!o.final) return { id: p.id, name: p.name, before, after };
   p.age++;
+  // potencial dinâmico: grandes épocas dos jovens sobem-no; jovens que não jogam perdem margem
+  if (age <= 24 && perf > 0.3 && minutesShare > 0.4) p.potential = Math.min(20, p.potential + perf * 0.6);
+  if (age <= 23 && minutesShare < 0.1) p.potential = Math.max(after, p.potential - 0.3);
   if (age >= 26) p.potential = Math.max(after, Math.min(p.potential, after + 0.5));
   else p.potential = Math.max(p.potential, after);
+  p.potential = Math.round(p.potential * 10) / 10;
   return { id: p.id, name: p.name, before, after };
+}
+
+/** Paragem longa por lesão (mais de 3 semanas): perde forma física todos os meses (estimativa); cruzado também perde técnica. */
+export function injuryDecline(p: Player, injuryDays: number, seed: string) {
+  if (injuryDays < 21) return;
+  const r = rng(`inj-${p.id}-${seed}`);
+  const phys = 0.25 * (p.age > 30 ? 1.5 : 1);
+  for (const k of ALL_ATTRS) {
+    if (p.position !== 'GR' && GK.includes(k)) continue;
+    const d = PHYSICAL.includes(k) ? -phys : injuryDays > 120 ? -0.1 : 0;
+    if (!d) continue;
+    const v = p.attrs[k] + d, base = Math.floor(v);
+    p.attrs[k] = Math.max(1, base + (r() < v - base ? 1 : 0));
+  }
 }
 
 export function retires(p: Player, seasonYear: number) {
