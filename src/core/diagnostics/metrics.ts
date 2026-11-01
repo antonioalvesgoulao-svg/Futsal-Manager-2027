@@ -92,9 +92,11 @@ export function measurePossession(m: Metrics, p: Possession, sc: Scene3D & { dur
 
   const still: Record<string, { n: number; run: number; best: number; tot: number }> = {};
   let prevF: Frame | null = null;
-  let stableOrder = '', stableOrderY = '';
-  let candidateOrder = '', candidateOrderY = '';
-  let candidateOrderSince = 0, candidateOrderYSince = 0;
+  // A rotação é um único evento, mesmo que a troca altere simultaneamente
+  // a ordem longitudinal e a lateral. As duas dimensões fazem parte da assinatura.
+  let stableRotation = '';
+  let candidateRotation = '';
+  let candidateRotationSince = 0;
   let frameIndex = 0;
   let lastHolder: string | null = null, releaseF: Frame | null = null, flight: Frame[] = [];
   const runStarted = new Set<string>();
@@ -149,26 +151,33 @@ export function measurePossession(m: Metrics, p: Possession, sc: Scene3D & { dur
       if (a?.kind === 'run' && !runStarted.has(id)) { runStarted.add(id); m.runActs++; }
       if (a?.kind !== 'run') runStarted.delete(id);
     }
-    // rotações: uma nova ordem só conta se persistir 0,5 s; evita contar oscilações
-    // momentâneas junto de um colega como trocas táticas repetidas.
+    // Rotações: a assinatura combina ordem longitudinal e lateral.
+    // Uma troca que altere ambos os eixos conta uma só vez e só após persistir 0,5 s.
     if (A.length >= 3) {
       const ord = [...A].sort((a, b) => U(P(a)) - U(P(b)));
       const ordY = [...A].sort((a, b) => P(a).y - P(b).y);
-      const okGap = (o: string[], val: (id: string) => number) => o.every((id, i) => i === 0 || val(id) - val(o[i - 1]) > TH.swapHyst);
-      const sig = ord.join(','), sigY = ordY.join(',');
-      const now = frameIndex * DT;
-      if (okGap(ord, (id) => U(P(id)))) {
-        if (!stableOrder) stableOrder = sig;
-        if (sig === stableOrder) { candidateOrder = ''; candidateOrderSince = now; }
-        else if (sig !== candidateOrder) { candidateOrder = sig; candidateOrderSince = now; }
-        else if (now - candidateOrderSince >= 0.5) { m.rotations++; stableOrder = sig; candidateOrder = ''; }
-      } else { candidateOrder = ''; }
-      if (okGap(ordY, (id) => P(id).y)) {
-        if (!stableOrderY) stableOrderY = sigY;
-        if (sigY === stableOrderY) { candidateOrderY = ''; candidateOrderYSince = now; }
-        else if (sigY !== candidateOrderY) { candidateOrderY = sigY; candidateOrderYSince = now; }
-        else if (now - candidateOrderYSince >= 0.5) { m.rotations++; stableOrderY = sigY; candidateOrderY = ''; }
-      } else { candidateOrderY = ''; }
+      const okGap = (o: string[], val: (id: string) => number) =>
+        o.every((id, i) => i === 0 || val(id) - val(o[i - 1]) > TH.swapHyst);
+      const sigX = okGap(ord, (id) => U(P(id))) ? ord.join(',') : null;
+      const sigY = okGap(ordY, (id) => P(id).y) ? ordY.join(',') : null;
+      if (!stableRotation) {
+        stableRotation = `${sigX ?? ''}|${sigY ?? ''}`;
+      } else {
+        const [stableX, stableY] = stableRotation.split('|');
+        const sig = `${sigX ?? stableX}|${sigY ?? stableY}`;
+        const now = frameIndex * DT;
+        if (sig === stableRotation) {
+          candidateRotation = '';
+          candidateRotationSince = now;
+        } else if (sig !== candidateRotation) {
+          candidateRotation = sig;
+          candidateRotationSince = now;
+        } else if (now - candidateRotationSince >= 0.5) {
+          m.rotations++;
+          stableRotation = candidateRotation;
+          candidateRotation = '';
+        }
+      }
     }
     // parado / velocidade (precisa do instante anterior)
     if (prevF) {
