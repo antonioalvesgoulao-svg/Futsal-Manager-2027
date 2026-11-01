@@ -130,3 +130,68 @@ https://github.com/antonioalvesgoulao-svg/Futsal-Manager-2027/pull/5
 - Workflow para o novo HEAD PR #5: [41358144794](https://github.com/antonioalvesgoulao-svg/Futsal-Manager-2027/actions/runs/41358144794), ainda em execução na última consulta. Instalação concluída; build em execução; testes e diagnóstico pendentes.
 - O HEAD anterior PR #5 `6618c00770b761196e52768491de0350a8942eff` teve workflow [41358023935](https://github.com/antonioalvesgoulao-svg/Futsal-Manager-2027/actions/runs/41358023935) concluído com sucesso (incluindo build e testes), mas não substitui a validação do novo HEAD.
 - PR #3 e #5 continuam drafts, abertas e sem merge. Motivo: foram criadas deliberadamente como drafts enquanto faltava validação; a PR #5 depende da PR #3. Não fazer merge sem aprovação explícita.
+
+
+---
+
+## Snapshot de continuidade consolidado — 1 novembro 2026, 22:40 UTC
+
+Esta secção é a atualização mais recente deste documento e prevalece sobre estados antigos descritos acima quando existir divergência. O estado foi confirmado diretamente no GitHub.
+
+### Estado de `main` e do jogo existente
+
+- `main` aponta para `15a3bb3ca4f450c09395f35e621220e9dc23697d` (confirmado em `branches/main`).
+- O commit `15a3bb3` adicionou a Fase 0 de diagnóstico tático e tem como pai `84edfdea6bea7bbcfc3156de5797f1950adb0148`.
+- O histórico imediatamente anterior de `main` contém desenvolvimento funcional substancial do manager. Não tratar o projeto como um protótipo novo nem reduzir o estado do jogo à camada tática.
+- Entre os marcos recentes registados no histórico estão:
+  - funcionalidades de carreira/gestão: novo jogo por liga, atributos do treinador, calendário mensal, comparação de jogadores e treino com fadiga;
+  - mercado: janelas, filtros, negociações, propostas, papéis no plantel, satisfação e valor dinâmico;
+  - observação de jogadores/equipas, atributos escondidos, scouting e preparação contra o sistema adversário;
+  - gestão de treinadores e staff: contratos, interinos, evolução, exigência das direções e entrevistas;
+  - palestras, GR avançado manual, escolha do 5x4, substituições nas táticas e folha do jogador;
+  - bolas paradas: seleção dos executantes e desenho de jogadas de canto/livre;
+  - regras disciplinares espanholas e competições/estrutura de Espanha;
+  - pavilhões 3D, equipamentos, marcador 3D, penáltis, baliza deserta e celebrações/festa do título.
+- Estes itens são evidência de commits no histórico, não uma declaração de que cada funcionalidade foi novamente testada nesta sessão. Antes de alterar qualquer uma, inspecionar o código atual e preservar o comportamento existente.
+
+### Estado atual das Pull Requests (consulta direta)
+
+| PR | Branch | Base | HEAD | Estado |
+|---|---|---|---|---|
+| [#1 Diagnóstico](https://github.com/antonioalvesgoulao-svg/Futsal-Manager-2027/pull/1) | `fix/diagnostics-phase0-hardening` | `main` | `830b8d3beaa103050ee6e3b5fcf2ce779e01b56b` | aberta, draft, não merged, mergeable |
+| [#3 Movimento por atributos](https://github.com/antonioalvesgoulao-svg/Futsal-Manager-2027/pull/3) | `feat/attribute-aware-movement-clean` | `main` | `ef382e103403ee77ce36b554ce2dfe119375134d` | aberta, draft, não merged, mergeable |
+| [#4 Continuidade/documentação](https://github.com/antonioalvesgoulao-svg/Futsal-Manager-2027/pull/4) | `docs/ai-handoff` | `main` | `0cb859e8a8172c83c56fa8aa34a2c4c1a1342d30` antes desta atualização | aberta, draft, não merged, mergeable |
+| [#5 Integração física 4-0](https://github.com/antonioalvesgoulao-svg/Futsal-Manager-2027/pull/5) | `feat/integrate-attribute-movement` | `feat/attribute-aware-movement-clean` | `564cc7ff7f10edb62510e9b37f347172367608da` | aberta, draft, não merged, mergeable |
+
+- PR #2 está fechada sem merge; não reutilizar a sua branch.
+- PR #5 está empilhada sobre PR #3; a sua base é exatamente o HEAD atual da PR #3. Não alterar esta relação sem rever a dependência.
+- Nenhuma destas PRs foi integrada em `main`. Não fazer merge sem aprovação explícita do António.
+- A PR #4 contém esta documentação. O HEAD será atualizado pelo commit desta atualização documental.
+
+### Validações confirmadas por SHA exata
+
+- PR #1, SHA `830b8d3beaa103050ee6e3b5fcf2ce779e01b56b`: runs [41356257764](https://github.com/antonioalvesgoulao-svg/Futsal-Manager-2027/actions/runs/41356257764) e [41356261073](https://github.com/antonioalvesgoulao-svg/Futsal-Manager-2027/actions/runs/41356261073) concluídos com sucesso.
+- PR #3, SHA `ef382e103403ee77ce36b554ce2dfe119375134d`: run [41358028406](https://github.com/antonioalvesgoulao-svg/Futsal-Manager-2027/actions/runs/41358028406) concluído com sucesso.
+- PR #5, SHA `564cc7ff7f10edb62510e9b37f347172367608da`: run [41358144794](https://github.com/antonioalvesgoulao-svg/Futsal-Manager-2027/actions/runs/41358144794) concluído com `success`. Esta é a validação do HEAD atual da PR #5, incluindo o workflow `validacao-atributos.yml`.
+- Runs de commits anteriores não substituem a validação do HEAD atual. Ao surgir um novo commit, confirmar novamente o run associado à nova SHA.
+
+### Implementação tática existente — estado consolidado
+
+- Fase 0: métricas e relatório comparável de comportamento/movimento, com limitações geométricas explicitamente identificadas como proxies.
+- PR #3: camada isolada `src/core/visual/movement.ts`, que traduz atributos em perfis e qualidade por intenção; ainda não constitui agentes autónomos nem inteligência tática completa.
+- PR #5: integração inicial de aceleração/agilidade no bake das trajetórias dos jogadores de campo da equipa em posse, apenas no ataque organizado 4-0. O mapa `playersById` é passado de `live.ts` para `Choreo`; guarda-redes, defensores e restantes sistemas preservam o comportamento anterior.
+- `bakeMovementTrajectory` é a função pura usada por `Track.bake`. Os testes comparam trajetórias sintéticas para aceleração 5 vs 18 e agilidade 5 vs 18, e verificam que o motor de resultados não importa a camada visual.
+- A validação automática cobre instalação, build, testes e diagnóstico. A CI não prova por si só que o efeito esteja visualmente bem calibrado numa partida completa.
+- Ainda não foi demonstrado um teste visual de partida completa com jogadores de atributos contrastantes. Esta continua a ser uma lacuna real.
+
+### Próximos passos reais — não recomeçar
+
+1. Fazer revisão técnica final das PRs #1, #3, #4 e #5, incluindo diffs e dependências; não fazer merge sem aprovação.
+2. Na linha tática, criar um cenário controlado e repetível de partida/ataque 4-0 com jogadores de aceleração e agilidade contrastantes. Comparar trajetórias e timing visualmente e confirmar que o motor de resultados produz os mesmos resultados com a camada visual ativada/desativada.
+3. Só depois de validar o efeito físico em jogo, avançar para intenções cognitivas/táticas reais (apoio, rotação, ataque ao espaço, leitura de linhas de passe e coordenação), em passos pequenos.
+4. Não declarar que o simulador já tem agentes autónomos: a coreografia continua a dirigir os lances e a integração atual é limitada.
+5. Preservar e continuar todas as funcionalidades de gestão, competições, mercado, staff, regras e apresentação já existentes no jogo. Qualquer alteração futura deve partir do código real em `main` e das branches relevantes, não de uma descrição abstrata do projeto.
+
+### Instrução para a próxima IA
+
+O estado correto não é simplesmente “retomar a tarefa indicada num handoff antigo”. Primeiro compara este snapshot com o GitHub atual e com os commits mais recentes. Usa este documento como mapa, não como substituto da inspeção do código. Continua o trabalho já desenvolvido, sem reconstruir funcionalidades existentes, sem apagar decisões anteriores e sem fazer merge para `main` sem autorização.
