@@ -11,11 +11,14 @@ import type { MatchResult } from './engine/types';
 import type { CompId, Fixture } from './season/types';
 import type { GameState } from './types';
 
-// Espanha (Código Disciplinario RFEF, estimativa a confirmar): 1 jogo a cada 5 amarelos na liga (ciclos de 5), 2 amarelos = 1 jogo;
-// taças sem acumulação, como em Portugal
+// Espanha (Código Disciplinario RFEF, versão de 3/3/2026, Título do fútbol sala, Art. 140-145):
+// - Art. 141.1: qualquer expulsão = 1 jogo, salvo infração mais grave (2 amarelos = 1 jogo; impedir golo = 1 jogo)
+// - Art. 141.5: os amarelos NUNCA se acumulam (sem castigos por acumulação)
+// - Art. 145.2: tentativa de agressão / jogo violento sem dano: até 3 jogos (confrontos); com dano: falta grave, 4-12 (o jogo não simula dano)
+// - Art. 143.3: a suspensão cumpre-se nos jogos oficiais seguintes, seja qual for a competição
 /** Liga e play-off são a mesma competição para efeitos de castigo. */
 export type DComp = Exclude<CompId, 'playoff' | 'espPlayoff' | 'espAp' | 'espCl'>;
-export const dcomp = (c: CompId): DComp => (c === 'playoff' ? 'liga' : c === 'espPlayoff' || c === 'espAp' || c === 'espCl' ? 'esp' : c);
+export const dcomp = (c: CompId): DComp => (c === 'playoff' ? 'liga' : ['esp', 'espPlayoff', 'espAp', 'espCl', 'copaEsp', 'superEsp', 'copaRey'].includes(c) ? 'esp' : (c as DComp));
 
 export interface Suspension { comp: DComp; games: number; reason: string; yellowsOnly?: boolean }
 export interface Discipline {
@@ -74,7 +77,8 @@ export function applyDiscipline(s: GameState, f: Fixture, m: MatchResult, name: 
     if (st.red) {
       const k = st.redKind ?? 'twoYellows';
       if (k === 'twoYellows') add(id, 1, 'expulso por 2 amarelos');
-      else if (k === 'dogso') add(id, rnd() < 0.75 ? 1 : 2, 'vermelho direto: impediu oportunidade de golo');
+      else if (k === 'dogso') add(id, comp === 'esp' ? 1 : rnd() < 0.75 ? 1 : 2, 'vermelho direto: impediu oportunidade de golo');
+      else if (comp === 'esp') add(id, 1 + Math.floor(rnd() * rnd() * 3), 'vermelho direto em confronto'); // Art. 145.2: até 3 jogos
       else {
         // confronto: agressão sem lesão (Art. 154, 1 a 8; na prática quase sempre perto do mínimo)
         const g = 1 + Math.floor(rnd() * rnd() * 5);
@@ -82,10 +86,9 @@ export function applyDiscipline(s: GameState, f: Fixture, m: MatchResult, name: 
       }
     }
     // acumulação de amarelos (só Liga Placard; os 2 amarelos da expulsão não contam)
-    if ((comp === 'liga' || comp === 'esp') && st.yellow > 0 && !(st.red && (st.redKind ?? 'twoYellows') === 'twoYellows')) {
-      const before = d.yellows[id] ?? 0;
-      const n = (d.yellows[id] = before + st.yellow);
-      if (comp === 'liga' ? THRESH(n) : Math.floor(n / 5) > Math.floor(before / 5)) { d.sanctioned[id] = n; add(id, 1, `${n}.º amarelo`, true); }
+    if (comp === 'liga' && st.yellow > 0 && !(st.red && (st.redKind ?? 'twoYellows') === 'twoYellows')) {
+      const n = (d.yellows[id] = (d.yellows[id] ?? 0) + st.yellow);
+      if (THRESH(n)) { d.sanctioned[id] = n; add(id, 1, `${n}.º amarelo`, true); }
     }
   }
   // 3) Art. 40.2: castigo por vermelho numa competição onde a equipa já não joga → passa para outra competição dessa época
