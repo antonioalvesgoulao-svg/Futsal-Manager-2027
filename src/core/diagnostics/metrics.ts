@@ -86,7 +86,9 @@ export function measurePossession(m: Metrics, p: Possession, sc: Scene3D & { dur
   const live = frames.filter((f) => !f.stoppage);
   if (!live.length) return;
   m.samples += live.length;
-  m.playSeconds += live.length * DT;
+  // Há um frame em t=0 e outro em t=duration: N amostras representam N-1 intervalos.
+  // Contar N * DT inflacionava o tempo útil em 0,1 s por posse e enviesava todas as taxas por minuto.
+  m.playSeconds += Math.max(0, live.length - 1) * DT;
 
   const still: Record<string, { n: number; run: number; best: number; tot: number }> = {};
   let prevF: Frame | null = null;
