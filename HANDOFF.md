@@ -77,3 +77,26 @@ Não há framework de testes unitários conhecido neste snapshot.
 - Inspecionar o código atual antes de editar.
 - Não fazer merge sem aprovação explícita.
 - Atualizar este handoff no fim de cada marco com SHA, PR, testes e próximo passo.
+
+
+## Integração inicial dos atributos na coreografia (1 novembro 2026)
+
+### PR #5 — integração física no ataque 4-0
+https://github.com/antonioalvesgoulao-svg/Futsal-Manager-2027/pull/5
+- Branch: `feat/integrate-attribute-movement`.
+- PR aberta, draft, não merged. Criada como PR empilhada sobre a branch da PR #3 (`feat/attribute-aware-movement-clean`), não diretamente sobre `main`.
+- HEAD conhecido: `fea819c794d85102642bc1bb3f68cb110afc9d15`.
+- A PR #5 depende da PR #3; manter essa relação explícita e não alterar a base sem rever a dependência.
+- `live.ts` constrói um mapa de jogadores a partir de `hs.squad` e `as.squad` e passa-o opcionalmente a `Choreo`.
+- `Choreo` calcula os perfis físicos por jogador. Apenas os jogadores de campo da equipa em posse, quando o sistema ofensivo é 4-0, recebem aceleração e agilidade individuais no bake das trajetórias.
+- O guarda-redes é excluído. Outros sistemas e jogadores defensores mantêm os parâmetros anteriores.
+- Foi removido `speedFactor` do perfil: o modelo não tem atributo explícito de velocidade máxima e não devemos inferi-lo a partir de aceleração.
+- Decisão, trabalho de equipa, resistência e adequação posicional ainda não alteram a coreografia. Precisam de intenções táticas explícitas e de uma integração própria.
+- O motor de resultados não foi alterado.
+- Não foi possível executar `npm run build` nem diagnóstico/simulação neste ambiente. Não há execução CI confirmada para este HEAD; não declarar build ou testes aprovados.
+
+### Próximo passo técnico
+1. Confirmar que a PR #3 continua aberta e rever a integração como PR empilhada.
+2. Obter uma execução real de build/CI para a branch de integração; a CI não pode ser presumida a partir de outras branches.
+3. Criar um cenário repetível 4-0 com dois jogadores de aceleração/agilidade muito diferentes e comparar trajetórias/timing, garantindo que os resultados do motor permanecem idênticos.
+4. Rever se o efeito físico é visualmente perceptível mas moderado; só depois avançar para tagging de intenções (apoio, rotação, ataque ao espaço).
