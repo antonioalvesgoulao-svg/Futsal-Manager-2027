@@ -290,8 +290,8 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
     const note = snap.teams.some((t) => t.flying) ? '5x4' : snap.teams.some((t) => t.short) ? 'Inferioridade numérica' : banner;
     $('#sb').innerHTML = scoreboardHtml({
       style: style as 'liga',
-      home: { short: h.shortName, color: colors[0], score: shownScore[0], fouls: snap.teams[0].fouls },
-      away: { short: a.shortName, color: colors[1], score: shownScore[1], fouls: snap.teams[1].fouls },
+      home: { id: h.id, short: h.shortName, color: colors[0], score: shownScore[0], fouls: snap.teams[0].fouls },
+      away: { id: a.id, short: a.shortName, color: colors[1], score: shownScore[1], fouls: snap.teams[1].fouls },
       clock: fmt(inPeriod),
       period: per === 1 ? '1.ª P' : per === 2 ? '2.ª P' : per <= 4 ? 'Prol.' : 'Pen.',
       note,

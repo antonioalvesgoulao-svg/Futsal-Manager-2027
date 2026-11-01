@@ -1,3 +1,4 @@
+import { crestSvg } from '../crest';
 import { fmtEur, marketValue, offerRenewal, renewalDemand, wageBill } from '../../core/contracts';
 import { FOCUS_LABEL, INT_LABEL, planOf, type Focus, type Intensity } from '../../core/training';
 import { moraleHtml, moraleOf } from '../../core/morale';
@@ -91,7 +92,7 @@ export function homeScreen(root: HTMLElement) {
   const el = h(`
     <div class="layout">
       <header class="top" style="--c1:${club.colors[0]};--c2:${club.colors[1]}">
-        <div class="crest">${club.shortName}</div>
+        <div class="crest-wrap">${crestSvg(club.id, 44, { c1: club.colors[0], c2: club.colors[1] })}</div>
         <div><strong>${club.name}</strong><div class="muted small">${s.manager.name} · ${s.season.label}</div></div>
         <div class="spacer"></div>
         <div class="date" id="date"></div>

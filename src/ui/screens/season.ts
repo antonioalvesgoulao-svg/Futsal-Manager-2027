@@ -1,3 +1,4 @@
+import { crestSvg } from '../crest';
 import { injuryOf } from '../../core/injuries';
 import { banFor } from '../../core/discipline';
 // Ecrãs da época: início, calendário, competições e dia de jogo
@@ -40,7 +41,7 @@ export function renderDashboard(content: HTMLElement, s: GameState) {
     <div class="cards">
       <div class="card">
         <div class="muted small">Próximo jogo</div>
-        ${next ? `<div class="big">${next.home === s.clubId ? 'vs' : '@'} ${clubName(s, next.home === s.clubId ? next.away : next.home)}</div>
+        ${next ? `<div class="big">${crestSvg(next.home === s.clubId ? next.away : next.home, 26)} ${next.home === s.clubId ? 'vs' : '@'} ${clubName(s, next.home === s.clubId ? next.away : next.home)}</div>
         <div class="small muted">${COMP_NAMES[next.comp]} · ${next.stage} · ${fmtDate(next.date)}</div>` : '<div class="big">Sem jogos marcados</div>'}
       </div>
       <div class="card">
@@ -50,7 +51,7 @@ export function renderDashboard(content: HTMLElement, s: GameState) {
       </div>
       <div class="card">
         <div class="muted small">Clube</div>
-        <div class="big">${club.name}</div>
+        <div class="big">${crestSvg(club.id, 26)} ${club.name}</div>
         <div class="small muted">${ARENAS[club.id]?.name ?? club.arena} · reputação ${club.reputation} · poder financeiro ${club.wealth}</div>
       </div>
     </div>
@@ -95,7 +96,7 @@ export function renderCompetitions(content: HTMLElement, s: GameState, tab = 'li
       <table class="tbl small table">
         <thead><tr><th>#</th><th>Clube</th><th>J</th><th>V</th><th>E</th><th>D</th><th>GM</th><th>GS</th><th>DG</th><th>Pts</th></tr></thead>
         <tbody>${t
-          .map((r, i) => `<tr class="${r.club === s.clubId ? 'mine' : ''} ${i < 8 ? 'zone-po' : ''}"><td>${i + 1}</td><td>${clubName(s, r.club)}</td><td>${r.p}</td><td>${r.w}</td><td>${r.d}</td><td>${r.l}</td><td>${r.gf}</td><td>${r.ga}</td><td>${r.gf - r.ga}</td><td><b>${r.pts}</b></td></tr>`)
+          .map((r, i) => `<tr class="${r.club === s.clubId ? 'mine' : ''} ${i < 8 ? 'zone-po' : ''}"><td>${i + 1}</td><td>${crestSvg(r.club, 18)} ${clubName(s, r.club)}</td><td>${r.p}</td><td>${r.w}</td><td>${r.d}</td><td>${r.l}</td><td>${r.gf}</td><td>${r.ga}</td><td>${r.gf - r.ga}</td><td><b>${r.pts}</b></td></tr>`)
           .join('')}</tbody>
       </table>
       <p class="small muted">Os 8 primeiros (a verde) seguem para o play-off. As descidas de divisão entram quando a II Divisão existir no jogo.</p>
@@ -173,9 +174,9 @@ export function renderMatchDay(content: HTMLElement, s: GameState, f: Fixture, o
     <h2>Dia de jogo</h2>
     <p class="muted">${COMP_NAMES[f.comp]} · ${f.stage} · ${f.neutral ? `${arenaOf(s, f).name} (campo neutro)` : arenaOf(s, f).name}${f.knockout ? ' · Jogo a eliminar' : ''}<br>Árbitros: ${refBadgeHtml(refereesFor(s, f))}</p>
     <div class="scoreboard">
-      <div class="team" style="--c1:${h.colors[0]}">${h.name}</div>
+      <div class="team" style="--c1:${h.colors[0]}">${crestSvg(h.id, 34)} ${h.name}</div>
       <div class="score">vs</div>
-      <div class="team" style="--c1:${a.colors[0]}">${a.name}</div>
+      <div class="team" style="--c1:${a.colors[0]}">${a.name} ${crestSvg(a.id, 34)}</div>
     </div>
     <div class="coaches small muted" style="margin-top:8px"><span>${hs.coachName} · ${tacticsSummary(hs.tactics)}</span><span>${as.coachName} · ${tacticsSummary(as.tactics)}</span></div>
     ${banLine(s, f)}

@@ -1,3 +1,4 @@
+import { crestSvg } from './crest';
 // Grafismo de transmissão original do jogo: marcadores eletrónicos por competição.
 // Inspiração portuguesa (azulejo, calçada, verde e vermelho), desenhado de raiz.
 import type { CompId } from '../core/season/types';
@@ -19,8 +20,8 @@ const EMBLEM: Record<string, string> = {
 
 export interface ScoreboardData {
   style: Exclude<CompId, 'playoff'>;
-  home: { short: string; color: string; score: number; fouls: number };
-  away: { short: string; color: string; score: number; fouls: number };
+  home: { short: string; color: string; score: number; fouls: number; id?: string };
+  away: { short: string; color: string; score: number; fouls: number; id?: string };
   clock: string; // tempo decorrido na parte
   period: string; // "1.ª P", "2.ª P", "Prol."
   note?: string; // ex.: "5x4", "Desconto de tempo"
@@ -33,11 +34,11 @@ export function scoreboardHtml(d: ScoreboardData) {
   return `
   <div class="sb sb-${d.style}">
     <div class="sb-row">
-      <div class="sb-team home"><span class="chip" style="background:${d.home.color}"></span><span class="nm">${d.home.short}</span></div>
+      <div class="sb-team home"><span class="chip" style="background:${d.home.color}"></span>${d.home.id ? crestSvg(d.home.id, 22) : ''}<span class="nm">${d.home.short}</span></div>
       <div class="sb-score">${d.home.score}</div>
       <div class="sb-mid">${EMBLEM[d.style]}<span class="cn">${SCOREBOARD_NAMES[d.style]}</span></div>
       <div class="sb-score">${d.away.score}</div>
-      <div class="sb-team away"><span class="nm">${d.away.short}</span><span class="chip" style="background:${d.away.color}"></span></div>
+      <div class="sb-team away"><span class="nm">${d.away.short}</span>${d.away.id ? crestSvg(d.away.id, 22) : ''}<span class="chip" style="background:${d.away.color}"></span></div>
     </div>
     <div class="sb-sub">
       ${foulBoxes(d.home.fouls)}

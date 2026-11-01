@@ -1,3 +1,4 @@
+import { crestSvg } from '../crest';
 // Ecrã de jogo amigável (teste do motor de jogo)
 import { simulateMatch } from '../../core/engine/match';
 import type { MatchResult, TeamSetup } from '../../core/engine/types';
@@ -60,9 +61,9 @@ export function resultHtml(m: MatchResult, h: Club, a: Club) {
   };
   return `
     <div class="scoreboard">
-      <div class="team" style="--c1:${h.colors[0]}">${h.name}</div>
+      <div class="team" style="--c1:${h.colors[0]}">${crestSvg(h.id, 34)} ${h.name}</div>
       <div class="score">${m.score[0]} - ${m.score[1]}${m.penalties ? `<div class="small muted">(${m.penalties[0]}-${m.penalties[1]} g.p.)</div>` : m.extraTime ? '<div class="small muted">(a.p.)</div>' : ''}</div>
-      <div class="team" style="--c1:${a.colors[0]}">${a.name}</div>
+      <div class="team" style="--c1:${a.colors[0]}">${a.name} ${crestSvg(a.id, 34)}</div>
     </div>
     <div class="scorers"><span>${scorers(0)}</span><span>${scorers(1)}</span></div>
     <div class="match-grid">
