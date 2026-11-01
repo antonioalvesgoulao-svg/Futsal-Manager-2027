@@ -34,7 +34,7 @@ for (let g = 0; g < nGames; g++) {
   const m = createMatch(hs, as, { seed: `${seed}-${g}` });
   const one = emptyMetrics();
   let start: StartState | null = null;
-  let prev: { p: Possession } | null = null;
+  let prev: { p: Possession; lostHolder: string | null } | null = null;
   // encadeia as posses exatamente como o jogo ao vivo (a posse seguinte parte de onde a anterior acabou)
   while (m.step()) {
     const sn = m.snapshot();
@@ -43,7 +43,8 @@ for (let g = 0; g < nGames; g++) {
     start = c.end;
     measurePossession(one, sn.possession, c, prev);
     measurePossession(total, sn.possession, c, prev);
-    prev = { p: sn.possession };
+    const endFrame = c.at(c.lead + c.duration);
+    prev = { p: sn.possession, lostHolder: endFrame.holder };
   }
   const res = m.result();
   perGame.push({ jogo: `${h}-${a}`, resultado: `${res.score[0]}-${res.score[1]}`, m: summarize(one) });
@@ -51,13 +52,23 @@ for (let g = 0; g < nGames; g++) {
 const summary = summarize(total);
 let commit = '';
 try { commit = execSync('git rev-parse --short HEAD', { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim(); } catch { /* fora do git */ }
-const out = { versao: name, semente: seed, jogos: nGames, commit, data: new Date().toISOString(), limiares: TH, segundos: Math.round((Date.now() - t0) / 1000), resumo: summary, porJogo: perGame };
+const parametros = { semente: seed, jogos: nGames, confrontos: Array.from({ length: nGames }, (_, i) => PAIRS[i % PAIRS.length]), duracao: { periodos: 2, minutosPorPeriodo: 20 }, limiares: TH };
+const out = { schema: 2, versao: name, commit, data: new Date().toISOString(), parametros, segundos: Math.round((Date.now() - t0) / 1000), resumo: summary, porJogo: perGame };
 mkdirSync('diagnostics', { recursive: true });
 writeFileSync(`diagnostics/${name}.json`, JSON.stringify(out, null, 1));
 
 // relatório em texto (Markdown), com comparação opcional com outra versão
-let base: typeof out | null = null;
-if (cmp && existsSync(cmp)) base = JSON.parse(readFileSync(cmp, 'utf8'));
+let base: any = null;
+if (cmp) {
+  if (!existsSync(cmp)) throw new Error(`Ficheiro de comparação não encontrado: ${cmp}`);
+  base = JSON.parse(readFileSync(cmp, 'utf8'));
+  const keys = ['semente', 'jogos', 'confrontos', 'duracao', 'limiares'];
+  const diffs = keys.filter((k) => JSON.stringify(base.parametros?.[k]) !== JSON.stringify(parametros[k]));
+  if (base.schema !== 2 || diffs.length) {
+    const reason = base.schema !== 2 ? 'baseline sem schema de parâmetros compatível' : `parâmetros diferentes: ${diffs.join(', ')}`;
+    throw new Error(`Comparação cancelada: ${reason}. Gere uma nova baseline com schema 2 e os mesmos parâmetros.`);
+  }
+}
 const rows = Object.entries(summary).map(([k, v]) => {
   const b = base ? (base.resumo as Record<string, number | null>)[k] : undefined;
   const diff = base && typeof v === 'number' && typeof b === 'number' ? ` | ${b} | ${v - b >= 0 ? '+' : ''}${Math.round((v - b) * 100) / 100}` : base ? ' | — | —' : '';
@@ -66,7 +77,7 @@ const rows = Object.entries(summary).map(([k, v]) => {
 const md = [
   `# Diagnóstico da simulação tática — ${name}`,
   ``,
-  `Semente **${seed}**, ${nGames} jogos (mesmos confrontos e semente em todas as versões), commit ${commit || '?'}, ${out.data.slice(0, 10)}.`,
+  `Semente **${seed}**, ${nGames} jogos, commit ${commit || '?'}, ${out.data.slice(0, 10)}. Parâmetros: ${JSON.stringify(parametros)}.`,
   ``,
   base ? `| Métrica | ${name} | ${base.versao} | Diferença |\n|---|---|---|---|` : `| Métrica | Valor |\n|---|---|`,
   ...rows,
