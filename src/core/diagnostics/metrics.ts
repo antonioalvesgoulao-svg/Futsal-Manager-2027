@@ -92,7 +92,10 @@ export function measurePossession(m: Metrics, p: Possession, sc: Scene3D & { dur
 
   const still: Record<string, { n: number; run: number; best: number; tot: number }> = {};
   let prevF: Frame | null = null;
-  let lastOrder = '', lastOrderY = '';
+  let stableOrder = '', stableOrderY = '';
+  let candidateOrder = '', candidateOrderY = '';
+  let candidateOrderSince = 0, candidateOrderYSince = 0;
+  let frameIndex = 0;
   let lastHolder: string | null = null, releaseF: Frame | null = null, flight: Frame[] = [];
   const runStarted = new Set<string>();
   for (const f of live) {
@@ -146,14 +149,26 @@ export function measurePossession(m: Metrics, p: Possession, sc: Scene3D & { dur
       if (a?.kind === 'run' && !runStarted.has(id)) { runStarted.add(id); m.runActs++; }
       if (a?.kind !== 'run') runStarted.delete(id);
     }
-    // rotações: trocas na ordem dos jogadores em profundidade ou em largura (com margem)
+    // rotações: uma nova ordem só conta se persistir 0,5 s; evita contar oscilações
+    // momentâneas junto de um colega como trocas táticas repetidas.
     if (A.length >= 3) {
       const ord = [...A].sort((a, b) => U(P(a)) - U(P(b)));
       const ordY = [...A].sort((a, b) => P(a).y - P(b).y);
       const okGap = (o: string[], val: (id: string) => number) => o.every((id, i) => i === 0 || val(id) - val(o[i - 1]) > TH.swapHyst);
       const sig = ord.join(','), sigY = ordY.join(',');
-      if (okGap(ord, (id) => U(P(id)))) { if (lastOrder && sig !== lastOrder) m.rotations++; lastOrder = sig; }
-      if (okGap(ordY, (id) => P(id).y)) { if (lastOrderY && sigY !== lastOrderY) m.rotations++; lastOrderY = sigY; }
+      const now = frameIndex * DT;
+      if (okGap(ord, (id) => U(P(id)))) {
+        if (!stableOrder) stableOrder = sig;
+        if (sig === stableOrder) { candidateOrder = ''; candidateOrderSince = now; }
+        else if (sig !== candidateOrder) { candidateOrder = sig; candidateOrderSince = now; }
+        else if (now - candidateOrderSince >= 0.5) { m.rotations++; stableOrder = sig; candidateOrder = ''; }
+      } else { candidateOrder = ''; }
+      if (okGap(ordY, (id) => P(id).y)) {
+        if (!stableOrderY) stableOrderY = sigY;
+        if (sigY === stableOrderY) { candidateOrderY = ''; candidateOrderYSince = now; }
+        else if (sigY !== candidateOrderY) { candidateOrderY = sigY; candidateOrderYSince = now; }
+        else if (now - candidateOrderYSince >= 0.5) { m.rotations++; stableOrderY = sigY; candidateOrderY = ''; }
+      } else { candidateOrderY = ''; }
     }
     // parado / velocidade (precisa do instante anterior)
     if (prevF) {
@@ -167,6 +182,7 @@ export function measurePossession(m: Metrics, p: Possession, sc: Scene3D & { dur
       }
     }
     prevF = f;
+    frameIndex++;
   }
   for (const [id, s] of Object.entries(still)) {
     if (!s.tot) continue;
