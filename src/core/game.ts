@@ -4,6 +4,7 @@ import { importanceOf, refereesFor } from './referees';
 import { aiTactics } from './coaches';
 import { normalizeTactics } from './tactics';
 import { accumulate, shootingFocus, trainingBonus } from './training';
+import { contractsSeasonEnd, ensureContracts } from './contracts';
 import { applyMorale, moraleEvent } from './morale';
 import { injuryOf, matchInjuries, trainingInjuries } from './injuries';
 import { applyDiscipline, banFor, seasonEndDiscipline } from './discipline';
@@ -55,6 +56,7 @@ export function startFirstSeason(s: GameState) {
   s.season = createSeason(2026, ranking, ['slb', 'scp']);
   s.date = '2026-07-01';
   s.pstats = {};
+  ensureContracts(s);
 }
 
 export function myFixtures(s: GameState) {
@@ -143,6 +145,12 @@ function trainingNews(s: GameState, from: string, to: string) {
   const days = Math.round((Date.parse(to) - Date.parse(from)) / 864e5);
   if (days > 0 && days <= 60) accumulate(s, days);
   dailyDevelopment(s, from, to);
+  // aviso em janeiro: contratos do meu plantel que acabam no fim da época
+  const jan = `${s.season.year + 1}-01-01`;
+  if (from < jan && to >= jan) {
+    const end = s.players.filter((p) => p.clubId === s.clubId && p.contract && p.contract.until <= s.season.year + 1);
+    if (end.length) news(s, `Contratos a acabar em junho: ${end.map((p) => p.name).join(', ')}. Renova no perfil do jogador ou saem a custo zero.`);
+  }
   const { fresh, healed } = trainingInjuries(s, from, to);
   moraleEvent(s, fresh.filter(([, i]) => i.days > 7).map(([id]) => id), -6);
   const name = (id: string) => s.players.find((p) => p.id === id);
@@ -157,6 +165,7 @@ export type AdvanceResult = { kind: 'match'; fixture: Fixture } | { kind: 'day' 
  * Se nesse dia o teu clube joga, para e devolve o jogo (jogas no ecrã de dia de jogo).
  */
 export function advance(s: GameState): AdvanceResult {
+  ensureContracts(s);
   const d = nextDate(s);
   if (!d) {
     const end = keyDates(s.season.year).end;
@@ -212,6 +221,8 @@ function endSeason(s: GameState): DevChange[] {
     c.before = s.devStart?.[p.id] ?? c.before;
     if (p.clubId === s.clubId) changes.push(c);
   }
+  // contratos que acabam (antes das reformas)
+  for (const t of contractsSeasonEnd(s, old.year + 1)) news(s, t);
   // reformas
   const retired = s.players.filter((p) => retires(p, old.year));
   for (const p of retired) if (p.clubId === s.clubId) news(s, `${p.name} terminou a carreira.`);
@@ -236,6 +247,7 @@ function endSeason(s: GameState): DevChange[] {
   s.leagues[0].season = s.season.label;
   s.date = `${old.year + 1}-07-01`;
   s.pstats = {};
+  ensureContracts(s);
   seasonEndDiscipline(s);
   s.trainLog = {};
   s.devFrac = 0; s.devStart = {}; s.devAttrs = {};

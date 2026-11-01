@@ -101,6 +101,7 @@ Real: 6,38 golos/jogo, casa 49,6%, fora 37,0%, empates 13,5%, <3 golos 6,1%. Man
 - Treino (`src/core/training.ts`, ecrã Treino; estimativas): foco da equipa (equilibrado, técnica, tática, físico, finalização, GR, recuperação) + intensidade (baixa 0,75/normal/alta 1,25 na evolução; lesões em treino ×0,7/×1/×1,4; recuperação ×0,5) + foco individual por jogador. A evolução é contínua, dia a dia (pedido do António): cada avanço aplica dias/365 da mudança anual (`dailyDevelopment` em game.ts, `developPlayer` com `frac`); dias lesionado não evoluem; envelhecimento e revisão do potencial no fim da época; pré-época sem efeito da nota/minutos; até ~+0,5 por atributo com foco total. GR fazem sempre metade de treino específico. Teste 1 época Benfica: físico/alta físicos +0,70 vs equilibrado -0,01; técnico técnicos +0,72 vs +0,29
 - Evolução dinâmica (`development.ts`, estimativa, pedido do António ao estilo FM/FIFA): crescimento = margem até ao potencial × ritmo por idade (≤19 0,45 … 26-27 0,1) × minutos + qualidade da época (nota média − 6,6); jovem sem jogar estagna; potencial sobe com grandes épocas (≤24) e desce a quem não joga (≤23). Lesão >3 semanas: -0,25 físicos por cada 30 dias parado (contados dia a dia) (×1,5 acima dos 30), >120 dias também -0,1 técnica/mental. Teste 3 épocas: nível médio da liga estável (11,17 → 11,09); jovens com margem >3 +0,7 a +0,9/época, com margem <1,5 ~0
 - Travões da evolução diária: por época cada atributo sobe no máximo +3 (≤21), +2 (22-25), +1 (26+); nível nunca passa o potencial +1 durante a época. Teste 5 épocas: maior subida 1,7-2,6/época, só 1-3% sobem ≥1,5; nível médio desce devagar (11,17 → 10,65) porque os veteranos saem e entram juniores fracos: a resolver no mercado (etapa 10) e formação (etapa 11)
+- Contratos (`src/core/contracts.ts`, `Player.contract`): salário mensal bruto = 850 €×e^(0,34×(nível−8)) × riqueza do clube × idade (estimativa), calibrado com a média europeia ~40 mil €/ano (Flashscore) e o topo ~300 mil €/ano (Pany Varela no Al Nassr, Record); simulação: média 41 mil €/ano, Sporting/Benfica ~1,9 M€/ano, pequenos 0,3-0,5 M€. Valor de mercado (idade, potencial, reputação) e cláusula (grandes 8-14× valor; referência real: cláusula de 50 mil € de Felipe Rufino ao Joinville). Renovação no perfil (pedido conforme mercado e moral; máx. anos por idade; +5 moral). Aviso em janeiro; quem acaba contrato no meu clube sai a custo zero; IA renova os 12 melhores. Plantel mostra salário, fim de contrato e folha salarial
 - Próximos melhoramentos possíveis: mais variantes de jogadas ensaiadas
 
 ## Roteiro
@@ -109,7 +110,7 @@ Real: 6,38 golos/jogo, casa 49,6%, fora 37,0%, empates 13,5%, <3 golos 6,1%. Man
 | 1-6 Base, dados, atributos, motor, táticas, época | Feito |
 | 7 Quadro tático gráfico, bolas paradas, jogo ao vivo 2D, 3D | Feito (a afinar com feedback) |
 | 8 Ligação 3D ao motor | Coberta pela 7 |
-| 9 Plantel e clube: treino, moral, lesões, castigos, contratos | Em curso (castigos, lesões, moral e treino feitos) |
+| 9 Plantel e clube: treino, moral, lesões, castigos, contratos | Feito (castigos, lesões, moral, treino, contratos); faltam perfil com cara (precisa de capturas do António) e emblemas |
 | 10 Mercado e finanças | |
 | 11 Staff e formação (treinadores com historial real) | |
 | 12 20 ligas europeias + segundas divisões e taças | |

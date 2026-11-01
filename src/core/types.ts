@@ -1,3 +1,4 @@
+import type { Contract } from './contracts';
 // Tipos centrais do jogo. Vão crescer em cada etapa.
 
 export interface Club {
@@ -31,6 +32,7 @@ export interface Player {
   nationality: string;
   attrs: Attributes;
   potential: number;
+  contract?: Contract;
 }
 
 export interface League {

@@ -1,3 +1,4 @@
+import { fmtEur, marketValue, offerRenewal, renewalDemand, wageBill } from '../../core/contracts';
 import { FOCUS_LABEL, INT_LABEL, planOf, type Focus, type Intensity } from '../../core/training';
 import { moraleHtml, moraleOf } from '../../core/morale';
 import { injuryInfo, injuryOf } from '../../core/injuries';
@@ -9,7 +10,7 @@ import type { Fixture } from '../../core/season/types';
 import { renderCalendar, renderCompetitions, renderDashboard, renderMatchDay } from './season';
 import { exportSave, saveToSlot, SLOTS } from '../../core/save';
 import { ATTR_GROUPS, overall, starsHtml } from '../../core/attributes';
-import type { Player } from '../../core/types';
+import type { Club, Player } from '../../core/types';
 import { renderFriendly } from './friendly';
 import { renderTactics } from './tactics';
 import { renderSettings } from './settings';
@@ -25,16 +26,19 @@ function attrClass(v: number) {
   return v >= 16 ? 'a4' : v >= 13 ? 'a3' : v >= 10 ? 'a2' : 'a1';
 }
 
-function playerProfile(p: Player, mine = false, status = '') {
+function playerProfile(p: Player, mine = false, status = '', club?: Club, renew = '') {
   const groups = Object.entries(ATTR_GROUPS).filter(([g]) => (p.position === 'GR' ? true : g !== 'guardaRedes'));
   return `
     <button class="btn ghost" data-back>◂ Plantel</button>
     <h2 style="margin-top:12px">${p.number ?? '-'} · ${p.name}</h2>${status}
     ${mine ? `<div class="row" style="justify-content:flex-start;gap:8px;margin-bottom:12px"><label class="small">Número da camisola <input id="pnum" type="number" min="1" max="99" value="${p.number ?? ''}" style="width:64px"></label><span class="muted small" id="pnummsg">Se o número já estiver ocupado, os dois jogadores trocam.</span></div>` : ''}
+    ${renew}
     <table class="tbl" style="margin-bottom:16px">
       <tr><th>Posição</th><td>${POS_NAME[p.position]}</td><th>Idade</th><td>${p.age}</td></tr>
       <tr><th>Nacionalidade</th><td>${p.nationality}</td><th>Valor atual</th><td>${starsHtml(overall(p.attrs, p.position))}</td></tr>
       <tr><th></th><td></td><th>Potencial</th><td>${starsHtml(p.potential)}</td></tr>
+      ${p.contract ? `<tr><th>Salário</th><td>${fmtEur(p.contract.wage)}/mês</td><th>Contrato até</th><td>30/06/${p.contract.until}</td></tr>
+      <tr><th>Cláusula</th><td>${fmtEur(p.contract.clause)}</td><th>Valor de mercado</th><td>${fmtEur(marketValue(p, club ?? ({ reputation: 60 } as Club)))}</td></tr>` : ''}
     </table>
     ${(HIST[p.id] ?? []).length ? `<h3>Historial (zerozero)</h3>
     <table class="tbl small" style="max-width:520px;margin-bottom:16px">
@@ -143,7 +147,21 @@ export function homeScreen(root: HTMLElement) {
       const bans = s!.discipline?.bans[pl.id] ?? [];
       const status = (inj ? `<div class="card" style="margin:8px 0;padding:8px 12px">🩹 <b>${inj.type}</b> · ${inj.days} dias de paragem · volta a ${inj.until.split('-').reverse().join('/')}<br><span class="small muted">${injuryInfo(inj.type)}</span></div>` : '')
         + bans.map((b) => `<div class="card" style="margin:8px 0;padding:8px 12px">🟥 Castigado: ${b.games} jogo(s) (${b.reason})</div>`).join('');
-      content.innerHTML = playerProfile(pl, pl.clubId === club.id, `<p>Moral: ${moraleHtml(moraleOf(s!, pl.id))}</p>` + status);
+      const pclub = s!.clubs.find((c) => c.id === pl.clubId)!;
+      const dem = renewalDemand(s!, pl);
+      const renew = pl.clubId === club.id ? `<div class="card" style="margin:8px 0 12px;padding:8px 12px"><b>Renovar contrato</b>
+        <div class="row" style="justify-content:flex-start;gap:8px;margin-top:6px;flex-wrap:wrap">
+          <label class="small">Salário/mês (€) <input id="rwage" type="number" step="50" min="0" value="${dem.wage}" style="width:90px"></label>
+          <label class="small">Anos <select id="ryears">${[1, 2, 3, 4].map((y) => `<option ${y === Math.min(2, dem.maxYears) ? 'selected' : ''}>${y}</option>`).join('')}</select></label>
+          <button class="btn" id="rgo">Propor</button><span class="small muted" id="rmsg">Pede cerca de ${fmtEur(dem.wage)}/mês, até ${dem.maxYears} ano(s).</span>
+        </div></div>` : '';
+      content.innerHTML = playerProfile(pl, pl.clubId === club.id, `<p>Moral: ${moraleHtml(moraleOf(s!, pl.id))}</p>` + status, pclub, renew);
+      content.querySelector('#rgo')?.addEventListener('click', () => {
+        const w = Number(content.querySelector<HTMLInputElement>('#rwage')!.value), y = Number(content.querySelector<HTMLSelectElement>('#ryears')!.value);
+        const res = offerRenewal(s!, pl, w, y);
+        if (res.ok) { renderContent(); }
+        const m = content.querySelector('#rmsg'); if (m) m.textContent = res.msg;
+      });
       content.querySelector<HTMLInputElement>('#pnum')?.addEventListener('change', (e) => {
         const v = Math.round(Number((e.target as HTMLInputElement).value));
         if (!(v >= 1 && v <= 99)) { content.querySelector('#pnummsg')!.textContent = 'Escolhe um número de 1 a 99.'; return; }
@@ -160,11 +178,11 @@ export function homeScreen(root: HTMLElement) {
         .filter((p) => p.clubId === club.id)
         .sort((a, b) => order.indexOf(a.position) - order.indexOf(b.position) || (a.number ?? 99) - (b.number ?? 99));
       content.innerHTML = `
-        <h2>Plantel <span class="muted small">${squad.length} jogadores</span></h2>
+        <h2>Plantel <span class="muted small">${squad.length} jogadores · folha salarial ${fmtEur(wageBill(s!, club.id))}/mês (estimativa)</span></h2>
         <table class="tbl">
-          <thead><tr><th>Nº</th><th>Nome</th><th>Posição</th><th>Idade</th><th>Nacionalidade</th><th>Atual</th><th>Potencial</th><th>Moral</th><th>J</th><th>G</th><th>A</th><th>Nota</th></tr></thead>
+          <thead><tr><th>Nº</th><th>Nome</th><th>Posição</th><th>Idade</th><th>Nacionalidade</th><th>Atual</th><th>Potencial</th><th>Moral</th><th>Salário/mês</th><th>Contrato</th><th>J</th><th>G</th><th>A</th><th>Nota</th></tr></thead>
           <tbody>${squad
-            .map((p) => `<tr class="click" data-p="${p.id}"><td>${p.number ?? '-'}</td><td>${p.name}${injuryOf(s!, p.id) ? ` <span title="${injuryOf(s!, p.id)!.type} (até ${injuryOf(s!, p.id)!.until})">🩹</span>` : ''}${totalBan(s!, p.id) ? ` <span title="Castigado: ${totalBan(s!, p.id)} jogo(s)">🟥${totalBan(s!, p.id)}</span>` : ''}${(s!.discipline?.yellows[p.id] ?? 0) ? ` <span class="muted small" title="Amarelos na Liga">🟨${s!.discipline!.yellows[p.id]}</span>` : ''}</td><td>${p.position}</td><td>${p.age}</td><td>${p.nationality}</td><td>${starsHtml(overall(p.attrs, p.position))}</td><td>${starsHtml(p.potential)}</td><td>${moraleHtml(moraleOf(s!, p.id))}</td>${statCells(s!.pstats[p.id])}</tr>`)
+            .map((p) => `<tr class="click" data-p="${p.id}"><td>${p.number ?? '-'}</td><td>${p.name}${injuryOf(s!, p.id) ? ` <span title="${injuryOf(s!, p.id)!.type} (até ${injuryOf(s!, p.id)!.until})">🩹</span>` : ''}${totalBan(s!, p.id) ? ` <span title="Castigado: ${totalBan(s!, p.id)} jogo(s)">🟥${totalBan(s!, p.id)}</span>` : ''}${(s!.discipline?.yellows[p.id] ?? 0) ? ` <span class="muted small" title="Amarelos na Liga">🟨${s!.discipline!.yellows[p.id]}</span>` : ''}</td><td>${p.position}</td><td>${p.age}</td><td>${p.nationality}</td><td>${starsHtml(overall(p.attrs, p.position))}</td><td>${starsHtml(p.potential)}</td><td>${moraleHtml(moraleOf(s!, p.id))}</td><td>${p.contract ? fmtEur(p.contract.wage) : '-'}</td><td${p.contract && p.contract.until <= s!.season.year + 1 ? ' style="color:#d9822b;font-weight:600"' : ''}>${p.contract ? 'jun ' + p.contract.until : '-'}</td>${statCells(s!.pstats[p.id])}</tr>`)
             .join('')}</tbody>
         </table>
         <p class="muted small">Clica num jogador para ver os atributos.</p>`;
