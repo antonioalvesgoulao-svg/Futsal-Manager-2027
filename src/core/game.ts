@@ -8,6 +8,7 @@ import { contractsSeasonEnd, ensureContracts } from './contracts';
 import { matchRevenue, monthlyFinance, book, PRIZES } from './finance';
 import { aiMarket, endLoans, ensurePool } from './market';
 import { analystBonus, academyIntake, academySeasonEnd, ensureStaff, gkTrainingK, juniorsOf, trainingK } from './staff';
+import { afterMyMatch, aiCoachChanges, onTitle, staffSeasonEnd } from './career';
 import { applyMorale, moraleEvent } from './morale';
 import { injuryOf, matchInjuries, trainingInjuries } from './injuries';
 import { applyDiscipline, banFor, seasonEndDiscipline } from './discipline';
@@ -163,6 +164,8 @@ function trainingNews(s: GameState, from: string, to: string) {
   if (from < jan && to >= jan) {
     const end = s.players.filter((p) => p.clubId === s.clubId && p.contract && p.contract.until <= s.season.year + 1);
     if (end.length) news(s, `Contratos a acabar em junho: ${end.map((p) => p.name).join(', ')}. Renova no perfil do jogador ou saem a custo zero.`);
+    const st = (s.staff ?? []).filter((x) => x.clubId === s.clubId && x.until <= s.season.year + 1);
+    if (st.length) news(s, `Staff com contrato a acabar em junho: ${st.map((x) => x.name).join(', ')}. Renova no ecrã Staff.`);
   }
   const { fresh, healed } = trainingInjuries(s, from, to);
   moraleEvent(s, fresh.filter(([, i]) => i.days > 7).map(([id]) => id), -6);
@@ -203,6 +206,9 @@ export function playMyMatch(s: GameState, f: Fixture, given?: MatchResult): Matc
   const opp = clubName(s, mySide === 0 ? f.away : f.home);
   const res = a > b || (m.penalties && (mySide === 0 ? m.penalties[0] > m.penalties[1] : m.penalties[1] > m.penalties[0])) ? 'Vitória' : a < b || m.penalties ? 'Derrota' : 'Empate';
   news(s, `${COMP_NAMES[f.comp]}, ${f.stage}: ${res} frente ao ${opp}, ${a}-${b}${m.penalties ? ` (${mySide === 0 ? m.penalties[0] : m.penalties[1]}-${mySide === 0 ? m.penalties[1] : m.penalties[0]} g.p.)` : m.extraTime ? ' (a.p.)' : ''}.`);
+  // direção: confiança conforme o resultado face ao esperado
+  const oppClub = s.clubs.find((c) => c.id === (mySide === 0 ? f.away : f.home))!;
+  for (const t of afterMyMatch(s, res === 'Vitória' ? 'V' : res === 'Empate' ? 'E' : 'D', oppClub.level, importanceOf(s, f))) news(s, t);
   playDay(s, f.date);
   return m;
 }
@@ -216,7 +222,9 @@ function playDay(s: GameState, d: string) {
   for (const [comp, w] of Object.entries(s.season.winners)) if (w && before[comp as keyof typeof before] !== w) {
     moraleEvent(s, s.players.filter((p) => p.clubId === w).map((p) => p.id), 10);
     if (PRIZES[comp]) book(s, w, `Prémio: ${COMP_NAMES[comp as keyof typeof COMP_NAMES]}`, PRIZES[comp]);
+    if (w === s.clubId) onTitle(s, comp);
   }
+  for (const t of aiCoachChanges(s)) news(s, t);
 }
 
 // Fim de época: palmarés, evolução, reformas, formação e nova época
@@ -241,6 +249,7 @@ function endSeason(s: GameState): DevChange[] {
   // contratos que acabam (antes das reformas)
   for (const t of endLoans(s, old.year + 1)) news(s, t);
   for (const t of contractsSeasonEnd(s, old.year + 1)) news(s, t);
+  for (const t of staffSeasonEnd(s, old.year + 1)) news(s, t);
   // reformas
   const retired = s.players.filter((p) => retires(p, old.year));
   for (const p of retired) if (p.clubId === s.clubId) news(s, `${p.name} terminou a carreira.`);

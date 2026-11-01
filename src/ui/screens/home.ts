@@ -1,3 +1,4 @@
+import { renderCareer } from './career';
 import { FP_STATS } from '../../core/state';
 import { renderAcademy, renderStaff } from './staff';
 import { renderFinance, renderMarket } from './market';
@@ -88,6 +89,7 @@ const SECTIONS: { id: string; label: string; stage: string }[] = [
   { id: 'financas', label: 'Finanças', stage: '' },
   { id: 'staff', label: 'Staff', stage: '' },
   { id: 'formacao', label: 'Formação', stage: '' },
+  { id: 'carreira', label: 'Carreira', stage: '' },
   { id: 'definicoes', label: 'Definições', stage: '' },
 ];
 
@@ -199,6 +201,8 @@ export function homeScreen(root: HTMLElement) {
         <p class="muted small">Clica num jogador para ver os atributos.</p>`;
     } else if (section === 'mercado') {
       renderMarket(content, s!, () => renderContent(), (id) => { section = 'plantel'; playerId = id; renderNav(); renderContent(); });
+    } else if (section === 'carreira') {
+      renderCareer(content, s!, () => go('home'));
     } else if (section === 'staff') {
       renderStaff(content, s!, () => renderContent());
     } else if (section === 'formacao') {
@@ -271,6 +275,7 @@ export function homeScreen(root: HTMLElement) {
   });
 
   el.querySelector('#next')!.addEventListener('click', () => {
+    if (s!.career?.sacked) { section = 'carreira'; renderNav(); renderContent(); alert('Foste despedido: escolhe um clube na Carreira para continuar.'); return; }
     if (pending) {
       section = 'inicio';
       renderContent();

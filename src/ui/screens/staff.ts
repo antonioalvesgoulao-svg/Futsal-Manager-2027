@@ -1,3 +1,4 @@
+import { poachFee, poachStaff, renewStaff } from '../../core/career';
 // Ecrãs do Staff e da Formação
 import { overall, starsHtml } from '../../core/attributes';
 import { fmtEur } from '../../core/contracts';
@@ -39,10 +40,12 @@ export function renderStaff(content: HTMLElement, s: GameState, refresh: () => v
     content.innerHTML = `
       <h2>Staff técnico <span class="muted small">${fmtEur(staffBill(s, my.id))}/mês de ${fmtEur(staffBudget(my))} (orçamento)</span></h2>
       <table class="tbl"><thead><tr><th>Função</th><th>Nome</th><th>Capacidade</th><th>Efeito</th><th>Idade</th><th>Salário</th><th></th></tr></thead><tbody>
-      ${mine.map((st) => `<tr><td>${st.func ?? ROLE_NAME[st.role]}</td><td class="click" data-open="${st.id}"><b>${st.name}</b>${st.real ? '' : ' <span class="muted small">(fictício)</span>'}</td><td>${bar(st.ability)}</td><td class="small">${EFFECT[st.role](st.ability)}</td><td>${st.age}</td><td>${fmtEur(st.wage)}</td><td><button class="btn ghost" data-find="${st.role}">Substituir</button></td></tr>${open === st.id ? `<tr><td colspan="7">${historyHtml(st.history)}</td></tr>` : ''}`).join('')}
+      ${mine.map((st) => `<tr><td>${st.func ?? ROLE_NAME[st.role]}</td><td class="click" data-open="${st.id}"><b>${st.name}</b>${st.real ? '' : ' <span class="muted small">(fictício)</span>'}</td><td>${bar(st.ability)}</td><td class="small">${EFFECT[st.role](st.ability)}</td><td>${st.age}</td><td>${fmtEur(st.wage)}<br><span class="small ${st.until <= s.season.year + 1 ? '' : 'muted'}" style="${st.until <= s.season.year + 1 ? 'color:#d9822b' : ''}">até jun ${st.until}</span></td><td>${st.until <= s.season.year + 1 ? `<button class="btn" data-renew="${st.id}">Renovar</button> ` : ''}<button class="btn ghost" data-find="${st.role}">Substituir</button></td></tr>${open === st.id ? `<tr><td colspan="7">${historyHtml(st.history)}</td></tr>` : ''}`).join('')}
       ${vagos.map((r) => `<tr><td>${ROLE_NAME[r]}</td><td class="muted">vago</td><td>${bar(5)}</td><td class="small">${EFFECT[r](5)}</td><td></td><td></td><td><button class="btn ghost" data-find="${r}">Procurar</button></td></tr>`).join('')}
       </tbody></table>
       <p class="muted small">Clica no nome para ver o historial. Equipas técnicas reais dos 12 clubes (futsalportugal.com e zerozero); as funções em falta num clube têm técnicos fictícios. Capacidade calculada do historial (estimativa).</p>
+      <h3>Técnicos de outros clubes ${role ? `· ${ROLE_NAME[role]}` : ''}</h3>
+      <table class="tbl small"><tbody>${(s.staff ?? []).filter((x) => x.clubId && x.clubId !== my.id && !x.clubId.includes('@') && (!role || x.role === role)).sort((a, b) => b.ability - a.ability).slice(0, 12).map((x) => `<tr><td>${x.func ?? ROLE_NAME[x.role]}</td><td>${x.name}</td><td>${s.clubs.find((c) => c.id === x.clubId)?.shortName ?? ''}</td><td>${bar(x.ability)}</td><td>ganha ${fmtEur(x.wage)}</td><td>indemn. ${fmtEur(poachFee(s, x))}</td><td><input type="number" step="50" value="${Math.round(x.wage * 1.3 / 50) * 50}" data-pw="${x.id}" style="width:80px"> <button class="btn" data-poach="${x.id}">Propor</button></td></tr>`).join('')}</tbody></table>
       <h3>Técnicos sem clube ${role ? `· ${ROLE_NAME[role]}` : ''} <select id="frole"><option value="">Todas as funções</option>${[...ROLES, ...EXTRA_ROLES].map((r) => `<option value="${r}" ${role === r ? 'selected' : ''}>${ROLE_NAME[r]}</option>`).join('')}</select></h3>
       <table class="tbl small"><tbody>${free.slice(0, 15).map((x) => `<tr><td>${ROLE_NAME[x.role]}</td><td>${x.name}</td><td>${bar(x.ability)}</td><td>${x.age} anos</td><td>pede ${fmtEur(staffWage(x.ability, my))}</td><td><button class="btn" data-hire="${x.id}">Contratar</button></td></tr>`).join('') || '<tr><td class="muted">Ninguém disponível.</td></tr>'}</tbody></table>
       <h3>Treinadores principais da Liga</h3>
@@ -54,6 +57,12 @@ export function renderStaff(content: HTMLElement, s: GameState, refresh: () => v
     content.querySelectorAll<HTMLElement>('[data-coach]').forEach((b) => (b.onclick = () => { open = open === b.dataset.coach ? null : b.dataset.coach!; draw(); }));
     content.querySelectorAll<HTMLElement>('[data-find]').forEach((b) => (b.onclick = () => { role = b.dataset.find as Role; draw(); }));
     content.querySelector<HTMLSelectElement>('#frole')!.onchange = (e) => { role = ((e.target as HTMLSelectElement).value || null) as Role | null; draw(); };
+    content.querySelectorAll<HTMLElement>('[data-renew]').forEach((b) => (b.onclick = () => { alert(renewStaff(s, s.staff!.find((x) => x.id === b.dataset.renew)!)); draw(); }));
+    content.querySelectorAll<HTMLElement>('[data-poach]').forEach((b) => (b.onclick = () => {
+      const st = s.staff!.find((x) => x.id === b.dataset.poach)!;
+      const w = Number(content.querySelector<HTMLInputElement>(`[data-pw="${st.id}"]`)!.value);
+      alert(poachStaff(s, st, w)); draw();
+    }));
     content.querySelectorAll<HTMLElement>('[data-hire]').forEach((b) => (b.onclick = () => {
       const st = s.staff!.find((x) => x.id === b.dataset.hire)!;
       const cur = staffOf(s, my.id, st.role);
