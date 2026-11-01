@@ -15,7 +15,7 @@ import type { CustomPlay } from '../tactics';
 import type { Action, Possession } from '../engine/match';
 import type { Tactics } from '../tactics';
 import type { Player } from '../types';
-import { movementProfile, type MovementProfile } from './movement';
+import { bakeMovementTrajectory, movementProfile, type MovementProfile } from './movement';
 
 export interface P2 { x: number; y: number }
 export interface Ball { x: number; y: number; z: number }
@@ -169,24 +169,12 @@ class Track {
 
   bake(t0: number, t1: number, vmax: number, amax: number, accelerationFactor = 1, agilityFactor = 1) {
     this.baked = null;
-    const dt = BAKE_DT;
-    const n = Math.max(2, Math.ceil((t1 - t0) / dt) + 2);
-    const xs = new Float32Array(n), ys = new Float32Array(n);
-    let p = this.at(t0);
-    let vx = 0, vy = 0;
-    for (let i = 0; i < n; i++) {
-      const t = t0 + i * dt;
-      xs[i] = p.x; ys[i] = p.y;
-      const g = this.at(t + 0.18 / clamp(agilityFactor, 0.82, 1.16));
-      let dx = (g.x - p.x) / 0.28, dy = (g.y - p.y) / 0.28;
-      const dl = Math.hypot(dx, dy);
-      if (dl > vmax) { dx = (dx * vmax) / dl; dy = (dy * vmax) / dl; }
-      let ax = dx - vx, ay = dy - vy;
-      const al = Math.hypot(ax, ay), amx = amax * clamp(accelerationFactor, 0.82, 1.16) * dt;
-      if (al > amx) { ax = (ax * amx) / al; ay = (ay * amx) / al; }
-      vx += ax; vy += ay;
-      p = { x: p.x + vx * dt, y: p.y + vy * dt };
-    }
+    const points = bakeMovementTrajectory(
+      (time) => this.at(time), t0, t1, vmax, amax,
+      accelerationFactor, agilityFactor, BAKE_DT,
+    );
+    const xs = Float32Array.from(points, (point) => point.x);
+    const ys = Float32Array.from(points, (point) => point.y);
     this.baked = { t0, xs, ys };
   }
 
