@@ -129,7 +129,7 @@ function addKazakhstan(s: SeasonState, y: number, ranking: string[], supercup: [
   const base = roundRobin([...ranking].sort(() => r() - 0.5));
   const rounds = [...base, ...base.map(g => g.map(([a,b]) => [b,a] as [string,string])), ...base, ...base.map(g => g.map(([a,b]) => [b,a] as [string,string]))];
   const start = nextWeekday(`${y}-09-05`, 6);
-  const dates = rounds.map((_,i)=>addDays(start,i*7));
+  const dates = rounds.map((_,i)=>addDays(start,Math.floor(i/2)*7+(i%2))); // duas jornadas por fim de semana
   const k = keyDates(y);
   s.fixtures.push({id:newId(y),comp:'kazSuper',stage:'Final',date:nextWeekday(`${y}-08-25`,6),home:supercup[0],away:supercup[1],neutral:true,knockout:true});
   rounds.forEach((games,i)=>games.forEach(([home,away])=>s.fixtures.push({id:newId(y),comp:'kaz',stage:`Jornada ${i+1}`,round:i+1,date:dates[i],home,away,knockout:false})));
