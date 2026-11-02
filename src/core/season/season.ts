@@ -134,7 +134,7 @@ function addKazakhstan(s: SeasonState, y: number, ranking: string[], supercup: [
   s.fixtures.push({id:newId(y),comp:'kazSuper',stage:'Final',date:nextWeekday(`${y}-08-25`,6),home:supercup[0],away:supercup[1],neutral:true,knockout:true});
   rounds.forEach((games,i)=>games.forEach(([home,away])=>s.fixtures.push({id:newId(y),comp:'kaz',stage:`Jornada ${i+1}`,round:i+1,date:dates[i],home,away,knockout:false})));
   const low=ranking.slice(4);
-  for(let i=0;i<4;i++) s.fixtures.push({id:newId(y),comp:'kazCup',stage:'Oitavos de final',date:nextWeekday(`${y}-10-10`,3),home:low[7-i],away:low[i],knockout:true});
+  for(let i=0;i<4;i++) s.fixtures.push({id:newId(y),comp:'kazCup',stage:'Eliminatória preliminar',date:nextWeekday(`${y}-10-10`,3),home:low[7-i],away:low[i],knockout:true});
 }
 
 // ---------------- Espanha (RFEF, Liga Prime Futsal) ----------------
@@ -498,7 +498,7 @@ function afterKazakhstan(s: SeasonState, clubIds: string[], name: (id:string)=>s
   if(sf.length===2 && sf.every(x=>x.winner) && !s.series.some(x=>x.comp==='kazPlayoff' && x.stage==='Final')) makeSeries(s,'Final',...order(sf[0].winner!,sf[1].winner!),5,k.playoffF,'kazPlayoff');
   const final=s.series.find(x=>x.comp==='kazPlayoff' && x.stage==='Final');
   if(final?.winner && !s.winners.kaz) {s.winners.kaz=final.winner;news.push(`${name(final.winner)} é campeão do Cazaquistão.`);}
-  const cupR1=byStage(s,'kazCup','Oitavos de final');
+  const cupR1=byStage(s,'kazCup','Eliminatória preliminar');
   if(done(cupR1) && !byStage(s,'kazCup','Quartos-de-final').length) {
     const ranked=s.kazRegularTable ?? ids;
     const winners=cupR1.map(winnerOf) as string[];
