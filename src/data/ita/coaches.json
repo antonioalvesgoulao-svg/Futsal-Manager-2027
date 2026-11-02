@@ -1,0 +1,145 @@
+{
+  "_info": "Serie A 2026/27: planteis, números, posições, datas de nascimento e equipas técnicas da Divisione Calcio a 5 (divisionecalcioa5.it) + historial do futsalportugal.com (recolha 2/11/2026, pedidos espaçados). tactical/motivation pelo historial quando existe, senão pelo nível do clube (estimativa); discipline/youth estimativa.",
+  "coaches": [
+    {
+      "id": "c_act",
+      "name": "Massimiliano Monsignori",
+      "clubId": "act",
+      "tactical": 9,
+      "motivation": 10,
+      "discipline": 14,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_cpr",
+      "name": "Francesco Chiaffarato",
+      "clubId": "cpr",
+      "tactical": 9,
+      "motivation": 9,
+      "discipline": 14,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_tre",
+      "name": "Nicolas Gulizia",
+      "clubId": "tre",
+      "tactical": 11,
+      "motivation": 11,
+      "discipline": 14,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_ebo",
+      "name": "Luciano Antonelli",
+      "clubId": "ebo",
+      "tactical": 11,
+      "motivation": 12,
+      "discipline": 14,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_pom",
+      "name": "Alessandro Nuccorini",
+      "clubId": "pom",
+      "tactical": 16,
+      "motivation": 15,
+      "discipline": 14,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_ben",
+      "name": "Fausto Scarpitti",
+      "clubId": "ben",
+      "tactical": 10,
+      "motivation": 10,
+      "discipline": 14,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_gio",
+      "name": "Gustavo Menini",
+      "clubId": "gio",
+      "tactical": 9,
+      "motivation": 10,
+      "discipline": 14,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_l84",
+      "name": "Diego Rios Gayoso",
+      "clubId": "l84",
+      "tactical": 12,
+      "motivation": 12,
+      "discipline": 14,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_cat",
+      "name": "Juanra Calvo",
+      "clubId": "cat",
+      "tactical": 12,
+      "motivation": 12,
+      "discipline": 14,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_nap",
+      "name": "Gianfranco Angelini",
+      "clubId": "nap",
+      "tactical": 16,
+      "motivation": 15,
+      "discipline": 14,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_rom",
+      "name": "Fabrizio Reali",
+      "clubId": "rom",
+      "tactical": 10,
+      "motivation": 10,
+      "discipline": 14,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_ave",
+      "name": "Piero Basile",
+      "clubId": "ave",
+      "tactical": 8,
+      "motivation": 9,
+      "discipline": 14,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_sal",
+      "name": "Felipe Conde",
+      "clubId": "sal",
+      "tactical": 12,
+      "motivation": 12,
+      "discipline": 14,
+      "youth": 12,
+      "style": {}
+    },
+    {
+      "id": "c_pad",
+      "name": "Giuseppe Milella",
+      "clubId": "pad",
+      "tactical": 11,
+      "motivation": 11,
+      "discipline": 14,
+      "youth": 12,
+      "style": {}
+    }
+  ]
+}

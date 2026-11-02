@@ -14,3 +14,11 @@ No StackBlitz: `stackblitz.com/github/O_TEU_UTILIZADOR/futsal-manager-2027`
 ## Estrutura
 - `src/core` lógica do jogo (estado, gravações, tipos)
 - `src/ui` ecrãs e navegação
+
+
+## Documentação para continuidade do projeto
+- [Instruções para qualquer IA/agente](AGENTS.md)
+- [Estado atual e próximos passos](HANDOFF.md)
+- [Arquitetura técnica](docs/ARCHITECTURE.md)
+- [Princípios e regras de futsal](docs/GAMEPLAY_RULES.md)
+- [Contexto detalhado do projeto para Claude](CLAUDE.md)

@@ -1,0 +1,33 @@
+name: Validacao tecnica
+
+on:
+  push:
+    branches:
+      - feat/attribute-aware-movement-clean
+      - feat/integrate-attribute-movement
+      - claude/awesome-hypatia-l5i9xc
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Instalar dependencias
+        run: npm ci
+      - name: TypeScript e build de producao
+        run: npm run build
+      - name: Testes de movimento (apenas branch de integracao)
+        if: github.ref != 'refs/heads/feat/attribute-aware-movement-clean'
+        run: npm test
+      - name: Diagnostico tatico
+        run: npm run diag

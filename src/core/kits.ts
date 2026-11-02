@@ -62,6 +62,16 @@ export function matchKits(home: { id: string; colors: [string, string] }, away: 
   let ak = mine === 1 && choice !== 'auto' ? (choice === 'home' ? A.home : A.away) : A.home;
   if (mine !== 1 || choice === 'auto') if (hexDist(hk.shirt, ak.shirt) < 130) ak = A.away;
   if (hexDist(hk.shirt, ak.shirt) < 130) hk = hk === H.home ? H.away : H.home; // escolha manual em choque: a casa cede
+  // se nenhum equipamento de árbitro ficar distinto das duas equipas, o visitante muda de equipamento (se puder)
+  if (refGap([hk, ak]) < 160 && !(mine === 1 && choice !== 'auto')) {
+    const alt = ak === A.home ? A.away : A.home;
+    if (hexDist(hk.shirt, alt.shirt) >= 130 && refGap([hk, alt]) > refGap([hk, ak])) ak = alt;
+  }
+  // ainda sem solução: a casa muda (raro, ex.: Palma de verde-lima contra o Jaén de preto)
+  if (refGap([hk, ak]) < 160 && !(mine === 0 && choice !== 'auto')) {
+    const alt = hk === H.home ? H.away : H.home;
+    if (hexDist(alt.shirt, ak.shirt) >= 130 && refGap([alt, ak]) > refGap([hk, ak])) hk = alt;
+  }
   return [hk, ak];
 }
 
@@ -93,4 +103,32 @@ export function matchGkKits(homeId: string, awayId: string, kits: [KitDef, KitDe
   };
   const hg = choose(homeId);
   return [hg, choose(awayId, hg)];
+}
+
+/** Equipamentos dos árbitros (indicados pelo António): camisola amarela, verde fluorescente, amarela fluorescente ou
+ *  toda preta, sempre com calção preto. */
+export const REF_KITS = [
+  { name: 'amarelo', shirt: '#facc15' },
+  { name: 'verde fluorescente', shirt: '#39ff14' },
+  { name: 'amarelo fluorescente', shirt: '#e6ff00' },
+  { name: 'preto', shirt: '#111111' },
+] as const;
+
+/** Escolhe o equipamento dos árbitros que nunca coincide com as camisolas (e a 2.ª cor do padrão) dos jogadores de
+ *  campo das duas equipas; evita também, se possível, a cor dos guarda-redes. Pela ordem da lista, o primeiro que
+ *  fique bem afastado; se nenhum ficar, o mais afastado de todos. */
+/** Maior distância de cor que se consegue entre os árbitros e os jogadores de campo. */
+function refGap(kits: [KitDef, KitDef]) {
+  const field = kits.flatMap((kd) => (kd.pattern === 'liso' ? [kd.shirt] : [kd.shirt, kd.alt]));
+  return Math.max(...REF_KITS.map((r) => Math.min(999, ...field.map((x) => hexDist(r.shirt, x)))));
+}
+
+export function refKitFor(kits: [KitDef, KitDef], gkKits?: KitDef[]) {
+  const field = kits.flatMap((kd) => (kd.pattern === 'liso' ? [kd.shirt] : [kd.shirt, kd.alt]));
+  const gks = (gkKits ?? []).map((g) => g.shirt);
+  const minD = (c: string, list: string[]) => Math.min(999, ...list.map((x) => hexDist(c, x)));
+  const ok = REF_KITS.find((r) => minD(r.shirt, field) >= 160 && minD(r.shirt, gks) >= 60)
+    ?? REF_KITS.find((r) => minD(r.shirt, field) >= 160)
+    ?? [...REF_KITS].sort((a, b) => minD(b.shirt, field) - minD(a.shirt, field))[0];
+  return { shirt: ok.shirt, shorts: '#111111', name: ok.name };
 }

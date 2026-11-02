@@ -224,7 +224,7 @@ export class Highlight3D {
       tag.visible = this.showTags;
       pm.g.add(tag);
     }
-    a = { ...pm, prev: new THREE.Vector3(), heading: 0, phase: (hsh % 10) / 3, speed: 0, init: false };
+    a = { ...pm, prev: new THREE.Vector3(), heading: 0, phase: (hsh % 10) / 3, speed: 0, stride: 0.93 + (hsh % 15) / 100, init: false };
     return a;
   }
 
@@ -290,35 +290,54 @@ export class Highlight3D {
       a.g.position.set(p.x, this.arena.groundAt(p.x, p.y) + podH, p.y);
       if (!a.init) { before.copy(a.g.position); a.init = true; }
       const vx = (a.g.position.x - before.x) / dt, vz = (a.g.position.z - before.z) / dt;
-      a.speed = lerp(a.speed, Math.min(9, Math.hypot(vx, vz)), 0.25);
+      const sp0 = a.speed;
+      a.speed = lerp(a.speed, Math.min(9, Math.hypot(vx, vz)), Math.min(1, dt * 9));
+      a.accel = lerp(a.accel ?? 0, (a.speed - sp0) / Math.max(1e-3, dt), Math.min(1, dt * 4));
       const act = f.acts[id];
       // para onde olha: a ação em curso, a direção da corrida ou a bola
+      // no futsal quem não sprinta continua virado para o jogo: recua de costas ou desloca-se de lado (sem rodar o corpo)
       let want = Math.atan2(f.ball.x - p.x, f.ball.y - p.y);
       if (act && (act.kind !== 'run' && act.kind !== 'celebrate' && act.kind !== 'fall')) want = act.ang;
-      else if (a.speed > 3.2) want = Math.atan2(vx, vz);
+      else if (a.speed > 3.2) {
+        const run = Math.atan2(vx, vz);
+        let off = run - want;
+        while (off > Math.PI) off -= Math.PI * 2;
+        while (off < -Math.PI) off += Math.PI * 2;
+        // a sprintar (ou a correr para a frente) olha para onde corre; abaixo de ~5,5 m/s em recuo/lado mantém o olhar no jogo
+        if (a.speed > 5.5 || Math.abs(off) < 1.75 || act?.kind === 'run' || f.holder === id) want = run;
+      }
       let d = want - a.heading;
       while (d > Math.PI) d -= Math.PI * 2;
       while (d < -Math.PI) d += Math.PI * 2;
-      a.heading += d * Math.min(1, dt * 9);
+      const gkAct = act && (act.kind === 'dive' || act.kind === 'splits' || act.kind === 'spread' || act.kind === 'catch' || act.kind === 'footsave');
+      const turn = d * Math.min(1, dt * (gkAct ? 20 : 9));
+      a.heading += turn;
+      a.turn = lerp(a.turn ?? 0, turn / Math.max(1e-3, dt), Math.min(1, dt * 6));
       a.g.rotation.set(0, a.heading, 0);
+      // velocidade no referencial do corpo (frente/lado), para as pernas fazerem o passo certo
+      const sh = Math.sin(a.heading), ch = Math.cos(a.heading);
+      a.fwd = lerp(a.fwd ?? 0, Math.max(-9, Math.min(9, vx * sh + vz * ch)), Math.min(1, dt * 9));
+      a.side = lerp(a.side ?? 0, Math.max(-9, Math.min(9, vx * ch - vz * sh)), Math.min(1, dt * 9));
       let act2 = act;
-      if ((act?.kind === 'dive' || act?.kind === 'splits') && act.to) {
+      if ((act?.kind === 'dive' || act?.kind === 'splits' || act?.kind === 'footsave') && act.to) {
         // lado do mergulho, visto pelo guarda-redes
-        const rx = Math.cos(a.heading), rz = -Math.sin(a.heading);
+        const rx = Math.cos(act.ang), rz = -Math.sin(act.ang); // lado pela direção do rematador (estável, não troca a meio do voo)
         const side = (act.to.x - p.x) * rx + (act.to.y - p.y) * rz >= 0 ? 1 : -1;
         act2 = { ...act, side };
       }
       const inf = this.info[id];
       const near = Math.hypot(f.ball.x - p.x, f.ball.y - p.y) < 16;
+      const en = this.choreo?.energy?.[id];
+      a.tired = en === undefined ? 0 : Math.max(0, Math.min(1, (68 - en) / 38)); // cansaço visível abaixo de ~68 de energia
       pose(a, act2, !!inf?.gk, near, dt);
-      if (act2?.kind === 'celebrate' && podH) a.g.position.y += podH; // os saltos no palanque partem do palanque
+      if (podH) a.g.position.y += podH; // em cima do palanque (a pose repõe a altura a zero; antes os pés ficavam enterrados)
       a.prev.copy(a.g.position);
     }
     for (const [id, a] of this.actors) if (!seen.has(id)) a.g.visible = false;
     const ceremony = f.phase === 'Entrada das equipas' || f.phase === 'Alinhamento';
     for (const [id, a] of this.bench) a.g.visible = !ceremony && !f.pos[id];
     if (f.holder) this.lastHolder = f.holder;
-    this.updateCamera(f.focus ? { x: f.focus.x, y: f.focus.y, z: 0 } : f.ball);
+    this.updateCamera(f.focus ? { x: f.focus.x, y: f.focus.y, z: 0 } : f.ball, dt, !!f.focus);
     // etiquetas: tamanho legível a qualquer distância, sem tapar o jogo de perto
     if (this.showTags) for (const ac of this.actors.values()) {
       const tg = ac.g.getObjectByName('tag');
@@ -332,7 +351,7 @@ export class Highlight3D {
 
   // ---------- festa do título (palanque, taça, confetes) ----------
   private cer: { g: THREE.Group; cup: THREE.Group; conf: THREE.Points; vel: Float32Array; captain: string } | null = null;
-  trophyCeremony(comp: string, captain: string, colors: [string, string], lang: 'pt' | 'es' = 'pt') {
+  trophyCeremony(comp: string, captain: string, colors: [string, string], lang: 'pt' | 'es' | 'it' = 'pt') {
     this.cer?.g.removeFromParent();
     const g = new THREE.Group();
     const P = PODIUM;
@@ -352,7 +371,7 @@ export class Highlight3D {
       const gr = c.createLinearGradient(0, 0, 1024, 0); gr.addColorStop(0, colors[0]); gr.addColorStop(1, colors[1] === '#ffffff' ? '#111827' : colors[1]);
       c.fillStyle = gr; c.fillRect(0, 0, 1024, 256);
       c.fillStyle = '#ffe08a'; c.font = 'bold 96px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle';
-      c.fillText(lang === 'es' ? 'CAMPEONES' : 'CAMPEÕES', 512, 92, 980);
+      c.fillText(lang === 'es' ? 'CAMPEONES' : lang === 'it' ? 'CAMPIONI' : 'CAMPEÕES', 512, 92, 980);
       c.fillStyle = '#ffffff'; c.font = 'bold 46px sans-serif'; c.fillText(comp.toUpperCase(), 512, 190, 980);
     });
     const wall = new THREE.Mesh(new THREE.PlaneGeometry(w + 1.5, 3.2), new THREE.MeshStandardMaterial({ map: back, roughness: 0.7, side: THREE.DoubleSide }));
@@ -364,7 +383,7 @@ export class Highlight3D {
     const cup = new THREE.Group();
     cup.add(new THREE.Mesh(new THREE.LatheGeometry(prof, 28), gold));
     for (const s of [-1, 1]) { const h = new THREE.Mesh(new THREE.TorusGeometry(0.07, 0.015, 8, 16, Math.PI), gold); h.position.set(s * 0.19, 0.4, 0); h.rotation.z = s * -Math.PI / 2; cup.add(h); }
-    cup.scale.setScalar(1.7); // bem visível na mão do capitão
+    cup.scale.setScalar(0.85); // tamanho real (~70 cm), proporcional aos jogadores
     g.add(cup);
     // confetes nas cores do clube e dourado
     const N = 1400;
@@ -390,7 +409,7 @@ export class Highlight3D {
     const lifted = this.t >= LIFT_AT;
     if (cap) {
       // antes: segura a taça ao peito; depois: ergue-a acima da cabeça (a balançar)
-      const up = lifted ? 2.15 + Math.sin(this.t * 3) * 0.08 : 1.1;
+      const up = lifted ? 2.0 + Math.sin(this.t * 3) * 0.06 : 1.0;
       c.cup.position.set(cap.g.position.x, (lifted ? podiumHeight(cap.g.position.x, cap.g.position.z) : cap.g.position.y) + up, cap.g.position.z + 0.18);
     }
     c.conf.visible = lifted;
@@ -415,7 +434,12 @@ export class Highlight3D {
   }
   private fixedView: { pos: THREE.Vector3; look: THREE.Vector3 } | null = null;
 
-  private updateCamera(b: { x: number; y: number; z: number }) {
+  private tvBallPrev: { x: number; y: number } | null = null;
+  private tvVel = { x: 0, y: 0 };
+  private tvSpan = 22;
+  private tvX = 0;
+
+  private updateCamera(b: { x: number; y: number; z: number }, dt = 1 / 60, focus = false) {
     const cam = this.camera;
     if (this.fixedView) {
       cam.position.copy(this.fixedView.pos);
@@ -438,12 +462,47 @@ export class Highlight3D {
       pos = new THREE.Vector3(sh.x - dir * 5, 2.1, sh.z * 1.05);
       look = new THREE.Vector3(dir * W / 2, 0.8, 0);
     } else {
-      // televisão: lateral elevada, acompanha a bola com suavidade (como uma realização real)
-      const fx = Math.max(-W / 2 + 6, Math.min(W / 2 - 6, ball.x + dir * 2));
-      // câmara principal numa plataforma por cima da primeira fila da bancada lateral
-      pos = new THREE.Vector3(fx * 0.85, Math.min(7.5, this.arena.height - 1.5), H / 2 + 8);
-      look = new THREE.Vector3(fx, 0.3, ball.z * 0.35);
+      // televisão: realização como numa transmissão. A câmara principal fica numa plataforma por cima da bancada
+      // lateral; segue o JOGO (bola + jogadores perto dela), antecipa para onde a bola vai e abre/fecha o plano:
+      // plano largo nas transições e com o jogo espalhado, mais fechado quando o lance se concentra perto da área
+      const k = (rate: number) => 1 - Math.exp(-Math.max(0.001, dt) * rate);
+      const bv = this.tvBallPrev ? { x: (b.x - this.tvBallPrev.x) / Math.max(1e-3, dt), y: (b.y - this.tvBallPrev.y) / Math.max(1e-3, dt) } : { x: 0, y: 0 };
+      this.tvBallPrev = { x: b.x, y: b.y };
+      this.tvVel.x = lerp(this.tvVel.x, Math.max(-25, Math.min(25, bv.x)), k(3));
+      this.tvVel.y = lerp(this.tvVel.y, Math.max(-25, Math.min(25, bv.y)), k(3));
+      // centro do lance: bola + jogadores a menos de 10 m (pesos menores), com antecipação de ~0,5 s do movimento da bola
+      let cx = b.x * 2, cz = b.y * 2, wsum = 2, minX = b.x, maxX = b.x;
+      for (const [id, a] of this.actors) {
+        if (!a.g.visible || this.info[id]?.referee) continue;
+        const px = a.g.position.x, pz = a.g.position.z;
+        const d = Math.hypot(px - b.x, pz - b.y);
+        if (d > 10) continue;
+        const w = 0.35 * (1 - d / 10);
+        cx += px * w; cz += pz * w; wsum += w;
+        minX = Math.min(minX, px); maxX = Math.max(maxX, px);
+      }
+      cx = cx / wsum + this.tvVel.x * 0.5; cz = cz / wsum;
+      // largura do plano: o lance todo + margem; transições (bola rápida no comprimento) abrem mais
+      const fast = Math.min(1, Math.abs(this.tvVel.x) / 9);
+      const span = Math.max(15, Math.min(34, (maxX - minX) + 9 + fast * 8 + (focus ? 6 : 0)));
+      this.tvSpan = this.snapCamera ? span : lerp(this.tvSpan, span, k(0.9));
+      const fx = Math.max(-W / 2 + 5, Math.min(W / 2 - 5, cx));
+      this.tvX = this.snapCamera ? fx : lerp(this.tvX, fx, k(1.8));
+      pos = new THREE.Vector3(this.tvX * 0.85, Math.min(7.6, this.arena.height - 1.5), H / 2 + 11);
+      look = new THREE.Vector3(this.tvX, 0.3, cz * 0.6); // o lance fica a meio da imagem também no lado de lá
+      // campo de visão que mostra a largura do plano à distância a que a câmara está
+      const dist = pos.distanceTo(look);
+      const hfov = 2 * Math.atan(this.tvSpan / 2 / dist);
+      const vfov = (2 * Math.atan(Math.tan(hfov / 2) / Math.max(0.5, cam.aspect)) * 180) / Math.PI;
+      const fov = Math.max(20, Math.min(44, vfov));
+      if (Math.abs(cam.fov - fov) > 0.05) { cam.fov = fov; cam.updateProjectionMatrix(); }
+      cam.position.copy(pos);
+      this.camLook.copy(look);
+      this.snapCamera = false;
+      cam.lookAt(this.camLook);
+      return;
     }
+    if (cam.fov !== 40) { cam.fov = 40; cam.updateProjectionMatrix(); }
     if (this.snapCamera) {
       cam.position.copy(pos);
       this.camLook.copy(look);

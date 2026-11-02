@@ -1,5 +1,6 @@
 import type { CustomPlay } from '../tactics';
 // Motor de jogo de futsal: simulação posse a posse com regras oficiais.
+import { systemScores } from '../tacticalAI';
 import { gauss, overall, rng } from '../attributes';
 import { roleFit, SLOTS } from '../tactics';
 import type { Player } from '../types';
@@ -237,6 +238,33 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     t.court = next;
     t.lastRotation = clock;
     log('substituicao', `${sideName(s)}: troca de quinteto (${ins.map((l) => l.p.name).join(', ')})`, s);
+  }
+
+  // Mudanças táticas do treinador da IA durante o jogo (auditoria 2026; valores estimados): a perder nos últimos
+  // 10 minutos sobe a pressão, acelera e, se o plantel servir, passa a 4-0 (mais mobilidade para desequilibrar);
+  // a ganhar nos últimos 6 minutos gere o jogo (posse paciente, pressão menos arriscada). Cada mudança só uma vez
+  const aiChanged: [Set<string>, Set<string>] = [new Set(), new Set()];
+  function aiTacticalAdjust(s: Side) {
+    const t = teams[s];
+    const tac = t.setup.tactics;
+    const lastPeriod = period === 2 || period === 4;
+    if (!lastPeriod) return;
+    const remaining = periodStart + periodLen - clock;
+    const diff = score[s] - score[1 - s];
+    const done = aiChanged[s];
+    if (diff < 0 && remaining < 600 && !done.has('perder')) {
+      done.add('perder');
+      tac.pressure = 'alta';
+      tac.tempo = 'rapido';
+      if (tac.system !== '4-0') {
+        const sc = systemScores(t.setup.squad);
+        if (sc['4-0'] >= sc[tac.system] - 1.2) tac.system = '4-0';
+      }
+    } else if (diff > 0 && remaining < 360 && !done.has('ganhar')) {
+      done.add('ganhar');
+      tac.tempo = 'paciente';
+      if (tac.pressure === 'alta') tac.pressure = 'media';
+    }
   }
 
   // Guarda-redes avançado
@@ -844,6 +872,7 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
       return true;
     }
     if (clock < periodStart + periodLen - 0.001) {
+      for (const sd of [0, 1] as const) if (teams[sd].setup.ai && opts.manual !== sd) aiTacticalAdjust(sd);
       onePossession();
       return true;
     }
@@ -857,7 +886,7 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
       beginPeriod(stage);
       return true;
     }
-    if (opts.knockout && score[0] === score[1]) penalties = shootout();
+    if (opts.knockout && !opts.noPenalties && score[0] === score[1]) penalties = shootout();
     finish();
     return false;
   }

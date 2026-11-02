@@ -16,6 +16,8 @@ const seed = arg('seed', 'base');
 const nGames = Number(arg('jogos', '12'));
 const name = arg('nome', 'atual');
 const cmp = arg('comparar', '');
+// --atributos: passa os jogadores à coreografia como o jogo ao vivo (física individual no 4-0); sem a opção mantém a linha de base
+const useAttrs = process.argv.includes('--atributos');
 
 // jogos fixos (mesmos confrontos em todas as versões): grandes, médios e pequenos, Portugal e Espanha
 const PAIRS: [string, string][] = [
@@ -33,13 +35,14 @@ for (let g = 0; g < nGames; g++) {
   const hs = setupFor(s, h), as = setupFor(s, a);
   const m = createMatch(hs, as, { seed: `${seed}-${g}` });
   const one = emptyMetrics();
+  const playersById = useAttrs ? Object.fromEntries([...hs.squad, ...as.squad].map((p) => [p.id, p])) : undefined;
   let start: StartState | null = null;
   let prev: { p: Possession } | null = null;
   // encadeia as posses exatamente como o jogo ao vivo (a posse seguinte parte de onde a anterior acabou)
   while (m.step()) {
     const sn = m.snapshot();
     if (!sn.possession) { start = null; prev = null; continue; }
-    const c = new Choreo(sn.possession, [hs.tactics, as.tactics], sn.period, start, m.names);
+    const c = new Choreo(sn.possession, [hs.tactics, as.tactics], sn.period, start, m.names, playersById);
     start = c.end;
     measurePossession(one, sn.possession, c, prev);
     measurePossession(total, sn.possession, c, prev);
@@ -51,7 +54,7 @@ for (let g = 0; g < nGames; g++) {
 const summary = summarize(total);
 let commit = '';
 try { commit = execSync('git rev-parse --short HEAD', { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim(); } catch { /* fora do git */ }
-const out = { versao: name, semente: seed, jogos: nGames, commit, data: new Date().toISOString(), limiares: TH, segundos: Math.round((Date.now() - t0) / 1000), resumo: summary, porJogo: perGame };
+const out = { versao: name, semente: seed, jogos: nGames, atributos: useAttrs, commit, data: new Date().toISOString(), limiares: TH, segundos: Math.round((Date.now() - t0) / 1000), resumo: summary, porJogo: perGame };
 mkdirSync('diagnostics', { recursive: true });
 writeFileSync(`diagnostics/${name}.json`, JSON.stringify(out, null, 1));
 
@@ -66,7 +69,7 @@ const rows = Object.entries(summary).map(([k, v]) => {
 const md = [
   `# Diagnóstico da simulação tática — ${name}`,
   ``,
-  `Semente **${seed}**, ${nGames} jogos (mesmos confrontos e semente em todas as versões), commit ${commit || '?'}, ${out.data.slice(0, 10)}.`,
+  `Semente **${seed}**, ${nGames} jogos${useAttrs ? ', com atributos na coreografia' : ''} (mesmos confrontos e semente em todas as versões), commit ${commit || '?'}, ${out.data.slice(0, 10)}.`,
   ``,
   base ? `| Métrica | ${name} | ${base.versao} | Diferença |\n|---|---|---|---|` : `| Métrica | Valor |\n|---|---|`,
   ...rows,

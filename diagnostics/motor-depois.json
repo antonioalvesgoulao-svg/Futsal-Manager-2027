@@ -1,0 +1,43 @@
+{
+ "epocas": 5,
+ "jogos": 1860,
+ "golosPorJogo": 6.34,
+ "casa": 49.7,
+ "empates": 12.5,
+ "fora": 37.8,
+ "menosDe3Golos": 7.4,
+ "sistemasNoInicio": {
+  "3-1": "44.1%",
+  "4-0": "30.9%",
+  "1-2-1": "16.9%",
+  "2-2": "8.1%"
+ },
+ "sistemasNoFim": {
+  "4-0": "50.2%",
+  "3-1": "37.3%",
+  "1-2-1": "7.3%",
+  "2-2": "5.2%"
+ },
+ "campeoes": [
+  [
+   "Liga Placard: Sporting CP",
+   "Liga Prime Futsal: FC Barcelona"
+  ],
+  [
+   "Liga Placard: Sporting CP",
+   "Liga Prime Futsal: FC Barcelona"
+  ],
+  [
+   "Liga Placard: Sporting CP",
+   "Liga Prime Futsal: FC Barcelona"
+  ],
+  [
+   "Liga Placard: Sporting CP",
+   "Liga Prime Futsal: Jaén Paraíso Interior"
+  ],
+  [
+   "Liga Placard: Sporting CP",
+   "Liga Prime Futsal: FC Barcelona"
+  ]
+ ]
+}

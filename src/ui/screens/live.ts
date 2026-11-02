@@ -21,7 +21,7 @@ import { Choreo, StartState } from '../../core/visual/choreo';
 import { IntroScene } from '../../core/visual/intro';
 import { attendance } from '../../core/attendance';
 import { lookOf } from '../../core/appearance';
-import { matchGkKits, matchKits, pendingKit, setPendingKit } from '../../core/kits';
+import { matchGkKits, matchKits, pendingKit, refKitFor, setPendingKit } from '../../core/kits';
 import { refBadgeHtml } from '../../core/referees';
 
 export const DEFAULT_SETTINGS: Settings = { speed: 'medio', moments3d: 'importantes', scoreboard: 'auto', quality: 'normal' };
@@ -62,8 +62,8 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
   const kits = matchKits(h, a, mySide, pendingKit);
   setPendingKit('auto');
   const gkKits = matchGkKits(h.id, a.id, kits);
-  // árbitros de amarelo, ou de preto se um GR jogar de amarelo
-  const refShirt = gkKits.some((g) => g.shirt === '#facc15') ? '#1f2937' : '#facc15';
+  // árbitros: amarelo, verde fluorescente, amarelo fluorescente ou preto, nunca igual às cores dos jogadores de campo
+  const refShirt = refKitFor(kits as [typeof kits[0], typeof kits[1]], gkKits).shirt;
   const colors: [string, string] = [kits[0].shirt, kits[1].shirt];
   /** nome nas costas: o apelido (último nome), ou o nome inteiro se for só um */
 const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
@@ -391,7 +391,7 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
     hl = new mod.Highlight3D($('#hlv'), {
       kits,
       quality: st.quality ?? 'normal',
-      lang: countryOfComp(f.comp) === 'esp' ? 'es' : 'pt', // anúncios e cores do túnel conforme o país da liga
+      lang: countryOfComp(f.comp) === 'esp' ? 'es' : countryOfComp(f.comp) === 'ita' ? 'it' : 'pt', // anúncios e cores do túnel conforme o país da liga
       gkKits,
       refShirt,
       profile: crowd.arena,
@@ -413,7 +413,7 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
   async function openIntro() {
     in3d = true;
     $('#hl').hidden = false;
-    $('#hlcap').textContent = `${h.name} - ${a.name} · ${crowd.arena.name}`;
+    $('#hlcap').textContent = ''; // só o marcador (pedido do António): sem etiqueta com clubes e pavilhão
     await ensure3d();
     if (!hl) return;
     introStage = 0;
@@ -506,6 +506,15 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
       $('#hlcap').textContent = 'Repetição';
       sound.muffle(true);
       hl.replayWindow(Math.max(0, g - 2.6), Math.min(c.total, g + 1.4), 0.4, userCam === 'baliza' ? 'tv' : 'baliza');
+      return;
+    }
+    // grande defesa: repetição em câmara lenta, vista de trás da baliza (como numa transmissão)
+    const sv = c?.bigSaveCt;
+    if (c && sv != null && g == null && !replayed.has(c)) {
+      replayed.add(c);
+      $('#hlcap').textContent = 'Repetição · grande defesa';
+      sound.muffle(true);
+      hl.replayWindow(Math.max(0, sv - 1.8), Math.min(c.total, sv + 1.6), 0.45, userCam === 'baliza' ? 'tv' : 'baliza');
       return;
     }
     hl.cameraId = userCam;
@@ -658,7 +667,7 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
     hl.setBench([[], []]);
     hl.play(scene, info, kit, 0, scene.total, [[shownScore[0], shownScore[1]], [shownScore[0], shownScore[1]]]);
     hl.setTags(false); // sem etiquetas por cima dos campeões
-    hl.trophyCeremony(COMP_NAMES[comp].replace(/ \((play-off|fase final)\)/, ''), capId, kit[mySide], countryOfComp(f.comp) === 'esp' ? 'es' : 'pt');
+    hl.trophyCeremony(COMP_NAMES[comp].replace(/ \((play-off|fase final)\)/, ''), capId, kit[mySide], countryOfComp(f.comp) === 'esp' ? 'es' : countryOfComp(f.comp) === 'ita' ? 'it' : 'pt');
     $('#hlc').textContent = 'Continuar ▸';
   }
 
@@ -686,7 +695,9 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
     snap = m.snapshot();
     if (snap.possession) {
       poss = snap.possession;
-      choreo = new Choreo(poss, [hs.tactics, as.tactics], snap.period, startState, m.names);
+      const playersById = Object.fromEntries([...hs.squad, ...as.squad].map((player) => [player.id, player]));
+      const energy = Object.fromEntries(snap.teams.flatMap((t) => [...t.court, ...(t.gk ? [t.gk] : [])].map((x) => [x.id, x.energy])));
+      choreo = new Choreo(poss, [hs.tactics, as.tactics], snap.period, startState, m.names, playersById, energy);
       startState = choreo.end;
       ct = 0;
       display = poss.start;

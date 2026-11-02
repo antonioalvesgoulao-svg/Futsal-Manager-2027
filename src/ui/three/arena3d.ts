@@ -37,7 +37,7 @@ export interface ArenaOpts {
   gkKits?: [KitDef, KitDef]; // guarda-redes
   quality?: 'normal' | 'alta';
   refShirt?: string;
-  lang?: 'pt' | 'es'; // língua dos anúncios e das placas (cada liga na sua)
+  lang?: 'pt' | 'es' | 'it'; // língua dos anúncios e das placas (cada liga na sua)
 }
 
 export function canvasTex(w: number, h: number, draw: (c: CanvasRenderingContext2D) => void) {
@@ -127,6 +127,23 @@ const ADS_ES: Ad[] = [
   { name: 'FUTSAL MANAGER 2027', tag: 'el juego de gestión', bg: '#0b1220', fg: '#ffffff', accent: '#22c55e' },
   { name: 'DEPORTE Y PASIÓN', tag: 'haz deporte', bg: '#be123c', fg: '#ffffff', accent: '#fecdd3' },
 ];
+// Itália: marcas inventadas em italiano (nenhuma é real)
+const ADS_IT: Ad[] = [
+  { name: 'CAFFÈ DEL BORGO', tag: 'il caffè di quartiere', bg: '#3b1f12', fg: '#f5e6c8', accent: '#d97706' },
+  { name: 'PASTA NONNA LINA', tag: 'trafilata al bronzo', bg: '#fef3c7', fg: '#7c2d12', accent: '#dc2626' },
+  { name: 'FONTE ALPINA', tag: 'acqua minerale naturale', bg: '#e0f2fe', fg: '#075985', accent: '#38bdf8' },
+  { name: 'OLIO COLLE VERDE', tag: 'extravergine di oliva', bg: '#365314', fg: '#fef9c3', accent: '#facc15' },
+  { name: 'ONDA TELECOM', tag: 'fibra in tutta Italia', bg: '#111827', fg: '#22d3ee', accent: '#f43f5e' },
+  { name: 'SCUDO ASSICURA', tag: 'proteggiamo la famiglia', bg: '#1e3a8a', fg: '#ffffff', accent: '#93c5fd' },
+  { name: 'GONDOLA VIAGGI', tag: 'il mondo ti aspetta', bg: '#0e7490', fg: '#ffffff', accent: '#fde047' },
+  { name: 'PIZZERIA VESUVIO', tag: 'forno a legna', bg: '#b91c1c', fg: '#fff7ed', accent: '#fbbf24' },
+  { name: 'SOLE ENERGIA', tag: 'la luce che conviene', bg: '#f59e0b', fg: '#1f2937', accent: '#fff7ed' },
+  { name: 'BANCA DEL PONTE', tag: 'mutui su misura', bg: '#0f2e1d', fg: '#ffffff', accent: '#86efac' },
+  { name: 'MOTO ROSSA', tag: 'officina e gomme', bg: '#18181b', fg: '#ffffff', accent: '#dc2626' },
+  { name: 'GELATO DOLCEVITA', tag: 'artigianale dal 1958', bg: '#fde68a', fg: '#7c2d12', accent: '#b45309' },
+  { name: 'FUTSAL MANAGER 2027', tag: 'il gioco manageriale', bg: '#0b1220', fg: '#ffffff', accent: '#22c55e' },
+  { name: 'SPORT E PASSIONE', tag: 'fai sport', bg: '#be123c', fg: '#ffffff', accent: '#fecdd3' },
+];
 const ADS: Ad[] = [
   { name: 'BICA FORTE', tag: 'café de bairro', bg: '#3b1f12', fg: '#f5e6c8', accent: '#d97706' },
   { name: 'AZULEJO SEGUROS', tag: 'proteção de família', bg: '#1d4ed8', fg: '#ffffff', accent: '#93c5fd' },
@@ -200,7 +217,7 @@ class Led {
         c.textAlign = 'center';
         c.textBaseline = 'middle';
         if (mode === 'ads') {
-          const list = this.o.lang === 'es' ? ADS_ES : ADS;
+          const list = this.o.lang === 'es' ? ADS_ES : this.o.lang === 'it' ? ADS_IT : ADS;
           const ad = list[Math.floor(this.r() * list.length)];
           c.fillStyle = ad.bg; c.fillRect(x, 0, PANEL_PX, 64);
           c.fillStyle = ad.accent; c.fillRect(x, 54, PANEL_PX, 10);
@@ -234,7 +251,7 @@ class Led {
           c.fillStyle = i % 2 ? t.colors[0] : '#0b1220'; c.fillRect(x, 0, PANEL_PX, 64);
           c.fillStyle = i % 2 ? (t.colors[1] === t.colors[0] ? '#fff' : t.colors[1]) : '#facc15';
           c.font = 'bold 40px sans-serif';
-          c.fillText(this.o.lang === 'es' ? '¡GOL!' : 'GOLO!', cx, 35);
+          c.fillText(this.o.lang === 'es' ? '¡GOL!' : this.o.lang === 'it' ? 'GOL!' : 'GOLO!', cx, 35);
         }
       });
     }
@@ -312,12 +329,17 @@ const shade = (hex: string) => { const n = parseInt(hex.slice(1), 16); const f =
 export const COUNTRY_THEME: Record<string, { bg: string; a: string; b: string }> = {
   pt: { bg: '#16202c', a: '#00a651', b: '#e30613' },
   es: { bg: '#14213d', a: '#c60b1e', b: '#ffc400' },
+  it: { bg: '#0b3d91', a: '#009246', b: '#ce2b37' },
 };
 function compTheme(comp: string, lang = 'pt'): { bg: string; a: string; b: string } {
   // Espanha: as cores dos marcadores das competições espanholas (vermelho e amarelo)
   if (/Supercopa/.test(comp)) return { bg: '#111111', a: '#c60b1e', b: '#ffc400' };
   if (/Copa de Espa/.test(comp)) return { bg: '#8a0f1d', a: '#ffc400', b: '#ffc400' };
   if (/Liga Prime|Primera/.test(comp)) return { bg: '#14213d', a: '#c60b1e', b: '#ffc400' };
+  // Itália: as cores dos marcadores das competições italianas
+  if (/Supercoppa/.test(comp)) return { bg: '#0f2e1d', a: '#009246', b: '#ce2b37' };
+  if (/Coppa Italia/.test(comp)) return { bg: '#13294b', a: '#d4a017', b: '#d4a017' };
+  if (/Serie A/.test(comp)) return { bg: '#0b3d91', a: '#009246', b: '#ce2b37' };
   if (/Taça de Portugal/.test(comp)) return { bg: '#5b0a14', a: '#d4a017', b: '#d4a017' };
   if (/Taça da Liga/.test(comp)) return { bg: '#0b2a6f', a: '#ffffff', b: '#1d4ed8' };
   if (/Supertaça/.test(comp)) return { bg: '#0b0b0b', a: '#d4a017', b: '#d4a017' };

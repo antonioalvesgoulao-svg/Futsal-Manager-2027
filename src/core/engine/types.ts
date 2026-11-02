@@ -14,6 +14,7 @@ export interface TeamSetup {
   fitness?: Record<string, number>; // condição física antes do jogo (fadiga do treino e dos jogos), 0-100
   cardK?: number; // disciplina do treinador: multiplica a probabilidade de cartão nas faltas (1 = normal)
   morale?: Record<string, number>; // moral dos jogadores (0-100)
+  ai?: boolean; // equipa do computador: o treinador muda a tática durante o jogo conforme o resultado e o tempo
 }
 
 export type EventType =
@@ -95,7 +96,8 @@ export interface MatchOptions {
   knockout?: boolean; // prolongamento e penáltis em caso de empate
   injuries?: boolean; // false = sem lesões (amigáveis de teste)
   extraTimeLen?: number; // duração de cada parte do prolongamento (s): 300 em Portugal, 180 em Espanha (RFEF)
-  noExtraTime?: boolean; // a eliminar sem prolongamento: empate vai diretamente a penáltis
+  noExtraTime?: boolean;
+  noPenalties?: boolean; // Itália (play-in): empate depois do prolongamento sem penáltis (passa a melhor classificada) // a eliminar sem prolongamento: empate vai diretamente a penáltis
   needWin?: [boolean, boolean]; // equipa precisa de ganhar (ex.: eliminatória a duas mãos)
   manual?: Side; // equipa controlada pelo jogador no modo ao vivo (sem pedidos de tempo automáticos)
   seed?: string;

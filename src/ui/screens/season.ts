@@ -9,7 +9,7 @@ import { ARENAS, arenaOf } from '../../core/attendance';
 import { refBadgeHtml, refereesFor } from '../../core/referees';
 import { KitChoice, kitsOf, matchGkKits, matchKits, setPendingKit } from '../../core/kits';
 import { kitSvg } from '../kitSvg';
-import { COMP_NAMES, COUNTRY_COMPS, CompId, Fixture } from '../../core/season/types';
+import { COMP_NAMES, COUNTRY_COMPS, CompId, Fixture, leagueCompOf } from '../../core/season/types';
 import { countryOf, leagueOf } from '../../core/state';
 import type { GameState } from '../../core/types';
 import { resultHtml } from './friendly';
@@ -29,7 +29,7 @@ export function renderDashboard(content: HTMLElement, s: GameState) {
   const club = s.clubs.find((c) => c.id === s.clubId)!;
   const next = nextMyFixture(s);
   const lg = leagueOf(s, s.clubId);
-  const table = leagueTable(s.season, lg.clubIds, 99, lg.id === 'esp1' ? 'esp' : 'liga');
+  const table = leagueTable(s.season, lg.clubIds, 99, leagueCompOf(lg.id));
   const pos = table.findIndex((r) => r.club === s.clubId) + 1;
   const row = table[pos - 1];
   const last = myFixtures(s).filter((f) => f.result).slice(-5);
@@ -59,7 +59,7 @@ export function renderDashboard(content: HTMLElement, s: GameState) {
       </div>
     </div>
     <h3>Notícias</h3>
-    <div class="feed">${s.news.slice(0, 25).map((n) => `<div class="ev"><span class="ic small muted">${fmtDate(n.date)}</span>${n.text}</div>`).join('')}</div>`;
+    <div class="feed">${s.news.slice(0, 25).map((n) => `<div class="ev"><span class="dt small muted">${fmtDate(n.date)}</span>${n.text}</div>`).join('')}</div>`;
 }
 
 export function renderCalendar(content: HTMLElement, s: GameState, month?: string) {
@@ -113,11 +113,11 @@ export function renderCalendar(content: HTMLElement, s: GameState, month?: strin
 export function renderCompetitions(content: HTMLElement, s: GameState, tab = 'liga', round?: number, country?: string, part: 'apertura' | 'clausura' | 'total' = 'total') {
   const ctry = country ?? countryOf(s, s.clubId);
   const C = COUNTRY_COMPS[ctry];
-  const lg = s.leagues.find((l) => l.id === (ctry === 'esp' ? 'esp1' : 'por1')) ?? s.leagues[0];
+  const lg = s.leagues.find((l) => l.id === (ctry === 'esp' ? 'esp1' : ctry === 'ita' ? 'ita1' : 'por1')) ?? s.leagues[0];
   // separadores por tipo (os ids antigos 'liga', 'taca'… continuam a funcionar)
   const kindTab: Record<string, string> = { liga: 'league', playoff: 'playoff', taca: 'cup', tacaLiga: 'leagueCup', supertaca: 'super' };
   tab = kindTab[tab] ?? tab;
-  const tabs: [string, string][] = [['league', COMP_NAMES[C.league]], ['playoff', ctry === 'esp' ? 'Fase final e permanência' : 'Play-off'], ['cup', COMP_NAMES[C.cup]], ...(C.leagueCup !== C.cup ? [['leagueCup', COMP_NAMES[C.leagueCup]] as [string, string]] : []), ['super', COMP_NAMES[C.super]], ['palmares', 'Palmarés'], ['marcadores', 'Marcadores']];
+  const tabs: [string, string][] = [['league', COMP_NAMES[C.league]], ['playoff', ctry === 'esp' ? 'Fase final e permanência' : ctry === 'ita' ? 'Play-in, play-off e play-out' : 'Play-off'], ['cup', COMP_NAMES[C.cup]], ...(C.leagueCup !== C.cup ? [['leagueCup', COMP_NAMES[C.leagueCup]] as [string, string]] : []), ['super', COMP_NAMES[C.super]], ['palmares', 'Palmarés'], ['marcadores', 'Marcadores']];
   let body = '';
   const sea = s.season;
   if (tab === 'league') {
@@ -131,16 +131,19 @@ export function renderCompetitions(content: HTMLElement, s: GameState, tab = 'li
       <table class="tbl small table">
         <thead><tr><th>#</th><th>Clube</th><th>J</th><th>V</th><th>E</th><th>D</th><th>GM</th><th>GS</th><th>DG</th><th>Pts</th></tr></thead>
         <tbody>${t
-          .map((r, i) => `<tr class="${r.club === s.clubId ? 'mine' : ''} ${(ctry === 'esp' ? (part === 'total' ? i < 4 : i < 2) : i < 8) ? 'zone-po' : ''}"><td>${i + 1}</td><td>${crestSvg(r.club, 18)} ${clubName(s, r.club)}</td><td>${r.p}</td><td>${r.w}</td><td>${r.d}</td><td>${r.l}</td><td>${r.gf}</td><td>${r.ga}</td><td>${r.gf - r.ga}</td><td><b>${r.pts}</b></td></tr>`)
+          .map((r, i) => `<tr class="${r.club === s.clubId ? 'mine' : ''} ${(ctry === 'esp' ? (part === 'total' ? i < 4 : i < 2) : ctry === 'ita' ? i < 6 : i < 8) ? 'zone-po' : ''} ${ctry === 'ita' && i >= 6 && i < 10 ? 'zone-pi' : ''} ${ctry === 'ita' && i >= t.length - 4 ? 'zone-rel' : ''}"><td>${i + 1}</td><td>${crestSvg(r.club, 18)} ${clubName(s, r.club)}</td><td>${r.p}</td><td>${r.w}</td><td>${r.d}</td><td>${r.l}</td><td>${r.gf}</td><td>${r.ga}</td><td>${r.gf - r.ga}</td><td><b>${r.pts}</b></td></tr>`)
           .join('')}</tbody>
       </table>
-      <p class="small muted">${ctry === 'esp' ? 'Apertura (jornadas 1-15) e Clausura (16-30) têm campeão cada. Fase final do Supercampeão: 1.º e 2.º de cada torneio + os melhores da classificação acumulada até 8. Na acumulada, o último desce e o 14.º e o 15.º jogam a permanência (descidas efetivas quando a Segunda existir no jogo). Os 6 primeiros do Apertura vão à fase final da Copa de España.' : 'Os 8 primeiros (a verde) seguem para o play-off. As descidas de divisão entram quando a II Divisão existir no jogo.'}</p>
+      <p class="small muted">${ctry === 'esp' ? 'Apertura (jornadas 1-15) e Clausura (16-30) têm campeão cada. Fase final do Supercampeão: 1.º e 2.º de cada torneio + os melhores da classificação acumulada até 8. Na acumulada, o último desce e o 14.º e o 15.º jogam a permanência (descidas efetivas quando a Segunda existir no jogo). Os 6 primeiros do Apertura vão à fase final da Copa de España.' : ctry === 'ita' ? 'Do 1.º ao 6.º (a verde) vão diretos ao play-off; do 7.º ao 10.º jogam o play-in (2 vagas). Os 2 últimos descem e o 11.º e o 12.º jogam o play-out (descidas efetivas quando a Serie A2 existir no jogo). Os 8 primeiros no fim da 1.ª volta vão à Final Eight da Coppa Italia. (Divisione Calcio a 5, Comunicati 028 e 029.)' : 'Os 8 primeiros (a verde) seguem para o play-off. As descidas de divisão entram quando a II Divisão existir no jogo.'}</p>
       <h3>Jornada <select id="rd">${Array.from({ length: rounds }, (_, i) => `<option ${i + 1 === rd ? 'selected' : ''}>${i + 1}</option>`).join('')}</select></h3>
       ${fixturesTable(s, games)}`;
   } else if (tab === 'playoff') {
     const stages = ['Quartos-de-final', 'Meias-finais', 'Final', 'Permanência'];
     const mine = sea.series.filter((x) => (x.comp ?? 'playoff') === C.playoff);
-    body = mine.length
+    // Itália: play-in (jogo único) e play-out (ida e volta) não são séries
+    const singles = sea.fixtures.filter((f) => f.comp === C.playoff && !f.seriesId);
+    const singlesHtml = singles.length ? [...new Set(singles.map((f) => f.stage))].map((st) => `<h3>${st}</h3>${fixturesTable(s, singles.filter((f) => f.stage === st))}`).join('') : '';
+    body = singlesHtml + (mine.length
       ? stages
           .map((st) => {
             const ser = mine.filter((x) => x.stage === st);
@@ -151,7 +154,7 @@ export function renderCompetitions(content: HTMLElement, s: GameState, tab = 'li
               .join('')}`;
           })
           .join('')
-      : '<div class="empty">O play-off começa no fim da fase regular.</div>';
+      : singlesHtml ? '' : '<div class="empty">O play-off começa no fim da fase regular.</div>');
   } else if (tab === 'cup' || tab === 'leagueCup' || tab === 'super') {
     const comp = C[tab as 'cup'];
     const fx = sea.fixtures.filter((f) => f.comp === comp);
@@ -162,6 +165,8 @@ export function renderCompetitions(content: HTMLElement, s: GameState, tab = 'li
       supertaca: 'Campeão nacional contra o vencedor da Taça de Portugal (ou finalista vencido, se for o mesmo clube).',
       copaRey: 'Eliminatórias a uma mão (o pior classificado na época anterior joga em casa), final em campo neutro. No real entram equipas das divisões inferiores: por agora só os 16 da Primera. Datas estimadas.',
       copaEsp: 'Copa de España S.M. el Rey (normas RFEF 2026/27): fase final de 8 em campo neutro (11-14 de março) com os 6 primeiros do Apertura e 2 vindos das eliminatórias (7.º ao 16.º do Apertura; no real também equipas das divisões inferiores, que entram quando existirem no jogo). Quartos e meias vão diretos a penáltis; a final tem prolongamento de 2x3 min.',
+      coppaIta: 'Final Eight com os 8 primeiros no fim da 1.ª volta da Serie A (Comunicato 028). Quartos 1.º-8.º, 4.º-5.º, 3.º-6.º, 2.º-7.º em campo neutro; datas e local por definir pela Divisione (estimativa: início de março).',
+      superIta: 'Final Four (Comunicato 027). 2026/27: L84 (campeão), Meta Catania (Coppa Italia), Napoli (1.º da fase regular) e Feldi Eboli (finalista da Coppa). Depois: campeão, Coppa Italia, 1.º da fase regular e finalista da Coppa (a Coppa della Divisione ainda não existe no jogo). Datas estimadas.',
       superEsp: 'Final four a jogo único (normas RFEF): Supercampeão, campeões do Apertura e do Clausura e vencedor da Copa (repetidos: melhores da acumulada). Meias com penáltis diretos. Na 1.ª época, os 4 mais fortes (estimativa). Data estimada.',
     };
     body = `<p class="small muted">${info[comp]}</p>` + (stages.length ? stages.map((st) => `<h3>${st}</h3>${fixturesTable(s, fx.filter((f) => f.stage === st))}`).join('') : '<div class="empty">Ainda sem jogos definidos.</div>');
@@ -182,7 +187,7 @@ export function renderCompetitions(content: HTMLElement, s: GameState, tab = 'li
       })
       .join('')}</tbody></table><p class="small muted">Todas as competições oficiais da época.</p>`;
   }
-  const countries = s.leagues.length > 1 ? `<div class="tabs">${[['por', 'Portugal'], ['esp', 'Espanha']].map(([id, l]) => `<button class="tab ${id === ctry ? 'on' : ''}" data-ctry="${id}">${l}</button>`).join('')}</div>` : '';
+  const countries = s.leagues.length > 1 ? `<div class="tabs">${[['por', 'Portugal'], ['esp', 'Espanha'], ['ita', 'Itália']].filter(([id]) => s.leagues.some((l) => l.id === `${id}1`)).map(([id, l]) => `<button class="tab ${id === ctry ? 'on' : ''}" data-ctry="${id}">${l}</button>`).join('')}</div>` : '';
   content.innerHTML = `<h2>Competições <span class="muted small">${sea.label}</span></h2>
     ${countries}
     <div class="tabs">${tabs.map(([id, l]) => `<button class="tab ${id === tab ? 'on' : ''}" data-tab="${id}">${l}</button>`).join('')}</div>

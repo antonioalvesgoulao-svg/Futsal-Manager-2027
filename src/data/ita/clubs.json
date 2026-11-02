@@ -1,0 +1,278 @@
+{
+ "league": {
+  "id": "ita1",
+  "name": "Serie A",
+  "country": "Itália",
+  "season": "2026/27",
+  "teams": 14
+ },
+ "source": "Clubes, pavilhões e cores: Divisione Calcio a 5 (divisionecalcioa5.it, 2/11/2026); lotações, nível, reputação, riqueza e orçamento: estimativa (classificação 2026/27, palmarés recente e Champions)",
+ "clubs": [
+  {
+   "id": "cat",
+   "slug": "meta-catania",
+   "name": "Meta Catania",
+   "shortName": "CAT",
+   "city": "Catania",
+   "arena": "Palazzetto Dello Sport Palacatania",
+   "capacity": 3000,
+   "capacityReal": false,
+   "colors": [
+    "#d50000",
+    "#4aa3df"
+   ],
+   "reputation": 80,
+   "level": 82,
+   "wealth": 74,
+   "budget": 1300000,
+   "league": "ita1"
+  },
+  {
+   "id": "nap",
+   "slug": "napoli-futsal",
+   "name": "Napoli Futsal",
+   "shortName": "NAP",
+   "city": "Napoli",
+   "arena": "PalaVesuvio",
+   "capacity": 2500,
+   "capacityReal": false,
+   "colors": [
+    "#4aa3df",
+    "#ffffff"
+   ],
+   "reputation": 79,
+   "level": 80,
+   "wealth": 72,
+   "budget": 1200000,
+   "league": "ita1"
+  },
+  {
+   "id": "l84",
+   "slug": "l84-torino",
+   "name": "L84 Torino",
+   "shortName": "L84",
+   "city": "Torino",
+   "arena": "Pala Maggiore",
+   "capacity": 1000,
+   "capacityReal": false,
+   "colors": [
+    "#15803d",
+    "#111111"
+   ],
+   "reputation": 80,
+   "level": 81,
+   "wealth": 70,
+   "budget": 1100000,
+   "league": "ita1"
+  },
+  {
+   "id": "ebo",
+   "slug": "feldi-eboli",
+   "name": "Feldi Eboli",
+   "shortName": "EBO",
+   "city": "Eboli",
+   "arena": "Palasele",
+   "capacity": 4000,
+   "capacityReal": false,
+   "colors": [
+    "#d50000",
+    "#1e3a8a"
+   ],
+   "reputation": 76,
+   "level": 77,
+   "wealth": 66,
+   "budget": 900000,
+   "league": "ita1"
+  },
+  {
+   "id": "ave",
+   "slug": "sandro-abate-avellino",
+   "name": "Sandro Abate",
+   "shortName": "SAA",
+   "city": "Avellino",
+   "arena": "Pala Del Mauro",
+   "capacity": 5000,
+   "capacityReal": false,
+   "colors": [
+    "#15803d",
+    "#ffffff"
+   ],
+   "reputation": 72,
+   "level": 74,
+   "wealth": 62,
+   "budget": 750000,
+   "league": "ita1"
+  },
+  {
+   "id": "tre",
+   "slug": "came-treviso",
+   "name": "Came Treviso",
+   "shortName": "TRE",
+   "city": "Ponzano Veneto",
+   "arena": "Palacicogna",
+   "capacity": 1500,
+   "capacityReal": false,
+   "colors": [
+    "#4aa3df",
+    "#ffffff"
+   ],
+   "reputation": 70,
+   "level": 73,
+   "wealth": 62,
+   "budget": 700000,
+   "league": "ita1"
+  },
+  {
+   "id": "sal",
+   "slug": "sporting-sala-consilina",
+   "name": "Sporting Sala Consilina",
+   "shortName": "SSC",
+   "city": "Sala Consilina",
+   "arena": "Centro Sportivo Meridionale",
+   "capacity": 800,
+   "capacityReal": false,
+   "colors": [
+    "#facc15",
+    "#15803d"
+   ],
+   "reputation": 64,
+   "level": 71,
+   "wealth": 55,
+   "budget": 500000,
+   "league": "ita1"
+  },
+  {
+   "id": "rom",
+   "slug": "roma-1927",
+   "name": "Roma 1927",
+   "shortName": "ROM",
+   "city": "Roma",
+   "arena": "PalaCesaroni",
+   "capacity": 1500,
+   "capacityReal": false,
+   "colors": [
+    "#facc15",
+    "#d50000"
+   ],
+   "reputation": 66,
+   "level": 69,
+   "wealth": 58,
+   "budget": 550000,
+   "league": "ita1"
+  },
+  {
+   "id": "ben",
+   "slug": "gg-teamwear-benevento",
+   "name": "Benevento 5",
+   "shortName": "BEN",
+   "city": "Benevento",
+   "arena": "Palatedeschi",
+   "capacity": 1500,
+   "capacityReal": false,
+   "colors": [
+    "#facc15",
+    "#d50000"
+   ],
+   "reputation": 62,
+   "level": 68,
+   "wealth": 52,
+   "budget": 450000,
+   "league": "ita1"
+  },
+  {
+   "id": "act",
+   "slug": "active-network",
+   "name": "Active Network",
+   "shortName": "ACT",
+   "city": "Orte",
+   "arena": "Palazzetto dello Sport Claudio Guazzaroni",
+   "capacity": 700,
+   "capacityReal": false,
+   "colors": [
+    "#f97316",
+    "#111111"
+   ],
+   "reputation": 60,
+   "level": 67,
+   "wealth": 50,
+   "budget": 420000,
+   "league": "ita1"
+  },
+  {
+   "id": "pom",
+   "slug": "fortitudo-pomezia",
+   "name": "Fortitudo Pomezia",
+   "shortName": "POM",
+   "city": "Pomezia",
+   "arena": "Palalavinium",
+   "capacity": 900,
+   "capacityReal": false,
+   "colors": [
+    "#d50000",
+    "#1e3a8a"
+   ],
+   "reputation": 66,
+   "level": 66,
+   "wealth": 52,
+   "budget": 450000,
+   "league": "ita1"
+  },
+  {
+   "id": "gio",
+   "slug": "giovinazzo-c5",
+   "name": "Giovinazzo C5",
+   "shortName": "GIO",
+   "city": "Giovinazzo",
+   "arena": "Palazzetto Dello Sport Palapansini",
+   "capacity": 1000,
+   "capacityReal": false,
+   "colors": [
+    "#15803d",
+    "#ffffff"
+   ],
+   "reputation": 58,
+   "level": 64,
+   "wealth": 48,
+   "budget": 380000,
+   "league": "ita1"
+  },
+  {
+   "id": "pad",
+   "slug": "vinumitaly-petrarca",
+   "name": "Petrarca Padova",
+   "shortName": "PAD",
+   "city": "Padova",
+   "arena": "Palestra Gozzano",
+   "capacity": 500,
+   "capacityReal": false,
+   "colors": [
+    "#111111",
+    "#ffffff"
+   ],
+   "reputation": 60,
+   "level": 64,
+   "wealth": 50,
+   "budget": 380000,
+   "league": "ita1"
+  },
+  {
+   "id": "cpr",
+   "slug": "bulldog-capurso",
+   "name": "Capurso",
+   "shortName": "CPR",
+   "city": "Capurso",
+   "arena": "Pala Pinto Mola di Bari",
+   "capacity": 800,
+   "capacityReal": false,
+   "colors": [
+    "#d50000",
+    "#ffffff"
+   ],
+   "reputation": 56,
+   "level": 63,
+   "wealth": 46,
+   "budget": 350000,
+   "league": "ita1"
+  }
+ ]
+}

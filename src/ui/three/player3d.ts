@@ -20,6 +20,12 @@ export interface Actor {
   heading: number;
   phase: number; // ciclo da corrida
   speed: number;
+  fwd?: number; // velocidade para a frente no referencial do corpo (negativa = de costas)
+  accel?: number; // aceleração ao longo da corrida (m/s²), para a inclinação
+  turn?: number; // velocidade de rotação (rad/s), para a inclinação nas curvas
+  stride?: number; // comprimento da passada próprio (altura)
+  tired?: number; // 0-1: cansaço (passada curta, corpo curvado, braços caídos)
+  side?: number; // velocidade lateral (positiva = para a direita do jogador, lado +x)
   init: boolean;
 }
 
@@ -355,22 +361,59 @@ export function pose(a: Actor, act: Act | undefined, gk: boolean, near: boolean,
   a.g.position.y = 0;
   for (const o of [...thigh, ...shin, ...arm, ...fore]) o.rotation.set(0, 0, 0);
   const sp = a.speed;
-  // cadência de corrida: ~2,8 passadas por segundo a sprintar, mais lenta a andar
-  a.phase += dt * (5 + sp * 1.25);
-  const amp = Math.min(1, sp / 7);
-  const walk = Math.min(1, sp / 2);
+  // direção do passo em relação ao corpo: frente, costas ou lado (passo lateral do futsal)
+  const fr = sp > 0.3 ? Math.max(-1, Math.min(1, (a.fwd ?? sp) / sp)) : 1;
+  const sr = sp > 0.3 ? Math.max(-1, Math.min(1, (a.side ?? 0) / sp)) : 0;
+  const lateral = Math.min(1, Math.abs(sr) * 1.3) * (1 - Math.max(0, fr)); // 1 = passo lateral puro
+  const back = Math.max(0, -fr); // 1 = recuo de costas
+  // cadência ligada à distância percorrida (os pés não deslizam): um ciclo (2 passos) mede ~1,3 m a andar e ~3,6 m a sprintar;
+  // passos laterais e de costas são mais curtos. Cada jogador tem a sua passada (a.stride, pela altura)
+  const cycle = (1.25 + 0.32 * sp) * (1 - 0.35 * lateral - 0.25 * back) * (a.stride ?? 1);
+  a.phase += dt * (sp > 0.25 ? (Math.PI * 2 * sp) / cycle : 0);
+  const tired = a.tired ?? 0;
+  const amp = Math.min(1, sp / 7.5) * (1 - 0.45 * lateral) * (1 - 0.35 * back) * (1 - 0.25 * tired);
+  const walk = Math.min(1, sp / 1.6);
+  const stride = fr >= 0 ? 1 - lateral : -back; // sinal: de costas a passada inverte-se
+  const swing = 0.16 + 0.78 * amp; // amplitude da anca (a sprintar ~0,95 rad: joelho alto à frente)
+  const fwdOff = -0.14 * amp * Math.max(0, fr); // a corrida é feita "à frente" do corpo
   for (let i = 0; i < 2; i++) {
     const ph = a.phase + i * Math.PI;
-    const hip = -(0.08 + 0.5 * amp) * Math.sin(ph) * walk - 0.06 * amp; // passada (ligeiramente à frente)
-    thigh[i].rotation.x = hip;
-    // o joelho dobra sobretudo quando a perna vem de trás para a frente
-    shin[i].rotation.x = (0.08 + (0.25 + 1.35 * amp) * Math.pow(Math.max(0, Math.cos(ph)), 1.3)) * walk + 0.06;
-    arm[i].rotation.x = -hip * 0.85;
-    arm[i].rotation.z = i ? 0.1 : -0.1; // braços ligeiramente afastados do corpo
-    fore[i].rotation.x = -(0.35 + 0.95 * amp);
+    const sw = Math.sin(ph);
+    const hip = fwdOff - swing * sw * walk * stride;
+    thigh[i].rotation.x = hip - 0.25 * lateral * walk; // a deslizar de lado as coxas ficam fletidas
+    // abre e fecha as pernas no passo lateral (a perna do lado para onde vai abre primeiro)
+    const outSign = i ? 1 : -1;
+    const lead = Math.sign(sr) === outSign ? 1 : 0.45;
+    thigh[i].rotation.z = outSign * (0.05 + 0.3 * lateral * walk * lead * (0.5 + 0.5 * sw));
+    // joelho: dobra muito na recuperação (a perna vem de trás para a frente) e um pouco no apoio (amortece)
+    const c = Math.cos(ph);
+    shin[i].rotation.x = ((0.18 + 1.75 * amp) * Math.pow(Math.max(0, c), 1.4) + (0.12 + 0.12 * amp) * Math.max(0, -c)) * walk + 0.06 + 0.45 * lateral * walk;
+    // braços em oposição às pernas, cotovelos a ~90° a correr
+    arm[i].rotation.x = -(hip - fwdOff) * (0.75 + 0.35 * amp) * (1 - lateral);
+    arm[i].rotation.z = outSign * (0.1 + 0.35 * lateral * walk); // braços abertos a defender de lado
+    fore[i].rotation.x = -(0.45 + 1.0 * amp);
   }
-  body.rotation.x = amp * 0.18;
-  body.position.y = HIP - 0.015 - Math.abs(Math.cos(a.phase)) * 0.035 * amp;
+  // tronco: inclina para a frente com a velocidade e ao acelerar, roda em contra-fase das ancas, inclina-se nas curvas
+  const lean = clamp01(((a.accel ?? 0) + 2) / 10) * 0.18;
+  body.rotation.x = (0.05 + 0.2 * amp) * Math.max(0, fr) + lean * Math.max(0, fr) + 0.12 * (lateral + back) * walk;
+  body.rotation.y = 0.14 * amp * Math.sin(a.phase) * Math.max(0, fr);
+  body.rotation.z = -0.06 * sr * walk + Math.max(-0.28, Math.min(0.28, (a.turn ?? 0) * sp * 0.035));
+  // dois apoios por ciclo: o corpo sobe na fase de voo e baixa ao amortecer
+  body.position.y = HIP - 0.015 + (Math.abs(Math.sin(a.phase)) - 0.5) * 0.07 * amp - 0.07 * Math.max(lateral, back) * walk;
+  // cansado: tronco curvado, braços caídos (mãos quase nos joelhos quando parado)
+  if (tired > 0) {
+    body.rotation.x += 0.12 * tired + (sp < 0.6 ? 0.25 * tired : 0);
+    for (let i = 0; i < 2; i++) { arm[i].rotation.x *= 1 - 0.4 * tired; fore[i].rotation.x *= 1 - 0.5 * tired; }
+  }
+  // travagem: pé à frente, corpo para trás, joelhos fletidos (apoio antes de mudar de direção)
+  const brake = (a.accel ?? 0) < -3.5 && sp > 1.2 ? Math.min(1, (-(a.accel ?? 0) - 3.5) / 5) : 0;
+  if (brake > 0 && !act) {
+    body.rotation.x -= 0.28 * brake;
+    thigh[0].rotation.x -= 0.35 * brake;
+    shin[0].rotation.x += 0.15 * brake;
+    shin[1].rotation.x += 0.35 * brake;
+    body.position.y -= 0.05 * brake;
+  }
   if (gk && near && !act && sp < 2.5) {
     // guarda-redes em posição de espera: pernas fletidas, peso à frente, braços abertos
     thigh[0].rotation.set(-0.6, 0, -0.12);
@@ -388,7 +431,8 @@ export function pose(a: Actor, act: Act | undefined, gk: boolean, near: boolean,
     case 'pass':
     case 'shoot': {
       // perna direita: recua (joelho dobrado), bate na bola e acompanha
-      const big = act.kind === 'shoot' ? 1.3 : 0.85;
+      // gesto conforme a força: potente (preparação grande), colocado, de bico (quase sem preparação)
+      const big = act.kind === 'shoot' ? Math.max(0.6, Math.min(1.4, (act.h ?? 25) / 22)) : 0.85;
       const back = k < 0.5 ? ease(k / 0.5) : 0;
       const hit = k >= 0.5 ? ease(clamp01((k - 0.5) / 0.3)) : 0;
       thigh[1].rotation.x = k < 0.5 ? 0.6 * big * back : lerp(0.6 * big, -1.05 * big, hit);
@@ -403,6 +447,19 @@ export function pose(a: Actor, act: Act | undefined, gk: boolean, near: boolean,
       body.position.y = HIP - 0.05;
       break;
     }
+    case 'receive': {
+      // receção: a perna direita sai ao encontro da bola (sola/interior), corpo ligeiramente para trás, braços a equilibrar
+      const e = Math.sin(clamp01(k) * Math.PI);
+      thigh[1].rotation.set(-0.55 * e, 0, 0.12 * e);
+      shin[1].rotation.x = 0.35 + 0.25 * e;
+      thigh[0].rotation.x = 0.05;
+      shin[0].rotation.x = 0.25;
+      body.rotation.x = -0.06 * e + 0.05;
+      body.position.y = HIP - 0.04;
+      arm[0].rotation.set(-0.2, 0, -0.45 * e - 0.1);
+      arm[1].rotation.set(-0.1, 0, 0.35 * e + 0.1);
+      break;
+    }
     case 'throw': {
       const up = k < 0.6 ? ease(k / 0.6) : 1 - ease((k - 0.6) / 0.4);
       arm[1].rotation.x = -Math.PI * 0.9 * up - (k > 0.6 ? 0.6 : 0);
@@ -413,23 +470,44 @@ export function pose(a: Actor, act: Act | undefined, gk: boolean, near: boolean,
       body.rotation.x = -0.15 * up + 0.2 * (1 - up);
       break;
     }
-    case 'dive': {
-      // mergulho para o lado da bola: voa, estica os braços e cai
+    case 'dive': { // VERSÃO APROVADA PELO ANTÓNIO (2/11/2026, commit 7c54d23): não alterar sem pedido dele
+      // voo de GR (futsal): passo de impulso com a perna do lado da bola, o corpo roda para a horizontal com o peito virado
+      // para o rematador, os dois braços juntos e esticados para a bola, a perna de cima arrasta ligeiramente fletida;
+      // cai de lado, amortece com o braço e levanta-se (sem "saltar" de pé no fim)
       const local = act.side ?? 1;
-      const up = ease(clamp01(k * 2.4));
-      const roll = (Math.PI / 2) * up * 0.95;
+      const load = k < 0.1 ? Math.sin((k / 0.1) * Math.PI) : 0;
+      // o corpo inclina logo desde o impulso, em diagonal para o ângulo: bola alta ~55°, rasteira ~80° (quase deitado);
+      // pouca elevação (é uma extensão lateral, não um salto para cima)
+      const h = act.h ?? 0.6;
+      const up = ease(clamp01((k - 0.02) * 5));
+      const getUp = k > 0.8 ? ease((k - 0.8) / 0.2) : 0;
+      const target = h > 1.3 ? 0.98 : h > 0.8 ? 1.15 : 1.38;
+      const fall = k > 0.45 ? ease(clamp01((k - 0.45) / 0.3)) : 0; // depois de chegar à bola, cai de lado
+      const roll = lerp(target * up, 1.42, fall) * (1 - getUp);
+      const fly = k < 0.6 ? Math.sin(clamp01(k / 0.6) * Math.PI) : 0;
+      const lift = fly * Math.max(0.05, Math.min(0.35, (h - 0.6) * 0.35));
       body.rotation.z = -local * roll;
-      const h = (act.h ?? 0.5) * 0.8;
-      const air = Math.sin(clamp01(k * 1.6) * Math.PI) * h;
-      body.position.y = HIP * Math.cos(roll) + 0.15 * Math.sin(roll) + air * (k < 0.6 ? 1 : 0);
-      body.position.x = local * Math.sin(roll) * 0.7;
-      arm[0].rotation.set(0, 0, -2.7);
-      arm[1].rotation.set(0, 0, 2.7);
-      fore[0].rotation.x = fore[1].rotation.x = 0;
-      thigh[0].rotation.set(-0.2, 0, -0.25 * local);
-      thigh[1].rotation.set(0.15, 0, -0.1 * local);
-      shin[0].rotation.x = 0.6;
-      shin[1].rotation.x = 0.3;
+      body.rotation.x = 0.12 + 0.25 * getUp;
+      body.rotation.y = local * 0.18 * up * (1 - getUp); // peito para o rematador
+      body.position.y = HIP * Math.cos(roll) + 0.24 * Math.sin(roll) + lift - 0.22 * load - 0.25 * getUp * (1 - getUp) * 4 * 0.5;
+      body.position.x = local * (Math.sin(roll) * 0.8 + 0.25 * up * (1 - getUp)); // o corpo vai para o lado
+      // braços juntos, por cima da cabeça no referencial do corpo (= apontam à bola); bola baixa: mãos mais à frente
+      // os braços sobem juntos antes de o corpo rodar (no impulso já vão à bola)
+      const ext = ease(clamp01((k - 0.05) * 10)) * (1 - getUp);
+      // braços paralelos levantados pela frente (bola alta: por cima da cabeça; baixa: mais à frente), inclinados para a bola
+      const raise = h > 1 ? 2.95 : 2.4;
+      const land = k > 0.62 && k < 0.88 ? Math.sin(((k - 0.62) / 0.26) * Math.PI) : 0; // o braço de baixo amortece a queda
+      const dnA = local > 0 ? 1 : 0; // braço do lado da bola (fica em baixo no voo)
+      const tilt = (local > 0 ? 1 : -1) * 0.3;
+      arm[dnA].rotation.set(-raise * ext + 1.3 * land - 0.3 * (1 - ext), 0, tilt * ext + (dnA ? 1 : -1) * 0.8 * land);
+      arm[1 - dnA].rotation.set(-raise * ext - 0.3 * (1 - ext), 0, tilt * ext + ((1 - dnA) ? 1 : -1) * 0.15 * (1 - ext));
+      fore[0].rotation.x = fore[1].rotation.x = -0.1 - 0.5 * land;
+      // pernas: a de baixo (impulso) estica, a de cima vai fletida e ligeiramente atrás; no impulso fletem as duas
+      const dn = local > 0 ? 1 : 0; // perna do lado da bola (a de baixo no voo)
+      thigh[dn].rotation.set(-0.1 - 0.45 * load - 0.6 * getUp, 0, (dn ? 1 : -1) * 0.12 * up);
+      thigh[1 - dn].rotation.set(0.25 * up - 0.45 * load - 0.6 * getUp, 0, (dn ? 1 : -1) * 0.05 * up);
+      shin[dn].rotation.x = 0.2 + 0.8 * load + 1.1 * getUp;
+      shin[1 - dn].rotation.x = 0.55 * up + 0.8 * load + 1.1 * getUp;
       break;
     }
     case 'splits': {
@@ -450,6 +528,24 @@ export function pose(a: Actor, act: Act | undefined, gk: boolean, near: boolean,
       arm[out].rotation.set(-0.2, 0, sgn * 1.25 * e);
       arm[1 - out].rotation.set(-0.4, 0, -sgn * 0.5 * e);
       fore[0].rotation.x = fore[1].rotation.x = -0.2;
+      break;
+    }
+    case 'footsave': {
+      // defesa com o pé, de pé: a perna do lado da bola estica para o lado rente ao chão, o corpo inclina para o
+      // outro lado para equilibrar, braços abertos; volta à posição base
+      const local = act.side ?? 1;
+      const e = ease(clamp01(k * 3)) * (k > 0.8 ? 1 - ease((k - 0.8) / 0.2) : 1);
+      const out = local > 0 ? 1 : 0, sgn = out ? 1 : -1;
+      thigh[out].rotation.set(-0.15 * e, 0, sgn * 0.62 * e);
+      shin[out].rotation.x = 0.05;
+      thigh[1 - out].rotation.set(-0.6 * e, 0, -sgn * 0.1 * e);
+      shin[1 - out].rotation.x = 1.05 * e;
+      body.rotation.z = sgn * 0.18 * e;
+      body.rotation.x = 0.2 * e;
+      body.position.y = HIP - 0.24 * e;
+      body.position.x = sgn * 0.1 * e;
+      arm[0].rotation.set(-0.3, 0, -0.9 * e - 0.1);
+      arm[1].rotation.set(-0.3, 0, 0.9 * e + 0.1);
       break;
     }
     case 'spread': {
@@ -485,13 +581,17 @@ export function pose(a: Actor, act: Act | undefined, gk: boolean, near: boolean,
       break;
     }
     case 'catch': {
-      thigh[0].rotation.x = thigh[1].rotation.x = -0.5;
-      shin[0].rotation.x = shin[1].rotation.x = 0.85;
-      body.position.y = HIP - 0.14;
-      body.rotation.x = 0.3;
-      arm[0].rotation.set(-1.3, 0, -0.15);
-      arm[1].rotation.set(-1.3, 0, 0.15);
-      fore[0].rotation.x = fore[1].rotation.x = -0.6;
+      // agarra à altura da bola: rasteira = baixa-se e junta as mãos à frente das pernas; alta = braços acima da cabeça
+      const h = act.h ?? 1;
+      const low = clamp01((0.9 - h) / 0.7), high = clamp01((h - 1.2) / 0.6);
+      thigh[0].rotation.x = thigh[1].rotation.x = -0.5 - 0.6 * low + 0.3 * high;
+      shin[0].rotation.x = shin[1].rotation.x = 0.85 + 0.6 * low - 0.4 * high;
+      body.position.y = HIP - 0.14 - 0.22 * low + 0.06 * high;
+      body.rotation.x = 0.3 + 0.45 * low - 0.15 * high;
+      const sh = -1.3 + 0.75 * low - 1.35 * high;
+      arm[0].rotation.set(sh, 0, -0.15);
+      arm[1].rotation.set(sh, 0, 0.15);
+      fore[0].rotation.x = fore[1].rotation.x = -0.35 + 0.2 * low;
       break;
     }
     case 'tackle': {
@@ -532,14 +632,33 @@ export function pose(a: Actor, act: Act | undefined, gk: boolean, near: boolean,
       break;
     }
     case 'shield': {
-      // pivô de costas: protege a bola com o corpo e os braços
-      thigh[0].rotation.set(-0.45, 0, -0.2);
-      thigh[1].rotation.set(-0.45, 0, 0.2);
-      shin[0].rotation.x = shin[1].rotation.x = 0.8;
-      body.position.y = HIP - 0.13;
-      body.rotation.x = 0.35;
-      arm[0].rotation.set(0.3, 0, -0.95);
-      arm[1].rotation.set(0.3, 0, 0.95);
+      // proteção de costas para o defensor (futsal): pequenos saltinhos para trás contra ele, com a sola de um pé
+      // pisada em cima da bola; a outra perna aguenta o peso, joelhos fletidos, braços abertos a sentir o defensor
+      a.phase += dt * 9;
+      const hop = Math.max(0, Math.sin(a.phase)) * 0.06;
+      thigh[1].rotation.set(-0.55, 0, 0.12); // pé na bola (sola por cima)
+      shin[1].rotation.x = 0.35;
+      thigh[0].rotation.set(-0.35, 0, -0.18);
+      shin[0].rotation.x = 0.85;
+      body.position.y = HIP - 0.13 + hop;
+      body.rotation.x = 0.3;
+      arm[0].rotation.set(0.35, 0, -1.0);
+      arm[1].rotation.set(0.35, 0, 1.0);
+      break;
+    }
+    case 'poke': {
+      // defensor encostado ao portador: braço nas costas dele e a perna a tentar chegar à bola por um dos lados
+      a.phase += dt * 4;
+      const reach = 0.5 + 0.5 * Math.sin(a.phase);
+      thigh[1].rotation.set(-0.35 - 0.55 * reach, 0, 0.25 * reach);
+      shin[1].rotation.x = 0.5 - 0.35 * reach;
+      thigh[0].rotation.set(0.1, 0, -0.1);
+      shin[0].rotation.x = 0.55;
+      body.position.y = HIP - 0.12;
+      body.rotation.x = 0.28 + 0.1 * reach;
+      arm[0].rotation.set(-1.15, 0, -0.15);
+      arm[1].rotation.set(-0.6, 0, 0.35);
+      fore[0].rotation.x = -0.3;
       break;
     }
     case 'block': {

@@ -1,0 +1,227 @@
+{
+ "epocas": 5,
+ "sistemasSorteados": {
+  "2-2": 143,
+  "3-1": 297,
+  "4-0": 143,
+  "1-2-1": 77
+ },
+ "anomaliasPorJogo": {
+  "congelados4s": 9.67,
+  "bolaMortaSeg": 4.887,
+  "grForaDaAreaSeg": 11.103,
+  "velocidadeSobreHumanaSeg": 2.217,
+  "rematesAcima130kmh": 0.39,
+  "defesasSemGesto": 0.02,
+  "golosSemGesto": 0
+ },
+ "piores": {
+  "grForaDefesa": [
+   {
+    "v": 21.75247812271118,
+    "where": "2|fam|fun|71|0.0|fun03"
+   },
+   {
+    "v": 21.73689031600952,
+    "where": "3|slb|rav|20|0.0|rav02"
+   },
+   {
+    "v": 21.71446704864502,
+    "where": "3|scb|tor|27|0.0|tor01"
+   },
+   {
+    "v": 21.652236223220825,
+    "where": "0|fun|fam|32|0.0|fam02"
+   },
+   {
+    "v": 21.645642280578613,
+    "where": "3|slb|rav|20|0.1|rav02"
+   }
+  ],
+  "congelados": [
+   {
+    "v": 4,
+    "where": "0|scp|slb|17|8.2|slb10"
+   },
+   {
+    "v": 4,
+    "where": "0|scp|slb|17|11.2|scp18"
+   },
+   {
+    "v": 4,
+    "where": "0|scp|slb|40|8.3|scp04"
+   },
+   {
+    "v": 4,
+    "where": "0|scp|slb|40|8.8|slb06"
+   },
+   {
+    "v": 4,
+    "where": "0|scp|slb|40|10.9|scp14"
+   }
+  ],
+  "bolaMorta": [
+   {
+    "v": 29.43295308487803,
+    "where": "0|fzz|uvn|97|0.0"
+   },
+   {
+    "v": 29.121691459117937,
+    "where": "2|uvn|fzz|130|0.0"
+   },
+   {
+    "v": 28.365308419134376,
+    "where": "2|uvn|fzz|127|0.0"
+   },
+   {
+    "v": 28.338792432552463,
+    "where": "4|lps|por|84|0.0"
+   },
+   {
+    "v": 28.179612114259815,
+    "where": "0|por|scb|106|0.0"
+   }
+  ],
+  "saltos": [
+   {
+    "v": 12.029493520116063,
+    "where": "2|por|scp|102|0.7|scp10"
+   },
+   {
+    "v": 11.968432024756297,
+    "where": "3|por|slb|48|0.9|por05"
+   },
+   {
+    "v": 11.793634569575438,
+    "where": "3|ele|rav|24|0.7|ele13"
+   },
+   {
+    "v": 11.769974221177414,
+    "where": "2|por|fun|25|0.6|fun12"
+   },
+   {
+    "v": 11.745924680087853,
+    "where": "4|por|uvn|33|0.7|por11"
+   }
+  ],
+  "defesaSemGesto": [
+   {
+    "v": 1,
+    "where": "0|scp|scb|6"
+   },
+   {
+    "v": 1,
+    "where": "0|scp|uvn|56"
+   },
+   {
+    "v": 1,
+    "where": "0|por|uvn|43"
+   },
+   {
+    "v": 1,
+    "where": "0|fam|fzz|80"
+   },
+   {
+    "v": 1,
+    "where": "1|rav|scb|51"
+   }
+  ],
+  "rematesRapidos": [
+   {
+    "v": 107.09812048624154,
+    "where": "0|fzz|tor|19"
+   },
+   {
+    "v": 68.76576196259798,
+    "where": "2|fam|slb|18"
+   },
+   {
+    "v": 62.65020179084016,
+    "where": "0|scb|fam|21"
+   },
+   {
+    "v": 59.4282887996165,
+    "where": "0|uvn|ele|29"
+   },
+   {
+    "v": 54.5086956736165,
+    "where": "1|ele|uvn|4"
+   }
+  ]
+ },
+ "jogos": 660,
+ "golosPorJogo": 5.7,
+ "minutosJogoCorrido": 26456,
+ "segundos": 2042,
+ "velocidades": {
+  "parado": 19.5,
+  "andar": 37.7,
+  "trote": 24.5,
+  "corrida": 8.1,
+  "rapida": 4.6,
+  "sprint": 5.5
+ },
+ "metrosPorMinutoJogador": 135,
+ "metrosPorMinutoAtacantes": 134,
+ "metrosPorMinutoDefensores": 136,
+ "saltosPorJogo": 1.2,
+ "foraDoCampoPorJogo": 3.4,
+ "sobreposicoesSegPorJogo": 16.1,
+ "bolaSoltaSegPorJogo": 0,
+ "bolaAltaSegPorJogo": 0,
+ "possesPorJogo": 102,
+ "duracaoPosse": {
+  "med": 22.87,
+  "p90": 37.33
+ },
+ "passesPorPosse": {
+  "med": 14,
+  "p90": 22
+ },
+ "portadorDefensorMaisProximo": {
+  "med": 1.24,
+  "p10": 0.71,
+  "p90": 4.8
+ },
+ "rematesPorJogo": 59.4,
+ "distanciaRemate": {
+  "med": 8.87,
+  "p10": 3.9,
+  "p90": 12.49
+ },
+ "rematadorDefensorMaisProximo": {
+  "med": 1.51,
+  "p10": 0.77,
+  "p90": 4.02
+ },
+ "rematesComDefensorNoCaminho": 80.2,
+ "grErroNoRemate": {
+  "med": 0.55,
+  "p90": 1.49
+ },
+ "sobreposicoesTipo": {
+  "adversarios": 10.1,
+  "adversarioPortador": 5,
+  "colegas": 1,
+  "comGR": 0
+ },
+ "acoesPorJogo": {
+  "pass": 1348.6,
+  "run": 651.9,
+  "shoot": 59.4,
+  "throw": 33.6,
+  "shield": 62.2,
+  "tackle": 33.9,
+  "screen": 61.7,
+  "feint": 95.6,
+  "splits": 7.5,
+  "fall": 19.9,
+  "dive": 8.9,
+  "spread": 4.2,
+  "catch": 5.3,
+  "celebrate": 23,
+  "block": 12.6,
+  "shove": 0.1,
+  "whistle": 0.1
+ }
+}

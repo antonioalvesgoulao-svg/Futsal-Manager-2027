@@ -1,5 +1,5 @@
 // Tipos da época: calendário, competições, séries de play-off, estatísticas e palmarés
-export type CompId = 'liga' | 'playoff' | 'taca' | 'tacaLiga' | 'supertaca' | 'esp' | 'espPlayoff' | 'copaRey' | 'copaEsp' | 'superEsp' | 'espAp' | 'espCl';
+export type CompId = 'liga' | 'playoff' | 'taca' | 'tacaLiga' | 'supertaca' | 'esp' | 'espPlayoff' | 'copaRey' | 'copaEsp' | 'superEsp' | 'espAp' | 'espCl' | 'ita' | 'itaPlayoff' | 'coppaIta' | 'superIta';
 
 export const COMP_NAMES: Record<CompId, string> = {
   liga: 'Liga Placard',
@@ -14,6 +14,10 @@ export const COMP_NAMES: Record<CompId, string> = {
   copaRey: 'Copa del Rey',
   copaEsp: 'Copa de España',
   superEsp: 'Supercopa de España',
+  ita: 'Serie A',
+  itaPlayoff: 'Serie A (play-off)',
+  coppaIta: 'Coppa Italia',
+  superIta: 'Supercoppa Italiana',
 };
 
 /** Tipo de cada competição, igual em todos os países: liga, play-off, taça (todos), taça da liga (final eight), supertaça. */
@@ -21,13 +25,19 @@ export type CompKind = 'league' | 'playoff' | 'cup' | 'leagueCup' | 'super';
 export const COMP_KIND: Record<CompId, CompKind> = {
   liga: 'league', playoff: 'playoff', taca: 'cup', tacaLiga: 'leagueCup', supertaca: 'super',
   esp: 'league', espPlayoff: 'playoff', copaRey: 'cup', copaEsp: 'leagueCup', superEsp: 'super', espAp: 'leagueCup', espCl: 'leagueCup',
+  ita: 'league', itaPlayoff: 'playoff', coppaIta: 'leagueCup', superIta: 'super',
 };
 export const kindOf = (c: CompId) => COMP_KIND[c];
 /** Competições de cada país, pela ordem liga, play-off, taça, taça da liga, supertaça. */
 export const COUNTRY_COMPS: Record<string, { league: CompId; playoff: CompId; cup: CompId; leagueCup: CompId; super: CompId }> = {
   por: { league: 'liga', playoff: 'playoff', cup: 'taca', leagueCup: 'tacaLiga', super: 'supertaca' },
   esp: { league: 'esp', playoff: 'espPlayoff', cup: 'copaEsp', leagueCup: 'copaEsp', super: 'superEsp' },
+  ita: { league: 'ita', playoff: 'itaPlayoff', cup: 'coppaIta', leagueCup: 'coppaIta', super: 'superIta' },
 };
+/** Competição de liga de cada liga do jogo (id da liga → CompId). */
+export const leagueCompOf = (leagueId?: string): CompId => (leagueId === 'esp1' ? 'esp' : leagueId === 'ita1' ? 'ita' : 'liga');
+/** Nome do país de cada liga. */
+export const leagueCountryName = (leagueId?: string) => (leagueId === 'esp1' ? 'Espanha' : leagueId === 'ita1' ? 'Itália' : 'Portugal');
 export const countryOfComp = (c: CompId) => (Object.entries(COUNTRY_COMPS).find(([, v]) => Object.values(v).includes(c))?.[0] ?? 'por');
 
 export interface Scorer {
@@ -56,6 +66,7 @@ export interface Fixture {
   away: string;
   neutral?: boolean;
   knockout: boolean; // empate vai a prolongamento e penáltis
+  tieToHome?: boolean; // Itália (play-in): empate depois do prolongamento = passa a casa (melhor classificada), sem penáltis
   seriesId?: string;
   cancelled?: boolean; // jogo da série que deixou de ser preciso
   result?: FixtureResult;
@@ -81,6 +92,7 @@ export interface SeasonState {
   halfTable?: string[]; // classificação no fim da 1.ª volta (Taça da Liga)
   regularTable?: string[]; // classificação final da fase regular
   esp?: { halfTable?: string[]; regularTable?: string[] }; // o mesmo para a Primera División
+  ita?: { halfTable?: string[]; regularTable?: string[]; playIn?: boolean; playout?: boolean }; // Serie A italiana
   winners: Partial<Record<CompId, string>>;
   finished: boolean;
 }

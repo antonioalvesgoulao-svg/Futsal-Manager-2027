@@ -3,7 +3,7 @@ import { crestSvg } from './crest';
 // Inspiração portuguesa (azulejo, calçada, verde e vermelho), desenhado de raiz.
 import type { CompId } from '../core/season/types';
 
-export type ScoreStyle = Exclude<CompId, 'playoff' | 'espPlayoff' | 'espAp' | 'espCl'>;
+export type ScoreStyle = Exclude<CompId, 'playoff' | 'espPlayoff' | 'espAp' | 'espCl' | 'itaPlayoff'>;
 export const SCOREBOARD_NAMES: Record<ScoreStyle, string> = {
   liga: 'Liga Placard',
   taca: 'Taça de Portugal',
@@ -13,9 +13,12 @@ export const SCOREBOARD_NAMES: Record<ScoreStyle, string> = {
   copaRey: 'Copa del Rey',
   copaEsp: 'Copa de España',
   superEsp: 'Supercopa',
+  ita: 'Serie A',
+  coppaIta: 'Coppa Italia',
+  superIta: 'Supercoppa',
 };
 /** Marcador da competição de um jogo (o play-off usa o da liga). */
-export const styleOf = (c: CompId): ScoreStyle => (c === 'playoff' ? 'liga' : c === 'espPlayoff' || c === 'espAp' || c === 'espCl' ? 'esp' : c);
+export const styleOf = (c: CompId): ScoreStyle => (c === 'playoff' ? 'liga' : c === 'espPlayoff' || c === 'espAp' || c === 'espCl' ? 'esp' : c === 'itaPlayoff' ? 'ita' : c);
 
 // Emblema original de cada estilo de marcador (desenho abstrato, sem logótipos reais)
 const EMBLEM: Record<string, string> = {
@@ -28,6 +31,10 @@ const EMBLEM: Record<string, string> = {
   copaRey: `<svg viewBox="0 0 40 40" class="emb"><path d="M8 26 L10 12 L16 19 L20 9 L24 19 L30 12 L32 26 Z" fill="#e9b949"/><rect x="8" y="28" width="24" height="4" rx="1" fill="#e9b949"/></svg>`,
   copaEsp: `<svg viewBox="0 0 40 40" class="emb"><path d="M11 8h18v6a9 9 0 0 1-18 0z" fill="#fff"/><rect x="18" y="22" width="4" height="7" fill="#fff"/><rect x="13" y="29" width="14" height="4" rx="1" fill="#fff"/></svg>`,
   superEsp: `<svg viewBox="0 0 40 40" class="emb"><path d="M20 4 L24 15 L36 15 L26 22 L30 34 L20 27 L10 34 L14 22 L4 15 L16 15 Z" fill="#c60b1e"/></svg>`,
+  // Itália: desenhos próprios (faixa tricolor, coroa de louros simples, estrela), sem logótipos reais
+  ita: `<svg viewBox="0 0 40 40" class="emb"><circle cx="20" cy="20" r="17" fill="#fff"/><path d="M8 8 A17 17 0 0 0 8 32 L15 32 L15 8 Z" fill="#009246"/><path d="M32 8 A17 17 0 0 1 32 32 L25 32 L25 8 Z" fill="#ce2b37"/><circle cx="20" cy="20" r="4" fill="#0b3d91"/></svg>`,
+  coppaIta: `<svg viewBox="0 0 40 40" class="emb"><path d="M12 30 Q6 20 12 9 M28 30 Q34 20 28 9" fill="none" stroke="#0b3d91" stroke-width="3"/><path d="M14 9h12v5a6 6 0 0 1-12 0z" fill="#d4a017"/><rect x="18.5" y="20" width="3" height="6" fill="#d4a017"/><rect x="15" y="26" width="10" height="3" rx="1" fill="#d4a017"/></svg>`,
+  superIta: `<svg viewBox="0 0 40 40" class="emb"><path d="M20 4 L24 15 L36 15 L26 22 L30 34 L20 27 L10 34 L14 22 L4 15 L16 15 Z" fill="#009246" stroke="#fff" stroke-width="1.5"/></svg>`,
 };
 
 export interface ScoreboardData {
@@ -146,6 +153,26 @@ export const broadcastCss = `
 .sb-superEsp .sb-mid { background: repeating-linear-gradient(45deg, #111 0 6px, #1e1e1e 6px 12px); color: #ffc400; }
 .sb-superEsp .sb-sub { background: #1a1a1a; color: #f5f5f5; }
 .sb-superEsp .sb-period { background: #ffc400; color: #111; }
+.sb-ita .gb-main, .sb-ita .lu-row { background: #0b3d91; }
+.sb-coppaIta .gb-main, .sb-coppaIta .lu-row { background: #13294b; }
+.sb-superIta .gb-main, .sb-superIta .lu-row { background: #0f2e1d; }
+.sb-ita .sb-row { background: #0b3d91; color: #fff; border-bottom: 3px solid; border-image: linear-gradient(90deg, #009246 33%, #fff 33% 66%, #ce2b37 66%) 1; }
+.sb-ita .sb-score { background: #fff; color: #0b3d91; }
+.sb-ita .sb-mid { background: repeating-linear-gradient(135deg, #0d47a8 0 8px, #0b3d91 8px 16px); color: #fff; }
+.sb-ita .sb-sub { background: #eef2f8; color: #0b3d91; }
+.sb-ita .sb-period { background: #009246; color: #fff; }
+.sb-coppaIta .sb-row { background: linear-gradient(90deg, #13294b, #1f3d6d); color: #fff; border-bottom: 3px solid #d4a017; }
+.sb-coppaIta .sb-score { background: #d4a017; color: #13294b; }
+.sb-coppaIta .sb-mid { background: #0c1c35; color: #d4a017; }
+.sb-coppaIta .sb-sub { background: #0c1c35; color: #f5f5f5; }
+.sb-coppaIta .sb-period { background: #d4a017; color: #0c1c35; }
+.sb-superIta .sb-row { background: #0f2e1d; color: #fff; border-bottom: 3px solid #ce2b37; }
+.sb-superIta .sb-score { background: #009246; color: #fff; }
+.sb-superIta .sb-mid { background: repeating-linear-gradient(45deg, #0f2e1d 0 6px, #16402a 6px 12px); color: #fff; }
+.sb-superIta .sb-sub { background: #16402a; color: #f5f5f5; }
+.sb-superIta .sb-period { background: #ce2b37; color: #fff; }
+.sb-ita .fouls i { background: rgba(0,0,0,.15); }
+.sb-ita .fouls i.on { background: #eab308; }
 .sb-esp .fouls i, .sb-copaEsp .fouls i { background: rgba(0,0,0,.15); }
 .sb-esp .fouls i.on, .sb-copaEsp .fouls i.on { background: #eab308; }
 .sb-esp .fouls i.max, .sb-copaEsp .fouls i.max { background: #dc2626; }
