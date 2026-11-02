@@ -403,3 +403,11 @@ Todas as ferramentas em `tools/diag` correm com: `npx esbuild <ficheiro> --bundl
   - futsalportugal.com tem ligas completas só de Portugal, Espanha, Itália e Brasil (e a Champions);
   - as outras ligas precisam de outra fonte (zerozero através do Chrome do António);
   - neste servidor a Wikipédia está bloqueada.
+
+## Itália (Serie A) — 2 novembro 2026 (Claude, branch `claude/awesome-hypatia-l5i9xc`, PR #6)
+
+- Feito: formato oficial (Comunicati 027-029: 14 clubes, play-in 7-8/9-10 jogo único com `tieToHome`, play-off à melhor de 3 com jogo 1 em casa do pior, playout 11.º x 12.º a 2 mãos, Coppa Italia Final Eight, Supercoppa Final Four), castigos FIGC, 207 jogadores e 74 elementos de equipas técnicas reais (`src/data/ita/`, gerados por `tools/ita/collect.py`, `collect_players.py`, `build_ita.py`), emblemas, marcador/anúncios em italiano.
+- Validação 3 épocas (`tools/diag/engine.ts`, agora com `porLiga`): Serie A 5,48 golos/jogo (PT 6,43, ES 6,31). Falta média real italiana para calibrar.
+- Estimativas: lotações, reputação/riqueza/orçamento, nível de quem não tem historial, nacionalidade de 112 jogadores (Itália), árbitros fictícios (`REF_PAIRS_ITA`), interiores 3D genéricos.
+- Por fazer: equipas italianas em `TEAM_LEVELS`/`LEAGUE_OF` do moneyball; calibrar golos; dados do António no modelo `docs/modelo_ligas_equipas.xlsx` (modelo de recolha para novas ligas).
+- PR #6 não está em `main`; não fazer merge sem aprovação do António.
