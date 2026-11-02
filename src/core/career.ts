@@ -1,5 +1,6 @@
 // Carreira e mercado de staff (estimativas ao estilo FM; não há dados públicos sobre despedimentos no futsal):
-// - objetivos da direção conforme o clube; confiança 0-100 que sobe e desce com os resultados; despedimento abaixo de 15
+// - objetivos da direção conforme o clube; confiança 0-100 que sobe e desce com os resultados; despedimento abaixo de 24
+//   (SACK_AT), só com pelo menos 10 jogos e maus resultados persistentes (últimos 8 jogos e época abaixo do esperado)
 // - clubes do computador despedem o treinador quando ficam muito abaixo do esperado e vão buscar outro ao mercado
 // - propostas de emprego ao treinador (tu) quando um clube maior fica sem treinador e a tua reputação chega
 // - contratos do staff: acabam no fim da época; os clubes renovam ou não; técnicos de outros clubes podem ser contratados
@@ -14,7 +15,7 @@ import type { Club, Coach, GameState } from './types';
 
 /** clubId do treinador desempregado (diferente do '' dos jogadores livres) */
 export const NO_CLUB = '_semclube';
-export interface Board { conf: number; exp: number; pts: number; games: number; coachSince: string }
+export interface Board { conf: number; exp: number; pts: number; games: number; coachSince: string; form?: number[] } // form: pontos − esperados nos últimos 8 jogos
 export interface Career {
   reputation: number; // reputação do treinador 1-100
   offers: { clubId: string; date: string }[];
@@ -80,7 +81,11 @@ export function boardAfterMatch(s: GameState, home: Club, away: Club, score: [nu
     const exp = expectedPoints(home, away, side, neutral);
     b.pts += pts; b.exp += exp; b.games++;
     // cada ponto acima/abaixo do esperado vale ~3 de confiança (×exigência ×importância); volta devagar a 60
-    b.conf = Math.max(0, Math.min(100, b.conf + (pts - exp) * 1.8 * demandOf(s, club) * (1 + importance * 0.5) + (60 - b.conf) * 0.03));
+    // um jogo isolado mexe no máximo ±9 na confiança (uma derrota sozinha nunca derruba o treinador)
+    const delta = Math.max(-9, Math.min(9, (pts - exp) * 1.8 * demandOf(s, club) * (1 + importance * 0.5)));
+    b.conf = Math.max(0, Math.min(100, b.conf + delta + (60 - b.conf) * 0.03));
+    (b.form ??= []).push(pts - exp);
+    if (b.form.length > 8) b.form.shift();
   }
 }
 
@@ -90,6 +95,14 @@ export function securityOf(conf: number) {
 }
 const SACK_AT = 24; // abaixo disto, e com pelo menos 10 jogos, a direção despede
 const MIN_GAMES = 10;
+/** Despedimento só com maus resultados persistentes: confiança baixa, pelo menos 10 jogos, últimos 8 jogos claramente
+ *  abaixo do esperado (−4 pontos ou pior) e época abaixo de 80% dos pontos esperados (estimativas). */
+export function shouldSack(b: Board) {
+  if (b.games < MIN_GAMES || b.conf >= SACK_AT) return false;
+  const recent = (b.form ?? []).reduce((a, x) => a + x, 0);
+  const formKnown = (b.form ?? []).length >= 6;
+  return (!formKnown || recent <= -4) && b.pts < b.exp * 0.8;
+}
 
 export function onTitle(s: GameState, clubId: string, comp: string) {
   const k = kindOf(comp as CompId);
@@ -104,7 +117,7 @@ export function afterMyMatch(s: GameState, won: boolean, lost: boolean) {
   if (!my) return [];
   c.reputation = Math.max(1, Math.min(100, c.reputation + (won ? 0.12 : lost ? -0.08 : 0) * (my.reputation / 70)));
   const b = boardOf(s, s.clubId);
-  if (b.conf < SACK_AT && b.games >= MIN_GAMES) return sackMe(s);
+  if (shouldSack(b)) return sackMe(s);
   return [];
 }
 
@@ -231,7 +244,7 @@ export function aiCoachChanges(s: GameState): string[] {
   for (const club of s.clubs) {
     if (club.id === s.clubId || c.vacancies?.[club.id]) continue;
     const b = boardOf(s, club.id);
-    if (b.games < MIN_GAMES || b.conf >= SACK_AT) continue;
+    if (!shouldSack(b)) continue;
     const old = s.coaches.find((x) => x.clubId === club.id);
     if (old) old.clubId = null;
     if (old) (s as GameState & { lastSacked?: Record<string, string> }).lastSacked = { ...((s as any).lastSacked ?? {}), [club.id]: old.id };

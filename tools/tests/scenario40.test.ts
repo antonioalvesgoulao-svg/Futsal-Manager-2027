@@ -12,9 +12,9 @@ import type { Player } from '../../src/core/types';
 
 const SEED = 'cenario-40';
 const s = newGame('Teste', 'Portugal', 'slb');
-const hs = setupFor(s, 'slb'), as = setupFor(s, 'scp');
-hs.tactics.system = '4-0';
-as.tactics.system = '4-0';
+// equipas novas em cada corrida: o treinador da IA muda a tática durante o jogo (o objeto de táticas é alterado)
+const fresh = () => { const h = setupFor(s, 'slb'), a = setupFor(s, 'scp'); h.tactics.system = '4-0'; a.tactics.system = '4-0'; h.ai = false; a.ai = false; return [h, a] as const; };
+const [hs, as] = fresh();
 
 // ala do Benfica em campo no início (primeiro jogador de campo não GR do quinteto inicial)
 const probe = createMatch(hs, as, { seed: SEED });
@@ -31,6 +31,7 @@ const withAttrs = (acc: number, agi: number): Record<string, Player> => {
 interface Run { engine: string; frames: Map<number, Record<string, { x: number; y: number }>>; speeds: number[]; accels: number[]; lag: number[] }
 
 function run(players: Record<string, Player> | undefined): Run {
+  const [hs, as] = fresh();
   const m = createMatch(hs, as, { seed: SEED });
   const out: Run = { engine: '', frames: new Map(), speeds: [], accels: [], lag: [] };
   const trace: string[] = [];

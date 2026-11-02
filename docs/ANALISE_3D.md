@@ -100,3 +100,54 @@ As outras câmaras não mudam.
 | Fadiga visível | Abaixo de ~68 de energia: passada mais curta, tronco curvado, braços caídos (mãos nos joelhos parado). A energia vem do motor (`snapshot`) |
 
 Medido (12 jogos): passes por minuto 30,7 → 31,7; linhas tapadas 36% → 33,5%; passes por dentro de adversários 2,1% → 1,7%; bloco defensivo 7,1 → 6,8 m de largura. Os resultados do motor não mudam (`npm test`). Ritmo 136 m/min, porque a pressão por gatilhos aumenta a corrida dos defensores.
+
+## Auditoria de 2026 — implementação (2/11/2026)
+### Inteligência tática (`src/core/tacticalAI.ts`, `coaches.ts`, motor)
+- Antes: a IA escolhia 3-1 sempre que havia um pivô com jogo de costas ≥15.
+- Agora: avaliação global do plantel (`systemScores`):
+  - pivô (jogo de costas, força, finalização);
+  - fixo (desarme, posicionamento, passe, visão);
+  - alas (drible, aceleração, remate, agilidade);
+  - mobilidade técnica e número de universais (4-0);
+  - físico e dois homens fortes na frente (2-2).
+- A personalidade do treinador soma ±0,6 (`chooseSystem`).
+- O adversário também conta: contra individual valoriza o 4-0; contra zona, o pivô e o 1-2-1.
+- Durante o jogo (`aiTacticalAdjust`, só equipas da IA, `TeamSetup.ai`):
+  - a perder nos últimos 10 min: pressão alta, ritmo rápido e 4-0 se o plantel servir;
+  - a ganhar nos últimos 6 min: posse paciente e pressão sem risco.
+- Execução no campo, medida na coreografia (% das jogadas):
+  - 3-1: pivô ~50%;
+  - 4-0: passe e corte ~63%, bloqueios contra individual;
+  - 2-2: cruzamentos ~50%;
+  - 1-2-1: pivô, paralela e "U".
+
+### Motor (`tools/diag/engine.ts`, 5 épocas PT+ES, 1 860 jogos, `diagnostics/motor-*.json`)
+| | Real | Antes | Depois |
+|---|---|---|---|
+| Golos/jogo | 6,38 | 6,28 | 6,34 |
+| Casa / empate / fora | 49,6 / 13,5 / 37,0 | 48,8 / 14,1 / 37,0 | 49,7 / 12,5 / 37,8 |
+| Sistemas no início | — | 3-1 93%, 4-0 7% | 3-1 44%, 4-0 31%, 1-2-1 17%, 2-2 8% |
+
+- Vantagem caseira testada: 2,6 dá 48,2% de vitórias em casa; 3,0 dá 49,7%; 3,4 dá 50,5%. Mantém-se 3,0 (o real é 49,6%).
+- Campeões: Sporting e Barcelona dominam, coerente com a qualidade dos plantéis.
+
+### Direção (`career.ts`)
+- Comentário corrigido (24, não 15).
+- Um jogo isolado mexe no máximo ±9 na confiança.
+- Despedimento (`shouldSack`) só com: confiança <24, ≥10 jogos, últimos 8 jogos ≤ −4 pontos face ao esperado, e época abaixo de 80% dos pontos esperados.
+- `tools/diag/careers.ts`, 3 épocas, 28 clubes: 1, 3 e 5 despedimentos por época (com a regra antiga: 1, 4, 2).
+
+### Jogador–bola (`tools/diag/ball.ts`, 12 jogos)
+- Bola contínua entre segmentos (`ballAt`/`segAt`), em vez de saltar.
+- Dono só quando a bola chega ao pé (`holderAt`).
+- A bola volta ao centro antes do pontapé de saída.
+- Passes nunca acima de ~22 m/s (`fixPassSpeeds`).
+
+| | Antes | Depois |
+|---|---|---|
+| Saltos da bola (instantes) | 3 123 | 1 366 |
+| Posse sem contacto | — | 0,56% |
+| Passes acima de 22 m/s | 2,9% | 1,35% |
+| Bola longe do pé a conduzir | 3,7% | 3,0% |
+
+Desempenho: 30 ms por lance (dilatação em janela deslizante e cache de quem tem a bola).

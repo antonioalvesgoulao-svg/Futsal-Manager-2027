@@ -24419,8 +24419,8 @@ var careerOf = (s2) => s2.career ??= { reputation: 35, offers: [], history: [] }
 function interimOf(s2, clubId) {
   const c = careerOf(s2);
   if (!c.vacancies?.[clubId]) return null;
-  const st = (s2.staff ?? []).find((x) => x.id === c.interim?.[clubId] && x.clubId === clubId);
-  return st ? { name: `${st.name} (interino)`, tactical: Math.round(st.ability * 0.6 + 4) } : { name: "Treinador interino", tactical: 10 };
+  const st2 = (s2.staff ?? []).find((x) => x.id === c.interim?.[clubId] && x.clubId === clubId);
+  return st2 ? { name: `${st2.name} (interino)`, tactical: Math.round(st2.ability * 0.6 + 4) } : { name: "Treinador interino", tactical: 10 };
 }
 
 // src/core/market.ts
@@ -24458,10 +24458,10 @@ function generateFreeAgents(s2, n, seed, targetOverall) {
   return out;
 }
 function ensurePool(s2) {
-  const m = marketOf(s2);
-  if (m.pool === s2.season.year) return;
-  m.pool = s2.season.year;
-  const since = m.freeSince ??= {};
+  const m2 = marketOf(s2);
+  if (m2.pool === s2.season.year) return;
+  m2.pool = s2.season.year;
+  const since = m2.freeSince ??= {};
   for (const p of s2.players) if (p.clubId === FREE) since[p.id] ??= s2.season.year;
   else delete since[p.id];
   s2.players = s2.players.filter((p) => p.clubId !== FREE || p.age < 33 && s2.season.year - since[p.id] < 2);
@@ -24473,13 +24473,50 @@ var DEFAULT = { tatico: 12, motivacao: 10, jovens: 10, treino: 10, disciplina: 1
 var managerAttrs = (s2) => ({ ...DEFAULT, ...s2.manager.attrs ?? {} });
 var mgrK = (s2, k, per = 0.03) => 1 + (managerAttrs(s2)[k] - 10) * per;
 
+// src/core/tacticalAI.ts
+var avg = (a) => a.length ? a.reduce((x, y) => x + y, 0) / a.length : 0;
+function systemScores(squad) {
+  const out = squad.filter((p) => p.position !== "GR").sort((a, b) => overall(b.attrs, b.position) - overall(a.attrs, a.position)).slice(0, 8);
+  if (!out.length) return { "3-1": 12, "4-0": 12, "2-2": 12, "1-2-1": 12 };
+  const A = (p) => p.attrs;
+  const pivQ = (p) => 0.4 * A(p).jogoCostas + 0.25 * A(p).forca + 0.25 * A(p).finalizacao + 0.1 * A(p).rececao;
+  const fixQ = (p) => 0.35 * A(p).desarme + 0.25 * A(p).posicionamento + 0.2 * A(p).passe + 0.2 * A(p).visao;
+  const wingQ = (p) => (A(p).drible + A(p).aceleracao + A(p).remate + A(p).agilidade) / 4;
+  const mobQ = (p) => (A(p).drible + A(p).passe + A(p).decisoes + A(p).agilidade + A(p).aceleracao + A(p).trabalhoEquipa) / 6;
+  const pivots = out.filter((p) => ["PIV", "ALA/PIV"].includes(p.position)).map(pivQ).sort((a, b) => b - a);
+  const fixos = out.filter((p) => ["FIX", "FIX/ALA", "UNI"].includes(p.position)).map(fixQ).sort((a, b) => b - a);
+  const alas = out.filter((p) => ["ALA", "ALA/PIV", "FIX/ALA", "UNI"].includes(p.position)).map(wingQ).sort((a, b) => b - a);
+  const univ = out.filter((p) => ["UNI", "FIX/ALA", "ALA/PIV"].includes(p.position)).length;
+  const piv1 = pivots[0] ?? 8, piv2 = pivots[1] ?? 7, fix1 = fixos[0] ?? 9;
+  const mob = avg(out.slice(0, 6).map(mobQ));
+  const wing2 = avg(alas.slice(0, 2).length ? alas.slice(0, 2) : [9]);
+  const phys = avg(out.slice(0, 6).map((p) => (A(p).forca + A(p).resistencia) / 2));
+  return {
+    "3-1": piv1 * 0.75 + fix1 * 0.25,
+    "4-0": mob * 0.95 + univ * 0.35 + 2.4 - Math.max(0, piv1 - mob - 2.5) * 0.3,
+    "2-2": (piv1 + piv2) / 2 * 0.7 + phys * 0.3 + 0.6,
+    "1-2-1": wing2 * 0.6 + fix1 * 0.2 + piv1 * 0.2 - 0.45
+  };
+}
+function chooseSystem(squad, r, oppMarking) {
+  const sc = systemScores(squad);
+  const pers = { "3-1": (r() - 0.5) * 1.2, "4-0": (r() - 0.5) * 1.2, "2-2": (r() - 0.5) * 1.2, "1-2-1": (r() - 0.5) * 1.2 };
+  if (oppMarking === "individual") {
+    sc["4-0"] += 0.5;
+    sc["2-2"] += 0.2;
+  }
+  if (oppMarking === "zona") {
+    sc["3-1"] += 0.3;
+    sc["1-2-1"] += 0.3;
+  }
+  return Object.keys(sc).sort((a, b) => sc[b] + pers[b] - (sc[a] + pers[a]))[0];
+}
+
 // src/core/coaches.ts
-function aiTactics(squad, club, coach) {
+function aiTactics(squad, club, coach, oppMarking) {
   const r = rng("estilo-" + (coach?.id ?? club.id));
   const out = squad.filter((p) => p.position !== "GR").sort((a, b) => overall(b.attrs, b.position) - overall(a.attrs, a.position)).slice(0, 8);
-  const bestPivot = Math.max(0, ...out.filter((p) => ["PIV", "ALA/PIV"].includes(p.position)).map((p) => p.attrs.jogoCostas));
-  const tech = out.reduce((s2, p) => s2 + (p.attrs.drible + p.attrs.decisoes + p.attrs.passe) / 3, 0) / Math.max(1, out.length);
-  const system = bestPivot >= 15 ? "3-1" : tech >= 13.5 ? "4-0" : club.level < 62 ? r() < 0.6 ? "2-2" : "1-2-1" : r() < 0.5 ? "1-2-1" : "3-1";
+  const system = chooseSystem(squad, r, oppMarking);
   const pressure = club.level >= 85 ? "alta" : club.level >= 65 ? r() < 0.3 ? "alta" : "media" : r() < 0.5 ? "baixa" : "media";
   const tempo = club.level >= 85 ? "paciente" : r() < 0.35 ? "rapido" : "equilibrado";
   const marking = r() < 0.6 ? "zona" : r() < 0.5 ? "individual" : "misto";
@@ -24529,9 +24566,9 @@ var INJ_PER_S = 25.9 / 1e3 / 3600;
 var injRisk = (l) => (1 + Math.max(0, l.p.age - 28) * 0.03) * (1.25 - l.p.attrs.resistencia / 40) * (l.p.position === "GR" ? 0.6 : 1);
 var REBOUND = 0.25;
 var fmt = (t) => {
-  const m = Math.floor(t / 60);
+  const m2 = Math.floor(t / 60);
   const s2 = Math.floor(t % 60);
-  return `${String(m).padStart(2, "0")}:${String(s2).padStart(2, "0")}`;
+  return `${String(m2).padStart(2, "0")}:${String(s2).padStart(2, "0")}`;
 };
 function createMatch(home, away, opts = {}) {
   const r = rng(opts.seed ?? `${home.clubId}-${away.clubId}-${Math.random()}`);
@@ -24624,7 +24661,7 @@ function createMatch(home, away, opts = {}) {
   const ROT = { curta: { min: 60, energy: 80, max: 180 }, normal: { min: 90, energy: 72, max: 300 }, longa: { min: 120, energy: 62, max: 420 } };
   const PRESS_DRAIN = { alta: 1.15, media: 1, baixa: 0.92 };
   const eff = (l, k) => l.p.attrs[k] * (0.72 + 0.28 * (l.energy / 100)) * l.mor;
-  const avg = (ls, ks) => ls.length ? ls.reduce((s2, l) => s2 + ks.reduce((a, k) => a + eff(l, k), 0) / ks.length, 0) / ls.length : 5;
+  const avg2 = (ls, ks) => ls.length ? ls.reduce((s2, l) => s2 + ks.reduce((a, k) => a + eff(l, k), 0) / ks.length, 0) / ls.length : 5;
   const outfield = (t) => t.court;
   const numbers = (t) => t.court.length + (t.gk ? 1 : 0);
   function log(type, text, side2, playerId, assistId) {
@@ -24713,6 +24750,29 @@ function createMatch(home, away, opts = {}) {
     t.court = next;
     t.lastRotation = clock;
     log("substituicao", `${sideName(s2)}: troca de quinteto (${ins.map((l) => l.p.name).join(", ")})`, s2);
+  }
+  const aiChanged = [/* @__PURE__ */ new Set(), /* @__PURE__ */ new Set()];
+  function aiTacticalAdjust(s2) {
+    const t = teams[s2];
+    const tac = t.setup.tactics;
+    const lastPeriod = period === 2 || period === 4;
+    if (!lastPeriod) return;
+    const remaining = periodStart + periodLen - clock;
+    const diff = score2[s2] - score2[1 - s2];
+    const done = aiChanged[s2];
+    if (diff < 0 && remaining < 600 && !done.has("perder")) {
+      done.add("perder");
+      tac.pressure = "alta";
+      tac.tempo = "rapido";
+      if (tac.system !== "4-0") {
+        const sc = systemScores(t.setup.squad);
+        if (sc["4-0"] >= sc[tac.system] - 1.2) tac.system = "4-0";
+      }
+    } else if (diff > 0 && remaining < 360 && !done.has("ganhar")) {
+      done.add("ganhar");
+      tac.tempo = "paciente";
+      if (tac.pressure === "alta") tac.pressure = "media";
+    }
   }
   function flyingDecision(s2) {
     const t = teams[s2];
@@ -24850,7 +24910,7 @@ function createMatch(home, away, opts = {}) {
     pstats[shooter.p.id].shots++;
     const finish2 = kind === "jogada" || kind === "canto" ? eff(shooter, "finalizacao") * 0.6 + eff(shooter, "remate") * 0.4 : eff(shooter, "finalizacao");
     const compo = eff(shooter, "compostura");
-    const defQ = avg(outfield(def), ["desarme", "posicionamento", "antecipacao"]);
+    const defQ = avg2(outfield(def), ["desarme", "posicionamento", "antecipacao"]);
     const gk = def.gk;
     const gkQ = gk ? (eff(gk, "reflexos") + eff(gk, "umParaUm") + eff(gk, "posicionamento") + eff(gk, "agilidade")) / 4 : 0;
     let pBlock = 0.24 + (defQ - finish2) * 0.01;
@@ -25084,7 +25144,7 @@ function createMatch(home, away, opts = {}) {
       const piv = bestBy(["PIV", "ALA/PIV"], "jogoCostas");
       att += piv ? (eff(piv, "jogoCostas") - 11) * 0.18 : -0.6;
     } else if (tac.system === "4-0") {
-      att += (avg(court, ["drible", "decisoes", "passe", "aceleracao"]) - 11) * 0.15 + 0.2;
+      att += (avg2(court, ["drible", "decisoes", "passe", "aceleracao"]) - 11) * 0.15 + 0.2;
       def -= 0.4;
     } else if (tac.system === "2-2") {
       def += 0.6;
@@ -25098,8 +25158,8 @@ function createMatch(home, away, opts = {}) {
     const fit = court.slice(0, 4).reduce((a, l, i) => a + roleFit(slots[i].role, l.p.position), 0) / Math.max(1, Math.min(4, court.length));
     att += (fit - 0.85) * 2.5;
     def += (fit - 0.85) * 2.5;
-    if (tac.marking === "individual") def += (avg(court, ["desarme", "agressividade"]) - 11) * 0.12;
-    else if (tac.marking === "zona") def += (avg(court, ["posicionamento", "concentracao"]) - 11) * 0.12;
+    if (tac.marking === "individual") def += (avg2(court, ["desarme", "agressividade"]) - 11) * 0.12;
+    else if (tac.marking === "zona") def += (avg2(court, ["posicionamento", "concentracao"]) - 11) * 0.12;
     return { att, def };
   }
   const MARK_VS = {
@@ -25110,15 +25170,15 @@ function createMatch(home, away, opts = {}) {
   function markingVs(def, att) {
     const mk = def.setup.tactics.marking;
     let v = MARK_VS[mk]?.[att.flying ? "flying" : att.setup.tactics.system] ?? 0;
-    if (mk === "misto") v += (avg(outfield(def), ["concentracao", "trabalhoEquipa"]) - 11) * 0.06;
+    if (mk === "misto") v += (avg2(outfield(def), ["concentracao", "trabalhoEquipa"]) - 11) * 0.06;
     return v;
   }
   function possession(s2, counter2 = false) {
     const att = teams[s2];
     const def = teams[1 - s2];
-    const attQ = avg(outfield(att), ["passe", "rececao", "drible", "decisoes", "visao"]);
-    const defQ = avg(outfield(def), ["desarme", "posicionamento", "antecipacao", "concentracao"]);
-    const press = avg(outfield(def), ["aceleracao", "resistencia", "trabalhoEquipa", "agressividade"]);
+    const attQ = avg2(outfield(att), ["passe", "rececao", "drible", "decisoes", "visao"]);
+    const defQ = avg2(outfield(def), ["desarme", "posicionamento", "antecipacao", "concentracao"]);
+    const press = avg2(outfield(def), ["aceleracao", "resistencia", "trabalhoEquipa", "agressividade"]);
     const numDiff = numbers(att) - numbers(def);
     let diff = attQ - defQ * 0.85 - press * 0.15 + numDiff * 2.2;
     if (att.flying) diff += 1.5;
@@ -25143,7 +25203,7 @@ function createMatch(home, away, opts = {}) {
       if (r() < 0.25) shot(s2, "jogada");
       return { next: 1 - s2, counter: false };
     }
-    const pFoul = 1 / REF.tolerance * (0.15 + (avg(outfield(def), ["agressividade"]) - 10) * 5e-3 + PRESS[dPress].foul + (def.setup.tactics.marking === "individual" ? 0.02 : 0));
+    const pFoul = 1 / REF.tolerance * (0.15 + (avg2(outfield(def), ["agressividade"]) - 10) * 5e-3 + PRESS[dPress].foul + (def.setup.tactics.marking === "individual" ? 0.02 : 0));
     const pLose = Math.max(0.18, Math.min(0.66, 0.4 - diff * 0.03 - (counter2 ? 0.15 : 0) + PRESS[dPress].lose + tempo.lose));
     const roll = r();
     if (roll < pFoul) {
@@ -25197,14 +25257,14 @@ function createMatch(home, away, opts = {}) {
   const timeoutRequest = [false, false];
   const flyingOverride = [null, null];
   function beginPeriod(i) {
-    const pl = plan[i];
-    period = pl.p;
+    const pl2 = plan[i];
+    period = pl2.p;
     periodStart = clock;
-    periodLen = pl.len;
-    side = pl.start;
+    periodLen = pl2.len;
+    side = pl2.start;
     counter = false;
-    const label = pl.p === 1 ? "In\xEDcio da 1.\xAA parte" : pl.p === 2 ? "In\xEDcio da 2.\xAA parte" : `In\xEDcio da ${pl.p - 2}.\xAA parte do prolongamento`;
-    log(pl.p >= 3 ? "prolongamento" : "inicio", label);
+    const label = pl2.p === 1 ? "In\xEDcio da 1.\xAA parte" : pl2.p === 2 ? "In\xEDcio da 2.\xAA parte" : `In\xEDcio da ${pl2.p - 2}.\xAA parte do prolongamento`;
+    log(pl2.p >= 3 ? "prolongamento" : "inicio", label);
   }
   function endPeriod() {
     log("fim_parte", `Fim do per\xEDodo. ${home.shortName} ${score2[0]}-${score2[1]} ${away.shortName}`);
@@ -25260,15 +25320,15 @@ function createMatch(home, away, opts = {}) {
       const sd = teams.indexOf(t);
       const won = score2[sd] > score2[1 - sd] ? 0.3 : score2[sd] < score2[1 - sd] ? -0.3 : 0;
       for (const l of t.players) {
-        const st = pstats[l.p.id];
-        if (st.minutes < 30) {
-          st.rating = 0;
+        const st2 = pstats[l.p.id];
+        if (st2.minutes < 30) {
+          st2.rating = 0;
           continue;
         }
-        let rt = 6.2 + won + st.goals * 0.9 + st.assists * 0.5 + st.tackles * 0.08 - st.fouls * 0.08 - st.yellow * 0.3 - (st.red ? 1.5 : 0);
-        if (l.p.position === "GR") rt += st.saves * 0.18 - conceded[l.p.id] * 0.35;
+        let rt = 6.2 + won + st2.goals * 0.9 + st2.assists * 0.5 + st2.tackles * 0.08 - st2.fouls * 0.08 - st2.yellow * 0.3 - (st2.red ? 1.5 : 0);
+        if (l.p.position === "GR") rt += st2.saves * 0.18 - conceded[l.p.id] * 0.35;
         rt += (r() - 0.5) * 0.6;
-        st.rating = Math.round(Math.max(3, Math.min(10, rt)) * 10) / 10;
+        st2.rating = Math.round(Math.max(3, Math.min(10, rt)) * 10) / 10;
       }
     }
     finished = true;
@@ -25282,6 +25342,7 @@ function createMatch(home, away, opts = {}) {
       return true;
     }
     if (clock < periodStart + periodLen - 1e-3) {
+      for (const sd of [0, 1]) if (teams[sd].setup.ai && opts.manual !== sd) aiTacticalAdjust(sd);
       onePossession();
       return true;
     }
@@ -25433,6 +25494,7 @@ function setupFor(s2, clubId, comp) {
     shortName: c.shortName,
     squad,
     tactics: aiTactics(squad, c, coach),
+    ai: true,
     coachTactical: (coach?.tactical ?? interimOf(s2, c.id)?.tactical ?? 11) + analystBonus(s2, c.id),
     morale: s2.morale,
     fitness: s2.fitness,
@@ -38198,8 +38260,8 @@ var Track = class {
         const kk = k / (n + 1);
         const bx = a.x + (b.x - a.x) * kk, by = a.y + (b.y - a.y) * kk;
         const ang = r() * Math.PI * 2;
-        const m = amp * (0.5 + r() * 0.5);
-        out.push({ t, x: clamp4(bx + Math.cos(ang) * m, -19.5, 19.5), y: clamp4(by + Math.sin(ang) * m, -9.8, 9.8), hold: false });
+        const m2 = amp * (0.5 + r() * 0.5);
+        out.push({ t, x: clamp4(bx + Math.cos(ang) * m2, -19.5, 19.5), y: clamp4(by + Math.sin(ang) * m2, -9.8, 9.8), hold: false });
       }
     }
     this.keys = out;
@@ -38230,10 +38292,10 @@ var Track = class {
     const d0 = { x: (b.x - a.x) / (b.t - a.t), y: (b.y - a.y) / (b.t - a.t) };
     const d1 = { x: (c.x - b.x) / (c.t - b.t), y: (c.y - b.y) / (c.t - b.t) };
     if (d0.x * d1.x + d0.y * d1.y <= 0) return { x: 0, y: 0 };
-    const m = { x: (c.x - a.x) / (c.t - a.t), y: (c.y - a.y) / (c.t - a.t) };
+    const m2 = { x: (c.x - a.x) / (c.t - a.t), y: (c.y - a.y) / (c.t - a.t) };
     const cap = Math.min(Math.hypot(d0.x, d0.y), Math.hypot(d1.x, d1.y));
-    const mm = Math.hypot(m.x, m.y);
-    return mm > cap && mm > 0 ? { x: m.x * cap / mm, y: m.y * cap / mm } : m;
+    const mm = Math.hypot(m2.x, m2.y);
+    return mm > cap && mm > 0 ? { x: m2.x * cap / mm, y: m2.y * cap / mm } : m2;
   }
   bake(t0, t1, vmax, amax, accelerationFactor = 1, agilityFactor = 1) {
     this.baked = null;
@@ -38659,9 +38721,9 @@ var Choreo = class {
       for (let i = 0; i < n; i++) {
         let best = 0;
         for (let j = Math.max(0, i - W); j <= Math.min(n - 1, i + W); j++) {
-          const m = Math.hypot(o[j], o2[j]);
-          if (m > best) {
-            best = m;
+          const m2 = Math.hypot(o[j], o2[j]);
+          if (m2 > best) {
+            best = m2;
             rx[i] = o[j];
             ry[i] = o2[j];
           }
@@ -38900,16 +38962,16 @@ var Choreo = class {
     const r = this.r;
     const sys = this.sys;
     const tA = this.tactics[this.att];
-    const hs = this.slot.get(holder);
+    const hs2 = this.slot.get(holder);
     const others = this.attOut.filter((x) => x !== holder);
-    if (this.isCounter && !forced && hs !== void 0) {
+    if (this.isCounter && !forced && hs2 !== void 0) {
       const hp0 = this.P(holder, T);
       const go = this.A(Math.min(this.U(hp0) + len * 5.2, 29), hp0.y * 0.75);
       this.key(holder, T + len, go);
       this.attKeysAt(T + len, /* @__PURE__ */ new Set([holder]), go.y);
       return holder;
     }
-    if (hs === void 0 || !others.length) {
+    if (hs2 === void 0 || !others.length) {
       const to = forced ?? others[0] ?? holder;
       if (to !== holder) {
         this.act(holder, "pass", T + len - 0.75, T + len - 0.4, { face: to });
@@ -38920,18 +38982,18 @@ var Choreo = class {
     }
     const hp = this.P(holder, T);
     const sideOfBall = hp.y >= 0 ? 1 : -1;
-    const fixoLike = (sys === "3-1" || sys === "1-2-1") && hs === 0;
-    const backLike = (sys === "4-0" || sys === "2-2") && (hs === 0 || hs === 3);
+    const fixoLike = (sys === "3-1" || sys === "1-2-1") && hs2 === 0;
+    const backLike = (sys === "4-0" || sys === "2-2") && (hs2 === 0 || hs2 === 3);
     const pivo = sys === "3-1" || sys === "1-2-1" ? this.slotHolder(3) : void 0;
     const opts = [["circ", tA.tempo === "paciente" ? 3 : 2]];
     if (len >= 1.2) {
       if (fixoLike) opts.push(["paralela", 2], ["diagonal", 1.6]);
-      if ((sys === "3-1" || sys === "1-2-1") && hs !== 3 && pivo) opts.push(["pivo", sys === "3-1" ? 1.3 : 0.8]);
+      if ((sys === "3-1" || sys === "1-2-1") && hs2 !== 3 && pivo) opts.push(["pivo", sys === "3-1" ? 1.3 : 0.8]);
       if (backLike) opts.push(["passaCorta", sys === "4-0" ? 3.5 : 1.6]);
-      if (sys === "2-2" && hs !== void 0) opts.push(["cruzamento", 1.4]);
+      if (sys === "2-2" && hs2 !== void 0) opts.push(["cruzamento", 1.4]);
       if (len >= 1.6) opts.push(["bloqueio", sys === "4-0" ? 0.9 : 0.7], ["drible", tA.tempo === "rapido" ? 0.45 : 0.3]);
       if (sys === "5x4") opts.push(["inversao", 2.5], ["diagonalCurta", 2]);
-      if ((sys === "3-1" || sys === "1-2-1") && hs !== 3 && pivo && len >= 1.5) opts.push(["falsoPivo", 1.1]);
+      if ((sys === "3-1" || sys === "1-2-1") && hs2 !== 3 && pivo && len >= 1.5) opts.push(["falsoPivo", 1.1]);
     }
     const oppPress = this.tactics[1 - this.att].pressure;
     if (len >= 1.6 && others.length >= 2) opts.push(["emU", this.tactics[1 - this.att].marking === "zona" ? 0.9 : 0.35]);
@@ -38969,7 +39031,7 @@ var Choreo = class {
       if (mv === "bloqueio" || mv === "drible" || mv === "saidaGR") mv = "circ";
       if (mv === "falsoPivo" && fs !== 3) mv = "circ";
       if (mv === "emU" || mv === "diagonalCurta" || mv === "cortina") mv = "circ";
-      if (mv === "passaCorta" && fs !== (hs === 0 ? 1 : 2)) mv = "circ";
+      if (mv === "passaCorta" && fs !== (hs2 === 0 ? 1 : 2)) mv = "circ";
     }
     this.accelNext = mv !== "circ" && r() < 0.6;
     const flightOf = (a, b) => clamp4(dist(a, b) / 12, 0.3, 0.9);
@@ -39029,7 +39091,7 @@ var Choreo = class {
       return pivo;
     }
     if (mv === "passaCorta" || mv === "cruzamento" || mv === "inversao") {
-      const s2 = hs === 0 || hs === 1 ? -1 : 1;
+      const s2 = hs2 === 0 || hs2 === 1 ? -1 : 1;
       if (mv === "passaCorta") {
         const wideSlot = s2 < 0 ? 1 : 2, oppWide = s2 < 0 ? 2 : 1, oppBack = s2 < 0 ? 3 : 0;
         const recv3 = forced ?? this.slotHolder(wideSlot) ?? others[0];
@@ -39047,8 +39109,8 @@ var Choreo = class {
           this.key(pw, tEnd + 1.2, this.slotPos(oppBack, tEnd + 1.2, s2 * 4));
         }
         if (pb && pb !== recv3) {
-          this.slot.set(pb, hs);
-          this.key(pb, tEnd + 1, this.slotPos(hs, tEnd + 1, s2 * 4));
+          this.slot.set(pb, hs2);
+          this.key(pb, tEnd + 1, this.slotPos(hs2, tEnd + 1, s2 * 4));
         }
         this.slot.set(holder, oppWide);
         this.label(tEnd - 0.3, `Passe e corte de ${this.nm(holder)}`);
@@ -39150,11 +39212,11 @@ var Choreo = class {
       this.label(T + len * 0.5, `Movimento em U de ${this.nm(recv2)} por tr\xE1s de ${this.nm(holder)}`);
       const rs2 = this.slot.get(recv2);
       if (rs2 !== void 0) {
-        this.slot.set(recv2, hs);
+        this.slot.set(recv2, hs2);
         this.slot.set(holder, rs2);
       }
       this.attKeysAt(tEnd, /* @__PURE__ */ new Set([holder, recv2]), spot2.y);
-      this.key(holder, tEnd + 0.9, this.slotPos(this.slot.get(holder) ?? hs, tEnd + 0.9, spot2.y, 1));
+      this.key(holder, tEnd + 0.9, this.slotPos(this.slot.get(holder) ?? hs2, tEnd + 0.9, spot2.y, 1));
       return recv2;
     }
     if (mv === "falsoPivo" && pivo) {
@@ -39170,13 +39232,13 @@ var Choreo = class {
         this.act(runner, "run", tEnd - 0.5, tEnd + 0.9, { to: deep });
         this.slot.set(runner, 3);
       }
-      this.slot.set(pivo, this.slot.get(runner ?? "") ?? hs);
+      this.slot.set(pivo, this.slot.get(runner ?? "") ?? hs2);
       this.label(tEnd - 0.4, `Falso piv\xF4: ${this.nm(pivo)} sai para receber${runner ? `, ${this.nm(runner)} ataca as costas` : ""}`);
       this.later.push(() => {
-        const m = this.defOut.reduce((a, b) => dist(this.P(b, T), this.P(pivo, T)) < dist(this.P(a, T), this.P(pivo, T)) ? b : a, this.defOut[0]);
-        if (!m) return;
-        this.fix(m, T + 0.2, tEnd + 0.6);
-        this.key(m, tEnd + 0.1, { x: come.x + this.dirA * 1.1, y: come.y });
+        const m2 = this.defOut.reduce((a, b) => dist(this.P(b, T), this.P(pivo, T)) < dist(this.P(a, T), this.P(pivo, T)) ? b : a, this.defOut[0]);
+        if (!m2) return;
+        this.fix(m2, T + 0.2, tEnd + 0.6);
+        this.key(m2, tEnd + 0.1, { x: come.x + this.dirA * 1.1, y: come.y });
       });
       this.attKeysAt(tEnd, /* @__PURE__ */ new Set([holder, pivo, ...runner ? [runner] : []]), come.y);
       return pivo;
@@ -39201,13 +39263,13 @@ var Choreo = class {
       this.act(screener, "run", tScr + 0.6, tEnd + 0.4, { to: roll });
       this.label(tScr - 0.2, `Bloqueio de ${this.nm(screener)} para ${this.nm(holder)}`);
       this.later.push(() => {
-        const m = this.defOut.reduce((a, b) => dist(this.P(b, tScr - 0.4), hp) < dist(this.P(a, tScr - 0.4), hp) ? b : a, this.defOut[0]);
-        if (!m) return;
+        const m2 = this.defOut.reduce((a, b) => dist(this.P(b, tScr - 0.4), hp) < dist(this.P(a, tScr - 0.4), hp) ? b : a, this.defOut[0]);
+        if (!m2) return;
         const sp = this.P(screener, tScr + 0.2);
         const stuck = { x: sp.x + toward.x * 0.75, y: sp.y + toward.y * 0.75 - lat * 0.4 };
-        this.fix(m, tScr - 0.1, tScr + 0.9);
-        this.key(m, tScr + 0.15, stuck);
-        this.key(m, tScr + 0.8, { x: stuck.x + toward.x * 0.4, y: stuck.y + lat * 0.8 });
+        this.fix(m2, tScr - 0.1, tScr + 0.9);
+        this.key(m2, tScr + 0.15, stuck);
+        this.key(m2, tScr + 0.8, { x: stuck.x + toward.x * 0.4, y: stuck.y + lat * 0.8 });
       });
       this.attKeysAt(tEnd, /* @__PURE__ */ new Set([holder, screener]), drive.y);
       return holder;
@@ -39221,12 +39283,12 @@ var Choreo = class {
       this.key(holder, tEnd, drive);
       this.label(tf - 0.2, `Finta de ${this.nm(holder)}`);
       this.later.push(() => {
-        const m = this.defOut.reduce((a, b) => dist(this.P(b, tf), hp) < dist(this.P(a, tf), hp) ? b : a, this.defOut[0]);
-        if (!m) return;
-        const mp = this.P(m, tf - 0.3);
-        this.fix(m, tf - 0.2, tf + 0.7);
-        this.key(m, tf + 0.1, { x: mp.x, y: mp.y - lat * 1.1 });
-        this.key(m, tf + 0.6, { x: mp.x + this.dirA * 0.6, y: mp.y - lat * 0.4 });
+        const m2 = this.defOut.reduce((a, b) => dist(this.P(b, tf), hp) < dist(this.P(a, tf), hp) ? b : a, this.defOut[0]);
+        if (!m2) return;
+        const mp = this.P(m2, tf - 0.3);
+        this.fix(m2, tf - 0.2, tf + 0.7);
+        this.key(m2, tf + 0.1, { x: mp.x, y: mp.y - lat * 1.1 });
+        this.key(m2, tf + 0.6, { x: mp.x + this.dirA * 0.6, y: mp.y - lat * 0.4 });
       });
       this.attKeysAt(tEnd, /* @__PURE__ */ new Set([holder]), drive.y);
       return holder;
@@ -39238,7 +39300,7 @@ var Choreo = class {
       "2-2": [[3, 1], [0, 2], [3, 1], [0, 2]],
       "5x4": [[1, 2], [0, 3], [0, 4], [1, 4], [2, 3]]
     };
-    const nb = (ADJ[sys][hs] ?? []).map((i) => this.slotHolder(i)).filter((x) => !!x && x !== holder);
+    const nb = (ADJ[sys][hs2] ?? []).map((i) => this.slotHolder(i)).filter((x) => !!x && x !== holder);
     const recv = forced ?? (nb.length ? nb[Math.floor(r() * nb.length)] : others[Math.floor(r() * others.length)]);
     const rs = this.slot.get(recv) ?? 0;
     const spot = this.slotPos(rs, tEnd, this.P(recv, T).y * 0.5, 1.2);
@@ -39246,7 +39308,7 @@ var Choreo = class {
     carry(this.A(this.U(hp) + 0.8, hp.y + (r() - 0.5) * 1.6));
     passTo(recv, spot);
     this.attKeysAt(tEnd, /* @__PURE__ */ new Set([holder, recv]), spot.y);
-    this.key(holder, tEnd + 0.4, this.slotPos(hs, tEnd + 0.4, spot.y, 1));
+    this.key(holder, tEnd + 0.4, this.slotPos(hs2, tEnd + 0.4, spot.y, 1));
     return recv;
   }
   // ---------- finalização de ataque organizado ----------
@@ -39279,12 +39341,12 @@ var Choreo = class {
         this.act(shooter, "feint", tf - 0.3, tf + 0.3, { ang: angTo(from, spot2) });
         this.label(tf - 0.3, `${this.nm(shooter)} em 1x1`);
         this.later.push(() => {
-          const m = this.defOut.reduce((x, y) => dist(this.P(y, tf), this.P(shooter, tf)) < dist(this.P(x, tf), this.P(shooter, tf)) ? y : x, this.defOut[0]);
-          if (!m) return;
-          const mp = this.P(m, tf - 0.2);
-          this.fix(m, tf - 0.1, tf + 0.8);
-          this.key(m, tf + 0.2, { x: mp.x, y: mp.y + s2 * 1.1 });
-          this.key(m, tf + 0.8, { x: mp.x + this.dirA * 0.8, y: mp.y + s2 * 0.4 });
+          const m2 = this.defOut.reduce((x, y) => dist(this.P(y, tf), this.P(shooter, tf)) < dist(this.P(x, tf), this.P(shooter, tf)) ? y : x, this.defOut[0]);
+          if (!m2) return;
+          const mp = this.P(m2, tf - 0.2);
+          this.fix(m2, tf - 0.1, tf + 0.8);
+          this.key(m2, tf + 0.2, { x: mp.x, y: mp.y + s2 * 1.1 });
+          this.key(m2, tf + 0.8, { x: mp.x + this.dirA * 0.8, y: mp.y + s2 * 0.4 });
         });
       }
       this.key(shooter, tf, { x: lerp(from.x, spot2.x, 0.4), y: lerp(from.y, spot2.y, 0.4) - s2 * 0.6 });
@@ -39319,11 +39381,11 @@ var Choreo = class {
       this.key(shooter, tS, turn);
       this.label(tr, `${this.nm(shooter)} recebe de costas e roda`);
       this.later.push(() => {
-        const m = this.defOut.reduce((x, y) => dist(this.P(y, tr), spot2) < dist(this.P(x, tr), spot2) ? y : x, this.defOut[0]);
-        if (!m) return;
-        this.fix(m, tr - 0.3, tS + 0.3);
-        this.key(m, tr, this.A(33.6, s2 * 1.6));
-        this.key(m, tS, this.A(33.2, s2 * 1.4));
+        const m2 = this.defOut.reduce((x, y) => dist(this.P(y, tr), spot2) < dist(this.P(x, tr), spot2) ? y : x, this.defOut[0]);
+        if (!m2) return;
+        this.fix(m2, tr - 0.3, tS + 0.3);
+        this.key(m2, tr, this.A(33.6, s2 * 1.6));
+        this.key(m2, tS, this.A(33.2, s2 * 1.4));
       });
       this.attKeysAt(tS, skip, s2 * 2);
       return;
@@ -39533,8 +39595,8 @@ var Choreo = class {
       const marks = [...atts];
       while (marks.length > this.defOut.length) {
         let wi = 0, wd = -1;
-        marks.forEach((m, i) => {
-          const d = dist(m.p, ball) + (m.id === holder ? -99 : 0);
+        marks.forEach((m2, i) => {
+          const d = dist(m2.p, ball) + (m2.id === holder ? -99 : 0);
           if (d > wd) {
             wd = d;
             wi = i;
@@ -39546,11 +39608,11 @@ var Choreo = class {
       if (tD.pressure !== "baixa" && this.U(bPrev) - bu > 2 && t > pressUntil) pressUntil = t + 1.5;
       const pressing = t < pressUntil;
       const spots = /* @__PURE__ */ new Map();
-      for (const m of marks) {
-        const au = this.U(m.p), av = m.p.y;
+      for (const m2 of marks) {
+        const au = this.U(m2.p), av = m2.p.y;
         const gu = 40 - au, gv = -av;
         const gl = Math.hypot(gu, gv) || 1;
-        const isH = m.id === holder;
+        const isH = m2.id === holder;
         const g0 = isH ? pressGap * (pressing ? 0.8 : 1) : gap;
         let u = au + gu / gl * g0, v = av + gv / gl * g0;
         if (!isH) {
@@ -39563,12 +39625,12 @@ var Choreo = class {
         }
         if (pressing) u -= isH ? 0.6 : 2.5;
         u = clamp4(Math.max(u, isH ? press : press + 1.5), 2, 39.2);
-        spots.set(m.id, this.A(u, clamp4(v, -9.4, 9.4)));
+        spots.set(m2.id, this.A(u, clamp4(v, -9.4, 9.4)));
       }
       if (holder && tD.marking !== "individual") {
-        const hm = marks.find((m) => m.id === holder);
+        const hm = marks.find((m2) => m2.id === holder);
         if (hm) {
-          const near = marks.filter((m) => m.id !== holder).map((m) => ({ m, d: dist(m.p, hm.p) })).filter((x) => x.d < 9).sort((a, b) => a.d - b.d)[0];
+          const near = marks.filter((m2) => m2.id !== holder).map((m2) => ({ m: m2, d: dist(m2.p, hm.p) })).filter((x) => x.d < 9).sort((a, b) => a.d - b.d)[0];
           if (near) {
             const hu2 = this.U(hm.p), hv = hm.p.y;
             const cover = this.A(clamp4(hu2 + 2.8, 2, 38.5), hv * 0.55);
@@ -39851,8 +39913,8 @@ var Choreo = class {
     return T;
   }
   /** Posições de todos num instante, com marcação "hold" (chegada obrigatória). */
-  placeAll(t, m, hold = true) {
-    for (const [id, p] of m) {
+  placeAll(t, m2, hold = true) {
+    for (const [id, p] of m2) {
       this.key(id, t, p, hold);
       this.fix(id, t - 0.1, t + 0.1);
     }
@@ -39883,8 +39945,8 @@ var Choreo = class {
     if (routine === "personalizado" && cpC) return this.customPlay(T, taker, this.A(40.3, s2 * 10.35), s2, tSet, tKick, sh, cpC);
     const shooter = sh && others.includes(sh.shooter) ? sh.shooter : others[Math.floor(r() * others.length)];
     const rest = others.filter((x) => x !== shooter);
-    const m = /* @__PURE__ */ new Map();
-    m.set(taker, this.A(40.3, s2 * 10.35));
+    const m2 = /* @__PURE__ */ new Map();
+    m2.set(taker, this.A(40.3, s2 * 10.35));
     let shotSpot, startShooter;
     const roles = [];
     if (routine === "primeiro_poste") {
@@ -39904,15 +39966,15 @@ var Choreo = class {
       shotSpot = this.A(33.5, s2 * 3.5);
       roles.push(this.A(37, s2 * 7.6), this.A(30.5, -s2 * 3));
     }
-    m.set(shooter, startShooter);
-    rest.forEach((id, i) => m.set(id, roles[i] ?? this.A(24, (i - 1) * 4)));
-    if (this.gkA) m.set(this.gkA, this.A(4, 0));
+    m2.set(shooter, startShooter);
+    rest.forEach((id, i) => m2.set(id, roles[i] ?? this.A(24, (i - 1) * 4)));
+    if (this.gkA) m2.set(this.gkA, this.A(4, 0));
     const dSpots = [this.A(36.8, s2 * 3.6), this.A(34.6, s2 * 0.3), this.A(36.2, -s2 * 2.8), this.A(31.2, s2 * 1.2)];
     const dIds = [...this.defOut];
-    dIds.forEach((id, i) => m.set(id, dSpots[i] ?? this.A(28, 0)));
-    if (this.gkD) m.set(this.gkD, this.A(39.5, s2 * 0.9));
-    this.placeAll(tSet, m);
-    for (const [id, p2] of m) this.key(id, tKick - 0.15, p2, true);
+    dIds.forEach((id, i) => m2.set(id, dSpots[i] ?? this.A(28, 0)));
+    if (this.gkD) m2.set(this.gkD, this.A(39.5, s2 * 0.9));
+    this.placeAll(tSet, m2);
+    for (const [id, p2] of m2) this.key(id, tKick - 0.15, p2, true);
     this.label(tSet - 1.6, "Organiza\xE7\xE3o ofensiva e defensiva para o canto");
     this.act(taker, "pass", tKick - 0.25, tKick + 0.15, { face: shooter });
     const tr = tKick + (routine === "curto" ? 0.45 : 0.75);
@@ -39940,9 +40002,9 @@ var Choreo = class {
     this.key(shooter, tr, shotSpot);
     this.key(taker, tr + 0.6, this.A(37.5, s2 * 8));
     this.pass(taker, shooter, tKick, tr, routine === "remate_fora" ? 0.03 : 0.06);
-    const near = dIds.reduce((x, y) => dist(m.get(y), shotSpot) < dist(m.get(x), shotSpot) ? y : x, dIds[0]);
-    if (near) this.key(near, tr + 0.25, { x: lerp(m.get(near).x, shotSpot.x, 0.7), y: lerp(m.get(near).y, shotSpot.y, 0.7) });
-    for (const id of dIds) if (id !== near) this.key(id, tr + 0.5, { x: m.get(id).x, y: lerp(m.get(id).y, shotSpot.y, 0.25) });
+    const near = dIds.reduce((x, y) => dist(m2.get(y), shotSpot) < dist(m2.get(x), shotSpot) ? y : x, dIds[0]);
+    if (near) this.key(near, tr + 0.25, { x: lerp(m2.get(near).x, shotSpot.x, 0.7), y: lerp(m2.get(near).y, shotSpot.y, 0.7) });
+    for (const id of dIds) if (id !== near) this.key(id, tr + 0.5, { x: m2.get(id).x, y: lerp(m2.get(id).y, shotSpot.y, 0.25) });
     if (!sh) {
       this.attKeysAt(tr + 1.2, /* @__PURE__ */ new Set([shooter, taker]));
       return tr;
@@ -39965,21 +40027,21 @@ var Choreo = class {
       return want;
     }).filter(Boolean);
     const P = (q) => this.A(q.x, s2 * q.y);
-    const m = /* @__PURE__ */ new Map();
-    m.set(taker, takerAt);
+    const m2 = /* @__PURE__ */ new Map();
+    m2.set(taker, takerAt);
     cp.slots.forEach((sl, i) => {
-      if (ids[i]) m.set(ids[i], P(sl));
+      if (ids[i]) m2.set(ids[i], P(sl));
     });
-    free.forEach((id, i) => m.set(id, this.A(22, (i - 0.5) * 6)));
-    if (this.gkA) m.set(this.gkA, this.A(4, 0));
+    free.forEach((id, i) => m2.set(id, this.A(22, (i - 0.5) * 6)));
+    if (this.gkA) m2.set(this.gkA, this.A(4, 0));
     const dIds = [...this.defOut];
     dIds.forEach((id, i) => {
-      const near = ids[i] ? m.get(ids[i]) : this.A(34, 0);
-      m.set(id, { x: lerp(near.x, this.A(39, 0).x, 0.35), y: near.y * 0.8 });
+      const near = ids[i] ? m2.get(ids[i]) : this.A(34, 0);
+      m2.set(id, { x: lerp(near.x, this.A(39, 0).x, 0.35), y: near.y * 0.8 });
     });
-    if (this.gkD) m.set(this.gkD, this.A(39.5, s2 * 0.9));
-    this.placeAll(tSet, m);
-    for (const [id, p2] of m) this.key(id, tKick - 0.15, p2, true);
+    if (this.gkD) m2.set(this.gkD, this.A(39.5, s2 * 0.9));
+    this.placeAll(tSet, m2);
+    for (const [id, p2] of m2) this.key(id, tKick - 0.15, p2, true);
     this.label(tSet - 1.6, "Jogada ensaiada desenhada pelo treinador");
     const tr = tKick + 0.8;
     for (const path of cp.paths.filter((x) => x.kind === "run" && x.from >= 0)) {
@@ -40072,16 +40134,16 @@ var Choreo = class {
       this.fix(kicker, T, tKick + 0.3);
       return this.customPlay(T, kicker, at, at.y >= 0 ? 1 : -1, tSet, tKick + 0.4, sh, cpF);
     }
-    const m = /* @__PURE__ */ new Map();
+    const m2 = /* @__PURE__ */ new Map();
     const g = this.A(40, 0);
     const gl = dist(at, g) || 1;
     const toG = { x: (g.x - at.x) / gl, y: (g.y - at.y) / gl };
     const perp = { x: -toG.y, y: toG.x };
-    m.set(kicker, { x: at.x - toG.x * 0.9, y: at.y - toG.y * 0.9 });
+    m2.set(kicker, { x: at.x - toG.x * 0.9, y: at.y - toG.y * 0.9 });
     const others = this.attOut.filter((x) => x !== kicker);
     if (!sh) {
       const mate = others.reduce((x, y) => dist(this.P(y, T), at) < dist(this.P(x, T), at) ? y : x, others[0] ?? kicker);
-      this.key(kicker, tSet, m.get(kicker), true);
+      this.key(kicker, tSet, m2.get(kicker), true);
       this.fix(kicker, T, tKick + 0.3);
       this.act(kicker, "pass", tKick - 0.2, tKick + 0.15, { face: mate });
       this.pass(kicker, mate, tKick, tKick + 0.7);
@@ -40093,22 +40155,22 @@ var Choreo = class {
     const dIds = [...this.defOut];
     if (barrier) {
       const b0 = { x: at.x + toG.x * 5, y: at.y + toG.y * 5 };
-      if (dIds[0]) m.set(dIds[0], { x: b0.x + perp.x * 0.32, y: b0.y + perp.y * 0.32 });
-      if (dIds[1]) m.set(dIds[1], { x: b0.x - perp.x * 0.32, y: b0.y - perp.y * 0.32 });
+      if (dIds[0]) m2.set(dIds[0], { x: b0.x + perp.x * 0.32, y: b0.y + perp.y * 0.32 });
+      if (dIds[1]) m2.set(dIds[1], { x: b0.x - perp.x * 0.32, y: b0.y - perp.y * 0.32 });
       this.label(tSet - 1.2, "Barreira a 5 metros");
     }
     const s2 = at.y >= 0 ? 1 : -1;
-    if (routine === "jogada_ensaiada" && shooter !== kicker) m.set(shooter, { x: at.x + perp.x * 3 - toG.x * 1.5, y: at.y + perp.y * 3 - toG.y * 1.5 });
-    else if (shooter !== kicker) m.set(shooter, this.A(33.5, -s2 * 4));
-    others.filter((x) => x !== shooter).forEach((id, i) => m.set(id, i === 0 ? this.A(36, -s2 * 3) : this.A(bu - 4, s2 * 6)));
+    if (routine === "jogada_ensaiada" && shooter !== kicker) m2.set(shooter, { x: at.x + perp.x * 3 - toG.x * 1.5, y: at.y + perp.y * 3 - toG.y * 1.5 });
+    else if (shooter !== kicker) m2.set(shooter, this.A(33.5, -s2 * 4));
+    others.filter((x) => x !== shooter).forEach((id, i) => m2.set(id, i === 0 ? this.A(36, -s2 * 3) : this.A(bu - 4, s2 * 6)));
     dIds.slice(barrier ? 2 : 0).forEach((id, i) => {
-      const a = [...m.entries()].filter(([k]) => this.sideOf.get(k) === att && k !== kicker)[i];
-      m.set(id, a ? { x: a[1].x + this.dirA * 1.4, y: a[1].y * 0.9 } : this.A(34, 0));
+      const a = [...m2.entries()].filter(([k]) => this.sideOf.get(k) === att && k !== kicker)[i];
+      m2.set(id, a ? { x: a[1].x + this.dirA * 1.4, y: a[1].y * 0.9 } : this.A(34, 0));
     });
-    if (this.gkD) m.set(this.gkD, barrier ? this.A(39.4, clamp4(-s2 * 0.7, -1.3, 1.3)) : this.gkSpot(this.dirA * 20, at, 1.3));
-    if (this.gkA) m.set(this.gkA, this.A(4, 0));
-    this.placeAll(tSet, m);
-    for (const [id, p2] of m) this.key(id, tKick - 0.2, p2, true);
+    if (this.gkD) m2.set(this.gkD, barrier ? this.A(39.4, clamp4(-s2 * 0.7, -1.3, 1.3)) : this.gkSpot(this.dirA * 20, at, 1.3));
+    if (this.gkA) m2.set(this.gkA, this.A(4, 0));
+    this.placeAll(tSet, m2);
+    for (const [id, p2] of m2) this.key(id, tKick - 0.2, p2, true);
     let tShot = tKick;
     if (routine === "remate_direto" || shooter === kicker) {
       this.label(tSet - 0.3, `${this.nm(kicker)} prepara o remate direto`);
@@ -40146,24 +40208,24 @@ var Choreo = class {
     this.label(T + 0.3, pen ? `Pen\xE1lti: ${this.nm(kicker)}` : `Livre de 10 m: ${this.nm(kicker)} na marca`);
     this.balls.push({ k: "fly", t0: T, t1: T + 1.2, from: this.ballAt(T), b: { ...at, z: 0.11 }, lift: 0.3 });
     this.balls.push({ k: "still", t0: T + 1.2, at: { ...at, z: 0.11 } });
-    const m = /* @__PURE__ */ new Map();
-    m.set(kicker, this.A(40 - d - 2.2, 0.6));
+    const m2 = /* @__PURE__ */ new Map();
+    m2.set(kicker, this.A(40 - d - 2.2, 0.6));
     const line = 40 - d - 1.2;
     const lanes = [-8.6, -6.4, 6.4, 8.6, -4.6, 4.6];
     let li = 0;
     for (const id of [...this.attOut.filter((x) => x !== kicker), ...this.defOut]) {
       const v = lanes[li++ % lanes.length];
-      if (pen) m.set(id, this.A(-0.6 - li % 2 * 0.8, (li % 2 ? -1 : 1) * (1.5 + Math.floor(li / 2) * 2.4)));
-      else m.set(id, this.A(line - (this.sideOf.get(id) === att ? 1.2 : 0) - (li > 4 ? 2 : 0), v + (this.sideOf.get(id) === att ? 0.6 : -0.6)));
+      if (pen) m2.set(id, this.A(-0.6 - li % 2 * 0.8, (li % 2 ? -1 : 1) * (1.5 + Math.floor(li / 2) * 2.4)));
+      else m2.set(id, this.A(line - (this.sideOf.get(id) === att ? 1.2 : 0) - (li > 4 ? 2 : 0), v + (this.sideOf.get(id) === att ? 0.6 : -0.6)));
     }
-    if (this.gkD) m.set(this.gkD, pen ? this.A(39.75, 0) : this.A(40 - (1.5 + this.r() * 1.5), 0));
-    if (this.gkA) m.set(this.gkA, this.A(3.5, 0));
-    this.placeAll(tSet, m);
-    for (const [id, p2] of m) this.key(id, tKick - 0.45, p2, true);
+    if (this.gkD) m2.set(this.gkD, pen ? this.A(39.75, 0) : this.A(40 - (1.5 + this.r() * 1.5), 0));
+    if (this.gkA) m2.set(this.gkA, this.A(3.5, 0));
+    this.placeAll(tSet, m2);
+    for (const [id, p2] of m2) this.key(id, tKick - 0.45, p2, true);
     this.key(kicker, tKick, this.A(40 - d - 0.4, 0.15));
     this.balls.push({ k: "foot", t0: tKick - 0.05, id: kicker });
     const tE = this.shot(tKick, kicker, a, this.dirA);
-    for (const id of [...this.attOut, ...this.defOut]) if (id !== kicker) this.key(id, tKick + (pen ? 1.6 : 1), { x: m.get(id).x + this.dirA * (pen ? 6 : 1.8), y: m.get(id).y * 0.7 });
+    for (const id of [...this.attOut, ...this.defOut]) if (id !== kicker) this.key(id, tKick + (pen ? 1.6 : 1), { x: m2.get(id).x + this.dirA * (pen ? 6 : 1.8), y: m2.get(id).y * 0.7 });
     return tE;
   }
   /** Confronto depois de uma falta: os jogadores juntam-se, empurram-se, os árbitros entram para separar
@@ -40280,10 +40342,27 @@ var Choreo = class {
     return { x: p.x + fx * 0.3 - fy * side, y: p.y + fy * 0.3 + fx * side, z: 0.11 };
   }
   ballAt(t) {
-    let seg = null;
-    for (const s2 of this.balls) if (s2.t0 <= t) seg = s2;
-    seg ??= this.balls[0];
+    let idx = -1;
+    for (let i = 0; i < this.balls.length; i++) if (this.balls[i].t0 <= t) idx = i;
+    if (idx < 0) idx = 0;
+    const seg = this.balls[idx];
     if (!seg) return { x: 0, y: 0, z: 0.11 };
+    const here = this.segAt(seg, t);
+    if (idx > 0 && (seg.k === "foot" || seg.k === "still" || seg.k === "hands")) {
+      const prev = this.segAt(this.balls[idx - 1], seg.t0);
+      const gap = Math.hypot(prev.x - here.x, prev.y - here.y);
+      if (gap > 0.3) {
+        const tr = Math.min(0.9, 0.12 + gap / 12);
+        const k = (t - seg.t0) / tr;
+        if (k < 1) {
+          const e = k * k * (3 - 2 * k);
+          return { x: lerp(prev.x, here.x, e), y: lerp(prev.y, here.y, e), z: lerp(prev.z, here.z, e) };
+        }
+      }
+    }
+    return here;
+  }
+  segAt(seg, t) {
     if (seg.k === "foot") return this.foot(seg.id, t);
     if (seg.k === "hands") {
       const p = this.P(seg.id, t);
@@ -40305,7 +40384,7 @@ var Choreo = class {
     if (seg.k === "pass") {
       const a2 = this.foot(seg.from, seg.t0), b2 = this.foot(seg.to, seg.t1);
       const len = dist(a2, b2);
-      const ground = seg.lift < 0.2 && len <= 14;
+      const ground = seg.lift < 0.2 && len <= 14 && len / Math.max(0.05, seg.t1 - seg.t0) < 14;
       const kk2 = ground ? 1 - Math.pow(1 - k, 1.45) : k;
       return { x: lerp(a2.x, b2.x, kk2), y: lerp(a2.y, b2.y, kk2), z: 0.11 + Math.sin(k * Math.PI) * (seg.lift + (len > 14 ? 0.4 : 0)) };
     }
@@ -40361,34 +40440,41 @@ var Choreo = class {
   }
 };
 
-// ../../../tmp/claude-0/-home-user-Futsal-Manager-2027/9c8d8f2b-882a-51af-b8f4-ef6c73669acb/scratchpad/loco/sys.ts
+// ../../../tmp/claude-0/-home-user-Futsal-Manager-2027/9c8d8f2b-882a-51af-b8f4-ef6c73669acb/scratchpad/loco/tele.ts
 var s = newGame("T", "PT", "slb");
-var KEYS = [["paralela", /paralela/i], ["diagonal", /^Diagonal/i], ["piv\xF4", /piv[oô]/i], ["passe e corte", /corte|passa e/i], ["cruzamento", /cruzamento/i], ["bloqueio", /bloqueio/i], ["1x1", /1x1|drible|finta/i], ["em U", /\bU\b/], ["invers\xE3o", /invers/i], ["sa\xEDda pelo GR", /GR|guarda-redes/i]];
-for (const sys of ["3-1", "4-0", "2-2", "1-2-1"]) for (const mark of ["zona", "individual"]) {
-  const cnt = {};
-  let n = 0;
-  for (let g = 0; g < 3; g++) {
-    const hs = setupFor(s, "slb"), as = setupFor(s, "scp");
-    hs.tactics = suggestTactics(hs.squad, { system: sys });
-    as.tactics = suggestTactics(as.squad, { marking: mark });
-    const pl = Object.fromEntries([...hs.squad, ...as.squad].map((p) => [p.id, p]));
-    const m = createMatch(hs, as, { seed: `sys${g}` });
-    let st = null;
-    while (m.step()) {
-      const sn = m.snapshot();
-      if (!sn.possession) {
-        st = null;
-        continue;
-      }
-      const c = new Choreo(sn.possession, [hs.tactics, as.tactics], sn.period, st, m.names, pl);
-      st = c.end;
-      if (sn.possession.side !== 0) continue;
-      for (const l of c.labels) for (const [k, re] of KEYS) if (re.test(l.text)) {
-        cnt[k] = (cnt[k] ?? 0) + 1;
-        n++;
-        break;
-      }
-    }
+s.clubId = "__x__";
+var hs = setupFor(s, "slb");
+var as = setupFor(s, "scp");
+var pl = Object.fromEntries([...hs.squad, ...as.squad].map((p) => [p.id, p]));
+var m = createMatch(hs, as, { seed: "bola0" });
+var st = null;
+var kinds = {};
+var shown = 0;
+while (m.step()) {
+  const sn = m.snapshot();
+  if (!sn.possession) {
+    st = null;
+    continue;
   }
-  console.log(sys.padEnd(5), "vs", mark.padEnd(10), Object.entries(cnt).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([k, v]) => `${k} ${Math.round(100 * v / n)}%`).join(", "));
+  const c = new Choreo(sn.possession, [hs.tactics, as.tactics], sn.period, st, m.names, pl);
+  st = c.end;
+  let pb = null;
+  for (let t = 0; t <= c.duration + c.extra; t += 1 / 30) {
+    const f = c.at(c.lead + t);
+    const b = f.ball;
+    if (pb && Math.hypot(b.x - pb.x, b.y - pb.y) * 30 > 40) {
+      const tt = t - c.lead;
+      let seg = null, prev = null;
+      for (const x of c.balls) if (x.t0 <= c.at ? true : true) {
+        if (x.t0 <= t + 0 - 0) {
+        }
+      }
+      const segs = c.balls.filter((x) => x.t0 <= t && x.t0 > t - 0.2).map((x) => x.k + (x.id ? ":" + x.id : x.from ? ":" + (typeof x.from === "string" ? x.from : "pt") : "")).join(",");
+      const key = segs || "meio";
+      kinds[key.replace(/:[a-z0-9]+/g, "")] = (kinds[key.replace(/:[a-z0-9]+/g, "")] ?? 0) + 1;
+      if (shown++ < 5) console.log("t", t.toFixed(2), "lead", c.lead, "de", JSON.stringify(pb), "para", JSON.stringify(b), "dono", f.holder, "segs", segs, "stop", f.stoppage);
+    }
+    pb = b;
+  }
 }
+console.log(kinds);

@@ -11,3 +11,6 @@ diagnostics/.prof.mjs
 diagnostics/.one.mjs
 diagnostics/.seasons.mjs
 diagnostics/.seasons-run.mjs
+diagnostics/.engine.mjs
+diagnostics/.careers.mjs
+diagnostics/.ball.mjs

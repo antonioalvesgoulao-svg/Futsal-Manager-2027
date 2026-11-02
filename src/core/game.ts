@@ -54,7 +54,7 @@ export function setupFor(s: GameState, clubId: string, comp?: CompId): TeamSetup
   }
   const coach = s.coaches.find((x) => x.clubId === c.id);
   return {
-    clubId: c.id, name: c.name, shortName: c.shortName, squad, tactics: aiTactics(squad, c, coach),
+    clubId: c.id, name: c.name, shortName: c.shortName, squad, tactics: aiTactics(squad, c, coach), ai: true,
     coachTactical: (coach?.tactical ?? interimOf(s, c.id)?.tactical ?? 11) + analystBonus(s, c.id), morale: s.morale, fitness: s.fitness, coachName: coach?.name ?? interimOf(s, c.id)?.name ?? 'Treinador interino',
   };
 }

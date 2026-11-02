@@ -14,6 +14,7 @@ export interface TeamSetup {
   fitness?: Record<string, number>; // condição física antes do jogo (fadiga do treino e dos jogos), 0-100
   cardK?: number; // disciplina do treinador: multiplica a probabilidade de cartão nas faltas (1 = normal)
   morale?: Record<string, number>; // moral dos jogadores (0-100)
+  ai?: boolean; // equipa do computador: o treinador muda a tática durante o jogo conforme o resultado e o tempo
 }
 
 export type EventType =

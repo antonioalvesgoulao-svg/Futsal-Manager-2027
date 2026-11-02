@@ -300,8 +300,10 @@ export class Choreo {
       // a bola volta ao centro
       const b0: Ball = { x: sb.x, y: sb.y, z: 0.11 };
       this.balls.push({ k: 'still', t0, at: b0 });
-      if (Math.hypot(sb.x, sb.y) > 0.5) this.balls.push({ k: 'fly', t0: t0 + 0.8, t1: t0 + 2.4, from: b0, b: { x: 0, y: 0, z: 0.11 }, lift: 1.2 });
-      this.balls.push({ k: 'still', t0: t0 + 2.4, at: { x: 0, y: 0, z: 0.11 } });
+      // devolvida ao centro dentro do tempo de preparação (antes podia chegar depois do pontapé de saída)
+      const tBack = t0 + Math.min(2.4, this.lead - 0.35);
+      if (Math.hypot(sb.x, sb.y) > 0.5) this.balls.push({ k: 'fly', t0: t0 + Math.min(0.8, (this.lead - 0.35) * 0.3), t1: tBack, from: b0, b: { x: 0, y: 0, z: 0.11 }, lift: 1.2 });
+      this.balls.push({ k: 'still', t0: tBack, at: { x: 0, y: 0, z: 0.11 } });
       this.phase(t0, 'Pontapé de saída');
       this.progFn = this.makeProg(0, 0);
     } else if (kind === 'gk' && this.gkA) {
@@ -501,6 +503,8 @@ export class Choreo {
         profile?.accelerationFactor, profile?.agilityFactor);
     }
 
+    this.fixPassSpeeds();
+    this.holderCache = new Map(); // a partir daqui a bola já não muda: quem tem a bola pode ficar em memória
     this.breathe();
     for (let pass = 0; pass < 3; pass++) this.separate(T + 0.5);
     this.keepInside();
@@ -613,11 +617,18 @@ export class Choreo {
     // suaviza a correção: alarga-a no tempo (máximo em ±0,25 s) e depois faz a média (±0,25 s): desvio contínuo,
     // como quem contorna o colega, sem saltos; nunca empurra ninguém para fora do campo
     const W = 8;
+    // máximo numa janela deslizante (fila monótona, O(n)): mesmo resultado que procurar em cada janela
     const dil = (o: Float32Array, o2: Float32Array) => {
       const rx = new Float32Array(n), ry = new Float32Array(n);
+      const mag = new Float32Array(n);
+      for (let i = 0; i < n; i++) mag[i] = Math.hypot(o[i], o2[i]);
+      const q = new Int32Array(n); let h = 0, tl = 0, j = 0;
       for (let i = 0; i < n; i++) {
-        let best = 0;
-        for (let j = Math.max(0, i - W); j <= Math.min(n - 1, i + W); j++) { const m = Math.hypot(o[j], o2[j]); if (m > best) { best = m; rx[i] = o[j]; ry[i] = o2[j]; } }
+        const hi = Math.min(n - 1, i + W);
+        for (; j <= hi; j++) { while (tl > h && mag[q[tl - 1]] <= mag[j]) tl--; q[tl++] = j; }
+        while (q[h] < i - W) h++;
+        const m = q[h];
+        if (mag[m] > 0) { rx[i] = o[m]; ry[i] = o2[m]; }
       }
       return [rx, ry] as const;
     };
@@ -667,6 +678,20 @@ export class Choreo {
         const amp = 0.42 * Math.sin(ph * Math.PI);
         B.xs[i] = X[i] + (-dy / dl) * amp * sgn; B.ys[i] = Y[i] + (dx / dl) * amp * sgn;
       }
+    }
+  }
+
+  /** Passes nunca mais rápidos do que ~22 m/s (~80 km/h, passe forte de futsal): se o recetor se afastou do previsto,
+   *  quem passa solta a bola mais cedo (enquanto ainda a tinha no pé), em vez de a bola "voar" a velocidade impossível. */
+  private fixPassSpeeds() {
+    for (let i = 1; i < this.balls.length; i++) {
+      const sg = this.balls[i];
+      if (sg.k !== 'pass') continue;
+      const prev = this.balls[i - 1];
+      const d = dist(this.P(sg.from, sg.t0), this.P(sg.to, sg.t1));
+      if (d / Math.max(0.01, sg.t1 - sg.t0) <= 22) continue;
+      const want = sg.t1 - d / 22;
+      sg.t0 = Math.max(prev.t0 + 0.15, Math.min(sg.t0, want));
     }
   }
 
@@ -2230,10 +2255,29 @@ export class Choreo {
   }
 
   // ---------- consulta ----------
+  private holderCache: Map<number, string | null> | null = null;
   private holderAt(t: number): string | null {
-    let seg: BSeg | null = null;
-    for (const s of this.balls) if (s.t0 <= t) seg = s;
-    return seg && (seg.k === 'foot' || seg.k === 'hands') ? seg.id : null;
+    if (this.holderCache) {
+      const key = Math.round(t * 1000);
+      const c = this.holderCache.get(key);
+      if (c !== undefined) return c;
+      const v = this.holderCalc(t);
+      this.holderCache.set(key, v);
+      return v;
+    }
+    return this.holderCalc(t);
+  }
+  private holderCalc(t: number): string | null {
+    let idx = -1;
+    for (let i = 0; i < this.balls.length; i++) if (this.balls[i].t0 <= t) idx = i;
+    const seg = idx >= 0 ? this.balls[idx] : null;
+    if (!seg || (seg.k !== 'foot' && seg.k !== 'hands')) return null;
+    // a bola ainda a caminho (transição contínua de ballAt): só é dono quando ela chega ao pé/mãos
+    if (idx > 0 && t - seg.t0 < 0.9) {
+      const here = this.segAt(seg, t), b = this.ballAt(t);
+      if (Math.hypot(here.x - b.x, here.y - b.y) > 0.8) return null;
+    }
+    return seg.id;
   }
 
   private foot(id: string, t: number): Ball {
@@ -2257,10 +2301,27 @@ export class Choreo {
   }
 
   private ballAt(t: number): Ball {
-    let seg: BSeg | null = null;
-    for (const s of this.balls) if (s.t0 <= t) seg = s;
-    seg ??= this.balls[0];
+    let idx = -1;
+    for (let i = 0; i < this.balls.length; i++) if (this.balls[i].t0 <= t) idx = i;
+    if (idx < 0) idx = 0;
+    const seg = this.balls[idx];
     if (!seg) return { x: 0, y: 0, z: 0.11 };
+    const here = this.segAt(seg, t);
+    // continuidade: quando a bola passa a outro segmento (outro pé, bola parada noutro sítio), nunca salta; faz o
+    // caminho em pouco tempo (conduzida/rolada), proporcional à distância
+    if (idx > 0 && (seg.k === 'foot' || seg.k === 'still' || seg.k === 'hands')) {
+      const prev = this.segAt(this.balls[idx - 1], seg.t0);
+      const gap = Math.hypot(prev.x - here.x, prev.y - here.y);
+      if (gap > 0.3) {
+        const tr = Math.min(0.9, 0.12 + gap / 12);
+        const k = (t - seg.t0) / tr;
+        if (k < 1) { const e = k * k * (3 - 2 * k); return { x: lerp(prev.x, here.x, e), y: lerp(prev.y, here.y, e), z: lerp(prev.z, here.z, e) }; }
+      }
+    }
+    return here;
+  }
+
+  private segAt(seg: BSeg, t: number): Ball {
     if (seg.k === 'foot') return this.foot(seg.id, t);
     if (seg.k === 'hands') {
       // bola nas mãos, à frente do peito (virado para o campo): nunca escondida dentro do corpo
@@ -2277,7 +2338,7 @@ export class Choreo {
       const a = this.foot(seg.from, seg.t0), b = this.foot(seg.to, seg.t1);
       const len = dist(a, b);
       // rasteiro: a bola sai mais rápida e abranda com o atrito do piso; picado: voo em arco
-      const ground = seg.lift < 0.2 && len <= 14;
+      const ground = seg.lift < 0.2 && len <= 14 && len / Math.max(0.05, seg.t1 - seg.t0) < 14; // atrito só em passes de velocidade normal
       const kk = ground ? 1 - Math.pow(1 - k, 1.45) : k;
       return { x: lerp(a.x, b.x, kk), y: lerp(a.y, b.y, kk), z: 0.11 + Math.sin(k * Math.PI) * (seg.lift + (len > 14 ? 0.4 : 0)) };
     }

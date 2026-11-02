@@ -327,3 +327,12 @@ Validação: tsc, build, `npm test` (motor intacto) e diag. Jogo ao vivo no brow
   5. Fadiga visível.
 - O António pediu estas melhorias ("conto contigo") a 2/11.
 - 2/11: aplicados os 5 pontos (decisão por leitura e identidade dos sistemas, defesa coordenada, física da bola, animações, fadiga visível). Ver `docs/ANALISE_3D.md`. O António autorizou ("deves aplicar todos").
+
+## Auditoria 2026: implementação (2 novembro 2026, Claude)
+- Ver `docs/ANALISE_3D.md` (secção "Auditoria de 2026").
+- Novas ferramentas: `tools/diag/engine.ts` (motor, 5 épocas), `tools/diag/careers.ts` (despedimentos), `tools/diag/ball.ts` (sincronização jogador–bola).
+- Os testes criam equipas novas em cada corrida, porque a IA muda a tática durante o jogo.
+- Ainda por fazer:
+  - restos de saltos da bola (~0,16% do tempo);
+  - mais variedade de gestos de GR e de desarmes;
+  - transições entre câmaras e repetições.
