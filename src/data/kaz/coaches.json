@@ -1,5 +1,5 @@
 {
-  "_info": "Treinadores provisórios fictícios para tornar a liga jogável. Nomes, idades e nacionalidades não são apresentados como dados reais do Zerozero; serão substituíveis quando houver registo verificável. Gustavo Paradeda é identificado como treinador do Kairat na informação consultada; os restantes nomes são fictícios e têm idade/nacionalidade explícitas.",
+  "_info": "Treinadores confirmados nas fichas Zerozero de futsal: Gustavo Paradeda (Kairat, 47 anos; nacionalidades Brasil/Rússia) e Aslan Smakov (Semey, 36 anos; Cazaquistão). Os restantes dez nomes são treinadores fictícios de preenchimento, marcados fictional:true, com idade e nacionalidade. Não confundir técnicos de clubes de futebol com futsal.",
   "coaches": [
     {
       "id": "c_kaz_aqt",
@@ -23,8 +23,8 @@
       "discipline": 12,
       "youth": 10,
       "style": {},
-      "age": 39,
-      "nationality": "Cazaquistão",
+      "age": 47,
+      "nationality": "Brasil / Rússia",
       "fictional": false
     },
     {
@@ -55,16 +55,16 @@
     },
     {
       "id": "c_kaz_sem",
-      "name": "Erlan Yermekov",
+      "name": "Aslan Smakov",
       "clubId": "sem",
       "tactical": 14,
       "motivation": 10,
       "discipline": 12,
       "youth": 13,
       "style": {},
-      "age": 42,
+      "age": 36,
       "nationality": "Cazaquistão",
-      "fictional": true
+      "fictional": false
     },
     {
       "id": "c_kaz_aty",
