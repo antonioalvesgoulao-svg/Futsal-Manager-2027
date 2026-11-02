@@ -55,3 +55,19 @@ Os 132 jogos da Liga Placard (2 voltas, todos os confrontos) passaram pela coreo
 | 8 | Árbitro/jogador junto à câmara TV tapa a imagem | Imagens | — | Baixa |
 
 Está bem (manter): GR enquadrado no remate (0,49 m da posição certa); sem saltos de posição; bola nunca solta do portador; distância dos remates (mediana 8,4 m); 83% dos remates com defensor no caminho.
+
+## 5 épocas com táticas sorteadas (2/11/2026)
+660 jogos e 26 456 min de jogo corrido, com `tools/diag/seasons.ts --epocas 5`; resultados em `diagnostics/epocas5.json`. Sistemas sorteados: 3-1 297, 2-2 143, 4-0 143, 1-2-1 77.
+
+| Medida (por jogo) | Valor | Leitura |
+|---|---|---|
+| Saltos de posição (>10 m/s) | 1,2 | Bom (eram 75 durante as correções) |
+| Corpos sobrepostos | 16 s | Quase só contacto voluntário; colegas 1 s |
+| Jogadores fora da quadra | 0,3 s | Entradas de suplentes |
+| Remates acima de 130 km/h | 0,39 | Raro; resta afinar |
+| Defesas sem gesto do GR | 0,02 | Bom |
+| GR a 0,55 m da posição certa no remate | p90 1,49 m | Bom |
+| Jogadores parados >4 s perto da bola | 9,7 | A melhorar |
+| GR defensor a mais de 7 m da baliza | 11 s | Sobretudo GR atacante a voltar depois de perder a bola (realista) |
+| Ritmo | 135 m/min | Referência real ~115-120 (estimativa); parado 19,5% |
+| Golos | 5,7 | Mais baixo por causa das táticas sorteadas (o motor não mudou) |

@@ -1,39 +1,41 @@
 {
- "epocas": 1,
+ "epocas": 5,
  "sistemasSorteados": {
-  "2-2": 11,
-  "3-1": 1
+  "2-2": 143,
+  "3-1": 297,
+  "4-0": 143,
+  "1-2-1": 77
  },
  "anomaliasPorJogo": {
-  "congelados4s": 5.42,
-  "bolaMortaSeg": 5.55,
-  "grForaDaAreaSeg": 19.442,
-  "velocidadeSobreHumanaSeg": 2.442,
-  "rematesAcima130kmh": 0.58,
-  "defesasSemGesto": 0.17,
+  "congelados4s": 9.67,
+  "bolaMortaSeg": 4.887,
+  "grForaDaAreaSeg": 11.103,
+  "velocidadeSobreHumanaSeg": 2.217,
+  "rematesAcima130kmh": 0.39,
+  "defesasSemGesto": 0.02,
   "golosSemGesto": 0
  },
  "piores": {
   "grForaDefesa": [
    {
-    "v": 20.81345361471176,
-    "where": "0|scp|fzz|89|0.0|scp01"
+    "v": 21.75247812271118,
+    "where": "2|fam|fun|71|0.0|fun03"
    },
    {
-    "v": 20.723518013954163,
-    "where": "0|scp|fzz|89|0.1|scp01"
+    "v": 21.73689031600952,
+    "where": "3|slb|rav|20|0.0|rav02"
    },
    {
-    "v": 20.494678258895874,
-    "where": "0|scp|fzz|89|0.2|scp01"
+    "v": 21.71446704864502,
+    "where": "3|scb|tor|27|0.0|tor01"
    },
    {
-    "v": 20.115617781877518,
-    "where": "0|scp|fzz|89|0.3|scp01"
+    "v": 21.652236223220825,
+    "where": "0|fun|fam|32|0.0|fam02"
    },
    {
-    "v": 19.561193853616714,
-    "where": "0|scp|fzz|89|0.4|scp01"
+    "v": 21.645642280578613,
+    "where": "3|slb|rav|20|0.1|rav02"
    }
   ],
   "congelados": [
@@ -60,46 +62,46 @@
   ],
   "bolaMorta": [
    {
-    "v": 20.597134437284797,
-    "where": "0|scp|lps|79|0.0"
+    "v": 29.43295308487803,
+    "where": "0|fzz|uvn|97|0.0"
    },
    {
-    "v": 16.197871795120356,
-    "where": "0|scp|rav|32|0.0"
+    "v": 29.121691459117937,
+    "where": "2|uvn|fzz|130|0.0"
    },
    {
-    "v": 16.146076721713673,
-    "where": "0|scp|rav|32|0.1"
+    "v": 28.365308419134376,
+    "where": "2|uvn|fzz|127|0.0"
    },
    {
-    "v": 16.00767176567227,
-    "where": "0|scp|rav|32|0.2"
+    "v": 28.338792432552463,
+    "where": "4|lps|por|84|0.0"
    },
    {
-    "v": 15.955980584481058,
-    "where": "0|scp|fam|66|0.0"
+    "v": 28.179612114259815,
+    "where": "0|por|scb|106|0.0"
    }
   ],
   "saltos": [
    {
-    "v": 10.900467082387234,
-    "where": "0|scp|rav|68|0.8|rav11"
+    "v": 12.029493520116063,
+    "where": "2|por|scp|102|0.7|scp10"
    },
    {
-    "v": 10.8560799424412,
-    "where": "0|scp|fam|66|0.9|fam11"
+    "v": 11.968432024756297,
+    "where": "3|por|slb|48|0.9|por05"
    },
    {
-    "v": 10.834755478141412,
-    "where": "0|scp|slb|65|9.3|slb07"
+    "v": 11.793634569575438,
+    "where": "3|ele|rav|24|0.7|ele13"
    },
    {
-    "v": 10.772798506064628,
-    "where": "0|scp|fam|66|0.8|fam11"
+    "v": 11.769974221177414,
+    "where": "2|por|fun|25|0.6|fun12"
    },
    {
-    "v": 10.676383076917629,
-    "where": "0|scp|rav|19|0.6|rav11"
+    "v": 11.745924680087853,
+    "where": "4|por|uvn|33|0.7|por11"
    }
   ],
   "defesaSemGesto": [
@@ -110,101 +112,116 @@
    {
     "v": 1,
     "where": "0|scp|uvn|56"
+   },
+   {
+    "v": 1,
+    "where": "0|por|uvn|43"
+   },
+   {
+    "v": 1,
+    "where": "0|fam|fzz|80"
+   },
+   {
+    "v": 1,
+    "where": "1|rav|scb|51"
    }
   ],
   "rematesRapidos": [
    {
-    "v": 43.02947244011712,
-    "where": "0|scp|fun|9"
+    "v": 107.09812048624154,
+    "where": "0|fzz|tor|19"
    },
    {
-    "v": 41.60708030391983,
-    "where": "0|scp|scb|76"
+    "v": 68.76576196259798,
+    "where": "2|fam|slb|18"
    },
    {
-    "v": 37.79426214047993,
-    "where": "0|scp|ele|20"
+    "v": 62.65020179084016,
+    "where": "0|scb|fam|21"
    },
    {
-    "v": 37.30421419972239,
-    "where": "0|scp|por|60"
+    "v": 59.4282887996165,
+    "where": "0|uvn|ele|29"
    },
    {
-    "v": 36.90684617306481,
-    "where": "0|scp|lps|48"
+    "v": 54.5086956736165,
+    "where": "1|ele|uvn|4"
    }
   ]
  },
- "jogos": 12,
- "golosPorJogo": 6.08,
- "minutosJogoCorrido": 481,
- "segundos": 36,
+ "jogos": 660,
+ "golosPorJogo": 5.7,
+ "minutosJogoCorrido": 26456,
+ "segundos": 2042,
  "velocidades": {
-  "parado": 22.7,
-  "andar": 36.6,
-  "trote": 22.7,
-  "corrida": 8,
-  "rapida": 4.3,
-  "sprint": 5.8
+  "parado": 19.5,
+  "andar": 37.7,
+  "trote": 24.5,
+  "corrida": 8.1,
+  "rapida": 4.6,
+  "sprint": 5.5
  },
- "metrosPorMinutoJogador": 131,
- "metrosPorMinutoAtacantes": 138,
- "metrosPorMinutoDefensores": 124,
- "saltosPorJogo": 2,
- "foraDoCampoPorJogo": 10.4,
- "sobreposicoesSegPorJogo": 15.3,
+ "metrosPorMinutoJogador": 135,
+ "metrosPorMinutoAtacantes": 134,
+ "metrosPorMinutoDefensores": 136,
+ "saltosPorJogo": 1.2,
+ "foraDoCampoPorJogo": 3.4,
+ "sobreposicoesSegPorJogo": 16.1,
  "bolaSoltaSegPorJogo": 0,
  "bolaAltaSegPorJogo": 0,
- "possesPorJogo": 99,
+ "possesPorJogo": 102,
  "duracaoPosse": {
-  "med": 23.46,
-  "p90": 39.29
+  "med": 22.87,
+  "p90": 37.33
  },
  "passesPorPosse": {
   "med": 14,
-  "p90": 21
+  "p90": 22
  },
  "portadorDefensorMaisProximo": {
-  "med": 1.25,
-  "p10": 0.78,
-  "p90": 5.13
+  "med": 1.24,
+  "p10": 0.71,
+  "p90": 4.8
  },
- "rematesPorJogo": 58.6,
+ "rematesPorJogo": 59.4,
  "distanciaRemate": {
-  "med": 9.01,
-  "p10": 3.74,
-  "p90": 12.53
+  "med": 8.87,
+  "p10": 3.9,
+  "p90": 12.49
  },
  "rematadorDefensorMaisProximo": {
-  "med": 1.18,
-  "p10": 0.69,
-  "p90": 3.98
+  "med": 1.51,
+  "p10": 0.77,
+  "p90": 4.02
  },
- "rematesComDefensorNoCaminho": 76.8,
+ "rematesComDefensorNoCaminho": 80.2,
  "grErroNoRemate": {
-  "med": 0.59,
-  "p90": 1.6
+  "med": 0.55,
+  "p90": 1.49
  },
  "sobreposicoesTipo": {
-  "adversarios": 10,
-  "adversarioPortador": 4.7,
-  "colegas": 0.7
+  "adversarios": 10.1,
+  "adversarioPortador": 5,
+  "colegas": 1,
+  "comGR": 0
  },
  "acoesPorJogo": {
-  "pass": 1261.1,
-  "run": 760.5,
-  "shoot": 58.6,
-  "throw": 32.2,
-  "shield": 25.8,
+  "pass": 1348.6,
+  "run": 651.9,
+  "shoot": 59.4,
+  "throw": 33.6,
+  "shield": 62.2,
   "tackle": 33.9,
-  "screen": 64.2,
-  "feint": 96,
-  "splits": 7.6,
-  "fall": 19.1,
-  "dive": 9.8,
-  "spread": 4.7,
-  "catch": 7,
-  "celebrate": 24.3,
-  "block": 12.6
+  "screen": 61.7,
+  "feint": 95.6,
+  "splits": 7.5,
+  "fall": 19.9,
+  "dive": 8.9,
+  "spread": 4.2,
+  "catch": 5.3,
+  "celebrate": 23,
+  "block": 12.6,
+  "shove": 0.1,
+  "whistle": 0.1
  }
 }
