@@ -11055,15 +11055,15 @@ function generateAttributes(p, level, boost = 0, hints) {
   const profile = PROFILES[p.position];
   const outfield = p.position !== "GR";
   const attrs = {};
-  for (const k of ALL_ATTRS) {
-    let v = base + (profile[k] ?? 0) + gauss(r) * 1.4;
-    if (outfield && GK.includes(k)) v = 1 + r() * 4;
-    if (p.age > 31 && PHYSICAL.includes(k)) v -= (p.age - 31) * 0.3;
-    if (p.age > 27 && MENTAL.includes(k)) v += Math.min(2, (p.age - 27) * 0.25);
-    if (p.age < 21 && MENTAL.includes(k)) v -= 1;
-    if (hints && (k === "finalizacao" || k === "remate")) v += Math.max(-2, Math.min(2, (hints.productivity - 1) * 1.5));
-    if (hints && (k === "resistencia" || k === "trabalhoEquipa" || k === "concentracao")) v += (hints.availability - 0.6) * 3;
-    attrs[k] = clamp(v);
+  for (const k2 of ALL_ATTRS) {
+    let v = base + (profile[k2] ?? 0) + gauss(r) * 1.4;
+    if (outfield && GK.includes(k2)) v = 1 + r() * 4;
+    if (p.age > 31 && PHYSICAL.includes(k2)) v -= (p.age - 31) * 0.3;
+    if (p.age > 27 && MENTAL.includes(k2)) v += Math.min(2, (p.age - 27) * 0.25);
+    if (p.age < 21 && MENTAL.includes(k2)) v -= 1;
+    if (hints && (k2 === "finalizacao" || k2 === "remate")) v += Math.max(-2, Math.min(2, (hints.productivity - 1) * 1.5));
+    if (hints && (k2 === "resistencia" || k2 === "trabalhoEquipa" || k2 === "concentracao")) v += (hints.availability - 0.6) * 3;
+    attrs[k2] = clamp(v);
   }
   const current = overall(attrs, p.position);
   let potential = current;
@@ -11072,8 +11072,8 @@ function generateAttributes(p, level, boost = 0, hints) {
   return { attrs, potential: Math.min(20, Math.round(potential * 10) / 10) };
 }
 function overall(a, pos) {
-  const k = KEY[pos];
-  return Math.round(k.reduce((s2, x) => s2 + a[x], 0) / k.length * 10) / 10;
+  const k2 = KEY[pos];
+  return Math.round(k2.reduce((s2, x) => s2 + a[x], 0) / k2.length * 10) / 10;
 }
 
 // src/data/por/history.json
@@ -18913,8 +18913,8 @@ function arrangeForSystem(players, system) {
   const list = [0, 1, 2, 3].map((i) => players[i]);
   let best = list;
   let bestScore = -1;
-  const perm = (arr, k) => {
-    if (k === arr.length) {
+  const perm = (arr, k2) => {
+    if (k2 === arr.length) {
       const sc = arr.reduce((a, p, i) => a + (p ? roleFit(slots[i].role, p.position) : 0), 0);
       if (sc > bestScore) {
         bestScore = sc;
@@ -18922,10 +18922,10 @@ function arrangeForSystem(players, system) {
       }
       return;
     }
-    for (let i = k; i < arr.length; i++) {
-      [arr[k], arr[i]] = [arr[i], arr[k]];
-      perm(arr, k + 1);
-      [arr[k], arr[i]] = [arr[i], arr[k]];
+    for (let i = k2; i < arr.length; i++) {
+      [arr[k2], arr[i]] = [arr[i], arr[k2]];
+      perm(arr, k2 + 1);
+      [arr[k2], arr[i]] = [arr[i], arr[k2]];
     }
   };
   perm(list, 0);
@@ -18980,10 +18980,6 @@ function suggestSetPieces(squad, base) {
     freeKickRoutine: "remate_direto",
     ...base
   };
-}
-function normalizeTactics(t, squad) {
-  if (!t.setPieces) t.setPieces = suggestSetPieces(squad);
-  return t;
 }
 
 // src/data/por/staff.json
@@ -24150,38 +24146,36 @@ function ensureStaff(s2) {
   const r = rng("staff-ini");
   s2.staff = [];
   for (const p of REAL.people) {
-    const club = s2.clubs.find((c2) => c2.id === p.club);
+    const club = s2.clubs.find((c) => c.id === p.club);
     if (!club || p.role === "principal") continue;
     const age = p.birth && p.birth !== "?" ? s2.season.year - Number(p.birth.slice(0, 4)) : 40;
     s2.staff.push({ id: `rs-${p.id}`, name: p.name, role: p.role, clubId: p.club, ability: Math.min(20, Math.round(p.ability + club.wealth * 0.035)), age, wage: staffWage(p.ability, club), until: s2.season.year + 2, func: p.func, nat: p.nat, history: p.history, real: true });
   }
-  for (const c2 of s2.clubs) for (const role of ROLES) if (!s2.staff.some((x) => x.clubId === c2.id && x.role === role)) s2.staff.push(makeStaff(`st-${c2.id}-${role}`, role, c2.id, 4 + c2.wealth * 0.09 + (r() - 0.5) * 4, r, s2.season.year, c2));
-  for (const c2 of s2.clubs) {
-    c2.staffBudget = void 0;
-    c2.staffBudget = Math.round(Math.max(staffBudget(c2), staffBill(s2, c2.id) * 1.1));
+  for (const c of s2.clubs) for (const role of ROLES) if (!s2.staff.some((x) => x.clubId === c.id && x.role === role)) s2.staff.push(makeStaff(`st-${c.id}-${role}`, role, c.id, 4 + c.wealth * 0.09 + (r() - 0.5) * 4, r, s2.season.year, c));
+  for (const c of s2.clubs) {
+    c.staffBudget = void 0;
+    c.staffBudget = Math.round(Math.max(staffBudget(c), staffBill(s2, c.id) * 1.1));
   }
   for (let i = 0; i < 25; i++) s2.staff.push(makeStaff(`st-free-${i}`, ROLES[i % 5], null, 4 + r() * 11, r, s2.season.year));
-  const esp = s2.clubs.find((c2) => c2.league === "esp1");
+  const esp = s2.clubs.find((c) => c.league === "esp1");
   if (esp) for (let i = 0; i < 15; i++) s2.staff.push(makeStaff(`st-freeES-${i}`, ROLES[i % 5], null, 4 + r() * 11, r, s2.season.year, { ...esp, wealth: 55 }));
 }
 var staffOf = (s2, clubId, role) => (s2.staff ?? []).filter((x) => x.clubId === clubId && x.role === role).sort((a, b) => b.ability - a.ability)[0];
 var abilityOf = (s2, clubId, role) => staffOf(s2, clubId, role)?.ability ?? 5;
-var extra = (s2, clubId, role) => staffOf(s2, clubId, role)?.ability ?? 0;
-var analystBonus = (s2, clubId) => extra(s2, clubId, "analista") * 0.075;
 var staffBill = (s2, clubId) => (s2.staff ?? []).filter((x) => x.clubId === clubId).reduce((a, x) => a + x.wage, 0);
 var juniorsId = (clubId) => `${clubId}@jun`;
 var juniorsOf = (s2, clubId) => s2.players.filter((p) => p.clubId === juniorsId(clubId));
 function academyLevel(s2, club) {
-  const coachYouth = club.id === s2.clubId ? 12 : s2.coaches.find((c2) => c2.clubId === club.id)?.youth ?? 10;
+  const coachYouth = club.id === s2.clubId ? 12 : s2.coaches.find((c) => c.clubId === club.id)?.youth ?? 10;
   return Math.round(Math.min(20, club.wealth * 0.07 + abilityOf(s2, club.id, "formacao") * 0.45 + coachYouth * 0.2) * 10) / 10;
 }
 var PFIRST = ["Jo\xE3o", "Rodrigo", "Martim", "Tom\xE1s", "Afonso", "Diogo", "Gon\xE7alo", "Duarte", "Francisco", "Rafael", "Miguel", "Guilherme", "Gabriel", "Louren\xE7o", "Santiago", "Vicente", "Sim\xE3o", "Henrique", "Salvador", "Pedro", "Tiago", "Andr\xE9", "Bernardo", "Leonardo", "Dinis", "Kevin", "Wilson"];
 function academyIntake(s2, club, year) {
   const r = rng(`acad-${club.id}-${year}`);
   const lvl = academyLevel(s2, club);
-  const n = 2 + Math.floor(lvl / 7) + (r() < 0.5 ? 1 : 0);
+  const n2 = 2 + Math.floor(lvl / 7) + (r() < 0.5 ? 1 : 0);
   const out = [];
-  for (let i = 0; i < n; i++) {
+  for (let i = 0; i < n2; i++) {
     const pos = i === 0 && r() < 0.35 ? "GR" : ["FIX", "ALA", "ALA", "PIV", "UNI", "FIX/ALA", "ALA/PIV"][Math.floor(r() * 7)];
     const who = isSpanish(club) ? spanishYouth(r) : { name: `${PFIRST[Math.floor(r() * PFIRST.length)]} ${LAST[Math.floor(r() * LAST.length)]}`, nationality: r() < 0.9 ? "Portugal" : "Cabo Verde" };
     const base = { id: `${club.id}j${year}${i}`, clubId: juniorsId(club.id), name: who.name, position: pos, number: null, age: 16 + Math.floor(r() * 2), nationality: who.nationality, attrs: {}, potential: 0 };
@@ -24203,11 +24197,11 @@ function marketWage(p, club) {
 }
 var salaryBudget = (club) => club.budget ?? Math.round(27e5 * Math.exp((club.wealth - 98) * 0.0498) / 1e3) * 1e3;
 function calibrateWages(s2) {
-  for (const c2 of s2.clubs) {
-    const squad = s2.players.filter((p) => p.clubId === c2.id);
-    c2.wageScale = 1;
-    const raw = squad.reduce((a, p) => a + marketWage(p, c2), 0) * 12;
-    c2.wageScale = raw ? salaryBudget(c2) / raw : 1;
+  for (const c of s2.clubs) {
+    const squad = s2.players.filter((p) => p.clubId === c.id);
+    c.wageScale = 1;
+    const raw = squad.reduce((a, p) => a + marketWage(p, c), 0) * 12;
+    c.wageScale = raw ? salaryBudget(c) / raw : 1;
   }
 }
 function marketValue(p, club) {
@@ -24228,51 +24222,51 @@ function makeContract(p, club, year, seed = "") {
   return { wage, until: year + years, clause: clauseFor(marketValue(p, club), club, r) };
 }
 function ensureContracts(s2) {
-  if (s2.clubs.some((c2) => c2.wageScale === void 0)) calibrateWages(s2);
+  if (s2.clubs.some((c) => c.wageScale === void 0)) calibrateWages(s2);
   for (const p of s2.players) {
     if (p.contract) continue;
-    const c2 = s2.clubs.find((x) => x.id === p.clubId);
-    if (c2) p.contract = makeContract(p, c2, s2.season.year, "-ini");
+    const c = s2.clubs.find((x) => x.id === p.clubId);
+    if (c) p.contract = makeContract(p, c, s2.season.year, "-ini");
   }
 }
 
 // src/core/season/season.ts
-var addDays = (d, n) => {
+var addDays = (d, n2) => {
   const x = /* @__PURE__ */ new Date(d + "T12:00:00Z");
-  x.setUTCDate(x.getUTCDate() + n);
+  x.setUTCDate(x.getUTCDate() + n2);
   return x.toISOString().slice(0, 10);
 };
 var weekday = (d) => (/* @__PURE__ */ new Date(d + "T12:00:00Z")).getUTCDay();
 var nextWeekday = (d, wd) => addDays(d, (wd - weekday(d) + 7) % 7);
 function keyDates(y) {
-  const n = y + 1;
+  const n2 = y + 1;
   return {
     supertaca: nextWeekday(`${y}-09-01`, 6),
     leagueStart: nextWeekday(`${y}-09-10`, 6),
     tacaR1: nextWeekday(`${y}-12-07`, 3),
-    tacaLigaQF: addDays(nextWeekday(`${n}-01-25`, 6), -2),
+    tacaLigaQF: addDays(nextWeekday(`${n2}-01-25`, 6), -2),
     // quinta
-    tacaLigaSF: nextWeekday(`${n}-01-25`, 6),
+    tacaLigaSF: nextWeekday(`${n2}-01-25`, 6),
     // sábado
-    tacaLigaF: addDays(nextWeekday(`${n}-01-25`, 6), 1),
+    tacaLigaF: addDays(nextWeekday(`${n2}-01-25`, 6), 1),
     // domingo
-    playoffQF: nextWeekday(`${n}-03-12`, 6),
-    playoffSF: nextWeekday(`${n}-04-02`, 6),
-    tacaQF: nextWeekday(`${n}-04-20`, 3),
+    playoffQF: nextWeekday(`${n2}-03-12`, 6),
+    playoffSF: nextWeekday(`${n2}-04-02`, 6),
+    tacaQF: nextWeekday(`${n2}-04-20`, 3),
     // quarta
-    tacaSF: addDays(nextWeekday(`${n}-04-20`, 3), 2),
+    tacaSF: addDays(nextWeekday(`${n2}-04-20`, 3), 2),
     // sexta
-    tacaF: addDays(nextWeekday(`${n}-04-20`, 3), 4),
+    tacaF: addDays(nextWeekday(`${n2}-04-20`, 3), 4),
     // domingo
-    playoffF: nextWeekday(`${n}-05-08`, 6),
-    end: `${n}-06-30`
+    playoffF: nextWeekday(`${n2}-05-08`, 6),
+    end: `${n2}-06-30`
   };
 }
 function leagueDates(y, rounds) {
-  const k = keyDates(y);
-  const blocked = (d2) => d2 >= `${y}-12-23` && d2 <= `${y + 1}-01-04` || d2 >= addDays(k.tacaLigaSF, -3) && d2 <= k.tacaLigaF;
+  const k2 = keyDates(y);
+  const blocked = (d2) => d2 >= `${y}-12-23` && d2 <= `${y + 1}-01-04` || d2 >= addDays(k2.tacaLigaSF, -3) && d2 <= k2.tacaLigaF;
   const out = [];
-  let d = k.leagueStart;
+  let d = k2.leagueStart;
   while (out.length < rounds) {
     if (!blocked(d)) out.push(d);
     d = addDays(d, 7);
@@ -24282,13 +24276,13 @@ function leagueDates(y, rounds) {
 function roundRobin(ids) {
   const t = [...ids];
   if (t.length % 2) t.push("__folga");
-  const n = t.length;
+  const n2 = t.length;
   const rounds = [];
-  for (let r = 0; r < n - 1; r++) {
+  for (let r = 0; r < n2 - 1; r++) {
     const games = [];
-    for (let i = 0; i < n / 2; i++) {
+    for (let i = 0; i < n2 / 2; i++) {
       const a = t[i];
-      const b = t[n - 1 - i];
+      const b = t[n2 - 1 - i];
       if (a === "__folga" || b === "__folga") continue;
       games.push([a, b]);
     }
@@ -24300,8 +24294,8 @@ function roundRobin(ids) {
   for (const games of rounds) {
     for (let g = 0; g < games.length; g++) {
       const [a, b] = games[g];
-      const score2 = (x) => (last[x] === "F" ? 2 : last[x] === "C" ? -2 : 0) - (homes[x] ?? 0) * 0.1;
-      const [h, w] = score2(a) >= score2(b) ? [a, b] : [b, a];
+      const score = (x) => (last[x] === "F" ? 2 : last[x] === "C" ? -2 : 0) - (homes[x] ?? 0) * 0.1;
+      const [h, w] = score(a) >= score(b) ? [a, b] : [b, a];
       games[g] = [h, w];
       last[h] = "C";
       last[w] = "F";
@@ -24319,9 +24313,9 @@ function createSeason(y, ranking, supercup, esp) {
   const first = roundRobin(shuffled);
   const rounds = [...first, ...first.map((g) => g.map(([a, b]) => [b, a]))];
   const dates = leagueDates(y, rounds.length);
-  const k = keyDates(y);
+  const k2 = keyDates(y);
   const fixtures = [];
-  fixtures.push({ id: newId(y), comp: "supertaca", stage: "Final", date: k.supertaca, home: supercup[0], away: supercup[1], neutral: true, knockout: true });
+  fixtures.push({ id: newId(y), comp: "supertaca", stage: "Final", date: k2.supertaca, home: supercup[0], away: supercup[1], neutral: true, knockout: true });
   rounds.forEach(
     (games, i) => games.forEach(([h, a]) => fixtures.push({ id: newId(y), comp: "liga", stage: `Jornada ${i + 1}`, round: i + 1, date: dates[i], home: h, away: a, knockout: false }))
   );
@@ -24329,51 +24323,51 @@ function createSeason(y, ranking, supercup, esp) {
   for (let i = 0; i < low.length / 2; i++) {
     const strong = low[i];
     const weak = low[low.length - 1 - i];
-    fixtures.push({ id: newId(y), comp: "taca", stage: "1.\xAA eliminat\xF3ria", date: k.tacaR1, home: weak, away: strong, knockout: true });
+    fixtures.push({ id: newId(y), comp: "taca", stage: "1.\xAA eliminat\xF3ria", date: k2.tacaR1, home: weak, away: strong, knockout: true });
   }
   const season = { year: y, label: `${y}/${String((y + 1) % 100).padStart(2, "0")}`, fixtures, series: [], winners: {}, finished: false };
   if (esp) addSpain(season, y, esp.ranking, esp.four);
   return season;
 }
 function spainDates(y) {
-  const n = y + 1;
+  const n2 = y + 1;
   const sat = (d) => nextWeekday(d, 6);
   return {
     superSF: addDays(sat(`${y}-09-01`), -1),
     superF: sat(`${y}-09-01`),
     aperturaStart: sat(`${y}-09-11`),
-    aperturaEnd: `${n}-01-08`,
-    clausuraStart: sat(`${n}-01-15`),
-    clausuraEnd: `${n}-05-22`,
-    qualR1: nextWeekday(`${n}-01-20`, 3),
-    qualR2: nextWeekday(`${n}-02-03`, 3),
-    qualR3: nextWeekday(`${n}-02-17`, 3),
-    copaQF: `${n}-03-11`,
-    copaSF: `${n}-03-13`,
-    copaF: `${n}-03-14`,
-    finalQF: sat(`${n}-05-29`),
-    finalSF: sat(`${n}-06-09`),
-    finalF: sat(`${n}-06-20`),
-    perm: sat(`${n}-05-29`)
+    aperturaEnd: `${n2}-01-08`,
+    clausuraStart: sat(`${n2}-01-15`),
+    clausuraEnd: `${n2}-05-22`,
+    qualR1: nextWeekday(`${n2}-01-20`, 3),
+    qualR2: nextWeekday(`${n2}-02-03`, 3),
+    qualR3: nextWeekday(`${n2}-02-17`, 3),
+    copaQF: `${n2}-03-11`,
+    copaSF: `${n2}-03-13`,
+    copaF: `${n2}-03-14`,
+    finalQF: sat(`${n2}-05-29`),
+    finalSF: sat(`${n2}-06-09`),
+    finalF: sat(`${n2}-06-20`),
+    perm: sat(`${n2}-05-29`)
   };
 }
 function addSpain(s2, y, ranking, four) {
-  const k = spainDates(y);
+  const k2 = spainDates(y);
   const r = rng("calendario-esp" + y);
   const first = roundRobin([...ranking].sort(() => r() - 0.5));
-  const blocked = (d) => d >= `${y}-12-23` && d <= `${y + 1}-01-04` || d >= addDays(k.copaQF, -3) && d <= addDays(k.copaF, 1) || d === k.superF;
+  const blocked = (d) => d >= `${y}-12-23` && d <= `${y + 1}-01-04` || d >= addDays(k2.copaQF, -3) && d <= addDays(k2.copaF, 1) || d === k2.superF;
   const dates = (from, to) => {
     const out = [];
     for (let d = from; out.length < first.length && d <= to; d = addDays(d, 7)) if (!blocked(d)) out.push(d);
     while (out.length < first.length) out.push(addDays(out[out.length - 1], 3));
     return out;
   };
-  const ap = dates(k.aperturaStart, k.aperturaEnd), cl = dates(k.clausuraStart, k.clausuraEnd);
+  const ap = dates(k2.aperturaStart, k2.aperturaEnd), cl = dates(k2.clausuraStart, k2.clausuraEnd);
   first.forEach((games, i) => games.forEach(([h, a]) => s2.fixtures.push({ id: newId(y), comp: "esp", stage: `Apertura - Jornada ${i + 1}`, round: i + 1, date: ap[i], home: h, away: a, knockout: false })));
   first.forEach((games, i) => games.forEach(([h, a]) => s2.fixtures.push({ id: newId(y), comp: "esp", stage: `Clausura - Jornada ${i + 1}`, round: first.length + i + 1, date: cl[i], home: a, away: h, knockout: false })));
   if (four.length >= 4) {
-    s2.fixtures.push({ id: newId(y), comp: "superEsp", stage: "Meias-finais", date: k.superSF, home: four[0], away: four[3], neutral: true, knockout: true });
-    s2.fixtures.push({ id: newId(y), comp: "superEsp", stage: "Meias-finais", date: k.superSF, home: four[1], away: four[2], neutral: true, knockout: true });
+    s2.fixtures.push({ id: newId(y), comp: "superEsp", stage: "Meias-finais", date: k2.superSF, home: four[0], away: four[3], neutral: true, knockout: true });
+    s2.fixtures.push({ id: newId(y), comp: "superEsp", stage: "Meias-finais", date: k2.superSF, home: four[1], away: four[2], neutral: true, knockout: true });
   }
   s2.esp = {};
 }
@@ -24414,15 +24408,6 @@ var ARENAS_ESP = {
 };
 Object.assign(ARENAS, ARENAS_ESP);
 
-// src/core/career.ts
-var careerOf = (s2) => s2.career ??= { reputation: 35, offers: [], history: [] };
-function interimOf(s2, clubId) {
-  const c2 = careerOf(s2);
-  if (!c2.vacancies?.[clubId]) return null;
-  const st = (s2.staff ?? []).find((x) => x.id === c2.interim?.[clubId] && x.clubId === clubId);
-  return st ? { name: `${st.name} (interino)`, tactical: Math.round(st.ability * 0.6 + 4) } : { name: "Treinador interino", tactical: 10 };
-}
-
 // src/core/market.ts
 var FREE = "";
 var marketOf = (s2) => s2.market ??= { offers: [], regs: {}, seq: 0 };
@@ -24442,10 +24427,10 @@ var pick = (r, xs) => {
   for (const [x, w] of xs) if ((v -= w) <= 0) return x;
   return xs[0][0];
 };
-function generateFreeAgents(s2, n, seed, targetOverall) {
+function generateFreeAgents(s2, n2, seed, targetOverall) {
   const r = rng(`fa-${seed}`);
   const out = [];
-  for (let i = 0; i < n; i++) {
+  for (let i = 0; i < n2; i++) {
     const nat = pick(r, NAT_W);
     const [F, L] = NAMES[nat];
     const pos = pick(r, POS_W);
@@ -24458,35 +24443,14 @@ function generateFreeAgents(s2, n, seed, targetOverall) {
   return out;
 }
 function ensurePool(s2) {
-  const m2 = marketOf(s2);
-  if (m2.pool === s2.season.year) return;
-  m2.pool = s2.season.year;
-  const since = m2.freeSince ??= {};
+  const m = marketOf(s2);
+  if (m.pool === s2.season.year) return;
+  m.pool = s2.season.year;
+  const since = m.freeSince ??= {};
   for (const p of s2.players) if (p.clubId === FREE) since[p.id] ??= s2.season.year;
   else delete since[p.id];
   s2.players = s2.players.filter((p) => p.clubId !== FREE || p.age < 33 && s2.season.year - since[p.id] < 2);
   s2.players.push(...generateFreeAgents(s2, 10, String(s2.season.year)));
-}
-
-// src/core/manager.ts
-var DEFAULT = { tatico: 12, motivacao: 10, jovens: 10, treino: 10, disciplina: 10, gestao: 10 };
-var managerAttrs = (s2) => ({ ...DEFAULT, ...s2.manager.attrs ?? {} });
-var mgrK = (s2, k, per = 0.03) => 1 + (managerAttrs(s2)[k] - 10) * per;
-
-// src/core/coaches.ts
-function aiTactics(squad, club, coach) {
-  const r = rng("estilo-" + (coach?.id ?? club.id));
-  const out = squad.filter((p) => p.position !== "GR").sort((a, b) => overall(b.attrs, b.position) - overall(a.attrs, a.position)).slice(0, 8);
-  const bestPivot = Math.max(0, ...out.filter((p) => ["PIV", "ALA/PIV"].includes(p.position)).map((p) => p.attrs.jogoCostas));
-  const tech = out.reduce((s2, p) => s2 + (p.attrs.drible + p.attrs.decisoes + p.attrs.passe) / 3, 0) / Math.max(1, out.length);
-  const system = bestPivot >= 15 ? "3-1" : tech >= 13.5 ? "4-0" : club.level < 62 ? r() < 0.6 ? "2-2" : "1-2-1" : r() < 0.5 ? "1-2-1" : "3-1";
-  const pressure = club.level >= 85 ? "alta" : club.level >= 65 ? r() < 0.3 ? "alta" : "media" : r() < 0.5 ? "baixa" : "media";
-  const tempo = club.level >= 85 ? "paciente" : r() < 0.35 ? "rapido" : "equilibrado";
-  const marking = r() < 0.6 ? "zona" : r() < 0.5 ? "individual" : "misto";
-  const flyingKeeper = r() < 0.3 ? "agressivo" : "auto";
-  const gkFeet = Math.max(0, ...squad.filter((p) => p.position === "GR").map((p) => p.attrs.jogoPes));
-  const gkStyle = gkFeet >= 15 && r() < 0.45 ? "avancado" : gkFeet >= 12 && r() < 0.5 ? "construtor" : "classico";
-  return suggestTactics(squad, { system, pressure, tempo, marking, flyingKeeper, gkStyle, rotation: "normal", ...coach?.style ?? {} });
 }
 
 // src/core/training.ts
@@ -24504,17 +24468,6 @@ var SHARE = {
 var MATCH_RATE = 25.9 / 1e3;
 var TRAIN_RATE = 3 / 1e3;
 var TRAIN_H_DAY = 7.5 / 7;
-var injuryOf = (s2, id) => {
-  const i = s2.injuries?.[id];
-  return i && i.until > s2.date ? i : void 0;
-};
-
-// src/core/discipline.ts
-var dcomp = (c2) => c2 === "playoff" ? "liga" : ["esp", "espPlayoff", "espAp", "espCl", "copaEsp", "superEsp", "copaRey"].includes(c2) ? "esp" : c2;
-function banFor(s2, pid, comp) {
-  const d = s2.discipline;
-  return (d?.bans[pid] ?? []).filter((b) => b.comp === dcomp(comp)).reduce((a, b) => a + b.games, 0);
-}
 
 // src/core/development.ts
 var PHYSICAL2 = Object.keys(ATTR_GROUPS.fisicos.attrs);
@@ -24522,933 +24475,20 @@ var MENTAL2 = Object.keys(ATTR_GROUPS.mentais.attrs);
 var GK2 = Object.keys(ATTR_GROUPS.guardaRedes.attrs);
 
 // src/core/engine/match.ts
-var HALF = 1200;
-var ET = 300;
-var MAX_SQUAD = 12;
 var INJ_PER_S = 25.9 / 1e3 / 3600;
-var injRisk = (l) => (1 + Math.max(0, l.p.age - 28) * 0.03) * (1.25 - l.p.attrs.resistencia / 40) * (l.p.position === "GR" ? 0.6 : 1);
-var REBOUND = 0.25;
-var fmt = (t) => {
-  const m2 = Math.floor(t / 60);
-  const s2 = Math.floor(t % 60);
-  return `${String(m2).padStart(2, "0")}:${String(s2).padStart(2, "0")}`;
-};
-function createMatch(home, away, opts = {}) {
-  const r = rng(opts.seed ?? `${home.clubId}-${away.clubId}-${Math.random()}`);
-  const pick3 = (arr, w) => {
-    const ws = arr.map((x) => Math.max(0.01, w(x)));
-    let v = r() * ws.reduce((a, b) => a + b, 0);
-    for (let i = 0; i < arr.length; i++) if ((v -= ws[i]) <= 0) return arr[i];
-    return arr[arr.length - 1];
-  };
-  const pace = Math.max(0.7, Math.min(1.3, 1 + gauss(r) * 0.08));
-  const form = [Math.max(0.7, Math.min(1.3, 1 + gauss(r) * 0.08)), Math.max(0.7, Math.min(1.3, 1 + gauss(r) * 0.08))];
-  const events = [];
-  const score2 = [0, 0];
-  const pstats = {};
-  const names = {};
-  const tstats = [newTeamStats(), newTeamStats()];
-  const conceded = {};
-  let clock = 0;
-  let period = 1;
-  let periodStart = 0;
-  let periodLen = HALF;
-  const teams = [home, away].map((setup) => buildTeam(setup));
-  function newTeamStats() {
-    return { possession: 0, shots: 0, onTarget: 0, corners: 0, fouls: 0, foulsByPeriod: [0, 0, 0, 0, 0], yellow: 0, red: 0, timeouts: [] };
-  }
-  function buildTeam(setup) {
-    const gks = setup.squad.filter((p) => p.position === "GR").sort((a, b) => overall(b.attrs, "GR") - overall(a.attrs, "GR"));
-    const out = setup.squad.filter((p) => p.position !== "GR").sort((a, b) => overall(b.attrs, b.position) - overall(a.attrs, a.position));
-    const tac = setup.tactics;
-    const wanted = new Set([tac.gk, ...tac.q1, ...tac.q2].filter(Boolean));
-    const gkList = [...gks.filter((p) => wanted.has(p.id)), ...gks.filter((p) => !wanted.has(p.id))].slice(0, 2);
-    const outList = [...out.filter((p) => wanted.has(p.id)), ...out.filter((p) => !wanted.has(p.id))];
-    const youth = outList.filter((p) => p.age <= 20 && p.nationality === "Portugal").slice(0, 2);
-    const rest = outList.filter((p) => !youth.includes(p));
-    const called = youth.length === 2 ? [...gkList, ...youth, ...rest.slice(0, MAX_SQUAD + 2 - gkList.length - 2)] : [...gkList, ...outList.slice(0, MAX_SQUAD - gkList.length)];
-    const players = called.map((p) => ({ p, energy: Math.max(40, setup.fitness?.[p.id] ?? 100), onCourt: false, sentOff: false, yellow: 0, mor: 1 + ((setup.morale?.[p.id] ?? 65) - 65) / 100 * 0.12 }));
-    for (const l of players) {
-      names[l.p.id] = l.p.name;
-      pstats[l.p.id] = { minutes: 0, goals: 0, assists: 0, shots: 0, onTarget: 0, saves: 0, fouls: 0, tackles: 0, yellow: 0, red: false, rating: 6 };
-      conceded[l.p.id] = 0;
-    }
-    const t = {
-      setup,
-      players,
-      gk: null,
-      court: [],
-      flying: false,
-      shortUntil: 0,
-      shortCount: 0,
-      lastRotation: 0,
-      qIdx: 0,
-      fouls: [0, 0, 0, 0, 0],
-      timeoutUsed: [false, false, false],
-      conceded: []
-    };
-    t.gk = players.find((l) => l.p.id === tac.gk) ?? players.find((l) => l.p.position === "GR") ?? null;
-    if (t.gk) t.gk.onCourt = true;
-    t.court = quintet(t, 0, 4);
-    t.court.forEach((l) => l.onCourt = true);
-    return t;
-  }
-  function chooseFour(t, exclude = []) {
-    const avail = t.players.filter((l) => !l.sentOff && l.p.position !== "GR" && !exclude.includes(l));
-    const share = (l) => clock > 120 ? pstats[l.p.id].minutes / clock : 0;
-    const value = (l) => overall(l.p.attrs, l.p.position) * (0.3 + 0.7 * (l.energy / 100)) * (1 - 0.3 * share(l));
-    const take = (pred, chosen2) => {
-      const c2 = avail.filter((l) => pred(l) && !chosen2.includes(l)).sort((a, b) => value(b) - value(a))[0];
-      if (c2) chosen2.push(c2);
-    };
-    const chosen = [];
-    take((l) => ["FIX", "FIX/ALA", "UNI"].includes(l.p.position), chosen);
-    take((l) => ["PIV", "ALA/PIV"].includes(l.p.position), chosen);
-    while (chosen.length < 4) {
-      const before = chosen.length;
-      take(() => true, chosen);
-      if (chosen.length === before) break;
-    }
-    return chosen;
-  }
-  function quintet(t, idx, size) {
-    const ids = idx === 0 ? t.setup.tactics.q1 : t.setup.tactics.q2;
-    const chosen = ids.map((id) => t.players.find((l) => l.p.id === id)).filter((l) => !!l && !l.sentOff && l.energy > 45 && l !== t.gk);
-    if (chosen.length < size) {
-      const extra2 = chooseFour(t, chosen).filter((l) => !chosen.includes(l));
-      chosen.push(...extra2.slice(0, size - chosen.length));
-    }
-    return chosen.slice(0, size);
-  }
-  const REF = opts.referees ?? { names: ["", ""], tolerance: 1, cards: 1, harsh: 1 };
-  const ROT = { curta: { min: 60, energy: 80, max: 180 }, normal: { min: 90, energy: 72, max: 300 }, longa: { min: 120, energy: 62, max: 420 } };
-  const PRESS_DRAIN = { alta: 1.15, media: 1, baixa: 0.92 };
-  const eff = (l, k) => l.p.attrs[k] * (0.72 + 0.28 * (l.energy / 100)) * l.mor;
-  const avg = (ls, ks) => ls.length ? ls.reduce((s2, l) => s2 + ks.reduce((a, k) => a + eff(l, k), 0) / ks.length, 0) / ls.length : 5;
-  const outfield = (t) => t.court;
-  const numbers = (t) => t.court.length + (t.gk ? 1 : 0);
-  function log(type, text, side2, playerId, assistId) {
-    events.push({ t: clock, period, side: side2, type, playerId, assistId, text: `${fmt(clock)} ${text}`, score: [score2[0], score2[1]] });
-  }
-  function tick(dt) {
-    for (const t of teams) {
-      for (const l of t.players) {
-        if (l.sentOff) continue;
-        if (l.onCourt) {
-          pstats[l.p.id].minutes += dt;
-          if (opts.injuries !== false && r() < INJ_PER_S * dt * injRisk(l)) injure(t, l);
-          const drain = l.p.position === "GR" ? 0.012 : 0.085 * (1.35 - l.p.attrs.resistencia / 25) * PRESS_DRAIN[t.setup.tactics.pressure];
-          l.energy = Math.max(20, l.energy - drain * dt);
-        } else {
-          l.energy = Math.min(100, l.energy + 0.11 * dt);
-        }
-      }
-    }
-    clock += dt;
-  }
-  function injure(t, l) {
-    const s2 = teams.indexOf(t);
-    l.sentOff = true;
-    l.onCourt = false;
-    pstats[l.p.id].injured = true;
-    const bench = t.players.filter((x) => !x.onCourt && !x.sentOff);
-    if (t.gk === l) {
-      const gk2 = bench.find((x) => x.p.position === "GR");
-      if (gk2) {
-        gk2.onCourt = true;
-        t.gk = gk2;
-      } else {
-        const g = [...t.court].sort((a, b) => b.p.attrs.reflexos + b.p.attrs.agilidade - a.p.attrs.reflexos - a.p.attrs.agilidade)[0];
-        if (g) {
-          t.court = t.court.filter((x) => x !== g);
-          t.gk = g;
-        }
-        const sub = bench.filter((x) => x.p.position !== "GR").sort((a, b) => b.energy - a.energy)[0];
-        if (sub) {
-          sub.onCourt = true;
-          t.court.push(sub);
-        }
-      }
-    } else {
-      t.court = t.court.filter((x) => x !== l);
-      const sub = bench.filter((x) => x.p.position !== "GR").sort((a, b) => b.energy - a.energy)[0];
-      if (sub) {
-        sub.onCourt = true;
-        t.court.push(sub);
-      }
-    }
-    log("lesao", `${l.p.name} lesiona-se e tem de sair (${sideName(s2)})`, s2, l.p.id);
-  }
-  function sideName(s2) {
-    return teams[s2].setup.shortName;
-  }
-  function rotate(s2) {
-    const t = teams[s2];
-    const avgEnergy = t.court.reduce((a, l) => a + l.energy, 0) / Math.max(1, t.court.length);
-    const since = clock - t.lastRotation;
-    if (t.setup.tactics.rotation === "manual") return;
-    const rot = ROT[t.setup.tactics.rotation] ?? ROT.normal;
-    if (since < rot.min) return;
-    if (avgEnergy > rot.energy && since < rot.max) return;
-    const target = 4 - (clock < t.shortUntil ? t.shortCount : 0) + (t.flying ? 1 : 0);
-    const out = t.court;
-    const hasQuintets = t.setup.tactics.q1.length + t.setup.tactics.q2.length > 0;
-    let next;
-    if (hasQuintets) {
-      t.qIdx = t.qIdx === 0 ? 1 : 0;
-      next = quintet(t, t.qIdx, Math.max(0, target));
-    } else {
-      const fresh = t.players.filter((l) => !l.onCourt && !l.sentOff && l.p.position !== "GR" && l.energy > 70).length;
-      next = chooseFour(t, fresh >= 4 ? out : out.filter(() => r() < 0.6)).slice(0, Math.max(0, target));
-    }
-    while (next.length < target) {
-      const extra2 = out.find((l) => !next.includes(l) && !l.sentOff);
-      if (!extra2) break;
-      next.push(extra2);
-    }
-    const ins = next.filter((l) => !out.includes(l));
-    if (!ins.length) return;
-    out.forEach((l) => l.onCourt = false);
-    next.forEach((l) => l.onCourt = true);
-    t.court = next;
-    t.lastRotation = clock;
-    log("substituicao", `${sideName(s2)}: troca de quinteto (${ins.map((l) => l.p.name).join(", ")})`, s2);
-  }
-  function flyingDecision(s2) {
-    const t = teams[s2];
-    const diff = score2[s2] - score2[1 - s2];
-    const remaining = periodStart + periodLen - clock;
-    let want = false;
-    const fk = flyingOverride[s2] === true ? "sempre" : flyingOverride[s2] === false ? "nunca" : t.setup.tactics.flyingKeeper;
-    const lastPeriod = period === 2 || period === 4;
-    const needWin = opts.needWin?.[s2] ?? false;
-    if (fk === "sempre") want = true;
-    else if (fk === "auto") {
-      want = lastPeriod && diff < 0 && diff >= -3 && remaining <= (diff === -1 ? 180 : 300);
-      if (opts.knockout && period === 4 && diff < 0 && remaining <= 150) want = true;
-    } else if (fk === "agressivo") {
-      want = lastPeriod && diff < 0 && diff >= -4 && remaining <= (diff === -1 ? 300 : 420);
-      if (needWin && lastPeriod && diff === 0 && remaining <= 180) want = true;
-    }
-    if (want && !t.flying && t.gk) {
-      const bench = t.players.filter((l) => !l.onCourt && !l.sentOff && l.p.position !== "GR");
-      const chosen = bench.find((l) => l.p.id === t.setup.tactics.flyingPlayer);
-      const sub = chosen ?? bench.sort((a, b) => eff(b, "passe") + eff(b, "decisoes") - eff(a, "passe") - eff(a, "decisoes"))[0];
-      if (!sub) return;
-      t.gk.onCourt = false;
-      t.gk = null;
-      sub.onCourt = true;
-      t.court = [...t.court, sub];
-      t.flying = true;
-      log("gr_avancado_on", `${sideName(s2)} arrisca com guarda-redes avan\xE7ado (${sub.p.name})`, s2);
-    } else if (!want && t.flying) {
-      removeFlying(s2);
-    }
-  }
-  function removeFlying(s2) {
-    const t = teams[s2];
-    if (!t.flying) return;
-    const gk = t.players.find((l) => l.p.position === "GR" && !l.sentOff);
-    const outP = [...t.court].sort((a, b) => a.energy - b.energy)[0];
-    if (outP) {
-      outP.onCourt = false;
-      t.court = t.court.filter((l) => l !== outP);
-    }
-    if (gk) {
-      gk.onCourt = true;
-      t.gk = gk;
-    }
-    t.flying = false;
-    log("gr_avancado_off", `${sideName(s2)} volta a jogar com guarda-redes`, s2);
-  }
-  function maybeTimeout(s2) {
-    const t = teams[s2];
-    const idx = period <= 2 ? period : 2;
-    if (period > 2 || t.timeoutUsed[idx] || clock - periodStart < 60) return;
-    const remaining = periodStart + periodLen - clock;
-    const diff = score2[s2] - score2[1 - s2];
-    const recentGoals = t.conceded.filter((x) => clock - x < 240).length;
-    if (recentGoals >= 2 || diff < 0 && remaining < 150 && period === 2 || remaining < 60 && r() < 0.3 && diff <= 0) {
-      t.timeoutUsed[idx] = true;
-      tstats[s2].timeouts.push(clock);
-      log("time_out", `Desconto de tempo pedido pelo ${sideName(s2)}`, s2);
-      for (const l of t.court) l.energy = Math.min(100, l.energy + 6);
-    }
-  }
-  function goal(s2, scorer, assist, how = "") {
-    score2[s2]++;
-    pstats[scorer.p.id].goals++;
-    if (assist) pstats[assist.p.id].assists++;
-    const opp = teams[1 - s2];
-    if (opp.gk) conceded[opp.gk.p.id]++;
-    opp.conceded.push(clock);
-    log("golo", `GOLO! ${scorer.p.name}${how}${assist ? `, assist\xEAncia de ${assist.p.name}` : ""}. ${home.shortName} ${score2[0]}-${score2[1]} ${away.shortName}`, s2, scorer.p.id, assist?.p.id);
-    if (clock < opp.shortUntil) {
-      opp.shortUntil = clock;
-      opp.shortCount = 0;
-      completeTeam(1 - s2);
-    }
-  }
-  function completeTeam(s2) {
-    const t = teams[s2];
-    const need = 4 + (t.flying ? 1 : 0) - t.court.length;
-    for (let i = 0; i < need; i++) {
-      const sub = t.players.filter((l) => !l.onCourt && !l.sentOff && l.p.position !== "GR").sort((a, b) => b.energy - a.energy)[0];
-      if (!sub) break;
-      sub.onCourt = true;
-      t.court.push(sub);
-    }
-  }
-  function card(s2, l, red, why = "dogso") {
-    const t = teams[s2];
-    if (!red) {
-      l.yellow++;
-      pstats[l.p.id].yellow++;
-      tstats[s2].yellow++;
-      if (l.yellow < 2) {
-        log("amarelo", `Cart\xE3o amarelo para ${l.p.name} (${sideName(s2)})`, s2, l.p.id);
-        return;
-      }
-    }
-    l.sentOff = true;
-    l.onCourt = false;
-    pstats[l.p.id].red = true;
-    pstats[l.p.id].redKind = red ? why : "twoYellows";
-    tstats[s2].red++;
-    log("vermelho", `Cart\xE3o vermelho${red ? "" : " (segundo amarelo)"} para ${l.p.name}. ${sideName(s2)} fica em inferioridade`, s2, l.p.id);
-    if (t.gk === l) {
-      t.gk = null;
-      const gk2 = t.players.find((x) => x.p.position === "GR" && !x.sentOff);
-      const outP = t.court.sort((a, b) => a.energy - b.energy)[0];
-      if (gk2 && outP) {
-        outP.onCourt = false;
-        t.court = t.court.filter((x) => x !== outP);
-        gk2.onCourt = true;
-        t.gk = gk2;
-      }
-    } else {
-      t.court = t.court.filter((x) => x !== l);
-    }
-    t.shortUntil = clock + 120;
-    t.shortCount = 1;
-  }
-  const shooterWeight = (l) => {
-    const posW = { PIV: 1.3, "ALA/PIV": 1.25, ALA: 1.15, UNI: 1, "FIX/ALA": 0.85, FIX: 0.7, GR: 0.1 };
-    return (14 + eff(l, "finalizacao") + eff(l, "remate")) * (posW[l.p.position] ?? 1);
-  };
-  const best = (ls, f) => [...ls].sort((a, b) => f(b) - f(a))[0];
-  let setPiece = null;
-  let savedCaught = null;
-  let actions = [];
-  function shot(s2, kind, shooterIn) {
-    const att = teams[s2];
-    const def = teams[1 - s2];
-    const shooter = shooterIn ?? pick3(outfield(att), shooterWeight);
-    const others = outfield(att).filter((l) => l !== shooter);
-    const assist = setPiece ? setPiece.assist : kind === "jogada" || kind === "contra" || kind === "canto" ? r() < 0.62 && others.length ? pick3(others, (l) => eff(l, "passe") + eff(l, "visao")) : void 0 : void 0;
-    tstats[s2].shots++;
-    pstats[shooter.p.id].shots++;
-    const finish2 = kind === "jogada" || kind === "canto" ? eff(shooter, "finalizacao") * 0.6 + eff(shooter, "remate") * 0.4 : eff(shooter, "finalizacao");
-    const compo = eff(shooter, "compostura");
-    const defQ = avg(outfield(def), ["desarme", "posicionamento", "antecipacao"]);
-    const gk = def.gk;
-    const gkQ = gk ? (eff(gk, "reflexos") + eff(gk, "umParaUm") + eff(gk, "posicionamento") + eff(gk, "agilidade")) / 4 : 0;
-    let pBlock = 0.24 + (defQ - finish2) * 0.01;
-    let pOn = 0.47 + (finish2 - 10) * 0.016 + (compo - 10) * 6e-3;
-    let pGoal = 0.155 + (finish2 - gkQ) * 0.022;
-    if (kind === "contra") {
-      pBlock *= 0.5;
-      pOn += 0.08;
-      pGoal += 0.1;
-    }
-    if (kind === "livre10") {
-      pBlock = 0;
-      pOn = 0.72 + (finish2 - 10) * 0.015;
-      pGoal = 0.42 + (finish2 - gkQ) * 0.025;
-    }
-    if (kind === "penalti") {
-      pBlock = 0;
-      pOn = 0.86 + (compo - 10) * 0.01;
-      pGoal = 0.78 + (finish2 - gkQ) * 0.02;
-    }
-    if (kind === "canto") {
-      pBlock += 0.05 + (setPiece?.block ?? 0);
-      pOn -= 0.05;
-      pGoal *= setPiece?.q ?? 1;
-    }
-    if (!gk || kind === "baliza_aberta") {
-      pGoal = kind === "baliza_aberta" ? gk ? 0.6 : 0.85 : 0.75;
-    }
-    if (kind === "recarga") {
-      pBlock = 0.18;
-      pOn = 0.62 + (finish2 - 10) * 0.012;
-      pGoal = 0.3 + (finish2 - gkQ) * 0.02;
-    }
-    if (kind === "baliza_aberta") {
-      pBlock = 0.08;
-      pOn = 0.5 + (eff(shooter, "remate") - 10) * 0.02;
-    }
-    const cl = (x, a, b) => Math.max(a, Math.min(b, x));
-    if (kind === "jogada" || kind === "contra" || kind === "canto") pGoal *= form[s2] * pace * TEMPO[att.setup.tactics.tempo].quality;
-    pBlock = cl(pBlock, 0, 0.45);
-    pOn = cl(pOn, 0.2, 0.95);
-    pGoal = cl(pGoal, 0.06, 0.92);
-    const how = {
-      jogada: "",
-      contra: " em contra-ataque",
-      livre10: " no livre direto dos 10 metros",
-      penalti: " de pen\xE1lti",
-      canto: " na sequ\xEAncia de um canto",
-      baliza_aberta: " para a baliza deserta",
-      recarga: " na recarga"
-    };
-    const vk = kind === "livre10" ? "free10" : kind === "penalti" ? "penalty" : kind === "canto" ? "setpiece" : kind === "baliza_aberta" ? "open" : kind === "contra" ? "counter" : kind === "recarga" ? "rebound" : "play";
-    if (r() < pBlock) {
-      const blocker = pick3(outfield(def), (l) => eff(l, "desarme") + eff(l, "posicionamento"));
-      pstats[blocker.p.id].tackles++;
-      actions.push({ type: "shot", side: s2, kind: vk, shooter: shooter.p.id, assist: assist?.p.id, result: "blocked", other: blocker.p.id });
-      if (r() < 0.25) corner(s2);
-      else log("remate_bloqueado", `Remate de ${shooter.p.name} bloqueado por ${blocker.p.name}`, s2, shooter.p.id);
-      return;
-    }
-    if (r() > pOn) {
-      const post = r() < 0.07;
-      actions.push({ type: "shot", side: s2, kind: vk, shooter: shooter.p.id, assist: assist?.p.id, result: post ? "post" : "wide" });
-      if (post) log("poste", `${shooter.p.name} acerta no poste!`, s2, shooter.p.id);
-      else if (kind !== "jogada") log("remate_fora", `${shooter.p.name} remata ao lado${how[kind]}`, s2, shooter.p.id);
-      return;
-    }
-    tstats[s2].onTarget++;
-    pstats[shooter.p.id].onTarget++;
-    if (r() < pGoal) {
-      actions.push({ type: "shot", side: s2, kind: vk, shooter: shooter.p.id, assist: assist?.p.id, result: "goal" });
-      goal(s2, shooter, assist, how[kind]);
-    } else if (gk) {
-      const caught = r() < 0.5 + (eff(gk, "posicionamento") - 10) * 0.02;
-      actions.push({ type: "shot", side: s2, kind: vk, shooter: shooter.p.id, assist: assist?.p.id, result: "saved", other: gk.p.id, caught });
-      if (caught) savedCaught = { side: 1 - s2, gk };
-      pstats[gk.p.id].saves++;
-      if (kind !== "jogada" || r() < 0.35) log("remate_defendido", `Defesa de ${gk.p.name} a remate de ${shooter.p.name}${kind === "penalti" ? " (pen\xE1lti defendido!)" : kind === "livre10" ? " (livre dos 10 m)" : ""}`, s2, shooter.p.id);
-      if (!caught && (kind === "jogada" || kind === "contra") && r() < REBOUND) {
-        const rs = r() < 0.3 ? shooter : pick3(outfield(att), (l) => eff(l, "antecipacao") + eff(l, "finalizacao"));
-        shot(s2, "recarga", rs);
-      } else if (r() < 0.2) corner(s2);
-    }
-  }
-  function taker(t, id, f) {
-    return outfield(t).find((l) => l.p.id === id) ?? best(outfield(t), f);
-  }
-  const CORNER = {
-    primeiro_poste: { chance: 0.36, target: (l) => eff(l, "finalizacao") + eff(l, "antecipacao"), q: 1, block: 0, counter: 0.06 },
-    remate_fora: { chance: 0.4, target: (l) => eff(l, "remate") * 2, q: 0.92, block: 0.08, counter: 0.1 },
-    bloqueio_pivo: { chance: 0.28, target: (l) => eff(l, "jogoCostas") + eff(l, "finalizacao") + (l.p.position === "PIV" ? 6 : 0), q: 1.18, block: -0.04, counter: 0.06 },
-    curto: { chance: 0.24, target: (l) => eff(l, "finalizacao") + eff(l, "remate"), q: 1, block: -0.06, counter: 0.01 }
-  };
-  function corner(s2) {
-    const att = teams[s2];
-    tstats[s2].corners++;
-    const sp = att.setup.tactics.setPieces;
-    const rt = sp?.cornerRoutine === "personalizado" ? customRt(sp.customCorner) : CORNER[sp?.cornerRoutine ?? "primeiro_poste"];
-    const kicker = taker(att, sp?.corner, (l) => eff(l, "bolasParadas") * 2 + eff(l, "passe"));
-    actions.push({ type: "corner", side: s2, shooter: kicker.p.id });
-    log("canto", `Canto para o ${sideName(s2)}, marcado por ${kicker.p.name}`, s2);
-    if (r() < rt.chance + (eff(kicker, "bolasParadas") - 10) * 0.01) {
-      const others = outfield(att).filter((l) => l !== kicker);
-      const chosen = others.find((l) => l.p.id === (sp?.cornerRoutine === "personalizado" ? sp.customCorner?.slots.find((x) => x.role === "rematador")?.player : sp?.cornerRoles?.[0]));
-      const shooter = chosen ?? (others.length ? pick3(others, rt.target) : kicker);
-      setPiece = { q: rt.q, block: rt.block, assist: kicker };
-      shot(s2, "canto", shooter);
-      setPiece = null;
-    } else if (r() < rt.counter) {
-      shot(1 - s2, "contra");
-    }
-  }
-  function customRt(cp) {
-    const runs = Math.min(3, (cp?.paths ?? []).filter((x) => x.kind === "run").length);
-    const block = cp?.slots.some((x) => x.role === "bloqueio");
-    const bal = cp?.slots.some((x) => x.role === "equilibrio");
-    return { chance: 0.3 + runs * 0.03, target: (l) => eff(l, "finalizacao") + eff(l, "remate"), q: 0.98 + runs * 0.03 + (block ? 0.05 : 0), block: block ? -0.03 : 0, counter: bal ? 0.04 : 0.11 };
-  }
-  const FREEKICK = {
-    remate_direto: { chance: 0.75, q: 0.95 },
-    jogada_ensaiada: { chance: 0.5, q: 1.12 },
-    cruzamento: { chance: 0.42, q: 1.08 }
-  };
-  function freeKick(s2) {
-    const att = teams[s2];
-    const sp = att.setup.tactics.setPieces;
-    const kind = sp?.freeKickRoutine ?? "remate_direto";
-    const rt = kind === "personalizado" ? { chance: customRt(sp?.customFk).chance + 0.15, q: customRt(sp?.customFk).q } : FREEKICK[kind];
-    const kicker = taker(att, sp?.freeKick, (l) => eff(l, "bolasParadas") * 2 + eff(l, "remate"));
-    if (r() > rt.chance + (eff(kicker, "bolasParadas") - 10) * 0.012) return;
-    let shooter = kicker;
-    const others = outfield(att).filter((l) => l !== kicker);
-    const chosenFk = others.find((l) => l.p.id === (kind === "personalizado" ? sp?.customFk?.slots.find((x) => x.role === "rematador")?.player : sp?.fkRoles?.[0]));
-    if (chosenFk && kind !== "remate_direto") shooter = chosenFk;
-    else if (kind === "personalizado" && others.length) shooter = pick3(others, (l) => eff(l, "finalizacao") + eff(l, "remate"));
-    else if (kind === "cruzamento" && others.length) shooter = best(others, (l) => eff(l, "finalizacao") + eff(l, "jogoCostas"));
-    else if (kind === "jogada_ensaiada" && others.length) shooter = pick3(others, (l) => eff(l, "finalizacao") + eff(l, "remate"));
-    setPiece = { q: rt.q, block: 0, assist: shooter === kicker ? void 0 : kicker };
-    shot(s2, "canto", shooter);
-    setPiece = null;
-  }
-  function tension() {
-    let t = opts.importance ?? 0.15;
-    const remaining = periodStart + periodLen - clock;
-    const close = Math.abs(score2[0] - score2[1]) <= 1;
-    if (close && period >= 2 && remaining < 600) t += 0.2;
-    if (score2[0] === score2[1] && period >= 2 && remaining < 300) t += 0.15;
-    return Math.min(1.2, t);
-  }
-  function maybeBrawl(s2, fouler, victim) {
-    const ten = tension();
-    if (r() > 15e-4 + 0.03 * ten * ten) return;
-    const pool = [...outfield(teams[0]), ...outfield(teams[1])].filter((l) => l !== fouler && l !== victim && !l.sentOff);
-    const extra2 = Math.min(pool.length, Math.floor(r() * (1 + 4 * ten)));
-    const others = [...pool].sort((a, b) => eff(b, "agressividade") - eff(a, "agressividade") + (r() - 0.5) * 8).slice(0, extra2);
-    const who = [fouler, victim, ...others];
-    const cards = [];
-    log("confronto", `Confronto entre jogadores! ${fouler.p.name} e ${victim.p.name}${others.length ? ` (juntam-se ${others.map((l) => l.p.name).join(", ")})` : ""}`, s2);
-    for (const l of who) {
-      const side2 = teams[0].court.includes(l) || teams[0].gk === l ? 0 : 1;
-      const main = l === fouler || l === victim;
-      const hot = (eff(l, "agressividade") - 10) * 0.02;
-      if (r() < (main ? 0.07 : 0.03) * REF.harsh * (0.6 + ten) + hot * 0.3) {
-        const target = l === fouler ? victim : l === victim ? fouler : null;
-        const aggr = !!target && r() < 0.3 + hot;
-        cards.push({ id: l.p.id, red: true });
-        card(side2, l, true, aggr ? "agressao" : "brawl");
-        if (aggr && target) {
-          pstats[l.p.id].victim = target.p.id;
-          if (!target.sentOff && r() < 0.25) injure(teams[1 - side2], target);
-        }
-      } else if (r() < (main ? 0.55 : 0.28) * REF.cards + hot) {
-        cards.push({ id: l.p.id, red: l.yellow >= 1 });
-        card(side2, l, false);
-      }
-    }
-    actions.push({ type: "brawl", side: s2, players: who.map((l) => l.p.id), cards });
-  }
-  function foul(s2) {
-    const def = teams[1 - s2];
-    const att = teams[s2];
-    const fouler = pick3(outfield(def), (l) => eff(l, "agressividade") + eff(l, "desarme") * 0.5);
-    const victim = pick3(outfield(att), (l) => eff(l, "drible") + eff(l, "jogoCostas"));
-    const fp = period >= 3 ? 2 : period;
-    def.fouls[fp]++;
-    tstats[1 - s2].fouls++;
-    tstats[1 - s2].foulsByPeriod[period]++;
-    pstats[fouler.p.id].fouls++;
-    const n = def.fouls[fp];
-    const dogso = r() < 4e-3;
-    const violent = !dogso && r() < 12e-4 + Math.max(0, eff(fouler, "agressividade") - 12) * 4e-4;
-    if (dogso) card(1 - s2, fouler, true);
-    else if (violent) {
-      card(1 - s2, fouler, true, "violento");
-      pstats[fouler.p.id].victim = victim.p.id;
-      if (r() < 0.5) injure(att, victim);
-    } else if (r() < (0.22 + (eff(fouler, "agressividade") - 10) * 8e-3) * REF.cards * (def.setup.cardK ?? 1) * (fouler.yellow ? 0.35 : 1)) card(1 - s2, fouler, false);
-    const sp = att.setup.tactics.setPieces;
-    actions.push({ type: "foul", side: s2, shooter: victim.p.id, other: fouler.p.id, kind: n >= 6 ? "free10" : "play" });
-    maybeBrawl(s2, fouler, victim);
-    if (r() < 0.03) {
-      actions[actions.length - 1].kind = "penalty";
-      log("penalti", `Pen\xE1lti! Falta de ${fouler.p.name} sobre ${victim.p.name}`, s2);
-      shot(s2, "penalti", taker(att, sp?.penalty, (l) => eff(l, "finalizacao") + eff(l, "compostura")));
-    } else if (n >= 6) {
-      log("livre_10m", `${n}.\xAA falta acumulada do ${sideName(1 - s2)} (${fouler.p.name}): livre direto sem barreira`, s2);
-      shot(s2, "livre10", taker(att, sp?.free10, (l) => eff(l, "finalizacao") + eff(l, "remate") + eff(l, "compostura")));
-    } else {
-      if (n === 5) log("falta", `5.\xAA falta acumulada do ${sideName(1 - s2)}: a pr\xF3xima d\xE1 livre de 10 metros`, 1 - s2);
-      else log("falta", `Falta de ${fouler.p.name} sobre ${victim.p.name}`, 1 - s2, fouler.p.id);
-      if (r() < 0.3) freeKick(s2);
-    }
-  }
-  const TEMPO = {
-    rapido: { dur: 0.8, lose: 0, quality: 0.98 },
-    equilibrado: { dur: 1, lose: 0, quality: 1 },
-    paciente: { dur: 1.2, lose: -0.01, quality: 1.02 }
-  };
-  const PRESS = {
-    alta: { lose: 0.05, foul: 0.03, counter: -0.05 },
-    media: { lose: 0, foul: 0, counter: 0 },
-    baixa: { lose: -0.04, foul: -0.02, counter: 0.1 }
-  };
-  function tacticalMods(t) {
-    const tac = t.setup.tactics;
-    const court = outfield(t);
-    let att = 0;
-    let def = 0;
-    const bestBy = (pos, k) => court.filter((l) => pos.includes(l.p.position)).sort((a, b) => eff(b, k) - eff(a, k))[0];
-    if (tac.system === "3-1") {
-      const piv = bestBy(["PIV", "ALA/PIV"], "jogoCostas");
-      att += piv ? (eff(piv, "jogoCostas") - 11) * 0.18 : -0.6;
-    } else if (tac.system === "4-0") {
-      att += (avg(court, ["drible", "decisoes", "passe", "aceleracao"]) - 11) * 0.15 + 0.2;
-      def -= 0.4;
-    } else if (tac.system === "2-2") {
-      def += 0.6;
-      att -= 0.4;
-    } else if (tac.system === "1-2-1") {
-      const fix = bestBy(["FIX", "FIX/ALA", "UNI"], "posicionamento");
-      def += fix ? (eff(fix, "posicionamento") - 11) * 0.12 + 0.15 : -0.4;
-      att += 0.1;
-    }
-    const slots = SLOTS[tac.system];
-    const fit = court.slice(0, 4).reduce((a, l, i) => a + roleFit(slots[i].role, l.p.position), 0) / Math.max(1, Math.min(4, court.length));
-    att += (fit - 0.85) * 2.5;
-    def += (fit - 0.85) * 2.5;
-    if (tac.marking === "individual") def += (avg(court, ["desarme", "agressividade"]) - 11) * 0.12;
-    else if (tac.marking === "zona") def += (avg(court, ["posicionamento", "concentracao"]) - 11) * 0.12;
-    return { att, def };
-  }
-  const MARK_VS = {
-    individual: { "3-1": 0.35, "4-0": -0.4, "2-2": 0, "1-2-1": 0.1, flying: -0.45 },
-    zona: { "3-1": -0.3, "4-0": 0.3, "2-2": 0.1, "1-2-1": 0, flying: 0.3 },
-    misto: { "3-1": 0.15, "4-0": -0.05, "2-2": 0.2, "1-2-1": 0.1, flying: 0 }
-  };
-  function markingVs(def, att) {
-    const mk = def.setup.tactics.marking;
-    let v = MARK_VS[mk]?.[att.flying ? "flying" : att.setup.tactics.system] ?? 0;
-    if (mk === "misto") v += (avg(outfield(def), ["concentracao", "trabalhoEquipa"]) - 11) * 0.06;
-    return v;
-  }
-  function possession(s2, counter2 = false) {
-    const att = teams[s2];
-    const def = teams[1 - s2];
-    const attQ = avg(outfield(att), ["passe", "rececao", "drible", "decisoes", "visao"]);
-    const defQ = avg(outfield(def), ["desarme", "posicionamento", "antecipacao", "concentracao"]);
-    const press = avg(outfield(def), ["aceleracao", "resistencia", "trabalhoEquipa", "agressividade"]);
-    const numDiff = numbers(att) - numbers(def);
-    let diff = attQ - defQ * 0.85 - press * 0.15 + numDiff * 2.2;
-    if (att.flying) diff += 1.5;
-    diff += tacticalMods(att).att - tacticalMods(def).def;
-    diff -= markingVs(def, att);
-    diff += (att.setup.coachTactical - 10) * 0.07 - (def.setup.coachTactical - 10) * 0.07;
-    const tempo = TEMPO[att.setup.tactics.tempo];
-    const dPress = def.setup.tactics.pressure;
-    diff += s2 === 0 ? 3 : -0.8;
-    const gd = score2[s2] - score2[1 - s2];
-    diff += Math.min(3, Math.max(0, -gd)) * 0.55 - Math.min(3, Math.max(0, gd)) * 0.2;
-    const gs = att.setup.tactics.gkStyle ?? "classico";
-    if (att.gk && !att.flying && gs !== "classico") diff += (eff(att.gk, "jogoPes") - 10) * (gs === "avancado" ? 0.08 : 0.06) + (gs === "avancado" ? 0.15 : 0.05);
-    const dur = (counter2 ? 5 + r() * 8 : 12 + r() * 26) * (counter2 ? 1 : tempo.dur) / pace;
-    const periodEnd = periodStart + periodLen;
-    const timeLeft = periodEnd - clock;
-    const dt = Math.min(dur, timeLeft);
-    tick(dt);
-    tstats[s2].possession += dt;
-    const ended = clock >= periodEnd - 1e-3;
-    if (ended && dur > timeLeft) {
-      if (r() < 0.25) shot(s2, "jogada");
-      return { next: 1 - s2, counter: false };
-    }
-    const pFoul = 1 / REF.tolerance * (0.15 + (avg(outfield(def), ["agressividade"]) - 10) * 5e-3 + PRESS[dPress].foul + (def.setup.tactics.marking === "individual" ? 0.02 : 0));
-    const pLose = Math.max(0.18, Math.min(0.66, 0.4 - diff * 0.03 - (counter2 ? 0.15 : 0) + PRESS[dPress].lose + tempo.lose));
-    const roll = r();
-    if (roll < pFoul) {
-      foul(s2);
-      return { next: 1 - s2, counter: false };
-    }
-    if (roll < pFoul + pLose) {
-      const tackler = pick3(outfield(def), (l) => eff(l, "desarme") + eff(l, "antecipacao"));
-      pstats[tackler.p.id].tackles++;
-      actions.push({ type: "lost", side: s2, other: tackler.p.id });
-      if (r() < 0.02) log("quatro_segundos", `${sideName(s2)} perde a bola por exceder os 4 segundos`, s2);
-      if (att.flying && r() < 0.32) {
-        shot(1 - s2, "baliza_aberta", tackler);
-        return { next: s2, counter: false };
-      }
-      if (!att.flying && (att.setup.tactics.gkStyle ?? "classico") === "avancado" && r() < 0.05) {
-        shot(1 - s2, "baliza_aberta", tackler);
-        return { next: s2, counter: false };
-      }
-      return { next: 1 - s2, counter: r() < 0.22 + PRESS[dPress].counter };
-    }
-    const beatPress = dPress === "alta" && r() < 0.09;
-    const gkStyle = att.setup.tactics.gkStyle ?? "classico";
-    const gkShoots = !att.flying && att.gk && !counter2 && r() < (gkStyle === "avancado" ? 0.025 : gkStyle === "construtor" ? 5e-3 : 0);
-    savedCaught = null;
-    if (gkShoots) {
-      shot(s2, "jogada", att.gk);
-      const last = actions[actions.length - 1];
-      if (last?.type === "shot") last.gkRun = true;
-    } else shot(s2, counter2 || beatPress ? "contra" : "jogada");
-    const sc = savedCaught;
-    if (sc && sc.side === 1 - s2) {
-      const style = teams[sc.side].setup.tactics.gkStyle ?? "classico";
-      const pc = 0.09 + (eff(sc.gk, "jogoPes") - 10) * 0.01 + (style === "avancado" ? 0.05 : style === "construtor" ? 0.02 : 0);
-      return { next: 1 - s2, counter: r() < pc };
-    }
-    return { next: 1 - s2, counter: false };
-  }
-  const first = r() < 0.5 ? 0 : 1;
-  const plan = [
-    { p: 1, len: HALF, start: first },
-    { p: 2, len: HALF, start: 1 - first }
-  ];
-  let stage = -1;
-  let side = first;
-  let counter = false;
-  let extraTime = false;
-  let penalties;
-  let finished = false;
-  let lastPossession = null;
-  const timeoutRequest = [false, false];
-  const flyingOverride = [null, null];
-  function beginPeriod(i) {
-    const pl2 = plan[i];
-    period = pl2.p;
-    periodStart = clock;
-    periodLen = pl2.len;
-    side = pl2.start;
-    counter = false;
-    const label = pl2.p === 1 ? "In\xEDcio da 1.\xAA parte" : pl2.p === 2 ? "In\xEDcio da 2.\xAA parte" : `In\xEDcio da ${pl2.p - 2}.\xAA parte do prolongamento`;
-    log(pl2.p >= 3 ? "prolongamento" : "inicio", label);
-  }
-  function endPeriod() {
-    log("fim_parte", `Fim do per\xEDodo. ${home.shortName} ${score2[0]}-${score2[1]} ${away.shortName}`);
-    for (const s2 of [0, 1]) {
-      if (teams[s2].flying) removeFlying(s2);
-      for (const l of teams[s2].players) l.energy = Math.min(100, l.energy + (period === 1 ? 25 : 8));
-    }
-  }
-  function manualTimeout(s2) {
-    const t = teams[s2];
-    const idx = period <= 2 ? period : 2;
-    if (period > 2 || t.timeoutUsed[idx]) return false;
-    t.timeoutUsed[idx] = true;
-    tstats[s2].timeouts.push(clock);
-    log("time_out", `Desconto de tempo pedido pelo ${sideName(s2)}`, s2);
-    for (const l of t.court) l.energy = Math.min(100, l.energy + 6);
-    return true;
-  }
-  function onePossession() {
-    for (const s2 of [0, 1]) {
-      const t = teams[s2];
-      if (t.shortCount && clock >= t.shortUntil) {
-        t.shortCount = 0;
-        completeTeam(s2);
-      }
-      flyingDecision(s2);
-      rotate(s2);
-      if (timeoutRequest[s2]) {
-        timeoutRequest[s2] = false;
-        manualTimeout(s2);
-      } else if (opts.manual !== s2) maybeTimeout(s2);
-    }
-    const before = score2[0] + score2[1];
-    const evBefore = events.length;
-    const start2 = clock;
-    const att = side;
-    const wasCounter = counter;
-    actions = [];
-    const holders = [teams[0], teams[1]].map((t) => [t.gk?.p.id ?? null, ...t.court.map((l) => l.p.id)]);
-    const res = possession(side, counter);
-    side = res.next;
-    counter = res.counter;
-    if (score2[0] + score2[1] > before) {
-      const last = events.filter((e) => e.type === "golo").pop();
-      side = 1 - last.side;
-      counter = false;
-    }
-    lastPossession = { side: att, start: start2, end: clock, counter: wasCounter, events: events.slice(evBefore), actions, onCourt: holders, flying: [teams[0].flying, teams[1].flying] };
-  }
-  function finish() {
-    log("fim_jogo", `Fim do jogo: ${home.shortName} ${score2[0]}-${score2[1]} ${away.shortName}${penalties ? ` (${penalties[0]}-${penalties[1]} nos pen\xE1ltis)` : ""}`);
-    for (const t of teams) {
-      const sd = teams.indexOf(t);
-      const won = score2[sd] > score2[1 - sd] ? 0.3 : score2[sd] < score2[1 - sd] ? -0.3 : 0;
-      for (const l of t.players) {
-        const st = pstats[l.p.id];
-        if (st.minutes < 30) {
-          st.rating = 0;
-          continue;
-        }
-        let rt = 6.2 + won + st.goals * 0.9 + st.assists * 0.5 + st.tackles * 0.08 - st.fouls * 0.08 - st.yellow * 0.3 - (st.red ? 1.5 : 0);
-        if (l.p.position === "GR") rt += st.saves * 0.18 - conceded[l.p.id] * 0.35;
-        rt += (r() - 0.5) * 0.6;
-        st.rating = Math.round(Math.max(3, Math.min(10, rt)) * 10) / 10;
-      }
-    }
-    finished = true;
-  }
-  function step() {
-    if (finished) return false;
-    lastPossession = null;
-    if (stage < 0) {
-      stage = 0;
-      beginPeriod(0);
-      return true;
-    }
-    if (clock < periodStart + periodLen - 1e-3) {
-      onePossession();
-      return true;
-    }
-    endPeriod();
-    stage++;
-    if (stage === 2 && opts.knockout && !opts.noExtraTime && score2[0] === score2[1]) {
-      extraTime = true;
-      plan.push({ p: 3, len: opts.extraTimeLen ?? ET, start: first }, { p: 4, len: opts.extraTimeLen ?? ET, start: 1 - first });
-    }
-    if (stage < plan.length) {
-      beginPeriod(stage);
-      return true;
-    }
-    if (opts.knockout && score2[0] === score2[1]) penalties = shootout();
-    finish();
-    return false;
-  }
-  function shootout() {
-    period = 5;
-    log("desempate", "Desempate por pontap\xE9s da marca de grande penalidade");
-    const pk = [0, 0];
-    const takers = teams.map(
-      (t) => t.players.filter((l) => !l.sentOff).sort((a, b) => eff(b, "finalizacao") + eff(b, "compostura") - eff(a, "finalizacao") - eff(a, "compostura"))
-    );
-    const n = Math.min(takers[0].length, takers[1].length);
-    const keepers = teams.map((t) => t.players.filter((l) => l.p.position === "GR" && !l.sentOff)[0]);
-    let i = 0;
-    const kick = (s2) => {
-      const l = takers[s2][i % n];
-      const gk = keepers[1 - s2];
-      const gkQ = gk ? (gk.p.attrs.reflexos + gk.p.attrs.umParaUm) / 2 : 5;
-      const p = Math.max(0.5, Math.min(0.92, 0.76 + (l.p.attrs.finalizacao + l.p.attrs.compostura) / 2 * 0.012 - gkQ * 0.01));
-      const ok = r() < p;
-      if (ok) pk[s2]++;
-      events.push({ t: clock, period: 5, side: s2, type: "desempate", playerId: l.p.id, text: `${l.p.name} (${sideName(s2)}) ${ok ? "marca" : "falha"}. ${pk[0]}-${pk[1]}`, score: [score2[0], score2[1]] });
-    };
-    for (i = 0; i < 5; i++) {
-      kick(first);
-      if (decided(i, true)) break;
-      kick(1 - first);
-      if (decided(i, false)) break;
-    }
-    while (pk[0] === pk[1]) {
-      kick(first);
-      kick(1 - first);
-      i++;
-    }
-    return pk;
-    function decided(round2, afterFirst) {
-      const taken = [round2 + 1, afterFirst ? round2 : round2 + 1];
-      const takenBy = first === 0 ? [taken[0], taken[1]] : [taken[1], taken[0]];
-      const left = [5 - takenBy[0], 5 - takenBy[1]];
-      return pk[0] + left[0] < pk[1] || pk[1] + left[1] < pk[0];
-    }
-  }
-  const result = () => ({ score: score2, penalties, extraTime, events, team: tstats, players: pstats, names });
-  function snapshot() {
-    const fp = period >= 3 ? 2 : period;
-    return {
-      clock,
-      period,
-      periodStart,
-      periodLen,
-      score: [score2[0], score2[1]],
-      finished,
-      teams: teams.map((t) => ({
-        gk: t.gk ? { id: t.gk.p.id, number: t.gk.p.number, name: t.gk.p.name, energy: t.gk.energy, position: t.gk.p.position } : null,
-        court: t.court.map((l) => ({ id: l.p.id, number: l.p.number, name: l.p.name, energy: l.energy, position: l.p.position })),
-        bench: t.players.filter((l) => !l.onCourt).map((l) => ({ id: l.p.id, number: l.p.number, name: l.p.name, energy: l.energy, position: l.p.position, sentOff: l.sentOff })),
-        flying: t.flying,
-        fouls: t.fouls[fp] ?? 0,
-        timeoutAvailable: period <= 2 && !t.timeoutUsed[period],
-        short: clock < t.shortUntil ? t.shortCount : 0
-      })),
-      possession: lastPossession
-    };
-  }
-  return {
-    step,
-    result,
-    snapshot,
-    events,
-    stats: tstats,
-    players: pstats,
-    names,
-    /** Substituição manual (volante, ilimitada): sai `outId` (em campo) e entra `inId` (no banco). */
-    substitute: (s2, outId, inId) => {
-      const t = teams[s2];
-      const out = t.players.find((l) => l.p.id === outId);
-      const inn = t.players.find((l) => l.p.id === inId);
-      if (!out || !inn) return "Jogador n\xE3o encontrado";
-      if (!out.onCourt) return `${out.p.name} n\xE3o est\xE1 em campo`;
-      if (inn.onCourt) return `${inn.p.name} j\xE1 est\xE1 em campo`;
-      if (inn.sentOff) return `${inn.p.name} foi expulso`;
-      if (t.gk === out) {
-        out.onCourt = false;
-        inn.onCourt = true;
-        t.gk = inn;
-      } else {
-        if (inn.p.position === "GR" && !t.flying) return "Um guarda-redes s\xF3 entra para o lugar do guarda-redes";
-        out.onCourt = false;
-        inn.onCourt = true;
-        t.court = t.court.map((l) => l === out ? inn : l);
-      }
-      t.lastRotation = clock;
-      log("substituicao", `${sideName(s2)}: entra ${inn.p.name}, sai ${out.p.name}`, s2, inn.p.id);
-      return null;
-    },
-    requestTimeout: (s2) => {
-      const t = teams[s2];
-      if (period > 2 || t.timeoutUsed[period]) return false;
-      timeoutRequest[s2] = true;
-      return true;
-    },
-    /** Palestra: muda a moral de cada jogador durante o jogo (pontos de moral, como em morale.ts). */
-    talk: (s2, deltas) => {
-      for (const l of teams[s2].players) if (deltas[l.p.id]) l.mor = Math.max(0.9, Math.min(1.1, l.mor + deltas[l.p.id] / 100 * 0.12));
-    },
-    /** GR avançado pelo treinador: true = lança já, false = tira, null = volta à instrução tática. */
-    setFlying: (s2, on) => {
-      flyingOverride[s2] = on;
-      if (on === false) removeFlying(s2);
-    },
-    flyingNow: (s2) => teams[s2].flying
-  };
-}
 
 // src/core/game.ts
 var espIds = (s2) => s2.leagues.find((l) => l.id === "esp1")?.clubIds ?? [];
-function setupFor(s2, clubId, comp) {
-  const c2 = s2.clubs.find((x) => x.id === clubId);
-  const all = s2.players.filter((p) => p.clubId === c2.id && !(comp && banFor(s2, p.id, comp) > 0));
-  let squad = all.filter((p) => !injuryOf(s2, p.id));
-  if (!squad.some((p) => p.position === "GR") && squad.length) {
-    const a = (p) => p.attrs.reflexos + p.attrs.agilidade + p.attrs.umParaUm + p.attrs.posicionamento;
-    const best = [...squad].sort((x, y) => a(y) - a(x))[0];
-    squad = squad.map((p) => p === best ? { ...p, position: "GR" } : p);
-  }
-  if (c2.id === s2.clubId) {
-    normalizeTactics(s2.tactics, squad);
-    const ok = (ids) => ids.filter((id) => squad.some((p) => p.id === id));
-    const tactics = comp ? { ...s2.tactics, q1: ok(s2.tactics.q1), q2: ok(s2.tactics.q2) } : s2.tactics;
-    return { clubId: c2.id, name: c2.name, shortName: c2.shortName, squad, tactics, coachTactical: managerAttrs(s2).tatico + analystBonus(s2, c2.id), cardK: 2 - mgrK(s2, "disciplina", 0.025), coachName: s2.manager.name, morale: s2.morale, fitness: s2.fitness };
-  }
-  const coach = s2.coaches.find((x) => x.clubId === c2.id);
-  return {
-    clubId: c2.id,
-    name: c2.name,
-    shortName: c2.shortName,
-    squad,
-    tactics: aiTactics(squad, c2, coach),
-    coachTactical: (coach?.tactical ?? interimOf(s2, c2.id)?.tactical ?? 11) + analystBonus(s2, c2.id),
-    morale: s2.morale,
-    fitness: s2.fitness,
-    coachName: coach?.name ?? interimOf(s2, c2.id)?.name ?? "Treinador interino"
-  };
-}
 function startFirstSeason(s2) {
-  const ranking = s2.leagues[0].clubIds.map((id) => s2.clubs.find((c2) => c2.id === id)).sort((a, b) => b.level - a.level).map((c2) => c2.id);
-  const esp = espIds(s2).map((id) => s2.clubs.find((c2) => c2.id === id)).sort((a, b) => b.level - a.level).map((c2) => c2.id);
+  const ranking = s2.leagues[0].clubIds.map((id) => s2.clubs.find((c) => c.id === id)).sort((a, b) => b.level - a.level).map((c) => c.id);
+  const esp = espIds(s2).map((id) => s2.clubs.find((c) => c.id === id)).sort((a, b) => b.level - a.level).map((c) => c.id);
   s2.season = createSeason(2026, ranking, ["slb", "scp"], esp.length ? { ranking: esp, four: esp.slice(0, 4) } : void 0);
   s2.date = "2026-07-01";
   s2.pstats = {};
   ensureContracts(s2);
   ensurePool(s2);
   ensureStaff(s2);
-  for (const c2 of s2.clubs) if (!juniorsOf(s2, c2.id).length) s2.players.push(...academyIntake(s2, c2, s2.season.year));
+  for (const c of s2.clubs) if (!juniorsOf(s2, c.id).length) s2.players.push(...academyIntake(s2, c, s2.season.year));
 }
 
 // src/data/esp/clubs.json
@@ -38021,8 +37061,8 @@ var coaches_default2 = {
 
 // src/core/state.ts
 var DB_CLUBS = [
-  ...clubs_default.clubs.map(({ check, ...c2 }) => ({ ...c2, colors: c2.colors })),
-  ...clubs_default2.clubs.map(({ fp, ...c2 }) => ({ ...c2, colors: c2.colors }))
+  ...clubs_default.clubs.map(({ check, ...c }) => ({ ...c, colors: c.colors })),
+  ...clubs_default2.clubs.map(({ fp, ...c }) => ({ ...c, colors: c.colors }))
 ];
 var BOOST = overrides_default.boost;
 var HISTORY = history_default.players;
@@ -38030,7 +37070,7 @@ var ATTR_OVERRIDES = overrides_default.attrs;
 var FP_STATS = { ...fpstats_default.players, ...fpstats_default2.players };
 function buildPlayers() {
   return [...players_default.players, ...players_default2.players].map((p) => {
-    const club = DB_CLUBS.find((c2) => c2.id === p.clubId.replace("@jun", ""));
+    const club = DB_CLUBS.find((c) => c.id === p.clubId.replace("@jun", ""));
     const key = `${p.clubId}|${p.name}`;
     const mb = computeMoneyball(HISTORY[p.id] ?? FP_STATS[p.id]?.seasons ?? [], p.position, p.age);
     const g = mb ? generateAttributes(p, mb.level, BOOST[key] ?? 0, { productivity: mb.productivity, availability: mb.availability }) : generateAttributes(p, club.level - 10, (BOOST[key] ?? 0) - 0.8);
@@ -38045,8 +37085,8 @@ function buildPlayers() {
 var DB_PLAYERS = buildPlayers();
 var DB_COACHES = [...coaches_default.coaches, ...coaches_default2.coaches];
 var DB_LEAGUES = [
-  { ...clubs_default.league, clubIds: clubs_default.clubs.map((c2) => c2.id) },
-  { ...clubs_default2.league, clubIds: clubs_default2.clubs.map((c2) => c2.id) }
+  { ...clubs_default.league, clubIds: clubs_default.clubs.map((c) => c.id) },
+  { ...clubs_default2.league, clubIds: clubs_default2.clubs.map((c) => c.id) }
 ];
 function newGame(managerName, nationality, clubId) {
   const s2 = {
@@ -38059,7 +37099,7 @@ function newGame(managerName, nationality, clubId) {
     leagues: structuredClone(DB_LEAGUES),
     players: structuredClone(DB_PLAYERS),
     // o treinador real do clube escolhido fica sem clube
-    coaches: DB_COACHES.map((c2) => ({ ...structuredClone(c2), clubId: c2.clubId === clubId ? null : c2.clubId })),
+    coaches: DB_COACHES.map((c) => ({ ...structuredClone(c), clubId: c.clubId === clubId ? null : c.clubId })),
     tactics: suggestTactics(DB_PLAYERS.filter((p) => p.clubId === clubId)),
     season: null,
     pstats: {},
@@ -38067,2055 +37107,145 @@ function newGame(managerName, nationality, clubId) {
     honours: []
   };
   startFirstSeason(s2);
-  s2.news.unshift({ date: s2.date, text: `${managerName} \xE9 o novo treinador do ${s2.clubs.find((c2) => c2.id === clubId).name}.` });
+  s2.news.unshift({ date: s2.date, text: `${managerName} \xE9 o novo treinador do ${s2.clubs.find((c) => c.id === clubId).name}.` });
   return s2;
 }
 
-// src/core/visual/movement.ts
-var clamp3 = (v, min, max) => Math.max(min, Math.min(max, v));
-var unit = (v) => clamp3((v - 1) / 19, 0, 1);
-function score(player, weights) {
-  let total = 0;
-  let weight = 0;
-  for (const [key, w] of Object.entries(weights)) {
-    total += unit(player.attrs[key]) * w;
-    weight += w;
-  }
-  return weight ? total / weight : 0.5;
+// src/core/kits.ts
+var k = (shirt, shorts, socks, pattern = "liso", alt = "#ffffff") => ({ shirt, shorts, socks, pattern, alt });
+var KITS = {
+  scp: { home: k("#00804a", "#111111", "#00804a", "listas", "#ffffff"), away: k("#ccaa6b", "#ccab6a", "#ccab6a", "liso", "#ffffff"), confirmed: true },
+  slb: { home: k("#e30613", "#ffffff", "#e30613", "liso", "#ffffff"), away: k("#ffffff", "#ff0000", "#ffffff", "liso", "#ffffff"), confirmed: true },
+  scb: { home: k("#e30613", "#ffffff", "#e30613", "liso", "#ffffff"), away: k("#782d3b", "#792b3a", "#9e8a70", "liso", "#ffffff"), confirmed: true },
+  fun: { home: k("#582321", "#000000", "#582321", "liso", "#ffffff"), away: k("#ffffff", "#000000", "#ffffff", "liso", "#ffffff"), confirmed: true },
+  lps: { home: k("#1b4937", "#1b4937", "#1b4937", "liso", "#ffffff"), away: k("#ffffff", "#ffffff", "#ffffff", "liso", "#ffffff"), confirmed: true },
+  fzz: { home: k("#f2e44f", "#000000", "#000000", "liso", "#ffffff"), away: k("#f01c35", "#f01c35", "#ffffff", "liso", "#ffffff"), confirmed: true },
+  ele: { home: k("#0b8a3e", "#000000", "#0b8a3e", "riscas", "#ffffff"), away: k("#000000", "#000000", "#000000", "liso", "#ffffff"), confirmed: true },
+  rav: { home: k("#024b3a", "#ffffff", "#ffffff", "riscas", "#ffffff"), away: k("#73b4d2", "#1c1f2e", "#1c1f2e", "listas", "#1c1f2e"), confirmed: true },
+  uvn: { home: k("#facc15", "#000000", "#facc15", "liso", "#ffffff"), away: k("#facc15", "#facc15", "#facc15", "liso", "#ffffff"), confirmed: true },
+  por: { home: k("#111111", "#111111", "#ffffff", "riscas", "#ffffff"), away: k("#facc15", "#facc15", "#facc15", "liso", "#ffffff"), confirmed: true },
+  fam: { home: k("#ffffff", "#ffffff", "#ffffff", "metade", "#18214e"), away: k("#cee5d4", "#cee5d4", "#cee5d4", "liso", "#ffffff"), confirmed: true },
+  tor: { home: k("#881732", "#34497e", "#881732", "metade", "#34497e"), away: k("#cbd9e6", "#cbd9e6", "#cbd9e6", "riscas", "#d6e0ea"), confirmed: true },
+  // Espanha: camisola principal tirada das fotos oficiais dos jogadores na RFEF (2026/27); calções, meias e alternativos
+  // são estimativa até o António confirmar (confirmed: false)
+  bar: { home: k("#a50044", "#004d98", "#004d98", "riscas", "#004d98"), away: k("#f5e04c", "#f5e04c", "#f5e04c"), confirmed: false },
+  epz: { home: k("#ffffff", "#ffffff", "#ffffff", "liso", "#d50000"), away: k("#d50000", "#111111", "#d50000"), confirmed: false },
+  pal: { home: k("#9acd32", "#6b21a8", "#9acd32", "liso", "#6b21a8"), away: k("#6b21a8", "#6b21a8", "#6b21a8"), confirmed: false },
+  jca: { home: k("#d32f2f", "#ffffff", "#d32f2f", "liso", "#ffffff"), away: k("#111111", "#111111", "#111111"), confirmed: false },
+  int: { home: k("#1f7a4a", "#1f7a4a", "#1f7a4a", "liso", "#ffffff"), away: k("#ffffff", "#ffffff", "#ffffff"), confirmed: false },
+  jae: { home: k("#ffd400", "#15803d", "#ffd400", "liso", "#15803d"), away: k("#111111", "#111111", "#111111"), confirmed: false },
+  val: { home: k("#1e6fd9", "#1e6fd9", "#1e6fd9", "liso", "#ffffff"), away: k("#ffffff", "#ffffff", "#ffffff"), confirmed: false },
+  man: { home: k("#8ecae6", "#1e3a8a", "#8ecae6", "liso", "#ec4899"), away: k("#111111", "#111111", "#111111"), confirmed: false },
+  zar: { home: k("#ffffff", "#ffffff", "#ffffff", "listas", "#4fb3e8"), away: k("#d50000", "#d50000", "#d50000"), confirmed: false },
+  pen: { home: k("#1e40af", "#1e40af", "#1e40af"), away: k("#ffffff", "#ffffff", "#ffffff"), confirmed: false },
+  par: { home: k("#1e4fd0", "#1e4fd0", "#1e4fd0"), away: k("#ffffff", "#ffffff", "#ffffff"), confirmed: false },
+  osa: { home: k("#15803d", "#15803d", "#15803d"), away: k("#ffffff", "#ffffff", "#ffffff"), confirmed: false },
+  cor: { home: k("#00843d", "#ffffff", "#00843d", "riscas", "#ffffff"), away: k("#111111", "#111111", "#111111"), confirmed: false },
+  eji: { home: k("#7cc4ec", "#1e3a8a", "#7cc4ec", "liso", "#1e3a8a"), away: k("#ffffff", "#ffffff", "#ffffff"), confirmed: false },
+  noi: { home: k("#ffffff", "#ffffff", "#ffffff", "liso", "#c9a227"), away: k("#1e3a8a", "#1e3a8a", "#1e3a8a"), confirmed: false },
+  stc: { home: k("#9fd3f0", "#1e3a8a", "#9fd3f0", "liso", "#1e3a8a"), away: k("#e30613", "#e30613", "#e30613"), confirmed: false }
+};
+function hexDist(a, b) {
+  const p = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+  const [x, y] = [p(a), p(b)];
+  return Math.hypot(x[0] - y[0], x[1] - y[1], x[2] - y[2]);
 }
-function movementProfile(player) {
-  const a = player.attrs;
-  const decision = score(player, { decisoes: 3, posicionamento: 2, antecipacao: 2, visao: 1 });
-  const teamwork = score(player, { trabalhoEquipa: 3, decisoes: 1, posicionamento: 1 });
-  return {
-    accelerationFactor: 0.82 + unit(a.aceleracao) * 0.34,
-    agilityFactor: 0.82 + unit(a.agilidade) * 0.34,
-    decisionFactor: 0.55 + decision * 0.45,
-    teamworkFactor: 0.55 + teamwork * 0.45,
-    enduranceFactor: 0.75 + unit(a.resistencia) * 0.3
+function kitsOf(id, fallback) {
+  return KITS[id] ?? { home: k(fallback[0], fallback[1], fallback[0]), away: k(fallback[1], fallback[0], fallback[1]), confirmed: false };
+}
+function matchKits(home, away, mine, choice = "auto") {
+  const H = kitsOf(home.id, home.colors), A = kitsOf(away.id, away.colors);
+  let hk = mine === 0 && choice === "away" ? H.away : H.home;
+  let ak = mine === 1 && choice !== "auto" ? choice === "home" ? A.home : A.away : A.home;
+  if (mine !== 1 || choice === "auto") {
+    if (hexDist(hk.shirt, ak.shirt) < 130) ak = A.away;
+  }
+  if (hexDist(hk.shirt, ak.shirt) < 130) hk = hk === H.home ? H.away : H.home;
+  if (refGap([hk, ak]) < 160 && !(mine === 1 && choice !== "auto")) {
+    const alt = ak === A.home ? A.away : A.home;
+    if (hexDist(hk.shirt, alt.shirt) >= 130 && refGap([hk, alt]) > refGap([hk, ak])) ak = alt;
+  }
+  if (refGap([hk, ak]) < 160 && !(mine === 0 && choice !== "auto")) {
+    const alt = hk === H.home ? H.away : H.home;
+    if (hexDist(alt.shirt, ak.shirt) >= 130 && refGap([alt, ak]) > refGap([hk, ak])) hk = alt;
+  }
+  return [hk, ak];
+}
+var GK_KITS = [
+  k("#f97316", "#111111", "#f97316"),
+  // laranja, calções pretos
+  k("#7dd3fc", "#7dd3fc", "#7dd3fc"),
+  // todo azul-claro
+  k("#facc15", "#facc15", "#facc15"),
+  // todo amarelo
+  k("#a3e635", "#a3e635", "#a3e635"),
+  // todo verde fluorescente
+  k("#ff6b1a", "#ff6b1a", "#ff6b1a")
+  // todo laranja fluorescente
+];
+function gkPref(id) {
+  let h = 7;
+  for (const ch of id) h = h * 31 + ch.charCodeAt(0) >>> 0;
+  return h % GK_KITS.length;
+}
+function matchGkKits(homeId, awayId, kits) {
+  const field = [kits[0].shirt, kits[1].shirt];
+  const ok = (g, other) => field.every((f) => hexDist(f, g.shirt) > 110) && (!other || hexDist(other.shirt, g.shirt) > 110);
+  const choose = (id, other) => {
+    const p = gkPref(id);
+    for (let i = 0; i < GK_KITS.length; i++) {
+      const g = GK_KITS[(p + i) % GK_KITS.length];
+      if (ok(g, other)) return g;
+    }
+    for (let i = 0; i < GK_KITS.length; i++) {
+      const g = GK_KITS[(p + i) % GK_KITS.length];
+      if (!other || hexDist(other.shirt, g.shirt) > 110) return g;
+    }
+    return GK_KITS[p];
   };
+  const hg = choose(homeId);
+  return [hg, choose(awayId, hg)];
 }
-function bakeMovementTrajectory(at, t0, t1, vmax, amax, accelerationFactor = 1, agilityFactor = 1, dt = 1 / 30) {
-  const clampFactor = (value) => clamp3(value, 0.82, 1.16);
-  const n = Math.max(2, Math.ceil((t1 - t0) / dt) + 2);
-  const points = [];
-  let position = at(t0);
-  let vx = 0;
-  let vy = 0;
-  const acceleration = amax * clampFactor(accelerationFactor);
-  const responseWindow = 0.28 / clampFactor(agilityFactor);
-  for (let i = 0; i < n; i++) {
-    const time = t0 + i * dt;
-    points.push({ x: position.x, y: position.y });
-    const target = at(time + 0.18);
-    let dx = (target.x - position.x) / responseWindow;
-    let dy = (target.y - position.y) / responseWindow;
-    const desiredSpeed = Math.hypot(dx, dy);
-    if (desiredSpeed > vmax) {
-      dx = dx * vmax / desiredSpeed;
-      dy = dy * vmax / desiredSpeed;
-    }
-    let ax = dx - vx;
-    let ay = dy - vy;
-    const delta = Math.hypot(ax, ay);
-    const maxDelta = acceleration * dt;
-    if (delta > maxDelta) {
-      ax = ax * maxDelta / delta;
-      ay = ay * maxDelta / delta;
-    }
-    vx += ax;
-    vy += ay;
-    position = { x: position.x + vx * dt, y: position.y + vy * dt };
-  }
-  return points;
+var REF_KITS = [
+  { name: "amarelo", shirt: "#facc15" },
+  { name: "verde fluorescente", shirt: "#39ff14" },
+  { name: "amarelo fluorescente", shirt: "#e6ff00" },
+  { name: "preto", shirt: "#111111" }
+];
+function refGap(kits) {
+  const field = kits.flatMap((kd) => kd.pattern === "liso" ? [kd.shirt] : [kd.shirt, kd.alt]);
+  return Math.max(...REF_KITS.map((r) => Math.min(999, ...field.map((x) => hexDist(r.shirt, x)))));
+}
+function refKitFor(kits, gkKits) {
+  const field = kits.flatMap((kd) => kd.pattern === "liso" ? [kd.shirt] : [kd.shirt, kd.alt]);
+  const gks = (gkKits ?? []).map((g) => g.shirt);
+  const minD = (c, list) => Math.min(999, ...list.map((x) => hexDist(c, x)));
+  const ok = REF_KITS.find((r) => minD(r.shirt, field) >= 160 && minD(r.shirt, gks) >= 60) ?? REF_KITS.find((r) => minD(r.shirt, field) >= 160) ?? [...REF_KITS].sort((a, b) => minD(b.shirt, field) - minD(a.shirt, field))[0];
+  return { shirt: ok.shirt, shorts: "#111111", name: ok.name };
 }
 
-// src/core/visual/choreo.ts
-var SHAPES = {
-  "3-1": [[19.5, 0], [26.5, -8.4], [26.5, 8.4], [34, 0]],
-  // fixo, ala E, ala D, pivô (largura total, como nos jogos reais)
-  "1-2-1": [[18.5, 0], [26, -8.2], [26, 8.2], [33.5, 0]],
-  "4-0": [[22, -3.6], [28.5, -8.6], [28.5, 8.6], [22, 3.6]],
-  // universal E, ala E, ala D, universal D
-  "2-2": [[22, -4.5], [31.5, -6], [31.5, 6], [22, 4.5]],
-  "5x4": [[24, 0], [27.5, -8.3], [27.5, 8.3], [34.5, -6.5], [34.5, 6.5]]
-  // GR avançado no topo, alas, dois nos cantos da área
-};
-var BLOCK = {
-  alta: [[17, 0], [21, -6], [21, 6], [26, 0]],
-  media: [[21, 0], [25, -5], [25, 5], [29.5, 0]],
-  baixa: [[26, 0], [29, -4.5], [29, 4.5], [32, 0]]
-};
-var PRESS_LINE = { alta: 7, media: 18.5, baixa: 25 };
-var VMAX = 7.4;
-var AMAX = 9;
-var BAKE_DT = 1 / 30;
-var clamp4 = (v, a, b) => Math.max(a, Math.min(b, v));
-var lerp = (a, b, k) => a + (b - a) * k;
-var ease = (k) => k * k * (3 - 2 * k);
-var dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
-var angTo = (a, b) => Math.atan2(b.x - a.x, b.y - a.y);
-function rnd(seed) {
-  let s2 = seed * 2654435761 >>> 0 || 1;
-  return () => (s2 = Math.imul(s2 ^ s2 >>> 15, 2246822507) ^ Math.imul(s2 ^ s2 >>> 13, 3266489909), ((s2 ^= s2 >>> 16) >>> 0) / 4294967296);
-}
-var REFS = ["arbitro1", "arbitro2"];
-var attackDir = (side, period) => period % 2 === 1 === (side === 0) ? 1 : -1;
-var Track = class {
-  constructor() {
-    this.keys = [];
-    // percurso final, com inércia: velocidade e aceleração máximas (como um jogador real)
-    this.baked = null;
-  }
-  set(t, p, hold = false) {
-    this.baked = null;
-    const k = { t, x: p.x, y: clamp4(p.y, -10.6, 10.6), hold };
-    let i = this.keys.length;
-    while (i > 0 && this.keys[i - 1].t > t) i--;
-    if (i > 0 && Math.abs(this.keys[i - 1].t - t) < 0.06) {
-      this.keys[i - 1] = k;
-      return;
-    }
-    if (i < this.keys.length && Math.abs(this.keys[i].t - t) < 0.06) {
-      this.keys[i] = k;
-      return;
-    }
-    this.keys.splice(i, 0, k);
-  }
-  /** Movimentos de apoio sem bola: onde o jogador ficaria parado muito tempo, faz desmarcações curtas
-   * (fintar a marcação, aproximar-se e voltar a abrir), como no futsal real. */
-  liven(r, t0, t1, amp, skip) {
-    const out = [];
-    for (let i = 0; i < this.keys.length; i++) {
-      const a = this.keys[i], b = this.keys[i + 1];
-      out.push(a);
-      if (!b || b.t < t0 || a.t > t1) continue;
-      const gap = b.t - a.t;
-      const n = Math.floor(gap / 1.3);
-      for (let k = 1; k <= n; k++) {
-        const t = a.t + gap * k / (n + 1);
-        if (skip(t)) continue;
-        const kk = k / (n + 1);
-        const bx = a.x + (b.x - a.x) * kk, by = a.y + (b.y - a.y) * kk;
-        const ang = r() * Math.PI * 2;
-        const m2 = amp * (0.5 + r() * 0.5);
-        out.push({ t, x: clamp4(bx + Math.cos(ang) * m2, -19.5, 19.5), y: clamp4(by + Math.sin(ang) * m2, -9.8, 9.8), hold: false });
-      }
-    }
-    this.keys = out;
-    this.baked = null;
-  }
-  /** Remove pontos-chave dentro de um intervalo (para dar lugar a movimentos explícitos). */
-  clear(t0, t1) {
-    this.baked = null;
-    this.keys = this.keys.filter((k) => k.t < t0 || k.t > t1);
-  }
-  /** Nenhum troço mais rápido do que vmax (exceto chegadas obrigatórias a bolas paradas). */
-  limit(vmax) {
-    for (let i = 1; i < this.keys.length; i++) {
-      const a = this.keys[i - 1], b = this.keys[i];
-      if (b.hold) continue;
-      const max = vmax * (b.t - a.t);
-      const d = Math.hypot(b.x - a.x, b.y - a.y);
-      if (d > max && d > 0) {
-        b.x = a.x + (b.x - a.x) * max / d;
-        b.y = a.y + (b.y - a.y) * max / d;
-      }
-    }
-  }
-  tangent(i) {
-    const ks = this.keys;
-    if (i === 0 || i === ks.length - 1 || ks[i].hold) return { x: 0, y: 0 };
-    const a = ks[i - 1], b = ks[i], c2 = ks[i + 1];
-    const d0 = { x: (b.x - a.x) / (b.t - a.t), y: (b.y - a.y) / (b.t - a.t) };
-    const d1 = { x: (c2.x - b.x) / (c2.t - b.t), y: (c2.y - b.y) / (c2.t - b.t) };
-    if (d0.x * d1.x + d0.y * d1.y <= 0) return { x: 0, y: 0 };
-    const m2 = { x: (c2.x - a.x) / (c2.t - a.t), y: (c2.y - a.y) / (c2.t - a.t) };
-    const cap = Math.min(Math.hypot(d0.x, d0.y), Math.hypot(d1.x, d1.y));
-    const mm = Math.hypot(m2.x, m2.y);
-    return mm > cap && mm > 0 ? { x: m2.x * cap / mm, y: m2.y * cap / mm } : m2;
-  }
-  bake(t0, t1, vmax, amax, accelerationFactor = 1, agilityFactor = 1) {
-    this.baked = null;
-    const points = bakeMovementTrajectory(
-      (time) => this.at(time),
-      t0,
-      t1,
-      vmax,
-      amax,
-      accelerationFactor,
-      agilityFactor,
-      BAKE_DT
-    );
-    const xs = Float32Array.from(points, (point) => point.x);
-    const ys = Float32Array.from(points, (point) => point.y);
-    this.baked = { t0, xs, ys };
-  }
-  at(t) {
-    const bk = this.baked;
-    if (bk) {
-      const f = clamp4((t - bk.t0) / BAKE_DT, 0, bk.xs.length - 1.001);
-      const i2 = Math.floor(f), k = f - i2;
-      return { x: lerp(bk.xs[i2], bk.xs[i2 + 1], k), y: lerp(bk.ys[i2], bk.ys[i2 + 1], k) };
-    }
-    const ks = this.keys;
-    if (!ks.length) return { x: 0, y: 0 };
-    if (t <= ks[0].t) return { x: ks[0].x, y: ks[0].y };
-    const n = ks.length - 1;
-    if (t >= ks[n].t) return { x: ks[n].x, y: ks[n].y };
-    let i = 0;
-    while (i < n - 1 && ks[i + 1].t <= t) i++;
-    const a = ks[i], b = ks[i + 1];
-    const h = b.t - a.t;
-    const s2 = (t - a.t) / h;
-    const m0 = this.tangent(i), m1 = this.tangent(i + 1);
-    const s22 = s2 * s2, s3 = s22 * s2;
-    const h00 = 2 * s3 - 3 * s22 + 1, h10 = s3 - 2 * s22 + s2, h01 = -2 * s3 + 3 * s22, h11 = s3 - s22;
-    return {
-      x: h00 * a.x + h10 * h * m0.x + h01 * b.x + h11 * h * m1.x,
-      y: h00 * a.y + h10 * h * m0.y + h01 * b.y + h11 * h * m1.y
-    };
-  }
-};
-var Choreo = class {
-  constructor(p, tactics, period, start2, names = {}, playersById = {}) {
-    this.p = p;
-    this.tactics = tactics;
-    this.names = names;
-    this.tr = /* @__PURE__ */ new Map();
-    this.movement = /* @__PURE__ */ new Map();
-    this.attrsOf = /* @__PURE__ */ new Map();
-    this.sideOf = /* @__PURE__ */ new Map();
-    this.balls = [];
-    this.acts = [];
-    this.labels = [];
-    this.phases = [];
-    this.fixed = /* @__PURE__ */ new Map();
-    // janelas com movimento explícito (a defesa automática não mexe)
-    this.later = [];
-    this.post = [];
-    this.slot = /* @__PURE__ */ new Map();
-    this.progFn = () => 1;
-    this.lastGoal = false;
-    this.isCounter = false;
-    // em transição: quem tem a bola e espaço à frente conduz para a baliza (nunca passa para trás)
-    this.spillNext = false;
-    // a defesa seguinte dá ressalto (recarga a seguir)
-    this.outAt = null;
-    // bola fora pela linha lateral (pontapé de linha lateral a seguir)
-    this.endGk = null;
-    this.shotTimes = [];
-    for (const [id, player] of Object.entries(playersById)) {
-      this.movement.set(id, movementProfile(player));
-      this.attrsOf.set(id, player.attrs);
-    }
-    this.r = rnd(Math.floor(p.start * 100) + 7);
-    const r = this.r;
-    const att = this.att = p.side;
-    const def = 1 - att;
-    this.dirA = attackDir(att, period);
-    this.D = this.duration = Math.max(0.5, p.end - p.start);
-    const D = this.D;
-    const ids = p.onCourt;
-    const out = (sd) => p.flying[sd] ? ids[sd].filter((x) => !!x) : ids[sd].slice(1).filter((x) => !!x);
-    this.attOut = out(att);
-    this.defOut = ids[def].slice(1).filter((x) => !!x);
-    this.gkA = p.flying[att] ? null : ids[att][0];
-    this.gkD = ids[def][0];
-    for (const sd of [0, 1]) for (const id of ids[sd]) if (id) {
-      this.sideOf.set(id, sd);
-      this.tr.set(id, new Track());
-    }
-    for (const id of REFS) this.tr.set(id, new Track());
-    this.sys = p.flying[att] ? "5x4" : tactics[att].system;
-    this.attOut.forEach((id, i) => this.slot.set(id, i % SHAPES[this.sys].length));
-    const kind0 = start2?.kind ?? (start2 ? "live" : "kickoff");
-    const kind = kind0 === "gk" && (!this.gkA || start2?.holder !== this.gkA) ? "live" : kind0;
-    this.lead = kind === "kickoff" ? start2 ? 4 : 1.6 : kind === "gk" ? 2.4 : kind === "lateral" ? 3.6 : 0;
-    const t0 = -this.lead;
-    for (const [id, tr] of this.tr) {
-      const prev = start2?.pos?.[id];
-      tr.set(t0, prev ?? (start2?.pos ? { x: 0, y: -10.4 } : this.restPos(id, kind === "lateral" ? "live" : kind)), true);
-    }
-    let holder;
-    const sb = start2?.ball ?? { x: 0, y: 0 };
-    if (kind === "kickoff") {
-      holder = this.attOut.find((id) => id !== ids[att][0]) ?? this.attOut[0];
-      for (const id of this.tr.keys()) this.tr.get(id).set(-0.15, this.restPos(id, "kickoff", holder), true);
-      const b0 = { x: sb.x, y: sb.y, z: 0.11 };
-      this.balls.push({ k: "still", t0, at: b0 });
-      if (Math.hypot(sb.x, sb.y) > 0.5) this.balls.push({ k: "fly", t0: t0 + 0.8, t1: t0 + 2.4, from: b0, b: { x: 0, y: 0, z: 0.11 }, lift: 1.2 });
-      this.balls.push({ k: "still", t0: t0 + 2.4, at: { x: 0, y: 0, z: 0.11 } });
-      this.phase(t0, "Pontap\xE9 de sa\xEDda");
-      this.progFn = this.makeProg(0, 0);
-    } else if (kind === "gk" && this.gkA) {
-      holder = this.gkA;
-      for (const id of this.tr.keys()) this.tr.get(id).set(-0.15, this.restPos(id, "gk"), id === holder);
-      const b0 = { x: sb.x, y: sb.y, z: 0.11 };
-      this.balls.push({ k: "still", t0, at: b0 });
-      const gp = this.P(holder, t0);
-      if (dist(gp, b0) < 6) {
-        const tg = t0 + clamp4(dist(gp, b0) / 5, 0.4, 1.2);
-        this.key(holder, tg, { x: clamp4(b0.x, -20.8, 20.8), y: b0.y }, true);
-        this.balls.push({ k: "hands", t0: tg, id: holder });
-      } else {
-        this.balls.push({ k: "fly", t0: t0 + 0.3, t1: t0 + 1.3, from: { x: b0.x, y: Math.sign(b0.y || 1) * 11.5, z: 0.6 }, b: holder, lift: 0.8 });
-        this.balls.push({ k: "hands", t0: t0 + 1.3, id: holder });
-      }
-      this.phase(t0, "Reposi\xE7\xE3o do guarda-redes");
-      this.progFn = this.makeProg(0, 0);
-    } else if (kind === "lateral") {
-      const spot = { x: clamp4(sb.x, -19, 19), y: Math.sign(sb.y || 1) * 10 };
-      holder = this.attOut.reduce((x, y) => dist(this.P(y, t0), spot) < dist(this.P(x, t0), spot) ? y : x);
-      const mates = this.attOut.filter((x) => x !== holder);
-      const variant = r() < 0.45 ? "curto" : r() < 0.6 ? "atras" : "bloqueio";
-      const near = mates.length ? mates.reduce((x, y) => dist(this.P(y, t0), spot) < dist(this.P(x, t0), spot) ? y : x) : holder;
-      const back = mates.length ? mates.reduce((x, y) => this.U(this.P(y, t0)) < this.U(this.P(x, t0)) ? y : x) : holder;
-      const mate = variant === "atras" ? back : near;
-      const sgn = Math.sign(spot.y);
-      this.balls.push({ k: "still", t0, at: { x: sb.x, y: sb.y, z: 0.11 } });
-      this.key(holder, -1.5, { x: sb.x, y: sb.y }, true);
-      this.balls.push({ k: "hands", t0: -1.5, id: holder, z: 0.95 });
-      this.key(holder, -0.9, { x: spot.x - this.dirA * 0.3, y: spot.y + sgn * 0.2 }, true);
-      this.balls.push({ k: "still", t0: -0.85, at: { x: spot.x, y: spot.y, z: 0.11 } });
-      const recv = variant === "atras" ? { x: clamp4(spot.x - this.dirA * 6, -17, 17), y: spot.y - sgn * 5.5 } : variant === "bloqueio" ? { x: clamp4(spot.x + this.dirA * 3.5, -17, 17), y: spot.y - sgn * 4.5 } : { x: clamp4(spot.x - this.dirA * 2.5, -17, 17), y: spot.y - sgn * 3.8 };
-      if (variant === "bloqueio") {
-        const scr = mates.find((x) => x !== mate);
-        if (scr) {
-          this.key(scr, -0.6, { x: recv.x - this.dirA * 2.2, y: recv.y + sgn * 1.2 }, true);
-          this.act(scr, "screen", -0.9, 0.3, { face: mate });
-        }
-        this.key(mate, -1, { x: recv.x - this.dirA * 3, y: recv.y + sgn * 1.5 }, true);
-      }
-      this.key(mate, -0.1, recv, true);
-      this.act(holder, "pass", -0.35, 0.05, { face: mate });
-      this.balls.push({ k: "pass", t0: -0.1, t1: 0.45, from: holder, to: mate, lift: 0.05 });
-      this.balls.push({ k: "foot", t0: 0.45, id: mate });
-      this.phase(t0, "Pontap\xE9 de linha lateral");
-      this.label(-0.6, `Pontap\xE9 de linha lateral: ${this.nm(holder)}`);
-      this.progFn = this.makeProg(0, clamp4((this.U(spot) - 12) / 16, 0, 1));
-      holder = mate;
-    } else {
-      const h0 = start2?.holder && this.attOut.concat(this.gkA ? [this.gkA] : []).includes(start2.holder) ? start2.holder : null;
-      holder = h0 ?? this.nearestOut(sb, t0);
-      if (!start2?.pos) this.tr.get(holder).set(t0, sb, true);
-      const hp0 = this.P(holder, t0);
-      if (start2 && Math.hypot(hp0.x - sb.x, hp0.y - sb.y) > 1.2) {
-        this.balls.push({ k: "still", t0, at: { x: sb.x, y: sb.y, z: 0.11 } });
-        this.key(holder, 0.7, sb);
-        this.balls.push({ k: "foot", t0: 0.7, id: holder });
-        this.label(0.2, `${this.nm(holder)} ganha a bola`);
-      } else this.balls.push({ k: "foot", t0, id: holder });
-      const u0 = this.U(sb);
-      this.progFn = this.makeProg(0, clamp4((u0 - 12) / 16, 0, 1));
-      this.phase(t0, p.counter ? "Transi\xE7\xE3o ofensiva" : "Recupera\xE7\xE3o de bola");
-    }
-    const first = p.actions[0];
-    const ending = first?.type === "foul" ? { kind: "foul", foul: first } : first?.type === "lost" ? { kind: "lost", lost: first } : first?.type === "shot" && first.side === att ? { kind: "shot", shot: first } : { kind: "none" };
-    const counter = p.counter || ending.shot?.kind === "counter";
-    this.isCounter = counter;
-    let T = 0;
-    const gkStyle = tactics[att].gkStyle ?? "classico";
-    if (holder === this.gkA && gkStyle !== "classico" && D > 7 && r() < (gkStyle === "avancado" ? 0.3 : 0.12)) {
-      const g0 = this.P(holder, 0);
-      const carryTo = this.A(gkStyle === "avancado" ? 15 + r() * 4.5 : 7 + r() * 2, clamp4(g0.y + (r() - 0.5) * 6, -5, 5));
-      this.balls.push({ k: "foot", t0: 0.3, id: holder });
-      const tc = Math.min(D - 1.2, 0.3 + dist(g0, carryTo) / 4.6);
-      this.key(holder, tc, carryTo);
-      this.attKeysAt(tc, /* @__PURE__ */ new Set([holder]));
-      this.label(0.4, `${this.nm(holder)} sai a jogar com os p\xE9s`);
-      const to = this.attOut.reduce((x, y) => this.U(this.P(y, tc)) > this.U(this.P(x, tc)) ? y : x);
-      this.act(holder, "pass", tc - 0.05, tc + 0.3, { face: to });
-      this.pass(holder, to, tc + 0.1, tc + 0.7);
-      this.key(holder, tc + 2.2, this.A(gkStyle === "avancado" ? 9 : 5, 0));
-      holder = to;
-      T = tc + 0.7;
-    } else if (holder === this.gkA) {
-      const tl = Math.min(1.1 + r() * 0.8, D * 0.3);
-      this.attKeysAt(tl + 0.4, /* @__PURE__ */ new Set([this.gkA]));
-      const gp0 = this.P(holder, tl);
-      const freeOf = (id) => {
-        const q = this.P(id, tl + 0.4);
-        const md = Math.min(9, ...this.defOut.map((d) => dist(this.P(d, tl), q)));
-        return Math.min(md, 5) - Math.max(0, dist(gp0, q) - 14) * 0.25 + r() * 0.8;
-      };
-      const to = this.attOut.reduce((x, y) => freeOf(y) > freeOf(x) ? y : x);
-      const td = dist(gp0, this.P(to, tl + 0.4));
-      const tf = Math.min(clamp4(td < 9 ? td / 9 : 0.25 + td / 15, 0.35, 1.8), Math.max(0.35, D - tl - 0.4));
-      this.act(holder, "throw", tl - 0.45, tl + 0.1, { face: to });
-      this.pass(holder, to, tl, tl + tf, td < 9 ? 0.03 : 0.12 + td * 0.03);
-      this.label(tl, `${this.nm(holder)} rep\xF5e a bola`);
-      holder = to;
-      T = tl + tf;
-    } else if (kind === "kickoff") {
-      const back = this.attOut.find((id) => id !== holder && this.slot.get(id) === 0) ?? this.attOut.find((id) => id !== holder);
-      this.act(holder, "pass", -0.1, 0.25, { face: back });
-      this.pass(holder, back, 0.15, 0.8, 0.05);
-      this.attKeysAt(1.4, /* @__PURE__ */ new Set());
-      holder = back;
-      T = 0.8;
-    } else if (kind === "lateral") T = 0.5;
-    this.phase(Math.max(0, T), counter && p.counter ? "Contra-ataque" : this.sys === "5x4" ? "Ataque 5x4 (guarda-redes avan\xE7ado)" : `Ataque organizado (${this.sys})`);
-    const shotA = ending.shot;
-    const gkRun = !!(shotA?.gkRun && this.gkA && shotA.shooter === this.gkA);
-    const shooter = shotA && (this.attOut.includes(shotA.shooter) || gkRun) ? shotA.shooter : void 0;
-    const assist = shotA?.assist && this.attOut.includes(shotA.assist) && shotA.assist !== shooter ? shotA.assist : void 0;
-    const tS = D - 0.25;
-    const finishLen = gkRun ? 4.4 : counter ? 4.6 : 2.6;
-    const needed = ending.kind === "shot" && shooter ? counter ? assist ?? holder : assist ?? shooter : ending.kind === "foul" && this.attOut.includes(ending.foul.shooter) ? ending.foul.shooter : void 0;
-    const tFin = ending.kind === "shot" && shooter ? Math.max(T + 0.3, tS - finishLen) : ending.kind === "foul" ? D - 1.5 : ending.kind === "lost" ? D - 1.1 : D;
-    holder = this.beats(T, tFin, holder, gkRun ? void 0 : counter ? assist ? needed : void 0 : needed);
-    T = Math.max(T, tFin);
-    let afterT = D;
-    if (ending.kind === "shot" && shooter) {
-      if (gkRun) this.gkCarry(holder, T, tS, shooter);
-      else if (counter) this.counterRun(holder, T, tS, shooter, assist, shotA);
-      else this.finish(holder, T, tS, shooter, assist, shotA);
-      this.spillNext = p.actions[1]?.kind === "rebound" && p.actions[1].side === att;
-      afterT = this.shot(tS, shooter, shotA, this.dirA);
-    } else if (ending.kind === "lost") {
-      this.loseBall(holder, T, D, ending.lost.other);
-      if (this.outAt) afterT = D + 0.7;
-    } else if (ending.kind === "foul") {
-      this.fouled(holder, T, D, ending.foul);
-      afterT = D + 0.6;
-    } else {
-      this.attKeysAt(D, /* @__PURE__ */ new Set([holder]));
-    }
-    this.sortBalls();
-    for (const id of this.attOut) if (id !== this.gkA) this.tr.get(id)?.liven(this.r, 0, D - 0.3, 1.8, (t) => this.isFixed(id, t) || this.holderAt(t) === id);
-    for (const id of this.tr.keys()) if (this.sideOf.get(id) === att) {
-      const profile = id !== this.gkA ? this.movement.get(id) : void 0;
-      this.tr.get(id).limit(VMAX);
-      this.tr.get(id).bake(-this.lead, D + 1, VMAX, AMAX, profile?.accelerationFactor, profile?.agilityFactor);
-    }
-    this.sortBalls();
-    for (const f of this.later) f();
-    this.later = [];
-    this.defend(0.35, Math.min(D, afterT));
-    for (const f of this.post) f();
-    T = this.restarts(Math.max(D, afterT), ending);
-    this.sortBalls();
-    for (const f of this.later) f();
-    for (const tr of this.tr.values()) tr.limit(VMAX * 1.1);
-    const gks = /* @__PURE__ */ new Set([this.p.onCourt[0][0], this.p.onCourt[1][0]]);
-    for (const [id, tr] of this.tr) {
-      const goalkeeper = gks.has(id);
-      const profile = !goalkeeper ? this.movement.get(id) : void 0;
-      tr.bake(
-        -this.lead,
-        T + 0.5,
-        goalkeeper ? VMAX * 1.1 : VMAX,
-        goalkeeper ? AMAX * 2.2 : this.sideOf.get(id) === att ? AMAX : AMAX * 1.3,
-        profile?.accelerationFactor,
-        profile?.agilityFactor
-      );
-    }
-    this.finalT = T;
-    this.extra = Math.max(0, T - D);
-    const pos = {};
-    for (const [id, tr] of this.tr) pos[id] = tr.at(T);
-    const goal = this.lastGoal;
-    const ballEnd = this.ballAt(T);
-    const h = this.holderAt(T);
-    this.end = goal ? { holder: null, ball: ballEnd, pos, kind: "kickoff" } : this.outAt && ending.kind === "lost" ? { holder: null, ball: this.outAt, pos, kind: "lateral" } : h && this.gkOfAny(h) && this.balls[this.balls.length - 1].k === "hands" ? { holder: h, ball: ballEnd, pos, kind: "gk" } : this.endGk ? { holder: this.endGk, ball: ballEnd, pos, kind: "gk" } : { holder: h, ball: ballEnd, pos, kind: "live" };
-  }
-  /** atributo 1-20 normalizado a 0-1 (0,5 sem dados: jogo sem plantéis) */
-  au(id, k) {
-    const a = id ? this.attrsOf.get(id) : void 0;
-    return a ? clamp4((a[k] - 1) / 19, 0, 1) : 0.5;
-  }
-  get attackDirection() {
-    return this.dirA;
-  }
-  get total() {
-    return this.lead + this.duration + this.extra;
-  }
-  /** Tempo de jogo decorrido (o relógio não anda na preparação nem nas bolas paradas). */
-  clockAt(ct) {
-    return clamp4(ct - this.lead, 0, this.duration);
-  }
-  /** Momentos que merecem ser vistos devagar: a finalização e as bolas paradas. */
-  isKey(ct) {
-    const t = ct - this.lead;
-    return t > this.D - 4.5 && (this.shotTimes.length > 0 || t > this.D);
-  }
-  /** Instante (na escala de at) do remate que deu golo, para a repetição. */
-  get goalShotCt() {
-    return this.lastGoal && this.shotTimes.length ? this.lead + this.shotTimes[this.shotTimes.length - 1] : null;
-  }
-  // ---------- utilidades ----------
-  sortBalls() {
-    this.balls = this.balls.map((b, i) => [b, i]).sort((x, y) => x[0].t0 - y[0].t0 || x[1] - y[1]).map((x) => x[0]);
-  }
-  nm(id) {
-    return id ? this.names[id] ?? "" : "";
-  }
-  label(t, text) {
-    this.labels.push({ t, text });
-  }
-  phase(t, text) {
-    this.phases.push({ t, text });
-  }
-  A(u, v) {
-    return { x: this.dirA * (u - 20), y: v };
-  }
-  U(p) {
-    return this.dirA * p.x + 20;
-  }
-  /** Posição de baliza do GR que defende a baliza em x = gx (±20) contra uma bola em b: na bissetriz do ângulo
-   *  dos postes, à profundidade dada (m da linha), mas nunca mais à frente do que a bola (−0,8 m) e sempre entre os
-   *  postes (+0,25 m). Com ângulo fechado fica no primeiro poste. */
-  gkSpot(gx, b, depth) {
-    const sg = Math.sign(gx);
-    const u1 = { x: gx - b.x, y: -1.5 - b.y }, u2 = { x: gx - b.x, y: 1.5 - b.y };
-    const l1 = Math.hypot(u1.x, u1.y) || 1, l2 = Math.hypot(u2.x, u2.y) || 1;
-    const bis = { x: u1.x / l1 + u2.x / l2, y: u1.y / l1 + u2.y / l2 };
-    const bdist = Math.abs(gx - b.x);
-    const d = Math.max(0.25, Math.min(depth, bdist - 0.8));
-    const s0 = Math.abs(bis.x) > 0.05 ? (bdist - d) / Math.abs(bis.x) : 0;
-    const q = s0 > 0 ? { x: b.x + bis.x * s0, y: b.y + bis.y * s0 } : { x: gx - sg * d, y: Math.sign(b.y) * 1.3 };
-    return { x: q.x, y: clamp4(q.y, -1.75, 1.75) };
-  }
-  P(id, t) {
-    return this.tr.get(id)?.at(t) ?? { x: 0, y: 0 };
-  }
-  key(id, t, p, hold = false) {
-    this.tr.get(id)?.set(t, p, hold);
-  }
-  fix(id, t0, t1) {
-    const l = this.fixed.get(id) ?? [];
-    l.push([t0, t1]);
-    this.fixed.set(id, l);
-  }
-  isFixed(id, t) {
-    return (this.fixed.get(id) ?? []).some(([a, b]) => t >= a && t <= b);
-  }
-  act(id, kind, t0, t1, o = {}) {
-    this.acts.push({ id, kind, t0, t1, ...o });
-  }
-  pass(from, to, t0, t1, lift = 0.08) {
-    this.balls.push({ k: "pass", t0, t1, from, to, lift });
-    this.balls.push({ k: "foot", t0: t1, id: to });
-  }
-  gkOfAny(id) {
-    return id === this.p.onCourt[0][0] || id === this.p.onCourt[1][0];
-  }
-  nearestOut(b, t) {
-    let best = this.attOut[0], bd = 1e9;
-    for (const id of this.attOut) {
-      const d = dist(this.P(id, t), b);
-      if (d < bd) {
-        bd = d;
-        best = id;
-      }
-    }
-    return best;
-  }
-  makeProg(t0, p0) {
-    const span = Math.max(3, Math.min(8, (this.D - t0) * 0.5));
-    return (t) => lerp(p0, 1, ease(clamp4((t - t0) / span, 0, 1)));
-  }
-  /** Posição na estrutura ofensiva (slot), conforme a progressão e o lado da bola. */
-  slotPos(i, t, bv, jitter = 0) {
-    const [au, av] = SHAPES[this.sys][i];
-    const pr = this.progFn(t);
-    const u = lerp(au - 13, au, pr) + (jitter ? (this.r() - 0.5) * jitter : 0);
-    const v = av + bv * 0.22 + (jitter ? (this.r() - 0.5) * jitter : 0);
-    return this.A(clamp4(u, 2, 38), clamp4(v, -8.6, 8.6));
-  }
-  /** Posição de partida em reposições (pontapé de saída, GR) */
-  restPos(id, kind, kicker) {
-    if (REFS.includes(id)) return { x: id === REFS[0] ? -2 : 2, y: id === REFS[0] ? -10.7 : 10.7 };
-    const sd = this.sideOf.get(id);
-    const isAtt = sd === this.att;
-    const gk = id === this.p.onCourt[sd][0] && !this.p.flying[sd];
-    if (isAtt) {
-      if (gk) return this.A(kind === "gk" ? 1.4 : 2, 0);
-      const i = this.slot.get(id) ?? 0;
-      if (kind === "kickoff") {
-        if (id === kicker) return this.A(19.6, 0.3);
-        const [au2, av2] = SHAPES[this.sys][i];
-        return this.A(clamp4(au2 - 8, 10, 19), av2 * 0.9);
-      }
-      const [au, av] = SHAPES[this.sys][i];
-      return this.A(clamp4(au - 12, 5, 30), av * (Math.abs(av) > 5 ? 1.08 : 1));
-    }
-    if (gk || id === this.p.onCourt[sd][0]) return this.A(39, 0);
-    const di = Math.max(0, this.defOut.indexOf(id));
-    const [bu, bv] = BLOCK[this.tactics[sd].pressure][di % 4];
-    return kind === "kickoff" ? this.A(Math.max(23.4, bu + 3), bv) : this.A(bu, bv);
-  }
-  /** Pontos-chave para os atacantes não envolvidos num lance, na estrutura. */
-  attKeysAt(t, skip, bv) {
-    const b = bv ?? this.ballAt(Math.min(t, this.lastBallT())).y;
-    for (const id of this.attOut) if (!skip.has(id)) this.key(id, t, this.slotPos(this.slot.get(id) ?? 0, t, b, 1.6));
-    const gs = this.tactics[this.att].gkStyle ?? "classico";
-    const gkU = gs === "avancado" ? lerp(2, 10, this.progFn(t)) : gs === "construtor" ? lerp(1.6, 6.5, this.progFn(t)) : lerp(1.4, 4.2, this.progFn(t));
-    if (this.gkA && !skip.has(this.gkA)) this.key(this.gkA, t, this.A(gkU, clamp4(b * (gs === "classico" ? 0.12 : 0.25), -2, 2)));
-  }
-  lastBallT() {
-    const s2 = this.balls[this.balls.length - 1];
-    return s2 ? s2.t0 : 0;
-  }
-  slotHolder(i, except) {
-    return this.attOut.find((id) => this.slot.get(id) === i && id !== except);
-  }
-  // ---------- ataque organizado: passes e movimentos ----------
-  beats(T, tEnd, holder, forced) {
-    const r = this.r;
-    const tA = this.tactics[this.att];
-    const interval = tA.tempo === "rapido" ? 1.15 : tA.tempo === "paciente" ? 1.7 : 1.4;
-    while (tEnd - T > 0.9) {
-      let len = interval * (0.75 + r() * 0.5) * (r() < 0.12 ? 1.6 : 1);
-      if (tEnd - T - len < 0.9) len = tEnd - T;
-      const last = T + len >= tEnd - 0.01;
-      const want = last && forced && forced !== holder ? forced : void 0;
-      holder = this.move(T, len, holder, want);
-      T += len;
-    }
-    if (forced && forced !== holder && tEnd - T > 0.4) holder = this.move(T, tEnd - T, holder, forced);
-    else if (tEnd > T) this.attKeysAt(tEnd, /* @__PURE__ */ new Set([holder]));
-    return holder;
-  }
-  /** Um lance de ataque: escolhe um padrão real conforme o sistema e executa-o. */
-  move(T, len, holder, forced) {
-    const r = this.r;
-    const sys = this.sys;
-    const tA = this.tactics[this.att];
-    const hs2 = this.slot.get(holder);
-    const others = this.attOut.filter((x) => x !== holder);
-    if (this.isCounter && !forced && hs2 !== void 0) {
-      const hp0 = this.P(holder, T);
-      const go = this.A(Math.min(this.U(hp0) + len * 5.2, 29), hp0.y * 0.75);
-      this.key(holder, T + len, go);
-      this.attKeysAt(T + len, /* @__PURE__ */ new Set([holder]), go.y);
-      return holder;
-    }
-    if (hs2 === void 0 || !others.length) {
-      const to = forced ?? others[0] ?? holder;
-      if (to !== holder) {
-        this.act(holder, "pass", T + len - 0.75, T + len - 0.4, { face: to });
-        this.pass(holder, to, T + len - 0.55, T + len);
-      }
-      this.attKeysAt(T + len, /* @__PURE__ */ new Set([holder]));
-      return to;
-    }
-    const hp = this.P(holder, T);
-    const sideOfBall = hp.y >= 0 ? 1 : -1;
-    const fixoLike = (sys === "3-1" || sys === "1-2-1") && hs2 === 0;
-    const backLike = (sys === "4-0" || sys === "2-2") && (hs2 === 0 || hs2 === 3);
-    const pivo = sys === "3-1" || sys === "1-2-1" ? this.slotHolder(3) : void 0;
-    const opts = [["circ", tA.tempo === "paciente" ? 3 : 2]];
-    if (len >= 1.2) {
-      if (fixoLike) opts.push(["paralela", 2], ["diagonal", 1.6]);
-      if ((sys === "3-1" || sys === "1-2-1") && hs2 !== 3 && pivo) opts.push(["pivo", sys === "3-1" ? 2.4 : 1.2]);
-      if (backLike) opts.push(["passaCorta", sys === "4-0" ? 3.5 : 1.6]);
-      if (sys === "2-2" && hs2 !== void 0) opts.push(["cruzamento", 1.4]);
-      if (len >= 1.6) opts.push(["bloqueio", sys === "4-0" ? 0.9 : 0.7], ["drible", tA.tempo === "rapido" ? 0.6 : 0.4]);
-      if (sys === "5x4") opts.push(["inversao", 2.5], ["diagonalCurta", 2]);
-      if ((sys === "3-1" || sys === "1-2-1") && hs2 !== 3 && pivo && len >= 1.5) opts.push(["falsoPivo", 1.1]);
-    }
-    const oppPress = this.tactics[1 - this.att].pressure;
-    if (len >= 1.6 && others.length >= 2) opts.push(["emU", this.tactics[1 - this.att].marking === "zona" ? 0.9 : 0.35]);
-    if (len >= 2 && this.U(hp) < 20 && pivo) opts.push(["cortina", oppPress === "alta" ? 2 : 0.6]);
-    if (this.gkA && this.U(hp) < 17 && len >= 1.5) opts.push(["saidaGR", oppPress === "alta" ? 3 : oppPress === "media" ? 0.8 : 0.2]);
-    let pick3 = r() * opts.reduce((a, o) => a + o[1], 0);
-    let mv = opts[0][0];
-    for (const [k, w] of opts) {
-      pick3 -= w;
-      if (pick3 <= 0) {
-        mv = k;
-        break;
-      }
-    }
-    if (forced) {
-      const fs = this.slot.get(forced);
-      if (mv === "pivo" && fs !== 3) mv = "circ";
-      if ((mv === "paralela" || mv === "diagonal") && (fs !== 1 && fs !== 2)) mv = "circ";
-      if (mv === "bloqueio" || mv === "drible" || mv === "saidaGR") mv = "circ";
-      if (mv === "falsoPivo" && fs !== 3) mv = "circ";
-      if (mv === "emU" || mv === "diagonalCurta" || mv === "cortina") mv = "circ";
-      if (mv === "passaCorta" && fs !== (hs2 === 0 ? 1 : 2)) mv = "circ";
-    }
-    const flightOf = (a, b) => clamp4(dist(a, b) / 12, 0.3, 0.9);
-    const passTo = (to, toSpot, lift = 0.08) => {
-      const fl = flightOf(hp, toSpot);
-      const tp = T + len - fl;
-      this.act(holder, "pass", tp - 0.2, tp + 0.15, { face: to });
-      this.pass(holder, to, tp, T + len, lift);
-    };
-    const carry = (to) => this.key(holder, T + len * 0.55, to);
-    const tEnd = T + len;
-    if (mv === "paralela" || mv === "diagonal") {
-      const s2 = r() < 0.5 ? -1 : 1;
-      const alaSlot = s2 < 0 ? 1 : 2;
-      const ala = this.slotHolder(alaSlot) ?? others[0];
-      const opp = this.slotHolder(s2 < 0 ? 2 : 1);
-      const recv2 = forced ?? ala;
-      const spot2 = this.slotPos(this.slot.get(recv2) ?? alaSlot, tEnd, s2 * 4);
-      carry(this.A(this.U(hp) + 1.2, hp.y * 0.6 + s2 * 1.2));
-      passTo(recv2, spot2);
-      this.key(recv2, tEnd, spot2);
-      if (mv === "paralela") {
-        const run = this.A(this.U(spot2) + 5, s2 * 8.6);
-        this.key(holder, tEnd + 0.6, run);
-        this.act(holder, "run", T + len * 0.6, tEnd + 0.8, { to: run });
-        this.slot.set(holder, alaSlot);
-        this.slot.set(recv2, 0);
-        this.label(T + len * 0.6, `Paralela de ${this.nm(holder)}`);
-      } else {
-        const run = this.A(this.U(spot2) + 4, -s2 * 4.5);
-        this.key(holder, tEnd + 0.6, run);
-        this.act(holder, "run", T + len * 0.6, tEnd + 0.9, { to: run });
-        this.slot.set(holder, s2 < 0 ? 2 : 1);
-        if (opp) {
-          this.slot.set(opp, 0);
-          this.key(opp, tEnd + 0.4, this.slotPos(0, tEnd, s2 * 4));
-        }
-        this.slot.set(recv2, alaSlot);
-        this.label(T + len * 0.6, `Diagonal de ${this.nm(holder)}`);
-      }
-      this.attKeysAt(tEnd, /* @__PURE__ */ new Set([holder, recv2, ...opp && mv === "diagonal" ? [opp] : []]), s2 * 4);
-      return recv2;
-    }
-    if (mv === "pivo" && pivo) {
-      const s2 = sideOfBall;
-      const spot2 = this.A(clamp4(this.U(this.slotPos(3, tEnd, 0)) - 1.5, 26, 34), s2 * 2.2);
-      this.key(pivo, T + len * 0.5, this.A(this.U(spot2) + 0.8, s2 * 1));
-      this.key(pivo, tEnd, spot2);
-      this.act(pivo, "run", T, tEnd, { to: spot2 });
-      this.act(pivo, "shield", tEnd, tEnd + 1, { ang: this.dirA > 0 ? -Math.PI / 2 : Math.PI / 2 });
-      passTo(pivo, spot2);
-      const cut = this.A(clamp4(this.U(hp) + 6, 24, 34), s2 * 3.5);
-      this.key(holder, tEnd + 0.7, cut);
-      this.act(holder, "run", tEnd - 0.3, tEnd + 0.8, { to: cut });
-      this.label(tEnd - 0.4, `Bola no piv\xF4 (${this.nm(pivo)}), corte de ${this.nm(holder)}`);
-      this.attKeysAt(tEnd, /* @__PURE__ */ new Set([holder, pivo]), s2 * 2);
-      return pivo;
-    }
-    if (mv === "passaCorta" || mv === "cruzamento" || mv === "inversao") {
-      const s2 = hs2 === 0 || hs2 === 1 ? -1 : 1;
-      if (mv === "passaCorta") {
-        const wideSlot = s2 < 0 ? 1 : 2, oppWide = s2 < 0 ? 2 : 1, oppBack = s2 < 0 ? 3 : 0;
-        const recv3 = forced ?? this.slotHolder(wideSlot) ?? others[0];
-        const spot3 = this.slotPos(this.slot.get(recv3) ?? wideSlot, tEnd, s2 * 4);
-        passTo(recv3, spot3);
-        this.key(recv3, tEnd, spot3);
-        const mid = this.A(clamp4(this.U(spot3) + 4, 20, 34), s2 * 1.5);
-        const fin = this.slotPos(oppWide, tEnd + 1.6, s2 * 4);
-        this.key(holder, tEnd + 0.5, mid);
-        this.key(holder, tEnd + 1.6, fin);
-        this.act(holder, "run", tEnd - 0.2, tEnd + 1.4, { to: mid });
-        const pw = this.slotHolder(oppWide), pb = this.slotHolder(oppBack);
-        if (pw && pw !== recv3) {
-          this.slot.set(pw, oppBack);
-          this.key(pw, tEnd + 1.2, this.slotPos(oppBack, tEnd + 1.2, s2 * 4));
-        }
-        if (pb && pb !== recv3) {
-          this.slot.set(pb, hs2);
-          this.key(pb, tEnd + 1, this.slotPos(hs2, tEnd + 1, s2 * 4));
-        }
-        this.slot.set(holder, oppWide);
-        this.label(tEnd - 0.3, `Passe e corte de ${this.nm(holder)}`);
-        this.attKeysAt(tEnd, /* @__PURE__ */ new Set([holder, recv3, ...pw ? [pw] : [], ...pb ? [pb] : []]), s2 * 4);
-        return recv3;
-      }
-      if (mv === "cruzamento") {
-        const f1 = this.slotHolder(1), f2 = this.slotHolder(2);
-        const recv3 = forced ?? others.find((x) => x !== f1 && x !== f2) ?? others[0];
-        const spot3 = this.slotPos(this.slot.get(recv3) ?? 0, tEnd, 0);
-        passTo(recv3, spot3);
-        this.key(recv3, tEnd, spot3);
-        if (f1 && f2 && f1 !== recv3 && f2 !== recv3) {
-          this.slot.set(f1, 2);
-          this.slot.set(f2, 1);
-          this.act(f1, "run", T, tEnd, { to: this.slotPos(2, tEnd, 0) });
-          this.act(f2, "run", T, tEnd, { to: this.slotPos(1, tEnd, 0) });
-          this.label(T + 0.4, "Cruzamento dos avan\xE7ados");
-        }
-        this.attKeysAt(tEnd, /* @__PURE__ */ new Set([holder, recv3]), 0);
-        return recv3;
-      }
-      const recv2 = forced ?? others.reduce((a, b) => Math.abs(this.P(b, T).y - hp.y) > Math.abs(this.P(a, T).y - hp.y) ? b : a);
-      const spot2 = this.slotPos(this.slot.get(recv2) ?? 0, tEnd, -hp.y * 0.3);
-      passTo(recv2, spot2);
-      this.key(recv2, tEnd, spot2);
-      this.label(tEnd - 0.5, "Invers\xE3o do centro do jogo");
-      this.attKeysAt(tEnd, /* @__PURE__ */ new Set([holder, recv2]), -hp.y * 0.3);
-      return recv2;
-    }
-    if (mv === "saidaGR" && this.gkA) {
-      const gk = this.gkA;
-      const s2 = sideOfBall;
-      const gSpot = this.A(3.2, clamp4(hp.y * 0.3, -2, 2));
-      const t1 = T + len * 0.45;
-      this.key(gk, t1, gSpot);
-      this.act(holder, "pass", t1 - 0.45, t1 - 0.1, { face: gk });
-      this.pass(holder, gk, t1 - 0.3, t1, 0.03);
-      const recv2 = others.reduce((a, b) => this.P(b, T).y * -s2 > this.P(a, T).y * -s2 ? b : a);
-      const rSpot = this.A(clamp4(this.U(this.P(recv2, T)) - 3, 6, 14), -s2 * 7.6);
-      this.key(recv2, tEnd, rSpot);
-      this.act(recv2, "run", t1 - 0.4, tEnd, { to: rSpot });
-      this.act(gk, "pass", tEnd - 0.75, tEnd - 0.4, { face: recv2 });
-      this.pass(gk, recv2, tEnd - 0.6, tEnd, 0.12);
-      this.key(holder, tEnd, this.A(clamp4(this.U(hp) + 2, 6, 16), s2 * 7));
-      this.label(t1 - 0.3, `Sa\xEDda de press\xE3o pelo guarda-redes`);
-      this.attKeysAt(tEnd, /* @__PURE__ */ new Set([holder, recv2, gk]), -s2 * 4);
-      this.key(gk, tEnd + 1.2, this.A(1.2, 0));
-      return recv2;
-    }
-    if (mv === "diagonalCurta") {
-      const s2 = sideOfBall;
-      const base = others.filter((x) => this.U(this.P(x, T)) > 31).sort((a, b) => dist(this.P(a, T), hp) - dist(this.P(b, T), hp))[0] ?? others[0];
-      const gapSpot = this.A(clamp4(this.U(hp) + 3, 29, 33), clamp4(hp.y * 0.45, -4.5, 4.5));
-      this.key(base, tEnd, gapSpot);
-      this.act(base, "run", T + len * 0.3, tEnd, { to: gapSpot });
-      passTo(base, gapSpot, 0.03);
-      this.label(tEnd - 0.4, `Diagonal curta para ${this.nm(base)}, entre as linhas`);
-      this.attKeysAt(tEnd, /* @__PURE__ */ new Set([holder, base]), s2 * 2);
-      this.key(base, tEnd + 1, this.slotPos(this.slot.get(base) ?? 3, tEnd + 1, s2 * 2));
-      return base;
-    }
-    if (mv === "cortina" && pivo) {
-      const s2 = sideOfBall;
-      const wing = others.filter((x) => x !== pivo).reduce((a, b) => this.P(b, T).y * -s2 > this.P(a, T).y * -s2 ? b : a);
-      const curtain = others.find((x) => x !== pivo && x !== wing);
-      const t1 = T + len * 0.45;
-      if (curtain) {
-        const cs = { x: hp.x + this.dirA * 1.6, y: hp.y - s2 * 1.2 };
-        this.key(curtain, t1 - 0.2, cs);
-        this.act(curtain, "screen", t1 - 0.5, t1 + 0.3, { face: holder });
-      }
-      const wSpot = this.A(clamp4(this.U(hp) + 3, 10, 24), -s2 * 7.6);
-      this.key(wing, t1 + 0.5, wSpot);
-      this.act(holder, "pass", t1 - 0.35, t1, { face: wing });
-      this.pass(holder, wing, t1 - 0.2, t1 + 0.5, 0.05);
-      const pSpot = this.A(33, -s2 * 1.8);
-      this.key(pivo, tEnd, pSpot);
-      this.act(wing, "pass", t1 + 0.4, t1 + 0.7, { face: pivo });
-      this.pass(wing, pivo, t1 + 0.55, tEnd, 0.05);
-      this.act(pivo, "shield", tEnd, tEnd + 0.8, { ang: this.dirA > 0 ? -Math.PI / 2 : Math.PI / 2 });
-      const cut = this.A(clamp4(this.U(hp) + 9, 22, 32), -s2 * 3);
-      this.key(holder, tEnd + 0.4, cut);
-      this.act(holder, "run", t1, tEnd + 0.4, { to: cut });
-      this.label(t1 - 0.3, `Cortina, passe de primeira para o piv\xF4 e corte de ${this.nm(holder)}`);
-      this.attKeysAt(tEnd, /* @__PURE__ */ new Set([holder, wing, pivo, ...curtain ? [curtain] : []]), -s2 * 3);
-      return pivo;
-    }
-    if (mv === "emU") {
-      const s2 = sideOfBall;
-      const recv2 = others.reduce((a, b) => this.P(b, T).y * -s2 > this.P(a, T).y * -s2 ? b : a);
-      const behind = this.A(clamp4(this.U(hp) - 2.2, 5, 30), hp.y * 0.2);
-      const spot2 = this.A(clamp4(this.U(hp) + 2.5, 8, 33), clamp4(hp.y + s2 * 2.5, -8.5, 8.5));
-      this.key(recv2, T + len * 0.55, behind);
-      this.key(recv2, tEnd, spot2);
-      this.act(recv2, "run", T, tEnd, { to: spot2 });
-      carry(this.A(this.U(hp) + 0.6, hp.y - s2 * 0.8));
-      passTo(recv2, spot2);
-      this.label(T + len * 0.5, `Movimento em U de ${this.nm(recv2)} por tr\xE1s de ${this.nm(holder)}`);
-      const rs2 = this.slot.get(recv2);
-      if (rs2 !== void 0) {
-        this.slot.set(recv2, hs2);
-        this.slot.set(holder, rs2);
-      }
-      this.attKeysAt(tEnd, /* @__PURE__ */ new Set([holder, recv2]), spot2.y);
-      this.key(holder, tEnd + 0.9, this.slotPos(this.slot.get(holder) ?? hs2, tEnd + 0.9, spot2.y, 1));
-      return recv2;
-    }
-    if (mv === "falsoPivo" && pivo) {
-      const s2 = sideOfBall;
-      const come = this.A(clamp4(this.U(hp) + 5.5, 18, 28), clamp4(hp.y * 0.5, -4, 4));
-      this.key(pivo, tEnd, come);
-      this.act(pivo, "run", T, tEnd, { to: come });
-      passTo(pivo, come);
-      const runner = others.find((x) => x !== pivo && (this.P(x, T).y >= 0 ? 1 : -1) !== s2) ?? others.find((x) => x !== pivo);
-      if (runner) {
-        const deep = this.A(34.5, -s2 * 1.5);
-        this.key(runner, tEnd + 0.9, deep);
-        this.act(runner, "run", tEnd - 0.5, tEnd + 0.9, { to: deep });
-        this.slot.set(runner, 3);
-      }
-      this.slot.set(pivo, this.slot.get(runner ?? "") ?? hs2);
-      this.label(tEnd - 0.4, `Falso piv\xF4: ${this.nm(pivo)} sai para receber${runner ? `, ${this.nm(runner)} ataca as costas` : ""}`);
-      this.later.push(() => {
-        const m2 = this.defOut.reduce((a, b) => dist(this.P(b, T), this.P(pivo, T)) < dist(this.P(a, T), this.P(pivo, T)) ? b : a, this.defOut[0]);
-        if (!m2) return;
-        this.fix(m2, T + 0.2, tEnd + 0.6);
-        this.key(m2, tEnd + 0.1, { x: come.x + this.dirA * 1.1, y: come.y });
-      });
-      this.attKeysAt(tEnd, /* @__PURE__ */ new Set([holder, pivo, ...runner ? [runner] : []]), come.y);
-      return pivo;
-    }
-    if (mv === "bloqueio") {
-      const screener = pivo && pivo !== holder ? pivo : others.reduce((a, b) => dist(this.P(b, T), hp) < dist(this.P(a, T), hp) ? b : a);
-      const g = this.A(40, 0);
-      const gd = dist(hp, g) || 1;
-      const toward = { x: (g.x - hp.x) / gd, y: (g.y - hp.y) / gd };
-      const lat = hp.y >= 0 ? -1 : 1;
-      const scr = { x: hp.x + toward.x * 1.9 + lat * 0, y: hp.y + toward.y * 1.9 + lat * 0.9 };
-      const tScr = T + Math.min(1.1, len * 0.45);
-      this.key(screener, tScr, scr, false);
-      this.key(screener, tScr + 0.6, scr, false);
-      this.act(screener, "screen", tScr - 0.1, tScr + 0.7, { face: holder });
-      const drive = this.A(clamp4(this.U(hp) + 3.2, 6, 33), clamp4(hp.y + lat * 4, -7.5, 7.5));
-      this.key(holder, tScr + 0.2, { x: hp.x + toward.x * 0.3, y: hp.y });
-      this.key(holder, tEnd, drive);
-      this.act(holder, "feint", tScr - 0.1, tScr + 0.4, { ang: angTo(hp, drive) });
-      const roll = this.A(clamp4(this.U(scr) + 4, 18, 35), scr.y * 0.4);
-      this.key(screener, tEnd + 0.3, roll);
-      this.act(screener, "run", tScr + 0.6, tEnd + 0.4, { to: roll });
-      this.label(tScr - 0.2, `Bloqueio de ${this.nm(screener)} para ${this.nm(holder)}`);
-      this.later.push(() => {
-        const m2 = this.defOut.reduce((a, b) => dist(this.P(b, tScr - 0.4), hp) < dist(this.P(a, tScr - 0.4), hp) ? b : a, this.defOut[0]);
-        if (!m2) return;
-        const sp = this.P(screener, tScr + 0.2);
-        const stuck = { x: sp.x + toward.x * 0.75, y: sp.y + toward.y * 0.75 - lat * 0.4 };
-        this.fix(m2, tScr - 0.1, tScr + 0.9);
-        this.key(m2, tScr + 0.15, stuck);
-        this.key(m2, tScr + 0.8, { x: stuck.x + toward.x * 0.4, y: stuck.y + lat * 0.8 });
-      });
-      this.attKeysAt(tEnd, /* @__PURE__ */ new Set([holder, screener]), drive.y);
-      return holder;
-    }
-    if (mv === "drible") {
-      const lat = hp.y >= 0 ? -1 : 1;
-      const drive = this.A(clamp4(this.U(hp) + 3.5, 6, 33), clamp4(hp.y + lat * 3, -7.5, 7.5));
-      const tf = T + len * 0.35;
-      this.act(holder, "feint", tf - 0.3, tf + 0.3, { ang: angTo(hp, drive) });
-      this.key(holder, tf, { x: hp.x - lat * 0 + this.dirA * 0.4, y: hp.y - lat * 0.6 });
-      this.key(holder, tEnd, drive);
-      this.label(tf - 0.2, `Finta de ${this.nm(holder)}`);
-      this.later.push(() => {
-        const m2 = this.defOut.reduce((a, b) => dist(this.P(b, tf), hp) < dist(this.P(a, tf), hp) ? b : a, this.defOut[0]);
-        if (!m2) return;
-        const mp = this.P(m2, tf - 0.3);
-        this.fix(m2, tf - 0.2, tf + 0.7);
-        this.key(m2, tf + 0.1, { x: mp.x, y: mp.y - lat * 1.1 });
-        this.key(m2, tf + 0.6, { x: mp.x + this.dirA * 0.6, y: mp.y - lat * 0.4 });
-      });
-      this.attKeysAt(tEnd, /* @__PURE__ */ new Set([holder]), drive.y);
-      return holder;
-    }
-    const ADJ = {
-      "3-1": [[1, 2, 3], [0, 3], [0, 3], [0, 1, 2]],
-      "1-2-1": [[1, 2], [0, 3], [0, 3], [1, 2]],
-      "4-0": [[1, 3], [0, 2], [1, 3], [0, 2]],
-      "2-2": [[3, 1], [0, 2], [3, 1], [0, 2]],
-      "5x4": [[1, 2], [0, 3], [0, 4], [1, 4], [2, 3]]
-    };
-    const nb = (ADJ[sys][hs2] ?? []).map((i) => this.slotHolder(i)).filter((x) => !!x && x !== holder);
-    const recv = forced ?? (nb.length ? nb[Math.floor(r() * nb.length)] : others[Math.floor(r() * others.length)]);
-    const rs = this.slot.get(recv) ?? 0;
-    const spot = this.slotPos(rs, tEnd, this.P(recv, T).y * 0.5, 1.2);
-    this.key(recv, tEnd, spot);
-    carry(this.A(this.U(hp) + 0.8, hp.y + (r() - 0.5) * 1.6));
-    passTo(recv, spot);
-    this.attKeysAt(tEnd, /* @__PURE__ */ new Set([holder, recv]), spot.y);
-    this.key(holder, tEnd + 0.4, this.slotPos(hs2, tEnd + 0.4, spot.y, 1));
-    return recv;
-  }
-  // ---------- finalização de ataque organizado ----------
-  /** Apaga movimentos planeados para depois de T (um novo lance substitui-os). */
-  replan(T) {
-    for (const id of this.attOut) this.tr.get(id).clear(T + 0.05, 1e9);
-    if (this.gkA) this.tr.get(this.gkA).clear(T + 0.05, 1e9);
-  }
-  finish(holder, T, tS, shooter, assist, a) {
-    const r = this.r;
-    this.replan(T);
-    const pivoSlot = (this.sys === "3-1" || this.sys === "1-2-1") && this.slot.get(shooter) === 3;
-    let kind;
-    if (!assist || holder === shooter) kind = a.result === "blocked" || r() < 0.4 ? r() < 0.5 ? "meia" : "individual" : "individual";
-    else if (pivoSlot) kind = "pivo";
-    else if (a.result === "blocked" || a.result === "wide") kind = r() < 0.7 ? "meia" : "poste2";
-    else kind = r() < 0.55 ? "poste2" : r() < 0.5 ? "meia" : "pivo";
-    const hp = this.P(holder, T);
-    const s2 = hp.y >= 0 ? 1 : -1;
-    const skip = /* @__PURE__ */ new Set([holder, shooter]);
-    if (kind === "individual" || holder === shooter) {
-      const from = this.P(shooter, T);
-      const spot2 = this.A(kind === "meia" ? 28 : 31.5, clamp4(from.y * 0.45, -5, 5));
-      if (holder !== shooter) {
-        this.pass(holder, shooter, T + 0.1, T + 0.6);
-        this.act(holder, "pass", T - 0.1, T + 0.25, { face: shooter });
-      }
-      const tf = lerp(T, tS, 0.45);
-      if (kind !== "meia") {
-        this.act(shooter, "feint", tf - 0.3, tf + 0.3, { ang: angTo(from, spot2) });
-        this.label(tf - 0.3, `${this.nm(shooter)} em 1x1`);
-        this.later.push(() => {
-          const m2 = this.defOut.reduce((x, y) => dist(this.P(y, tf), this.P(shooter, tf)) < dist(this.P(x, tf), this.P(shooter, tf)) ? y : x, this.defOut[0]);
-          if (!m2) return;
-          const mp = this.P(m2, tf - 0.2);
-          this.fix(m2, tf - 0.1, tf + 0.8);
-          this.key(m2, tf + 0.2, { x: mp.x, y: mp.y + s2 * 1.1 });
-          this.key(m2, tf + 0.8, { x: mp.x + this.dirA * 0.8, y: mp.y + s2 * 0.4 });
-        });
-      }
-      this.key(shooter, tf, { x: lerp(from.x, spot2.x, 0.4), y: lerp(from.y, spot2.y, 0.4) - s2 * 0.6 });
-      this.key(shooter, tS, spot2);
-      this.attKeysAt(tS, skip, spot2.y);
-      return;
-    }
-    if (kind === "poste2") {
-      const wide = this.A(clamp4(this.U(hp) + 3, 30, 34), s2 * 7);
-      const post = this.A(37.6, -s2 * 2.3);
-      const tp2 = tS - 0.55;
-      this.key(holder, tp2, wide);
-      const sp02 = this.P(shooter, T);
-      this.key(shooter, tS - 1.6, this.A(clamp4(this.U(sp02) + 2, 26, 34), -s2 * 5.5));
-      this.key(shooter, tS, post);
-      this.act(shooter, "run", tS - 1.7, tS, { to: post });
-      this.act(holder, "pass", tp2 - 0.2, tp2 + 0.15, { face: shooter });
-      this.pass(holder, shooter, tp2, tS - 0.02, 0.05);
-      this.label(tS - 1.6, `Desmarca\xE7\xE3o de ${this.nm(shooter)} ao segundo poste`);
-      this.attKeysAt(tS, skip, s2 * 3);
-      return;
-    }
-    if (kind === "pivo") {
-      const spot2 = this.A(32.5, s2 * 1.6);
-      const turn = this.A(31.8, s2 * 0.2);
-      const tr = tS - 1.25;
-      this.key(shooter, tr, spot2);
-      this.act(shooter, "shield", tr - 0.1, tr + 0.5, { ang: this.dirA > 0 ? -Math.PI / 2 : Math.PI / 2 });
-      this.act(holder, "pass", tr - 0.7, tr - 0.35, { face: shooter });
-      this.pass(holder, shooter, tr - 0.5, tr);
-      this.act(shooter, "feint", tr + 0.4, tr + 0.85, { ang: angTo(spot2, turn) });
-      this.key(shooter, tS, turn);
-      this.label(tr, `${this.nm(shooter)} recebe de costas e roda`);
-      this.later.push(() => {
-        const m2 = this.defOut.reduce((x, y) => dist(this.P(y, tr), spot2) < dist(this.P(x, tr), spot2) ? y : x, this.defOut[0]);
-        if (!m2) return;
-        this.fix(m2, tr - 0.3, tS + 0.3);
-        this.key(m2, tr, this.A(33.6, s2 * 1.6));
-        this.key(m2, tS, this.A(33.2, s2 * 1.4));
-      });
-      this.attKeysAt(tS, skip, s2 * 2);
-      return;
-    }
-    const spot = this.A(28.5 + r() * 1.5, s2 * (0.5 + r() * 2));
-    const tp = tS - 0.6;
-    this.key(holder, tp, this.A(clamp4(this.U(hp) + 1.5, 28, 33), s2 * 5));
-    const sp0 = this.P(shooter, T);
-    this.key(shooter, tS - 1, this.A(clamp4(this.U(sp0), 22, 27), spot.y * 0.6));
-    this.key(shooter, tS, spot);
-    this.act(shooter, "run", tS - 1.1, tS, { to: spot });
-    this.act(holder, "pass", tp - 0.2, tp + 0.15, { face: shooter });
-    this.pass(holder, shooter, tp, tS - 0.02);
-    this.label(tS - 1, `${this.nm(shooter)} aparece para o remate de fora`);
-    this.attKeysAt(tS, skip, s2 * 2);
-  }
-  // ---------- GR atacante: recebe atrás, conduz até ao meio-campo e remata de longe ----------
-  gkCarry(holder, T, tS, gk) {
-    this.replan(T);
-    const hp = this.P(holder, T);
-    const g0 = this.P(gk, T);
-    this.act(holder, "pass", T + 0.1, T + 0.45, { face: gk });
-    this.pass(holder, gk, T + 0.3, T + 1);
-    this.key(holder, T + 1.4, this.A(clamp4(this.U(hp) + 4, 14, 30), hp.y));
-    this.key(gk, T + 1, g0);
-    const v = clamp4(g0.y + (this.r() - 0.5) * 5, -5, 5);
-    const spot = this.A(18 + this.r() * 4, v);
-    this.key(gk, lerp(T + 1, tS, 0.55), this.A(lerp(this.U(g0), this.U(spot), 0.6), lerp(g0.y, v, 0.6)));
-    this.key(gk, tS, spot);
-    for (const id of this.attOut) if (id !== holder) this.key(id, tS, this.slotPos(this.slot.get(id) ?? 0, tS, v, 1.2));
-    this.label(T + 1.2, `${this.nm(gk)} (GR) sai a jogar com a bola`);
-    this.label(tS - 0.3, `${this.nm(gk)} arrisca o remate de longe!`);
-  }
-  // ---------- contra-ataque: 2x1, 3x2, 2x0 ----------
-  counterRun(carrier, T, tS, shooter, assist, a) {
-    const r = this.r;
-    this.replan(T);
-    const cp = this.P(carrier, T);
-    const others = this.attOut.filter((x) => x !== carrier);
-    const ahead = others.sort((x, y) => this.U(this.P(y, T)) - this.U(this.P(x, T)));
-    const s1 = cp.y <= 0 ? 1 : -1;
-    const r1 = shooter !== carrier ? shooter : ahead[0];
-    const r2 = assist && assist !== carrier && assist !== r1 ? assist : ahead.find((x) => x !== r1);
-    const vc = clamp4(cp.y * 0.4, -3, 3);
-    const end = this.A(32 + r() * 2, vc * 0.6);
-    this.phase(T, "Contra-ataque");
-    this.key(carrier, lerp(T, tS, 0.5), this.A(lerp(this.U(cp), this.U(end), 0.6), lerp(cp.y, vc, 0.6)));
-    if (r1) {
-      const lane = this.A(clamp4(this.U(this.P(r1, T)) + 7, 22, 33), s1 * 6.5);
-      this.key(r1, lerp(T, tS, 0.55), lane);
-      this.act(r1, "run", T, tS, { to: lane });
-    }
-    if (r2) {
-      const lane = this.A(clamp4(this.U(this.P(r2, T)) + 6, 18, 28), -s1 * 5);
-      this.key(r2, lerp(T, tS, 0.6), lane);
-      this.act(r2, "run", T, tS - 0.5, { to: lane });
-    }
-    for (const id of others) if (id !== r1 && id !== r2) this.key(id, tS, this.A(clamp4(this.U(this.P(id, T)) + 6, 10, 20), this.P(id, T).y * 0.6));
-    if (this.gkA) this.key(this.gkA, tS, this.A(3.5, 0));
-    if (shooter === carrier) {
-      this.key(carrier, tS, end);
-      if (r() < 0.5) {
-        this.act(carrier, "feint", tS - 1, tS - 0.5, { ang: angTo(cp, end) });
-        this.label(tS - 1.1, `${this.nm(carrier)} finta o \xFAltimo defensor`);
-      }
-    } else if (assist && assist !== carrier && r2) {
-      const wing = this.A(32, s1 * 6);
-      this.key(assist, tS - 1.1, wing);
-      this.key(carrier, tS - 1.5, this.A(lerp(this.U(cp), this.U(end), 0.8), vc));
-      this.act(carrier, "pass", tS - 1.85, tS - 1.5, { face: assist });
-      this.pass(carrier, assist, tS - 1.65, tS - 1.05);
-      const post = this.A(37.4, -s1 * 2.2);
-      this.key(shooter, tS, post);
-      this.act(assist, "pass", tS - 0.75, tS - 0.4, { face: shooter });
-      this.pass(assist, shooter, tS - 0.55, tS - 0.02, 0.05);
-    } else {
-      const uc = lerp(this.U(cp), this.U(end), 0.95);
-      const post = this.A(Math.min(36.6, uc + 4.6), s1 * 1.9);
-      this.key(carrier, tS - 0.55, this.A(uc, vc));
-      this.key(shooter, lerp(T, tS, 0.75), this.A(uc - 1.2, vc + s1 * 3.4));
-      this.key(shooter, tS - 0.5, this.A(uc + 0.4, vc + s1 * 3.2));
-      this.key(shooter, tS, post);
-      this.label(tS - 0.6, `Passe lateral para ${this.nm(shooter)}`);
-      this.act(shooter, "run", T, tS, { to: post });
-      this.act(carrier, "pass", tS - 0.75, tS - 0.4, { face: shooter });
-      this.pass(carrier, shooter, tS - 0.55, tS - 0.02, 0.05);
-    }
-    const nAttack = shooter === carrier ? 1 : assist && assist !== carrier && r2 ? 3 : 2;
-    const keep = nAttack === 3 ? 2 : nAttack === 1 ? r() < 0.4 ? 0 : 1 : 1;
-    const defs = [...this.defOut].sort((x, y) => this.U(this.P(y, T)) - this.U(this.P(x, T)));
-    defs.slice(keep).forEach((id, i) => {
-      const d0 = this.P(id, T);
-      this.fix(id, T, tS + 0.6);
-      this.key(id, T, d0);
-      this.later.push(() => {
-        const bu = this.U(this.P(carrier, tS - 0.8));
-        this.key(id, tS - 0.3, this.A(Math.min(bu - 2.5 - i * 1.6, this.U(d0) + 0.8 * (tS - T) * 5.6), d0.y * 0.5));
-        this.key(id, tS + 0.6, this.A(Math.min(bu - 1 - i * 1.6, 36), d0.y * 0.4));
-      });
-      this.act(id, "run", T, tS);
-    });
-    if (keep === 0) this.label(T + 0.6, `${this.nm(carrier)} isolado, sozinho para a baliza!`);
-    if (this.gkD && shooter !== carrier) {
-      const gk = this.gkD;
-      this.later.push(() => {
-        const cpp = this.P(carrier, tS - 0.7);
-        this.fix(gk, tS - 1.4, tS - 0.05);
-        this.key(gk, tS - 0.65, this.A(37.2, clamp4(cpp.y * 0.55, -1.6, 1.6)));
-      });
-    }
-    this.post.push(() => {
-      const tm = tS - 1.2;
-      const ball = this.ballAt(tm);
-      const bu = this.U(ball);
-      const nAtt = this.attOut.filter((id) => this.U(this.P(id, tm)) >= bu - 3).length;
-      const nDef = this.defOut.filter((id) => this.U(this.P(id, tm)) > bu - 0.5).length;
-      const na = Math.max(1, Math.min(4, nAtt)), nd = Math.min(4, nDef);
-      this.label(T + 0.2, na > nd ? `Contra-ataque em superioridade: ${na}x${nd}` : "Transi\xE7\xE3o r\xE1pida, a defesa recupera a tempo");
-    });
-  }
-  // ---------- perda de bola ----------
-  loseBall(holder, T, D, tackler) {
-    const r = this.r;
-    this.replan(T);
-    const hp = this.P(holder, T);
-    const drive = this.A(clamp4(this.U(hp) + 2.5, 4, 34), hp.y * 0.8);
-    this.key(holder, D, drive);
-    this.attKeysAt(D, /* @__PURE__ */ new Set([holder]));
-    if (!tackler || !this.tr.has(tackler)) return;
-    const intercept = r() < 0.5;
-    if (intercept) {
-      const mate = this.attOut.find((x) => x !== holder) ?? holder;
-      this.act(holder, "pass", D - 0.75, D - 0.4, { face: mate });
-      this.later.push(() => {
-        const a = this.P(holder, D - 0.55), b = this.P(mate, D);
-        const cut = { x: lerp(a.x, b.x, 0.55), y: lerp(a.y, b.y, 0.55) };
-        this.fix(tackler, D - 0.8, D + 0.3);
-        this.key(tackler, D - 0.6, { x: cut.x + this.dirA * 1.2, y: cut.y + 0.8 });
-        this.key(tackler, D, cut);
-      });
-      this.pass(holder, tackler, D - 0.55, D);
-      this.label(D - 0.3, `${this.nm(tackler)} interceta o passe`);
-    } else if (r() < 0.4) {
-      const hp2 = this.P(holder, D);
-      const out = { x: clamp4(hp2.x + this.dirA * (1 + r() * 2), -19, 19), y: (hp2.y >= 0 ? 1 : -1) * 10.6 };
-      this.later.push(() => {
-        this.fix(tackler, D - 0.8, D + 0.3);
-        this.key(tackler, D - 0.55, { x: hp2.x + this.dirA * 1.6, y: hp2.y + 0.8 });
-        this.key(tackler, D, { x: hp2.x + this.dirA * 0.55, y: hp2.y + 0.25 });
-      });
-      this.act(tackler, "tackle", D - 0.45, D + 0.2, { face: holder });
-      this.balls.push({ k: "fly", t0: D - 0.05, t1: D + 0.6, from: holder, b: { x: out.x, y: out.y, z: 0.11 }, lift: 0.3 });
-      this.balls.push({ k: "still", t0: D + 0.6, at: { x: out.x, y: out.y, z: 0.11 } });
-      this.outAt = out;
-      this.label(D - 0.3, `${this.nm(tackler)} desarma e a bola sai pela lateral`);
-    } else {
-      this.later.push(() => {
-        const hp2 = this.P(holder, D);
-        this.fix(tackler, D - 0.8, D + 0.3);
-        this.key(tackler, D - 0.55, { x: hp2.x + this.dirA * 1.6, y: hp2.y + 0.8 });
-        this.key(tackler, D, { x: hp2.x + this.dirA * 0.55, y: hp2.y + 0.25 });
-      });
-      this.act(tackler, "tackle", D - 0.45, D + 0.2, { face: holder });
-      this.balls.push({ k: "foot", t0: D - 0.05, id: tackler });
-      if (r() < 0.35) this.act(holder, "fall", D - 0.05, D + 1.3);
-      this.label(D - 0.3, `Desarme de ${this.nm(tackler)}`);
-    }
-  }
-  // ---------- falta ----------
-  fouled(holder, T, D, f) {
-    this.replan(T);
-    const hp = this.P(holder, T);
-    const drive = f.kind === "penalty" ? this.A(35.2 + this.r() * 1.6, clamp4(hp.y * 0.5, -4, 4)) : this.A(clamp4(this.U(hp) + 3, 6, 33), hp.y * 0.8);
-    this.key(holder, D, drive);
-    this.attKeysAt(D, /* @__PURE__ */ new Set([holder]));
-    this.act(holder, "fall", D, D + 1.4);
-    this.key(holder, D + 1.3, drive, true);
-    const fouler = f.other;
-    if (fouler && this.tr.has(fouler)) {
-      this.later.push(() => {
-        this.fix(fouler, D - 2.4, D + 0.7);
-        for (const [dt, gap] of [[1.8, 2.6], [1.2, 1.6], [0.7, 0.9], [0.3, 0.55], [0, 0.35]]) {
-          const hp2 = this.P(holder, D - dt);
-          this.key(fouler, D - dt, { x: hp2.x + this.dirA * gap * 0.8, y: hp2.y - Math.sign(hp2.y || 1) * gap * 0.5 });
-        }
-      });
-      this.act(fouler, "tackle", D - 0.4, D + 0.15, { face: holder });
-    }
-    this.balls.push({ k: "still", t0: D, at: { x: drive.x + this.dirA * 0.4, y: drive.y, z: 0.11 } });
-    this.label(D, `Falta de ${this.nm(fouler)} sobre ${this.nm(holder)}`);
-  }
-  // ---------- defesa: pressão, cobertura e troca de marcações ----------
-  defend(t0, t1) {
-    const def = 1 - this.att;
-    const tD = this.tactics[def];
-    const press = PRESS_LINE[tD.pressure];
-    const gap = tD.marking === "individual" ? 1 : tD.marking === "misto" ? 1.3 : 1.6;
-    const pressGap = tD.pressure === "alta" ? 0.65 : tD.pressure === "media" ? 0.85 : 1.1;
-    let fixedPairs = null;
-    const dt = 0.25;
-    for (let t = t0; t <= t1 + 1e-6; t += dt) {
-      const ball = this.ballAt(t);
-      const bu = this.U(ball), bv = ball.y;
-      const holder = this.holderAt(t);
-      const atts = this.attOut.map((id) => ({ id, p: this.P(id, Math.min(t1, t + 0.15)) }));
-      const marks = [...atts];
-      while (marks.length > this.defOut.length) {
-        let wi = 0, wd = -1;
-        marks.forEach((m2, i) => {
-          const d = dist(m2.p, ball) + (m2.id === holder ? -99 : 0);
-          if (d > wd) {
-            wd = d;
-            wi = i;
-          }
-        });
-        marks.splice(wi, 1);
-      }
-      const spots = /* @__PURE__ */ new Map();
-      for (const m2 of marks) {
-        const au = this.U(m2.p), av = m2.p.y;
-        const gu = 40 - au, gv = -av;
-        const gl = Math.hypot(gu, gv) || 1;
-        const isH = m2.id === holder;
-        const g0 = isH ? pressGap : gap;
-        let u = au + gu / gl * g0, v = av + gv / gl * g0;
-        if (!isH) {
-          const dB = Math.hypot(au - bu, av - bv);
-          const help = clamp4((dB - 7) / 14, 0, tD.marking === "zona" ? 0.45 : tD.marking === "misto" ? 0.3 : 0.12);
-          v = lerp(v, bv * 0.35, help);
-          u += help * 3;
-        }
-        u = clamp4(Math.max(u, isH ? press : press + 1.5), 2, 39.2);
-        spots.set(m2.id, this.A(u, clamp4(v, -9.4, 9.4)));
-      }
-      const free = this.defOut.filter((id) => !this.isFixed(id, t));
-      const assign = /* @__PURE__ */ new Map();
-      if (tD.marking === "individual" && fixedPairs) {
-        for (const [d, a] of fixedPairs) if (spots.has(a) && free.includes(d)) assign.set(d, a);
-      }
-      const taken = new Set(assign.values());
-      const pairs = [];
-      for (const d of free) if (!assign.has(d)) {
-        for (const [a, sp] of spots) if (!taken.has(a)) pairs.push([dist(this.P(d, t - dt), sp), d, a]);
-      }
-      pairs.sort((x, y) => x[0] - y[0]);
-      for (const [, d, a] of pairs) if (!assign.has(d) && !taken.has(a)) {
-        assign.set(d, a);
-        taken.add(a);
-      }
-      if (!fixedPairs) fixedPairs = new Map(assign);
-      for (const d of free) {
-        const a = assign.get(d);
-        const target = a ? spots.get(a) : this.A(clamp4(Math.max(bu + 4, press + 4), 20, 36), bv * 0.3);
-        const prev = this.P(d, t - dt);
-        const maxd = VMAX * 1.05 * dt;
-        const dd = dist(prev, target);
-        const np = dd > maxd ? { x: prev.x + (target.x - prev.x) * maxd / dd, y: prev.y + (target.y - prev.y) * maxd / dd } : target;
-        this.key(d, t, np);
-      }
-      for (const [k, id] of REFS.entries()) {
-        if (this.isFixed(id, t)) continue;
-        const target = { x: clamp4(ball.x * 0.85 + (k ? 2.5 : -2.5) * this.dirA, -17, 17), y: k ? 10.7 : -10.7 };
-        const prev = this.P(id, t - dt);
-        const maxd = 6 * dt, dd = dist(prev, target);
-        this.key(id, t, dd > maxd ? { x: prev.x + (target.x - prev.x) * maxd / dd, y: target.y } : target);
-      }
-      if (this.gkD && !this.isFixed(this.gkD, t)) {
-        const gx = this.dirA * 20;
-        const bl = this.ballAt(Math.max(t0, t - 0.15));
-        const prev = this.P(this.gkD, t - dt);
-        let target;
-        if (this.U(bl) < 16) target = { x: gx - this.dirA * 3.6, y: clamp4(bl.y * 0.12, -1, 1) };
-        else {
-          const dl = Math.hypot(gx - bl.x, bl.y);
-          const tight = clamp4(1 - Math.abs(bl.y) / Math.max(1, dl) * 0.75, 0.35, 1);
-          const depth = clamp4(0.45 + dl * 0.12, 0.6, 2.4) * tight * (0.85 + this.au(this.gkD, "saidas") * 0.3);
-          target = this.gkSpot(gx, bl, depth);
-        }
-        const dd = dist(prev, target);
-        const maxLat = 4.5 * dt, maxDep = 3 * dt;
-        const np = dd < 0.12 ? prev : { x: prev.x + clamp4(target.x - prev.x, -maxDep, maxDep), y: prev.y + clamp4(target.y - prev.y, -maxLat, maxLat) };
-        this.key(this.gkD, t, np);
-      }
-    }
-  }
-  // ---------- remate ----------
-  /** Remate e reação do guarda-redes / do defensor que bloqueia. Devolve o instante em que a bola fica parada. */
-  shot(T, shooter, a, g) {
-    const r = this.r;
-    const res = a.result ?? "wide";
-    const from = this.P(shooter, T);
-    const side = r() < 0.5 ? -1 : 1;
-    let target, after;
-    let caught = false;
-    const spill = this.spillNext;
-    this.spillNext = false;
-    const kSide = 1 - (this.sideOf.get(shooter) ?? this.att);
-    const kId = this.p.onCourt[kSide][0];
-    const kPos = kId && !this.p.flying[kSide] ? this.P(kId, T) : null;
-    const fromDist = Math.hypot(g * 20 - from.x, from.y);
-    const tightShot = Math.abs(from.y) > 1.3 && Math.abs(g * 20 - from.x) < Math.abs(from.y) * 1.2;
-    const rush = kPos && fromDist < 8.5 && !tightShot && res !== "blocked" ? clamp4((8.5 - fromDist) * 0.45, 0.4, 2.6) : 0;
-    const kDepth = tightShot ? 0.35 : rush ? Math.max(0.4, Math.abs(g * 20 - from.x) - clamp4(1 + fromDist * 0.15, 1, 2)) : clamp4(0.45 + fromDist * 0.12, 0.6, 2.2);
-    const kBase = kPos ? this.gkSpot(g * 20, from, kDepth) : { x: g * 19.4, y: 0 };
-    const gkX = kBase.x;
-    if (res === "goal") {
-      const v = (r() - 0.5) * 2.5;
-      target = { x: g * 20.35, y: v, z: 0.15 + r() * 1.6 };
-      after = { x: g * 20.9, y: v * 0.9, z: 0.1 };
-    } else if (res === "post") {
-      target = { x: g * 19.95, y: side * 1.52, z: 0.3 + r() * 1.4 };
-      after = { x: g * 15, y: side * 4.5, z: 0.1 };
-    } else if (res === "wide") {
-      target = { x: g * 20.2, y: side * (1.9 + r() * 1.6), z: 0.2 + r() * 1.8 };
-      after = { x: g * 21.8, y: side * (3 + r() * 2), z: 0.1 };
-    } else if (res === "saved") {
-      const v = (r() - 0.5) * 2.6;
-      target = { x: gkX - g * 0.2, y: v, z: 0.2 + r() * 1.3 };
-      caught = spill ? false : a.caught ?? (target.z < 1.7 && (Math.abs(v) < 0.8 || r() < 0.45));
-      if (caught && target.z > 1.5) target.z = 1.1;
-      const sv = Math.sign(v) || side;
-      after = caught ? target : spill ? { x: g * (14.5 + r() * 2), y: clamp4(v * 2.5 + side * 1.5, -5, 5), z: 0.1 } : { x: g * (20.6 + r() * 0.8), y: sv * (2.6 + r() * 2.2), z: 0.1 };
-    } else {
-      const gl = Math.hypot(g * 20 - from.x, -from.y) || 1;
-      target = { x: from.x + (g * 20 - from.x) / gl * 2.2, y: from.y + -from.y / gl * 2.2, z: 0.4 };
-      after = { x: g * 20.6, y: (from.y >= 0 ? 1 : -1) * (6 + r() * 3), z: 0.1 };
-    }
-    const rem = this.au(shooter, "remate");
-    const sdist = Math.hypot(target.x - from.x, target.y - from.y);
-    const power = r() < (sdist < 6 ? 0.3 : 0.4 + 0.4 * rem);
-    const vball = res === "blocked" ? 16 : power ? 22 + 8 * rem + r() * 3 : 14 + 5 * rem + r() * 3;
-    const fl = clamp4(sdist / vball, 0.16, 1.1);
-    const windup = power ? 0.3 : 0.2;
-    this.shotTimes.push(T);
-    this.act(shooter, "shoot", T - windup, T + windup * 0.75, { ang: angTo(from, target) });
-    this.balls.push({ k: "fly", t0: T, t1: T + fl, from: shooter, b: target, lift: res === "blocked" ? 0.1 : 0.15 });
-    this.label(T - 0.1, `Remate de ${this.nm(shooter)}`);
-    const keeperSide = 1 - (this.sideOf.get(shooter) ?? this.att);
-    const gk = this.p.onCourt[keeperSide][0];
-    const gkInGoal = gk && !this.p.flying[keeperSide];
-    let gkTech = null;
-    const offTarget = res === "wide" && Math.abs(target.y) > 1.65 || target.z > 2.05;
-    if (gkInGoal && res !== "blocked" && offTarget) {
-      const step = clamp4(target.y * 0.25, -1.2, 1.2);
-      this.later.push(() => {
-        const g0 = this.P(gk, T);
-        this.fix(gk, T, T + fl + 0.8);
-        this.key(gk, T, g0);
-        this.key(gk, T + fl + 0.3, { x: g0.x, y: clamp4(g0.y + step * 0.5, -1.7, 1.7) });
-      });
-    } else if (gkInGoal && res !== "blocked") {
-      const ty = clamp4(target.y, -1.75, 1.75);
-      const close = Math.hypot(g * 20 - from.x, from.y) < 7.5;
-      const gPos = kBase;
-      const lat = Math.abs(ty - gPos.y);
-      let tech = lat < 0.45 && target.z < 1.7 ? "catch" : close && lat < 1.3 ? "spread" : target.z < 0.55 ? "splits" : lat > 0.9 || target.z > 1.2 ? "dive" : "splits";
-      if (res === "saved" && !caught && tech === "catch") tech = target.z > 1.1 ? "dive" : close ? "spread" : "splits";
-      gkTech = tech;
-      const react = rush ? 0 : clamp4(0.2 - this.au(gk, "reflexos") * 0.1, 0.08, 0.2);
-      const sy = Math.sign(ty - gPos.y) || 1;
-      const reach = tech === "dive" ? 0.9 : tech === "splits" ? 0.75 : 0;
-      const ky = res === "saved" || res === "post" ? ty - sy * reach : tech === "spread" ? lerp(gPos.y, ty, 0.3) : lerp(gPos.y, ty - sy * reach, res === "goal" ? 0.55 : 0.7);
-      const tgt = { x: gkX, y: clamp4(rush || tightShot ? lerp(kBase.y, ky, 0.35) : ky, -1.8, 1.8) };
-      if (rush) this.label(T - 0.2, `${this.nm(gk)} sai ao encontro do atacante`);
-      const tR = T + Math.min(react, Math.max(0, fl - 0.12));
-      this.later.push(() => {
-        const g0 = this.P(gk, T - 0.15);
-        this.fix(gk, T - (rush ? 0.9 : 0.2), T + fl + 1.6);
-        if (rush) {
-          const g1 = this.P(gk, T - 0.9);
-          this.key(gk, T - 0.9, g1);
-          this.key(gk, T - 0.05, kBase);
-        } else {
-          const set = { x: lerp(g0.x, kBase.x, 0.7), y: lerp(g0.y, kBase.y, 0.7) };
-          this.key(gk, T - 0.2, set);
-          this.key(gk, tR, set);
-        }
-        this.key(gk, T + fl, tgt, true);
-        this.key(gk, T + fl + 1.3, tgt);
-      });
-      const peak = tech === "dive" ? 0.42 : tech === "splits" ? 0.31 : 0.29;
-      if (tech === "catch") this.act(gk, "catch", tR, T + fl + 0.8, { face: shooter, h: target.z });
-      else this.act(gk, tech, tR, tR + Math.max(0.12, fl - (tR - T) + 0.05) / peak, { to: { x: target.x, y: target.y }, h: target.z, face: shooter });
-      if (res === "saved" && tech !== "catch") this.label(T + fl, tech === "dive" ? `Voo de ${this.nm(gk)} ao \xE2ngulo!` : tech === "splits" ? `${this.nm(gk)} defende com a perna, em espargata` : `${this.nm(gk)} fecha o \xE2ngulo em cruz`);
-    }
-    if (res === "blocked" && a.other && this.tr.has(a.other)) {
-      const bl = a.other;
-      this.later.push(() => {
-        this.fix(bl, T - 0.7, T + 0.8);
-        this.key(bl, T - 0.4, { x: target.x + g * 0.8, y: target.y + 0.7 });
-        this.key(bl, T + fl, { x: target.x + g * 0.35, y: target.y });
-        this.key(bl, T + 0.8, { x: target.x + g * 0.35, y: target.y });
-      });
-      this.act(bl, "block", T - 0.35, T + 0.6, { face: shooter });
-      this.label(T + fl, `Remate bloqueado por ${this.nm(bl)}`);
-    }
-    let tEnd = T + fl;
-    if (caught && gk) {
-      const dived = gkTech === "dive" || gkTech === "splits";
-      this.balls.push({ k: "hands", t0: tEnd, id: gk, z: dived ? 0.45 : 1 });
-      this.label(tEnd, `${this.nm(gk)} agarra a bola`);
-      const tUp = tEnd + (dived ? 1.4 : 0.6);
-      this.balls.push({ k: "hands", t0: tUp, id: gk, z: 1 });
-      const mates = this.p.onCourt[keeperSide].slice(1).filter((x) => !!x && this.tr.has(x));
-      if (!mates.length) {
-        this.endGk = gk;
-        return tUp + 0.6;
-      }
-      const sgn = r() < 0.5 ? -1 : 1;
-      const opts = [{ x: g * 11.5, y: sgn * 7.2 }, { x: g * 13, y: (r() - 0.5) * 3 }, { x: g * 2, y: -sgn * 6.5 }];
-      const weights = [0.5, 0.25, 0.25 + 0.2 * this.au(gk, "jogoPes")];
-      const opp = [...this.attOut, ...this.defOut].filter((d) => this.sideOf.get(d) !== keeperSide);
-      const room = (q) => Math.min(6, ...opp.map((d) => dist(this.P(d, tEnd), q)));
-      const si = [0, 1, 2].reduce((x, y) => room(opts[y]) + weights[y] * 3 + r() > room(opts[x]) + weights[x] * 3 + r() ? y : x);
-      const spot = opts[si];
-      const mate = mates.reduce((x, y) => dist(this.P(y, T), spot) < dist(this.P(x, T), spot) ? y : x);
-      const tThrow = tUp + 0.7 + r() * 0.5;
-      const thrD = dist({ x: g * 18.6, y: 0 }, spot);
-      const thrT = thrD < 9 ? thrD / 9 : 0.25 + thrD / 15;
-      this.later.push(() => {
-        this.key(mate, tThrow + thrT, spot);
-        this.key(gk, tUp + 0.4, { x: g * 18.6, y: clamp4(this.P(gk, tEnd).y, -1.5, 1.5) });
-      });
-      this.act(gk, "throw", tThrow - 0.6, tThrow + 0.2, { face: mate });
-      this.balls.push({ k: "pass", t0: tThrow, t1: tThrow + thrT, from: gk, to: mate, lift: thrD < 9 ? 0.03 : 0.12 + thrD * 0.03 });
-      this.balls.push({ k: "foot", t0: tThrow + thrT, id: mate });
-      this.label(tThrow - 0.4, `${this.nm(gk)} rep\xF5e a bola com a m\xE3o`);
-      return tThrow + thrT + 0.35;
-    }
-    const fl2 = res === "goal" ? 0.25 : 0.8;
-    this.balls.push({ k: "fly", t0: tEnd, t1: tEnd + fl2, from: target, b: after, lift: res === "goal" ? 0 : 0.5 });
-    this.balls.push({ k: "still", t0: tEnd + fl2, at: after });
-    if (res === "post") this.label(tEnd, "Ao poste!");
-    if (res === "goal") {
-      this.lastGoal = true;
-      this.label(tEnd, `GOLO de ${this.nm(shooter)}!`);
-    }
-    if (spill && res === "saved") {
-      this.label(tEnd, `${this.nm(gk)} defende para a frente... ressalto!`);
-      return tEnd + 0.5;
-    }
-    if ((res === "wide" || res === "saved") && gk && !this.p.flying[keeperSide]) this.endGk = gk;
-    tEnd += fl2 + 0.3;
-    return tEnd;
-  }
-  // ---------- bolas paradas e lances seguintes ----------
-  restarts(T, ending) {
-    const p = this.p;
-    const att = this.att;
-    const first = p.actions[0];
-    const rest = p.actions.slice(first ? 1 : 0);
-    if (ending.kind === "shot" && ending.shot?.result === "goal") return this.celebrate(T, ending.shot.shooter, att);
-    let foulPending = ending.kind === "foul";
-    for (let i = 0; i < rest.length; i++) {
-      const a = rest[i];
-      if (a.type === "brawl") {
-        T = this.brawl(T, a);
-        continue;
-      }
-      if (a.type === "corner") {
-        const nx = rest[i + 1];
-        const withShot = nx && nx.type === "shot" && nx.side === att && nx.kind === "setpiece" ? nx : void 0;
-        T = this.corner(T, a.shooter, withShot);
-        if (withShot) {
-          i++;
-          if (withShot.result === "goal") return this.celebrate(T, withShot.shooter, att);
-        } else T = this.clearance(T);
-        continue;
-      }
-      if (a.type !== "shot") continue;
-      if (a.kind === "rebound") {
-        T = this.rebound(T, a);
-        if (a.result === "goal") return this.celebrate(T, a.shooter, att);
-        continue;
-      }
-      if (a.side !== att) {
-        T = this.oppShot(T, a);
-        if (a.result === "goal") return this.celebrate(T, a.shooter, a.side);
-        continue;
-      }
-      if (a.kind === "free10" || a.kind === "penalty") {
-        T = this.spotKick(T, a);
-        foulPending = false;
-        if (a.result === "goal") return this.celebrate(T, a.shooter, att);
-        continue;
-      }
-      if (a.kind === "setpiece" && foulPending) {
-        T = this.freeKick(T, a);
-        foulPending = false;
-        if (a.result === "goal") return this.celebrate(T, a.shooter, att);
-      }
-    }
-    if (foulPending && ending.foul?.kind !== "free10" && ending.foul?.kind !== "penalty") T = this.freeKick(T, null);
-    return T;
-  }
-  /** Posições de todos num instante, com marcação "hold" (chegada obrigatória). */
-  placeAll(t, m2, hold = true) {
-    for (const [id, p] of m2) {
-      this.key(id, t, p, hold);
-      this.fix(id, t - 0.1, t + 0.1);
-    }
-  }
-  corner(T, taker, sh2) {
-    const r = this.r;
-    const att = this.att;
-    const routine = this.tactics[att].setPieces?.cornerRoutine ?? "primeiro_poste";
-    const s2 = this.ballAt(T).y >= 0 ? 1 : -1;
-    const spot = { x: this.dirA * 19.75, y: s2 * 9.75, z: 0.11 };
-    const b0 = this.ballAt(T);
-    const tp0 = this.P(taker, T);
-    const tPick = T + clamp4(dist(tp0, b0) / 6, 0.5, 2.6);
-    const tPlace = tPick + clamp4(dist(b0, spot) / 4.5, 0.4, 2.5);
-    const tSet = Math.max(T + 3.4, tPlace + 0.6);
-    const tKick = tSet + 0.9;
-    this.key(taker, tPick, { x: b0.x, y: b0.y }, true);
-    this.key(taker, tPlace, { x: spot.x + this.dirA * 0.5, y: spot.y + Math.sign(spot.y) * 0.5 }, true);
-    this.fix(taker, T, tKick);
-    this.balls.push({ k: "still", t0: T, at: { x: b0.x, y: b0.y, z: 0.11 } });
-    this.balls.push({ k: "hands", t0: tPick, id: taker, z: 0.95 });
-    this.balls.push({ k: "still", t0: tPlace, at: spot });
-    const NAMES2 = { primeiro_poste: "ao primeiro poste", remate_fora: "remate de fora", bloqueio_pivo: "bloqueio para o piv\xF4", curto: "canto curto", personalizado: "jogada desenhada" };
-    this.phase(T, `Canto (${NAMES2[routine]})`);
-    this.label(T + 0.4, `Canto para ${this.nm(taker)} marcar`);
-    const others = this.attOut.filter((x) => x !== taker);
-    const cpC = this.tactics[att].setPieces?.customCorner;
-    if (routine === "personalizado" && cpC) return this.customPlay(T, taker, this.A(40.3, s2 * 10.35), s2, tSet, tKick, sh2, cpC);
-    const shooter = sh2 && others.includes(sh2.shooter) ? sh2.shooter : others[Math.floor(r() * others.length)];
-    const rest = others.filter((x) => x !== shooter);
-    const m2 = /* @__PURE__ */ new Map();
-    m2.set(taker, this.A(40.3, s2 * 10.35));
-    let shotSpot, startShooter;
-    const roles = [];
-    if (routine === "primeiro_poste") {
-      startShooter = this.A(32.5, s2 * 4.5);
-      shotSpot = this.A(38.1, s2 * 1.9);
-      roles.push(this.A(30, 0), this.A(33.5, -s2 * 3.5));
-    } else if (routine === "remate_fora") {
-      startShooter = this.A(26.5, s2 * 2);
-      shotSpot = this.A(30, s2 * 1.2);
-      roles.push(this.A(37.6, s2 * 0.5), this.A(36.9, -s2 * 1.3));
-    } else if (routine === "bloqueio_pivo") {
-      startShooter = this.A(33.5, 0);
-      shotSpot = this.A(36.6, s2 * 2.4);
-      roles.push(this.A(34, s2 * 2), this.A(29.5, -s2 * 2));
-    } else {
-      startShooter = this.A(31.5, s2 * 2.5);
-      shotSpot = this.A(33.5, s2 * 3.5);
-      roles.push(this.A(37, s2 * 7.6), this.A(30.5, -s2 * 3));
-    }
-    m2.set(shooter, startShooter);
-    rest.forEach((id, i) => m2.set(id, roles[i] ?? this.A(24, (i - 1) * 4)));
-    if (this.gkA) m2.set(this.gkA, this.A(4, 0));
-    const dSpots = [this.A(36.8, s2 * 3.6), this.A(34.6, s2 * 0.3), this.A(36.2, -s2 * 2.8), this.A(31.2, s2 * 1.2)];
-    const dIds = [...this.defOut];
-    dIds.forEach((id, i) => m2.set(id, dSpots[i] ?? this.A(28, 0)));
-    if (this.gkD) m2.set(this.gkD, this.A(39.5, s2 * 0.9));
-    this.placeAll(tSet, m2);
-    for (const [id, p2] of m2) this.key(id, tKick - 0.15, p2, true);
-    this.label(tSet - 1.6, "Organiza\xE7\xE3o ofensiva e defensiva para o canto");
-    this.act(taker, "pass", tKick - 0.25, tKick + 0.15, { face: shooter });
-    const tr = tKick + (routine === "curto" ? 0.45 : 0.75);
-    if (routine === "primeiro_poste") {
-      this.act(shooter, "run", tKick - 0.5, tr, { to: shotSpot });
-      this.key(rest[0] ?? shooter, tr, this.A(33, s2 * 1.5));
-      if (rest[1]) this.key(rest[1], tr, this.A(37.5, -s2 * 1.6));
-      this.label(tKick, `Bola tensa ao primeiro poste para ${this.nm(shooter)}`);
-    } else if (routine === "remate_fora") {
-      rest.forEach((id) => this.act(id, "screen", tKick - 0.3, tr + 0.5, { face: shooter }));
-      this.act(shooter, "run", tKick - 0.5, tr, { to: shotSpot });
-      this.label(tKick, `Passe atrasado para o remate de ${this.nm(shooter)}`);
-    } else if (routine === "bloqueio_pivo") {
-      if (rest[0]) {
-        this.key(rest[0], tKick + 0.1, this.A(35.5, s2 * 1));
-        this.act(rest[0], "screen", tKick - 0.1, tr + 0.4, { face: taker });
-      }
-      this.act(shooter, "run", tKick - 0.2, tr, { to: shotSpot });
-      this.label(tKick - 0.2, `Bloqueio de ${this.nm(rest[0])} para libertar ${this.nm(shooter)}`);
-    } else {
-      if (rest[0]) this.key(rest[0], tKick + 0.2, this.A(37, s2 * 6.8));
-      this.act(shooter, "run", tKick - 0.3, tr, { to: shotSpot });
-      this.label(tKick, "Canto jogado curto");
-    }
-    this.key(shooter, tr, shotSpot);
-    this.key(taker, tr + 0.6, this.A(37.5, s2 * 8));
-    this.pass(taker, shooter, tKick, tr, routine === "remate_fora" ? 0.03 : 0.06);
-    const near = dIds.reduce((x, y) => dist(m2.get(y), shotSpot) < dist(m2.get(x), shotSpot) ? y : x, dIds[0]);
-    if (near) this.key(near, tr + 0.25, { x: lerp(m2.get(near).x, shotSpot.x, 0.7), y: lerp(m2.get(near).y, shotSpot.y, 0.7) });
-    for (const id of dIds) if (id !== near) this.key(id, tr + 0.5, { x: m2.get(id).x, y: lerp(m2.get(id).y, shotSpot.y, 0.25) });
-    if (!sh2) {
-      this.attKeysAt(tr + 1.2, /* @__PURE__ */ new Set([shooter, taker]));
-      return tr;
-    }
-    const tShot = tr + (routine === "curto" ? 0.55 : 0.05);
-    if (routine === "curto") {
-      this.act(shooter, "feint", tr, tShot, { ang: angTo(shotSpot, this.A(40, 0)) });
-      this.key(shooter, tShot, this.A(33.3, s2 * 2.5));
-    }
-    return this.shot(tShot, shooter, sh2, this.dirA);
-  }
-  /** Jogada desenhada pelo treinador (cantos e livres): posições, setas (movimentos) e tracejados (passes). */
-  customPlay(T, taker, takerAt, s2, tSet, tKick, sh2, cp) {
-    const att = this.att;
-    const others = this.attOut.filter((x) => x !== taker);
-    const free = [...others];
-    const ids = cp.slots.map((sl) => {
-      const want = sl.player && free.includes(sl.player) ? sl.player : sl.role === "rematador" && sh2?.shooter && free.includes(sh2.shooter) ? sh2.shooter : free[0];
-      free.splice(free.indexOf(want), 1);
-      return want;
-    }).filter(Boolean);
-    const P2 = (q) => this.A(q.x, s2 * q.y);
-    const m2 = /* @__PURE__ */ new Map();
-    m2.set(taker, takerAt);
-    cp.slots.forEach((sl, i) => {
-      if (ids[i]) m2.set(ids[i], P2(sl));
-    });
-    free.forEach((id, i) => m2.set(id, this.A(22, (i - 0.5) * 6)));
-    if (this.gkA) m2.set(this.gkA, this.A(4, 0));
-    const dIds = [...this.defOut];
-    dIds.forEach((id, i) => {
-      const near = ids[i] ? m2.get(ids[i]) : this.A(34, 0);
-      m2.set(id, { x: lerp(near.x, this.A(39, 0).x, 0.35), y: near.y * 0.8 });
-    });
-    if (this.gkD) m2.set(this.gkD, this.A(39.5, s2 * 0.9));
-    this.placeAll(tSet, m2);
-    for (const [id, p2] of m2) this.key(id, tKick - 0.15, p2, true);
-    this.label(tSet - 1.6, "Jogada ensaiada desenhada pelo treinador");
-    const tr = tKick + 0.8;
-    for (const path of cp.paths.filter((x) => x.kind === "run" && x.from >= 0)) {
-      const id = ids[path.from];
-      if (!id) continue;
-      this.key(id, tr, P2(path.to));
-      this.act(id, cp.slots[path.from].role === "bloqueio" ? "screen" : "run", tKick - 0.4, tr, cp.slots[path.from].role === "bloqueio" ? { face: taker } : { to: P2(path.to) });
-    }
-    cp.slots.forEach((sl, i) => {
-      if (sl.role === "bloqueio" && ids[i] && !cp.paths.some((x) => x.from === i && x.kind === "run")) this.act(ids[i], "screen", tKick - 0.3, tr + 0.4, { face: taker });
-    });
-    const pass0 = cp.paths.find((x) => x.kind === "pass" && x.from === -1);
-    const endOf = (i) => {
-      const rp = cp.paths.find((x) => x.kind === "run" && x.from === i);
-      return P2(rp ? rp.to : cp.slots[i]);
-    };
-    const recvIdx = pass0 ? cp.slots.map((_, i) => i).filter((i) => ids[i]).sort((a, b) => dist(endOf(a), P2(pass0.to)) - dist(endOf(b), P2(pass0.to)))[0] : cp.slots.findIndex((x) => x.role === "rematador");
-    const receiver = ids[recvIdx] ?? ids[0] ?? others[0];
-    this.key(receiver, tr, endOf(recvIdx));
-    this.pass(taker, receiver, tKick, tr, 0.05);
-    let shooter = receiver, tShot = tr + 0.05;
-    const pass2 = cp.paths.find((x) => x.kind === "pass" && x.from === recvIdx);
-    if (pass2) {
-      const j = cp.slots.map((_, i) => i).filter((i) => ids[i] && i !== recvIdx).sort((a, b) => dist(endOf(a), P2(pass2.to)) - dist(endOf(b), P2(pass2.to)))[0];
-      if (j !== void 0 && ids[j]) {
-        this.key(ids[j], tr + 0.6, endOf(j));
-        this.pass(receiver, ids[j], tr + 0.1, tr + 0.6, 0.05);
-        shooter = ids[j];
-        tShot = tr + 0.65;
-      }
-    }
-    this.label(tKick, `Jogada desenhada: ${this.nm(taker)} para ${this.nm(receiver)}`);
-    if (!sh2) {
-      this.attKeysAt(tShot + 1.2, /* @__PURE__ */ new Set([shooter, taker]));
-      return tShot;
-    }
-    const realShooter = sh2.shooter && this.attOut.includes(sh2.shooter) ? sh2.shooter : shooter;
-    if (realShooter !== shooter) {
-      const sp = this.P(realShooter, tShot);
-      this.pass(shooter, realShooter, tShot, tShot + 0.5, 0.05);
-      this.key(realShooter, tShot + 0.5, sp);
-      tShot += 0.55;
-    }
-    return this.shot(tShot, realShooter, sh2, this.dirA);
-  }
-  /** A defesa afasta a bola depois de um canto ou livre sem remate. */
-  clearance(T) {
-    const def = this.defOut;
-    if (!def.length) return T;
-    const ball = this.ballAt(T);
-    const cl = def.reduce((x, y) => dist(this.P(y, T), ball) < dist(this.P(x, T), ball) ? y : x, def[0]);
-    const cp = this.P(cl, T);
-    this.key(cl, T + 0.4, { x: lerp(cp.x, ball.x, 0.85), y: lerp(cp.y, ball.y, 0.85) });
-    this.balls.push({ k: "foot", t0: T + 0.4, id: cl });
-    this.act(cl, "pass", T + 0.45, T + 0.8, { ang: this.dirA > 0 ? -Math.PI / 2 : Math.PI / 2 });
-    const to = { x: this.dirA * -2, y: ball.y * 0.4, z: 0.1 };
-    this.balls.push({ k: "fly", t0: T + 0.6, t1: T + 1.6, from: cl, b: to, lift: 1.6 });
-    this.balls.push({ k: "still", t0: T + 1.6, at: to });
-    this.label(T + 0.5, `${this.nm(cl)} afasta o perigo`);
-    const rec = def.filter((x) => x !== cl).reduce((x, y) => dist(this.P(y, T), to) < dist(this.P(x, T), to) ? y : x, def.find((x) => x !== cl) ?? cl);
-    this.key(rec, T + 1.8, { x: to.x, y: to.y - 0.3 });
-    this.balls.push({ k: "foot", t0: T + 1.8, id: rec });
-    for (const id of this.attOut) this.key(id, T + 2, this.slotPos(this.slot.get(id) ?? 0, T + 2, 0));
-    return T + 2;
-  }
-  freeKick(T, sh2) {
-    const r = this.r;
-    const att = this.att;
-    const ball = this.ballAt(T);
-    const routine = this.tactics[att].setPieces?.freeKickRoutine ?? "remate_direto";
-    let at = { x: ball.x, y: ball.y };
-    if (this.U(at) > 31.5 - Math.max(0, Math.abs(at.y) - 3) * 0.4) at = this.A(31.5 - Math.max(0, Math.abs(at.y) - 3) * 0.4, clamp4(at.y, -8, 8));
-    const bu = this.U(at);
-    const kicker = sh2 ? sh2.assist && this.attOut.includes(sh2.assist) ? sh2.assist : sh2.shooter : this.nearestOut(at, T);
-    const shooter = sh2?.shooter && this.attOut.includes(sh2.shooter) ? sh2.shooter : kicker;
-    const kp0 = this.P(kicker, T);
-    const tPick = T + clamp4(dist(kp0, ball) / 5.5, 0.4, 1.8);
-    const tPlace = tPick + clamp4(dist(ball, at) / 4.5, 0.3, 1.6);
-    const tSet = Math.max(T + (sh2 ? 2.8 : 1.4), tPlace + 0.5);
-    const tKick = tSet + (sh2 ? 0.9 : 0.3);
-    this.balls.push({ k: "still", t0: T, at: { x: ball.x, y: ball.y, z: 0.11 } });
-    this.key(kicker, tPick, { x: ball.x, y: ball.y }, true);
-    this.balls.push({ k: "hands", t0: tPick, id: kicker, z: 0.95 });
-    this.key(kicker, tPlace, { x: at.x, y: at.y }, true);
-    this.balls.push({ k: "still", t0: tPlace, at: { ...at, z: 0.11 } });
-    this.fix(kicker, T, tPlace + 0.1);
-    const cpF = this.tactics[att].setPieces?.customFk;
-    if (routine === "personalizado" && cpF && sh2) {
-      this.key(kicker, tSet, at, true);
-      this.fix(kicker, T, tKick + 0.3);
-      return this.customPlay(T, kicker, at, at.y >= 0 ? 1 : -1, tSet, tKick + 0.4, sh2, cpF);
-    }
-    const m2 = /* @__PURE__ */ new Map();
-    const g = this.A(40, 0);
-    const gl = dist(at, g) || 1;
-    const toG = { x: (g.x - at.x) / gl, y: (g.y - at.y) / gl };
-    const perp = { x: -toG.y, y: toG.x };
-    m2.set(kicker, { x: at.x - toG.x * 0.9, y: at.y - toG.y * 0.9 });
-    const others = this.attOut.filter((x) => x !== kicker);
-    if (!sh2) {
-      const mate = others.reduce((x, y) => dist(this.P(y, T), at) < dist(this.P(x, T), at) ? y : x, others[0] ?? kicker);
-      this.key(kicker, tSet, m2.get(kicker), true);
-      this.fix(kicker, T, tKick + 0.3);
-      this.act(kicker, "pass", tKick - 0.2, tKick + 0.15, { face: mate });
-      this.pass(kicker, mate, tKick, tKick + 0.7);
-      this.label(T + 0.3, `Livre marcado por ${this.nm(kicker)}`);
-      return tKick + 0.7;
-    }
-    this.phase(T, "Livre direto");
-    const barrier = bu > 22;
-    const dIds = [...this.defOut];
-    if (barrier) {
-      const b0 = { x: at.x + toG.x * 5, y: at.y + toG.y * 5 };
-      if (dIds[0]) m2.set(dIds[0], { x: b0.x + perp.x * 0.32, y: b0.y + perp.y * 0.32 });
-      if (dIds[1]) m2.set(dIds[1], { x: b0.x - perp.x * 0.32, y: b0.y - perp.y * 0.32 });
-      this.label(tSet - 1.2, "Barreira a 5 metros");
-    }
-    const s2 = at.y >= 0 ? 1 : -1;
-    if (routine === "jogada_ensaiada" && shooter !== kicker) m2.set(shooter, { x: at.x + perp.x * 3 - toG.x * 1.5, y: at.y + perp.y * 3 - toG.y * 1.5 });
-    else if (shooter !== kicker) m2.set(shooter, this.A(33.5, -s2 * 4));
-    others.filter((x) => x !== shooter).forEach((id, i) => m2.set(id, i === 0 ? this.A(36, -s2 * 3) : this.A(bu - 4, s2 * 6)));
-    dIds.slice(barrier ? 2 : 0).forEach((id, i) => {
-      const a = [...m2.entries()].filter(([k]) => this.sideOf.get(k) === att && k !== kicker)[i];
-      m2.set(id, a ? { x: a[1].x + this.dirA * 1.4, y: a[1].y * 0.9 } : this.A(34, 0));
-    });
-    if (this.gkD) m2.set(this.gkD, this.A(39.4, clamp4(-s2 * 0.7, -1.3, 1.3)));
-    if (this.gkA) m2.set(this.gkA, this.A(4, 0));
-    this.placeAll(tSet, m2);
-    for (const [id, p2] of m2) this.key(id, tKick - 0.2, p2, true);
-    let tShot = tKick;
-    if (routine === "remate_direto" || shooter === kicker) {
-      this.label(tSet - 0.3, `${this.nm(kicker)} prepara o remate direto`);
-      this.key(kicker, tKick, { x: at.x - toG.x * 0.4, y: at.y - toG.y * 0.4 });
-      this.balls.push({ k: "foot", t0: tKick - 0.05, id: kicker });
-    } else if (routine === "jogada_ensaiada") {
-      const sp = { x: at.x + perp.x * 2.2 + toG.x * 0.6, y: at.y + perp.y * 2.2 + toG.y * 0.6 };
-      this.act(kicker, "pass", tKick - 0.2, tKick + 0.1, { face: shooter });
-      this.pass(kicker, shooter, tKick, tKick + 0.45, 0.02);
-      this.key(shooter, tKick + 0.45, sp);
-      this.act(shooter, "run", tKick - 0.3, tKick + 0.45, { to: sp });
-      tShot = tKick + 0.5;
-      this.label(tKick - 0.3, `Jogada ensaiada: ${this.nm(kicker)} toca para ${this.nm(shooter)}`);
-    } else {
-      const sp = this.A(37.4, -s2 * 2);
-      this.act(kicker, "pass", tKick - 0.2, tKick + 0.15, { face: shooter });
-      this.pass(kicker, shooter, tKick, tKick + 0.75, 0.6);
-      this.key(shooter, tKick + 0.75, sp);
-      this.act(shooter, "run", tKick - 0.4, tKick + 0.75, { to: sp });
-      tShot = tKick + 0.78;
-      this.label(tKick - 0.3, `Cruzamento ao segundo poste para ${this.nm(shooter)}`);
-    }
-    return this.shot(tShot, shooter, sh2, this.dirA);
-  }
-  /** Livre direto de 10 m (6.ª falta) ou penálti (6 m): todos atrás da linha da bola, a 5 m. */
-  spotKick(T, a) {
-    const pen = a.kind === "penalty";
-    const d = pen ? 6 : 10;
-    const att = this.att;
-    const at = this.A(40 - d, 0);
-    const kicker = a.shooter;
-    const tSet = T + (pen ? 5 : 3);
-    const tKick = tSet + 1;
-    this.phase(T, pen ? "Pen\xE1lti" : "Livre direto de 10 metros");
-    this.label(T + 0.3, pen ? `Pen\xE1lti: ${this.nm(kicker)}` : `Livre de 10 m: ${this.nm(kicker)} na marca`);
-    this.balls.push({ k: "fly", t0: T, t1: T + 1.2, from: this.ballAt(T), b: { ...at, z: 0.11 }, lift: 0.3 });
-    this.balls.push({ k: "still", t0: T + 1.2, at: { ...at, z: 0.11 } });
-    const m2 = /* @__PURE__ */ new Map();
-    m2.set(kicker, this.A(40 - d - 2.2, 0.6));
-    const line = 40 - d - 1.2;
-    const lanes = [-8.6, -6.4, 6.4, 8.6, -4.6, 4.6];
-    let li = 0;
-    for (const id of [...this.attOut.filter((x) => x !== kicker), ...this.defOut]) {
-      const v = lanes[li++ % lanes.length];
-      if (pen) m2.set(id, this.A(-0.6 - li % 2 * 0.8, (li % 2 ? -1 : 1) * (1.5 + Math.floor(li / 2) * 2.4)));
-      else m2.set(id, this.A(line - (this.sideOf.get(id) === att ? 1.2 : 0) - (li > 4 ? 2 : 0), v + (this.sideOf.get(id) === att ? 0.6 : -0.6)));
-    }
-    if (this.gkD) m2.set(this.gkD, pen ? this.A(39.75, 0) : this.A(40 - (1.5 + this.r() * 1.5), 0));
-    if (this.gkA) m2.set(this.gkA, this.A(3.5, 0));
-    this.placeAll(tSet, m2);
-    for (const [id, p2] of m2) this.key(id, tKick - 0.45, p2, true);
-    this.key(kicker, tKick, this.A(40 - d - 0.4, 0.15));
-    this.balls.push({ k: "foot", t0: tKick - 0.05, id: kicker });
-    const tE = this.shot(tKick, kicker, a, this.dirA);
-    for (const id of [...this.attOut, ...this.defOut]) if (id !== kicker) this.key(id, tKick + (pen ? 1.6 : 1), { x: m2.get(id).x + this.dirA * (pen ? 6 : 1.8), y: m2.get(id).y * 0.7 });
-    return tE;
-  }
-  /** Confronto depois de uma falta: os jogadores juntam-se, empurram-se, os árbitros entram para separar
-   *  e mostram os cartões. */
-  brawl(T, a) {
-    const who = (a.players ?? []).filter((id) => this.tr.has(id));
-    if (who.length < 2) return T;
-    const c2 = this.ballAt(T);
-    const center = { x: clamp4(c2.x, -15, 15), y: clamp4(c2.y, -7, 7) };
-    this.phase(T, "Confronto!");
-    this.label(T + 0.2, `Confronto: ${this.nm(who[0])} e ${this.nm(who[1])}${who.length > 2 ? ` (+${who.length - 2})` : ""}`);
-    who.forEach((id, i) => {
-      const ang = i / who.length * Math.PI * 2 + (i % 2 ? 0.4 : 0);
-      const rad = i < 2 ? 0.45 : 0.9 + i % 3 * 0.35;
-      const spot = { x: center.x + Math.cos(ang) * rad, y: center.y + Math.sin(ang) * rad };
-      this.key(id, T + 1.2 + i * 0.12, spot);
-      this.key(id, T + 3.6, { x: spot.x + Math.cos(ang) * 0.3, y: spot.y + Math.sin(ang) * 0.3 });
-      this.act(id, "shove", T + 1 + i * 0.12, T + 3.4, { face: who[i === 0 ? 1 : 0] });
-    });
-    REFS.forEach((id, k) => {
-      this.key(id, T + 1.6, { x: center.x + (k ? 0.6 : -0.6), y: center.y + (k ? 0.3 : -0.3) });
-      this.key(id, T + 4, { x: center.x + (k ? 1.4 : -1.4), y: center.y + (k ? 1.2 : -1.2) });
-      this.act(id, "whistle", T + 1.6, T + 4.2, { face: who[0] });
-    });
-    for (const [i, cd] of (a.cards ?? []).entries()) this.label(T + 4.2 + i * 0.7, `${cd.red ? "Cart\xE3o vermelho" : "Cart\xE3o amarelo"} para ${this.nm(cd.id)}`);
-    const back = T + 4.6 + (a.cards?.length ?? 0) * 0.7;
-    for (const id of who) this.key(id, back + 1.2, this.restPos(id, "gk"));
-    return back + 1.2;
-  }
-  /** Remate da outra equipa no mesmo lance (contra-ataque após canto, baliza deserta). */
-  // recarga: o atacante mais perto ataca a bola solta e remata logo
-  rebound(T, a) {
-    const ball = this.ballAt(T);
-    const cand = this.attOut.filter((x) => this.tr.has(x));
-    if (!cand.length) return T;
-    const sh2 = a.shooter && cand.includes(a.shooter) ? a.shooter : cand.reduce((x, y) => dist(this.P(y, T), ball) < dist(this.P(x, T), ball) ? y : x);
-    const tl = clamp4(dist(this.P(sh2, T - 0.6), ball) / 6.5, 0.45, 1.2);
-    this.later.push(() => {
-      this.fix(sh2, T - 0.6, T + tl + 0.4);
-      this.key(sh2, T + tl, { x: ball.x - this.dirA * 0.4, y: ball.y });
-    });
-    this.balls.push({ k: "foot", t0: T + tl, id: sh2 });
-    this.label(T + 0.1, `${this.nm(sh2)} vai \xE0 recarga`);
-    this.spillNext = false;
-    return this.shot(T + tl + 0.15, sh2, a, this.dirA);
-  }
-  oppShot(T, a) {
-    const sh2 = a.shooter;
-    if (!this.tr.has(sh2)) return T;
-    const g = -this.dirA;
-    const ball = this.ballAt(T);
-    const sp = this.P(sh2, T);
-    this.phase(T, a.kind === "open" ? "Baliza deserta!" : "Contra-ataque");
-    this.key(sh2, T + 0.5, { x: ball.x, y: ball.y });
-    this.balls.push({ k: "foot", t0: T + 0.5, id: sh2 });
-    let tS = T + 0.9;
-    if (a.kind !== "open") {
-      const tgt = { x: g * 9, y: clamp4(sp.y * 0.4, -3, 3) };
-      const tl = clamp4(dist(ball, tgt) / 6.2, 1.2, 3.6);
-      this.key(sh2, T + 0.5 + tl, tgt);
-      tS = T + 0.6 + tl;
-      for (const id of this.attOut) this.key(id, tS, { x: lerp(this.P(id, T).x, g * 12, 0.6), y: this.P(id, T).y * 0.6 });
-      for (const id of this.defOut) if (id !== sh2) this.key(id, tS, { x: lerp(this.P(id, T).x, g * 10, 0.6), y: this.P(id, T).y * 0.8 });
-      this.label(T + 0.6, `${this.nm(sh2)} sai em contra-ataque`);
-    } else this.label(T + 0.3, `${this.nm(sh2)} remata para a baliza deserta`);
-    return this.shot(tS, sh2, a, g);
-  }
-  celebrate(T, scorer, side) {
-    if (!this.tr.has(scorer)) return T + 2;
-    const dir = side === this.att ? this.dirA : -this.dirA;
-    const sp = this.P(scorer, T);
-    const corner = { x: dir * 16, y: (sp.y >= 0 ? 1 : -1) * 9.6 };
-    this.phase(T, "Golo!");
-    this.key(scorer, T + 2.2, corner);
-    this.act(scorer, "celebrate", T + 0.3, T + 6.2);
-    let i = 0;
-    for (const [id, s2] of this.sideOf) {
-      if (REFS.includes(id)) continue;
-      if (id === scorer) continue;
-      const p0 = this.P(id, T);
-      const gk = id === this.p.onCourt[s2][0] && !this.p.flying[s2];
-      if (s2 === side && !gk) {
-        const a = i++ / 3 * Math.PI;
-        this.key(id, T + 2.6, { x: corner.x - dir * (1 + Math.cos(a)), y: corner.y - Math.sign(corner.y) * (0.8 + Math.sin(a) * 1.2) });
-        this.key(id, T + 4.2, { x: corner.x - dir * (0.5 + Math.cos(a) * 0.4), y: corner.y - Math.sign(corner.y) * (0.5 + Math.sin(a) * 0.5) });
-        this.act(id, "celebrate", T + 2, T + 6.2);
-      } else if (!gk) this.key(id, T + 4.5, { x: lerp(p0.x, 0, 0.35), y: p0.y * 0.7 });
-      else this.key(id, T + 4.5, p0, true);
-    }
-    return T + 6.4;
-  }
-  // ---------- consulta ----------
-  holderAt(t) {
-    let seg = null;
-    for (const s2 of this.balls) if (s2.t0 <= t) seg = s2;
-    return seg && (seg.k === "foot" || seg.k === "hands") ? seg.id : null;
-  }
-  foot(id, t) {
-    const p = this.P(id, t);
-    const q = this.P(id, t - 0.12);
-    const vx = (p.x - q.x) / 0.12, vy = (p.y - q.y) / 0.12;
-    const sp = Math.hypot(vx, vy);
-    const sd = this.sideOf.get(id) ?? this.att;
-    const d = sd === this.att ? this.dirA : -this.dirA;
-    if (sp > 1.5) {
-      const rate = 1.4 + sp * 0.22;
-      const ph = t * rate % 1;
-      const lead = 0.32 + Math.min(1, sp / 7) * 0.75 * Math.sin(ph * Math.PI);
-      return { x: p.x + vx / sp * lead, y: p.y + vy / sp * lead, z: 0.11 };
-    }
-    const side = Math.sin(t * 2.6) * 0.14;
-    const fx = sp > 0.6 ? vx / sp : d, fy = sp > 0.6 ? vy / sp : 0;
-    return { x: p.x + fx * 0.3 - fy * side, y: p.y + fy * 0.3 + fx * side, z: 0.11 };
-  }
-  ballAt(t) {
-    let seg = null;
-    for (const s2 of this.balls) if (s2.t0 <= t) seg = s2;
-    seg ??= this.balls[0];
-    if (!seg) return { x: 0, y: 0, z: 0.11 };
-    if (seg.k === "foot") return this.foot(seg.id, t);
-    if (seg.k === "hands") {
-      const p = this.P(seg.id, t);
-      const q = this.P(seg.id, t - 0.15);
-      const vx = p.x - q.x, vy = p.y - q.y, vl = Math.hypot(vx, vy);
-      let dx, dy;
-      if (vl > 0.12) {
-        dx = vx / vl;
-        dy = vy / vl;
-      } else {
-        const cl = Math.hypot(p.x, p.y) || 1;
-        dx = -p.x / cl;
-        dy = -p.y / cl;
-      }
-      return { x: p.x + dx * 0.34, y: p.y + dy * 0.34, z: seg.z ?? 1.05 };
-    }
-    if (seg.k === "still") return seg.at;
-    const k = clamp4((t - seg.t0) / Math.max(0.01, seg.t1 - seg.t0), 0, 1);
-    if (seg.k === "pass") {
-      const a2 = this.foot(seg.from, seg.t0), b2 = this.foot(seg.to, seg.t1);
-      const len = dist(a2, b2);
-      return { x: lerp(a2.x, b2.x, k), y: lerp(a2.y, b2.y, k), z: 0.11 + Math.sin(k * Math.PI) * (seg.lift + (len > 14 ? 0.4 : 0)) };
-    }
-    const a = typeof seg.from === "string" ? this.foot(seg.from, seg.t0) : seg.from;
-    const b = typeof seg.b === "string" ? { ...this.P(seg.b, seg.t1), z: 1.05 } : seg.b;
-    return { x: lerp(a.x, b.x, k), y: lerp(a.y, b.y, k), z: Math.max(0.11, lerp(a.z, b.z, k) + Math.sin(k * Math.PI) * seg.lift) };
-  }
-  at(ct) {
-    const t = clamp4(ct - this.lead, -this.lead, this.finalT);
-    const pos = {};
-    for (const [id, tr] of this.tr) pos[id] = tr.at(t);
-    const ball = this.ballAt(t);
-    let label = "";
-    for (const l of this.labels) if (l.t <= t && t - l.t < 2.6) label = l.text;
-    let phase = "";
-    for (const ph of this.phases) if (ph.t <= t) phase = ph.text;
-    const acts = {};
-    for (const a of this.acts) {
-      if (t < a.t0 || t > a.t1) continue;
-      const me = pos[a.id];
-      if (!me) continue;
-      const ang = a.ang ?? (a.face && pos[a.face] ? angTo(me, pos[a.face]) : a.to ? angTo(me, a.to) : angTo(me, ball));
-      acts[a.id] = { kind: a.kind, k: (t - a.t0) / Math.max(0.01, a.t1 - a.t0), ang, to: a.to, h: a.h };
-    }
-    const holder = this.holderAt(t);
-    if (holder && !acts[holder] && t >= 0 && t <= this.D && !this.gkOfAny(holder)) {
-      const hp = pos[holder];
-      const hq = this.tr.get(holder).at(t - 0.2);
-      const slow = dist(hp, hq) < 0.5;
-      const opp = this.sideOf.get(holder) === this.att ? this.defOut : this.attOut;
-      let near = null, nd = 1.15;
-      for (const id of opp) {
-        const p = pos[id];
-        if (p) {
-          const d = dist(p, hp);
-          if (d < nd) {
-            nd = d;
-            near = p;
-          }
-        }
-      }
-      if (near && slow) acts[holder] = { kind: "shield", k: 0.5, ang: angTo(near, hp) };
-    }
-    return { pos, ball, holder, stoppage: t < 0 || t > this.D, label, phase, acts };
-  }
-};
-
-// ../../../tmp/claude-0/-home-user-Futsal-Manager-2027/9c8d8f2b-882a-51af-b8f4-ef6c73669acb/scratchpad/loco/one.ts
+// ../../../tmp/claude-0/-home-user-Futsal-Manager-2027/9c8d8f2b-882a-51af-b8f4-ef6c73669acb/scratchpad/loco/refk.ts
 var s = newGame("T", "PT", "slb");
-var hs = setupFor(s, "slb");
-var as = setupFor(s, "scp");
-var pl = Object.fromEntries([...hs.squad, ...as.squad].map((x) => [x.id, x]));
-var m = createMatch(hs, as, { seed: "loco" });
-var start = null;
-var pick2 = null;
-var P;
-while (m.step()) {
-  const sn = m.snapshot();
-  if (!sn.possession) {
-    start = null;
-    continue;
-  }
-  const c2 = new Choreo(sn.possession, [hs.tactics, as.tactics], sn.period, start, m.names, pl);
-  start = c2.end;
-  if (c2.acts.some((a) => a.kind === "dive") && c2.acts.some((a) => a.kind === "throw")) {
-    pick2 = c2;
-    P = sn.possession;
-    break;
+var hex = (a, b) => {
+  const p = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+  const [x, y] = [p(a), p(b)];
+  return Math.hypot(x[0] - y[0], x[1] - y[1], x[2] - y[2]);
+};
+var cnt = {};
+var worst = 999;
+var wpair = "";
+var n = 0;
+for (const lg of s.leagues) for (const h of lg.clubIds) for (const a of lg.clubIds) if (h !== a) {
+  const H = s.clubs.find((c) => c.id === h), A = s.clubs.find((c) => c.id === a);
+  const kits = matchKits(H, A, 0, "auto");
+  const gk = matchGkKits(h, a, kits);
+  const r = refKitFor(kits, gk);
+  cnt[r.name] = (cnt[r.name] ?? 0) + 1;
+  n++;
+  const d = Math.min(...kits.flatMap((k2) => k2.pattern === "liso" ? [k2.shirt] : [k2.shirt, k2.alt]).map((c) => hex(c, r.shirt)));
+  if (d < worst) {
+    worst = d;
+    wpair = `${h}-${a} ${r.name} ${kits.map((k2) => k2.shirt + "/" + k2.alt).join(" ")}`;
   }
 }
-var c = pick2;
-console.log("acts", JSON.stringify(P.actions.map((a) => ({ t: a.type, k: a.kind, r: a.result, sh: m.names[a.shooter] }))));
-console.log(c.phases.map((p) => p.t.toFixed(1) + " " + p.text).join(" | "));
-for (const a of c.acts) if (["shoot", "dive", "splits", "spread", "catch"].includes(a.kind)) console.log(a.kind, m.names[a.id], a.t0.toFixed(2), a.t1.toFixed(2), JSON.stringify(a.to), a.h?.toFixed(2));
-var sh = c.acts.filter((a) => a.kind === "shoot");
-for (const x of sh) {
-  const t = x.t0 + 0.2;
-  const f = c.at(c.lead + t);
-  const gk = c.p.onCourt[1 - c.sideOf.get(x.id)][0];
-  console.log("t", t.toFixed(2), "rematador", JSON.stringify(f.pos[x.id]), "GR", JSON.stringify(f.pos[gk]), "bola", JSON.stringify(f.ball), "fixed?", c.isFixed(gk, t));
-}
+console.log(n, "jogos", cnt, "menor dist\xE2ncia \xE0 camisola de campo", worst.toFixed(0), wpair);

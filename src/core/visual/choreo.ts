@@ -648,6 +648,13 @@ export class Choreo {
         const t = B.t0 + i * BAKE_DT;
         if (t < 0 || t > this.D) { inside = false; continue; }
         if (!inside && Math.abs(B.xs[i]) <= 20 && Math.abs(B.ys[i]) <= 10) inside = true;
+        // o suplente que entra pode estar fora um instante, mas nunca joga a bola fora da quadra
+        if (!inside) {
+          const b = this.ballAt(t);
+          const ballAct = this.acts.some((a) => a.id === id && (a.kind === 'pass' || a.kind === 'shoot' || a.kind === 'throw') && t >= a.t0 - 0.3 && t <= a.t1);
+          const ballSeg = this.balls.some((bs) => (bs.k === 'pass' || bs.k === 'fly') && bs.from === id && t >= bs.t0 - 0.4 && t <= bs.t0 + 0.05);
+          if (ballAct || ballSeg || this.holderAt(t) === id || Math.hypot(b.x - B.xs[i], b.y - B.ys[i]) < 1.5) inside = true;
+        }
         if (inside) { B.xs[i] = clamp(B.xs[i], -19.9, 19.9); B.ys[i] = clamp(B.ys[i], -9.9, 9.9); }
       }
     }

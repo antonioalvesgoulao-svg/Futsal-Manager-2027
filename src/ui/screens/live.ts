@@ -21,7 +21,7 @@ import { Choreo, StartState } from '../../core/visual/choreo';
 import { IntroScene } from '../../core/visual/intro';
 import { attendance } from '../../core/attendance';
 import { lookOf } from '../../core/appearance';
-import { matchGkKits, matchKits, pendingKit, setPendingKit } from '../../core/kits';
+import { matchGkKits, matchKits, pendingKit, refKitFor, setPendingKit } from '../../core/kits';
 import { refBadgeHtml } from '../../core/referees';
 
 export const DEFAULT_SETTINGS: Settings = { speed: 'medio', moments3d: 'importantes', scoreboard: 'auto', quality: 'normal' };
@@ -62,8 +62,8 @@ export function renderLive(content: HTMLElement, s: GameState, f: Fixture, onDon
   const kits = matchKits(h, a, mySide, pendingKit);
   setPendingKit('auto');
   const gkKits = matchGkKits(h.id, a.id, kits);
-  // árbitros de amarelo, ou de preto se um GR jogar de amarelo
-  const refShirt = gkKits.some((g) => g.shirt === '#facc15') ? '#1f2937' : '#facc15';
+  // árbitros: amarelo, verde fluorescente, amarelo fluorescente ou preto, nunca igual às cores dos jogadores de campo
+  const refShirt = refKitFor(kits as [typeof kits[0], typeof kits[1]], gkKits).shirt;
   const colors: [string, string] = [kits[0].shirt, kits[1].shirt];
   /** nome nas costas: o apelido (último nome), ou o nome inteiro se for só um */
 const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;

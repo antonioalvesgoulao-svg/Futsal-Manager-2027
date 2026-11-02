@@ -304,3 +304,14 @@ Alterações no 3D:
 Desempenho: a coreografia demora 23 ms por posse no browser (mediana), uma vez a cada ~20 s de jogo.
 
 Validação: tsc, build, `npm test` (motor intacto) e diag. Jogo ao vivo no browser sem erros.
+
+## Árbitros e jogadores fora da quadra (2 novembro 2026, Claude)
+- Equipamentos dos árbitros (indicação do António), em `REF_KITS`/`refKitFor` (`kits.ts`):
+  - opções: amarelo, verde fluorescente, amarelo fluorescente ou todo preto, sempre com calção preto;
+  - nunca coincidem com a camisola nem com a 2.ª cor do padrão dos jogadores de campo; se possível, também evitam a cor dos GR.
+  - Se nenhum ficar distinto, o visitante (ou, em último caso, a casa) muda de equipamento em `matchKits`.
+  - Em 372 combinações PT/ES: amarelo 218, verde fluorescente 130, preto 24. Mínimo: Barcelona–Palma com árbitros de preto.
+- `keepInside()` em `choreo.ts`: em jogo corrido quem está dentro da quadra não sai.
+  - O suplente que entra pela zona de substituição pode estar um instante fora.
+  - Nunca joga a bola (receber, passar, rematar) fora da quadra.
+- Verificado num jogo inteiro (4-0 contra 2-2): no máximo 10 jogadores em campo; a figura sem etiqueta junto à câmara era o árbitro.
