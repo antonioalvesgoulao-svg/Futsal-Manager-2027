@@ -73,3 +73,11 @@ Estas instruções aplicam-se a qualquer assistente de programação (ChatGPT/Co
 - Locomoção 3D (`pose` em player3d): a passada depende de `Actor.fwd`/`Actor.side` (frente, costas, lado). Não voltar a rodar o corpo para a direção da corrida a baixa velocidade. Os defensores olham para o jogo.
 - Física individual (aceleração/agilidade) aplica-se a todos os jogadores de campo em todos os sistemas. Os GR mantêm os seus limites.
 - Voo do GR (`pose`, case 'dive' em player3d.ts): versão aprovada pelo António a 2/11/2026 (commit 7c54d23). Não alterar sem pedido dele.
+
+
+## Liga do Cazaquistão (2/11/2026)
+- A implementação inicial está na branch `feat/kazakhstan-futsal-league`, empilhada sobre `claude/awesome-hypatia-l5i9xc` / PR #6. Não fazer merge sem autorização.
+- Fonte de participantes: Zerozero, Premiere League Futsal 2026/27 (12 clubes). Dados parciais; consultar `src/data/kaz/*.json` e respetivas notas de proveniência.
+- Não apresentar estimativas de nível, cidade/pavilhão, equipamentos, plantéis fictícios ou staff fictício como dados reais. Jogadores fictícios estão marcados `fictional: true`; treinadores fictícios também. Staff gerado tem idade e nacionalidade.
+- Kairat e Semey têm plantéis com dados recuperados; as restantes equipas usam jogadores fictícios provisórios para preencher o mínimo funcional. Completar quando houver fontes.
+- O calendário implementa 44 jornadas em 4 voltas, play-off dos oito primeiros, Taça e Supertaça. Datas/ordem de taça e calendário são aproximações baseadas nos registos disponíveis; validar formato oficial antes de afirmar correspondência integral.
