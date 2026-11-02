@@ -472,7 +472,7 @@ export class Choreo {
 
     // ---- defesa (depois de o ataque estar definido) ----
     this.sortBalls();
-    for (const id of this.attOut) if (id !== this.gkA) this.tr.get(id)?.liven(this.r, 0, D - 0.3, 1.1, (t) => this.isFixed(id, t) || this.holderAt(t) === id);
+    for (const id of this.attOut) if (id !== this.gkA) this.tr.get(id)?.liven(this.r, 0, D - 0.3, 0.8, (t) => this.isFixed(id, t) || this.holderAt(t) === id);
     for (const id of this.tr.keys()) if (this.sideOf.get(id) === att) {
       const profile = id !== this.gkA ? this.movement.get(id) : undefined; // física individual em todos os sistemas
       this.tr.get(id)!.limit(VMAX);
@@ -498,6 +498,7 @@ export class Choreo {
         profile?.accelerationFactor, profile?.agilityFactor);
     }
 
+    this.breathe();
     for (let pass = 0; pass < 3; pass++) this.separate(T + 0.5);
     this.keepInside();
     this.finalT = T;
@@ -637,6 +638,34 @@ export class Choreo {
     }
   }
 
+  /** Ninguém fica imóvel muito tempo perto do lance: depois de ~2,2 s parado com a bola a menos de 9 m, o jogador faz
+   *  pequenos ajustes (passo de ~0,4 m para o lado ou para dar linha, e volta), como se vê nos jogos reais. */
+  private breathe() {
+    for (const [id, tr] of this.tr) {
+      if (!this.sideOf.has(id) || this.gkOfAny(id) || !tr.baked) continue;
+      const B = tr.baked;
+      const n = B.xs.length;
+      const X = Float32Array.from(B.xs), Y = Float32Array.from(B.ys); // trajetória original (para medir a imobilidade)
+      let still = 0, k = 0;
+      for (let i = 1; i < n; i++) {
+        const t = B.t0 + i * BAKE_DT;
+        if (t < 0 || t > this.D) { still = 0; continue; }
+        const v = Math.hypot(X[i] - X[i - 1], Y[i] - Y[i - 1]) / BAKE_DT;
+        const ball = this.ballAt(t);
+        const near = Math.hypot(ball.x - X[i], ball.y - Y[i]) < 9;
+        if (v < 0.35 && near && this.holderAt(t) !== id && !this.isFixed(id, t)) still += BAKE_DT; else { still = 0; continue; }
+        if (still < 2.2) continue;
+        // ajuste: 1,6 s de ida e volta, perpendicular à linha para a bola (alternando o lado)
+        const ph = (still - 2.2) / 1.6;
+        if (ph >= 1) { still = 1.4; k++; continue; }
+        const dx = ball.x - X[i], dy = ball.y - Y[i], dl = Math.hypot(dx, dy) || 1;
+        const sgn = (id.charCodeAt(id.length - 1) + k) % 2 ? 1 : -1;
+        const amp = 0.42 * Math.sin(ph * Math.PI);
+        B.xs[i] = X[i] + (-dy / dl) * amp * sgn; B.ys[i] = Y[i] + (dx / dl) * amp * sgn;
+      }
+    }
+  }
+
   /** Em jogo corrido nenhum jogador sai da quadra: quem já está dentro fica dentro (linhas laterais e de fundo). */
   private keepInside() {
     for (const [id, tr] of this.tr) {
@@ -741,7 +770,7 @@ export class Choreo {
   /** Pontos-chave para os atacantes não envolvidos num lance, na estrutura. */
   private attKeysAt(t: number, skip: Set<string>, bv?: number) {
     const b = bv ?? this.ballAt(Math.min(t, this.lastBallT())).y;
-    for (const id of this.attOut) if (!skip.has(id)) this.key(id, t, this.slotPos(this.slot.get(id) ?? 0, t, b, 0.7)); // pequena variação (antes 1,6 m: andavam sempre)
+    for (const id of this.attOut) if (!skip.has(id)) this.key(id, t, this.slotPos(this.slot.get(id) ?? 0, t, b, 0.4)); // pequena variação (antes 1,6 m: andavam sempre)
     // posição do GR conforme o estilo: clássico perto da baliza, construtor e atacante mais subidos
     const gs = this.tactics[this.att].gkStyle ?? 'classico';
     const gkU = gs === 'avancado' ? lerp(2, 10, this.progFn(t)) : gs === 'construtor' ? lerp(1.6, 6.5, this.progFn(t)) : lerp(1.4, 4.2, this.progFn(t));
@@ -1488,7 +1517,7 @@ export class Choreo {
         const dd = dist(prev, target);
         const nearBall = a === holder || dist(prev, ball) < 3.5;
         const dead = nearBall ? 0.15 : dist(prev, ball) < 8 ? 0.5 : 0.9; // perto do lance ajusta-se a cada passe
-        const vmax = Math.min(VMAX * 1.05, (nearBall ? 2.5 : 0.9) + Math.max(0, dd - dead) * 1.5);
+        const vmax = Math.min(VMAX * 1.05, (nearBall ? 2.0 : 0.8) + Math.max(0, dd - dead) * 1.4);
         const maxd = vmax * dt;
         const np = dd <= dead ? prev : dd > maxd ? { x: prev.x + ((target.x - prev.x) * maxd) / dd, y: prev.y + ((target.y - prev.y) * maxd) / dd } : target;
         this.key(d, t, np);
@@ -1531,6 +1560,8 @@ export class Choreo {
   /** Remate e reação do guarda-redes / do defensor que bloqueia. Devolve o instante em que a bola fica parada. */
   private shot(T: number, shooter: string, a: Action, g: number): number {
     const r = this.r;
+    // o remate parte sempre de onde o rematador consegue chegar (em qualquer lance: jogo, recarga, contra-ataque, bola parada)
+    this.tr.get(shooter)?.limit(VMAX * 0.85);
     const res = a.result ?? 'wide';
     const from = this.P(shooter, T);
     const side = r() < 0.5 ? -1 : 1;
@@ -1578,8 +1609,8 @@ export class Choreo {
     const rem = this.au(shooter, 'remate');
     const sdist = Math.hypot(target.x - from.x, target.y - from.y);
     const power = r() < (sdist < 6 ? 0.3 : 0.4 + 0.4 * rem);
-    const vball = res === 'blocked' ? 16 : power ? 22 + 8 * rem + r() * 3 : 14 + 5 * rem + r() * 3;
-    const fl = clamp(sdist / vball, 0.16, 1.1);
+    const vball = res === 'blocked' ? 16 : power ? 21 + 7 * rem + r() * 2.5 : 14 + 5 * rem + r() * 3; // máx. ~110 km/h
+    const fl = clamp((sdist + 1.5) / vball, 0.18, 1.1); // +1,5 m: o rematador pode chegar um pouco atrás do ponto planeado
     const windup = power ? 0.3 : 0.2; // preparação maior no remate potente
     this.shotTimes.push(T);
     this.act(shooter, 'shoot', T - windup, T + windup * 0.75, { ang: angTo(from, target) });

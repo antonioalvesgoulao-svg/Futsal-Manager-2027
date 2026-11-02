@@ -71,3 +71,10 @@ Está bem (manter): GR enquadrado no remate (0,49 m da posição certa); sem sal
 | GR defensor a mais de 7 m da baliza | 11 s | Sobretudo GR atacante a voltar depois de perder a bola (realista) |
 | Ritmo | 135 m/min | Referência real ~115-120 (estimativa); parado 19,5% |
 | Golos | 5,7 | Mais baixo por causa das táticas sorteadas (o motor não mudou) |
+
+## Correções depois das 5 épocas (2/11/2026)
+| Problema | Antes | Depois (12 jogos de teste) |
+|---|---|---|
+| Parados >4 s perto da bola | 5,2-9,7 por jogo | 1,7 (`breathe()`: ajuste de ~0,4 m para o lado após 2,2 s imóvel) |
+| Remates acima de 130 km/h | 0,4-0,6 por jogo | 0 (limite de alcance dentro de `shot()`; máx. ~110 km/h; +1,5 m de margem no voo) |
+| Ritmo | 131-135 m/min | 129 (defensores 121, atacantes 138: as rotações do ataque mantêm-se) |

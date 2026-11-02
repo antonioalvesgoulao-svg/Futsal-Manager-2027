@@ -1,107 +1,105 @@
 {
- "epocas": 5,
+ "epocas": 1,
  "sistemasSorteados": {
-  "2-2": 143,
-  "3-1": 297,
-  "4-0": 143,
-  "1-2-1": 77
+  "2-2": 11,
+  "3-1": 1
  },
  "anomaliasPorJogo": {
-  "congelados4s": 9.67,
-  "bolaMortaSeg": 4.887,
-  "grForaDaAreaSeg": 11.103,
-  "velocidadeSobreHumanaSeg": 2.217,
-  "rematesAcima130kmh": 0.39,
-  "defesasSemGesto": 0.02,
+  "congelados4s": 1.67,
+  "bolaMortaSeg": 5.442,
+  "grForaDaAreaSeg": 19.458000000000002,
+  "velocidadeSobreHumanaSeg": 2.95,
+  "rematesAcima130kmh": 0,
+  "defesasSemGesto": 0.17,
   "golosSemGesto": 0
  },
  "piores": {
   "grForaDefesa": [
    {
-    "v": 21.75247812271118,
-    "where": "2|fam|fun|71|0.0|fun03"
+    "v": 20.81345385313034,
+    "where": "0|scp|fzz|89|0.0|scp01"
    },
    {
-    "v": 21.73689031600952,
-    "where": "3|slb|rav|20|0.0|rav02"
+    "v": 20.723527550697327,
+    "where": "0|scp|fzz|89|0.1|scp01"
    },
    {
-    "v": 21.71446704864502,
-    "where": "3|scb|tor|27|0.0|tor01"
+    "v": 20.494701474905014,
+    "where": "0|scp|fzz|89|0.2|scp01"
    },
    {
-    "v": 21.652236223220825,
-    "where": "0|fun|fam|32|0.0|fam02"
+    "v": 20.115629836916924,
+    "where": "0|scp|fzz|89|0.3|scp01"
    },
    {
-    "v": 21.645642280578613,
-    "where": "3|slb|rav|20|0.1|rav02"
+    "v": 19.561128169298172,
+    "where": "0|scp|fzz|89|0.4|scp01"
    }
   ],
   "congelados": [
    {
     "v": 4,
-    "where": "0|scp|slb|17|8.2|slb10"
+    "where": "0|scp|slb|17|7.8|slb10"
    },
    {
     "v": 4,
-    "where": "0|scp|slb|17|11.2|scp18"
+    "where": "0|scp|slb|40|7.8|scp04"
    },
    {
     "v": 4,
-    "where": "0|scp|slb|40|8.3|scp04"
+    "where": "0|scp|scb|3|7.2|scb06"
    },
    {
     "v": 4,
-    "where": "0|scp|slb|40|8.8|slb06"
+    "where": "0|scp|scb|45|18.4|scp08"
    },
    {
     "v": 4,
-    "where": "0|scp|slb|40|10.9|scp14"
+    "where": "0|scp|scb|53|8.0|scp14"
    }
   ],
   "bolaMorta": [
    {
-    "v": 29.43295308487803,
-    "where": "0|fzz|uvn|97|0.0"
+    "v": 20.58616387769656,
+    "where": "0|scp|lps|79|0.0"
    },
    {
-    "v": 29.121691459117937,
-    "where": "2|uvn|fzz|130|0.0"
+    "v": 15.878910247024129,
+    "where": "0|scp|fam|66|0.0"
    },
    {
-    "v": 28.365308419134376,
-    "where": "2|uvn|fzz|127|0.0"
+    "v": 15.83463271997823,
+    "where": "0|scp|fam|66|0.1"
    },
    {
-    "v": 28.338792432552463,
-    "where": "4|lps|por|84|0.0"
+    "v": 15.751059224369685,
+    "where": "0|scp|fam|66|0.2"
    },
    {
-    "v": 28.179612114259815,
-    "where": "0|por|scb|106|0.0"
+    "v": 15.608016877860466,
+    "where": "0|scp|fam|66|0.3"
    }
   ],
   "saltos": [
    {
-    "v": 12.029493520116063,
-    "where": "2|por|scp|102|0.7|scp10"
+    "v": 10.844760286773832,
+    "where": "0|scp|slb|65|9.3|slb07"
    },
    {
-    "v": 11.968432024756297,
-    "where": "3|por|slb|48|0.9|por05"
+    "v": 10.688020164945108,
+    "where": "0|scp|uvn|54|1.1|uvn13"
    },
    {
-    "v": 11.793634569575438,
-    "where": "3|ele|rav|24|0.7|ele13"
+    "v": 10.298504213471364,
+    "where": "0|scp|por|95|0.6|por10"
    },
    {
-    "v": 11.769974221177414,
-    "where": "2|por|fun|25|0.6|fun12"
+    "v": 10.2876981233814,
+    "where": "0|scp|uvn|54|1.0|uvn13"
    },
    {
-    "v": 11.745924680087853,
-    "where": "4|por|uvn|33|0.7|por11"
+    "v": 10.267759416701324,
+    "where": "0|scp|tor|54|0.7|tor07"
    }
   ],
   "defesaSemGesto": [
@@ -112,116 +110,79 @@
    {
     "v": 1,
     "where": "0|scp|uvn|56"
-   },
-   {
-    "v": 1,
-    "where": "0|por|uvn|43"
-   },
-   {
-    "v": 1,
-    "where": "0|fam|fzz|80"
-   },
-   {
-    "v": 1,
-    "where": "1|rav|scb|51"
-   }
-  ],
-  "rematesRapidos": [
-   {
-    "v": 107.09812048624154,
-    "where": "0|fzz|tor|19"
-   },
-   {
-    "v": 68.76576196259798,
-    "where": "2|fam|slb|18"
-   },
-   {
-    "v": 62.65020179084016,
-    "where": "0|scb|fam|21"
-   },
-   {
-    "v": 59.4282887996165,
-    "where": "0|uvn|ele|29"
-   },
-   {
-    "v": 54.5086956736165,
-    "where": "1|ele|uvn|4"
    }
   ]
  },
- "jogos": 660,
- "golosPorJogo": 5.7,
- "minutosJogoCorrido": 26456,
- "segundos": 2042,
+ "jogos": 12,
+ "golosPorJogo": 6.08,
+ "minutosJogoCorrido": 481,
+ "segundos": 48,
  "velocidades": {
-  "parado": 19.5,
-  "andar": 37.7,
-  "trote": 24.5,
-  "corrida": 8.1,
-  "rapida": 4.6,
-  "sprint": 5.5
+  "parado": 23,
+  "andar": 36.5,
+  "trote": 23,
+  "corrida": 7.8,
+  "rapida": 4.1,
+  "sprint": 5.6
  },
- "metrosPorMinutoJogador": 135,
- "metrosPorMinutoAtacantes": 134,
- "metrosPorMinutoDefensores": 136,
- "saltosPorJogo": 1.2,
- "foraDoCampoPorJogo": 3.4,
- "sobreposicoesSegPorJogo": 16.1,
+ "metrosPorMinutoJogador": 129,
+ "metrosPorMinutoAtacantes": 138,
+ "metrosPorMinutoDefensores": 121,
+ "saltosPorJogo": 0.8,
+ "foraDoCampoPorJogo": 5.9,
+ "sobreposicoesSegPorJogo": 16.4,
  "bolaSoltaSegPorJogo": 0,
  "bolaAltaSegPorJogo": 0,
- "possesPorJogo": 102,
+ "possesPorJogo": 99,
  "duracaoPosse": {
-  "med": 22.87,
-  "p90": 37.33
+  "med": 23.46,
+  "p90": 39.29
  },
  "passesPorPosse": {
-  "med": 14,
-  "p90": 22
+  "med": 13,
+  "p90": 21
  },
  "portadorDefensorMaisProximo": {
-  "med": 1.24,
-  "p10": 0.71,
-  "p90": 4.8
+  "med": 1.27,
+  "p10": 0.76,
+  "p90": 5.24
  },
- "rematesPorJogo": 59.4,
+ "rematesPorJogo": 58.6,
  "distanciaRemate": {
-  "med": 8.87,
-  "p10": 3.9,
-  "p90": 12.49
+  "med": 9.01,
+  "p10": 3.85,
+  "p90": 12.5
  },
  "rematadorDefensorMaisProximo": {
-  "med": 1.51,
-  "p10": 0.77,
-  "p90": 4.02
+  "med": 1.17,
+  "p10": 0.69,
+  "p90": 3.99
  },
- "rematesComDefensorNoCaminho": 80.2,
+ "rematesComDefensorNoCaminho": 76.5,
  "grErroNoRemate": {
-  "med": 0.55,
-  "p90": 1.49
+  "med": 0.6,
+  "p90": 1.6
  },
  "sobreposicoesTipo": {
-  "adversarios": 10.1,
-  "adversarioPortador": 5,
-  "colegas": 1,
-  "comGR": 0
+  "adversarios": 10.7,
+  "adversarioPortador": 4.9,
+  "colegas": 0.9
  },
  "acoesPorJogo": {
-  "pass": 1348.6,
-  "run": 651.9,
-  "shoot": 59.4,
-  "throw": 33.6,
-  "shield": 62.2,
+  "pass": 1261.4,
+  "run": 760,
+  "shoot": 58.6,
+  "throw": 32.2,
+  "shield": 25.6,
   "tackle": 33.9,
-  "screen": 61.7,
-  "feint": 95.6,
-  "splits": 7.5,
-  "fall": 19.9,
-  "dive": 8.9,
-  "spread": 4.2,
-  "catch": 5.3,
-  "celebrate": 23,
-  "block": 12.6,
-  "shove": 0.1,
-  "whistle": 0.1
+  "screen": 64,
+  "feint": 96.1,
+  "splits": 7.8,
+  "fall": 18.9,
+  "dive": 10,
+  "spread": 4.5,
+  "catch": 6.8,
+  "celebrate": 24.3,
+  "block": 12.6
  }
 }
