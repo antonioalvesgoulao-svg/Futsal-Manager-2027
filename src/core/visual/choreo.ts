@@ -354,14 +354,25 @@ export class Choreo {
       holder = mate;
     } else {
       const h0 = start?.holder && this.attOut.concat(this.gkA ? [this.gkA] : []).includes(start.holder) ? start.holder : null;
-      holder = h0 ?? this.nearestOut(sb, t0);
+      const near0 = this.nearestOut(sb, t0);
+      // quem ganhou a bola (lance anterior) só fica com ela se estiver perto; senão vai o mais próximo
+      holder = h0 && dist(this.P(h0, t0), sb) < dist(this.P(near0, t0), sb) + 2.5 ? h0 : near0;
       if (!start?.pos) this.tr.get(holder)!.set(t0, sb, true);
       const hp0 = this.P(holder, t0);
-      if (start && Math.hypot(hp0.x - sb.x, hp0.y - sb.y) > 1.2) {
-        // bola solta: o mais próximo vai buscá-la
+      const outside = Math.abs(sb.x) > 20.2 || Math.abs(sb.y) > 10.2;
+      if (start && outside) {
+        // bola fora do campo (ex.: remate para fora contra 5x4, sem GR na baliza): um apanha-bolas devolve-a logo
+        const hq = this.P(holder, t0 + 1);
+        this.balls.push({ k: 'fly', t0, t1: t0 + 0.9, from: { x: sb.x, y: sb.y, z: 0.6 }, b: holder, lift: 0.6 });
+        this.balls.push({ k: 'foot', t0: t0 + 0.9, id: holder });
+        void hq;
+        this.label(0.1, `${this.nm(holder)} recebe a bola`);
+      } else if (start && Math.hypot(hp0.x - sb.x, hp0.y - sb.y) > 1.2) {
+        // bola solta: o mais próximo vai buscá-la, a correr (o tempo que for preciso)
+        const tg = clamp(t0 + Math.hypot(hp0.x - sb.x, hp0.y - sb.y) / 6, 0.5, Math.max(0.5, this.D - 0.5));
         this.balls.push({ k: 'still', t0, at: { x: sb.x, y: sb.y, z: 0.11 } });
-        this.key(holder, 0.7, sb);
-        this.balls.push({ k: 'foot', t0: 0.7, id: holder });
+        this.key(holder, tg, sb);
+        this.balls.push({ k: 'foot', t0: tg, id: holder });
         this.label(0.2, `${this.nm(holder)} ganha a bola`);
       } else this.balls.push({ k: 'foot', t0, id: holder });
       const u0 = this.U(sb);
@@ -445,6 +456,8 @@ export class Choreo {
       if (gkRun) this.gkCarry(holder, T, tS, shooter);
       else if (counter) this.counterRun(holder, T, tS, shooter, assist, shotA!);
       else this.finish(holder, T, tS, shooter, assist, shotA!);
+      // o remate parte de onde o rematador consegue chegar (posses curtas: não chega à zona de remate planeada)
+      this.tr.get(shooter)?.limit(VMAX * 0.85);
       this.spillNext = p.actions[1]?.kind === 'rebound' && p.actions[1].side === att;
       afterT = this.shot(tS, shooter, shotA!, this.dirA);
     } else if (ending.kind === 'lost') {
@@ -615,8 +628,10 @@ export class Choreo {
       const ref = side[k] === 9;
       for (let i = 0; i < n; i++) {
         const x = B[k].xs[i], y = B[k].ys[i];
-        B[k].xs[i] = Math.abs(x) <= 20 ? clamp(x + sx[i], -20, 20) : x;
-        B[k].ys[i] = ref || Math.abs(y) > 10 ? y : clamp(y + sy[i], -10, 10);
+        // contínuo: aplica sempre a correção, sem nunca empurrar para mais longe do campo do que já estava
+        const mx = Math.max(20, Math.abs(x)), my = Math.max(10, Math.abs(y));
+        B[k].xs[i] = clamp(x + sx[i], -mx, mx);
+        B[k].ys[i] = ref ? y : clamp(y + sy[i], -my, my);
       }
     }
   }
@@ -841,7 +856,7 @@ export class Choreo {
       this.key(pivo, T + len * 0.5, this.A(this.U(spot) + 0.8, s * 1.0));
       this.key(pivo, tEnd, spot);
       this.act(pivo, 'run', T, tEnd, { to: spot });
-      this.act(pivo, 'shield', tEnd, tEnd + 1.0, { ang: this.dirA > 0 ? -Math.PI / 2 : Math.PI / 2 });
+      if (r() < 0.7) this.act(pivo, 'shield', tEnd, tEnd + 1.0, { ang: this.dirA > 0 ? -Math.PI / 2 : Math.PI / 2 }); // de costas, a proteger; às vezes recebe já orientado
       passTo(pivo, spot);
       const cut = this.A(clamp(this.U(hp) + 6, 24, 34), s * 3.5);
       this.key(holder, tEnd + 0.7, cut);
@@ -1115,7 +1130,7 @@ export class Choreo {
         this.act(holder, 'pass', T - 0.1, T + 0.25, { face: shooter });
       }
       const tf = lerp(T, tS, 0.45);
-      if (kind !== 'meia') {
+      if (kind !== 'meia' && r() < 0.45) { // finta antes do remate só às vezes (nem todos os remates são precedidos de finta)
         this.act(shooter, 'feint', tf - 0.3, tf + 0.3, { ang: angTo(from, spot) });
         this.label(tf - 0.3, `${this.nm(shooter)} em 1x1`);
         this.later.push(() => {
@@ -1448,7 +1463,7 @@ export class Choreo {
         // e só sprinta quando fica mesmo para trás (perto do portador reage sempre)
         const dd = dist(prev, target);
         const nearBall = a === holder || dist(prev, ball) < 3.5;
-        const dead = nearBall ? 0.15 : 0.9;
+        const dead = nearBall ? 0.15 : dist(prev, ball) < 8 ? 0.5 : 0.9; // perto do lance ajusta-se a cada passe
         const vmax = Math.min(VMAX * 1.05, (nearBall ? 2.5 : 0.9) + Math.max(0, dd - dead) * 1.5);
         const maxd = vmax * dt;
         const np = dd <= dead ? prev : dd > maxd ? { x: prev.x + ((target.x - prev.x) * maxd) / dd, y: prev.y + ((target.y - prev.y) * maxd) / dd } : target;
@@ -1479,7 +1494,9 @@ export class Choreo {
         }
         // passos de ajuste: perto do alvo não se mexe (fica fixo, pronto); longe desloca-se de lado
         const dd = dist(prev, target);
-        const maxLat = 4.5 * dt, maxDep = 3 * dt;
+        // fora da baliza (GR que saiu a jogar e perdeu a bola) volta a sprintar; perto, passos curtos
+        const sprint = dd > 3;
+        const maxLat = (sprint ? VMAX : 4.5) * dt, maxDep = (sprint ? VMAX : 3) * dt;
         const np = dd < 0.12 ? prev : { x: prev.x + clamp(target.x - prev.x, -maxDep, maxDep), y: prev.y + clamp(target.y - prev.y, -maxLat, maxLat) };
         this.key(this.gkD, t, np);
       }
@@ -1530,7 +1547,8 @@ export class Choreo {
     } else {
       const gl = Math.hypot(g * 20 - from.x, -from.y) || 1;
       target = { x: from.x + ((g * 20 - from.x) / gl) * 2.2, y: from.y + (-from.y / gl) * 2.2, z: 0.4 };
-      after = { x: g * 20.6, y: (from.y >= 0 ? 1 : -1) * (6 + r() * 3), z: 0.1 };
+      // bloqueado: a bola ressalta no defensor e fica em jogo (às vezes sai pela linha de fundo, para canto)
+      after = r() < 0.3 ? { x: g * 20.6, y: (from.y >= 0 ? 1 : -1) * (6 + r() * 3), z: 0.1 } : { x: clamp(target.x - g * (2 + r() * 4), -19, 19), y: clamp(target.y + (r() - 0.5) * 6, -9, 9), z: 0.1 };
     }
     // força do remate: potente (peito do pé, 80-110 km/h) ou colocado/de bico (50-75 km/h), conforme o atributo remate e a distância
     const rem = this.au(shooter, 'remate');
@@ -2048,8 +2066,10 @@ export class Choreo {
     const ball = this.ballAt(T);
     const cand = this.attOut.filter((x) => this.tr.has(x));
     if (!cand.length) return T;
-    const sh = a.shooter && cand.includes(a.shooter) ? a.shooter : cand.reduce((x, y) => (dist(this.P(y, T), ball) < dist(this.P(x, T), ball) ? y : x));
-    const tl = clamp(dist(this.P(sh, T - 0.6), ball) / 6.5, 0.45, 1.2);
+    // vai à recarga quem está perto da bola (o rematador original só se estiver a menos de 6 m); chega a correr (~6,5 m/s)
+    const nearest = cand.reduce((x, y) => (dist(this.P(y, T), ball) < dist(this.P(x, T), ball) ? y : x));
+    const sh = a.shooter && cand.includes(a.shooter) && dist(this.P(a.shooter, T), ball) < 6 ? a.shooter : nearest;
+    const tl = clamp(dist(this.P(sh, T - 0.6), ball) / 6.5, 0.45, 3);
     this.later.push(() => { this.fix(sh, T - 0.6, T + tl + 0.4); this.key(sh, T + tl, { x: ball.x - this.dirA * 0.4, y: ball.y }); });
     this.balls.push({ k: 'foot', t0: T + tl, id: sh });
     this.label(T + 0.1, `${this.nm(sh)} vai à recarga`);

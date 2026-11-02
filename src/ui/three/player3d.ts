@@ -441,29 +441,39 @@ export function pose(a: Actor, act: Act | undefined, gk: boolean, near: boolean,
       break;
     }
     case 'dive': {
-      // voo lateral de GR: impulso com os joelhos fletidos (0-10%), o corpo roda logo para a horizontal e voa baixo,
-      // à altura da bola, de lado para a bola, braços esticados na direção do voo; depois cai de lado no chão
+      // voo de GR (futsal): passo de impulso com a perna do lado da bola, o corpo roda para a horizontal com o peito virado
+      // para o rematador, os dois braços juntos e esticados para a bola, a perna de cima arrasta ligeiramente fletida;
+      // cai de lado, amortece com o braço e levanta-se (sem "saltar" de pé no fim)
       const local = act.side ?? 1;
       const load = k < 0.1 ? Math.sin((k / 0.1) * Math.PI) : 0;
-      const roll = (Math.PI / 2) * 0.92 * ease(clamp01((k - 0.04) * 3.2));
+      const up = ease(clamp01((k - 0.04) * 3.4));
+      const getUp = k > 0.8 ? ease((k - 0.8) / 0.2) : 0;
+      const roll = (Math.PI / 2) * 0.9 * up * (1 - getUp);
       const h = act.h ?? 0.6;
-      const fly = k < 0.75 ? Math.sin(clamp01(k / 0.75) * Math.PI) : 0;
-      const lift = fly * Math.max(0.12, Math.min(0.85, h * 0.55));
+      const fly = k < 0.72 ? Math.sin(clamp01(k / 0.72) * Math.PI) : 0;
+      const lift = fly * Math.max(0.1, Math.min(0.8, h * 0.5));
       body.rotation.z = -local * roll;
-      body.rotation.x = 0.08;
-      body.position.y = HIP * Math.cos(roll) + 0.22 * Math.sin(roll) + lift - 0.2 * load;
-      body.position.x = local * Math.sin(roll) * 0.85;
-      // braços esticados para a bola (alta = acima da cabeça; baixa = mais à frente do corpo)
-      const reach = h > 1 ? 2.75 : 2.2;
-      const ext = ease(clamp01((k - 0.03) * 3.5)); // os braços acompanham a rotação do corpo
-      arm[0].rotation.set((h > 1 ? 0 : -0.5) * ext - 0.4 * (1 - ext), 0, -reach * ext - 0.3 * (1 - ext));
-      arm[1].rotation.set((h > 1 ? 0 : -0.5) * ext - 0.4 * (1 - ext), 0, reach * ext + 0.3 * (1 - ext));
-      fore[0].rotation.x = fore[1].rotation.x = -0.05;
-      // pernas: a de impulso estica, a outra dobra; no impulso as duas fletem
-      thigh[0].rotation.set(-0.15 - 0.5 * load, 0, -0.2 * local);
-      thigh[1].rotation.set(0.1 - 0.5 * load, 0, -0.05 * local);
-      shin[0].rotation.x = 0.35 + 0.8 * load;
-      shin[1].rotation.x = 0.15 + 0.8 * load;
+      body.rotation.x = 0.12 + 0.25 * getUp;
+      body.rotation.y = local * 0.18 * up * (1 - getUp); // peito para o rematador
+      body.position.y = HIP * Math.cos(roll) + 0.24 * Math.sin(roll) + lift - 0.22 * load - 0.25 * getUp * (1 - getUp) * 4 * 0.5;
+      body.position.x = local * Math.sin(roll) * 0.8;
+      // braços juntos, por cima da cabeça no referencial do corpo (= apontam à bola); bola baixa: mãos mais à frente
+      // os braços sobem juntos antes de o corpo rodar (no impulso já vão à bola)
+      const ext = ease(clamp01((k - 0.05) * 10)) * (1 - getUp);
+      // braços paralelos levantados pela frente (bola alta: por cima da cabeça; baixa: mais à frente), inclinados para a bola
+      const raise = h > 1 ? 2.95 : 2.4;
+      const land = k > 0.62 && k < 0.88 ? Math.sin(((k - 0.62) / 0.26) * Math.PI) : 0; // o braço de baixo amortece a queda
+      const dnA = local > 0 ? 1 : 0; // braço do lado da bola (fica em baixo no voo)
+      const tilt = (local > 0 ? 1 : -1) * 0.3;
+      arm[dnA].rotation.set(-raise * ext + 1.3 * land - 0.3 * (1 - ext), 0, tilt * ext + (dnA ? 1 : -1) * 0.8 * land);
+      arm[1 - dnA].rotation.set(-raise * ext - 0.3 * (1 - ext), 0, tilt * ext + ((1 - dnA) ? 1 : -1) * 0.15 * (1 - ext));
+      fore[0].rotation.x = fore[1].rotation.x = -0.1 - 0.5 * land;
+      // pernas: a de baixo (impulso) estica, a de cima vai fletida e ligeiramente atrás; no impulso fletem as duas
+      const dn = local > 0 ? 1 : 0; // perna do lado da bola (a de baixo no voo)
+      thigh[dn].rotation.set(-0.1 - 0.45 * load - 0.6 * getUp, 0, (dn ? 1 : -1) * 0.12 * up);
+      thigh[1 - dn].rotation.set(0.25 * up - 0.45 * load - 0.6 * getUp, 0, (dn ? 1 : -1) * 0.05 * up);
+      shin[dn].rotation.x = 0.2 + 0.8 * load + 1.1 * getUp;
+      shin[1 - dn].rotation.x = 0.55 * up + 0.8 * load + 1.1 * getUp;
       break;
     }
     case 'splits': {

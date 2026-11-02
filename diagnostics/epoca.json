@@ -2,11 +2,11 @@
  "jogos": 12,
  "golosPorJogo": 7.17,
  "minutosJogoCorrido": 481,
- "segundos": 37,
+ "segundos": 36,
  "velocidades": {
-  "parado": 21,
-  "andar": 36.9,
-  "trote": 23.7,
+  "parado": 21.1,
+  "andar": 36.8,
+  "trote": 23.8,
   "corrida": 8.1,
   "rapida": 4.6,
   "sprint": 5.6
@@ -14,9 +14,9 @@
  "metrosPorMinutoJogador": 134,
  "metrosPorMinutoAtacantes": 129,
  "metrosPorMinutoDefensores": 139,
- "saltosPorJogo": 3.3,
- "foraDoCampoPorJogo": 7.1,
- "sobreposicoesSegPorJogo": 21.9,
+ "saltosPorJogo": 4.7,
+ "foraDoCampoPorJogo": 9.3,
+ "sobreposicoesSegPorJogo": 21.4,
  "bolaSoltaSegPorJogo": 0,
  "bolaAltaSegPorJogo": 0,
  "possesPorJogo": 99,
@@ -31,44 +31,45 @@
  "portadorDefensorMaisProximo": {
   "med": 1.21,
   "p10": 0.67,
-  "p90": 4.37
+  "p90": 4.21
  },
  "rematesPorJogo": 58.7,
  "distanciaRemate": {
-  "med": 8.17,
-  "p10": 3.85,
-  "p90": 12.08
+  "med": 8.28,
+  "p10": 3.78,
+  "p90": 11.94
  },
  "rematadorDefensorMaisProximo": {
-  "med": 1.66,
-  "p10": 0.78,
-  "p90": 4.06
+  "med": 1.55,
+  "p10": 0.82,
+  "p90": 4.04
  },
- "rematesComDefensorNoCaminho": 81,
+ "rematesComDefensorNoCaminho": 80.8,
  "grErroNoRemate": {
-  "med": 0.5,
-  "p90": 1.39
+  "med": 0.49,
+  "p90": 1.36
  },
  "sobreposicoesTipo": {
-  "adversarios": 13.8,
-  "adversarioPortador": 5.2,
-  "colegas": 2.9
+  "adversarioPortador": 4.9,
+  "adversarios": 13.7,
+  "colegas": 2.8,
+  "comGR": 0
  },
  "acoesPorJogo": {
-  "pass": 1296.4,
-  "run": 693.1,
-  "shield": 149.2,
-  "fall": 19,
-  "tackle": 31.8,
-  "feint": 110.9,
+  "pass": 1294,
+  "run": 694.2,
+  "shield": 109.3,
+  "fall": 17.7,
+  "tackle": 32.1,
+  "feint": 101.3,
   "shoot": 58.7,
-  "catch": 4.8,
+  "splits": 8.2,
   "throw": 32.3,
-  "splits": 7.7,
-  "screen": 66.5,
-  "dive": 11.1,
+  "screen": 65.8,
+  "catch": 4.6,
+  "dive": 10.3,
   "block": 11.3,
-  "spread": 3.8,
+  "spread": 4.3,
   "celebrate": 28.7
  }
 }
