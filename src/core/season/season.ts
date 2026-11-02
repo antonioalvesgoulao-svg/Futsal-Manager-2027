@@ -483,13 +483,13 @@ function afterKazakhstan(s: SeasonState, clubIds: string[], name: (id:string)=>s
   const league = s.fixtures.filter(f=>f.comp==='kaz');
   const k=keyDates(s.year);
   const qf=s.series.filter(x=>x.comp==='kazPlayoff' && x.stage==='Quartos-de-final');
-  if (!s.regularTable && done(league)) {
+  if (!s.kazRegularTable && done(league)) {
     const ranked=table().map(x=>x.club);
-    (s as any).kazRegularTable=ranked;
+    s.kazRegularTable=ranked;
     for(const [a,b] of [[0,7],[3,4],[1,6],[2,5]]) makeSeries(s,'Quartos-de-final',ranked[a],ranked[b],3,k.playoffQF,'kazPlayoff');
     news.push(`Fim da fase regular cazaque: ${name(ranked[0])} termina em 1.º lugar.`);
   }
-  const order=(a:string,b:string):[string,string]=>{const t=(s as any).kazRegularTable as string[];return t.indexOf(a)<=t.indexOf(b)?[a,b]:[b,a];};
+  const order=(a:string,b:string):[string,string]=>{const t=s.kazRegularTable ?? [];return t.indexOf(a)<=t.indexOf(b)?[a,b]:[b,a];};
   if(qf.length===4 && qf.every(x=>x.winner) && !s.series.some(x=>x.comp==='kazPlayoff' && x.stage==='Meias-finais')) {
     makeSeries(s,'Meias-finais',...order(qf[0].winner!,qf[1].winner!),3,k.playoffSF,'kazPlayoff');
     makeSeries(s,'Meias-finais',...order(qf[2].winner!,qf[3].winner!),3,k.playoffSF,'kazPlayoff');
@@ -500,7 +500,7 @@ function afterKazakhstan(s: SeasonState, clubIds: string[], name: (id:string)=>s
   if(final?.winner && !s.winners.kaz) {s.winners.kaz=final.winner;news.push(`${name(final.winner)} é campeão do Cazaquistão.`);}
   const cupR1=byStage(s,'kazCup','Oitavos de final');
   if(done(cupR1) && !byStage(s,'kazCup','Quartos-de-final').length) {
-    const ranked=(s as any).kazRegularTable as string[] ?? ids;
+    const ranked=s.kazRegularTable ?? ids;
     const winners=cupR1.map(winnerOf) as string[];
     const top=ranked.slice(0,4);
     addCupRound(s,'kazCup','Quartos-de-final',nextWeekday(`${s.year+1}-02-10`,3),[[top[0],winners[3]],[top[1],winners[2]],[top[2],winners[1]],[top[3],winners[0]]],true);
