@@ -72,6 +72,9 @@ export interface Coach {
   discipline: number;
   youth: number;
   style: Partial<Tactics>;
+  age?: number;
+  nationality?: string;
+  fictional?: boolean;
 }
 
 export interface Settings {
