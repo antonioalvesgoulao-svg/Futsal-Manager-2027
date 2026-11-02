@@ -381,3 +381,25 @@ Todas as ferramentas em `tools/diag` correm com: `npx esbuild <ficheiro> --bundl
 - Testar no commit exato (tsc, build, testes, browser).
 - Nunca fazer merge para `main` sem autorização.
 - Não alterar o voo do GR aprovado.
+
+## Champions League de futsal — dados recolhidos (2/11/2026)
+- **Formato desde 2025/26** (UEFA):
+  - 56 equipas de 52 federações;
+  - ronda preliminar com 32 equipas em 8 mini-torneios;
+  - ronda principal de 8 grupos de 4 (os detentores e as federações mais bem colocadas entram aqui);
+  - oitavos e quartos a duas mãos;
+  - Final Four (2026: Pesaro).
+- **Ronda principal 2026/27** (futsalportugal.com, competição 57; o país de alguns clubes está por confirmar):
+  - G1: FC Barcelona, Semey FC, Futsal Minerva, FK Lučenec
+  - G2: Anderlecht, Kairat Almaty, TFK Beitar, United Galati
+  - G3: Sporting CP, Stalitsa Minsk, MNK Olmissum, Étoile Lavalloise
+  - G4: SL Benfica, HIT Kiev, ElPozo Murcia, Tigers Roermond
+  - G5: Piast Gliwice, Buba Mara, Araz Naxçivan, Újpest
+  - G6: Kauno Žalgiris, Unisport, Differdange 03, Doukas SAC
+  - G7: L84 Torino, Luxol St. Andrews, Mad Max, Hjørring
+  - G8: SC Athletic, FK Chrudim, Athletic Club Graz, Loznica-Grad 2018
+- **Federações com 2 clubes:** Portugal, Espanha e Cazaquistão.
+- **Fontes de dados:**
+  - futsalportugal.com tem ligas completas só de Portugal, Espanha, Itália e Brasil (e a Champions);
+  - as outras ligas precisam de outra fonte (zerozero através do Chrome do António);
+  - neste servidor a Wikipédia está bloqueada.
