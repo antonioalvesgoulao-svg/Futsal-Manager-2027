@@ -1,5 +1,5 @@
 {
-  "_info": "Treinadores provisórios fictícios para tornar a liga jogável. Nomes, idades e nacionalidades não são apresentados como dados reais do Zerozero; serão substituíveis quando houver registo verificável.",
+  "_info": "Treinadores provisórios fictícios para tornar a liga jogável. Nomes, idades e nacionalidades não são apresentados como dados reais do Zerozero; serão substituíveis quando houver registo verificável. Gustavo Paradeda é identificado como treinador do Kairat na informação consultada; os restantes nomes são fictícios e têm idade/nacionalidade explícitas.",
   "coaches": [
     {
       "id": "c_kaz_aqt",
@@ -16,7 +16,7 @@
     },
     {
       "id": "c_kaz_kai",
-      "name": "Aibek Akhmetov",
+      "name": "Gustavo Paradeda",
       "clubId": "kai",
       "tactical": 11,
       "motivation": 11,
@@ -25,7 +25,7 @@
       "style": {},
       "age": 39,
       "nationality": "Cazaquistão",
-      "fictional": true
+      "fictional": false
     },
     {
       "id": "c_kaz_aya",
