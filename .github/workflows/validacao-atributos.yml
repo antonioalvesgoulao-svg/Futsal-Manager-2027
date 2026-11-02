@@ -6,6 +6,7 @@ on:
       - feat/attribute-aware-movement-clean
       - feat/integrate-attribute-movement
       - claude/awesome-hypatia-l5i9xc
+      - feat/kazakhstan-futsal-league
   workflow_dispatch:
 
 permissions:
