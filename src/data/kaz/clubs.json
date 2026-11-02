@@ -1,0 +1,192 @@
+{
+  "league": {
+    "id": "kaz1",
+    "name": "Premiere League Futsal",
+    "country": "Cazaquistão",
+    "season": "2026/27",
+    "teams": 12
+  },
+  "clubs": [
+    {
+      "id": "aqt",
+      "name": "Aqtobe",
+      "shortName": "AQT",
+      "city": "Aqtöbe",
+      "arena": "Pavilhão de Aqtobe",
+      "colors": [
+        "#d71920",
+        "#ffffff"
+      ],
+      "reputation": 74,
+      "level": 73,
+      "wealth": 57,
+      "league": "kaz1"
+    },
+    {
+      "id": "kai",
+      "name": "Kairat",
+      "shortName": "KAI",
+      "city": "Almaty",
+      "arena": "Baluan Sholak Palace of OS Sports",
+      "colors": [
+        "#f5c400",
+        "#111111"
+      ],
+      "reputation": 91,
+      "level": 91,
+      "wealth": 88,
+      "league": "kaz1"
+    },
+    {
+      "id": "aya",
+      "name": "SK Ayat",
+      "shortName": "AYA",
+      "city": "Rudny",
+      "arena": "Gornyak",
+      "colors": [
+        "#e31e24",
+        "#ffffff"
+      ],
+      "reputation": 72,
+      "level": 71,
+      "wealth": 52,
+      "league": "kaz1"
+    },
+    {
+      "id": "kas",
+      "name": "Kaspiy Aktau",
+      "shortName": "KAS",
+      "city": "Aktau",
+      "arena": "Pavilhão de Aktau",
+      "colors": [
+        "#0066a1",
+        "#ffffff"
+      ],
+      "reputation": 68,
+      "level": 67,
+      "wealth": 48,
+      "league": "kaz1"
+    },
+    {
+      "id": "sem",
+      "name": "Semey",
+      "shortName": "SEM",
+      "city": "Semey",
+      "arena": "Pavilhão de Semey",
+      "colors": [
+        "#111111",
+        "#f0c419"
+      ],
+      "reputation": 88,
+      "level": 88,
+      "wealth": 76,
+      "league": "kaz1"
+    },
+    {
+      "id": "aty",
+      "name": "Atyrau",
+      "shortName": "ATY",
+      "city": "Atyrau",
+      "arena": "Pavilhão de Atyrau",
+      "colors": [
+        "#008b75",
+        "#ffffff"
+      ],
+      "reputation": 69,
+      "level": 68,
+      "wealth": 50,
+      "league": "kaz1"
+    },
+    {
+      "id": "bay",
+      "name": "Bayterek",
+      "shortName": "BAY",
+      "city": "Oral",
+      "arena": "Pavilhão de Oral",
+      "colors": [
+        "#1c6b3c",
+        "#ffffff"
+      ],
+      "reputation": 62,
+      "level": 61,
+      "wealth": 38,
+      "league": "kaz1"
+    },
+    {
+      "id": "elo",
+      "name": "Elorda",
+      "shortName": "ELO",
+      "city": "Astana",
+      "arena": "Pavilhão de Astana",
+      "colors": [
+        "#1769aa",
+        "#f5c400"
+      ],
+      "reputation": 70,
+      "level": 69,
+      "wealth": 60,
+      "league": "kaz1"
+    },
+    {
+      "id": "okz",
+      "name": "Okzhetpes",
+      "shortName": "OKZ",
+      "city": "Kokshetau",
+      "arena": "Pavilhão de Kokshetau",
+      "colors": [
+        "#168a49",
+        "#ffffff"
+      ],
+      "reputation": 60,
+      "level": 59,
+      "wealth": 36,
+      "league": "kaz1"
+    },
+    {
+      "id": "tul",
+      "name": "Tulpar",
+      "shortName": "TUL",
+      "city": "Qaraghandy",
+      "arena": "Pavilhão de Qaraghandy",
+      "colors": [
+        "#f0c419",
+        "#111111"
+      ],
+      "reputation": 66,
+      "level": 65,
+      "wealth": 43,
+      "league": "kaz1"
+    },
+    {
+      "id": "zhi",
+      "name": "Zhigitter Astana",
+      "shortName": "ZHI",
+      "city": "Astana",
+      "arena": "Pavilhão de Astana",
+      "colors": [
+        "#d71920",
+        "#111111"
+      ],
+      "reputation": 58,
+      "level": 57,
+      "wealth": 34,
+      "league": "kaz1"
+    },
+    {
+      "id": "ord",
+      "name": "Ordabasy",
+      "shortName": "ORD",
+      "city": "Shymkent",
+      "arena": "Pavilhão de Shymkent",
+      "colors": [
+        "#006b3c",
+        "#ffffff"
+      ],
+      "reputation": 63,
+      "level": 62,
+      "wealth": 42,
+      "league": "kaz1"
+    }
+  ],
+  "_info": "12 participantes e nomes conforme Zerozero (Premiere League Futsal 2026/27). Níveis, riqueza, cidades/arenas não publicados no registo consultado e cores dos equipamentos são estimativas de jogo; Kairat (Almaty, Baluan Sholak) e SK Ayat (Rudny, Gornyak) têm pavilhão identificado. Não tratar estimativas como confirmação histórica."
+}
