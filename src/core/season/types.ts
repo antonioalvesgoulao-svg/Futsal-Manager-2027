@@ -1,5 +1,5 @@
 // Tipos da época: calendário, competições, séries de play-off, estatísticas e palmarés
-export type CompId = 'liga' | 'playoff' | 'taca' | 'tacaLiga' | 'supertaca' | 'esp' | 'espPlayoff' | 'copaRey' | 'copaEsp' | 'superEsp' | 'espAp' | 'espCl';
+export type CompId = 'liga' | 'playoff' | 'taca' | 'tacaLiga' | 'supertaca' | 'esp' | 'espPlayoff' | 'copaRey' | 'copaEsp' | 'superEsp' | 'espAp' | 'espCl' | 'kaz' | 'kazPlayoff' | 'kazCup' | 'kazSuper';
 
 export const COMP_NAMES: Record<CompId, string> = {
   liga: 'Liga Placard',
@@ -14,6 +14,7 @@ export const COMP_NAMES: Record<CompId, string> = {
   copaRey: 'Copa del Rey',
   copaEsp: 'Copa de España',
   superEsp: 'Supercopa de España',
+  kaz: 'Premiere League Futsal', kazPlayoff: 'Premiere League Futsal (play-off)', kazCup: 'Taça do Cazaquistão', kazSuper: 'Supertaça do Cazaquistão',
 };
 
 /** Tipo de cada competição, igual em todos os países: liga, play-off, taça (todos), taça da liga (final eight), supertaça. */
@@ -21,12 +22,14 @@ export type CompKind = 'league' | 'playoff' | 'cup' | 'leagueCup' | 'super';
 export const COMP_KIND: Record<CompId, CompKind> = {
   liga: 'league', playoff: 'playoff', taca: 'cup', tacaLiga: 'leagueCup', supertaca: 'super',
   esp: 'league', espPlayoff: 'playoff', copaRey: 'cup', copaEsp: 'leagueCup', superEsp: 'super', espAp: 'leagueCup', espCl: 'leagueCup',
+  kaz: 'league', kazPlayoff: 'playoff', kazCup: 'cup', kazSuper: 'super',
 };
 export const kindOf = (c: CompId) => COMP_KIND[c];
 /** Competições de cada país, pela ordem liga, play-off, taça, taça da liga, supertaça. */
 export const COUNTRY_COMPS: Record<string, { league: CompId; playoff: CompId; cup: CompId; leagueCup: CompId; super: CompId }> = {
   por: { league: 'liga', playoff: 'playoff', cup: 'taca', leagueCup: 'tacaLiga', super: 'supertaca' },
   esp: { league: 'esp', playoff: 'espPlayoff', cup: 'copaEsp', leagueCup: 'copaEsp', super: 'superEsp' },
+  kaz: { league: 'kaz', playoff: 'kazPlayoff', cup: 'kazCup', leagueCup: 'kazCup', super: 'kazSuper' },
 };
 export const countryOfComp = (c: CompId) => (Object.entries(COUNTRY_COMPS).find(([, v]) => Object.values(v).includes(c))?.[0] ?? 'por');
 
