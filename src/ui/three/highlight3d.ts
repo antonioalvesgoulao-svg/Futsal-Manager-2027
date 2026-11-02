@@ -327,6 +327,8 @@ export class Highlight3D {
       }
       const inf = this.info[id];
       const near = Math.hypot(f.ball.x - p.x, f.ball.y - p.y) < 16;
+      const en = this.choreo?.energy?.[id];
+      a.tired = en === undefined ? 0 : Math.max(0, Math.min(1, (68 - en) / 38)); // cansaço visível abaixo de ~68 de energia
       pose(a, act2, !!inf?.gk, near, dt);
       if (act2?.kind === 'celebrate' && podH) a.g.position.y += podH; // os saltos no palanque partem do palanque
       a.prev.copy(a.g.position);

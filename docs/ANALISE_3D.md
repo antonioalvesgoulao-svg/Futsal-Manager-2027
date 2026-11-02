@@ -87,3 +87,16 @@ A câmara TV (`updateCamera` em `highlight3d.ts`) passou de seguir a bola com zo
 - o lance fica a meio da imagem também do lado de lá.
 
 As outras câmaras não mudam.
+
+## Aproximação ao futsal real, todos os pontos (2/11/2026, pedido do António)
+| Ponto | O que mudou (`choreo.ts`, `player3d.ts`, `highlight3d.ts`, `live.ts`) |
+|---|---|
+| Decisão por leitura | A escolha da jogada depende de como o adversário defende (individual: bloqueios ×1,9, cortina, paralela; zona: "U", pivô, inversões), da pressão (alta: jogo direto e saída pelo GR; baixa: circulação e 1x1) e da inteligência do portador (decisões+visão: quem lê pior faz mais circulação segura) |
+| Identidade dos sistemas (medido, % das jogadas) | 3-1 e 1-2-1: pivô 40-51%, paralela e diagonal; 4-0: passe e corte ~63%, bloqueios 21% contra individual; 2-2: cruzamentos ~50% |
+| Ritmo | Construção mais lenta no próprio meio-campo (×1,2), aceleração no último terço (×0,85), lance seguinte rápido depois de uma jogada que ganha espaço; quem decide pior fica mais tempo com a bola |
+| Defesa coordenada | Gatilho de pressão: passe para trás faz o bloco subir junto ~1,5 s (exceto bloco baixo); cobertura à zona/mista atrás e por dentro de quem pressiona |
+| Física da bola | Passes rasteiros abrandam com o atrito; bolas soltas a rolar abrandam; pequeno ressalto no fim das bolas no ar |
+| Animações | Receção orientada (0,3 s); gesto do remate conforme a força (potente/colocado/bico); travagem com o corpo atrás e joelhos fletidos |
+| Fadiga visível | Abaixo de ~68 de energia: passada mais curta, tronco curvado, braços caídos (mãos nos joelhos parado). A energia vem do motor (`snapshot`) |
+
+Medido (12 jogos): passes por minuto 30,7 → 31,7; linhas tapadas 36% → 33,5%; passes por dentro de adversários 2,1% → 1,7%; bloco defensivo 7,1 → 6,8 m de largura. Os resultados do motor não mudam (`npm test`). Ritmo 136 m/min, porque a pressão por gatilhos aumenta a corrida dos defensores.

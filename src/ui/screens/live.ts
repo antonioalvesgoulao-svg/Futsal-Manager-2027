@@ -687,7 +687,8 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
     if (snap.possession) {
       poss = snap.possession;
       const playersById = Object.fromEntries([...hs.squad, ...as.squad].map((player) => [player.id, player]));
-      choreo = new Choreo(poss, [hs.tactics, as.tactics], snap.period, startState, m.names, playersById);
+      const energy = Object.fromEntries(snap.teams.flatMap((t) => [...t.court, ...(t.gk ? [t.gk] : [])].map((x) => [x.id, x.energy])));
+      choreo = new Choreo(poss, [hs.tactics, as.tactics], snap.period, startState, m.names, playersById, energy);
       startState = choreo.end;
       ct = 0;
       display = poss.start;

@@ -326,3 +326,4 @@ Validação: tsc, build, `npm test` (motor intacto) e diag. Jogo ao vivo no brow
   4. Animações: apoios, receções, tipos de remate e de defesa do GR.
   5. Fadiga visível.
 - O António pediu estas melhorias ("conto contigo") a 2/11.
+- 2/11: aplicados os 5 pontos (decisão por leitura e identidade dos sistemas, defesa coordenada, física da bola, animações, fadiga visível). Ver `docs/ANALISE_3D.md`. O António autorizou ("deves aplicar todos").

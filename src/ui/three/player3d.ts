@@ -24,6 +24,7 @@ export interface Actor {
   accel?: number; // aceleração ao longo da corrida (m/s²), para a inclinação
   turn?: number; // velocidade de rotação (rad/s), para a inclinação nas curvas
   stride?: number; // comprimento da passada próprio (altura)
+  tired?: number; // 0-1: cansaço (passada curta, corpo curvado, braços caídos)
   side?: number; // velocidade lateral (positiva = para a direita do jogador, lado +x)
   init: boolean;
 }
@@ -369,7 +370,8 @@ export function pose(a: Actor, act: Act | undefined, gk: boolean, near: boolean,
   // passos laterais e de costas são mais curtos. Cada jogador tem a sua passada (a.stride, pela altura)
   const cycle = (1.25 + 0.32 * sp) * (1 - 0.35 * lateral - 0.25 * back) * (a.stride ?? 1);
   a.phase += dt * (sp > 0.25 ? (Math.PI * 2 * sp) / cycle : 0);
-  const amp = Math.min(1, sp / 7.5) * (1 - 0.45 * lateral) * (1 - 0.35 * back);
+  const tired = a.tired ?? 0;
+  const amp = Math.min(1, sp / 7.5) * (1 - 0.45 * lateral) * (1 - 0.35 * back) * (1 - 0.25 * tired);
   const walk = Math.min(1, sp / 1.6);
   const stride = fr >= 0 ? 1 - lateral : -back; // sinal: de costas a passada inverte-se
   const swing = 0.16 + 0.78 * amp; // amplitude da anca (a sprintar ~0,95 rad: joelho alto à frente)
@@ -398,6 +400,20 @@ export function pose(a: Actor, act: Act | undefined, gk: boolean, near: boolean,
   body.rotation.z = -0.06 * sr * walk + Math.max(-0.28, Math.min(0.28, (a.turn ?? 0) * sp * 0.035));
   // dois apoios por ciclo: o corpo sobe na fase de voo e baixa ao amortecer
   body.position.y = HIP - 0.015 + (Math.abs(Math.sin(a.phase)) - 0.5) * 0.07 * amp - 0.07 * Math.max(lateral, back) * walk;
+  // cansado: tronco curvado, braços caídos (mãos quase nos joelhos quando parado)
+  if (tired > 0) {
+    body.rotation.x += 0.12 * tired + (sp < 0.6 ? 0.25 * tired : 0);
+    for (let i = 0; i < 2; i++) { arm[i].rotation.x *= 1 - 0.4 * tired; fore[i].rotation.x *= 1 - 0.5 * tired; }
+  }
+  // travagem: pé à frente, corpo para trás, joelhos fletidos (apoio antes de mudar de direção)
+  const brake = (a.accel ?? 0) < -3.5 && sp > 1.2 ? Math.min(1, (-(a.accel ?? 0) - 3.5) / 5) : 0;
+  if (brake > 0 && !act) {
+    body.rotation.x -= 0.28 * brake;
+    thigh[0].rotation.x -= 0.35 * brake;
+    shin[0].rotation.x += 0.15 * brake;
+    shin[1].rotation.x += 0.35 * brake;
+    body.position.y -= 0.05 * brake;
+  }
   if (gk && near && !act && sp < 2.5) {
     // guarda-redes em posição de espera: pernas fletidas, peso à frente, braços abertos
     thigh[0].rotation.set(-0.6, 0, -0.12);
@@ -415,7 +431,8 @@ export function pose(a: Actor, act: Act | undefined, gk: boolean, near: boolean,
     case 'pass':
     case 'shoot': {
       // perna direita: recua (joelho dobrado), bate na bola e acompanha
-      const big = act.kind === 'shoot' ? 1.3 : 0.85;
+      // gesto conforme a força: potente (preparação grande), colocado, de bico (quase sem preparação)
+      const big = act.kind === 'shoot' ? Math.max(0.6, Math.min(1.4, (act.h ?? 25) / 22)) : 0.85;
       const back = k < 0.5 ? ease(k / 0.5) : 0;
       const hit = k >= 0.5 ? ease(clamp01((k - 0.5) / 0.3)) : 0;
       thigh[1].rotation.x = k < 0.5 ? 0.6 * big * back : lerp(0.6 * big, -1.05 * big, hit);
@@ -428,6 +445,19 @@ export function pose(a: Actor, act: Act | undefined, gk: boolean, near: boolean,
       body.rotation.x = act.kind === 'shoot' ? 0.05 + hit * 0.2 : 0.08;
       body.rotation.y = k < 0.5 ? -0.25 * back : lerp(-0.25, 0.2, hit);
       body.position.y = HIP - 0.05;
+      break;
+    }
+    case 'receive': {
+      // receção: a perna direita sai ao encontro da bola (sola/interior), corpo ligeiramente para trás, braços a equilibrar
+      const e = Math.sin(clamp01(k) * Math.PI);
+      thigh[1].rotation.set(-0.55 * e, 0, 0.12 * e);
+      shin[1].rotation.x = 0.35 + 0.25 * e;
+      thigh[0].rotation.x = 0.05;
+      shin[0].rotation.x = 0.25;
+      body.rotation.x = -0.06 * e + 0.05;
+      body.position.y = HIP - 0.04;
+      arm[0].rotation.set(-0.2, 0, -0.45 * e - 0.1);
+      arm[1].rotation.set(-0.1, 0, 0.35 * e + 0.1);
       break;
     }
     case 'throw': {
