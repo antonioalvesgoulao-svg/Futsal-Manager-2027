@@ -37,6 +37,20 @@ export const KITS: Record<string, ClubKits> = {
   eji: { home: k('#7cc4ec', '#1e3a8a', '#7cc4ec', 'liso', '#1e3a8a'), away: k('#ffffff', '#ffffff', '#ffffff'), confirmed: false },
   noi: { home: k('#ffffff', '#ffffff', '#ffffff', 'liso', '#c9a227'), away: k('#1e3a8a', '#1e3a8a', '#1e3a8a'), confirmed: false },
   stc: { home: k('#9fd3f0', '#1e3a8a', '#9fd3f0', 'liso', '#1e3a8a'), away: k('#e30613', '#e30613', '#e30613'), confirmed: false },
+
+  // Cazaquistão: paletas provisórias inspiradas nas cores de identidade visual disponíveis; não confirmadas por fotografia de equipamento 2026/27.
+  aqt: { home: k('#d71920','#ffffff','#d71920'), away: k('#ffffff','#d71920','#ffffff'), confirmed: false },
+  kai: { home: k('#f5c400','#111111','#f5c400'), away: k('#111111','#ffffff','#111111'), confirmed: false },
+  aya: { home: k('#e31e24','#ffffff','#e31e24'), away: k('#ffffff','#111111','#ffffff'), confirmed: false },
+  kas: { home: k('#0066a1','#ffffff','#0066a1'), away: k('#ffffff','#0066a1','#ffffff'), confirmed: false },
+  sem: { home: k('#111111','#f0c419','#111111'), away: k('#ffffff','#111111','#ffffff'), confirmed: false },
+  aty: { home: k('#008b75','#ffffff','#008b75'), away: k('#ffffff','#008b75','#ffffff'), confirmed: false },
+  bay: { home: k('#1c6b3c','#ffffff','#1c6b3c'), away: k('#ffffff','#1c6b3c','#ffffff'), confirmed: false },
+  elo: { home: k('#1769aa','#f5c400','#1769aa'), away: k('#ffffff','#1769aa','#ffffff'), confirmed: false },
+  okz: { home: k('#168a49','#ffffff','#168a49'), away: k('#ffffff','#168a49','#ffffff'), confirmed: false },
+  tul: { home: k('#f0c419','#111111','#f0c419'), away: k('#111111','#ffffff','#111111'), confirmed: false },
+  zhi: { home: k('#d71920','#111111','#d71920'), away: k('#ffffff','#d71920','#ffffff'), confirmed: false },
+  ord: { home: k('#006b3c','#ffffff','#006b3c'), away: k('#ffffff','#006b3c','#ffffff'), confirmed: false },
 };
 
 export type KitChoice = 'auto' | 'home' | 'away';
