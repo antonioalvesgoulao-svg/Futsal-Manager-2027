@@ -6,56 +6,34 @@
  },
  "anomaliasPorJogo": {
   "congelados4s": 2.08,
-  "bolaMortaSeg": 6.275,
-  "grForaDaAreaSeg": 20.025,
-  "velocidadeSobreHumanaSeg": 3.0420000000000003,
-  "rematesAcima130kmh": 0.08,
+  "bolaMortaSeg": 5.5,
+  "grForaDaAreaSeg": 20,
+  "velocidadeSobreHumanaSeg": 2.8920000000000003,
+  "rematesAcima130kmh": 0,
   "defesasSemGesto": 0.17,
   "golosSemGesto": 0
  },
  "piores": {
   "grForaDefesa": [
    {
-    "v": 19.472322285175323,
+    "v": 19.47232210636139,
     "where": "0|scp|fzz|89|0.0|scp01"
    },
    {
-    "v": 19.354782342910767,
+    "v": 19.354805529117584,
     "where": "0|scp|fzz|89|0.1|scp01"
    },
    {
-    "v": 19.05723887681961,
+    "v": 19.057315349578857,
     "where": "0|scp|fzz|89|0.2|scp01"
    },
    {
-    "v": 18.569726586341858,
+    "v": 18.56987202167511,
     "where": "0|scp|fzz|89|0.3|scp01"
    },
    {
-    "v": 17.902634382247925,
+    "v": 17.902799367904663,
     "where": "0|scp|fzz|89|0.4|scp01"
-   }
-  ],
-  "saltos": [
-   {
-    "v": 12.115614123789156,
-    "where": "0|scp|slb|14|0.6|slb10"
-   },
-   {
-    "v": 10.854740590429794,
-    "where": "0|scp|scb|34|0.7|scb04"
-   },
-   {
-    "v": 10.836543637461377,
-    "where": "0|scp|fam|66|0.7|fam11"
-   },
-   {
-    "v": 10.834102361435693,
-    "where": "0|scp|slb|14|0.7|slb10"
-   },
-   {
-    "v": 10.667305192270833,
-    "where": "0|scp|tor|13|0.8|tor05"
    }
   ],
   "congelados": [
@@ -65,7 +43,7 @@
    },
    {
     "v": 4,
-    "where": "0|scp|slb|34|7.5|scp06"
+    "where": "0|scp|slb|34|7.0|scp06"
    },
    {
     "v": 4,
@@ -82,7 +60,7 @@
   ],
   "bolaMorta": [
    {
-    "v": 26.900697762415795,
+    "v": 26.77965234796164,
     "where": "0|scp|slb|98|0.0"
    },
    {
@@ -94,12 +72,12 @@
     "where": "0|scp|fam|90|0.0"
    },
    {
-    "v": 16.187993771318006,
-    "where": "0|scp|lps|46|0.0"
+    "v": 16.452669014023954,
+    "where": "0|scp|rav|32|0.0"
    },
    {
-    "v": 16.16172329537149,
-    "where": "0|scp|rav|32|0.0"
+    "v": 16.372452958131984,
+    "where": "0|scp|rav|32|0.1"
    }
   ],
   "defesaSemGesto": [
@@ -112,32 +90,44 @@
     "where": "0|scp|uvn|56"
    }
   ],
-  "rematesRapidos": [
+  "saltos": [
    {
-    "v": 36.481908325130604,
-    "where": "0|scp|fzz|91"
+    "v": 10.434333570404775,
+    "where": "0|scp|ele|34|8.3|scp10"
+   },
+   {
+    "v": 10.375836022356326,
+    "where": "0|scp|ele|48|0.7|ele09"
+   },
+   {
+    "v": 10.325775439307568,
+    "where": "0|scp|por|40|0.7|por10"
+   },
+   {
+    "v": 10.00490427017212,
+    "where": "0|scp|lps|11|0.6|scp08"
    }
   ]
  },
  "jogos": 12,
  "golosPorJogo": 6.5,
  "minutosJogoCorrido": 481,
- "segundos": 47,
+ "segundos": 43,
  "velocidades": {
   "parado": 19.6,
-  "andar": 37,
+  "andar": 36.4,
   "trote": 24.1,
-  "corrida": 8.5,
-  "rapida": 4.8,
-  "sprint": 5.9
+  "corrida": 8.6,
+  "rapida": 5,
+  "sprint": 6.3
  },
- "metrosPorMinutoJogador": 138,
- "metrosPorMinutoAtacantes": 143,
- "metrosPorMinutoDefensores": 132,
- "saltosPorJogo": 1.7,
- "foraDoCampoPorJogo": 7.2,
- "sobreposicoesSegPorJogo": 16,
- "bolaSoltaSegPorJogo": 0.2,
+ "metrosPorMinutoJogador": 140,
+ "metrosPorMinutoAtacantes": 144,
+ "metrosPorMinutoDefensores": 136,
+ "saltosPorJogo": 0.3,
+ "foraDoCampoPorJogo": 5.2,
+ "sobreposicoesSegPorJogo": 14,
+ "bolaSoltaSegPorJogo": 0.1,
  "bolaAltaSegPorJogo": 0,
  "possesPorJogo": 101,
  "duracaoPosse": {
@@ -149,46 +139,47 @@
   "p90": 24
  },
  "portadorDefensorMaisProximo": {
-  "med": 1.3,
+  "med": 1.37,
   "p10": 0.65,
-  "p90": 5.56
+  "p90": 5.01
  },
  "rematesPorJogo": 57.3,
  "distanciaRemate": {
   "med": 9.01,
   "p10": 3.87,
-  "p90": 12.56
+  "p90": 12.48
  },
  "rematadorDefensorMaisProximo": {
-  "med": 1.17,
+  "med": 1.2,
   "p10": 0.63,
-  "p90": 4.01
+  "p90": 3.95
  },
- "rematesComDefensorNoCaminho": 72.3,
+ "rematesComDefensorNoCaminho": 72.2,
  "grErroNoRemate": {
-  "med": 0.58,
+  "med": 0.59,
   "p90": 1.54
  },
  "sobreposicoesTipo": {
-  "adversarios": 10.2,
-  "adversarioPortador": 4.7,
-  "colegas": 1.1
+  "adversarios": 7.9,
+  "adversarioPortador": 4.8,
+  "colegas": 1.3
  },
  "acoesPorJogo": {
-  "pass": 1432.2,
-  "run": 717.6,
-  "screen": 61.8,
-  "feint": 92.1,
+  "pass": 1432,
+  "run": 716.9,
+  "screen": 62.5,
+  "feint": 92.3,
   "shoot": 57.3,
   "throw": 32.7,
-  "catch": 5.8,
-  "shield": 22.4,
-  "tackle": 33.3,
-  "fall": 20.6,
-  "splits": 7.5,
-  "dive": 10.2,
+  "catch": 5.6,
+  "shield": 22.5,
+  "tackle": 33.9,
+  "fall": 20.5,
+  "dive": 10.5,
   "celebrate": 26,
   "block": 11.8,
-  "spread": 4.5
+  "spread": 4.6,
+  "splits": 6.3,
+  "footsave": 1
  }
 }

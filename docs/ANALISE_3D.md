@@ -151,3 +151,14 @@ Medido (12 jogos): passes por minuto 30,7 → 31,7; linhas tapadas 36% → 33,5%
 | Bola longe do pé a conduzir | 3,7% | 3,0% |
 
 Desempenho: 30 ms por lance (dilatação em janela deslizante e cache de quem tem a bola).
+
+### Continuação (2/11/2026)
+| Ponto | Feito | Medido (12 jogos) |
+|---|---|---|
+| Transição defensiva (5) | `turnover`: ~2,5 s depois da perda, os 2 mais próximos (1 com bloco baixo) pressionam já a bola, a sprintar; os outros recuam para trás da linha da bola | Jogadores perto da bola aos 3 s: 1,16 → 1,51; avanço de quem recupera em 3 s: 9,0 → 8,0 m; recuo do bloco 8,8 → 7,7 m (os que pressionam ficam à frente) |
+| Sem bola (4) | `escapeMarkers`: atacante sem bola colado ao defensor (<1,3 m) desmarca-se ~0,9 m para o espaço e para o lado da bola | Linhas livres 1,83 → 1,95; linhas tapadas 36% → 32% (39% no início da auditoria) |
+| GR (6) | Defesa com o pé, de pé (rasteiras a meia distância do corpo), `footsave` | Pose verificada em imagem |
+| TV (8) | Repetição automática das grandes defesas (voo, espargata, pé, cruz), 0,45x, vista de trás da baliza | — |
+| Bola | Continuidade também no início de passes e voos | Saltos 1 353 → 1 124 (~0,13% do tempo) |
+
+Motor igual (6,34 golos, 49,7/12,5/37,8). Saltos de jogadores 0,3 por jogo. Desempenho: 39 ms por lance.

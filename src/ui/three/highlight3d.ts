@@ -309,7 +309,7 @@ export class Highlight3D {
       let d = want - a.heading;
       while (d > Math.PI) d -= Math.PI * 2;
       while (d < -Math.PI) d += Math.PI * 2;
-      const gkAct = act && (act.kind === 'dive' || act.kind === 'splits' || act.kind === 'spread' || act.kind === 'catch');
+      const gkAct = act && (act.kind === 'dive' || act.kind === 'splits' || act.kind === 'spread' || act.kind === 'catch' || act.kind === 'footsave');
       const turn = d * Math.min(1, dt * (gkAct ? 20 : 9));
       a.heading += turn;
       a.turn = lerp(a.turn ?? 0, turn / Math.max(1e-3, dt), Math.min(1, dt * 6));
@@ -319,7 +319,7 @@ export class Highlight3D {
       a.fwd = lerp(a.fwd ?? 0, Math.max(-9, Math.min(9, vx * sh + vz * ch)), Math.min(1, dt * 9));
       a.side = lerp(a.side ?? 0, Math.max(-9, Math.min(9, vx * ch - vz * sh)), Math.min(1, dt * 9));
       let act2 = act;
-      if ((act?.kind === 'dive' || act?.kind === 'splits') && act.to) {
+      if ((act?.kind === 'dive' || act?.kind === 'splits' || act?.kind === 'footsave') && act.to) {
         // lado do mergulho, visto pelo guarda-redes
         const rx = Math.cos(act.ang), rz = -Math.sin(act.ang); // lado pela direção do rematador (estável, não troca a meio do voo)
         const side = (act.to.x - p.x) * rx + (act.to.y - p.y) * rz >= 0 ? 1 : -1;

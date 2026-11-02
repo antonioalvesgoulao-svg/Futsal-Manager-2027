@@ -530,6 +530,24 @@ export function pose(a: Actor, act: Act | undefined, gk: boolean, near: boolean,
       fore[0].rotation.x = fore[1].rotation.x = -0.2;
       break;
     }
+    case 'footsave': {
+      // defesa com o pé, de pé: a perna do lado da bola estica para o lado rente ao chão, o corpo inclina para o
+      // outro lado para equilibrar, braços abertos; volta à posição base
+      const local = act.side ?? 1;
+      const e = ease(clamp01(k * 3)) * (k > 0.8 ? 1 - ease((k - 0.8) / 0.2) : 1);
+      const out = local > 0 ? 1 : 0, sgn = out ? 1 : -1;
+      thigh[out].rotation.set(-0.15 * e, 0, sgn * 0.62 * e);
+      shin[out].rotation.x = 0.05;
+      thigh[1 - out].rotation.set(-0.6 * e, 0, -sgn * 0.1 * e);
+      shin[1 - out].rotation.x = 1.05 * e;
+      body.rotation.z = sgn * 0.18 * e;
+      body.rotation.x = 0.2 * e;
+      body.position.y = HIP - 0.24 * e;
+      body.position.x = sgn * 0.1 * e;
+      arm[0].rotation.set(-0.3, 0, -0.9 * e - 0.1);
+      arm[1].rotation.set(-0.3, 0, 0.9 * e + 0.1);
+      break;
+    }
     case 'spread': {
       // abertura em cruz: pernas muito abertas e fletidas, braços abertos, a tapar a baliza
       const e = ease(clamp01(k * 3.5)) * (k > 0.85 ? 1 - ease((k - 0.85) / 0.15) : 1);

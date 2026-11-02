@@ -135,7 +135,7 @@ for (const h of CLUBS) for (const a of CLUBS) {
     for (const b of c.balls) if (b.k === 'fly' && typeof b.from === 'string') { const fp = c.tr.get(b.from)?.at(b.t0); if (fp && typeof b.b !== 'string') { const vv = dist(fp, b.b) / Math.max(0.01, b.t1 - b.t0); if (vv > 36) { add('rematesRapidos'); note('rematesRapidos', vv, where); } } }
     for (const x of P.actions) if (x.type === 'shot' && (x.result === 'saved' || x.result === 'goal')) {
       const sd = x.side; const gk = P.onCourt[1 - sd][0];
-      if (gk && !P.flying[1 - sd] && !c.acts.some((y: any) => y.id === gk && ['dive', 'splits', 'spread', 'catch'].includes(y.kind))) { add('defesaSemGesto' + x.result); if (x.result === 'saved') note('defesaSemGesto', 1, where); }
+      if (gk && !P.flying[1 - sd] && !c.acts.some((y: any) => y.id === gk && ['dive', 'splits', 'spread', 'catch', 'footsave'].includes(y.kind))) { add('defesaSemGesto' + x.result); if (x.result === 'saved') note('defesaSemGesto', 1, where); }
       add('rematesBaliza');
     }
   }

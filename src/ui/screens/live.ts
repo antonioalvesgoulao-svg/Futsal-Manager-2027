@@ -508,6 +508,15 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
       hl.replayWindow(Math.max(0, g - 2.6), Math.min(c.total, g + 1.4), 0.4, userCam === 'baliza' ? 'tv' : 'baliza');
       return;
     }
+    // grande defesa: repetição em câmara lenta, vista de trás da baliza (como numa transmissão)
+    const sv = c?.bigSaveCt;
+    if (c && sv != null && g == null && !replayed.has(c)) {
+      replayed.add(c);
+      $('#hlcap').textContent = 'Repetição · grande defesa';
+      sound.muffle(true);
+      hl.replayWindow(Math.max(0, sv - 1.8), Math.min(c.total, sv + 1.6), 0.45, userCam === 'baliza' ? 'tv' : 'baliza');
+      return;
+    }
     hl.cameraId = userCam;
     sound.muffle(false);
     if (tryContinue()) return;
