@@ -89,6 +89,7 @@ input, select { background: var(--bg); color: var(--text); border: 1px solid var
 .feed { max-height: 70vh; overflow-y: auto; border: 1px solid var(--line); border-radius: 8px; }
 .ev { padding: 6px 10px; border-bottom: 1px solid var(--line); font-size: 13px; display: flex; gap: 8px; }
 .ev .ic { width: 18px; text-align: center; flex-shrink: 0; }
+.ev .dt { flex-shrink: 0; min-width: 64px; line-height: 1.3; } /* data das notícias: coluna própria, sem tapar o texto */
 .ev.goal { background: #1d2a1f; font-weight: 600; }
 .ev.minor { color: var(--muted); }
 @media (max-width: 800px) { .match-grid { grid-template-columns: 1fr; } }
@@ -175,7 +176,7 @@ tr.today td { background: #2a2618; }
 .live-comp { text-align: right; }
 .live-grid { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(300px, 1fr); gap: 16px; }
 .pitch2d { position: relative; width: 100%; aspect-ratio: 2 / 1; border-radius: 10px; overflow: hidden; background: #b5793f; }
-.pitch2d svg { width: 100%; height: 100%; display: block; }
+.pitch2d > svg { width: 100%; height: 100%; display: block; } /* só o desenho do campo (antes apanhava os emblemas do marcador do 3D) */
 .pitch2d .floor { fill: #b5793f; } .pitch2d .line { fill: none; stroke: rgba(255,255,255,.85); stroke-width: 1.5; }
 .pitch2d .dot { fill: rgba(255,255,255,.85); } .pitch2d .goal { fill: #e5e7eb; }
 .ball2d { fill: #fff; stroke: #111; stroke-width: 1.5; }
@@ -201,7 +202,7 @@ button[disabled] { opacity: .45; cursor: not-allowed; }
 .hl-view canvas { width: 100% !important; height: 100% !important; object-fit: cover; }
 .hl-lu { position: absolute; left: 12px; right: 12px; top: 46%; transform: translateY(-50%); z-index: 6; pointer-events: none; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
 .hl-lu:empty { display: none; }
-.hl-cap { position: absolute; left: 12px; top: 10px; background: rgba(0,0,0,.65); color: #fff; padding: 6px 10px; border-radius: 6px; font-weight: 600; font-size: 14px; max-width: 70%; }
+.hl-cap { position: absolute; left: 12px; top: 96px; background: rgba(0,0,0,.65); color: #fff; padding: 6px 10px; border-radius: 6px; font-weight: 600; font-size: 14px; max-width: 70%; }
 .hl-bar { position: absolute; left: 0; right: 0; bottom: 0; display: flex; gap: 8px; align-items: center; padding: 8px; background: linear-gradient(transparent, rgba(0,0,0,.75)); }
 .hl-bar .spacer { flex: 1; }
 .seg.cams { display: inline-flex; flex-wrap: nowrap; } .seg.cams button { flex: none; padding: 6px 10px; font-size: 12px; }
@@ -253,7 +254,8 @@ button[disabled] { opacity: .45; cursor: not-allowed; }
 
 .talk-box { width: min(760px, 100%); max-height: 88vh; overflow: auto; }
 .talk-opts { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 4px; }
-.hl-sb { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); z-index: 3; pointer-events: none; }
+.hl-sb { position: absolute; top: 12px; left: 12px; z-index: 7; pointer-events: none; } /* marcador do 3D: canto superior esquerdo, igual ao do 2D */
+.hl-sb .sb { min-width: 460px; }
 .trophy-ov { position: fixed; inset: 0; z-index: 200; background: radial-gradient(circle at 50% 40%, rgba(40,30,10,.92), rgba(0,0,0,.96)); display: grid; place-items: center; overflow: hidden; }
 .trophy-box { position: relative; z-index: 2; text-align: center; color: #fff; max-width: 760px; padding: 16px; animation: tIn .8s ease-out both; }
 .trophy-box h1 { font-size: 54px; margin: 6px 0; color: #ffd76a; text-shadow: 0 4px 20px rgba(255,200,60,.5); letter-spacing: .04em; }

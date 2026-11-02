@@ -91,7 +91,7 @@ export function unemployedScreen(root: HTMLElement, s: GameState, onJob: () => v
   const draw = () => {
     el.querySelector('#date')!.textContent = fmtD(s.date);
     renderCareer(content, s, onJob);
-    content.insertAdjacentHTML('beforeend', `<h3>Notícias</h3><div class="feed">${s.news.slice(0, 15).map((n) => `<div class="ev"><span class="ic small muted">${fmtD(n.date)}</span>${n.text}</div>`).join('')}</div>`);
+    content.insertAdjacentHTML('beforeend', `<h3>Notícias</h3><div class="feed">${s.news.slice(0, 15).map((n) => `<div class="ev"><span class="dt small muted">${fmtD(n.date)}</span>${n.text}</div>`).join('')}</div>`);
   };
   el.querySelector('#next')!.addEventListener('click', () => { advance(s); if (!careerOf(s).unemployed) onJob(); else draw(); });
   el.querySelector('#save')!.addEventListener('click', () => { const n = Number(prompt('Gravar em que espaço? (1, 2, 3)', '1')); if ([1, 2, 3].includes(n)) alert(saveToSlot(n, s) ? 'Jogo gravado.' : 'Erro ao gravar.'); });

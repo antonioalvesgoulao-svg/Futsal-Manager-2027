@@ -413,7 +413,7 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
   async function openIntro() {
     in3d = true;
     $('#hl').hidden = false;
-    $('#hlcap').textContent = `${h.name} - ${a.name} · ${crowd.arena.name}`;
+    $('#hlcap').textContent = ''; // só o marcador (pedido do António): sem etiqueta com clubes e pavilhão
     await ensure3d();
     if (!hl) return;
     introStage = 0;

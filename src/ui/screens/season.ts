@@ -59,7 +59,7 @@ export function renderDashboard(content: HTMLElement, s: GameState) {
       </div>
     </div>
     <h3>Notícias</h3>
-    <div class="feed">${s.news.slice(0, 25).map((n) => `<div class="ev"><span class="ic small muted">${fmtDate(n.date)}</span>${n.text}</div>`).join('')}</div>`;
+    <div class="feed">${s.news.slice(0, 25).map((n) => `<div class="ev"><span class="dt small muted">${fmtDate(n.date)}</span>${n.text}</div>`).join('')}</div>`;
 }
 
 export function renderCalendar(content: HTMLElement, s: GameState, month?: string) {
