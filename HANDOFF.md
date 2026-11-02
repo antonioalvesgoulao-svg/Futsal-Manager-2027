@@ -392,7 +392,7 @@ Branch: `feat/kazakhstan-futsal-league`, baseada em `claude/awesome-hypatia-l5i9
 - Nova liga `kaz1`, escolha de clube, país, nomes/nacionalidades gerados e integração no estado do jogo.
 - Calendário 44 jornadas (4 voltas), play-off dos 8 primeiros, Taça e Supertaça cazaques. Calendário e fases de taça são aproximações jogáveis; a fonte disponível confirma as fases do play-off e a existência da Supertaça, mas não todos os detalhes regulamentares.
 - Kairat e Semey têm plantéis com dados Zerozero recuperados nesta etapa. Outras equipas têm cinco jogadores fictícios provisórios por clube, identificados por `fictional: true`.
-- Treinador Kairat: Gustavo Paradeda. Outros treinadores são fictícios com idade e nacionalidade no JSON. Staff de apoio gerado com idade e nacionalidade.
+- Treinadores confirmados nas fichas Zerozero de futsal: Gustavo Paradeda (Kairat, 47 anos; Brasil/Rússia) e Aslan Smakov (Semey, 36 anos; Cazaquistão). Os restantes dez treinadores são fictícios, identificados e com idade/nacionalidade. Staff de apoio gerado com idade e nacionalidade.
 - Equipamentos e vários pavilhões/níveis são estimativas e estão marcados como não confirmados nos dados.
 
 ### Ficheiros
