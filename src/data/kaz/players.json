@@ -1,5 +1,5 @@
 {
-  "_info": "Dados Zerozero confirmados em parte: Kairat (jogadores indicados no registo consultado) e Semey (amostra histórica/plantel 2026/27 parcial). Para as outras equipas foram criados cinco jogadores fictícios de preenchimento, identificados por fictional:true. Todos os plantéis são provisórios e necessitam de reconciliação com a página de plantel 2026/27.",
+  "_info": "Dados Zerozero confirmados em parte: Kairat (jogadores indicados no registo consultado) e Semey (amostra histórica/plantel 2026/27 parcial). Para as outras equipas foram criados cinco jogadores fictícios de preenchimento, identificados por fictional:true. Todos os plantéis são provisórios e necessitam de reconciliação com a página de plantel 2026/27. Plantéis reais conhecidos de Kairat e Semey foram substituídos pelas entradas de Zerozero recuperadas nesta etapa; restantes equipas mantêm cinco jogadores fictícios de preenchimento.",
   "players": [
     {
       "id": "kaz001",
@@ -48,56 +48,6 @@
       "position": "PIV",
       "number": 5,
       "age": 28,
-      "nationality": "Cazaquistão",
-      "fictional": true
-    },
-    {
-      "id": "kaz006",
-      "clubId": "kai",
-      "name": "Daniyar Yermekov",
-      "position": "GR",
-      "number": 1,
-      "age": 23,
-      "nationality": "Cazaquistão",
-      "fictional": true
-    },
-    {
-      "id": "kaz007",
-      "clubId": "kai",
-      "name": "Aslan Nurgaliyev",
-      "position": "FIX",
-      "number": 2,
-      "age": 33,
-      "nationality": "Cazaquistão",
-      "fictional": true
-    },
-    {
-      "id": "kaz008",
-      "clubId": "kai",
-      "name": "Yerlan Kassenov",
-      "position": "ALA",
-      "number": 3,
-      "age": 28,
-      "nationality": "Cazaquistão",
-      "fictional": true
-    },
-    {
-      "id": "kaz009",
-      "clubId": "kai",
-      "name": "Dias Yermekov",
-      "position": "ALA",
-      "number": 4,
-      "age": 23,
-      "nationality": "Cazaquistão",
-      "fictional": true
-    },
-    {
-      "id": "kaz010",
-      "clubId": "kai",
-      "name": "Aibek Nurgaliyev",
-      "position": "PIV",
-      "number": 5,
-      "age": 33,
       "nationality": "Cazaquistão",
       "fictional": true
     },
@@ -198,56 +148,6 @@
       "position": "PIV",
       "number": 5,
       "age": 28,
-      "nationality": "Cazaquistão",
-      "fictional": true
-    },
-    {
-      "id": "kaz021",
-      "clubId": "sem",
-      "name": "Rauan Akhmetov",
-      "position": "GR",
-      "number": 1,
-      "age": 23,
-      "nationality": "Cazaquistão",
-      "fictional": true
-    },
-    {
-      "id": "kaz022",
-      "clubId": "sem",
-      "name": "Arman Abdullin",
-      "position": "FIX",
-      "number": 2,
-      "age": 33,
-      "nationality": "Cazaquistão",
-      "fictional": true
-    },
-    {
-      "id": "kaz023",
-      "clubId": "sem",
-      "name": "Nurlan Bekov",
-      "position": "ALA",
-      "number": 3,
-      "age": 28,
-      "nationality": "Cazaquistão",
-      "fictional": true
-    },
-    {
-      "id": "kaz024",
-      "clubId": "sem",
-      "name": "Miras Akhmetov",
-      "position": "ALA",
-      "number": 4,
-      "age": 23,
-      "nationality": "Cazaquistão",
-      "fictional": true
-    },
-    {
-      "id": "kaz025",
-      "clubId": "sem",
-      "name": "Erlan Abdullin",
-      "position": "PIV",
-      "number": 5,
-      "age": 33,
       "nationality": "Cazaquistão",
       "fictional": true
     },
@@ -600,6 +500,424 @@
       "age": 23,
       "nationality": "Cazaquistão",
       "fictional": true
+    },
+    {
+      "id": "kaz_kai_01",
+      "clubId": "kai",
+      "name": "Bruninho",
+      "position": "GR",
+      "number": null,
+      "age": 24,
+      "nationality": "Cazaquistão",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_kai_02",
+      "clubId": "kai",
+      "name": "Arthur Eroshenkov",
+      "position": "GR",
+      "number": null,
+      "age": 18,
+      "nationality": "Cazaquistão",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_kai_03",
+      "clubId": "kai",
+      "name": "Yerassyl Sharipidenov",
+      "position": "GR",
+      "number": null,
+      "age": 21,
+      "nationality": "Cazaquistão",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_kai_04",
+      "clubId": "kai",
+      "name": "João Paulo",
+      "position": "GR",
+      "number": null,
+      "age": 31,
+      "nationality": "Brasil",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_kai_05",
+      "clubId": "kai",
+      "name": "Quixeré",
+      "position": "FIX",
+      "number": null,
+      "age": 24,
+      "nationality": "Brasil",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_kai_06",
+      "clubId": "kai",
+      "name": "Athirson Silva",
+      "position": "FIX",
+      "number": null,
+      "age": 23,
+      "nationality": "Brasil",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_kai_07",
+      "clubId": "kai",
+      "name": "Almas Imanbekov",
+      "position": "UNI",
+      "number": null,
+      "age": 22,
+      "nationality": "Cazaquistão",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_kai_08",
+      "clubId": "kai",
+      "name": "Alimzhan Seitnur",
+      "position": "UNI",
+      "number": null,
+      "age": 20,
+      "nationality": "Cazaquistão",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_kai_09",
+      "clubId": "kai",
+      "name": "Zhakhangir Rashit",
+      "position": "UNI",
+      "number": null,
+      "age": 26,
+      "nationality": "Cazaquistão",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_kai_10",
+      "clubId": "kai",
+      "name": "Igor Carioca",
+      "position": "ALA",
+      "number": null,
+      "age": 28,
+      "nationality": "Brasil",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_kai_11",
+      "clubId": "kai",
+      "name": "Kamil Gereykhanov",
+      "position": "ALA",
+      "number": null,
+      "age": 26,
+      "nationality": "Cazaquistão",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_kai_12",
+      "clubId": "kai",
+      "name": "Meirzhan Keshubayev",
+      "position": "ALA",
+      "number": null,
+      "age": 22,
+      "nationality": "Cazaquistão",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_kai_13",
+      "clubId": "kai",
+      "name": "Beibarys Kurmanbay",
+      "position": "ALA",
+      "number": null,
+      "age": 19,
+      "nationality": "Cazaquistão",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_kai_14",
+      "clubId": "kai",
+      "name": "Zhomart Tokayev",
+      "position": "ALA",
+      "number": null,
+      "age": 26,
+      "nationality": "Cazaquistão",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_kai_15",
+      "clubId": "kai",
+      "name": "Caio Ruiz",
+      "position": "ALA",
+      "number": null,
+      "age": 29,
+      "nationality": "Brasil",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_kai_16",
+      "clubId": "kai",
+      "name": "Camilo",
+      "position": "PIV",
+      "number": null,
+      "age": 22,
+      "nationality": "Brasil",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_kai_17",
+      "clubId": "kai",
+      "name": "Pavel Karpov",
+      "position": "PIV",
+      "number": null,
+      "age": 26,
+      "nationality": "Cazaquistão",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_kai_18",
+      "clubId": "kai",
+      "name": "Azat Valiullin",
+      "position": "PIV",
+      "number": null,
+      "age": 34,
+      "nationality": "Cazaquistão",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_kai_19",
+      "clubId": "kai",
+      "name": "Rafão",
+      "position": "PIV",
+      "number": null,
+      "age": 24,
+      "nationality": "Brasil",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_sem_01",
+      "clubId": "sem",
+      "name": "Dedezinho",
+      "position": "PIV",
+      "number": null,
+      "age": 26,
+      "nationality": "Brasil",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_sem_02",
+      "clubId": "sem",
+      "name": "Rauan Atantayev",
+      "position": "GR",
+      "number": null,
+      "age": 36,
+      "nationality": "Cazaquistão",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_sem_03",
+      "clubId": "sem",
+      "name": "Rodriguinho",
+      "position": "ALA",
+      "number": null,
+      "age": 37,
+      "nationality": "Brasil",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_sem_04",
+      "clubId": "sem",
+      "name": "Rinat Turegazin",
+      "position": "PIV",
+      "number": null,
+      "age": 31,
+      "nationality": "Cazaquistão",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_sem_05",
+      "clubId": "sem",
+      "name": "Yerzhan Karmenov",
+      "position": "UNI",
+      "number": null,
+      "age": 22,
+      "nationality": "Cazaquistão",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_sem_06",
+      "clubId": "sem",
+      "name": "Gabriel Cândido",
+      "position": "ALA",
+      "number": null,
+      "age": 24,
+      "nationality": "Brasil",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_sem_07",
+      "clubId": "sem",
+      "name": "Abdirassil Abdumanapuly",
+      "position": "FIX",
+      "number": null,
+      "age": 25,
+      "nationality": "Cazaquistão",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_sem_08",
+      "clubId": "sem",
+      "name": "Chingiz Yesenamanov",
+      "position": "FIX",
+      "number": null,
+      "age": 37,
+      "nationality": "Cazaquistão",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_sem_09",
+      "clubId": "sem",
+      "name": "Arnold Knaub",
+      "position": "FIX",
+      "number": null,
+      "age": 31,
+      "nationality": "Cazaquistão",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_sem_10",
+      "clubId": "sem",
+      "name": "Bruno Gomes",
+      "position": "PIV",
+      "number": null,
+      "age": 30,
+      "nationality": "Brasil",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_sem_11",
+      "clubId": "sem",
+      "name": "Léo Higuita",
+      "position": "GR",
+      "number": null,
+      "age": 40,
+      "nationality": "Brasil",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_sem_12",
+      "clubId": "sem",
+      "name": "Nursultan Piyaly",
+      "position": "FIX",
+      "number": null,
+      "age": 29,
+      "nationality": "Cazaquistão",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_sem_13",
+      "clubId": "sem",
+      "name": "Jaime Kniess",
+      "position": "GR",
+      "number": null,
+      "age": 32,
+      "nationality": "Brasil",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_sem_14",
+      "clubId": "sem",
+      "name": "Pedrinho",
+      "position": "ALA",
+      "number": null,
+      "age": 21,
+      "nationality": "Brasil",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_sem_15",
+      "clubId": "sem",
+      "name": "Akzhol Daribay",
+      "position": "ALA",
+      "number": null,
+      "age": 27,
+      "nationality": "Cazaquistão",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_sem_16",
+      "clubId": "sem",
+      "name": "Marcelo dos Santos",
+      "position": "FIX",
+      "number": null,
+      "age": 26,
+      "nationality": "Brasil",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_sem_17",
+      "clubId": "sem",
+      "name": "Azamat Tolesh",
+      "position": "UNI",
+      "number": null,
+      "age": 18,
+      "nationality": "Cazaquistão",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_sem_18",
+      "clubId": "sem",
+      "name": "Caio Torres",
+      "position": "FIX",
+      "number": null,
+      "age": 25,
+      "nationality": "Brasil",
+      "source": "Zerozero",
+      "fictional": false
+    },
+    {
+      "id": "kaz_sem_19",
+      "clubId": "sem",
+      "name": "Alikhan Omarov",
+      "position": "UNI",
+      "number": null,
+      "age": 17,
+      "nationality": "Cazaquistão",
+      "source": "Zerozero",
+      "fictional": false
     }
   ]
 }
