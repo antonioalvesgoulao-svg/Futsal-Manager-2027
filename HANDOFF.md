@@ -411,3 +411,11 @@ Todas as ferramentas em `tools/diag` correm com: `npx esbuild <ficheiro> --bundl
 - Estimativas: lotações, reputação/riqueza/orçamento, nível de quem não tem historial, nacionalidade de 112 jogadores (Itália), árbitros fictícios (`REF_PAIRS_ITA`), interiores 3D genéricos.
 - Por fazer: equipas italianas em `TEAM_LEVELS`/`LEAGUE_OF` do moneyball; calibrar golos; dados do António no modelo `docs/modelo_ligas_equipas.xlsx` (modelo de recolha para novas ligas).
 - PR #6 não está em `main`; não fazer merge sem aprovação do António.
+
+### Itália — dados reais (2 novembro 2026, noite)
+- Média real Serie A 2021/22-2025/26 (divisionecalcioa5.it, jornadas da fase regular; 2022/23 incompleta por erro de ligação): 6,14 golos/jogo, casa 47,3%, empates 19,7%, fora 33,0%, <3 golos 7,7%. Calibração: `MatchOptions.goalFactor` (só Itália, `ITA_GOAL_FACTOR` = 1,22 em game.ts) → simulação 6,04 golos/jogo; Portugal e Espanha iguais (6,43 / 6,31). Empates simulados 12% vs 20% reais: por resolver.
+- Árbitros reais: 86 da C.A.N. 5 Élite (AIA, lista do António) em 43 duplas sorteadas; topo e temperamento estimativa.
+- Cores dos clubes tiradas dos sites oficiais (Benevento, Giovinazzo, Padova, Capurso estimativa). Lotações reais de 6 pavilhões.
+- Nacionalidades: 34 de 112 estimadas pelo nome (continuam `nationalityEstimated`).
+- Por fazer: `TEAM_LEVELS`/`LEAGUE_OF` do moneyball; interiores 3D dos pavilhões (sem fotos); empates.
+- PR #8 já está em `main` (aprovada pelo António).

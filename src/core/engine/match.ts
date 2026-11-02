@@ -435,7 +435,7 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     if (kind === 'recarga') { pBlock = 0.18; pOn = 0.62 + (finish - 10) * 0.012; pGoal = 0.3 + (finish - gkQ) * 0.02; }
     if (kind === 'baliza_aberta') { pBlock = 0.08; pOn = 0.5 + (eff(shooter, 'remate') - 10) * 0.02; }
     const cl = (x: number, a: number, b: number) => Math.max(a, Math.min(b, x));
-    if (kind === 'jogada' || kind === 'contra' || kind === 'canto') pGoal *= form[s] * pace * TEMPO[att.setup.tactics.tempo].quality;
+    if (kind === 'jogada' || kind === 'contra' || kind === 'canto') pGoal *= form[s] * pace * TEMPO[att.setup.tactics.tempo].quality * (opts.goalFactor ?? 1);
     pBlock = cl(pBlock, 0, 0.45); pOn = cl(pOn, 0.2, 0.95); pGoal = cl(pGoal, 0.06, 0.92);
 
     const how: Record<string, string> = {

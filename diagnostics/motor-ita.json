@@ -1,11 +1,11 @@
 {
  "epocas": 3,
  "jogos": 1662,
- "golosPorJogo": 6.06,
- "casa": 49.3,
- "empates": 12.7,
- "fora": 38,
- "menosDe3Golos": 9,
+ "golosPorJogo": 6.25,
+ "casa": 49.2,
+ "empates": 12,
+ "fora": 38.7,
+ "menosDe3Golos": 7.6,
  "sistemasNoInicio": {
   "3-1": "43.7%",
   "4-0": "37.2%",
@@ -14,7 +14,7 @@
  },
  "sistemasNoFim": {
   "4-0": "50.8%",
-  "3-1": "38.5%",
+  "3-1": "38.6%",
   "2-2": "5.7%",
   "1-2-1": "5%"
  },
@@ -27,12 +27,12 @@
   [
    "Liga Placard: Sporting CP",
    "Liga Prime Futsal: FC Barcelona",
-   "Serie A: Napoli Futsal"
+   "Serie A: Sandro Abate"
   ],
   [
    "Liga Placard: Sporting CP",
    "Liga Prime Futsal: FC Barcelona",
-   "Serie A: Sandro Abate"
+   "Serie A: Napoli Futsal"
   ]
  ],
  "porLiga": {
@@ -47,9 +47,9 @@
    "empates": 12.8
   },
   "Serie A": {
-   "golos": 5.48,
-   "casa": 48,
-   "empates": 14.1
+   "golos": 6.04,
+   "casa": 47.8,
+   "empates": 12.1
   }
  }
 }

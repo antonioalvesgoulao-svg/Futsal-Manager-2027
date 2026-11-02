@@ -52,19 +52,52 @@ export const REF_PAIRS_ESP: RefPair[] = [
   { id: 'e21', names: ['Francisco J. Marazuela', 'David Pizarro'], tolerance: 1.11, cards: 1.07, harsh: 1.2, real: true, top: false }, // Castellano - Leonés / Andaluz, 2+2 épocas na 1.ª
 ];
 
-// Itália: a lista oficial da CAN 5 (AIA) não está publicada num sítio acessível e o site da Divisione não indica os árbitros dos
-// jogos; duplas com nomes FICTÍCIOS (assinalados no jogo) e temperamento sorteado como em Portugal, até haver a lista real.
+// Itália: 86 árbitros reais da C.A.N. 5 Élite 2026/27 (AIA, aia-figc.it, lista colada pelo António; nomes corrigidos da tradução
+// automática) em 43 duplas sorteadas; as duplas de topo e o temperamento são estimativa (sorteio, sem dados de experiência).
 export const REF_PAIRS_ITA: RefPair[] = [
-  { id: 'i1', names: ['Stefano Grasso', 'Andrea Ferraro'], tolerance: 0.85, cards: 1.06, harsh: 0.91, real: false, top: true },
-  { id: 'i2', names: ['Marco Morelli', 'Luca Vitale'], tolerance: 0.87, cards: 1.1, harsh: 1.1, real: false, top: true },
-  { id: 'i3', names: ['Claudio Monti', 'Simone Martini'], tolerance: 0.93, cards: 1.18, harsh: 0.94, real: false, top: true },
-  { id: 'i4', names: ['Roberto Galli', 'Matteo Leone'], tolerance: 0.99, cards: 0.88, harsh: 1.17, real: false, top: false },
-  { id: 'i5', names: ['Emanuele Sala', 'Paolo Riva'], tolerance: 1.02, cards: 1.19, harsh: 0.97, real: false, top: false },
-  { id: 'i6', names: ['Fabio Pellegrini', 'Giorgio Farina'], tolerance: 1.11, cards: 1.19, harsh: 1.17, real: false, top: false },
-  { id: 'i7', names: ['Alessio Benedetti', 'Michele Cattaneo'], tolerance: 0.96, cards: 1.05, harsh: 1.15, real: false, top: false },
-  { id: 'i8', names: ['Federico Silvestri', 'Gianluca Bianchi'], tolerance: 1.02, cards: 1.23, harsh: 1.01, real: false, top: false },
-  { id: 'i9', names: ['Nicola Palumbo', 'Antonio Orlando'], tolerance: 1.11, cards: 1.07, harsh: 1.12, real: false, top: false },
-  { id: 'i10', names: ['Daniele Fabbri', 'Davide Testa'], tolerance: 1.11, cards: 1.23, harsh: 1.01, real: false, top: false },
+  { id: 'i1', names: ['Alberto Onesti', 'Ivano Pubblico'], tolerance: 1.02, cards: 1.06, harsh: 1.06, real: true, top: true }, // Pescara / Roma 1
+  { id: 'i2', names: ['Dominic Di Donato', 'Gianluigi Squilletti'], tolerance: 1.09, cards: 1.04, harsh: 1.17, real: true, top: true }, // Merano / Campobasso
+  { id: 'i3', names: ['Daniel Fior', 'Roberto Galasso'], tolerance: 0.93, cards: 0.92, harsh: 1.05, real: true, top: true }, // Castelfranco Veneto / Aprilia
+  { id: 'i4', names: ['Luca Di Battista', 'Rosario Angelo Faiella'], tolerance: 0.88, cards: 0.86, harsh: 1.13, real: true, top: true }, // Avezzano / Castellammare di Stabia
+  { id: 'i5', names: ['Luca Paverani', 'Stefano Lavanna'], tolerance: 0.89, cards: 1.11, harsh: 1.09, real: true, top: true }, // Roma 2 / Pesaro
+  { id: 'i6', names: ['Giulio Colombo', 'Giovanni Zannola'], tolerance: 0.85, cards: 0.99, harsh: 1.11, real: true, top: true }, // Bassano del Grappa / Ostia Lido
+  { id: 'i7', names: ['Amedeo Lacalamita', 'Alessandro Accomando'], tolerance: 0.88, cards: 1.16, harsh: 0.99, real: true, top: false }, // Bari / Olbia
+  { id: 'i8', names: ['Michele Romeo', 'Matteo Ottaviani'], tolerance: 0.95, cards: 1.12, harsh: 1.04, real: true, top: false }, // Roma 2 / Trieste
+  { id: 'i9', names: ['Andrea Saggese', 'Elio Simone'], tolerance: 1.14, cards: 1.24, harsh: 1.13, real: true, top: false }, // Rovereto / Napoli
+  { id: 'i10', names: ['Simone Zagno', 'Antonella Manca'], tolerance: 0.95, cards: 1.23, harsh: 0.96, real: true, top: false }, // Agropoli / Sassari
+  { id: 'i11', names: ['Gabriele Pette', 'Andrea Cini'], tolerance: 1.00, cards: 1.01, harsh: 1.11, real: true, top: false }, // Bologna / Perugia
+  { id: 'i12', names: ['Giovanni Agosta', 'Lorenzo Zorzi'], tolerance: 1.10, cards: 1.15, harsh: 1.04, real: true, top: false }, // Rovigo / Reggio Emilia
+  { id: 'i13', names: ['Giacomo Voltarel', 'Andrea Salanitro'], tolerance: 1.03, cards: 1.18, harsh: 1.18, real: true, top: false }, // Treviso / Catania
+  { id: 'i14', names: ['Nicola Maria Manzione', 'Andrea Guadagnini'], tolerance: 0.85, cards: 1.09, harsh: 0.95, real: true, top: false }, // Salerno / Castelfranco Veneto
+  { id: 'i15', names: ['Daniele Conti', 'Domenico Saccà'], tolerance: 0.93, cards: 1.08, harsh: 1.09, real: true, top: false }, // Ancona / Reggio Calabria
+  { id: 'i16', names: ['Chiara Perona', 'Bartolomeo Santarpia'], tolerance: 0.89, cards: 0.97, harsh: 0.97, real: true, top: false }, // Biella / Castellammare di Stabia
+  { id: 'i17', names: ['Angelo Bottini', 'Gianluca Rutolo'], tolerance: 1.09, cards: 0.89, harsh: 0.97, real: true, top: false }, // Roma 1 / Chieti
+  { id: 'i18', names: ['Antonio Carnazza', 'Raffaele Buonocore'], tolerance: 0.83, cards: 1.04, harsh: 1.15, real: true, top: false }, // Taranto / Castellammare di Stabia
+  { id: 'i19', names: ['Stefano Prisco', 'Alessandro Desogus'], tolerance: 0.85, cards: 1.01, harsh: 1.08, real: true, top: false }, // Lecce / Carbonia
+  { id: 'i20', names: ['Ivo Colangeli', 'Vincenzo Buzzacchino'], tolerance: 0.91, cards: 1.20, harsh: 1.07, real: true, top: false }, // Aprilia / Taranto
+  { id: 'i21', names: ['Carlotta Filippi', 'Francesco Coco'], tolerance: 0.84, cards: 0.88, harsh: 1.22, real: true, top: false }, // Bergamo / Parma
+  { id: 'i22', names: ['Antonio Dimundo', 'Marco Lupo'], tolerance: 0.89, cards: 0.88, harsh: 0.95, real: true, top: false }, // Molfetta / Palermo
+  { id: 'i23', names: ['Andrea Barillà', 'Andrea Cattaneo'], tolerance: 0.94, cards: 1.08, harsh: 1.11, real: true, top: false }, // Cinisello Balsamo / Civitavecchia
+  { id: 'i24', names: ['Andrea Salvatore Calì', 'Pasquale Giaquinto'], tolerance: 0.85, cards: 1.10, harsh: 1.11, real: true, top: false }, // Caltanissetta / Ostia Lido
+  { id: 'i25', names: ['Martina Piccolo', 'Giovanni Loprete'], tolerance: 1.14, cards: 1.19, harsh: 1.01, real: true, top: false }, // Padova / Catanzaro
+  { id: 'i26', names: ['Alessandro Soligo', 'Marco Moro'], tolerance: 1.10, cards: 1.13, harsh: 0.94, real: true, top: false }, // Castelfranco Veneto / Latina
+  { id: 'i27', names: ['Francesco Saverio Mancuso', 'Fortunato Zangara'], tolerance: 1.00, cards: 1.22, harsh: 1.06, real: true, top: false }, // Lamezia Terme / Catanzaro
+  { id: 'i28', names: ['Antonio D\'Addato', 'Denis Prekaj'], tolerance: 0.87, cards: 1.16, harsh: 0.91, real: true, top: false }, // Barletta / Treviglio
+  { id: 'i29', names: ['Domenico De Candia', 'Ugo Ciccarelli'], tolerance: 0.96, cards: 1.13, harsh: 0.91, real: true, top: false }, // Molfetta / Napoli
+  { id: 'i30', names: ['Francesco Sgueglia', 'Alessandro Mella'], tolerance: 0.87, cards: 0.92, harsh: 1.08, real: true, top: false }, // Finale Emilia / Roma 1
+  { id: 'i31', names: ['Christopher Corsini', 'Antonio Napo'], tolerance: 1.07, cards: 1.06, harsh: 1.05, real: true, top: false }, // Taranto / Ercolano
+  { id: 'i32', names: ['Fabio Loni', 'Davide Copat'], tolerance: 0.94, cards: 1.22, harsh: 1.06, real: true, top: false }, // Cagliari / Pordenone
+  { id: 'i33', names: ['Emmanuel Nazareno Di Gregorio', 'David Plutino'], tolerance: 0.99, cards: 0.87, harsh: 1.17, real: true, top: false }, // Catania / Reggio Emilia
+  { id: 'i34', names: ['Pierluigi Minardi', 'Emilio Romano'], tolerance: 1.13, cards: 0.92, harsh: 1.05, real: true, top: false }, // Cosenza / Nola
+  { id: 'i35', names: ['Daniele Filannino', 'Antonio Dan Campanella'], tolerance: 1.03, cards: 0.89, harsh: 1.13, real: true, top: false }, // Jesi / Venosa
+  { id: 'i36', names: ['Jacopo Giannelli', 'Giuseppe Lamorges'], tolerance: 1.00, cards: 0.97, harsh: 1.06, real: true, top: false }, // Bari / Palermo
+  { id: 'i37', names: ['Vincenzo Cannistrà', 'Paolo Lorenzo Galanti'], tolerance: 0.82, cards: 1.24, harsh: 1.08, real: true, top: false }, // Catanzaro / Pescara
+  { id: 'i38', names: ['Andrea Frau', 'Andrea Crescenzio'], tolerance: 0.96, cards: 0.86, harsh: 0.94, real: true, top: false }, // Carbonia / Aprilia
+  { id: 'i39', names: ['Gioacchino Lattanzio', 'Thomas Vallecaro'], tolerance: 1.06, cards: 1.08, harsh: 1.04, real: true, top: false }, // Collegno / Salerno
+  { id: 'i40', names: ['Emilio Viviani', 'Ionut Cristea'], tolerance: 1.12, cards: 0.87, harsh: 0.95, real: true, top: false }, // Nocera Inferiore / Albano Laziale
+  { id: 'i41', names: ['Giuseppe Mansueto', 'Kenan Kreso'], tolerance: 0.94, cards: 0.91, harsh: 1.08, real: true, top: false }, // Treviso / Trieste
+  { id: 'i42', names: ['Roberto Acella', 'Alessandro Carella'], tolerance: 0.89, cards: 0.95, harsh: 1.03, real: true, top: false }, // Macerata / Matera
+  { id: 'i43', names: ['Salvatore Pagano', 'Mario Certa'], tolerance: 1.10, cards: 1.09, harsh: 0.97, real: true, top: false }, // Catania / Marsala
 ];
 
 /** Clássicos espanhóis (estimativa): dérbi de Múrcia (ElPozo x Cartagena) e jogos entre os 5 grandes. */

@@ -95,6 +95,7 @@ export interface MatchResult {
 export interface MatchOptions {
   knockout?: boolean; // prolongamento e penáltis em caso de empate
   injuries?: boolean; // false = sem lesões (amigáveis de teste)
+  goalFactor?: number; // fator da liga sobre a eficácia dos remates em jogo corrido (1 = Portugal/Espanha; Itália calibrada pela média real)
   extraTimeLen?: number; // duração de cada parte do prolongamento (s): 300 em Portugal, 180 em Espanha (RFEF)
   noExtraTime?: boolean;
   noPenalties?: boolean; // Itália (play-in): empate depois do prolongamento sem penáltis (passa a melhor classificada) // a eliminar sem prolongamento: empate vai diretamente a penáltis
