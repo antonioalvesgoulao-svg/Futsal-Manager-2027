@@ -15,11 +15,15 @@ import espData from '../data/esp/clubs.json';
 import espPlayers from '../data/esp/players.json';
 import espFp from '../data/esp/fpstats.json';
 import espCoaches from '../data/esp/coaches.json';
+import kazData from '../data/kaz/clubs.json';
+import kazPlayers from '../data/kaz/players.json';
+import kazCoaches from '../data/kaz/coaches.json';
 
 // Base de dados: cada liga é um ficheiro em src/data/<país>/clubs.json
 export const DB_CLUBS: Club[] = [
   ...porData.clubs.map(({ check, ...c }) => ({ ...c, colors: c.colors as [string, string] })),
   ...espData.clubs.map(({ fp, ...c }) => ({ ...c, colors: c.colors as [string, string] })),
+  ...kazData.clubs.map((c) => ({ ...c, colors: c.colors as [string, string] })),
 ];
 type RawPlayer = Omit<Player, 'attrs' | 'potential'>;
 const BOOST = porOverrides.boost as Record<string, number>;
@@ -29,7 +33,7 @@ export const FP_STATS = { ...porFp.players, ...espFp.players } as Record<string,
 
 // Jogadores com atributos gerados (sempre iguais para o mesmo jogador)
 function buildPlayers(): Player[] {
-  return ([...porPlayers.players, ...espPlayers.players] as RawPlayer[]).map((p) => {
+  return ([...porPlayers.players, ...espPlayers.players, ...kazPlayers.players] as RawPlayer[]).map((p) => {
     const club = DB_CLUBS.find((c) => c.id === p.clubId.replace('@jun', ''))!; // Sub-19 não inscritos como seniores ficam na formação
     const key = `${p.clubId}|${p.name}`;
     // historial: zerozero; quem não o tem (jogadores novos do site da FPF) usa as épocas oficiais do futsalportugal.com
@@ -48,10 +52,11 @@ function buildPlayers(): Player[] {
   });
 }
 export const DB_PLAYERS: Player[] = buildPlayers();
-export const DB_COACHES: Coach[] = [...porCoaches.coaches, ...espCoaches.coaches] as Coach[];
+export const DB_COACHES: Coach[] = [...porCoaches.coaches, ...espCoaches.coaches, ...kazCoaches.coaches] as Coach[];
 export const DB_LEAGUES: League[] = [
   { ...porData.league, clubIds: porData.clubs.map((c) => c.id) },
   { ...espData.league, clubIds: espData.clubs.map((c) => c.id) },
+  { ...kazData.league, clubIds: kazData.clubs.map((c) => c.id) },
 ];
 
 /** Liga de um clube (os clubes sem `league` são da Liga Placard). */
@@ -59,7 +64,7 @@ export function leagueOf(s: GameState, clubId: string): League {
   const c = s.clubs.find((x) => x.id === clubId.replace('@jun', ''));
   return s.leagues.find((l) => l.id === (c?.league ?? 'por1')) ?? s.leagues[0];
 }
-export const countryOf = (s: GameState, clubId: string) => (leagueOf(s, clubId).id === 'esp1' ? 'esp' : 'por');
+export const countryOf = (s: GameState, clubId: string) => (leagueOf(s, clubId).id === 'esp1' ? 'esp' : leagueOf(s, clubId).id === 'kaz1' ? 'kaz' : 'por');
 
 let current: GameState | null = null;
 const listeners = new Set<() => void>();
