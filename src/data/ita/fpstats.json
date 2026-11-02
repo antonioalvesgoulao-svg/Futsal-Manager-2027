@@ -1,1 +1,2867 @@
-{"_info":"a gerar","players":{}}
+{
+"_info": "Serie A 2026/27: planteis, números, posições, datas de nascimento e equipas técnicas da Divisione Calcio a 5 (divisionecalcioa5.it) + historial do futsalportugal.com (recolha 2/11/2026, pedidos espaçados). Jogos, golos e cartões por época desde 2021/22 e títulos (futsalportugal.com); carreira em Itália do site oficial.",
+"players": {
+"act04": {
+"fpId": "59440",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [],
+"italy": [
+"2026-27 Active Network (Serie A)",
+"2026-27 Fortitudo Pomezia (Serie A)",
+"2025-26 Ecocity Genzano (Serie A)",
+"2025-26 Napoli Futsal (Serie A)",
+"2024-25 Roma C5 (Giovanili)",
+"2023-24 Roma C5 (Giovanili)"
+]
+},
+"act05": {
+"fpId": "29221",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [
+"Taça de Portugal (2000/2001)"
+],
+"italy": [
+"2026-27 Active Network (Serie A)",
+"2024-25 Pirossigeno Cosenza (Serie A)",
+"2024-25 Napoli Futsal (Serie A)",
+"2023-24 Olimpus Roma (Serie A)",
+"2022-23 Sammichele 1992 (Serie B)",
+"2021-22 Saviatesta Mantova (Serie A2)"
+]
+},
+"act07": {
+"fpId": "1742",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [],
+"italy": [
+"2026-27 Active Network (Serie A)",
+"2025-26 Active Network (Serie A)",
+"2024-25 Active Network Futsal (Serie A)",
+"2023-24 Active Network Futsal (Serie A)",
+"2022-23 Active Network Futsal (Serie A2)",
+"2021-22 Active Network Futsal (Serie A2)"
+]
+},
+"act08": {
+"fpId": "5447",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [],
+"italy": [
+"2026-27 Active Network (Serie A)",
+"2025-26 Active Network (Serie A)",
+"2024-25 Active Network Futsal (Serie A)",
+"2024-25 Sporting Ciampino Futsal (Altri)",
+"2023-24 Sporting Ciampino Futsal (Serie A)",
+"2022-23 Ciampino Aniene Anni Nuovi (Serie A)"
+]
+},
+"act09": {
+"fpId": "25510",
+"games": 2,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "23",
+"team": "Feldi Eboli",
+"games": 2,
+"goals": 0
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Active Network (Serie A)",
+"2025-26 Active Network (Serie A)",
+"2024-25 Active Network Futsal (Serie A)",
+"2023-24 Feldi Eboli (Serie A)",
+"2023-24 Nuova Comauto Pistoia (Serie A2)",
+"2022-23 Nuova Comauto Pistoia (Serie A)"
+]
+},
+"act10": {
+"fpId": "201019",
+"games": 3,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "25",
+"team": "FC Barcelona",
+"games": 3,
+"goals": 0
+}
+],
+"titles": [
+"RFEF - Primera División de Fútbol Sala (2025/2026)"
+],
+"italy": [
+"2026-27 Active Network (Serie A)",
+"2023-24 Itria Football Club (Serie A2)",
+"2021-22 Saviatesta Mantova (Serie A2)",
+"2020-21 360GG Futsal (Serie A2)"
+]
+},
+"act11": {
+"fpId": "711",
+"games": 137,
+"yellow": 40,
+"red": 2,
+"seasons": [
+{
+"s": "25",
+"team": "Ribera Navarra FS",
+"games": 15,
+"goals": 9
+},
+{
+"s": "24",
+"team": "Jaén Paraíso Interior",
+"games": 12,
+"goals": 5
+},
+{
+"s": "24",
+"team": "Espanha",
+"games": 1,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Jaén Paraíso Interior",
+"games": 33,
+"goals": 22
+},
+{
+"s": "23",
+"team": "Espanha",
+"games": 6,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Jaén Paraíso Interior",
+"games": 38,
+"goals": 34
+},
+{
+"s": "22",
+"team": "Espanha",
+"games": 7,
+"goals": 3
+},
+{
+"s": "21",
+"team": "Viña Albali Valdepeñas",
+"games": 12,
+"goals": 10
+},
+{
+"s": "21",
+"team": "Espanha",
+"games": 13,
+"goals": 6
+}
+],
+"titles": [
+"Copa de España Feminino (2022/2023)"
+],
+"italy": [
+"2026-27 Active Network (Serie A)",
+"2025-26 Napoli Futsal (Serie A)"
+]
+},
+"act13": {
+"fpId": "3136",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [],
+"italy": [
+"2026-27 Active Network (Serie A)",
+"2025-26 Ecocity Genzano (Serie A)",
+"2025-26 CDM Futsal (Serie A)",
+"2024-25 CDM Futsal (Serie A2)",
+"2023-24 CDM Futsal (Serie A2)",
+"2021-22 Città Giardino Marassi (Giovanili)"
+]
+},
+"cpr01": {
+"fpId": "286236",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [],
+"italy": [
+"2026-27 GTS Global Work Capurso (Serie A)",
+"2025-26 Global Work Capurso (Serie A)",
+"2024-25 Diaz (Serie B)",
+"2023-24 Bulldog Capurso (Serie A2)",
+"2022-23 Bulldog Capurso (Serie A2)",
+"2021-22 Bulldog Capurso (Serie A2)"
+]
+},
+"cpr02": {
+"fpId": "4444",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [],
+"italy": [
+"2026-27 GTS Global Work Capurso (Serie A)",
+"2025-26 Global Work Capurso (Serie A)",
+"2024-25 Bulldog Capurso (Serie A2)",
+"2024-25 Itria Football Club (Serie A2)",
+"2023-24 Itria Football Club (Serie A2)",
+"2022-23 Itria F.C. (Serie A2)"
+]
+},
+"cpr05": {
+"fpId": "41249",
+"games": 5,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "25",
+"team": "Uruguai",
+"games": 5,
+"goals": 1
+}
+],
+"titles": [],
+"italy": [
+"2026-27 GTS Global Work Capurso (Serie A)"
+]
+},
+"tre01": {
+"fpId": "59821",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [],
+"italy": [
+"2026-27 Came Treviso (Serie A)",
+"2025-26 Came Treviso (Serie A)",
+"2024-25 Came Treviso C5 (Serie A)",
+"2024-25 Olimpia Verona (Serie A2)",
+"2023-24 Olimpia Verona (Serie A)",
+"2022-23 Saviatesta Mantova (Serie A2)"
+]
+},
+"tre03": {
+"fpId": "10682",
+"games": 86,
+"yellow": 29,
+"red": 1,
+"seasons": [
+{
+"s": "24",
+"team": "Jaén Paraíso Interior",
+"games": 25,
+"goals": 3
+},
+{
+"s": "23",
+"team": "Córdoba Patrimonio",
+"games": 19,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Levante UD",
+"games": 29,
+"goals": 4
+},
+{
+"s": "21",
+"team": "Atlântico",
+"games": 13,
+"goals": 5
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Came Treviso (Serie A)",
+"2025-26 Came Treviso (Serie A)"
+]
+},
+"tre09": {
+"fpId": "1208",
+"games": 54,
+"yellow": 1,
+"red": 1,
+"seasons": [
+{
+"s": "24",
+"team": "ACR Lordelo",
+"games": 21,
+"goals": 1
+},
+{
+"s": "22",
+"team": "FC Famalicão",
+"games": 15,
+"goals": 0
+},
+{
+"s": "21",
+"team": "FC Famalicão",
+"games": 18,
+"goals": 0
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Came Treviso (Serie A)",
+"2025-26 Came Treviso (Serie A)",
+"2025-26 Vitulano Drugstore Manfredonia C5 (Tornei)",
+"2024-25 Vitulano Drugstore Manfredonia C5 (Serie A)",
+"2023-24 Italservice Pesaro (Serie A)",
+"2023-24 Futsal Pescara 1997 (Esordienti 11c11)"
+]
+},
+"tre10": {
+"fpId": "24019",
+"games": 12,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Itália",
+"games": 1,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Itália",
+"games": 2,
+"goals": 1
+},
+{
+"s": "23",
+"team": "Itália",
+"games": 5,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Itália",
+"games": 4,
+"goals": 0
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Came Treviso (Serie A)",
+"2025-26 Came Treviso (Serie A)",
+"2024-25 Came Treviso C5 (Serie A2)",
+"2023-24 Saviatesta Mantova (Serie A)",
+"2022-23 Saviatesta Mantova (Serie A2)",
+"2022-23 Olimpia Verona (Serie A2)"
+]
+},
+"tre11": {
+"fpId": "21317",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [],
+"italy": [
+"2026-27 Came Treviso (Serie A)",
+"2025-26 Atlante Grosseto (Serie A2)",
+"2025-26 L84 Torino (Serie A)",
+"2024-25 Itria Football Club (Serie A2)",
+"2023-24 L84 (Serie A)",
+"2023-24 Lecco C5 (Serie A2)"
+]
+},
+"tre13": {
+"fpId": "1731",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [],
+"italy": [
+"2026-27 Came Treviso (Serie A)",
+"2025-26 Came Treviso (Serie A)",
+"2025-26 Vinumitaly Petrarca (Serie A2)",
+"2024-25 Vinumitaly Petrarca (Serie A)",
+"2023-24 Modena Cavezzo Futsal (Serie A2)",
+"2022-23 Città di Massa C5 (Serie A2)"
+]
+},
+"ebo01": {
+"fpId": "1804",
+"games": 13,
+"yellow": 0,
+"red": 1,
+"seasons": [
+{
+"s": "24",
+"team": "Itália",
+"games": 2,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Itália",
+"games": 5,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Itália",
+"games": 4,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Itália",
+"games": 2,
+"goals": 0
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Feldi Eboli (Serie A)",
+"2025-26 Came Treviso (Serie A)",
+"2024-25 Came Treviso C5 (Serie A)",
+"2023-24 Came Treviso C5 (Serie A)",
+"2022-23 Napoli Futsal (Serie A)",
+"2022-23 Came Dosson C5 (Serie A)"
+]
+},
+"ebo02": {
+"fpId": "25508",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [],
+"italy": [
+"2026-27 Feldi Eboli (Serie A)",
+"2025-26 Feldi Eboli (Serie A)",
+"2024-25 Feldi Eboli (Serie A)",
+"2023-24 Feldi Eboli (Giovanili)",
+"2022-23 Feldi Eboli (Serie A)",
+"2021-22 Salernitana U17 (Allievi Nazionali U17)"
+]
+},
+"ebo04": {
+"fpId": "5200",
+"games": 17,
+"yellow": 4,
+"red": 1,
+"seasons": [
+{
+"s": "25",
+"team": "Itália",
+"games": 2,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Itália",
+"games": 6,
+"goals": 2
+},
+{
+"s": "23",
+"team": "Feldi Eboli",
+"games": 5,
+"goals": 4
+},
+{
+"s": "22",
+"team": "Feldi Eboli",
+"games": 4,
+"goals": 3
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Feldi Eboli (Serie A)",
+"2025-26 Feldi Eboli (Serie A)"
+]
+},
+"ebo05": {
+"fpId": "1830",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [],
+"italy": [
+"2026-27 Feldi Eboli (Serie A)",
+"2025-26 Ecocity Genzano (Serie A)",
+"2025-26 Italservice Pesaro (Serie B)",
+"2024-25 Italservice Pesaro (Serie A)",
+"2024-25 Ecocity Futsal Genzano (Serie A)",
+"2023-24 Ecocity Futsal Genzano (Serie A)"
+]
+},
+"ebo06": {
+"fpId": "23888",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [],
+"italy": [
+"2026-27 Feldi Eboli (Serie A)",
+"2025-26 Feldi Eboli (Serie A)",
+"2025-26 Sandro Abate (Serie A)",
+"2024-25 Sandro Abate Avellino (Serie A)",
+"2024-25 Roma C5 (Serie A2)",
+"2023-24 Roma C5 (Serie A2)"
+]
+},
+"ebo08": {
+"fpId": "60616",
+"games": 14,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "25",
+"team": "Piast Gliwice Futsal",
+"games": 5,
+"goals": 2
+},
+{
+"s": "22",
+"team": "Piast Gliwice Futsal",
+"games": 9,
+"goals": 4
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Feldi Eboli (Serie A)"
+]
+},
+"ebo10": {
+"fpId": "26373",
+"games": 33,
+"yellow": 9,
+"red": 1,
+"seasons": [
+{
+"s": "25",
+"team": "Colômbia",
+"games": 4,
+"goals": 2
+},
+{
+"s": "24",
+"team": "Córdoba Patrimonio",
+"games": 29,
+"goals": 10
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Feldi Eboli (Serie A)",
+"2025-26 Feldi Eboli (Serie A)"
+]
+},
+"ebo11": {
+"fpId": "56979",
+"games": 5,
+"yellow": 4,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Alemanha",
+"games": 0,
+"goals": 2
+},
+{
+"s": "24",
+"team": "Alemanha",
+"games": 5,
+"goals": 4
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Feldi Eboli (Serie A)",
+"2025-26 Active Network (Serie A)",
+"2024-25 Active Network Futsal (Serie A)"
+]
+},
+"ebo12": {
+"fpId": "15739",
+"games": 26,
+"yellow": 11,
+"red": 1,
+"seasons": [
+{
+"s": "23",
+"team": "Araz Naxçivan",
+"games": 1,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Azerbaijão",
+"games": 3,
+"goals": 3
+},
+{
+"s": "22",
+"team": "Azerbaijão",
+"games": 3,
+"goals": 2
+},
+{
+"s": "21",
+"team": "Araz Naxçivan",
+"games": 6,
+"goals": 6
+},
+{
+"s": "21",
+"team": "Pato Futsal",
+"games": 10,
+"goals": 4
+},
+{
+"s": "21",
+"team": "Azerbaijão",
+"games": 3,
+"goals": 0
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Feldi Eboli (Serie A)",
+"2025-26 Feldi Eboli (Serie A)",
+"2025-26 Pirossigeno Cosenza (Serie A)"
+]
+},
+"ebo13": {
+"fpId": "23693",
+"games": 9,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "24",
+"team": "Itália",
+"games": 1,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Itália",
+"games": 5,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Itália",
+"games": 3,
+"goals": 0
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Feldi Eboli (Serie A)",
+"2025-26 L84 Torino (Serie A)",
+"2024-25 Feldi Eboli (Serie A)",
+"2023-24 Sandro Abate Avellino (Serie A)",
+"2023-24 Monastir (Serie B)",
+"2022-23 360 GG Monastir (Serie A)"
+]
+},
+"ebo15": {
+"fpId": "1910",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [],
+"italy": [
+"2026-27 Feldi Eboli (Serie A)",
+"2025-26 Feldi Eboli (Serie A)",
+"2022-23 Feldi Eboli (Giovanili)"
+]
+},
+"ebo16": {
+"fpId": "22588",
+"games": 11,
+"yellow": 2,
+"red": 0,
+"seasons": [
+{
+"s": "23",
+"team": "Feldi Eboli",
+"games": 6,
+"goals": 1
+},
+{
+"s": "22",
+"team": "Feldi Eboli",
+"games": 5,
+"goals": 2
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Feldi Eboli (Serie A)",
+"2025-26 Feldi Eboli (Serie A)",
+"2024-25 Feldi Eboli (Serie A)",
+"2023-24 Feldi Eboli (Serie A)",
+"2022-23 Feldi Eboli (Serie A)",
+"2021-22 Feldi Eboli (Serie A)"
+]
+},
+"pom02": {
+"fpId": "1776",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [],
+"italy": [
+"2026-27 Fortitudo Pomezia (Serie A)",
+"2025-26 Fortitudo Pomezia (Serie A)",
+"2024-25 Fortitudo Pomezia 1957 (Serie A)",
+"2023-24 Fortitudo Pomezia 1957 (Serie A)",
+"2022-23 Fortitudo Pomezia 1957 (Serie A)",
+"2021-22 Fortitudo Pomezia 1957 (Serie A2)"
+]
+},
+"pom04": {
+"fpId": "1825",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [],
+"italy": [
+"2026-27 Fortitudo Pomezia (Serie A)",
+"2025-26 Fortitudo Pomezia (Serie A)",
+"2025-26 Feldi Eboli (Serie A)",
+"2024-25 Fortitudo Pomezia 1957 (Serie A)",
+"2023-24 Fortitudo Pomezia 1957 (Serie A)",
+"2022-23 Todis Lido di Ostia (Serie A2)"
+]
+},
+"pom06": {
+"fpId": "1709",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [
+"Campeonato da Europa (2013/2014)",
+"Série A  (2017/2018)",
+"Coppa Itália (2018/2019)",
+"Supercopa Itália (2018/2019)"
+],
+"italy": [
+"2026-27 Fortitudo Pomezia (Serie A)",
+"2025-26 Roma 1927 (Serie A)",
+"2025-26 CDM Futsal (Serie A)",
+"2024-25 Roma 1927 Futsal (Serie A)",
+"2023-24 Fortitudo Pomezia 1957 (Serie A)",
+"2022-23 Fortitudo Pomezia 1957 (Serie A)"
+]
+},
+"pom09": {
+"fpId": "1842",
+"games": 96,
+"yellow": 32,
+"red": 1,
+"seasons": [
+{
+"s": "24",
+"team": "Argentina",
+"games": 7,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Jaén Paraíso Interior",
+"games": 37,
+"goals": 12
+},
+{
+"s": "22",
+"team": "Jaén Paraíso Interior",
+"games": 38,
+"goals": 10
+},
+{
+"s": "22",
+"team": "Argentina",
+"games": 4,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Pesaro Calcio 5",
+"games": 3,
+"goals": 2
+},
+{
+"s": "21",
+"team": "Argentina",
+"games": 7,
+"goals": 2
+}
+],
+"titles": [
+"Campeonato do Mundo (2016/2017)",
+"Copa de España Feminino (2022/2023)"
+],
+"italy": [
+"2026-27 Fortitudo Pomezia (Serie A)",
+"2025-26 Ecocity Genzano (Serie A)",
+"2024-25 Ecocity Futsal Genzano (Serie A)",
+"2022-23 Italservice Pesaro (Serie A)",
+"2021-22 Italservice Pesaro (Serie A)",
+"2020-21 Italservice Pesaro (Serie A)"
+]
+},
+"pom12": {
+"fpId": "750",
+"games": 33,
+"yellow": 8,
+"red": 0,
+"seasons": [
+{
+"s": "21",
+"team": "ElPozo Murcia",
+"games": 33,
+"goals": 3
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Fortitudo Pomezia (Serie A)",
+"2025-26 Fortitudo Pomezia (Serie A)"
+]
+},
+"pom14": {
+"fpId": "10622",
+"games": 116,
+"yellow": 4,
+"red": 1,
+"seasons": [
+{
+"s": "26",
+"team": "Royal Sporting Anderlecht Futsal",
+"games": 2,
+"goals": 0
+},
+{
+"s": "25",
+"team": "SC Braga",
+"games": 24,
+"goals": 2
+},
+{
+"s": "24",
+"team": "SC Braga",
+"games": 37,
+"goals": 0
+},
+{
+"s": "23",
+"team": "SC Braga",
+"games": 40,
+"goals": 7
+},
+{
+"s": "21",
+"team": "Blumenau",
+"games": 13,
+"goals": 1
+}
+],
+"titles": [
+"Taça de Portugal (2023/2024)",
+"Supertaça (2024/2025)"
+],
+"italy": [
+"2026-27 Fortitudo Pomezia (Serie A)",
+"2025-26 Fortitudo Pomezia (Serie A)"
+]
+},
+"ben03": {
+"fpId": "25509",
+"games": 6,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "23",
+"team": "Feldi Eboli",
+"games": 6,
+"goals": 0
+}
+],
+"titles": [],
+"italy": [
+"2026-27 GG Team Wear Benevento 5 (Serie A)",
+"2025-26 Benevento 5 (Serie A2)",
+"2020-21 Feldi Eboli (Serie A)",
+"2019-20 Acqua&Sapone Unigross (Serie A)",
+"2018-19 Real San Giuseppe ()",
+"2018-19 Lecco C5 (Serie A2 Elite)"
+]
+},
+"ben07": {
+"fpId": "10026",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [],
+"italy": [
+"2026-27 GG Team Wear Benevento 5 (Serie A)",
+"2025-26 Benevento 5 (Serie A2)",
+"2023-24 Campania (Altri)",
+"2022-23 Campania (Altri)"
+]
+},
+"ben10": {
+"fpId": "21318",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [],
+"italy": [
+"2026-27 GG Team Wear Benevento 5 (Serie A)",
+"2025-26 Benevento 5 (Serie A2)",
+"2024-25 Itria Football Club (Serie A2)",
+"2023-24 Itria Football Club (Serie A2)",
+"2022-23 Itria F.C. (Serie A2)",
+"2021-22 Itria F.C. (Serie B)"
+]
+},
+"ben14": {
+"fpId": "64143",
+"games": 4,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "25",
+"team": "Uruguai",
+"games": 4,
+"goals": 0
+}
+],
+"titles": [],
+"italy": [
+"2026-27 GG Team Wear Benevento 5 (Serie A)",
+"2026-27 Sulmona Futsal (Serie A2 Elite)",
+"2025-26 Sulmona Futsal (Serie A2)",
+"2024-25 Defender Giovinazzo C5 (Serie A)",
+"2023-24 Lenzi Automobili Prato (Serie A2)",
+"2023-24 Futsal Cesena (Serie A2 Elite)"
+]
+},
+"ben15": {
+"fpId": "28843",
+"games": 10,
+"yellow": 2,
+"red": 0,
+"seasons": [
+{
+"s": "25",
+"team": "Itália",
+"games": 6,
+"goals": 3
+},
+{
+"s": "24",
+"team": "Itália",
+"games": 4,
+"goals": 0
+}
+],
+"titles": [],
+"italy": [
+"2026-27 GG Team Wear Benevento 5 (Serie A)",
+"2025-26 Ecocity Genzano (Serie A)",
+"2025-26 Italservice Pesaro (Serie B)",
+"2024-25 Italservice Pesaro (Serie A)",
+"2023-24 Italservice Pesaro (Serie A)",
+"2023-24 Ecocity Futsal Genzano (Serie A)"
+]
+},
+"ben16": {
+"fpId": "63263",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [],
+"italy": [
+"2026-27 GG Team Wear Benevento 5 (Serie A)",
+"2025-26 Benevento 5 (Serie A2)",
+"2024-25 New Real Rieti (Serie A2)",
+"2023-24 New Real Rieti (Serie B)",
+"2022-23 Olimpus Roma (Serie A)",
+"2021-22 Olimpus Roma (Serie A)"
+]
+},
+"gio03": {
+"fpId": "10132",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [],
+"italy": [
+"2026-27 Defender Giovinazzo (Serie A)",
+"2025-26 Active Network (Serie A)",
+"2025-26 Bonorva 1960 (Promozione)",
+"2024-25 Active Network Futsal (Serie A)",
+"2023-24 Active Network Futsal (Serie A)",
+"2022-23 Active Network Futsal (Serie A2)"
+]
+},
+"gio05": {
+"fpId": "22587",
+"games": 12,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "23",
+"team": "Feldi Eboli",
+"games": 6,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Feldi Eboli",
+"games": 6,
+"goals": 2
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Defender Giovinazzo (Serie A)",
+"2025-26 Sporting Sala Consilina (Serie A)",
+"2024-25 Sporting Sala Consilina (Serie A)",
+"2024-25 Saviatesta Mantova (Serie A2)",
+"2023-24 Saviatesta Mantova (Serie A)",
+"2022-23 Feldi Eboli (Serie A)"
+]
+},
+"gio09": {
+"fpId": "60393",
+"games": 7,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "25",
+"team": "Araz Naxçivan",
+"games": 7,
+"goals": 6
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Defender Giovinazzo (Serie A)"
+]
+},
+"gio10": {
+"fpId": "23699",
+"games": 6,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "23",
+"team": "Itália",
+"games": 2,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Itália",
+"games": 4,
+"goals": 0
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Defender Giovinazzo (Serie A)",
+"2025-26 Defender Giovinazzo (Serie A2)",
+"2024-25 Fortitudo Pomezia 1957 (Serie A)",
+"2023-24 Sporting Sala Consilina (Serie A)",
+"2022-23 Olimpus Roma (Serie A)",
+"2022-23 Vitulano Drugstore Manfredonia (Serie A2)"
+]
+},
+"gio14": {
+"fpId": "12348",
+"games": 11,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Letónia",
+"games": 1,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Letónia",
+"games": 6,
+"goals": 5
+},
+{
+"s": "22",
+"team": "Letónia",
+"games": 4,
+"goals": 5
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Defender Giovinazzo (Serie A)",
+"2025-26 CDM Futsal (Serie A)"
+]
+},
+"l8402": {
+"fpId": "5582",
+"games": 138,
+"yellow": 6,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "L84 Torino",
+"games": 3,
+"goals": 0
+},
+{
+"s": "25",
+"team": "ElPozo Murcia",
+"games": 38,
+"goals": 1
+},
+{
+"s": "24",
+"team": "Islas Baleares Palma Futsal",
+"games": 42,
+"goals": 1
+},
+{
+"s": "23",
+"team": "Noia Portus Apostoli",
+"games": 19,
+"goals": 3
+},
+{
+"s": "22",
+"team": "Noia Portus Apostoli",
+"games": 32,
+"goals": 2
+},
+{
+"s": "21",
+"team": "Tubarão",
+"games": 4,
+"goals": 1
+}
+],
+"titles": [
+"UEFA Futsal Champions League (2024/2025)"
+],
+"italy": [
+"2026-27 L84 Torino (Serie A)"
+]
+},
+"l8404": {
+"fpId": "1812",
+"games": 56,
+"yellow": 3,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "L84 Torino",
+"games": 3,
+"goals": 4
+},
+{
+"s": "22",
+"team": "Royal Sporting Anderlecht Futsal",
+"games": 8,
+"goals": 1
+},
+{
+"s": "22",
+"team": "Argentina",
+"games": 4,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Levante UD",
+"games": 34,
+"goals": 15
+},
+{
+"s": "21",
+"team": "Argentina",
+"games": 7,
+"goals": 2
+}
+],
+"titles": [
+"Campeonato do Mundo (2016/2017)"
+],
+"italy": [
+"2026-27 L84 Torino (Serie A)",
+"2025-26 L84 Torino (Serie A)",
+"2024-25 L84 (Serie A)",
+"2023-24 L84 (Serie A)",
+"2017-18 Pescara ()",
+"2015-16 Pescara ()"
+]
+},
+"l8405": {
+"fpId": "1781",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [],
+"italy": [
+"2026-27 L84 Torino (Serie A)",
+"2025-26 L84 Torino (Serie A)",
+"2020-21 L84 (Serie A2)",
+"2018-19 Feldi Eboli ()",
+"2018-19 Real Rieti ()",
+"2017-18 Kaos Reggio Emilia Calcio A 5 ()"
+]
+},
+"l8406": {
+"fpId": "1831",
+"games": 17,
+"yellow": 2,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "L84 Torino",
+"games": 3,
+"goals": 2
+},
+{
+"s": "26",
+"team": "Itália",
+"games": 1,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Itália",
+"games": 6,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Itália",
+"games": 1,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Pesaro Calcio 5",
+"games": 3,
+"goals": 1
+},
+{
+"s": "21",
+"team": "Itália",
+"games": 3,
+"goals": 0
+}
+],
+"titles": [],
+"italy": [
+"2026-27 L84 Torino (Serie A)",
+"2025-26 L84 Torino (Serie A)",
+"2024-25 L84 (Serie A)",
+"2023-24 L84 (Serie A)",
+"2023-24 Italservice Pesaro (Serie A)",
+"2022-23 Italservice Pesaro (Serie A)"
+]
+},
+"l8407": {
+"fpId": "286586",
+"games": 3,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "L84 Torino",
+"games": 3,
+"goals": 1
+}
+],
+"titles": [],
+"italy": [
+"2026-27 L84 Torino (Serie A)"
+]
+},
+"l8408": {
+"fpId": "1771",
+"games": 21,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "25",
+"team": "Itália",
+"games": 6,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Itália",
+"games": 3,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Feldi Eboli",
+"games": 6,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Itália",
+"games": 3,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Itália",
+"games": 3,
+"goals": 0
+}
+],
+"titles": [],
+"italy": [
+"2026-27 L84 Torino (Serie A)",
+"2025-26 L84 Torino (Serie A)",
+"2025-26 Feldi Eboli (Serie A)",
+"2024-25 Feldi Eboli (Serie A)",
+"2023-24 Feldi Eboli (Serie A)",
+"2022-23 Ciampino Aniene Anni Nuovi (Serie A)"
+]
+},
+"l8409": {
+"fpId": "1895",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [],
+"italy": [
+"2026-27 L84 Torino (Serie A)",
+"2025-26 L84 Torino (Serie A)",
+"2021-22 Meta Catania Bricocity (Serie A)",
+"2020-21 Meta Catania Bricocity (Serie A)",
+"2020-21 Real San Giuseppe (Serie A)",
+"2018-19 Feldi Eboli ()"
+]
+},
+"l8411": {
+"fpId": "43474",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [
+"Supertaça (2005/2006)",
+"2ª Divisão (2012/2013)"
+],
+"italy": [
+"2026-27 L84 Torino (Serie A)"
+]
+},
+"l8412": {
+"fpId": "736",
+"games": 152,
+"yellow": 39,
+"red": 5,
+"seasons": [
+{
+"s": "26",
+"team": "L84 Torino",
+"games": 3,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Ribera Navarra FS",
+"games": 26,
+"goals": 13
+},
+{
+"s": "24",
+"team": "Ribera Navarra FS",
+"games": 17,
+"goals": 18
+},
+{
+"s": "24",
+"team": "Inter FS",
+"games": 12,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Inter FS",
+"games": 33,
+"goals": 17
+},
+{
+"s": "22",
+"team": "Ribera Navarra FS",
+"games": 29,
+"goals": 29
+},
+{
+"s": "21",
+"team": "Ribera Navarra FS",
+"games": 32,
+"goals": 25
+}
+],
+"titles": [],
+"italy": [
+"2026-27 L84 Torino (Serie A)"
+]
+},
+"l8416": {
+"fpId": "1864",
+"games": 9,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "L84 Torino",
+"games": 3,
+"goals": 1
+},
+{
+"s": "24",
+"team": "Itália",
+"games": 6,
+"goals": 3
+}
+],
+"titles": [],
+"italy": [
+"2026-27 L84 Torino (Serie A)",
+"2025-26 L84 Torino (Serie A)",
+"2024-25 L84 (Serie A)",
+"2023-24 Italservice Pesaro (Serie A)",
+"2022-23 Italservice Pesaro (Serie A)",
+"2022-23 Feldi Eboli (Serie A)"
+]
+},
+"l8418": {
+"fpId": "52557",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [],
+"italy": [
+"2026-27 L84 Torino (Serie A)",
+"2025-26 L84 Torino (Serie A)",
+"2023-24 L 84 (Giovanili)",
+"2023-24 Piemonte Valle D'Aosta (Altri)",
+"2022-23 Piemonte Valle D'Aosta (Altri)",
+"2020-21 L 84 (Giovanili)"
+]
+},
+"cat04": {
+"fpId": "25707",
+"games": 26,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Itália",
+"games": 1,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Catania Calcio A 5",
+"games": 3,
+"goals": 4
+},
+{
+"s": "25",
+"team": "Itália",
+"games": 4,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Catania Calcio A 5",
+"games": 9,
+"goals": 13
+},
+{
+"s": "24",
+"team": "Itália",
+"games": 6,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Itália",
+"games": 1,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Itália",
+"games": 2,
+"goals": 0
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Covei Meta Catania Bricocity (Serie A)",
+"2025-26 Covei Meta Catania Bricocity (Serie A)",
+"2024-25 Meta Catania Bricocity (Serie A)",
+"2023-24 Meta Catania Bricocity (Serie A)",
+"2022-23 Meta Catania Bricocity (Serie A)",
+"2022-23 Leonardo (Serie A2)"
+]
+},
+"cat05": {
+"fpId": "18667",
+"games": 14,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "24",
+"team": "FC Barcelona",
+"games": 5,
+"goals": 0
+},
+{
+"s": "21",
+"team": "FC Barcelona",
+"games": 9,
+"goals": 1
+}
+],
+"titles": [
+"RFEF - Primera División de Fútbol Sala (2021/2022)",
+"Campeonato Europa Sub 19 (2022/2023)"
+],
+"italy": [
+"2026-27 Covei Meta Catania Bricocity (Serie A)"
+]
+},
+"cat06": {
+"fpId": "27260",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [],
+"italy": [
+"2026-27 Covei Meta Catania Bricocity (Serie A)",
+"2025-26 Covei Meta Catania Bricocity (Serie A)",
+"2024-25 Meta Catania Bricocity (Serie A)",
+"2022-23 Meta Catania C5 (Giovanili)"
+]
+},
+"cat07": {
+"fpId": "10130",
+"games": 13,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Itália",
+"games": 1,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Catania Calcio A 5",
+"games": 3,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Catania Calcio A 5",
+"games": 9,
+"goals": 0
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Covei Meta Catania Bricocity (Serie A)",
+"2025-26 Covei Meta Catania Bricocity (Serie A)",
+"2024-25 Meta Catania Bricocity (Serie A)",
+"2023-24 Meta Catania Bricocity (Serie A)",
+"2022-23 Meta Catania Bricocity (Serie A)",
+"2021-22 Meta Catania Bricocity (Serie A)"
+]
+},
+"cat08": {
+"fpId": "1779",
+"games": 23,
+"yellow": 6,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Itália",
+"games": 1,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Catania Calcio A 5",
+"games": 2,
+"goals": 1
+},
+{
+"s": "25",
+"team": "Itália",
+"games": 5,
+"goals": 1
+},
+{
+"s": "24",
+"team": "Catania Calcio A 5",
+"games": 9,
+"goals": 2
+},
+{
+"s": "24",
+"team": "Itália",
+"games": 4,
+"goals": 1
+},
+{
+"s": "23",
+"team": "Itália",
+"games": 2,
+"goals": 0
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Covei Meta Catania Bricocity (Serie A)",
+"2025-26 Covei Meta Catania Bricocity (Serie A)",
+"2024-25 Meta Catania Bricocity (Serie A)",
+"2023-24 Meta Catania Bricocity (Serie A)",
+"2022-23 Meta Catania Bricocity (Serie A)",
+"2021-22 Opificio 4.0 CMB Matera (Serie A)"
+]
+},
+"cat09": {
+"fpId": "64138",
+"games": 4,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "25",
+"team": "Uruguai",
+"games": 4,
+"goals": 0
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Covei Meta Catania Bricocity (Serie A)"
+]
+},
+"cat10": {
+"fpId": "18553",
+"games": 96,
+"yellow": 14,
+"red": 1,
+"seasons": [
+{
+"s": "25",
+"team": "Ribera Navarra FS",
+"games": 17,
+"goals": 1
+},
+{
+"s": "24",
+"team": "Ribera Navarra FS",
+"games": 30,
+"goals": 15
+},
+{
+"s": "23",
+"team": "Ribera Navarra FS",
+"games": 16,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Ribera Navarra FS",
+"games": 22,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Ribera Navarra FS",
+"games": 11,
+"goals": 0
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Covei Meta Catania Bricocity (Serie A)",
+"2025-26 Covei Meta Catania Bricocity (Serie A)"
+]
+},
+"cat11": {
+"fpId": "66462",
+"games": 39,
+"yellow": 6,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Praia Clube",
+"games": 15,
+"goals": 5
+},
+{
+"s": "25",
+"team": "Praia Clube",
+"games": 24,
+"goals": 5
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Covei Meta Catania Bricocity (Serie A)"
+]
+},
+"cat13": {
+"fpId": "10133",
+"games": 38,
+"yellow": 17,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Itália",
+"games": 1,
+"goals": 0
+},
+{
+"s": "25",
+"team": "Catania Calcio A 5",
+"games": 3,
+"goals": 2
+},
+{
+"s": "25",
+"team": "Itália",
+"games": 6,
+"goals": 1
+},
+{
+"s": "24",
+"team": "Catania Calcio A 5",
+"games": 9,
+"goals": 1
+},
+{
+"s": "24",
+"team": "Itália",
+"games": 5,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Itália",
+"games": 5,
+"goals": 1
+},
+{
+"s": "22",
+"team": "Itália",
+"games": 6,
+"goals": 4
+},
+{
+"s": "21",
+"team": "Itália",
+"games": 3,
+"goals": 0
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Covei Meta Catania Bricocity (Serie A)",
+"2025-26 Covei Meta Catania Bricocity (Serie A)",
+"2024-25 Meta Catania Bricocity (Serie A)",
+"2023-24 Meta Catania Bricocity (Serie A)",
+"2022-23 Meta Catania Bricocity (Serie A)",
+"2021-22 Meta Catania Bricocity (Serie A)"
+]
+},
+"cat14": {
+"fpId": "23920",
+"games": 28,
+"yellow": 2,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Finlândia",
+"games": 1,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Akaa Futsal",
+"games": 6,
+"goals": 3
+},
+{
+"s": "24",
+"team": "Finlândia",
+"games": 6,
+"goals": 2
+},
+{
+"s": "23",
+"team": "Finlândia",
+"games": 7,
+"goals": 2
+},
+{
+"s": "22",
+"team": "Finlândia",
+"games": 4,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Finlândia",
+"games": 4,
+"goals": 2
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Covei Meta Catania Bricocity (Serie A)"
+]
+},
+"cat15": {
+"fpId": "27264",
+"games": 3,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "25",
+"team": "Catania Calcio A 5",
+"games": 3,
+"goals": 0
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Covei Meta Catania Bricocity (Serie A)",
+"2025-26 Covei Meta Catania Bricocity (Serie A)",
+"2024-25 Meta Catania Bricocity (Serie A)",
+"2023-24 Meta Catania Bricocity (Serie A)",
+"2018-19 Punto Snai (Tornei)"
+]
+},
+"nap02": {
+"fpId": "67032",
+"games": 16,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Cascavel Futsal",
+"games": 16,
+"goals": 0
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Napoli Futsal (Serie A)",
+"2025-26 Covei Meta Catania Bricocity (Serie A)",
+"2024-25 Meta Catania Bricocity (Serie A)",
+"2023-24 Meta Catania Bricocity (Serie A)",
+"2023-24 Monastir (Serie B)",
+"2022-23 360 GG Monastir (Serie A)"
+]
+},
+"nap05": {
+"fpId": "60601",
+"games": 12,
+"yellow": 3,
+"red": 0,
+"seasons": [
+{
+"s": "25",
+"team": "Catania Calcio A 5",
+"games": 3,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Catania Calcio A 5",
+"games": 9,
+"goals": 2
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Napoli Futsal (Serie A)",
+"2025-26 Covei Meta Catania Bricocity (Serie A)",
+"2018-19 Feldi Eboli ()",
+"2017-18 Acqua&Sapone Futsal ()",
+"2016-17 Napoli C5 ()",
+"2015-16 Asti ()"
+]
+},
+"nap08": {
+"fpId": "10672",
+"games": 37,
+"yellow": 10,
+"red": 0,
+"seasons": [
+{
+"s": "24",
+"team": "Riga FC",
+"games": 3,
+"goals": 1
+},
+{
+"s": "22",
+"team": "Inter FS",
+"games": 2,
+"goals": 1
+},
+{
+"s": "22",
+"team": "Feldi Eboli",
+"games": 5,
+"goals": 6
+},
+{
+"s": "21",
+"team": "Inter FS",
+"games": 18,
+"goals": 2
+},
+{
+"s": "21",
+"team": "Corinthians",
+"games": 9,
+"goals": 3
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Napoli Futsal (Serie A)",
+"2025-26 Napoli Futsal (Serie A)"
+]
+},
+"nap09": {
+"fpId": "1905",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [],
+"italy": [
+"2026-27 Napoli Futsal (Serie A)",
+"2025-26 Sporting Sala Consilina (Serie A)",
+"2024-25 Sporting Sala Consilina (Serie A)",
+"2024-25 Meta Catania Bricocity (Serie A)",
+"2023-24 Sandro Abate Avellino (Serie A)",
+"2023-24 Prezioso Casa Napoli (Serie A)"
+]
+},
+"nap10": {
+"fpId": "1811",
+"games": 19,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "25",
+"team": "Paraguai",
+"games": 5,
+"goals": 1
+},
+{
+"s": "24",
+"team": "Paraguai",
+"games": 5,
+"goals": 2
+},
+{
+"s": "21",
+"team": "Pesaro Calcio 5",
+"games": 3,
+"goals": 1
+},
+{
+"s": "21",
+"team": "Paraguai",
+"games": 6,
+"goals": 0
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Napoli Futsal (Serie A)",
+"2025-26 Napoli Futsal (Serie A)",
+"2024-25 Napoli Futsal (Serie A)",
+"2023-24 Prezioso Casa Napoli (Serie A)",
+"2022-23 Napoli Futsal (Serie A)",
+"2022-23 Italservice Pesaro (Serie A)"
+]
+},
+"nap11": {
+"fpId": "4917",
+"games": 17,
+"yellow": 5,
+"red": 0,
+"seasons": [
+{
+"s": "25",
+"team": "Catania Calcio A 5",
+"games": 3,
+"goals": 4
+},
+{
+"s": "25",
+"team": "Itália",
+"games": 6,
+"goals": 1
+},
+{
+"s": "24",
+"team": "Catania Calcio A 5",
+"games": 8,
+"goals": 5
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Napoli Futsal (Serie A)",
+"2025-26 Covei Meta Catania Bricocity (Serie A)",
+"2024-25 Meta Catania Bricocity (Serie A)",
+"2023-24 Meta Catania Bricocity (Serie A)",
+"2022-23 L84 (Serie A)",
+"2021-22 Napoli Futsal (Serie A)"
+]
+},
+"nap13": {
+"fpId": "64540",
+"games": 3,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Murata",
+"games": 3,
+"goals": 0
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Napoli Futsal (Serie A)",
+"2025-26 Junior Domitia (Serie A2)",
+"2024-25 Junior Domitia (Serie A2)",
+"2023-24 Prezioso Casa Napoli (Serie A)",
+"2022-23 Napoli Futsal (Serie A)",
+"2021-22 Napoli Futsal (Serie A)"
+]
+},
+"nap14": {
+"fpId": "2708",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [],
+"italy": [
+"2026-27 Napoli Futsal (Serie A)",
+"2025-26 Napoli Futsal (Serie A)",
+"2023-24 Fortitudo Pomezia 1957 (Serie A)",
+"2020-21 Atletico Lodigiani (Serie C2)",
+"2020-21 Cioli Ariccia Feros (Serie B)"
+]
+},
+"nap15": {
+"fpId": "1683",
+"games": 163,
+"yellow": 26,
+"red": 2,
+"seasons": [
+{
+"s": "26",
+"team": "Portugal",
+"games": 2,
+"goals": 2
+},
+{
+"s": "25",
+"team": "Kairat Almaty",
+"games": 2,
+"goals": 1
+},
+{
+"s": "25",
+"team": "SC Braga",
+"games": 8,
+"goals": 6
+},
+{
+"s": "24",
+"team": "SC Braga",
+"games": 26,
+"goals": 10
+},
+{
+"s": "24",
+"team": "Portugal",
+"games": 7,
+"goals": 5
+},
+{
+"s": "23",
+"team": "Sporting CP",
+"games": 34,
+"goals": 21
+},
+{
+"s": "23",
+"team": "Portugal",
+"games": 5,
+"goals": 2
+},
+{
+"s": "22",
+"team": "Sporting CP",
+"games": 34,
+"goals": 19
+},
+{
+"s": "22",
+"team": "Portugal",
+"games": 9,
+"goals": 2
+},
+{
+"s": "21",
+"team": "Eléctrico FC",
+"games": 34,
+"goals": 15
+},
+{
+"s": "21",
+"team": "Portugal",
+"games": 2,
+"goals": 0
+}
+],
+"titles": [
+"Liga Placard (2020/2021, 2022/2023, 2023/2024)",
+"Taça de Portugal (2019/2020, 2019/2020)",
+"Taça da Liga (2020/2021, 2023/2024)",
+"Supertaça (2022/2023, 2024/2025)",
+"Taça Nacional Sub 17 (2015/2016)",
+"Campeonato Nacional Sub 17 (2016/2017)",
+"Campeonato Nacional Sub 19 (2018/2019)",
+"Finalíssima (2022/2023)"
+],
+"italy": [
+"2026-27 Napoli Futsal (Serie A)"
+]
+},
+"nap17": {
+"fpId": "4446",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [],
+"italy": [
+"2026-27 Napoli Futsal (Serie A)",
+"2025-26 Ecocity Genzano (Serie A)",
+"2024-25 Ecocity Futsal Genzano (Serie A)",
+"2024-25 Fortitudo Pomezia 1957 (Serie A)",
+"2023-24 Fortitudo Pomezia 1957 (Serie A)",
+"2023-24 Saviatesta Mantova (Serie A)"
+]
+},
+"rom01": {
+"fpId": "654",
+"games": 91,
+"yellow": 14,
+"red": 2,
+"seasons": [
+{
+"s": "25",
+"team": "Argentina",
+"games": 1,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Royal Sporting Anderlecht Futsal",
+"games": 6,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Argentina",
+"games": 7,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Noia Portus Apostoli",
+"games": 26,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Real Betis Futsal",
+"games": 23,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Argentina",
+"games": 4,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Real Betis Futsal",
+"games": 18,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Argentina",
+"games": 6,
+"goals": 0
+}
+],
+"titles": [
+"Campeonato do Mundo (2016/2017)"
+],
+"italy": [
+"2026-27 Roma 1927 (Serie A)",
+"2025-26 Roma 1927 (Serie A)"
+]
+},
+"rom02": {
+"fpId": "59120",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [],
+"italy": [
+"2026-27 Roma 1927 (Serie A)",
+"2025-26 Roma 1927 (Serie A)",
+"2025-26 Lazio (Serie A2)",
+"2024-25 Fortitudo Pomezia 1957 (Serie A)",
+"2023-24 United Pomezia C5 (Serie B)",
+"2021-22 Sporting Club Marconi (Giovanili)"
+]
+},
+"rom03": {
+"fpId": "21314",
+"games": 16,
+"yellow": 2,
+"red": 0,
+"seasons": [
+{
+"s": "24",
+"team": "Itália",
+"games": 4,
+"goals": 0
+},
+{
+"s": "23",
+"team": "Itália",
+"games": 6,
+"goals": 1
+},
+{
+"s": "22",
+"team": "Itália",
+"games": 6,
+"goals": 3
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Roma 1927 (Serie A)",
+"2025-26 Roma 1927 (Serie A)",
+"2024-25 Roma 1927 Futsal (Serie A)",
+"2023-24 Olimpus Roma (Serie A)",
+"2022-23 Olimpus Roma (Serie A)",
+"2022-23 Roma C5 (Serie A2)"
+]
+},
+"rom04": {
+"fpId": "1713",
+"games": 24,
+"yellow": 4,
+"red": 0,
+"seasons": [
+{
+"s": "25",
+"team": "Itália",
+"games": 4,
+"goals": 1
+},
+{
+"s": "23",
+"team": "Feldi Eboli",
+"games": 6,
+"goals": 4
+},
+{
+"s": "23",
+"team": "Itália",
+"games": 5,
+"goals": 3
+},
+{
+"s": "22",
+"team": "Feldi Eboli",
+"games": 6,
+"goals": 2
+},
+{
+"s": "22",
+"team": "Itália",
+"games": 3,
+"goals": 2
+}
+],
+"titles": [
+"UEFA Futsal Champions League (2010/2011)",
+"Série A  (2017/2018)",
+"Coppa Itália (2018/2019)",
+"Supercopa Itália (2018/2019)"
+],
+"italy": [
+"2025-26 Feldi Eboli (Serie A)",
+"2024-25 Feldi Eboli (Serie A)",
+"2023-24 Feldi Eboli (Serie A)",
+"2022-23 Feldi Eboli (Serie A)",
+"2021-22 Feldi Eboli (Serie A)",
+"2021-22 Cormar Futsal Polistena (Serie A)"
+]
+},
+"rom05": {
+"fpId": "150637",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [],
+"italy": [
+"2026-27 Roma 1927 (Serie A)",
+"2025-26 Roma 1927 (Serie A)"
+]
+},
+"rom06": {
+"fpId": "21",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [
+"Liga Placard (2015/2016, 2016/2017, 2017/2018)",
+"Taça de Portugal (2015/2016, 2017/2018)",
+"Taça da Liga (2015/2016, 2016/2017)",
+"Campeonato da Europa (2013/2014)"
+],
+"italy": [
+"2026-27 Roma 1927 (Serie A)",
+"2025-26 Roma 1927 (Serie A)",
+"2024-25 Roma 1927 Futsal (Serie A)",
+"2023-24 Olimpus Roma (Serie A)",
+"2021-22 Napoli Futsal (Serie A)",
+"2020-21 FF Napoli (Serie A2)"
+]
+},
+"rom07": {
+"fpId": "27261",
+"games": 9,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "24",
+"team": "Catania Calcio A 5",
+"games": 9,
+"goals": 1
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Roma 1927 (Serie A)",
+"2025-26 Active Network (Serie A)",
+"2025-26 Sandro Abate (Serie A)",
+"2024-25 Sandro Abate Avellino (Serie A)",
+"2024-25 Meta Catania Bricocity (Serie A)",
+"2023-24 Ecocity Futsal Genzano (Serie A)"
+]
+},
+"rom08": {
+"fpId": "58816",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [],
+"italy": [
+"2026-27 Roma 1927 (Serie A)",
+"2025-26 Roma 1927 (Serie A)",
+"2023-24 Olimpus Roma (Giovanili)"
+]
+},
+"rom10": {
+"fpId": "60603",
+"games": 3,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "25",
+"team": "Catania Calcio A 5",
+"games": 3,
+"goals": 3
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Roma 1927 (Serie A)",
+"2025-26 Covei Meta Catania Bricocity (Serie A)",
+"2022-23 Olimpus Roma (Serie A)",
+"2021-22 Vitulano Drugstore Manfredonia (Serie A)"
+]
+},
+"ave04": {
+"fpId": "23692",
+"games": 6,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "23",
+"team": "Itália",
+"games": 2,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Itália",
+"games": 4,
+"goals": 0
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Sandro Abate (Serie A)",
+"2025-26 Sandro Abate (Serie A)",
+"2024-25 Sandro Abate Avellino (Serie A)",
+"2023-24 Sandro Abate Avellino (Serie A)",
+"2022-23 Real San Giuseppe (Serie A)",
+"2021-22 Benevento 5 (Serie A2)"
+]
+},
+"ave06": {
+"fpId": "56825",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [],
+"italy": [
+"2026-27 Sandro Abate (Serie A)",
+"2025-26 Sandro Abate (Serie A)",
+"2024-25 Sandro Abate Avellino (Serie A)",
+"2024-25 GG Team Wear Benevento 5 (Serie A)",
+"2023-24 Benevento 5 (Serie A2)",
+"2022-23 Sandro Abate Avellino (Serie A)"
+]
+},
+"ave07": {
+"fpId": "1873",
+"games": 3,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "21",
+"team": "Pesaro Calcio 5",
+"games": 3,
+"goals": 0
+}
+],
+"titles": [
+"Campeonato da Europa (2013/2014)"
+],
+"italy": [
+"2026-27 Sandro Abate (Serie A)",
+"2025-26 Napoli Futsal (Serie A)",
+"2025-26 Formia Futsal (Serie A2)",
+"2024-25 Napoli Futsal (Serie A)",
+"2023-24 Prezioso Casa Napoli (Serie A)",
+"2022-23 Napoli Futsal (Serie A)"
+]
+},
+"ave08": {
+"fpId": "1813",
+"games": 18,
+"yellow": 2,
+"red": 1,
+"seasons": [
+{
+"s": "24",
+"team": "Argentina",
+"games": 7,
+"goals": 3
+},
+{
+"s": "22",
+"team": "Argentina",
+"games": 4,
+"goals": 2
+},
+{
+"s": "21",
+"team": "Argentina",
+"games": 7,
+"goals": 4
+}
+],
+"titles": [
+"UEFA Futsal Champions League (2010/2011)",
+"Campeonato do Mundo (2016/2017)"
+],
+"italy": [
+"2026-27 Sandro Abate (Serie A)",
+"2025-26 Napoli Futsal (Serie A)",
+"2024-25 Napoli Futsal (Serie A)",
+"2023-24 Prezioso Casa Napoli (Serie A)",
+"2022-23 Napoli Futsal (Serie A)",
+"2022-23 Italservice Pesaro (Serie A)"
+]
+},
+"ave10": {
+"fpId": "43237",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [
+"Supertaça (2008/2009, 2010/2011, 2013/2014, 2014/2015)",
+"Liga Placard (2009/2010, 2010/2011, 2012/2013, 2013/2014)",
+"Taça de Portugal (2007/2008, 2010/2011, 2012/2013)",
+"UEFA Futsal Champions League (2004/2005)"
+],
+"italy": [
+"2026-27 Sandro Abate (Serie A)",
+"2025-26 Sandro Abate (Serie A)",
+"2021-22 Napoli Futsal (Serie A)",
+"2020-21 Real San Giuseppe (Serie A)"
+]
+},
+"ave12": {
+"fpId": "1815",
+"games": 10,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "21",
+"team": "Pesaro Calcio 5",
+"games": 3,
+"goals": 0
+},
+{
+"s": "21",
+"team": "Argentina",
+"games": 7,
+"goals": 3
+}
+],
+"titles": [
+"UEFA Futsal Champions League (2010/2011)",
+"Campeonato do Mundo (2016/2017)",
+"Coppa Itália (2018/2019)",
+"Supercopa Itália (2018/2019)"
+],
+"italy": [
+"2026-27 Sandro Abate (Serie A)",
+"2025-26 L84 Torino (Serie A)",
+"2024-25 L84 (Serie A)",
+"2023-24 L84 (Serie A)",
+"2022-23 L84 (Serie A)",
+"2021-22 Italservice Pesaro (Serie A)"
+]
+},
+"ave14": {
+"fpId": "43244",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [
+"Liga Placard (2010/2011, 2012/2013, 2013/2014)",
+"Taça de Portugal (2010/2011, 2012/2013)",
+"Supertaça (2010/2011, 2013/2014)"
+],
+"italy": [
+"2026-27 Sandro Abate (Serie A)",
+"2025-26 Pirossigeno Cosenza (Serie A)",
+"2020-21 Italservice Pesaro (Serie A)",
+"2019-20 Italservice Pesaro (Serie A)",
+"2018-19 Pesaro C5 ()",
+"2017-18 Pesaro C5 ()"
+]
+},
+"ave16": {
+"fpId": "697",
+"games": 9,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "23",
+"team": "KS Constract Lubawa",
+"games": 9,
+"goals": 1
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Sandro Abate (Serie A)",
+"2025-26 Sandro Abate (Serie A)"
+]
+},
+"sal13": {
+"fpId": "60602",
+"games": 3,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "25",
+"team": "Catania Calcio A 5",
+"games": 3,
+"goals": 2
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Sporting Sala Consilina (Serie A)",
+"2025-26 Ecocity Genzano (Serie A)",
+"2025-26 Covei Meta Catania Bricocity (Serie A)",
+"2024-25 Ecocity Futsal Genzano (Serie A)",
+"2023-24 Sporting Sala Consilina (Serie A)",
+"2022-23 Sporting Sala Consilina (Serie A2)"
+]
+},
+"sal14": {
+"fpId": "62351",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [
+"RFEF - Primera División de Fútbol Sala (2010/2011, 2011/2012, 2012/2013)",
+"UEFA Futsal Champions League (2011/2012, 2013/2014, 2014/2015)"
+],
+"italy": [
+"2026-27 Sporting Sala Consilina (Serie A)",
+"2025-26 Sporting Sala Consilina (Serie A)",
+"2022-23 Came Dosson C5 (Serie A)"
+]
+},
+"sal16": {
+"fpId": "1835",
+"games": 2,
+"yellow": 0,
+"red": 0,
+"seasons": [
+{
+"s": "23",
+"team": "Itália",
+"games": 1,
+"goals": 0
+},
+{
+"s": "22",
+"team": "Itália",
+"games": 1,
+"goals": 0
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Sporting Sala Consilina (Serie A)",
+"2025-26 Roma 1927 (Serie A)",
+"2024-25 Roma 1927 Futsal (Serie A)",
+"2023-24 Olimpus Roma (Serie A)",
+"2023-24 Ecocity Futsal Genzano (Serie A)",
+"2022-23 Ecocity Futsal Genzano (Serie A2)"
+]
+},
+"sal17": {
+"fpId": "478",
+"games": 102,
+"yellow": 15,
+"red": 1,
+"seasons": [
+{
+"s": "22",
+"team": "FC Barcelona",
+"games": 50,
+"goals": 5
+},
+{
+"s": "21",
+"team": "FC Barcelona",
+"games": 39,
+"goals": 7
+},
+{
+"s": "21",
+"team": "Espanha",
+"games": 13,
+"goals": 4
+}
+],
+"titles": [
+"RFEF - Primera División de Fútbol Sala (2013/2014, 2014/2015, 2015/2016, 2016/2017, 2017/2018, 2019/2020, 2021/2022, 2022/2023)",
+"Campeonato da Europa (2007/2008, 2009/2010, 2011/2012, 2015/2016)",
+"UEFA Futsal Champions League (2008/2009, 2016/2017, 2017/2018, 2021/2022)",
+"Supercopa España  (2018/2019, 2021/2022, 2022/2023)",
+"Copa de España (2022/2023)"
+],
+"italy": [
+"2026-27 Sporting Sala Consilina (Serie A)",
+"2025-26 Sporting Sala Consilina (Serie A)",
+"2024-25 Sporting Sala Consilina (Serie A)",
+"2023-24 Sporting Altamarca (Serie A2)",
+"2022-23 Sporting Altamarca (Serie A2)",
+"2022-23 Futsal Giorgione (Serie B)"
+]
+},
+"pad04": {
+"fpId": "57059",
+"games": 5,
+"yellow": 1,
+"red": 0,
+"seasons": [
+{
+"s": "26",
+"team": "Itália",
+"games": 1,
+"goals": 0
+},
+{
+"s": "24",
+"team": "Itália",
+"games": 4,
+"goals": 2
+}
+],
+"titles": [],
+"italy": [
+"2026-27 Vinumitaly Petrarca (Serie A)",
+"2025-26 Vinumitaly Petrarca (Serie A2)",
+"2025-26 Italia (Nazionali)",
+"2024-25 Vinumitaly Petrarca (Serie A)",
+"2023-24 Vinumitaly Petrarca (Serie A2)",
+"2022-23 Syn-Bios Petrarca (Serie A)"
+]
+},
+"pad14": {
+"fpId": "1843",
+"games": 0,
+"yellow": 0,
+"red": 0,
+"seasons": [],
+"titles": [],
+"italy": [
+"2026-27 Vinumitaly Petrarca (Serie A)",
+"2026-27 Sandro Abate (Serie A)",
+"2025-26 Sandro Abate (Serie A)",
+"2025-26 Vinumitaly Petrarca (Serie A2)",
+"2020-21 Syn-Bios Petrarca (Serie A)",
+"2020-21 Real San Giuseppe (Serie A)"
+]
+}
+}
+}
