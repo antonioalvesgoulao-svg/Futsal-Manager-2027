@@ -83,7 +83,8 @@ export interface SeasonState {
   series: Series[];
   halfTable?: string[]; // classificação no fim da 1.ª volta (Taça da Liga)
   regularTable?: string[]; // classificação final da fase regular
-  esp?: { halfTable?: string[]; regularTable?: string[] }; // o mesmo para a Primera División
+  esp?: { halfTable?: string[]; regularTable?: string[] };
+  kazRegularTable?: string[]; // o mesmo para a Primera División
   winners: Partial<Record<CompId, string>>;
   finished: boolean;
 }
