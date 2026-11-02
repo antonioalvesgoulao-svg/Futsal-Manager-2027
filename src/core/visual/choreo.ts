@@ -499,6 +499,7 @@ export class Choreo {
     }
 
     for (let pass = 0; pass < 3; pass++) this.separate(T + 0.5);
+    this.keepInside();
     this.finalT = T;
     this.extra = Math.max(0, T - D);
 
@@ -632,6 +633,22 @@ export class Choreo {
         const mx = Math.max(20, Math.abs(x)), my = Math.max(10, Math.abs(y));
         B[k].xs[i] = clamp(x + sx[i], -mx, mx);
         B[k].ys[i] = ref ? y : clamp(y + sy[i], -my, my);
+      }
+    }
+  }
+
+  /** Em jogo corrido nenhum jogador sai da quadra: quem já está dentro fica dentro (linhas laterais e de fundo). */
+  private keepInside() {
+    for (const [id, tr] of this.tr) {
+      const sd = this.sideOf.get(id);
+      if (sd === undefined || REFS.includes(id) || !tr.baked) continue;
+      const B = tr.baked;
+      let inside = false;
+      for (let i = 0; i < B.xs.length; i++) {
+        const t = B.t0 + i * BAKE_DT;
+        if (t < 0 || t > this.D) { inside = false; continue; }
+        if (!inside && Math.abs(B.xs[i]) <= 20 && Math.abs(B.ys[i]) <= 10) inside = true;
+        if (inside) { B.xs[i] = clamp(B.xs[i], -19.9, 19.9); B.ys[i] = clamp(B.ys[i], -9.9, 9.9); }
       }
     }
   }
