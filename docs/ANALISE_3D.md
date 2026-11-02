@@ -78,3 +78,12 @@ Está bem (manter): GR enquadrado no remate (0,49 m da posição certa); sem sal
 | Parados >4 s perto da bola | 5,2-9,7 por jogo | 1,7 (`breathe()`: ajuste de ~0,4 m para o lado após 2,2 s imóvel) |
 | Remates acima de 130 km/h | 0,4-0,6 por jogo | 0 (limite de alcance dentro de `shot()`; máx. ~110 km/h; +1,5 m de margem no voo) |
 | Ritmo | 131-135 m/min | 129 (defensores 121, atacantes 138: as rotações do ataque mantêm-se) |
+
+## Realização TV (2/11/2026, objetivo do António: "parecer que estamos a ver um jogo na TV", como o FM)
+A câmara TV (`updateCamera` em `highlight3d.ts`) passou de seguir a bola com zoom fixo a uma realização de transmissão:
+- segue o centro do lance (a bola mais os jogadores a menos de 10 m) e antecipa ~0,5 s o movimento da bola;
+- o plano tem a largura do lance mais uma margem (15-34 m): fecha quando o jogo se concentra e abre nas transições e nas bolas paradas;
+- movimento suavizado no tempo (independente da velocidade do computador);
+- o lance fica a meio da imagem também do lado de lá.
+
+As outras câmaras não mudam.

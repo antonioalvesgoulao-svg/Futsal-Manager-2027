@@ -315,3 +315,14 @@ Validação: tsc, build, `npm test` (motor intacto) e diag. Jogo ao vivo no brow
   - O suplente que entra pela zona de substituição pode estar um instante fora.
   - Nunca joga a bola (receber, passar, rematar) fora da quadra.
 - Verificado num jogo inteiro (4-0 contra 2-2): no máximo 10 jogadores em campo; a figura sem etiqueta junto à câmara era o árbitro.
+
+## Realização TV e plano para a "sensação de TV" (2 novembro 2026, Claude)
+- O António quer que o 3D pareça um jogo de futsal visto na TV, como o FM consegue com o futebol.
+- Feito: realização da câmara TV (ver `docs/ANALISE_3D.md`).
+- Próximos passos, por ordem de impacto:
+  1. Decisão por leitura do jogo (Fase 1 da evolução tática).
+  2. Defesa coordenada (gatilhos de pressão, coberturas).
+  3. Física simples da bola.
+  4. Animações: apoios, receções, tipos de remate e de defesa do GR.
+  5. Fadiga visível.
+- O António pediu estas melhorias ("conto contigo") a 2/11.

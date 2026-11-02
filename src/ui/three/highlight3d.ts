@@ -335,7 +335,7 @@ export class Highlight3D {
     const ceremony = f.phase === 'Entrada das equipas' || f.phase === 'Alinhamento';
     for (const [id, a] of this.bench) a.g.visible = !ceremony && !f.pos[id];
     if (f.holder) this.lastHolder = f.holder;
-    this.updateCamera(f.focus ? { x: f.focus.x, y: f.focus.y, z: 0 } : f.ball);
+    this.updateCamera(f.focus ? { x: f.focus.x, y: f.focus.y, z: 0 } : f.ball, dt, !!f.focus);
     // etiquetas: tamanho legível a qualquer distância, sem tapar o jogo de perto
     if (this.showTags) for (const ac of this.actors.values()) {
       const tg = ac.g.getObjectByName('tag');
@@ -432,7 +432,12 @@ export class Highlight3D {
   }
   private fixedView: { pos: THREE.Vector3; look: THREE.Vector3 } | null = null;
 
-  private updateCamera(b: { x: number; y: number; z: number }) {
+  private tvBallPrev: { x: number; y: number } | null = null;
+  private tvVel = { x: 0, y: 0 };
+  private tvSpan = 22;
+  private tvX = 0;
+
+  private updateCamera(b: { x: number; y: number; z: number }, dt = 1 / 60, focus = false) {
     const cam = this.camera;
     if (this.fixedView) {
       cam.position.copy(this.fixedView.pos);
@@ -455,12 +460,47 @@ export class Highlight3D {
       pos = new THREE.Vector3(sh.x - dir * 5, 2.1, sh.z * 1.05);
       look = new THREE.Vector3(dir * W / 2, 0.8, 0);
     } else {
-      // televisão: lateral elevada, acompanha a bola com suavidade (como uma realização real)
-      const fx = Math.max(-W / 2 + 6, Math.min(W / 2 - 6, ball.x + dir * 2));
-      // câmara principal numa plataforma por cima da primeira fila da bancada lateral
-      pos = new THREE.Vector3(fx * 0.85, Math.min(7.6, this.arena.height - 1.5), H / 2 + 11); // mais recuada: o árbitro da linha de baixo tapa menos o jogo (sem apanhar o ecrã do teto)
-      look = new THREE.Vector3(fx, 0.3, ball.z * 0.35);
+      // televisão: realização como numa transmissão. A câmara principal fica numa plataforma por cima da bancada
+      // lateral; segue o JOGO (bola + jogadores perto dela), antecipa para onde a bola vai e abre/fecha o plano:
+      // plano largo nas transições e com o jogo espalhado, mais fechado quando o lance se concentra perto da área
+      const k = (rate: number) => 1 - Math.exp(-Math.max(0.001, dt) * rate);
+      const bv = this.tvBallPrev ? { x: (b.x - this.tvBallPrev.x) / Math.max(1e-3, dt), y: (b.y - this.tvBallPrev.y) / Math.max(1e-3, dt) } : { x: 0, y: 0 };
+      this.tvBallPrev = { x: b.x, y: b.y };
+      this.tvVel.x = lerp(this.tvVel.x, Math.max(-25, Math.min(25, bv.x)), k(3));
+      this.tvVel.y = lerp(this.tvVel.y, Math.max(-25, Math.min(25, bv.y)), k(3));
+      // centro do lance: bola + jogadores a menos de 10 m (pesos menores), com antecipação de ~0,5 s do movimento da bola
+      let cx = b.x * 2, cz = b.y * 2, wsum = 2, minX = b.x, maxX = b.x;
+      for (const [id, a] of this.actors) {
+        if (!a.g.visible || this.info[id]?.referee) continue;
+        const px = a.g.position.x, pz = a.g.position.z;
+        const d = Math.hypot(px - b.x, pz - b.y);
+        if (d > 10) continue;
+        const w = 0.35 * (1 - d / 10);
+        cx += px * w; cz += pz * w; wsum += w;
+        minX = Math.min(minX, px); maxX = Math.max(maxX, px);
+      }
+      cx = cx / wsum + this.tvVel.x * 0.5; cz = cz / wsum;
+      // largura do plano: o lance todo + margem; transições (bola rápida no comprimento) abrem mais
+      const fast = Math.min(1, Math.abs(this.tvVel.x) / 9);
+      const span = Math.max(15, Math.min(34, (maxX - minX) + 9 + fast * 8 + (focus ? 6 : 0)));
+      this.tvSpan = this.snapCamera ? span : lerp(this.tvSpan, span, k(0.9));
+      const fx = Math.max(-W / 2 + 5, Math.min(W / 2 - 5, cx));
+      this.tvX = this.snapCamera ? fx : lerp(this.tvX, fx, k(1.8));
+      pos = new THREE.Vector3(this.tvX * 0.85, Math.min(7.6, this.arena.height - 1.5), H / 2 + 11);
+      look = new THREE.Vector3(this.tvX, 0.3, cz * 0.6); // o lance fica a meio da imagem também no lado de lá
+      // campo de visão que mostra a largura do plano à distância a que a câmara está
+      const dist = pos.distanceTo(look);
+      const hfov = 2 * Math.atan(this.tvSpan / 2 / dist);
+      const vfov = (2 * Math.atan(Math.tan(hfov / 2) / Math.max(0.5, cam.aspect)) * 180) / Math.PI;
+      const fov = Math.max(20, Math.min(44, vfov));
+      if (Math.abs(cam.fov - fov) > 0.05) { cam.fov = fov; cam.updateProjectionMatrix(); }
+      cam.position.copy(pos);
+      this.camLook.copy(look);
+      this.snapCamera = false;
+      cam.lookAt(this.camLook);
+      return;
     }
+    if (cam.fov !== 40) { cam.fov = 40; cam.updateProjectionMatrix(); }
     if (this.snapCamera) {
       cam.position.copy(pos);
       this.camLook.copy(look);
