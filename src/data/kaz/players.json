@@ -1,0 +1,605 @@
+{
+  "_info": "Dados Zerozero confirmados em parte: Kairat (jogadores indicados no registo consultado) e Semey (amostra histórica/plantel 2026/27 parcial). Para as outras equipas foram criados cinco jogadores fictícios de preenchimento, identificados por fictional:true. Todos os plantéis são provisórios e necessitam de reconciliação com a página de plantel 2026/27.",
+  "players": [
+    {
+      "id": "kaz001",
+      "clubId": "aqt",
+      "name": "Nurlan Akhmetov",
+      "position": "GR",
+      "number": 1,
+      "age": 33,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz002",
+      "clubId": "aqt",
+      "name": "Miras Abdullin",
+      "position": "FIX",
+      "number": 2,
+      "age": 28,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz003",
+      "clubId": "aqt",
+      "name": "Erlan Bekov",
+      "position": "ALA",
+      "number": 3,
+      "age": 23,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz004",
+      "clubId": "aqt",
+      "name": "Timur Akhmetov",
+      "position": "ALA",
+      "number": 4,
+      "age": 33,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz005",
+      "clubId": "aqt",
+      "name": "Rauan Abdullin",
+      "position": "PIV",
+      "number": 5,
+      "age": 28,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz006",
+      "clubId": "kai",
+      "name": "Daniyar Yermekov",
+      "position": "GR",
+      "number": 1,
+      "age": 23,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz007",
+      "clubId": "kai",
+      "name": "Aslan Nurgaliyev",
+      "position": "FIX",
+      "number": 2,
+      "age": 33,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz008",
+      "clubId": "kai",
+      "name": "Yerlan Kassenov",
+      "position": "ALA",
+      "number": 3,
+      "age": 28,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz009",
+      "clubId": "kai",
+      "name": "Dias Yermekov",
+      "position": "ALA",
+      "number": 4,
+      "age": 23,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz010",
+      "clubId": "kai",
+      "name": "Aibek Nurgaliyev",
+      "position": "PIV",
+      "number": 5,
+      "age": 33,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz011",
+      "clubId": "aya",
+      "name": "Arman Sadykov",
+      "position": "GR",
+      "number": 1,
+      "age": 28,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz012",
+      "clubId": "aya",
+      "name": "Nurlan Tulegenov",
+      "position": "FIX",
+      "number": 2,
+      "age": 23,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz013",
+      "clubId": "aya",
+      "name": "Miras Zhaksylykov",
+      "position": "ALA",
+      "number": 3,
+      "age": 33,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz014",
+      "clubId": "aya",
+      "name": "Erlan Sadykov",
+      "position": "ALA",
+      "number": 4,
+      "age": 28,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz015",
+      "clubId": "aya",
+      "name": "Timur Tulegenov",
+      "position": "PIV",
+      "number": 5,
+      "age": 23,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz016",
+      "clubId": "kas",
+      "name": "Alikhan Omarov",
+      "position": "GR",
+      "number": 1,
+      "age": 33,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz017",
+      "clubId": "kas",
+      "name": "Daniyar Iskakov",
+      "position": "FIX",
+      "number": 2,
+      "age": 28,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz018",
+      "clubId": "kas",
+      "name": "Aslan Kairatuly",
+      "position": "ALA",
+      "number": 3,
+      "age": 23,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz019",
+      "clubId": "kas",
+      "name": "Yerlan Omarov",
+      "position": "ALA",
+      "number": 4,
+      "age": 33,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz020",
+      "clubId": "kas",
+      "name": "Dias Iskakov",
+      "position": "PIV",
+      "number": 5,
+      "age": 28,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz021",
+      "clubId": "sem",
+      "name": "Rauan Akhmetov",
+      "position": "GR",
+      "number": 1,
+      "age": 23,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz022",
+      "clubId": "sem",
+      "name": "Arman Abdullin",
+      "position": "FIX",
+      "number": 2,
+      "age": 33,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz023",
+      "clubId": "sem",
+      "name": "Nurlan Bekov",
+      "position": "ALA",
+      "number": 3,
+      "age": 28,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz024",
+      "clubId": "sem",
+      "name": "Miras Akhmetov",
+      "position": "ALA",
+      "number": 4,
+      "age": 23,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz025",
+      "clubId": "sem",
+      "name": "Erlan Abdullin",
+      "position": "PIV",
+      "number": 5,
+      "age": 33,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz026",
+      "clubId": "aty",
+      "name": "Aibek Yermekov",
+      "position": "GR",
+      "number": 1,
+      "age": 28,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz027",
+      "clubId": "aty",
+      "name": "Alikhan Nurgaliyev",
+      "position": "FIX",
+      "number": 2,
+      "age": 23,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz028",
+      "clubId": "aty",
+      "name": "Daniyar Kassenov",
+      "position": "ALA",
+      "number": 3,
+      "age": 33,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz029",
+      "clubId": "aty",
+      "name": "Aslan Yermekov",
+      "position": "ALA",
+      "number": 4,
+      "age": 28,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz030",
+      "clubId": "aty",
+      "name": "Yerlan Nurgaliyev",
+      "position": "PIV",
+      "number": 5,
+      "age": 23,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz031",
+      "clubId": "bay",
+      "name": "Timur Sadykov",
+      "position": "GR",
+      "number": 1,
+      "age": 33,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz032",
+      "clubId": "bay",
+      "name": "Rauan Tulegenov",
+      "position": "FIX",
+      "number": 2,
+      "age": 28,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz033",
+      "clubId": "bay",
+      "name": "Arman Zhaksylykov",
+      "position": "ALA",
+      "number": 3,
+      "age": 23,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz034",
+      "clubId": "bay",
+      "name": "Nurlan Sadykov",
+      "position": "ALA",
+      "number": 4,
+      "age": 33,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz035",
+      "clubId": "bay",
+      "name": "Miras Tulegenov",
+      "position": "PIV",
+      "number": 5,
+      "age": 28,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz036",
+      "clubId": "elo",
+      "name": "Dias Omarov",
+      "position": "GR",
+      "number": 1,
+      "age": 23,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz037",
+      "clubId": "elo",
+      "name": "Aibek Iskakov",
+      "position": "FIX",
+      "number": 2,
+      "age": 33,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz038",
+      "clubId": "elo",
+      "name": "Alikhan Kairatuly",
+      "position": "ALA",
+      "number": 3,
+      "age": 28,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz039",
+      "clubId": "elo",
+      "name": "Daniyar Omarov",
+      "position": "ALA",
+      "number": 4,
+      "age": 23,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz040",
+      "clubId": "elo",
+      "name": "Aslan Iskakov",
+      "position": "PIV",
+      "number": 5,
+      "age": 33,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz041",
+      "clubId": "okz",
+      "name": "Erlan Akhmetov",
+      "position": "GR",
+      "number": 1,
+      "age": 28,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz042",
+      "clubId": "okz",
+      "name": "Timur Abdullin",
+      "position": "FIX",
+      "number": 2,
+      "age": 23,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz043",
+      "clubId": "okz",
+      "name": "Rauan Bekov",
+      "position": "ALA",
+      "number": 3,
+      "age": 33,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz044",
+      "clubId": "okz",
+      "name": "Arman Akhmetov",
+      "position": "ALA",
+      "number": 4,
+      "age": 28,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz045",
+      "clubId": "okz",
+      "name": "Nurlan Abdullin",
+      "position": "PIV",
+      "number": 5,
+      "age": 23,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz046",
+      "clubId": "tul",
+      "name": "Yerlan Yermekov",
+      "position": "GR",
+      "number": 1,
+      "age": 33,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz047",
+      "clubId": "tul",
+      "name": "Dias Nurgaliyev",
+      "position": "FIX",
+      "number": 2,
+      "age": 28,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz048",
+      "clubId": "tul",
+      "name": "Aibek Kassenov",
+      "position": "ALA",
+      "number": 3,
+      "age": 23,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz049",
+      "clubId": "tul",
+      "name": "Alikhan Yermekov",
+      "position": "ALA",
+      "number": 4,
+      "age": 33,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz050",
+      "clubId": "tul",
+      "name": "Daniyar Nurgaliyev",
+      "position": "PIV",
+      "number": 5,
+      "age": 28,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz051",
+      "clubId": "zhi",
+      "name": "Miras Sadykov",
+      "position": "GR",
+      "number": 1,
+      "age": 23,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz052",
+      "clubId": "zhi",
+      "name": "Erlan Tulegenov",
+      "position": "FIX",
+      "number": 2,
+      "age": 33,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz053",
+      "clubId": "zhi",
+      "name": "Timur Zhaksylykov",
+      "position": "ALA",
+      "number": 3,
+      "age": 28,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz054",
+      "clubId": "zhi",
+      "name": "Rauan Sadykov",
+      "position": "ALA",
+      "number": 4,
+      "age": 23,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz055",
+      "clubId": "zhi",
+      "name": "Arman Tulegenov",
+      "position": "PIV",
+      "number": 5,
+      "age": 33,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz056",
+      "clubId": "ord",
+      "name": "Aslan Omarov",
+      "position": "GR",
+      "number": 1,
+      "age": 28,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz057",
+      "clubId": "ord",
+      "name": "Yerlan Iskakov",
+      "position": "FIX",
+      "number": 2,
+      "age": 23,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz058",
+      "clubId": "ord",
+      "name": "Dias Kairatuly",
+      "position": "ALA",
+      "number": 3,
+      "age": 33,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz059",
+      "clubId": "ord",
+      "name": "Aibek Omarov",
+      "position": "ALA",
+      "number": 4,
+      "age": 28,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    },
+    {
+      "id": "kaz060",
+      "clubId": "ord",
+      "name": "Alikhan Iskakov",
+      "position": "PIV",
+      "number": 5,
+      "age": 23,
+      "nationality": "Cazaquistão",
+      "fictional": true
+    }
+  ]
+}
