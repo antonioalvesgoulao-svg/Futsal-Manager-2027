@@ -162,3 +162,15 @@ Desempenho: 30 ms por lance (dilatação em janela deslizante e cache de quem te
 | Bola | Continuidade também no início de passes e voos | Saltos 1 353 → 1 124 (~0,13% do tempo) |
 
 Motor igual (6,34 golos, 49,7/12,5/37,8). Saltos de jogadores 0,3 por jogo. Desempenho: 39 ms por lance.
+
+## Feedback do António (2/11/2026, 2 vídeos da Supertaça + fotos da festa)
+| Problema | Causa | Correção | Medido (12 jogos) |
+|---|---|---|---|
+| Portador de costas a proteger a bola muito tempo, ninguém abre linha | Contra-ataques que chegavam a ~11 m da baliza sem remate ficavam em "modo contra-ataque" até ao fim da posse (até 28 s): o portador ficava parado | Ao chegar à zona de finalização a equipa passa a ataque organizado; nenhum lance com bola passa de ~2,4 s | Proteções >2,5 s: 58 → 8 |
+| Jogadores das duas equipas amontoados | Colegas sem bola sem regra de espaço | Colegas a menos de 3,2 m afastam-se (largura/profundidade) | 6+ jogadores a <4 m da bola: 2,16% → 1,90% do tempo |
+| Defensor não tenta tirar a bola | Sem gesto | `poke`: braço nas costas do portador, perna a tentar chegar à bola | — |
+| Proteção "a arrastar" | Pose estática | `shield`: saltinhos para trás contra o defensor, sola em cima da bola | Pose vista em imagem |
+| Troféu enorme | Taça ampliada ×1,7 | Tamanho real (×0,85) | Imagem |
+| Pés enterrados no palanque | A pose repunha a altura a zero (só os saltos somavam o palanque) | Soma sempre a altura do palanque | Imagem |
+
+Motor igual (6,34 golos, 49,7/12,5/37,8); 33 ms por lance; jogo ao vivo sem erros.

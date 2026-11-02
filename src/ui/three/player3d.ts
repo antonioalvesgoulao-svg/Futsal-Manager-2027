@@ -632,14 +632,33 @@ export function pose(a: Actor, act: Act | undefined, gk: boolean, near: boolean,
       break;
     }
     case 'shield': {
-      // pivô de costas: protege a bola com o corpo e os braços
-      thigh[0].rotation.set(-0.45, 0, -0.2);
-      thigh[1].rotation.set(-0.45, 0, 0.2);
-      shin[0].rotation.x = shin[1].rotation.x = 0.8;
-      body.position.y = HIP - 0.13;
-      body.rotation.x = 0.35;
-      arm[0].rotation.set(0.3, 0, -0.95);
-      arm[1].rotation.set(0.3, 0, 0.95);
+      // proteção de costas para o defensor (futsal): pequenos saltinhos para trás contra ele, com a sola de um pé
+      // pisada em cima da bola; a outra perna aguenta o peso, joelhos fletidos, braços abertos a sentir o defensor
+      a.phase += dt * 9;
+      const hop = Math.max(0, Math.sin(a.phase)) * 0.06;
+      thigh[1].rotation.set(-0.55, 0, 0.12); // pé na bola (sola por cima)
+      shin[1].rotation.x = 0.35;
+      thigh[0].rotation.set(-0.35, 0, -0.18);
+      shin[0].rotation.x = 0.85;
+      body.position.y = HIP - 0.13 + hop;
+      body.rotation.x = 0.3;
+      arm[0].rotation.set(0.35, 0, -1.0);
+      arm[1].rotation.set(0.35, 0, 1.0);
+      break;
+    }
+    case 'poke': {
+      // defensor encostado ao portador: braço nas costas dele e a perna a tentar chegar à bola por um dos lados
+      a.phase += dt * 4;
+      const reach = 0.5 + 0.5 * Math.sin(a.phase);
+      thigh[1].rotation.set(-0.35 - 0.55 * reach, 0, 0.25 * reach);
+      shin[1].rotation.x = 0.5 - 0.35 * reach;
+      thigh[0].rotation.set(0.1, 0, -0.1);
+      shin[0].rotation.x = 0.55;
+      body.position.y = HIP - 0.12;
+      body.rotation.x = 0.28 + 0.1 * reach;
+      arm[0].rotation.set(-1.15, 0, -0.15);
+      arm[1].rotation.set(-0.6, 0, 0.35);
+      fore[0].rotation.x = -0.3;
       break;
     }
     case 'block': {

@@ -330,7 +330,7 @@ export class Highlight3D {
       const en = this.choreo?.energy?.[id];
       a.tired = en === undefined ? 0 : Math.max(0, Math.min(1, (68 - en) / 38)); // cansaço visível abaixo de ~68 de energia
       pose(a, act2, !!inf?.gk, near, dt);
-      if (act2?.kind === 'celebrate' && podH) a.g.position.y += podH; // os saltos no palanque partem do palanque
+      if (podH) a.g.position.y += podH; // em cima do palanque (a pose repõe a altura a zero; antes os pés ficavam enterrados)
       a.prev.copy(a.g.position);
     }
     for (const [id, a] of this.actors) if (!seen.has(id)) a.g.visible = false;
@@ -383,7 +383,7 @@ export class Highlight3D {
     const cup = new THREE.Group();
     cup.add(new THREE.Mesh(new THREE.LatheGeometry(prof, 28), gold));
     for (const s of [-1, 1]) { const h = new THREE.Mesh(new THREE.TorusGeometry(0.07, 0.015, 8, 16, Math.PI), gold); h.position.set(s * 0.19, 0.4, 0); h.rotation.z = s * -Math.PI / 2; cup.add(h); }
-    cup.scale.setScalar(1.7); // bem visível na mão do capitão
+    cup.scale.setScalar(0.85); // tamanho real (~70 cm), proporcional aos jogadores
     g.add(cup);
     // confetes nas cores do clube e dourado
     const N = 1400;
@@ -409,7 +409,7 @@ export class Highlight3D {
     const lifted = this.t >= LIFT_AT;
     if (cap) {
       // antes: segura a taça ao peito; depois: ergue-a acima da cabeça (a balançar)
-      const up = lifted ? 2.15 + Math.sin(this.t * 3) * 0.08 : 1.1;
+      const up = lifted ? 2.0 + Math.sin(this.t * 3) * 0.06 : 1.0;
       c.cup.position.set(cap.g.position.x, (lifted ? podiumHeight(cap.g.position.x, cap.g.position.z) : cap.g.position.y) + up, cap.g.position.z + 0.18);
     }
     c.conf.visible = lifted;
