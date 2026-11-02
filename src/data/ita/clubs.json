@@ -113,7 +113,7 @@
    "capacity": 1500,
    "capacityReal": false,
    "colors": [
-    "#39b54a",
+    "#4aa3df",
     "#ffffff"
    ],
    "reputation": 70,
@@ -275,5 +275,5 @@
    "league": "ita1"
   }
  ],
- "_info": " Cores: tiradas do site oficial de cada clube (cores principais do design, 2/11/2026); Benevento, Giovinazzo, Padova e Capurso sem site acessível (estimativa). Lotações reais (Wikipédia, Comune di Eboli, metacatania.it): Catania 5000, PalaVesuvio 3711, PalaSele 8000, Del Mauro 5195, PalaPansini 3350, PalaTedeschi 4000; restantes estimativa."
+ "_info": " Cores: tiradas do site oficial de cada clube (cores principais do design, 2/11/2026); Benevento, Giovinazzo, Padova e Capurso sem site acessível, Came Treviso corrigida pelo António (não veste verde; azul-claro/branco, estimativa). Lotações reais (Wikipédia, Comune di Eboli, metacatania.it): Catania 5000, PalaVesuvio 3711, PalaSele 8000, Del Mauro 5195, PalaPansini 3350, PalaTedeschi 4000; restantes estimativa."
 }
