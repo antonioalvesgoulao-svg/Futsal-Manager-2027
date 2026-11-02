@@ -6,11 +6,16 @@ const ES_FIRST = ['Javier', 'José', 'Antonio', 'Manuel', 'David', 'Juan', 'Fran
 const ES_LAST = ['García', 'Fernández', 'González', 'Rodríguez', 'López', 'Martínez', 'Sánchez', 'Pérez', 'Gómez', 'Martín', 'Jiménez', 'Ruiz', 'Hernández', 'Díaz', 'Moreno', 'Álvarez', 'Muñoz', 'Romero', 'Navarro', 'Torres', 'Domínguez', 'Gil', 'Vázquez', 'Serrano', 'Ramos', 'Blanco', 'Molina', 'Ortega'];
 
 export const isSpanish = (club?: Club) => club?.league === 'esp1';
+export const isKazakh = (club?: Club) => club?.league === 'kaz1';
+const KZ_FIRST = ['Arman','Nurlan','Aibek','Miras','Alikhan','Erlan','Daniyar','Timur','Aslan','Rauan','Yerlan','Dias'];
+const KZ_LAST = ['Sadykov','Nurgaliyev','Bekov','Omarov','Tulegenov','Kassenov','Akhmetov','Iskakov','Zhaksylykov','Yermekov','Abdullin','Kairatuly'];
 
 /** Nome e nacionalidade de um jovem gerado num clube espanhol (90% espanhóis, o resto da América do Sul). */
 export function spanishYouth(r: () => number) {
   return { name: `${ES_FIRST_YOUNG[Math.floor(r() * ES_FIRST_YOUNG.length)]} ${ES_LAST[Math.floor(r() * ES_LAST.length)]}`, nationality: r() < 0.9 ? 'Espanha' : r() < 0.5 ? 'Argentina' : 'Brasil' };
 }
+export function kazakhYouth(r: () => number) { return { name: `${KZ_FIRST[Math.floor(r()*KZ_FIRST.length)]} ${KZ_LAST[Math.floor(r()*KZ_LAST.length)]}`, nationality: 'Cazaquistão' }; }
+export const kazakhName = (r: () => number) => `${KZ_FIRST[Math.floor(r()*KZ_FIRST.length)]} ${KZ_LAST[Math.floor(r()*KZ_LAST.length)]}`;
 export const spanishName = (r: () => number) => `${ES_FIRST[Math.floor(r() * ES_FIRST.length)]} ${ES_LAST[Math.floor(r() * ES_LAST.length)]}`;
 /** Nacionalidade "da casa" de um clube. */
-export const homeNation = (club?: Club) => (isSpanish(club) ? 'Espanha' : 'Portugal');
+export const homeNation = (club?: Club) => (isSpanish(club) ? 'Espanha' : isKazakh(club) ? 'Cazaquistão' : 'Portugal');
