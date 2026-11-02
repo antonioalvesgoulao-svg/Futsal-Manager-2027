@@ -60,6 +60,8 @@ export const TEAM_LEVELS: Record<string, number> = {
   'Kairat Almaty': 82, Joinville: 78, 'Jaraguá Futsal': 76, 'Pato Futsal': 76, 'Magnus Futsal': 80, 'São José Futsal': 72, 'Foz Cataratas Futsal': 72,
   'Cascavel Futsal': 76, 'Carlos Barbosa': 78, Corinthians: 76, 'Joaçaba Futsal': 72, 'Santo André': 70, Blumenau: 70, 'Atlântico': 72,
   'Royal Sporting Anderlecht Futsal': 82, 'Etoile Lavalloise': 70, 'Haladás VSE': 64, 'FK Chrudim': 68, 'Uragan Ivano-Frankivsk': 70, 'MNK Olmissum': 66, ACCS: 66,
+  // Itália (Serie A): nomes canónicos de tools/ita/build_matchstats.py; clubes atuais com o nível do jogo, os outros estimativa
+  'Meta Catania': 82, 'Napoli Futsal': 80, 'L84 Torino': 81, 'Feldi Eboli': 77, 'Sandro Abate': 74, 'Came Treviso': 73, 'Sporting Sala Consilina': 71, 'Roma 1927': 69, 'Benevento 5': 68, 'Active Network': 67, 'Giovinazzo C5': 64, 'Petrarca Padova': 64, 'Capurso': 63, 'Olimpus Roma': 76, 'Real San Giuseppe': 72, 'Futsal Pescara': 72, 'Ciampino Aniene': 68, 'Sporting Ciampino': 62, 'CMB Matera': 72, '360 GG Monastir': 64, 'Città di Melilli': 62, 'Futsal Polistena': 62, 'Nuova Comauto Pistoia': 62, 'Olimpia Verona': 60, 'Saviatesta Mantova': 64, 'Lido di Ostia': 66, 'Manfredonia C5': 62, 'Pirossigeno Cosenza': 64, 'CDM Futsal': 62,
   // Estrangeiro
   Barcelona: 96, 'ElPozo Murcia Costa Cálida': 90, 'Illes Balears Palma': 93,
   'Real Betis': 78, Levante: 82, 'Ribera Navarra': 80, 'ETB Calviá': 55, 'Wanapix AD Sala 10': 70,
@@ -90,6 +92,8 @@ const LEAGUE_OF: Record<string, number> = {
   'Ecocity Genzano': 72, 'Fortitudo Pomezia': 72, 'Italservice Pesaro': 72, Canosa: 60, 'Nyírbátori': 55, 'Haladás': 55,
   'MNK Osijek': 55, 'Futsal Pula': 55, 'Novo Vrijeme': 55, 'Panta Walon': 50, Omonia: 45, 'New Vision Georgians': 42,
   'United Galati': 52, 'Araz Naxçivan': 55, 'Piast Gliwice': 65, 'KS Constract Lubawa': 65, 'Svarog FC Teplice': 58,
+  // Serie A italiana (estimativa: abaixo da Liga Placard e da Liga Prime)
+  'Meta Catania': 70, 'Napoli Futsal': 70, 'L84 Torino': 70, 'Feldi Eboli': 70, 'Sandro Abate': 70, 'Came Treviso': 70, 'Sporting Sala Consilina': 70, 'Roma 1927': 70, 'Benevento 5': 70, 'Active Network': 70, 'Giovinazzo C5': 70, 'Petrarca Padova': 70, 'Capurso': 70, 'Olimpus Roma': 70, 'Real San Giuseppe': 70, 'Futsal Pescara': 70, 'Ciampino Aniene': 70, 'Sporting Ciampino': 70, 'CMB Matera': 70, '360 GG Monastir': 70, 'Città di Melilli': 70, 'Futsal Polistena': 70, 'Nuova Comauto Pistoia': 70, 'Olimpia Verona': 70, 'Saviatesta Mantova': 70, 'Lido di Ostia': 70, 'Manfredonia C5': 70, 'Pirossigeno Cosenza': 70, 'CDM Futsal': 70,
   // Médio Oriente e América do Sul
   'Al-Nassr': 48, 'Al-Qadisiyah': 48, 'Al-Ula FC': 48, 'Al-Riyadh': 48, 'Al-Tadhamon': 42, Magallanes: 38,
 };
