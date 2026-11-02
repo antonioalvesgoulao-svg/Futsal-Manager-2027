@@ -52,8 +52,25 @@ export const REF_PAIRS_ESP: RefPair[] = [
   { id: 'e21', names: ['Francisco J. Marazuela', 'David Pizarro'], tolerance: 1.11, cards: 1.07, harsh: 1.2, real: true, top: false }, // Castellano - Leonés / Andaluz, 2+2 épocas na 1.ª
 ];
 
+// Itália: a lista oficial da CAN 5 (AIA) não está publicada num sítio acessível e o site da Divisione não indica os árbitros dos
+// jogos; duplas com nomes FICTÍCIOS (assinalados no jogo) e temperamento sorteado como em Portugal, até haver a lista real.
+export const REF_PAIRS_ITA: RefPair[] = [
+  { id: 'i1', names: ['Stefano Grasso', 'Andrea Ferraro'], tolerance: 0.85, cards: 1.06, harsh: 0.91, real: false, top: true },
+  { id: 'i2', names: ['Marco Morelli', 'Luca Vitale'], tolerance: 0.87, cards: 1.1, harsh: 1.1, real: false, top: true },
+  { id: 'i3', names: ['Claudio Monti', 'Simone Martini'], tolerance: 0.93, cards: 1.18, harsh: 0.94, real: false, top: true },
+  { id: 'i4', names: ['Roberto Galli', 'Matteo Leone'], tolerance: 0.99, cards: 0.88, harsh: 1.17, real: false, top: false },
+  { id: 'i5', names: ['Emanuele Sala', 'Paolo Riva'], tolerance: 1.02, cards: 1.19, harsh: 0.97, real: false, top: false },
+  { id: 'i6', names: ['Fabio Pellegrini', 'Giorgio Farina'], tolerance: 1.11, cards: 1.19, harsh: 1.17, real: false, top: false },
+  { id: 'i7', names: ['Alessio Benedetti', 'Michele Cattaneo'], tolerance: 0.96, cards: 1.05, harsh: 1.15, real: false, top: false },
+  { id: 'i8', names: ['Federico Silvestri', 'Gianluca Bianchi'], tolerance: 1.02, cards: 1.23, harsh: 1.01, real: false, top: false },
+  { id: 'i9', names: ['Nicola Palumbo', 'Antonio Orlando'], tolerance: 1.11, cards: 1.07, harsh: 1.12, real: false, top: false },
+  { id: 'i10', names: ['Daniele Fabbri', 'Davide Testa'], tolerance: 1.11, cards: 1.23, harsh: 1.01, real: false, top: false },
+];
+
 /** Clássicos espanhóis (estimativa): dérbi de Múrcia (ElPozo x Cartagena) e jogos entre os 5 grandes. */
 const ESP_BIG = ['bar', 'epz', 'pal', 'jca', 'int'];
+/** Itália: os 4 mais fortes (estimativa) e o dérbi da Campânia (Napoli x Feldi Eboli). */
+const ITA_BIG = ['cat', 'nap', 'l84', 'ebo'];
 
 export const TEMPER_LABEL = (p: RefPair) =>
   `${p.tolerance >= 1.1 ? 'deixa jogar' : p.tolerance <= 0.9 ? 'apita muito' : 'critério médio'}, ${p.cards >= 1.15 ? 'cartões fáceis' : p.cards <= 0.9 ? 'poucos cartões' : 'cartões normais'}`;
@@ -71,6 +88,8 @@ export function importanceOf(s: GameState, f: Fixture): number {
   if (big.includes(f.home) && big.includes(f.away)) imp += 0.5;
   else if ([f.home, f.away].sort().join('-') === 'epz-jca') imp += 0.45;
   else if (ESP_BIG.includes(f.home) && ESP_BIG.includes(f.away)) imp += 0.3;
+  else if ([f.home, f.away].sort().join('-') === 'ebo-nap') imp += 0.35;
+  else if (ITA_BIG.includes(f.home) && ITA_BIG.includes(f.away)) imp += 0.25;
   if (/Final/.test(f.stage) && !/Meias|Quartos/.test(f.stage)) imp += 0.45;
   else if (kindOf(f.comp) === 'playoff') imp += 0.25;
   else if (f.knockout) imp += 0.15;
@@ -90,7 +109,8 @@ export function importanceOf(s: GameState, f: Fixture): number {
 /** Dupla nomeada: os jogos grandes vão para as duplas de topo. */
 export function refereesFor(s: GameState, f: Fixture): RefPair {
   const imp = importanceOf(s, f);
-  const all = f.comp === 'esp' || f.comp === 'espPlayoff' || f.comp === 'copaRey' || f.comp === 'copaEsp' || f.comp === 'superEsp' ? REF_PAIRS_ESP : REF_PAIRS;
+  const all = f.comp === 'esp' || f.comp === 'espPlayoff' || f.comp === 'copaRey' || f.comp === 'copaEsp' || f.comp === 'superEsp' ? REF_PAIRS_ESP
+    : f.comp === 'ita' || f.comp === 'itaPlayoff' || f.comp === 'coppaIta' || f.comp === 'superIta' ? REF_PAIRS_ITA : REF_PAIRS;
   const pool = imp >= 0.5 ? all.filter((p) => p.top) : all;
   return pool[Math.floor(hash(f.id + s.season.year) * pool.length)];
 }
@@ -104,6 +124,8 @@ export function severity(p: RefPair) {
 // bandeira de Portugal (desenho simples: verde, vermelho e esfera amarela)
 const FLAG_PT = `<svg viewBox="0 0 30 20" width="21" height="14" style="vertical-align:-2px;border-radius:2px"><rect width="12" height="20" fill="#046a38"/><rect x="12" width="18" height="20" fill="#da291c"/><circle cx="12" cy="10" r="4.2" fill="#ffe900"/><circle cx="12" cy="10" r="2.4" fill="#da291c"/></svg>`;
 
+const FLAG_IT = `<svg viewBox="0 0 30 20" width="21" height="14" style="vertical-align:-2px;border-radius:2px"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ce2b37"/></svg>`;
+
 const FLAG_ES = `<svg viewBox="0 0 30 20" width="21" height="14" style="vertical-align:-2px;border-radius:2px"><rect width="30" height="20" fill="#c60b1e"/><rect y="5" width="30" height="10" fill="#ffc400"/></svg>`;
 
 /** Dupla de arbitragem com a bandeira e uma barra de severidade (verde, pouco cheia → vermelha, cheia). */
@@ -111,6 +133,6 @@ export function refBadgeHtml(p: RefPair) {
   const sv = severity(p);
   const w = Math.round(12 + sv * 88);
   const col = `hsl(${Math.round(120 - sv * 120)}, 75%, 45%)`;
-  const FL = p.id.startsWith('e') ? FLAG_ES : FLAG_PT;
+  const FL = p.id.startsWith('e') ? FLAG_ES : p.id.startsWith('i') ? FLAG_IT : FLAG_PT;
   return `<span class="refb">${FL} ${p.names[0]} ${FL} ${p.names[1]}${p.real ? '' : ' <span class="small muted">(nomes fictícios)</span>'} <span class="refbar" title="Severidade: ${TEMPER_LABEL(p)}"><i style="width:${w}%;background:${col}"></i></span> <span class="small muted">${TEMPER_LABEL(p)}</span></span>`;
 }

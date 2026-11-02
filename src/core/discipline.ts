@@ -16,9 +16,13 @@ import type { GameState } from './types';
 // - Art. 141.5: os amarelos NUNCA se acumulam (sem castigos por acumulação)
 // - Art. 145.2: tentativa de agressão / jogo violento sem dano: até 3 jogos (confrontos); com dano: falta grave, 4-12 (o jogo não simula dano)
 // - Art. 143.3: a suspensão cumpre-se nos jogos oficiais seguintes, seja qual for a competição
+// Itália (FIGC, Codice di Giustizia Sportiva e comunicados da Divisione Calcio a 5; regra do futebol desde 2015 aplicada ao
+// calcio a 5): Serie A (com play-off) 1 jogo ao 5.º amarelo (diffida ao 4.º), depois ao 10.º, 14.º, 17.º, 19.º e a cada amarelo;
+// Coppa Italia: 1 jogo a cada 2 amarelos, só nessa competição. Vermelhos: 1 jogo (2 amarelos, impedir golo); confronto 1-3,
+// agressão/conduta violenta 3+ (estimativa pelo CGS)
 /** Liga e play-off são a mesma competição para efeitos de castigo. */
-export type DComp = Exclude<CompId, 'playoff' | 'espPlayoff' | 'espAp' | 'espCl'>;
-export const dcomp = (c: CompId): DComp => (c === 'playoff' ? 'liga' : ['esp', 'espPlayoff', 'espAp', 'espCl', 'copaEsp', 'superEsp', 'copaRey'].includes(c) ? 'esp' : (c as DComp));
+export type DComp = Exclude<CompId, 'playoff' | 'espPlayoff' | 'espAp' | 'espCl' | 'itaPlayoff'>;
+export const dcomp = (c: CompId): DComp => (c === 'playoff' ? 'liga' : c === 'itaPlayoff' ? 'ita' : ['esp', 'espPlayoff', 'espAp', 'espCl', 'copaEsp', 'superEsp', 'copaRey'].includes(c) ? 'esp' : (c as DComp));
 
 export interface Suspension { comp: DComp; games: number; reason: string; yellowsOnly?: boolean }
 export interface Discipline {
@@ -31,6 +35,7 @@ export interface Discipline {
 export const emptyDiscipline = (): Discipline => ({ yellows: {}, sanctioned: {}, phase: 'liga', bans: {} });
 
 const THRESH = (n: number) => n === 5 || n === 9 || (n >= 12 && (n - 12) % 3 === 0);
+const THRESH_ITA = (n: number) => n === 5 || n === 10 || n === 14 || n === 17 || n >= 19;
 
 /** Jogos de castigo de um jogador numa competição. */
 export function banFor(s: GameState, pid: string, comp: CompId) {
@@ -81,7 +86,10 @@ export function applyDiscipline(s: GameState, f: Fixture, m: MatchResult, name: 
         // agressão / jogo violento: castigo conforme o dano (dias de paragem do atingido)
         const injDays = st.victim ? s.injuries?.[st.victim]?.days ?? 0 : 0;
         let g: number;
-        if (comp === 'esp') {
+        if (comp === 'ita' || comp === 'coppaIta' || comp === 'superIta') {
+          // FIGC (CGS, conduta violenta): 3 jogos ou mais, conforme o dano (estimativa)
+          g = 3 + Math.floor(rnd() * rnd() * 4) + Math.floor(injDays / 15);
+        } else if (comp === 'esp') {
           // RFEF Art. 145: agressão a jogador = grave, 4-12; jogo violento com baixa >2 semanas 4-12, >2 meses 13-24; sem dano até 3
           if (k === 'violento' && injDays > 60) g = 13 + Math.floor(rnd() * 12);
           else if (k === 'agressao' || injDays > 14) g = 4 + Math.floor(rnd() * rnd() * 9) + (injDays > 14 ? 2 : 0);
@@ -92,8 +100,8 @@ export function applyDiscipline(s: GameState, f: Fixture, m: MatchResult, name: 
         }
         add(id, Math.min(24, g), k === 'agressao' ? `agressão a adversário${injDays ? `, que ficou ${injDays} dias parado` : ''}` : `entrada violenta${injDays ? `, adversário ${injDays} dias parado` : ''}`);
       }
-      else if (k === 'dogso') add(id, comp === 'esp' ? 1 : rnd() < 0.75 ? 1 : 2, 'vermelho direto: impediu oportunidade de golo');
-      else if (comp === 'esp') add(id, 1 + Math.floor(rnd() * rnd() * 3), 'vermelho direto em confronto'); // Art. 145.2: até 3 jogos
+      else if (k === 'dogso') add(id, comp === 'esp' || comp === 'ita' || comp === 'coppaIta' ? 1 : rnd() < 0.75 ? 1 : 2, 'vermelho direto: impediu oportunidade de golo');
+      else if (comp === 'esp' || comp === 'ita' || comp === 'coppaIta' || comp === 'superIta') add(id, 1 + Math.floor(rnd() * rnd() * 3), 'vermelho direto em confronto'); // RFEF 145.2 até 3; Itália 1-3 (estimativa)
       else {
         // confronto: agressão sem lesão (Art. 154, 1 a 8; na prática quase sempre perto do mínimo)
         const g = 1 + Math.floor(rnd() * rnd() * 5);
@@ -101,6 +109,12 @@ export function applyDiscipline(s: GameState, f: Fixture, m: MatchResult, name: 
       }
     }
     // acumulação de amarelos (só Liga Placard; os 2 amarelos da expulsão não contam)
+    // Itália: Serie A (5.º, 10.º, 14.º, 17.º, 19.º…) e Coppa Italia (a cada 2), contagens separadas por competição
+    if ((comp === 'ita' || comp === 'coppaIta') && st.yellow > 0 && !(st.red && (st.redKind ?? 'twoYellows') === 'twoYellows')) {
+      const key = `${id}@${comp}`;
+      const n = (d.yellows[key] = (d.yellows[key] ?? 0) + st.yellow);
+      if (comp === 'ita' ? THRESH_ITA(n) && d.sanctioned[key] !== n : n % 2 === 0) { d.sanctioned[key] = n; add(id, 1, `${n}.º amarelo${comp === 'coppaIta' ? ' na Coppa Italia' : ''}`, true); }
+    }
     if (comp === 'liga' && st.yellow > 0 && !(st.red && (st.redKind ?? 'twoYellows') === 'twoYellows')) {
       const n = (d.yellows[id] = (d.yellows[id] ?? 0) + st.yellow);
       if (THRESH(n)) { d.sanctioned[id] = n; add(id, 1, `${n}.º amarelo`, true); }

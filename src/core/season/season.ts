@@ -92,7 +92,7 @@ const newId = (y: number) => `f${y}_${++fid}`;
  * @param ranking  clubes ordenados pela época anterior (melhor primeiro): define cabeças de série na Taça
  * @param supercup [campeão, vencedor da Taça ou finalista]
  */
-export function createSeason(y: number, ranking: string[], supercup: [string, string], esp?: { ranking: string[]; four: string[] }): SeasonState {
+export function createSeason(y: number, ranking: string[], supercup: [string, string], esp?: { ranking: string[]; four: string[] }, ita?: { ranking: string[]; four: string[] }): SeasonState {
   fid = 0;
   const r = rng('calendario' + y);
   const shuffled = [...ranking].sort(() => r() - 0.5);
@@ -118,6 +118,7 @@ export function createSeason(y: number, ranking: string[], supercup: [string, st
 
   const season: SeasonState = { year: y, label: `${y}/${String((y + 1) % 100).padStart(2, '0')}`, fixtures, series: [], winners: {}, finished: false };
   if (esp) addSpain(season, y, esp.ranking, esp.four);
+  if (ita) addItaly(season, y, ita.ranking, ita.four);
   return season;
 }
 
@@ -253,6 +254,132 @@ function afterSpain(s: SeasonState, clubIds: string[], name: (id: string) => str
   }
 }
 
+// ---------------- Itália (Divisione Calcio a 5, Serie A) ----------------
+// Formato 2026/27 (Comunicati Ufficiali 027, 028 e 029 da Divisione Calcio a 5, agosto 2026):
+// - Serie A: 14 clubes, 2 voltas (26 jornadas), 19 set. 2026 – 9 abr. 2027
+// - Play-in (gara única em casa da melhor classificada; empate: prolongamento 2x5 e passa a melhor classificada):
+//   A 7.º-8.º (vencedor = 7.ª cabeça de série), B 9.º-10.º, C perdedor A vs vencedor B (vencedor = 8.ª)
+// - Play-off: quartos 1-8, 4-5, 3-6, 2-7; meias Q1-Q2 e Q3-Q4; tudo à melhor de 3, jogo 1 em casa do pior classificado,
+//   jogos 2 e 3 em casa do melhor; prolongamento 2x5 e penáltis
+// - Descidas: os 2 últimos; play-out a duas mãos entre o 11.º e o 12.º (ida em casa do 12.º); empate no agregado:
+//   prolongamento e fica o mais bem classificado; com 8+ pontos de diferença não há play-out e desce o 12.º
+// - Coppa Italia: Final Eight com os 8 primeiros no fim da 1.ª volta (modalidades a definir pela Divisione: quartos 1-8, 4-5,
+//   3-6, 2-7 em campo neutro, estimativa)
+// - Supercoppa: Final Four (2026/27: L84 campeão, Meta Catania Coppa Italia, Napoli melhor da fase regular, Feldi finalista
+//   da Coppa); a partir de 2027/28 campeão, Coppa Italia, 1.º da fase regular e Coppa della Divisione (esta não existe no jogo:
+//   entra o finalista da Coppa Italia)
+// Datas da Coppa Italia e da Supercoppa, prolongamento do play-out (simplificado: empate no agregado = fica o 11.º): estimativa.
+export function italyDates(y: number) {
+  const n = y + 1;
+  const fri = (d: string) => nextWeekday(d, 5);
+  return {
+    superSF: `${y}-09-05`, superF: `${y}-09-06`, leagueStart: fri(`${y}-09-18`), leagueEnd: `${n}-04-09`,
+    coppaQF: `${n}-03-05`, coppaSF: `${n}-03-06`, coppaF: `${n}-03-07`,
+    playInAB: `${n}-04-24`, playInC: `${n}-05-01`, qf: `${n}-05-08`, sf: `${n}-05-22`, f: `${n}-06-05`, playout1: `${n}-04-24`, playout2: `${n}-05-01`,
+  };
+}
+
+function addItaly(s: SeasonState, y: number, ranking: string[], four: string[]) {
+  const k = italyDates(y);
+  const r = rng('calendario-ita' + y);
+  const first = roundRobin([...ranking].sort(() => r() - 0.5));
+  const rounds = [...first, ...first.map((g) => g.map(([a, b]) => [b, a] as [string, string]))];
+  const blocked = (d: string) => (d >= `${y}-12-23` && d <= `${y + 1}-01-03`) || (d >= addDays(k.coppaQF, -2) && d <= addDays(k.coppaF, 1));
+  const dates: string[] = [];
+  for (let d = k.leagueStart; dates.length < rounds.length; d = addDays(d, 7)) if (!blocked(d)) dates.push(d);
+  rounds.forEach((games, i) => games.forEach(([h, a]) => s.fixtures.push({ id: newId(y), comp: 'ita', stage: `Giornata ${i + 1}`, round: i + 1, date: dates[i], home: h, away: a, knockout: false })));
+  if (four.length >= 4) {
+    s.fixtures.push({ id: newId(y), comp: 'superIta', stage: 'Meias-finais', date: k.superSF, home: four[0], away: four[3], neutral: true, knockout: true });
+    s.fixtures.push({ id: newId(y), comp: 'superIta', stage: 'Meias-finais', date: k.superSF, home: four[1], away: four[2], neutral: true, knockout: true });
+  }
+  s.ita = {};
+}
+
+function afterItaly(s: SeasonState, clubIds: string[], name: (id: string) => string, news: string[]) {
+  if (!s.ita || !clubIds.length) return;
+  const e = s.ita;
+  const k = italyDates(s.year);
+  const ssf = byStage(s, 'superIta', 'Meias-finais');
+  if (done(ssf) && !byStage(s, 'superIta', 'Final').length) addCupRound(s, 'superIta', 'Final', k.superF, [[winnerOf(ssf[0])!, winnerOf(ssf[1])!]], true);
+  const liga = s.fixtures.filter((f) => f.comp === 'ita');
+  const half = Math.max(...liga.map((f) => f.round ?? 0)) / 2;
+  // fim da 1.ª volta: Coppa Italia (Final Eight com os 8 primeiros)
+  if (!e.halfTable && done(liga.filter((f) => (f.round ?? 0) <= half))) {
+    const t = (e.halfTable = leagueTable(s, clubIds, half, 'ita').map((x) => x.club));
+    news.push(`Coppa Italia: Final Eight com ${t.slice(0, 8).map(name).join(', ')}.`);
+    addCupRound(s, 'coppaIta', 'Quartos-de-final', k.coppaQF, [[t[0], t[7]], [t[3], t[4]], [t[2], t[5]], [t[1], t[6]]], true);
+  }
+  for (const [from, to, d] of [['Quartos-de-final', 'Meias-finais', k.coppaSF], ['Meias-finais', 'Final', k.coppaF]] as const) {
+    const prev = byStage(s, 'coppaIta', from);
+    if (done(prev) && !byStage(s, 'coppaIta', to).length) {
+      const ws = prev.map(winnerOf) as string[];
+      const pairs: [string, string][] = [];
+      for (let i = 0; i < ws.length; i += 2) pairs.push([ws[i], ws[i + 1]]);
+      addCupRound(s, 'coppaIta', to, d, pairs, true);
+    }
+  }
+  for (const comp of ['coppaIta', 'superIta'] as CompId[]) {
+    const fin = byStage(s, comp, 'Final')[0];
+    if (fin?.result && !s.winners[comp]) {
+      s.winners[comp] = winnerOf(fin)!;
+      news.push(`${name(s.winners[comp]!)} vence a ${comp === 'coppaIta' ? 'Coppa Italia' : 'Supercoppa Italiana'}.`);
+    }
+  }
+  // fim da fase regular: play-in, play-off (1.º-6.º diretos) e play-out/descidas
+  if (!e.regularTable && done(liga)) {
+    const t = (e.regularTable = leagueTable(s, clubIds, 99, 'ita').map((x) => x.club));
+    news.push(`${name(t[0])} termina a fase regular da Serie A em 1.º. Play-off: ${t.slice(0, 6).map(name).join(', ')}; play-in: ${t.slice(6, 10).map(name).join(', ')}.`);
+    s.fixtures.push({ id: newId(s.year), comp: 'itaPlayoff', stage: 'Play-in A', date: k.playInAB, home: t[6], away: t[7], knockout: true, tieToHome: true });
+    s.fixtures.push({ id: newId(s.year), comp: 'itaPlayoff', stage: 'Play-in B', date: k.playInAB, home: t[8], away: t[9], knockout: true, tieToHome: true });
+    const n = t.length;
+    const tab = leagueTable(s, clubIds, 99, 'ita');
+    const pts = (c: string) => tab.find((x) => x.club === c)!.pts;
+    news.push(`${name(t[n - 1])} e ${name(t[n - 2])} descem à Serie A2 Elite (as descidas efetivas entram quando houver divisões inferiores no jogo).`);
+    if (pts(t[n - 4]) - pts(t[n - 3]) >= 8) news.push(`Sem play-out (8+ pontos de diferença): ${name(t[n - 3])} desce diretamente.`);
+    else {
+      s.fixtures.push({ id: newId(s.year), comp: 'itaPlayoff', stage: 'Play-out - ida', date: k.playout1, home: t[n - 3], away: t[n - 4], knockout: false });
+      s.fixtures.push({ id: newId(s.year), comp: 'itaPlayoff', stage: 'Play-out - volta', date: k.playout2, home: t[n - 4], away: t[n - 3], knockout: false });
+    }
+  }
+  const t = e.regularTable;
+  if (!t) return;
+  const rank = (x: string) => t.indexOf(x);
+  const order = (a: string, b: string): [string, string] => (rank(a) <= rank(b) ? [a, b] : [b, a]);
+  const pa = byStage(s, 'itaPlayoff', 'Play-in A'), pb = byStage(s, 'itaPlayoff', 'Play-in B');
+  if (done(pa) && done(pb) && !byStage(s, 'itaPlayoff', 'Play-in C').length) {
+    const loserA = winnerOf(pa[0]) === pa[0].home ? pa[0].away : pa[0].home;
+    const [h, a] = order(loserA, winnerOf(pb[0])!);
+    s.fixtures.push({ id: newId(s.year), comp: 'itaPlayoff', stage: 'Play-in C', date: k.playInC, home: h, away: a, knockout: true, tieToHome: true });
+  }
+  const pc = byStage(s, 'itaPlayoff', 'Play-in C');
+  const ser = (stage: string) => s.series.filter((x) => x.comp === 'itaPlayoff' && x.stage === stage);
+  if (done(pc) && !ser('Quartos-de-final').length) {
+    const seed7 = winnerOf(pa[0])!, seed8 = winnerOf(pc[0])!;
+    for (const [hi, lo] of [[t[0], seed8], [t[3], t[4]], [t[2], t[5]], [t[1], seed7]] as [string, string][]) makeSeries(s, 'Quartos-de-final', hi, lo, 3, k.qf, 'itaPlayoff', true);
+  }
+  const qf = ser('Quartos-de-final');
+  if (qf.length === 4 && qf.every((x) => x.winner) && !ser('Meias-finais').length) {
+    makeSeries(s, 'Meias-finais', ...order(qf[0].winner!, qf[1].winner!), 3, k.sf, 'itaPlayoff', true);
+    makeSeries(s, 'Meias-finais', ...order(qf[2].winner!, qf[3].winner!), 3, k.sf, 'itaPlayoff', true);
+  }
+  const sf = ser('Meias-finais');
+  if (sf.length === 2 && sf.every((x) => x.winner) && !ser('Final').length) makeSeries(s, 'Final', ...order(sf[0].winner!, sf[1].winner!), 3, k.f, 'itaPlayoff', true);
+  const fin = ser('Final')[0];
+  if (fin?.winner && !s.winners.ita) {
+    s.winners.ita = fin.winner;
+    news.push(`${name(fin.winner)} é campeão de Itália (Scudetto)!`);
+  }
+  const po = [...byStage(s, 'itaPlayoff', 'Play-out - ida'), ...byStage(s, 'itaPlayoff', 'Play-out - volta')];
+  if (po.length === 2 && done(po) && !e.playout) {
+    e.playout = true;
+    const n = t.length, a = t[n - 4], b = t[n - 3];
+    const ga = (po[0].home === a ? po[0].result!.score[0] : po[0].result!.score[1]) + (po[1].home === a ? po[1].result!.score[0] : po[1].result!.score[1]);
+    const gb = (po[0].home === b ? po[0].result!.score[0] : po[0].result!.score[1]) + (po[1].home === b ? po[1].result!.score[0] : po[1].result!.score[1]);
+    const stays = ga >= gb ? a : b; // empate no agregado: fica o mais bem classificado (simplificação do prolongamento)
+    news.push(`Play-out: ${name(stays)} garante a permanência na Serie A; ${name(stays === a ? b : a)} desce.`);
+  }
+}
+
 export interface TableRow {
   club: string;
   p: number;
@@ -300,15 +427,17 @@ export function leagueTable(s: SeasonState, clubIds: string[], upToRound = 99, c
 // Vencedor de um jogo a eliminar
 export function winnerOf(f: Fixture): string | null {
   if (!f.result) return null;
+  if (f.tieToHome && !f.result.pens && f.result.score[0] === f.result.score[1]) return f.home; // Itália: empate = passa a melhor classificada
   const [h, a] = f.result.pens ?? f.result.score;
   return h > a ? f.home : f.away;
 }
 
-function makeSeries(s: SeasonState, stage: string, hi: string, lo: string, bestOf: number, firstDate: string, comp: CompId = 'playoff'): Series {
+function makeSeries(s: SeasonState, stage: string, hi: string, lo: string, bestOf: number, firstDate: string, comp: CompId = 'playoff', italian = false): Series {
   const id = `s${s.year}_${s.series.length + 1}`;
   // melhor de 3: casa do melhor nos jogos 1 e 3; melhor de 5: jogos 1, 2 e 5
-  const homes = bestOf === 3 ? [hi, lo, hi] : [hi, hi, lo, lo, hi];
-  const gaps = bestOf === 3 ? [0, 4, 7] : [0, 4, 7, 11, 14];
+  // Itália (Comunicato 029, 1.3): jogo 1 em casa do pior classificado, jogos 2 e 3 em casa do melhor
+  const homes = italian ? [lo, hi, hi] : bestOf === 3 ? [hi, lo, hi] : [hi, hi, lo, lo, hi];
+  const gaps = italian ? [0, 5, 7] : bestOf === 3 ? [0, 4, 7] : [0, 4, 7, 11, 14];
   const ser: Series = { id, stage, hi, lo, bestOf, wins: [0, 0], fixtureIds: [], ...(comp !== 'playoff' ? { comp } : {}) };
   homes.forEach((h, i) => {
     const f: Fixture = {
@@ -333,7 +462,7 @@ const byStage = (s: SeasonState, comp: CompId, stage: string) => s.fixtures.filt
  * Depois de cada dia de jogos: atualiza séries, cria as rondas seguintes e regista vencedores.
  * Devolve mensagens para as notícias.
  */
-export function afterMatchday(s: SeasonState, clubIds: string[], name: (id: string) => string, espIds: string[] = []): string[] {
+export function afterMatchday(s: SeasonState, clubIds: string[], name: (id: string) => string, espIds: string[] = [], itaIds: string[] = []): string[] {
   const news: string[] = [];
   const k = keyDates(s.year);
   const r = rng('sorteio' + s.year + s.fixtures.filter((f) => f.result).length);
@@ -444,6 +573,7 @@ export function afterMatchday(s: SeasonState, clubIds: string[], name: (id: stri
     news.push(`${name(fin.winner)} é campeão nacional!`);
   }
   afterSpain(s, espIds, name, news);
+  afterItaly(s, itaIds, name, news);
   return news;
 }
 

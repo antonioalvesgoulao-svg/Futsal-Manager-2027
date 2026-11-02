@@ -1,7 +1,7 @@
 // Pavilhões e assistência, ao estilo do Football Manager: a procura depende da dimensão e
 // reputação do clube, do momento (classificação e forma), do adversário, da importância do
 // jogo e de um pouco de acaso; a lotação real do pavilhão é o limite.
-import type { Fixture } from './season/types';
+import { leagueCompOf, type Fixture } from './season/types';
 import { leagueTable } from './season/season';
 import type { GameState } from './types';
 
@@ -99,7 +99,7 @@ export const NEUTRALS: ArenaProfile[] = [
 ];
 
 /** Cada competição joga num dos campos neutros, rodando de época para época. */
-/** Pavilhão espanhol a partir dos dados do clube (aproximação: sem fotos do interior ainda). */
+/** Pavilhão espanhol ou italiano a partir dos dados do clube (aproximação: sem fotos do interior ainda). */
 function spanishArena(c: { arena: string; capacity?: number; capacityReal?: boolean; colors: [string, string] }): ArenaProfile {
   const cap = c.capacity ?? 1500;
   const big = cap >= 3000;
@@ -113,11 +113,12 @@ export function neutralFor(comp: string, year: number): ArenaProfile {
 
 export function arenaOf(s: GameState, f: Fixture): ArenaProfile {
   const c = s.clubs.find((x) => x.id === f.home);
-  if (c?.league === 'esp1') {
+  if (c?.league === 'esp1' || c?.league === 'ita1') {
     if (!f.neutral) return ARENAS[c.id] ?? spanishArena(c);
-    // campo neutro em Espanha: um dos grandes pavilhões, que não seja de quem joga, rodando por época (estimativa)
-    const hosts = s.clubs.filter((x) => x.league === 'esp1' && (x.capacity ?? 0) >= 4500 && x.id !== f.home && x.id !== f.away);
-    const comps = ['superEsp', 'copaEsp', 'copaRey'];
+    // campo neutro em Espanha/Itália: um dos grandes pavilhões, que não seja de quem joga, rodando por época (estimativa)
+    const big = c.league === 'esp1' ? 4500 : 2500;
+    const hosts = s.clubs.filter((x) => x.league === c.league && (x.capacity ?? 0) >= big && x.id !== f.home && x.id !== f.away);
+    const comps = ['superEsp', 'copaEsp', 'copaRey', 'superIta', 'coppaIta'];
     const host = hosts[(comps.indexOf(f.comp) + s.season.year) % hosts.length] ?? c;
     return ARENAS[host.id] ?? spanishArena(host);
   }
@@ -157,7 +158,7 @@ export function attendance(s: GameState, f: Fixture): Crowd {
   const h = s.clubs.find((c) => c.id === f.home)!;
   const a = s.clubs.find((c) => c.id === f.away)!;
   // Espanha enche mais os pavilhões do que Portugal (estimativa ×1,5 na procura)
-  const country = h.league === 'esp1' ? 1.5 : 1;
+  const country = h.league === 'esp1' ? 1.5 : h.league === 'ita1' ? 1.2 : 1; // Itália: estimativa
   let people: number;
   if (f.neutral) people = (demand(h.reputation) + demand(a.reputation)) * 0.75;
   else {
@@ -166,16 +167,16 @@ export function attendance(s: GameState, f: Fixture): Crowd {
     people *= 1 + Math.max(-0.1, (a.reputation - 70) / 90);
     // momento: classificação e forma
     const lg = s.leagues.find((l) => l.clubIds.includes(h.id));
-    const table = leagueTable(s.season, lg?.clubIds ?? [], 99, h.league === 'esp1' ? 'esp' : 'liga');
+    const table = leagueTable(s.season, lg?.clubIds ?? [], 99, leagueCompOf(h.league));
     const pos = table.findIndex((r) => r.club === h.id);
     if (table[0]?.p > 2 && pos >= 0) people *= pos < 3 ? 1.12 : pos >= table.length - 3 ? 0.88 : 1;
     people *= 1 + form(s, h.id) * 0.035;
   }
   // importância do jogo
   people *= country;
-  if (f.comp === 'playoff' || f.comp === 'espPlayoff') people *= /Final/.test(f.stage) ? 1.6 : /Meias/.test(f.stage) ? 1.35 : 1.2;
-  else if (f.comp === 'taca' || f.comp === 'tacaLiga' || f.comp === 'copaRey' || f.comp === 'copaEsp') people *= /Final/.test(f.stage) ? 1.7 : /Meias/.test(f.stage) ? 1.35 : 0.9;
-  else if (f.comp === 'supertaca' || f.comp === 'superEsp') people *= 1.3;
+  if (f.comp === 'playoff' || f.comp === 'espPlayoff' || f.comp === 'itaPlayoff') people *= /Final/.test(f.stage) ? 1.6 : /Meias/.test(f.stage) ? 1.35 : 1.2;
+  else if (f.comp === 'taca' || f.comp === 'tacaLiga' || f.comp === 'copaRey' || f.comp === 'copaEsp' || f.comp === 'coppaIta') people *= /Final/.test(f.stage) ? 1.7 : /Meias/.test(f.stage) ? 1.35 : 0.9;
+  else if (f.comp === 'supertaca' || f.comp === 'superEsp' || f.comp === 'superIta') people *= 1.3;
   const derby = [f.home, f.away].sort().join('-') === 'scp-slb';
   if (derby) people *= 1.7;
   people *= 0.88 + hash(f.id) * 0.24;

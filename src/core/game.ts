@@ -25,6 +25,7 @@ import type { GameState } from './types';
 
 /** Clubes da Primera División (vazio em gravações antigas, sem Espanha). */
 export const espIds = (s: GameState) => s.leagues.find((l) => l.id === 'esp1')?.clubIds ?? [];
+export const itaIds = (s: GameState) => s.leagues.find((l) => l.id === 'ita1')?.clubIds ?? [];
 
 /** Tipo de golo pelo texto do relato (relatórios do analista). */
 export function goalKind(t: string) {
@@ -70,7 +71,11 @@ export function startFirstSeason(s: GameState) {
   const ranking = s.leagues[0].clubIds.map((id) => s.clubs.find((c) => c.id === id)!).sort((a, b) => b.level - a.level).map((c) => c.id);
   // Espanha: ordem 2025/26 aproximada pelos níveis atuais (estimativa); Supercopa com os 4 primeiros dessa ordem
   const esp = espIds(s).map((id) => s.clubs.find((c) => c.id === id)!).sort((a, b) => b.level - a.level).map((c) => c.id);
-  s.season = createSeason(2026, ranking, ['slb', 'scp'], esp.length ? { ranking: esp, four: esp.slice(0, 4) } : undefined);
+  // Itália: ordem 2025/26 aproximada pelos níveis; Supercoppa 2026/27 real (Comunicato 027): L84 (campeão), Meta Catania (Coppa Italia),
+  // Napoli (1.º da fase regular), Feldi Eboli (finalista da Coppa)
+  const ita = itaIds(s).map((id) => s.clubs.find((c) => c.id === id)!).sort((a, b) => b.level - a.level).map((c) => c.id);
+  const itaFour = ['l84', 'cat', 'nap', 'ebo'].filter((x) => ita.includes(x));
+  s.season = createSeason(2026, ranking, ['slb', 'scp'], esp.length ? { ranking: esp, four: esp.slice(0, 4) } : undefined, ita.length ? { ranking: ita, four: itaFour.length === 4 ? itaFour : ita.slice(0, 4) } : undefined);
   s.date = '2026-07-01';
   s.pstats = {};
   ensureContracts(s);
@@ -94,7 +99,7 @@ export function matchOptions(s: GameState, f: Fixture) {
   // prolongamento de 2 x 3 min. Play-off (melhor de 3): estimativa com o mesmo prolongamento
   const esp = ['esp', 'espPlayoff', 'copaEsp', 'superEsp', 'copaRey'].includes(f.comp);
   const noExtraTime = (f.comp === 'taca' || f.comp === 'copaEsp' || f.comp === 'superEsp') && (f.stage === 'Quartos-de-final' || f.stage === 'Meias-finais');
-  return { knockout: f.knockout, noExtraTime, extraTimeLen: esp ? 180 : undefined, seed: `${f.id}-${s.season.year}`, manual: f.home === s.clubId ? (0 as const) : f.away === s.clubId ? (1 as const) : undefined, referees: ref, importance: importanceOf(s, f) };
+  return { knockout: f.knockout, noExtraTime, noPenalties: !!f.tieToHome, extraTimeLen: esp ? 180 : undefined, seed: `${f.id}-${s.season.year}`, manual: f.home === s.clubId ? (0 as const) : f.away === s.clubId ? (1 as const) : undefined, referees: ref, importance: importanceOf(s, f) };
 }
 
 function playFixture(s: GameState, f: Fixture, given?: MatchResult): MatchResult {
@@ -246,7 +251,7 @@ function playDay(s: GameState, d: string) {
   for (const f of s.season.fixtures.filter((x) => x.date === d && !x.result && !x.cancelled)) playFixture(s, f);
   const clubIds = s.leagues[0].clubIds;
   const before = { ...s.season.winners };
-  for (const t of afterMatchday(s.season, clubIds, (id) => clubName(s, id), espIds(s))) news(s, t);
+  for (const t of afterMatchday(s.season, clubIds, (id) => clubName(s, id), espIds(s), itaIds(s))) news(s, t);
   // títulos: todo o plantel ganha moral
   for (const [comp, w] of Object.entries(s.season.winners)) if (w && before[comp as keyof typeof before] !== w) {
     moraleEvent(s, s.players.filter((p) => p.clubId === w).map((p) => p.id), 10);
@@ -310,7 +315,17 @@ function endSeason(s: GameState): DevChange[] {
     for (const c of [old.winners.espAp, old.winners.espCl, ec, old.winners.copaEsp, ...et]) if (c && !four.includes(c) && four.length < 4) four.push(c);
     espNext = { ranking: [ec, ...et.filter((c) => c !== ec)], four };
   }
-  s.season = createSeason(old.year + 1, ranking, [champ, second], espNext);
+  // Itália (Comunicato 027, 2027/28 em diante): campeão, Coppa Italia, 1.º da fase regular e (sem Coppa della Divisione no jogo)
+  // finalista da Coppa Italia; repetidos → seguintes da fase regular
+  let itaNext: { ranking: string[]; four: string[] } | undefined;
+  if (itaIds(s).length) {
+    const it = old.ita?.regularTable ?? leagueTable(old, itaIds(s), 99, 'ita').map((x) => x.club);
+    const ic = old.winners.ita ?? it[0];
+    const four: string[] = [];
+    for (const c of [ic, old.winners.coppaIta, it[0], runnerUp(old, 'coppaIta'), ...it]) if (c && !four.includes(c) && four.length < 4) four.push(c);
+    itaNext = { ranking: [ic, ...it.filter((c) => c !== ic)], four };
+  }
+  s.season = createSeason(old.year + 1, ranking, [champ, second], espNext, itaNext);
   for (const l of s.leagues) l.season = s.season.label;
   s.date = `${old.year + 1}-07-01`;
   s.pstats = {};

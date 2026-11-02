@@ -4,6 +4,7 @@ import { fmtEur } from '../../core/contracts';
 import { ROLE_NAME, staffBudget } from '../../core/staff';
 import { advance } from '../../core/game';
 import { leagueTable } from '../../core/season/season';
+import { leagueCompOf, leagueCountryName } from '../../core/season/types';
 import { saveToSlot } from '../../core/save';
 import { suggestTactics } from '../../core/tactics';
 import type { GameState } from '../../core/types';
@@ -17,7 +18,7 @@ export function renderCareer(content: HTMLElement, s: GameState, onJob: () => vo
   const c = careerOf(s);
   const club = s.clubs.find((x) => x.id === s.clubId);
   const myLg = club ? s.leagues.find((l) => l.clubIds.includes(club.id)) ?? s.leagues[0] : s.leagues[0];
-  const t = leagueTable(s.season, myLg.clubIds, 99, myLg.id === 'esp1' ? 'esp' : 'liga');
+  const t = leagueTable(s.season, myLg.clubIds, 99, leagueCompOf(myLg.id));
   let interviewing: string | null = null;
   let result = '';
   const draw = () => {
@@ -40,7 +41,7 @@ export function renderCareer(content: HTMLElement, s: GameState, onJob: () => vo
         const coach = k.id === s.clubId ? `${s.manager.name} (tu)` : s.coaches.find((x) => x.clubId === k.id)?.name ?? '<span style="color:#c0392b">vago</span>';
         const bb = boardOf(s, k.id); const ap = canApply(s, k.id);
         const vac = c.vacancies?.[k.id];
-        return `<tr><td>${crestSvg(k.id, 18)} ${k.name}</td><td class="muted">${k.league === 'esp1' ? 'Espanha' : 'Portugal'}</td><td>${coach}</td><td>${vac ? '' : meter(bb.conf)}</td><td>${vac ? `Sem treinador até ${fmtD(vac)}` : securityOf(bb.conf)}</td><td>${ap.ok ? `<button class="btn" data-apply="${k.id}">Candidatar</button>` : ''}</td></tr>${interviewing === k.id ? `<tr><td colspan="6">${interviewHtml(s, k.id)}</td></tr>` : ''}`;
+        return `<tr><td>${crestSvg(k.id, 18)} ${k.name}</td><td class="muted">${leagueCountryName(k.league)}</td><td>${coach}</td><td>${vac ? '' : meter(bb.conf)}</td><td>${vac ? `Sem treinador até ${fmtD(vac)}` : securityOf(bb.conf)}</td><td>${ap.ok ? `<button class="btn" data-apply="${k.id}">Candidatar</button>` : ''}</td></tr>${interviewing === k.id ? `<tr><td colspan="6">${interviewHtml(s, k.id)}</td></tr>` : ''}`;
       }).join('')}
       </tbody></table>
       ${result}`;

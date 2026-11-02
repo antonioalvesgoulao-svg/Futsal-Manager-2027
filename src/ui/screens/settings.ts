@@ -27,11 +27,11 @@ export function renderSettings(content: HTMLElement, s: GameState) {
         <select data-k="quality">${opt('quality', 'normal', 'Normal (mais fluido) · recomendada')}${opt('quality', 'alta', 'Alta (reflexos no piso, sombras mais finas; precisa de um computador mais rápido)')}</select>
       </label>
       <label>Marcador eletrónico
-        <select data-k="scoreboard">${opt('scoreboard', 'auto', 'O da competição do jogo')}${opt('scoreboard', 'liga', 'Liga Placard')}${opt('scoreboard', 'taca', 'Taça de Portugal')}${opt('scoreboard', 'tacaLiga', 'Taça da Liga')}${opt('scoreboard', 'supertaca', 'Supertaça')}${opt('scoreboard', 'esp', 'Primera División')}${opt('scoreboard', 'copaRey', 'Copa del Rey')}${opt('scoreboard', 'copaEsp', 'Copa de España')}${opt('scoreboard', 'superEsp', 'Supercopa de España')}</select>
+        <select data-k="scoreboard">${opt('scoreboard', 'auto', 'O da competição do jogo')}${opt('scoreboard', 'liga', 'Liga Placard')}${opt('scoreboard', 'taca', 'Taça de Portugal')}${opt('scoreboard', 'tacaLiga', 'Taça da Liga')}${opt('scoreboard', 'supertaca', 'Supertaça')}${opt('scoreboard', 'esp', 'Primera División')}${opt('scoreboard', 'copaRey', 'Copa del Rey')}${opt('scoreboard', 'copaEsp', 'Copa de España')}${opt('scoreboard', 'superEsp', 'Supercopa de España')}${opt('scoreboard', 'ita', 'Serie A')}${opt('scoreboard', 'coppaIta', 'Coppa Italia')}${opt('scoreboard', 'superIta', 'Supercoppa Italiana')}</select>
       </label>
     </div>
     <h3>Marcadores</h3>
-    <div class="sb-demo">${demo('liga')}${demo('taca')}${demo('tacaLiga')}${demo('supertaca')}${demo('esp')}${demo('copaRey')}${demo('copaEsp')}${demo('superEsp')}</div>
+    <div class="sb-demo">${demo('liga')}${demo('taca')}${demo('tacaLiga')}${demo('supertaca')}${demo('esp')}${demo('copaRey')}${demo('copaEsp')}${demo('superEsp')}${demo('ita')}${demo('coppaIta')}${demo('superIta')}</div>
     <p class="small muted">Grafismo original do jogo, de inspiração portuguesa. As definições ficam guardadas com o jogo.</p>`;
   content.querySelectorAll<HTMLSelectElement>('[data-k]').forEach((el) =>
     el.addEventListener('change', () => {

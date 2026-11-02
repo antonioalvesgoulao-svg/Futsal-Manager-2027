@@ -1,4 +1,4 @@
-import { homeNation, isSpanish, spanishYouth } from './names';
+import { homeNation, localYouth } from './names';
 // Fim de época: envelhecimento, evolução e declínio, reformas e novos jovens da formação
 import { ALL_ATTRS, ATTR_GROUPS, AttrKey, gauss, overall, rng, generateAttributes } from './attributes';
 import type { Club, Player, Position } from './types';
@@ -123,7 +123,7 @@ export function youthIntake(club: Club, squad: Player[], seasonYear: number): Pl
     const base: Player = {
       id: `${club.id}y${seasonYear}${i}`,
       clubId: club.id,
-      name: isSpanish(club) ? spanishYouth(r).name : `${FIRST[Math.floor(r() * FIRST.length)]} ${LAST[Math.floor(r() * LAST.length)]}`,
+      name: localYouth(club, r)?.name ?? `${FIRST[Math.floor(r() * FIRST.length)]} ${LAST[Math.floor(r() * LAST.length)]}`,
       position: pos,
       number,
       age: 17 + Math.floor(r() * 2),

@@ -15,27 +15,35 @@ import espData from '../data/esp/clubs.json';
 import espPlayers from '../data/esp/players.json';
 import espFp from '../data/esp/fpstats.json';
 import espCoaches from '../data/esp/coaches.json';
+import itaData from '../data/ita/clubs.json';
+import itaPlayers from '../data/ita/players.json';
+import itaFp from '../data/ita/fpstats.json';
+import itaCoaches from '../data/ita/coaches.json';
 
 // Base de dados: cada liga é um ficheiro em src/data/<país>/clubs.json
 export const DB_CLUBS: Club[] = [
   ...porData.clubs.map(({ check, ...c }) => ({ ...c, colors: c.colors as [string, string] })),
   ...espData.clubs.map(({ fp, ...c }) => ({ ...c, colors: c.colors as [string, string] })),
+  // Itália só entra quando os plantéis estiverem gerados (tools/ita/build_ita.py)
+  ...(itaPlayers.players.length ? itaData.clubs.map(({ slug, ...c }) => ({ ...c, colors: c.colors as [string, string] })) : []),
 ];
 type RawPlayer = Omit<Player, 'attrs' | 'potential'>;
 const BOOST = porOverrides.boost as Record<string, number>;
 const HISTORY = porHistory.players as Record<string, SeasonRow[]>;
 const ATTR_OVERRIDES = porOverrides.attrs as Record<string, Partial<Player['attrs']>>;
-export const FP_STATS = { ...porFp.players, ...espFp.players } as Record<string, { games: number; yellow: number; red: number; seasons: { s: string; team: string; games: number; goals: number }[]; titles: string[] }>;
+export const FP_STATS = { ...porFp.players, ...espFp.players, ...itaFp.players } as Record<string, { games: number; yellow: number; red: number; seasons: { s: string; team: string; games: number; goals: number }[]; titles: string[] }>;
 
 // Jogadores com atributos gerados (sempre iguais para o mesmo jogador)
 function buildPlayers(): Player[] {
-  return ([...porPlayers.players, ...espPlayers.players] as RawPlayer[]).map((p) => {
+  return ([...porPlayers.players, ...espPlayers.players, ...itaPlayers.players] as (RawPlayer & { serieA?: number })[]).map((p) => {
     const club = DB_CLUBS.find((c) => c.id === p.clubId.replace('@jun', ''))!; // Sub-19 não inscritos como seniores ficam na formação
     const key = `${p.clubId}|${p.name}`;
     // historial: zerozero; quem não o tem (jogadores novos do site da FPF) usa as épocas oficiais do futsalportugal.com
     const mb = computeMoneyball((HISTORY[p.id] ?? FP_STATS[p.id]?.seasons ?? []) as SeasonRow[], p.position, p.age);
     const g = mb
       ? generateAttributes(p as Player, mb.level, BOOST[key] ?? 0, { productivity: mb.productivity, availability: mb.availability })
+      // Itália sem historial no futsalportugal: nível pela experiência na Serie A (carreira oficial, épocas desde 2021/22; estimativa)
+      : club.league === 'ita1' ? generateAttributes(p as Player, club.level - 9 + Math.min(7, (p.serieA ?? 0) * 1.4), (BOOST[key] ?? 0) - 0.4)
       // sem nenhum dado (nem zerozero nem FPF): gerado como jogador de rotação, abaixo do nível do clube, e sem o acaso de talento a puxar para cima
       : generateAttributes(p as Player, club.level - 10, (BOOST[key] ?? 0) - 0.8);
     // agressividade pelos cartões reais (FPF, desde 2021/22): média da Liga 0,21 cartões/jogo (amarelo=1, vermelho=2)
@@ -48,10 +56,11 @@ function buildPlayers(): Player[] {
   });
 }
 export const DB_PLAYERS: Player[] = buildPlayers();
-export const DB_COACHES: Coach[] = [...porCoaches.coaches, ...espCoaches.coaches] as Coach[];
+export const DB_COACHES: Coach[] = [...porCoaches.coaches, ...espCoaches.coaches, ...itaCoaches.coaches] as Coach[];
 export const DB_LEAGUES: League[] = [
   { ...porData.league, clubIds: porData.clubs.map((c) => c.id) },
   { ...espData.league, clubIds: espData.clubs.map((c) => c.id) },
+  ...(itaPlayers.players.length ? [{ ...itaData.league, clubIds: itaData.clubs.map((c) => c.id) }] : []),
 ];
 
 /** Liga de um clube (os clubes sem `league` são da Liga Placard). */
@@ -59,7 +68,7 @@ export function leagueOf(s: GameState, clubId: string): League {
   const c = s.clubs.find((x) => x.id === clubId.replace('@jun', ''));
   return s.leagues.find((l) => l.id === (c?.league ?? 'por1')) ?? s.leagues[0];
 }
-export const countryOf = (s: GameState, clubId: string) => (leagueOf(s, clubId).id === 'esp1' ? 'esp' : 'por');
+export const countryOf = (s: GameState, clubId: string) => { const id = leagueOf(s, clubId).id; return id === 'esp1' ? 'esp' : id === 'ita1' ? 'ita' : 'por'; };
 
 let current: GameState | null = null;
 const listeners = new Set<() => void>();

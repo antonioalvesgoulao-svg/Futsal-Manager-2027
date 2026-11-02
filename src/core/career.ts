@@ -6,7 +6,7 @@
 // - contratos do staff: acabam no fim da época; os clubes renovam ou não; técnicos de outros clubes podem ser contratados
 import { rng } from './attributes';
 import { leagueTable } from './season/season';
-import { kindOf, type CompId } from './season/types';
+import { kindOf, leagueCompOf, type CompId } from './season/types';
 import { homeNation } from './names';
 import { fmtEur, salaryBudget } from './contracts';
 import { book, financeOf } from './finance';
@@ -55,7 +55,8 @@ export function expectedPoints(home: Club, away: Club, side: 0 | 1, neutral = fa
 /** Paciência da direção: clubes grandes e ricos exigem mais (reagem mais a cada ponto perdido). */
 /** Títulos nacionais (Liga, Taça, Taça da Liga, Supertaça) antes do jogo começar: ordem de grandeza (estimativa). */
 // Espanha (Liga, Copa de España, Copa del Rey, Supercopa; ordem de grandeza, estimativa): Inter, Barça e ElPozo os mais titulados
-const PAST_TITLES: Record<string, number> = { scp: 60, slb: 35, scb: 4, fun: 1, int: 35, bar: 18, epz: 16, jca: 4, pal: 3, jae: 3, val: 1 };
+// Itália (Scudetto, Coppa Italia, Supercoppa; ordem de grandeza, estimativa): L84 campeão 2025/26, Meta Catania Coppa Italia 2025/26
+const PAST_TITLES: Record<string, number> = { scp: 60, slb: 35, scb: 4, fun: 1, int: 35, bar: 18, epz: 16, jca: 4, pal: 3, jae: 3, val: 1, l84: 2, cat: 2, nap: 2, ebo: 3, ave: 1, pom: 1 };
 /** Palmarés do clube: história + títulos ganhos no jogo. */
 export const palmaresOf = (s: GameState, clubId: string) => (PAST_TITLES[clubId] ?? 0) + s.honours.filter((h) => h.winner === clubId).length;
 /**
@@ -476,7 +477,7 @@ export function staffSeasonEnd(s: GameState, endingYear: number): string[] {
       if (f) { f.clubId = c.id; f.wage = staffWage(f.ability, c); f.until = endingYear + 2; }
     }
   }
-  const table = s.leagues.flatMap((l) => leagueTable(s.season, l.clubIds, 99, l.id === 'esp1' ? 'esp' : 'liga'));
+  const table = s.leagues.flatMap((l) => leagueTable(s.season, l.clubIds, 99, leagueCompOf(l.id)));
   const posIn = (id: string) => { const lg = s.leagues.find((l) => l.clubIds.includes(id)); const t = lg ? table.filter((r) => lg.clubIds.includes(r.club)) : []; return t.findIndex((r) => r.club === id) + 1; };
   // treinadores da IA evoluem com o sucesso: pontos acima do esperado, títulos, posição face ao objetivo (estimativa)
   const titles: Record<string, number> = {};

@@ -886,7 +886,7 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
       beginPeriod(stage);
       return true;
     }
-    if (opts.knockout && score[0] === score[1]) penalties = shootout();
+    if (opts.knockout && !opts.noPenalties && score[0] === score[1]) penalties = shootout();
     finish();
     return false;
   }
