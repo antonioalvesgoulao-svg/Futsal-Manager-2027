@@ -6,3 +6,6 @@ diagnostics/.run.mjs
 .tmp-*.mjs
 diagnostics/.gk.mjs
 diagnostics/.season.mjs
+diagnostics/.season2.mjs
+diagnostics/.prof.mjs
+diagnostics/.one.mjs

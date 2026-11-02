@@ -280,3 +280,27 @@ Pedido do António: 3D mais fluido, mais realista e mais próximo do futsal. Op�
 - Motor intacto (`npm test`); tsc, build e diag OK.
 - Imagens (Playwright) de corrida, voo e reposição: plausíveis; o gesto do voo ainda precisa de trabalho.
 - Ainda não visto pelo António.
+
+## Correção dos problemas da época (2 novembro 2026, Claude)
+Pedido do António: corrigir tudo o que a análise da época encontrou (ver `docs/ANALISE_3D.md`, secção "Correções da época").
+
+Alterações em `choreo.ts`:
+- `separate()` depois do bake (3 passagens): os corpos não se atravessam.
+  - Distância mínima: colegas 0,75 m, adversários 0,5 m, GR 0,6 m.
+  - Exceções: contacto voluntário (carga, desarme, proteção, festejo, confronto); quem tem a bola não cede.
+  - A correção é suavizada no tempo, sem empurrar ninguém para fora do campo.
+  - Os adversários de quem passa saem da trajetória da bola.
+- Defesa à zona/mista: só o portador é apertado; os outros recuam para o lado da baliza e fecham o meio.
+- Os defensores longe da bola ignoram pequenas diferenças (zona morta de 0,9 m) e só aceleram quando ficam para trás.
+- Ritmo:
+  - `liven` passa a ajustar a cada 3,2 s (antes 1,3 s), com amplitude de 1,1 m;
+  - a variação das posições da estrutura passa de 1,6 m para 0,7 m.
+- Pivô e drible um pouco menos frequentes.
+
+Alterações no 3D:
+- `player3d.ts`: novo gesto do voo do GR (impulso, rotação para a horizontal, voo à altura da bola).
+- `highlight3d.ts`: câmara TV mais recuada (7,6 m de altura, 11 m atrás da linha).
+
+Desempenho: a coreografia demora 23 ms por posse no browser (mediana), uma vez a cada ~20 s de jogo.
+
+Validação: tsc, build, `npm test` (motor intacto) e diag. Jogo ao vivo no browser sem erros.

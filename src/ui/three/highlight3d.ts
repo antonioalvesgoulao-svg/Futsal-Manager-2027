@@ -458,7 +458,7 @@ export class Highlight3D {
       // televisão: lateral elevada, acompanha a bola com suavidade (como uma realização real)
       const fx = Math.max(-W / 2 + 6, Math.min(W / 2 - 6, ball.x + dir * 2));
       // câmara principal numa plataforma por cima da primeira fila da bancada lateral
-      pos = new THREE.Vector3(fx * 0.85, Math.min(7.5, this.arena.height - 1.5), H / 2 + 8);
+      pos = new THREE.Vector3(fx * 0.85, Math.min(7.6, this.arena.height - 1.5), H / 2 + 11); // mais recuada: o árbitro da linha de baixo tapa menos o jogo (sem apanhar o ecrã do teto)
       look = new THREE.Vector3(fx, 0.3, ball.z * 0.35);
     }
     if (this.snapCamera) {

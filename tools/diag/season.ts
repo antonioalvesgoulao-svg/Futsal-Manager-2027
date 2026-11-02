@@ -50,6 +50,7 @@ for (const h of CLUBS) for (const a of CLUBS) {
           if (v > 10) add('saltos');
           if (!gks.has(id)) {
             add('amostrasCampo'); add('distCampo', v * 0.1);
+            const role = c.sideOf.get(id) === c.att ? 'Atac' : 'Def'; add('am' + role); add('dist' + role, v * 0.1);
             add(v < 0.5 ? 'v_parado' : v < 2 ? 'v_andar' : v < 4 ? 'v_trote' : v < 5.5 ? 'v_corrida' : v < 7 ? 'v_rapida' : 'v_sprint');
           }
         }
@@ -99,6 +100,7 @@ const out = {
   segundos: Math.round((Date.now() - t0) / 1000),
   velocidades: { parado: pct('v_parado', 'amostrasCampo'), andar: pct('v_andar', 'amostrasCampo'), trote: pct('v_trote', 'amostrasCampo'), corrida: pct('v_corrida', 'amostrasCampo'), rapida: pct('v_rapida', 'amostrasCampo'), sprint: pct('v_sprint', 'amostrasCampo') },
   metrosPorMinutoJogador: Math.round((N.distCampo ?? 0) / ((N.amostrasCampo ?? 1) / 600)),
+  metrosPorMinutoAtacantes: Math.round((N.distAtac ?? 0) / ((N.amAtac ?? 1) / 600)), metrosPorMinutoDefensores: Math.round((N.distDef ?? 0) / ((N.amDef ?? 1) / 600)),
   saltosPorJogo: Math.round(((N.saltos ?? 0) / games) * 10) / 10,
   foraDoCampoPorJogo: Math.round(((N.foraDoCampo ?? 0) / games) * 10) / 10,
   sobreposicoesSegPorJogo: Math.round(((N.sobreposicoes ?? 0) / 10 / games) * 10) / 10,
