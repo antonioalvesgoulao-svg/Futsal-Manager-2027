@@ -336,3 +336,48 @@ Validação: tsc, build, `npm test` (motor intacto) e diag. Jogo ao vivo no brow
   - restos de saltos da bola (~0,16% do tempo);
   - mais variedade de gestos de GR e de desarmes;
   - transições entre câmaras e repetições.
+
+---
+
+## Snapshot para a próxima IA — 2 novembro 2026 (Claude)
+
+**Onde está o trabalho mais recente:**
+- branch `claude/awesome-hypatia-l5i9xc`, PR #6 (draft, sem merge);
+- a PR inclui as PR #3, #4 e #5 (e tem por base a #5);
+- `main` continua no commit da Fase 0 (`15a3bb3`): o que se abre no StackBlitz por omissão NÃO tem as melhorias.
+
+**Feito na PR #6** (pormenor e números em `docs/ANALISE_3D.md`):
+- 3D: corrida, GR (posição, reação, voo aprovado pelo António, defesa com o pé), separação dos corpos, defesa à zona, pressão por gatilhos e imediata, desmarcações e espaço, proteção de bola aos saltinhos, câmara TV, repetições, árbitros, marcador do 3D, troféu.
+- IA tática: `tacticalAI.ts` escolhe o sistema pelo perfil do plantel; mudanças táticas durante o jogo.
+- Direção: `shouldSack`.
+- Sincronização bola–jogador.
+
+**Ferramentas de validação** (correr antes e depois de mexer):
+| Comando | Para quê |
+|---|---|
+| `npm test` | o motor dá o mesmo jogo com e sem a coreografia |
+| `npm run diag -- --seed base --jogos 12 --nome x --atributos` | métricas táticas |
+| `tools/diag/engine.ts` | 5 épocas do motor; real: 6,38 golos, 49,6/13,5/37,0 |
+| `tools/diag/seasons.ts` | épocas pela coreografia 3D, anomalias |
+| `tools/diag/ball.ts` | sincronização da bola |
+| `tools/diag/careers.ts` | despedimentos |
+
+Todas as ferramentas em `tools/diag` correm com: `npx esbuild <ficheiro> --bundle --platform=node --format=esm --outfile=diagnostics/.x.mjs && node diagnostics/.x.mjs`.
+
+**Pendente:**
+- Etapa 12: outras ligas (a próxima é Itália, com dados no futsalportugal.com).
+- Etapas 13-14.
+- 3D:
+  - ritmo de corrida ~146 m/min (real ~115-120, estimativa);
+  - restos de saltos da bola (~0,13% do tempo);
+  - GR a sair aos pés;
+  - transições entre câmaras;
+  - jogador lesionado a coxear.
+- Dados: equipamentos alternativos de Espanha; equipas técnicas de 7 clubes portugueses.
+
+**Regras do António:**
+- Português europeu, conciso, tabelas.
+- Realismo; dizer o que é estimativa.
+- Testar no commit exato (tsc, build, testes, browser).
+- Nunca fazer merge para `main` sem autorização.
+- Não alterar o voo do GR aprovado.
