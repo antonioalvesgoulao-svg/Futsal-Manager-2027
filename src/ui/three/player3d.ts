@@ -446,17 +446,21 @@ export function pose(a: Actor, act: Act | undefined, gk: boolean, near: boolean,
       // cai de lado, amortece com o braço e levanta-se (sem "saltar" de pé no fim)
       const local = act.side ?? 1;
       const load = k < 0.1 ? Math.sin((k / 0.1) * Math.PI) : 0;
-      const up = ease(clamp01((k - 0.04) * 3.4));
-      const getUp = k > 0.8 ? ease((k - 0.8) / 0.2) : 0;
-      const roll = (Math.PI / 2) * 0.9 * up * (1 - getUp);
+      // o corpo inclina logo desde o impulso, em diagonal para o ângulo: bola alta ~55°, rasteira ~80° (quase deitado);
+      // pouca elevação (é uma extensão lateral, não um salto para cima)
       const h = act.h ?? 0.6;
-      const fly = k < 0.72 ? Math.sin(clamp01(k / 0.72) * Math.PI) : 0;
-      const lift = fly * Math.max(0.1, Math.min(0.8, h * 0.5));
+      const up = ease(clamp01((k - 0.02) * 5));
+      const getUp = k > 0.8 ? ease((k - 0.8) / 0.2) : 0;
+      const target = h > 1.3 ? 0.98 : h > 0.8 ? 1.15 : 1.38;
+      const fall = k > 0.45 ? ease(clamp01((k - 0.45) / 0.3)) : 0; // depois de chegar à bola, cai de lado
+      const roll = lerp(target * up, 1.42, fall) * (1 - getUp);
+      const fly = k < 0.6 ? Math.sin(clamp01(k / 0.6) * Math.PI) : 0;
+      const lift = fly * Math.max(0.05, Math.min(0.35, (h - 0.6) * 0.35));
       body.rotation.z = -local * roll;
       body.rotation.x = 0.12 + 0.25 * getUp;
       body.rotation.y = local * 0.18 * up * (1 - getUp); // peito para o rematador
       body.position.y = HIP * Math.cos(roll) + 0.24 * Math.sin(roll) + lift - 0.22 * load - 0.25 * getUp * (1 - getUp) * 4 * 0.5;
-      body.position.x = local * Math.sin(roll) * 0.8;
+      body.position.x = local * (Math.sin(roll) * 0.8 + 0.25 * up * (1 - getUp)); // o corpo vai para o lado
       // braços juntos, por cima da cabeça no referencial do corpo (= apontam à bola); bola baixa: mãos mais à frente
       // os braços sobem juntos antes de o corpo rodar (no impulso já vão à bola)
       const ext = ease(clamp01((k - 0.05) * 10)) * (1 - getUp);
