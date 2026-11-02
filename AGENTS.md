@@ -72,3 +72,4 @@ Estas instruções aplicam-se a qualquer assistente de programação (ChatGPT/Co
 - Os GR e os defensores mudam quando os atacantes mudam: reagem ao lance e as posses encadeiam-se. Não exigir trajetórias iguais fora dos jogadores alterados.
 - Locomoção 3D (`pose` em player3d): a passada depende de `Actor.fwd`/`Actor.side` (frente, costas, lado). Não voltar a rodar o corpo para a direção da corrida a baixa velocidade. Os defensores olham para o jogo.
 - Física individual (aceleração/agilidade) aplica-se a todos os jogadores de campo em todos os sistemas. Os GR mantêm os seus limites.
+- Voo do GR (`pose`, case 'dive' em player3d.ts): versão aprovada pelo António a 2/11/2026 (commit 7c54d23). Não alterar sem pedido dele.
