@@ -92,7 +92,7 @@ const newId = (y: number) => `f${y}_${++fid}`;
  * @param ranking  clubes ordenados pela época anterior (melhor primeiro): define cabeças de série na Taça
  * @param supercup [campeão, vencedor da Taça ou finalista]
  */
-export function createSeason(y: number, ranking: string[], supercup: [string, string], esp?: { ranking: string[]; four: string[] }): SeasonState {
+export function createSeason(y: number, ranking: string[], supercup: [string, string], esp?: { ranking: string[]; four: string[] }, kaz?: { ranking: string[]; supercup: [string, string] }): SeasonState {
   fid = 0;
   const r = rng('calendario' + y);
   const shuffled = [...ranking].sort(() => r() - 0.5);
@@ -118,7 +118,23 @@ export function createSeason(y: number, ranking: string[], supercup: [string, st
 
   const season: SeasonState = { year: y, label: `${y}/${String((y + 1) % 100).padStart(2, '0')}`, fixtures, series: [], winners: {}, finished: false };
   if (esp) addSpain(season, y, esp.ranking, esp.four);
+  if (kaz) addKazakhstan(season, y, kaz.ranking, kaz.supercup);
   return season;
+}
+
+
+/** Cazaquistão: 12 clubes, calendário de 44 jornadas (4 voltas) baseado no calendário 2026/27; datas semanais aproximadas. */
+function addKazakhstan(s: SeasonState, y: number, ranking: string[], supercup: [string,string]) {
+  const r = rng('calendario-kaz' + y);
+  const base = roundRobin([...ranking].sort(() => r() - 0.5));
+  const rounds = [...base, ...base.map(g => g.map(([a,b]) => [b,a] as [string,string])), ...base, ...base.map(g => g.map(([a,b]) => [b,a] as [string,string]))];
+  const start = nextWeekday(`${y}-09-05`, 6);
+  const dates = rounds.map((_,i)=>addDays(start,i*7));
+  const k = keyDates(y);
+  s.fixtures.push({id:newId(y),comp:'kazSuper',stage:'Final',date:nextWeekday(`${y}-08-25`,6),home:supercup[0],away:supercup[1],neutral:true,knockout:true});
+  rounds.forEach((games,i)=>games.forEach(([home,away])=>s.fixtures.push({id:newId(y),comp:'kaz',stage:`Jornada ${i+1}`,round:i+1,date:dates[i],home,away,knockout:false})));
+  const low=ranking.slice(4);
+  for(let i=0;i<4;i++) s.fixtures.push({id:newId(y),comp:'kazCup',stage:'Oitavos de final',date:nextWeekday(`${y}-10-10`,3),home:low[7-i],away:low[i],knockout:true});
 }
 
 // ---------------- Espanha (RFEF, Liga Prime Futsal) ----------------
@@ -444,6 +460,7 @@ export function afterMatchday(s: SeasonState, clubIds: string[], name: (id: stri
     news.push(`${name(fin.winner)} é campeão nacional!`);
   }
   afterSpain(s, espIds, name, news);
+  afterKazakhstan(s, clubIds, name, news);
   return news;
 }
 
@@ -456,6 +473,49 @@ export function runnerUp(s: SeasonState, comp: CompId): string | undefined {
   const f = s.fixtures.find((x) => x.comp === comp && x.stage === 'Final');
   const w = f && winnerOf(f);
   return f && w ? (w === f.home ? f.away : f.home) : undefined;
+}
+
+
+function afterKazakhstan(s: SeasonState, clubIds: string[], name: (id:string)=>string, news:string[]) {
+  const ids = s.fixtures.filter(f=>f.comp==='kaz').map(f=>f.home).filter((id,i,a)=>a.indexOf(id)===i);
+  if (!ids.length) return;
+  const table = () => leagueTable(s, ids, 99, 'kaz');
+  const league = s.fixtures.filter(f=>f.comp==='kaz');
+  const k=keyDates(s.year);
+  const qf=s.series.filter(x=>x.comp==='kazPlayoff' && x.stage==='Quartos-de-final');
+  if (!s.regularTable && done(league)) {
+    const ranked=table().map(x=>x.club);
+    (s as any).kazRegularTable=ranked;
+    for(const [a,b] of [[0,7],[3,4],[1,6],[2,5]]) makeSeries(s,'Quartos-de-final',ranked[a],ranked[b],3,k.playoffQF,'kazPlayoff');
+    news.push(`Fim da fase regular cazaque: ${name(ranked[0])} termina em 1.º lugar.`);
+  }
+  const order=(a:string,b:string):[string,string]=>{const t=(s as any).kazRegularTable as string[];return t.indexOf(a)<=t.indexOf(b)?[a,b]:[b,a];};
+  if(qf.length===4 && qf.every(x=>x.winner) && !s.series.some(x=>x.comp==='kazPlayoff' && x.stage==='Meias-finais')) {
+    makeSeries(s,'Meias-finais',...order(qf[0].winner!,qf[1].winner!),3,k.playoffSF,'kazPlayoff');
+    makeSeries(s,'Meias-finais',...order(qf[2].winner!,qf[3].winner!),3,k.playoffSF,'kazPlayoff');
+  }
+  const sf=s.series.filter(x=>x.comp==='kazPlayoff' && x.stage==='Meias-finais');
+  if(sf.length===2 && sf.every(x=>x.winner) && !s.series.some(x=>x.comp==='kazPlayoff' && x.stage==='Final')) makeSeries(s,'Final',...order(sf[0].winner!,sf[1].winner!),5,k.playoffF,'kazPlayoff');
+  const final=s.series.find(x=>x.comp==='kazPlayoff' && x.stage==='Final');
+  if(final?.winner && !s.winners.kaz) {s.winners.kaz=final.winner;news.push(`${name(final.winner)} é campeão do Cazaquistão.`);}
+  const cupR1=byStage(s,'kazCup','Oitavos de final');
+  if(done(cupR1) && !byStage(s,'kazCup','Quartos-de-final').length) {
+    const ranked=(s as any).kazRegularTable as string[] ?? ids;
+    const winners=cupR1.map(winnerOf) as string[];
+    const top=ranked.slice(0,4);
+    addCupRound(s,'kazCup','Quartos-de-final',nextWeekday(`${s.year+1}-02-10`,3),[[top[0],winners[3]],[top[1],winners[2]],[top[2],winners[1]],[top[3],winners[0]]],true);
+  }
+  for(const [from,to,date] of [['Quartos-de-final','Meias-finais',`${s.year+1}-03-20`],['Meias-finais','Final',`${s.year+1}-03-22`]] as const) {
+    const prev=byStage(s,'kazCup',from);
+    if(done(prev) && !byStage(s,'kazCup',to).length) {
+      const w=prev.map(winnerOf) as string[];
+      addCupRound(s,'kazCup',to,date,from==='Quartos-de-final'?[[w[0],w[3]],[w[1],w[2]]]:[[w[0],w[1]]],true);
+    }
+  }
+  const cupFinal=byStage(s,'kazCup','Final')[0];
+  if(cupFinal?.result && !s.winners.kazCup){s.winners.kazCup=winnerOf(cupFinal)!;news.push(`${name(s.winners.kazCup)} vence a Taça do Cazaquistão.`);}
+  const sup=s.fixtures.find(f=>f.comp==='kazSuper');
+  if(sup?.result && !s.winners.kazSuper){s.winners.kazSuper=winnerOf(sup)!;news.push(`${name(s.winners.kazSuper)} conquista a Supertaça do Cazaquistão.`);}
 }
 
 export type { FixtureResult };
