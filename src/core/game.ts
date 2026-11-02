@@ -25,6 +25,7 @@ import type { GameState } from './types';
 
 /** Clubes da Primera División (vazio em gravações antigas, sem Espanha). */
 export const espIds = (s: GameState) => s.leagues.find((l) => l.id === 'esp1')?.clubIds ?? [];
+export const kazIds = (s: GameState) => s.leagues.find((l) => l.id === 'kaz1')?.clubIds ?? [];
 
 /** Tipo de golo pelo texto do relato (relatórios do analista). */
 export function goalKind(t: string) {
@@ -70,7 +71,8 @@ export function startFirstSeason(s: GameState) {
   const ranking = s.leagues[0].clubIds.map((id) => s.clubs.find((c) => c.id === id)!).sort((a, b) => b.level - a.level).map((c) => c.id);
   // Espanha: ordem 2025/26 aproximada pelos níveis atuais (estimativa); Supercopa com os 4 primeiros dessa ordem
   const esp = espIds(s).map((id) => s.clubs.find((c) => c.id === id)!).sort((a, b) => b.level - a.level).map((c) => c.id);
-  s.season = createSeason(2026, ranking, ['slb', 'scp'], esp.length ? { ranking: esp, four: esp.slice(0, 4) } : undefined);
+  const kaz = kazIds(s).map((id) => s.clubs.find((c) => c.id === id)!).sort((a,b)=>b.level-a.level).map(c=>c.id);
+  s.season = createSeason(2026, ranking, ['slb', 'scp'], esp.length ? { ranking: esp, four: esp.slice(0, 4) } : undefined, kaz.length ? { ranking: kaz, supercup: ['sem','kai'] } : undefined);
   s.date = '2026-07-01';
   s.pstats = {};
   ensureContracts(s);
@@ -310,7 +312,11 @@ function endSeason(s: GameState): DevChange[] {
     for (const c of [old.winners.espAp, old.winners.espCl, ec, old.winners.copaEsp, ...et]) if (c && !four.includes(c) && four.length < 4) four.push(c);
     espNext = { ranking: [ec, ...et.filter((c) => c !== ec)], four };
   }
-  s.season = createSeason(old.year + 1, ranking, [champ, second], espNext);
+  const kazTable = old.kazRegularTable ?? kazIds(s).slice().sort((a,b)=>(s.clubs.find(c=>c.id===b)?.level??0)-(s.clubs.find(c=>c.id===a)?.level??0));
+  const kazChamp = old.winners.kaz ?? kazTable[0];
+  const kazCup = old.winners.kazCup ?? kazTable[1];
+  const kazRunner = kazCup === kazChamp ? kazTable[1] : kazCup;
+  s.season = createSeason(old.year + 1, ranking, [champ, second], espNext, kazIds(s).length ? { ranking: [kazChamp,...kazTable.filter(c=>c!==kazChamp)], supercup: [kazChamp,kazRunner] } : undefined);
   for (const l of s.leagues) l.season = s.season.label;
   s.date = `${old.year + 1}-07-01`;
   s.pstats = {};

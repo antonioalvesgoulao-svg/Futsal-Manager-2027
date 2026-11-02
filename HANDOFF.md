@@ -381,3 +381,25 @@ Todas as ferramentas em `tools/diag` correm com: `npx esbuild <ficheiro> --bundl
 - Testar no commit exato (tsc, build, testes, browser).
 - Nunca fazer merge para `main` sem autorização.
 - Não alterar o voo do GR aprovado.
+
+
+## Implementação inicial da liga do Cazaquistão — 2 novembro 2026
+
+Branch: `feat/kazakhstan-futsal-league`, baseada em `claude/awesome-hypatia-l5i9xc` (PR #6 draft, não merged). Esta implementação ainda carece de validação local/CI.
+
+### Incluído
+- 12 participantes de Premiere League Futsal 2026/27 conforme Zerozero: Aqtobe, Kairat, SK Ayat, Kaspiy Aktau, Semey, Atyrau, Bayterek, Elorda, Okzhetpes, Tulpar, Zhigitter Astana e Ordabasy.
+- Nova liga `kaz1`, escolha de clube, país, nomes/nacionalidades gerados e integração no estado do jogo.
+- Calendário 44 jornadas (4 voltas), play-off dos 8 primeiros, Taça e Supertaça cazaques. Calendário e fases de taça são aproximações jogáveis; a fonte disponível confirma as fases do play-off e a existência da Supertaça, mas não todos os detalhes regulamentares.
+- Kairat e Semey têm plantéis com dados Zerozero recuperados nesta etapa. Outras equipas têm cinco jogadores fictícios provisórios por clube, identificados por `fictional: true`.
+- Treinadores confirmados nas fichas Zerozero de futsal: Gustavo Paradeda (Kairat, 47 anos; Brasil/Rússia) e Aslan Smakov (Semey, 36 anos; Cazaquistão). Os restantes dez treinadores são fictícios, identificados e com idade/nacionalidade. Staff de apoio gerado com idade e nacionalidade.
+- Equipamentos e vários pavilhões/níveis são estimativas e estão marcados como não confirmados nos dados.
+
+### Ficheiros
+`src/data/kaz/{clubs,players,coaches,staff}.json`, `src/core/state.ts`, `src/core/types.ts`, `src/core/names.ts`, `src/core/staff.ts`, `src/core/kits.ts`, `src/core/season/{types,season}.ts`, `src/core/game.ts`.
+
+### Limitações e validação
+- Ainda não foram executados `npx tsc`, `npx vite build`, `npm test` nem diagnósticos nesta branch. Não declarar integração validada.
+- A lista de clubes segue Zerozero, conforme pedido. Plantéis completos para as 12 equipas não estavam acessíveis; preenchimento fictício está identificado.
+- Rever se o calendário de 44 jornadas e o play-off melhor de 3/5 correspondem ao regulamento 2026/27. Equipamentos, arenas e dados de staff ainda precisam de confirmação.
+- Próximo passo: executar CI, corrigir erros de integração e abrir PR empilhada para a branch da PR #6, sem merge.
