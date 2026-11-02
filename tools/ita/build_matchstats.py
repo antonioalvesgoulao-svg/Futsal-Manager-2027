@@ -5,6 +5,13 @@
 import json, re, sys, unicodedata, collections
 W = sys.argv[1]
 M = json.load(open(f'{W}/matches.json'))
+# jogos por disputar também têm ficha (plantel inscrito) com 0 - 0 e sem golos: ficam de fora.
+# Desde 2024/25 muitas fichas não indicam quem entrou: nesses jogos conta todos os da ficha (estimativa, inclui suplentes não utilizados).
+M = {k: m for k, m in M.items() if m['goals'] or m['score'] != '0 - 0' or any(p.get('sub') for sd in ('h', 'a') for p in m[sd]['players'])}
+for m in M.values():
+    if not any(p.get('sub') for sd in ('h', 'a') for p in m[sd]['players']):
+        for sd in ('h', 'a'):
+            for p in m[sd]['players']: p['played'] = True
 # nome oficial (com patrocinador) -> nome no moneyball (TEAM_LEVELS); níveis em src/core/moneyball.ts
 CANON = [('Meta Catania', 'Meta Catania'), ('Napoli Futsal', 'Napoli Futsal'), ('Prezioso Casa Napoli', 'Napoli Futsal'), ('L84', 'L84 Torino'),
          ('Feldi Eboli', 'Feldi Eboli'), ('Sandro Abate', 'Sandro Abate'), ('Came', 'Came Treviso'), ('Sala Consilina', 'Sporting Sala Consilina'),

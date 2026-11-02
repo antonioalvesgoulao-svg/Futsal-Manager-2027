@@ -29,7 +29,7 @@ export const itaIds = (s: GameState) => s.leagues.find((l) => l.id === 'ita1')?.
 
 /** Tipo de golo pelo texto do relato (relatórios do analista). */
 /** Itália: média real 2021/22-2025/26 (divisionecalcioa5.it) ~6,1 golos/jogo; os planteis dão menos com os parâmetros de Portugal. */
-export const ITA_GOAL_FACTOR = 1.22;
+export const ITA_GOAL_FACTOR = 1.16;
 const ITA_COMPS = ['ita', 'itaPlayoff', 'coppaIta', 'superIta'];
 export function goalKind(t: string) {
   return /contra-ataque/.test(t) ? 'contra' : /canto/.test(t) ? 'canto' : /10 metros/.test(t) ? 'livre10' : /penálti/.test(t) ? 'penalti' : /deserta/.test(t) ? 'baliza deserta' : /recarga/.test(t) ? 'recarga' : 'jogada';
