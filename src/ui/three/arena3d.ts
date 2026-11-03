@@ -638,6 +638,32 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
         seats.push({ p, ry, side: sd, row: rI, u, txt: !!textMask && pr.seatText!.side === sd && textMask(u, rI, rows, sideLen[sd]) });
       }
     }
+    // corrimãos (ex.: Pala Del Mauro): ao longo de cada escada, a subir com os degraus, e na frente da bancada
+    if (pr.rails && pr.aisles) {
+      const rm = new THREE.MeshStandardMaterial({ color: pr.rails, metalness: 0.6, roughness: 0.35 });
+      const at = (u: number, dd: number, yy: number) => (sd === 'N' || sd === 'S' ? new THREE.Vector3(u, yy, out * dd) : new THREE.Vector3(out * dd, yy, u));
+      const rod = (a: THREE.Vector3, b: THREE.Vector3) => {
+        const len = a.distanceTo(b); const m = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, len, 6), rm);
+        m.position.copy(a).add(b).multiplyScalar(0.5); m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), b.clone().sub(a).normalize()); scene.add(m);
+      };
+      const tot = Math.floor(sideLen[sd] / seatW);
+      const tiers: [number, number][] = split < rows ? [[0, split - 1], [split, rows - 1]] : [[0, rows - 1]];
+      for (let k = 0; k < tot; k++) {
+        const u = (k - (tot - 1) / 2) * seatW;
+        if (Math.round(Math.abs(u) / seatW) % (pr.aisles + 1) !== Math.floor(pr.aisles / 2)) continue;
+        if (gap && Math.abs(u) < gap / 2 + 0.3) continue;
+        for (const [r0, r1] of tiers) {
+          if (r1 <= r0) continue;
+          const dA = front[sd] + r0 * rowD + (r0 >= split ? upD : 0), yA = base + r0 * rise + (r0 >= split ? upY : 0);
+          const dB = front[sd] + r1 * rowD + (r1 >= split ? upD : 0), yB = base + r1 * rise + (r1 >= split ? upY : 0);
+          rod(at(u, dA + 0.2, yA + 0.95), at(u, dB + 0.6, yB + 0.95));
+          for (let rr = r0; rr <= r1; rr += 3) { const dd = front[sd] + rr * rowD + (rr >= split ? upD : 0) + 0.3, yy = base + rr * rise + (rr >= split ? upY : 0); rod(at(u, dd, yy), at(u, dd, yy + 0.95)); }
+        }
+      }
+      // grade da frente da bancada
+      const d0 = front[sd] - 0.05, y0 = base + 0.95;
+      rod(at(-sideLen[sd] / 2, d0, y0), at(sideLen[sd] / 2, d0, y0));
+    }
     // frente da bancada: LED nos modernos, muro pintado nos outros
     const fl = sideLen[sd];
     const frontsTex = pr.fronts ? canvasTex(2048, 64, (c) => {
@@ -793,7 +819,7 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
   // ---- edifício: paredes, janelas, teto e luzes ----
   const hallW = W + 2 * (W / 2 + 4.6 + TR + standDepth + 3 - W / 2);
   const hallD = H + 2 * (FN + standDepth + 3 - H / 2);
-  const hallH = Math.max(11, base + maxRows * rise + (pr.upperTier ? upY : 0) + 6);
+  const hallH = Math.max(11, base + maxRows * rise + (pr.upperTier ? upY : 0) + (pr.roofGap ?? 6)); // roofGap: espaço entre a última fila e o teto
   // chão do pavilhão à volta do campo e das bancadas
   // chão do pavilhão com a abertura da rampa do túnel
   const rampEnd = pr.sides.includes('N') ? FN + standDepth : FN;
