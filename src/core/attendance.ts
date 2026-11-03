@@ -91,7 +91,7 @@ export const ARENAS_ESP: Record<string, ArenaProfile> = {
 Object.assign(ARENAS, ARENAS_ESP);
 
 // Itália: interiores a partir das fotos enviadas pelo António (3/11/2026); lotações em src/data/ita/clubs.json.
-// Onde a foto não mostra um lado, esse lado repete o lado oposto (pedido do António). Palazzetto Guazzaroni (Active Network): sem fotos, genérico.
+// Onde a foto não mostra um lado, esse lado repete o lado oposto (pedido do António). Palazzetto Guazzaroni (Active Network): sem fotos, estimativa.
 const IT_BLUE = { court: '#1f5fd0', surround: '#3fc0a8' }; // piso azul das transmissões da Serie A
 export const ARENAS_ITA: Record<string, ArenaProfile> = {
   cat: { name: 'PalaCatania', capacity: 5000, capacityReal: true, style: 'moderno', sides: ['N', 'S', 'E', 'W'], corners: true, seat: '#2a55a8', seatMix: ['#2a55a8', '#f2c21b'], wall: '#d9d4c3', roof: 'treliça', windows: true, truss: '#c9b23a', structure: 'vigas', ceiling: '#2f6b3f', aisles: 14, rake: 0.46, floor: IT_BLUE },
@@ -106,6 +106,7 @@ export const ARENAS_ITA: Record<string, ArenaProfile> = {
   pom: { name: 'PalaLavinium', capacity: 900, capacityReal: false, style: 'municipal', sides: ['N', 'S'], seat: '#1f4fb0', wall: '#0f3d2e', roof: 'abóbada', windows: false, beams: '#9a5a2a', structure: 'arcos', ceiling: '#f2f2ee', aisles: 10, floor: { court: '#d9b27a', surround: '#1e4fb0', area: '#1e4fb0', wood: true } },
   gio: { name: 'PalaPansini', capacity: 3350, capacityReal: true, style: 'municipal', sides: ['N', 'S', 'E', 'W'], benches: true, seat: '#1f9a4a', seatMix: ['#1f9a4a', '#f2f2f2'], wall: '#9aa1a8', roof: 'treliça', windows: true, truss: '#4b5563', structure: 'trelicas', ceiling: '#d5d9dd', aisles: 14, floor: { court: '#c98e52', surround: '#c98e52', wood: true } },
   pad: { name: 'Palestra Gozzano', capacity: 500, capacityReal: false, style: 'clube', sides: ['N'], benches: true, seat: '#9ca3af', wall: '#d6d3cc', roof: 'treliça', windows: true, truss: '#6b7280', ceiling: '#9aa1a8', floor: { court: '#d6a066', surround: '#d6a066', wood: true } },
+  act: { name: 'Palazzetto dello Sport Claudio Guazzaroni', capacity: 700, capacityReal: false, style: 'municipal', sides: ['N', 'S'], seat: '#cc0000', seatMix: ['#cc0000', '#9aa1a8'], wall: '#eeeeec', roof: 'treliça', windows: true, truss: '#9aa1a8', ceiling: '#d5d9dd', aisles: 10, floor: { court: '#d6a066', surround: '#d6a066', wood: true } }, // sem fotos: pavilhão municipal típico (estimativa)
   cpr: { name: 'Pala Pinto', capacity: 2500, capacityReal: true, style: 'municipal', sides: ['N', 'S'], seat: '#c62828', seatMix: ['#c62828', '#4a6fa5'], wall: '#d9d4c8', roof: 'laje', windows: true, beams: '#1e4f9a', pillars: '#1e4f9a', ceiling: '#e5e7eb', upperTier: true, tierGap: 'corredor', aisles: 12, floor: { court: '#ddc08e', surround: '#1f8a6a', area: '#1e5fd0', wood: true } },
 };
 Object.assign(ARENAS, ARENAS_ITA);
