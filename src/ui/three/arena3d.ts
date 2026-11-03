@@ -575,6 +575,11 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
     const out = sd === 'N' || sd === 'W' ? -1 : 1; // para fora do campo
     let left = cap;
     const split = splitAt(rows);
+    // entradas de setor (vomitórios): aberturas no meio da bancada, com 3 filas de altura e 2,4 m de largura
+    const vN = pr.vomitories ? (sd === 'N' || sd === 'S' ? pr.vomitories : Math.max(1, Math.round(pr.vomitories / 2))) : 0;
+    const vU = Array.from({ length: vN }, (_, i) => (-0.5 + (i + 0.5) / vN) * (sideLen[sd] - 4)).filter((u) => !(gap && Math.abs(u) < gap / 2 + 1.5));
+    const vR0 = Math.max(1, Math.round(rows * 0.3)), vR1 = vR0 + 2;
+    const inVom = (u: number, row: number) => row >= vR0 && row <= vR1 && vU.some((x) => Math.abs(u - x) < 1.3);
     for (let rI = 0; rI < rows; rI++) {
       // segundo anel: recua e sobe, com camarotes envidraçados (ou só um corredor) no intervalo
       const up = rI >= split;
@@ -626,6 +631,7 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
       for (let k = 0; k < tot; k++) {
         const u = (k - (tot - 1) / 2) * seatW;
         if (pr.aisles && Math.round(Math.abs(u) / seatW) % (pr.aisles + 1) === Math.floor(pr.aisles / 2)) continue; // escadas
+        if (inVom(u, rI)) continue; // entrada de setor
         if (Math.abs(u) > gap / 2 + 0.2 || !gap || overTunnel) us.push(u);
       }
       us.sort((a, b) => Math.abs(a) - Math.abs(b));
@@ -636,6 +642,17 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
         if (isBench(sd, rI)) p.y -= 0.3;
         if (pr.standing) p.y += 0.4;
         seats.push({ p, ry, side: sd, row: rI, u, txt: !!textMask && pr.seatText!.side === sd && textMask(u, rI, rows, sideLen[sd]) });
+      }
+    }
+    if (vU.length) {
+      const dark = new THREE.MeshStandardMaterial({ color: '#1b1f24', roughness: 0.9 }), white = new THREE.MeshStandardMaterial({ color: '#eef0f2', roughness: 0.6 });
+      const dIn = front[sd] + vR0 * rowD, yIn = base + vR0 * rise, depth = (vR1 - vR0 + 1) * rowD, hgt = (vR1 - vR0 + 1) * rise + 1.2;
+      for (const u of vU) {
+        const put = (m: THREE.Mesh, uu: number, dd: number, yy: number) => { if (sd === 'N' || sd === 'S') m.position.set(uu, yy, out * dd); else { m.rotation.y = Math.PI / 2; m.position.set(out * dd, yy, uu); } scene.add(m); };
+        put(new THREE.Mesh(new THREE.BoxGeometry(2.4, hgt, depth), dark), u, dIn + depth / 2, yIn - 1 + hgt / 2); // boca escura do túnel de acesso
+        for (const sg of [-1, 1]) put(new THREE.Mesh(new THREE.BoxGeometry(0.25, hgt + 0.1, depth + 0.1), white), u + sg * 1.32, dIn + depth / 2, yIn - 1 + hgt / 2); // paredes brancas
+        put(new THREE.Mesh(new THREE.BoxGeometry(2.9, 0.3, depth + 0.1), white), u, dIn + depth / 2, yIn - 1 + hgt + 0.15); // laje por cima
+        if (pr.rails) put(new THREE.Mesh(new THREE.BoxGeometry(2.9, 0.05, 0.05), new THREE.MeshStandardMaterial({ color: pr.rails, metalness: 0.6, roughness: 0.35 })), u, dIn + depth + 0.05, yIn - 1 + hgt + 1.1); // grade em cima
       }
     }
     // corrimãos (ex.: Pala Del Mauro): ao longo de cada escada, a subir com os degraus, e na frente da bancada
