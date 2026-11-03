@@ -1,5 +1,5 @@
 {
-"_info": "Serie A 2026/27: planteis, números, posições, datas de nascimento e equipas técnicas da Divisione Calcio a 5 (divisionecalcioa5.it) + historial do futsalportugal.com (recolha 2/11/2026, pedidos espaçados). ageEstimated = sem data de nascimento (25 anos); nationalityEstimated = sem nacionalidade nas fontes (Itália, estimativa).",
+"_info": "Serie A 2026/27: planteis, números, posições, datas de nascimento e equipas técnicas da Divisione Calcio a 5 (divisionecalcioa5.it) + historial do futsalportugal.com (recolha 2/11/2026, pedidos espaçados). ageEstimated = sem data de nascimento (25 anos); nationalityEstimated = sem nacionalidade nas fontes; estimada pelo nome (Brasil/Argentina/Paraguai/Portugal/Polónia quando o nome o indica, senão Itália).",
 "players": [
 {
 "id": "act01",
@@ -66,7 +66,7 @@
 "position": "PIV",
 "number": 9,
 "age": 25,
-"nationality": "Itália",
+"nationality": "Brasil",
 "fullName": "Vinicius Calvanes Marques Pereira Calvanese",
 "serieA": 1,
 "nationalityEstimated": true
@@ -134,7 +134,7 @@
 "position": "ALA",
 "number": 24,
 "age": 29,
-"nationality": "Itália",
+"nationality": "Argentina",
 "fullName": "Kevin Nahuel Arrieta",
 "serieA": 2,
 "nationalityEstimated": true
@@ -221,7 +221,7 @@
 "position": "PIV",
 "number": 7,
 "age": 27,
-"nationality": "Itália",
+"nationality": "Brasil",
 "serieA": 1,
 "nationalityEstimated": true
 },
@@ -232,7 +232,7 @@
 "position": "UNI",
 "number": 8,
 "age": 31,
-"nationality": "Itália",
+"nationality": "Argentina",
 "serieA": 2,
 "nationalityEstimated": true
 },
@@ -243,7 +243,7 @@
 "position": "PIV",
 "number": 9,
 "age": 28,
-"nationality": "Itália",
+"nationality": "Brasil",
 "serieA": 1,
 "nationalityEstimated": true
 },
@@ -296,7 +296,7 @@
 "position": "FIX",
 "number": 6,
 "age": 27,
-"nationality": "Itália",
+"nationality": "Argentina",
 "serieA": 2,
 "nationalityEstimated": true
 },
@@ -318,7 +318,7 @@
 "position": "ALA",
 "number": 10,
 "age": 36,
-"nationality": "Itália",
+"nationality": "Brasil",
 "fullName": "Luiz Cardozo Brizzi Luizinho",
 "serieA": 2,
 "nationalityEstimated": true
@@ -330,7 +330,7 @@
 "position": "ALA",
 "number": 11,
 "age": 32,
-"nationality": "Itália",
+"nationality": "Brasil",
 "serieA": 1,
 "nationalityEstimated": true
 },
@@ -341,7 +341,7 @@
 "position": "PIV",
 "number": 12,
 "age": 35,
-"nationality": "Itália",
+"nationality": "Brasil",
 "fullName": "Arlan Pablo Japa Vieira",
 "serieA": 2,
 "nationalityEstimated": true
@@ -491,7 +491,7 @@
 "position": "PIV",
 "number": 13,
 "age": 30,
-"nationality": "Itália",
+"nationality": "Brasil",
 "serieA": 5,
 "nationalityEstimated": true
 },
@@ -619,7 +619,7 @@
 "position": "UNI",
 "number": 7,
 "age": 28,
-"nationality": "Itália",
+"nationality": "Polónia",
 "serieA": 6,
 "nationalityEstimated": true
 },
@@ -705,7 +705,7 @@
 "position": "ALA",
 "number": 27,
 "age": 40,
-"nationality": "Itália",
+"nationality": "Argentina",
 "serieA": 3,
 "nationalityEstimated": true
 },
@@ -793,7 +793,7 @@
 "position": "ALA",
 "number": 7,
 "age": 32,
-"nationality": "Itália",
+"nationality": "Argentina",
 "serieA": 2,
 "nationalityEstimated": true
 },
@@ -814,7 +814,7 @@
 "position": "ALA",
 "number": 10,
 "age": 32,
-"nationality": "Itália",
+"nationality": "Argentina",
 "serieA": 2,
 "nationalityEstimated": true
 },
@@ -825,7 +825,7 @@
 "position": "PIV",
 "number": 11,
 "age": 34,
-"nationality": "Itália",
+"nationality": "Brasil",
 "fullName": "Guilherme Gaio Gui",
 "serieA": 2,
 "nationalityEstimated": true
@@ -881,7 +881,7 @@
 "position": "UNI",
 "number": 23,
 "age": 31,
-"nationality": "Itália",
+"nationality": "Paraguai",
 "serieA": 2,
 "nationalityEstimated": true
 },
@@ -1073,7 +1073,7 @@
 "position": "UNI",
 "number": 84,
 "age": 42,
-"nationality": "Itália",
+"nationality": "Brasil",
 "serieA": 1,
 "nationalityEstimated": true
 },
@@ -1084,7 +1084,7 @@
 "position": "GR",
 "number": 3,
 "age": 33,
-"nationality": "Itália",
+"nationality": "Brasil",
 "serieA": 6,
 "nationalityEstimated": true
 },
@@ -1105,7 +1105,7 @@
 "position": "GR",
 "number": 28,
 "age": 24,
-"nationality": "Itália",
+"nationality": "Brasil",
 "serieA": 2,
 "nationalityEstimated": true
 },
@@ -1180,7 +1180,7 @@
 "position": "PIV",
 "number": 11,
 "age": 28,
-"nationality": "Itália",
+"nationality": "Portugal",
 "serieA": 3,
 "nationalityEstimated": true
 },
@@ -1222,7 +1222,7 @@
 "position": "PIV",
 "number": 18,
 "age": 35,
-"nationality": "Itália",
+"nationality": "Brasil",
 "serieA": 6,
 "nationalityEstimated": true
 },
@@ -1233,7 +1233,7 @@
 "position": "ALA",
 "number": 20,
 "age": 28,
-"nationality": "Itália",
+"nationality": "Paraguai",
 "serieA": 4,
 "nationalityEstimated": true
 },
@@ -1298,7 +1298,7 @@
 "position": "GR",
 "number": 28,
 "age": 27,
-"nationality": "Itália",
+"nationality": "Brasil",
 "serieA": 3,
 "nationalityEstimated": true
 },
@@ -1390,7 +1390,7 @@
 "position": "PIV",
 "number": 19,
 "age": 34,
-"nationality": "Itália",
+"nationality": "Brasil",
 "serieA": 1,
 "nationalityEstimated": true
 },
@@ -1431,7 +1431,7 @@
 "position": "GR",
 "number": 14,
 "age": 39,
-"nationality": "Itália",
+"nationality": "Brasil",
 "serieA": 1,
 "nationalityEstimated": true
 },
@@ -1530,7 +1530,7 @@
 "position": "ALA",
 "number": 10,
 "age": 32,
-"nationality": "Itália",
+"nationality": "Argentina",
 "serieA": 6,
 "nationalityEstimated": true
 },
@@ -1551,7 +1551,7 @@
 "position": "ALA",
 "number": 20,
 "age": 32,
-"nationality": "Itália",
+"nationality": "Portugal",
 "serieA": 1,
 "nationalityEstimated": true
 },
@@ -1593,7 +1593,7 @@
 "position": "ALA",
 "number": 66,
 "age": 24,
-"nationality": "Itália",
+"nationality": "Brasil",
 "fullName": "Luis Henrique D’Andrea Bortoletto",
 "serieA": 3,
 "nationalityEstimated": true
@@ -1696,7 +1696,7 @@
 "position": "UNI",
 "number": 33,
 "age": 36,
-"nationality": "Itália",
+"nationality": "Brasil",
 "serieA": 2,
 "nationalityEstimated": true
 },
@@ -1918,7 +1918,7 @@
 "position": "GR",
 "number": 20,
 "age": 36,
-"nationality": "Itália",
+"nationality": "Brasil",
 "serieA": 1,
 "nationalityEstimated": true
 },
@@ -1929,7 +1929,7 @@
 "position": "GR",
 "number": 21,
 "age": 21,
-"nationality": "Itália",
+"nationality": "Brasil",
 "serieA": 1,
 "nationalityEstimated": true
 },
@@ -2018,7 +2018,7 @@
 "position": "ALA",
 "number": 9,
 "age": 33,
-"nationality": "Itália",
+"nationality": "Brasil",
 "serieA": 1,
 "nationalityEstimated": true
 },
@@ -2136,7 +2136,7 @@
 "position": "ALA",
 "number": 3,
 "age": 28,
-"nationality": "Itália",
+"nationality": "Brasil",
 "serieA": 2,
 "nationalityEstimated": true
 },
@@ -2203,7 +2203,7 @@
 "position": "ALA",
 "number": 11,
 "age": 38,
-"nationality": "Itália",
+"nationality": "Brasil",
 "serieA": 2,
 "nationalityEstimated": true
 },

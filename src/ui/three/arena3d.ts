@@ -347,6 +347,8 @@ function compTheme(comp: string, lang = 'pt'): { bg: string; a: string; b: strin
 }
 
 export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
+  // pista de atletismo à volta da quadra (ex.: PalaVesuvio): as bancadas recuam a largura da pista
+  const TR = o.profile.track ?? 0, FN = FRONT_N + TR;
   const ct = compTheme(o.comp, o.lang);
   const pr = o.profile;
   const r = rng(pr.name.length * 131 + pr.capacity);
@@ -355,6 +357,21 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
   floor.rotation.x = -Math.PI / 2;
   floor.receiveShadow = true;
   scene.add(floor);
+  if (TR > 0) {
+    // pista (tartan vermelho-acastanhado com linhas brancas) em forma de estádio, por baixo das bancadas recuadas
+    const PW = W + 8 + 2 * TR + 2, PH = H + 8 + 2 * TR + 2, K = 12;
+    const tex = canvasTex(Math.round(PW * K), Math.round(PH * K), (c) => {
+      const rr = (x: number, y: number, w: number, h: number, r: number) => { c.beginPath(); c.roundRect(x * K, y * K, w * K, h * K, r * K); };
+      c.fillStyle = '#a8503a'; rr(0, 0, PW, PH, PH / 2); c.fill();
+      c.strokeStyle = 'rgba(255,255,255,0.85)'; c.lineWidth = 0.06 * K;
+      const lanes = Math.max(2, Math.floor((TR - 0.6) / 1.22));
+      for (let l = 0; l <= lanes; l++) { const m = 1 + l * 1.22; rr(m, m, PW - 2 * m, PH - 2 * m, Math.max(0.5, PH / 2 - m)); c.stroke(); }
+      c.clearRect((PW - (W + 8)) / 2 * K, (PH - (H + 8)) / 2 * K, (W + 8) * K, (H + 8) * K);
+    });
+    const track = new THREE.Mesh(new THREE.PlaneGeometry(PW, PH), new THREE.MeshStandardMaterial({ map: tex, transparent: true, alphaTest: 0.5, roughness: 0.8 }));
+    track.rotation.x = -Math.PI / 2; track.position.y = 0.004; track.receiveShadow = true;
+    scene.add(track);
+  }
   if (o.quality === 'alta') {
     // piso envernizado: reflexo verdadeiro (jogadores, bola, luzes) por baixo de um piso ligeiramente transparente
     const mirror = new Reflector(new THREE.PlaneGeometry(W + 8, H + 8), { textureWidth: 1024, textureHeight: 512, color: 0x8a8a8a });
@@ -523,7 +540,7 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
   const CORNER_LEN = 9; // comprimento médio de cada canto (m), para repartir a lotação
   const lenTot = pr.sides.reduce((a, s) => a + sideLen[s], 0) + cornerList.length * CORNER_LEN;
   const seatW = 0.5, rowD = 0.85, rise = pr.rake ?? 0.42;
-  const front = { N: FRONT_N, S: H / 2 + 4.2, E: W / 2 + 4.6, W: W / 2 + 4.6 };
+  const front = { N: FN, S: H / 2 + 4.2 + TR, E: W / 2 + 4.6 + TR, W: W / 2 + 4.6 + TR };
   const base = pr.base ?? (modern ? 1.2 : 0.6); // altura da primeira fila
   const isBench = (sd: string, row = 99) => pr.benches === true || (Array.isArray(pr.benches) && pr.benches.includes(sd as 'N')) || (!!pr.lowerBenches && row < splitAt(rowsBySide[sd] ?? 99));
   const splitAt = (rows: number) => (pr.upperTier ? Math.ceil(rows * (pr.tierSplit ?? 0.55)) : 99);
@@ -583,7 +600,7 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
       // degrau (do lado dos bancos, em duas metades: a passagem do túnel fica ao meio)
       // por cima do corredor (acima da laje do túnel) a bancada continua inteira
       // o teto do corredor acompanha a rampa: a bancada continua por cima onde houver altura livre
-      const ceil = rampFloor(d - FRONT_N) + HEADROOM;
+      const ceil = rampFloor(d - FN) + HEADROOM;
       const overTunnel = gap > 0 && y > ceil + 0.12;
       if (overTunnel) {
         const fill = new THREE.Mesh(new THREE.BoxGeometry(gap + 0.4, y - ceil, rowD), concrete);
@@ -774,14 +791,14 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
   }
 
   // ---- edifício: paredes, janelas, teto e luzes ----
-  const hallW = W + 2 * (W / 2 + 4.6 + standDepth + 3 - W / 2);
-  const hallD = H + 2 * (FRONT_N + standDepth + 3 - H / 2);
+  const hallW = W + 2 * (W / 2 + 4.6 + TR + standDepth + 3 - W / 2);
+  const hallD = H + 2 * (FN + standDepth + 3 - H / 2);
   const hallH = Math.max(11, base + maxRows * rise + (pr.upperTier ? upY : 0) + 6);
   // chão do pavilhão à volta do campo e das bancadas
   // chão do pavilhão com a abertura da rampa do túnel
-  const rampEnd = pr.sides.includes('N') ? FRONT_N + standDepth : FRONT_N;
+  const rampEnd = pr.sides.includes('N') ? FN + standDepth : FN;
   const floorShape = new THREE.Shape([new THREE.Vector2(-hallW / 2, -hallD / 2), new THREE.Vector2(hallW / 2, -hallD / 2), new THREE.Vector2(hallW / 2, hallD / 2), new THREE.Vector2(-hallW / 2, hallD / 2)]);
-  if (rampEnd > FRONT_N) floorShape.holes.push(new THREE.Path([new THREE.Vector2(-TUNNEL_GAP / 2, FRONT_N), new THREE.Vector2(-TUNNEL_GAP / 2, rampEnd), new THREE.Vector2(TUNNEL_GAP / 2, rampEnd), new THREE.Vector2(TUNNEL_GAP / 2, FRONT_N)]));
+  if (rampEnd > FN) floorShape.holes.push(new THREE.Path([new THREE.Vector2(-TUNNEL_GAP / 2, FN), new THREE.Vector2(-TUNNEL_GAP / 2, rampEnd), new THREE.Vector2(TUNNEL_GAP / 2, rampEnd), new THREE.Vector2(TUNNEL_GAP / 2, FN)]));
   const outer = new THREE.Mesh(new THREE.ShapeGeometry(floorShape), new THREE.MeshStandardMaterial({ color: '#3b4b5f', roughness: 0.9 }));
   outer.rotation.x = -Math.PI / 2;
   outer.position.y = -0.005;
@@ -915,11 +932,11 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
   const tunnel = new THREE.Group();
   {
     const hasN = pr.sides.includes('N');
-    const zBack = hasN ? FRONT_N + standDepth : hallD / 2 - 0.1; // fundo do corredor
+    const zBack = hasN ? FN + standDepth : hallD / 2 - 0.1; // fundo do corredor
     const wG = TUNNEL_GAP;
     // corredor fixo: chão, laje por cima e porta escura para os balneários ao fundo
     const dark = new THREE.MeshBasicMaterial({ color: '#06080b' });
-    const corrLen = zBack - FRONT_N;
+    const corrLen = zBack - FN;
     const bot = hasN ? -RAMP_DROP : 0;
     if (corrLen > 0.2) {
       // chão: rampa a descer e depois plano até aos balneários
@@ -928,22 +945,22 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
       const rampLen = Math.hypot(rl, rampFloor(rl));
       const ramp = new THREE.Mesh(new THREE.PlaneGeometry(wG, rampLen), fm);
       ramp.rotation.x = -Math.PI / 2 - Math.atan2(-rampFloor(rl), rl);
-      ramp.position.set(0, rampFloor(rl) / 2 + 0.005, -(FRONT_N + rl / 2));
+      ramp.position.set(0, rampFloor(rl) / 2 + 0.005, -(FN + rl / 2));
       scene.add(ramp);
       if (corrLen > rl) {
         const flat = new THREE.Mesh(new THREE.PlaneGeometry(wG, corrLen - rl), fm);
         flat.rotation.x = -Math.PI / 2;
-        flat.position.set(0, bot + 0.005, -(FRONT_N + rl + (corrLen - rl) / 2));
+        flat.position.set(0, bot + 0.005, -(FN + rl + (corrLen - rl) / 2));
         scene.add(flat);
       }
       // paredes do corredor (descem até ao fundo da rampa)
       for (const sg of [-1, 1]) {
         const wall = new THREE.Mesh(new THREE.BoxGeometry(0.15, 2.6 - bot, corrLen), concrete);
-        wall.position.set(sg * (wG / 2 + 0.05), (2.6 + bot) / 2, -(FRONT_N + corrLen / 2));
+        wall.position.set(sg * (wG / 2 + 0.05), (2.6 + bot) / 2, -(FN + corrLen / 2));
         scene.add(wall);
       }
       const lintel = new THREE.Mesh(new THREE.BoxGeometry(wG + 0.4, 0.4, 0.2), new THREE.MeshStandardMaterial({ color: ct.bg }));
-      lintel.position.set(0, 2.75, -FRONT_N - 0.1);
+      lintel.position.set(0, 2.75, -FN - 0.1);
       if (!hasN) scene.add(lintel);
     }
     const door = new THREE.Mesh(new THREE.PlaneGeometry(wG, HEADROOM), dark);
@@ -951,7 +968,7 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
     scene.add(door);
 
     // túnel retrátil (só na cerimónia)
-    const z0 = TUNNEL_MOUTH, z1 = FRONT_N;
+    const z0 = TUNNEL_MOUTH, z1 = FN;
     const len = z1 - z0;
     const tw = wG - 0.3, th = 2.4;
     const lona = canvasTex(1024, 256, (c) => {
@@ -1015,7 +1032,7 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
 
   // claques: bandeiras, tifo e tochas
   const ultras: { sd: number; u: ReturnType<typeof buildUltras> }[] = [];
-  const front0 = { N: FRONT_N, S: H / 2 + 4.2, E: W / 2 + 4.6, W: W / 2 + 4.6 };
+  const front0 = { N: FN, S: H / 2 + 4.2 + TR, E: W / 2 + 4.6 + TR, W: W / 2 + 4.6 + TR };
   for (const [sd, side] of [[0, homeUltra], [1, awayUltra]] as const) {
     if (!side) continue;
     const t = o.teams[sd];
@@ -1030,7 +1047,7 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
     height: hallH,
     benchSeats,
     tableSeats,
-    groundAt: (x: number, z: number) => (pr.sides.includes('N') && Math.abs(x) < TUNNEL_GAP / 2 && z < -FRONT_N ? rampFloor(-z - FRONT_N) : 0),
+    groundAt: (x: number, z: number) => (pr.sides.includes('N') && Math.abs(x) < TUNNEL_GAP / 2 && z < -FN ? rampFloor(-z - FN) : 0),
     netHit(sgn: number, y: number, z: number, amp = 0.35) {
       const n = nets.find((x) => x.sgn === sgn);
       if (n) n.hit = { t: uniforms.uTime.value, y, z, amp };

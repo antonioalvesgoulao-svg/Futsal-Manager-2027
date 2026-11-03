@@ -15,10 +15,10 @@
    "shortName": "CAT",
    "city": "Catania",
    "arena": "Palazzetto Dello Sport Palacatania",
-   "capacity": 3000,
-   "capacityReal": false,
+   "capacity": 5000,
+   "capacityReal": true,
    "colors": [
-    "#d50000",
+    "#e0101c",
     "#4aa3df"
    ],
    "reputation": 80,
@@ -34,10 +34,10 @@
    "shortName": "NAP",
    "city": "Napoli",
    "arena": "PalaVesuvio",
-   "capacity": 2500,
-   "capacityReal": false,
+   "capacity": 3711,
+   "capacityReal": true,
    "colors": [
-    "#4aa3df",
+    "#1e73be",
     "#ffffff"
    ],
    "reputation": 79,
@@ -56,7 +56,7 @@
    "capacity": 1000,
    "capacityReal": false,
    "colors": [
-    "#15803d",
+    "#186c2e",
     "#111111"
    ],
    "reputation": 80,
@@ -72,11 +72,11 @@
    "shortName": "EBO",
    "city": "Eboli",
    "arena": "Palasele",
-   "capacity": 4000,
-   "capacityReal": false,
+   "capacity": 8000,
+   "capacityReal": true,
    "colors": [
-    "#d50000",
-    "#1e3a8a"
+    "#da232e",
+    "#23376d"
    ],
    "reputation": 76,
    "level": 77,
@@ -91,8 +91,8 @@
    "shortName": "SAA",
    "city": "Avellino",
    "arena": "Pala Del Mauro",
-   "capacity": 5000,
-   "capacityReal": false,
+   "capacity": 5300,
+   "capacityReal": true,
    "colors": [
     "#15803d",
     "#ffffff"
@@ -132,8 +132,8 @@
    "capacity": 800,
    "capacityReal": false,
    "colors": [
-    "#facc15",
-    "#15803d"
+    "#3ca13b",
+    "#ffffff"
    ],
    "reputation": 64,
    "level": 71,
@@ -148,11 +148,11 @@
    "shortName": "ROM",
    "city": "Roma",
    "arena": "PalaCesaroni",
-   "capacity": 1500,
-   "capacityReal": false,
+   "capacity": 2000,
+   "capacityReal": true,
    "colors": [
-    "#facc15",
-    "#d50000"
+    "#fbb900",
+    "#980a2b"
    ],
    "reputation": 66,
    "level": 69,
@@ -167,8 +167,8 @@
    "shortName": "BEN",
    "city": "Benevento",
    "arena": "Palatedeschi",
-   "capacity": 1500,
-   "capacityReal": false,
+   "capacity": 4000,
+   "capacityReal": true,
    "colors": [
     "#facc15",
     "#d50000"
@@ -189,8 +189,8 @@
    "capacity": 700,
    "capacityReal": false,
    "colors": [
-    "#f97316",
-    "#111111"
+    "#cc0000",
+    "#facc15"
    ],
    "reputation": 60,
    "level": 67,
@@ -208,8 +208,8 @@
    "capacity": 900,
    "capacityReal": false,
    "colors": [
-    "#d50000",
-    "#1e3a8a"
+    "#dd3333",
+    "#003366"
    ],
    "reputation": 66,
    "level": 66,
@@ -224,8 +224,8 @@
    "shortName": "GIO",
    "city": "Giovinazzo",
    "arena": "Palazzetto Dello Sport Palapansini",
-   "capacity": 1000,
-   "capacityReal": false,
+   "capacity": 3350,
+   "capacityReal": true,
    "colors": [
     "#15803d",
     "#ffffff"
@@ -262,8 +262,8 @@
    "shortName": "CPR",
    "city": "Capurso",
    "arena": "Pala Pinto Mola di Bari",
-   "capacity": 800,
-   "capacityReal": false,
+   "capacity": 2500,
+   "capacityReal": true,
    "colors": [
     "#d50000",
     "#ffffff"
@@ -274,5 +274,6 @@
    "budget": 350000,
    "league": "ita1"
   }
- ]
+ ],
+ "_info": " Cores: tiradas do site oficial de cada clube (cores principais do design, 2/11/2026); Benevento, Giovinazzo, Padova e Capurso sem site acessível, Came Treviso corrigida pelo António (não veste verde; azul-claro/branco, estimativa). Lotações reais (Wikipédia, Comune di Eboli, metacatania.it): Catania 5000, PalaVesuvio 3711, PalaSele 8000, Del Mauro 5195, PalaPansini 3350, PalaTedeschi 4000; restantes estimativa. Lotações indicadas pelo António (3/11): Pala Del Mauro 5300, PalaCesaroni 2000, Pala Pinto 2500."
 }
