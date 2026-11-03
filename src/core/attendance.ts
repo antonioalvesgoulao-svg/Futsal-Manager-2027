@@ -45,6 +45,7 @@ export interface ArenaProfile {
   aisles?: number; // escadas: um corredor a cada N lugares
   rake?: number; // subida por fila (m), 0,42 por omissão; bancadas mais íngremes > 0,42
   seatText?: { side: 'N' | 'S' | 'E' | 'W'; text: string; color: string }; // letras desenhadas com cadeiras de outra cor
+  track?: number; // pista de atletismo à volta da quadra: largura (m) que afasta as bancadas
 }
 
 // Lotações: Wikipédia (listas de pavilhões da Liga Placard 2016/17 e 2025/26); AMCO Arena (SC Braga,
@@ -94,7 +95,7 @@ Object.assign(ARENAS, ARENAS_ESP);
 const IT_BLUE = { court: '#1f5fd0', surround: '#3fc0a8' }; // piso azul das transmissões da Serie A
 export const ARENAS_ITA: Record<string, ArenaProfile> = {
   cat: { name: 'PalaCatania', capacity: 5000, capacityReal: true, style: 'moderno', sides: ['N', 'S', 'E', 'W'], corners: true, seat: '#2a55a8', seatMix: ['#2a55a8', '#f2c21b'], wall: '#d9d4c3', roof: 'treliça', windows: true, truss: '#c9b23a', structure: 'vigas', ceiling: '#2f6b3f', aisles: 14, rake: 0.46, floor: IT_BLUE },
-  nap: { name: 'PalaVesuvio', capacity: 3711, capacityReal: true, style: 'municipal', sides: ['N', 'S', 'E', 'W'], corners: true, seat: '#e5e7eb', wall: '#d6d8db', roof: 'treliça', windows: true, truss: '#4b5563', structure: 'trelicas', ceiling: '#2b2f36', aisles: 12, floor: IT_BLUE },
+  nap: { name: 'PalaVesuvio', capacity: 3711, capacityReal: true, track: 7, style: 'municipal', sides: ['N', 'S', 'E', 'W'], corners: true, seat: '#e5e7eb', wall: '#d6d8db', roof: 'treliça', windows: true, truss: '#4b5563', structure: 'trelicas', ceiling: '#2b2f36', aisles: 12, floor: IT_BLUE },
   l84: { name: 'Pala Maggiore', capacity: 1000, capacityReal: false, style: 'municipal', sides: ['N', 'S'], seat: '#b3262d', wall: '#efe9dc', roof: 'treliça', windows: true, beams: '#8a5a32', structure: 'vigas', ceiling: '#c9a27a', aisles: 12, floor: { court: '#d9b27a', surround: '#d9b27a', wood: true } },
   ebo: { name: 'PalaSele', capacity: 8000, capacityReal: true, style: 'moderno', sides: ['N', 'S', 'E', 'W'], corners: true, seat: '#1f4fb0', seatMix: ['#1f4fb0', '#9aa1a8'], wall: '#6b4a32', roof: 'abóbada', windows: false, beams: '#a0622f', structure: 'cupula', ceiling: '#8a5a30', truss: '#c9ced4', upperTier: true, tierGap: 'corredor', aisles: 14, rake: 0.5, floor: { court: '#1f5fd0', surround: '#7fe0c0', wood: true } },
   ave: { name: 'Pala Del Mauro', capacity: 5300, capacityReal: true, style: 'moderno', sides: ['N', 'S', 'E', 'W'], corners: true, seat: '#c62828', seatMix: ['#c62828', '#1f7a4a', '#c62828'], wall: '#1f7a4a', roof: 'laje', windows: false, ceiling: '#e8e0c8', structure: 'liso', upperTier: true, tierGap: 'corredor', aisles: 12, rake: 0.5, floor: { court: '#d9b27a', surround: '#1f7a4a', wood: true } },
