@@ -1,10 +1,14 @@
 // Equipamentos de cada clube: principal e alternativo (camisola, calções, meias, padrão).
 // confirmed=false: cores por confirmar com o António (não encontradas em fontes públicas acessíveis).
-export type KitPattern = 'liso' | 'listas' | 'riscas' | 'metade'; // listas = horizontais; riscas = verticais
-export interface KitDef { shirt: string; shorts: string; socks: string; pattern: KitPattern; alt: string } // alt = 2.ª cor do padrão
+// listas = horizontais; riscas = verticais; finas = riscas finas; faixa = diagonal do ombro à anca; banda = horizontal no peito;
+// ombros = parte de cima noutra cor; laterais = painéis dos lados; centro = risca larga ao meio; xadrez; degrade = cor que muda para baixo
+export type KitPattern = 'liso' | 'listas' | 'riscas' | 'metade' | 'finas' | 'faixa' | 'banda' | 'ombros' | 'laterais' | 'centro' | 'xadrez' | 'degrade';
+export const KIT_PATTERNS: KitPattern[] = ['liso', 'listas', 'riscas', 'finas', 'metade', 'faixa', 'banda', 'ombros', 'laterais', 'centro', 'xadrez', 'degrade'];
+/** alt = 2.ª cor do padrão; sleeves = cor das mangas (opcional, senão como a camisola); collar = cor da gola (opcional, senão a dos calções) */
+export interface KitDef { shirt: string; shorts: string; socks: string; pattern: KitPattern; alt: string; sleeves?: string; collar?: string }
 export interface ClubKits { home: KitDef; away: KitDef; confirmed: boolean }
 
-const k = (shirt: string, shorts: string, socks: string, pattern: KitPattern = 'liso', alt = '#ffffff'): KitDef => ({ shirt, shorts, socks, pattern, alt });
+const k = (shirt: string, shorts: string, socks: string, pattern: KitPattern = 'liso', alt = '#ffffff', sleeves?: string, collar?: string): KitDef => ({ shirt, shorts, socks, pattern, alt, ...(sleeves ? { sleeves } : {}), ...(collar ? { collar } : {}) });
 
 export const KITS: Record<string, ClubKits> = {
   scp: { home: k('#00804a', '#111111', '#00804a', 'listas', '#ffffff'), away: k('#ccaa6b', '#ccab6a', '#ccab6a', 'liso', '#ffffff'), confirmed: true },

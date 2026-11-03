@@ -213,7 +213,7 @@ export class Highlight3D {
     let hsh = 0;
     for (const ch of id) hsh = (hsh * 31 + ch.charCodeAt(0)) >>> 0;
     const look: Look = inf.look ?? { skin: '#d9a77f', hair: '#2e1e14', style: 'curto', beard: 'nenhuma', height: 1.78, boots: ['#111111', '#ffffff'] };
-    const pm = makePlayer({ shirt, shorts, socks: kd?.socks ?? cols[0], number: inf.number, name: inf.name, gk: inf.gk, pattern: kd?.pattern, alt: kd?.alt }, look);
+    const pm = makePlayer({ shirt, shorts, socks: kd?.socks ?? cols[0], number: inf.number, name: inf.name, gk: inf.gk, pattern: kd?.pattern, alt: kd?.alt, sleeves: kd?.sleeves, collar: kd?.collar }, look);
     this.scene.add(pm.g);
     // identificação discreta por cima da cabeça: número e apelido, com a cor da equipa
     if (!inf.referee && inf.look) {

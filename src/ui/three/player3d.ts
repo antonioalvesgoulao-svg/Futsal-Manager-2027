@@ -8,6 +8,8 @@ import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js
 import type { Look } from '../../core/appearance';
 import type { Act } from '../../core/visual/choreo';
 import { canvasTex } from './arena3d';
+import { drawKitPattern } from '../kitPattern';
+import type { KitPattern } from '../../core/kits';
 
 export interface Actor {
   g: THREE.Group; // posição e orientação no campo
@@ -29,7 +31,7 @@ export interface Actor {
   init: boolean;
 }
 
-export interface Kit { shirt: string; shorts: string; socks: string; number: number | null; name?: string; gk: boolean; pattern?: 'liso' | 'listas' | 'riscas' | 'metade'; alt?: string }
+export interface Kit { shirt: string; shorts: string; socks: string; number: number | null; name?: string; gk: boolean; pattern?: KitPattern; alt?: string; sleeves?: string; collar?: string }
 
 const HIP = 0.92;
 
@@ -214,14 +216,10 @@ export function makePlayer(kit: Kit, look: Look) {
   const skinMat = skinMaterial(look.skin);
   const shirtMat = fabric(kit.shirt);
   if (kit.pattern && kit.pattern !== 'liso' && kit.alt) {
-    // padrão da camisola: listas horizontais, riscas verticais ou metades (coordenadas do tecido: u à volta, v ao longo)
-    shirtMat.map = canvasTex(256, 256, (c) => {
-      c.fillStyle = kit.shirt; c.fillRect(0, 0, 256, 256);
-      c.fillStyle = kit.alt!;
-      if (kit.pattern === 'listas') for (let y = 0; y < 256; y += 64) c.fillRect(0, y, 256, 32);
-      else if (kit.pattern === 'riscas') for (let x = 0; x < 256; x += 32) c.fillRect(x, 0, 16, 256);
-      else c.fillRect(128, 0, 128, 256);
-    });
+    // padrão da camisola (kitPattern.ts): a textura tem a frente ao centro; o tecido começa (u=0) à frente, por isso desloca-se meia volta
+    const tex = canvasTex(256, 256, (c) => drawKitPattern(c, { shirt: kit.shirt, alt: kit.alt!, pattern: kit.pattern! }));
+    tex.wrapS = THREE.RepeatWrapping; tex.offset.x = 0.5;
+    shirtMat.map = tex;
     shirtMat.color.set('#ffffff');
   }
   const shortsMat = fabric(kit.shorts);
@@ -264,7 +262,10 @@ export function makePlayer(kit: Kit, look: Look) {
       shirt.push({ geo: segGeo(0.25, [0.044, 0.045, 0.036, 0.03], 0.02), bone: fore[i], y0: 0.02, len: 0.25, parent: arm[i] });
     } else shirt.push({ geo: segGeo(0.14, [0.066, 0.063], 0.05, [true, true], 20, 0.35), bone: arm[i], y0: 0.02, len: 0.29, parent: body, child: fore[i], blend: 0.25 });
   }
+  // mangas noutra cor (opcional): peças à parte com o seu material
+  const sleeveParts = kit.sleeves ? shirt.splice(1) : [];
   g.add(skinned(shirt, bones, shirtMat));
+  if (sleeveParts.length) g.add(skinned(sleeveParts, bones, fabric(kit.sleeves!)));
 
   // ---- calções ----
   const pelvis = segGeo(0.2, [0.128, 0.15, 0.155], 0.2, [true, true], 20, 0.5);
@@ -307,7 +308,7 @@ export function makePlayer(kit: Kit, look: Look) {
   sn.position.set(0.03, -0.1, 0.104);
   sn.rotation.y = 0.35;
   thigh[1].add(sn);
-  const collar = new THREE.Mesh(new THREE.TorusGeometry(0.056, 0.007, 8, 24), fabric(kit.shorts));
+  const collar = new THREE.Mesh(new THREE.TorusGeometry(0.056, 0.007, 8, 24), fabric(kit.collar ?? kit.shorts));
   collar.rotation.x = Math.PI / 2;
   collar.position.set(0, 0.665, 0.005);
   body.add(collar);
