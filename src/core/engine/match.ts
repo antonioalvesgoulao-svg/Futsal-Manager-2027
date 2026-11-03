@@ -7,6 +7,8 @@ import type { Player } from '../types';
 import type { MatchEvent, MatchOptions, MatchResult, PlayerStats, Side, TeamSetup, TeamStats, EventType } from './types';
 
 const HALF = 1200; // 20 minutos de tempo útil
+const lerpN = (a: number, b: number, k: number) => a + (b - a) * k;
+const cl = (x: number, a: number, b: number) => Math.max(a, Math.min(b, x));
 const ET = 300; // prolongamento: 2 x 5 minutos
 // Regulamento da Liga Placard, Art. 69.2: 5 + 7 suplentes; até 9 suplentes se 2 da ficha forem Sub-20 formados localmente
 const MAX_SQUAD = 12;
@@ -411,9 +413,34 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
   function shot(s: Side, kind: 'jogada' | 'contra' | 'livre10' | 'penalti' | 'canto' | 'baliza_aberta' | 'recarga', shooterIn?: Live): void {
     const att = teams[s];
     const def = teams[1 - s];
-    const shooter = shooterIn ?? pick(outfield(att), shooterWeight);
-    const others = outfield(att).filter((l) => l !== shooter);
-    const assist = setPiece ? setPiece.assist : kind === 'jogada' || kind === 'contra' || kind === 'canto' ? (r() < 0.62 && others.length ? pick(others, (l) => eff(l, 'passe') + eff(l, 'visao')) : undefined) : undefined;
+    let shooter = shooterIn ?? pick(outfield(att), shooterWeight);
+    let others = outfield(att).filter((l) => l !== shooter);
+    let assist = setPiece ? setPiece.assist : kind === 'jogada' || kind === 'contra' || kind === 'canto' ? (r() < 0.62 && others.length ? pick(others, (l) => eff(l, 'passe') + eff(l, 'visao')) : undefined) : undefined;
+    // contra-ataque: situação numérica (quantos atacantes chegam e quantos defensores recuperam, pela aceleração,
+    // posicionamento e concentração de cada um) e decisão de quem conduz (rematar ou passar), pelos atributos
+    let cnt: [number, number] | undefined;
+    if (kind === 'contra' && !shooterIn && !setPiece) {
+      const atts = outfield(att), defs = outfield(def);
+      const carrier = pick(atts, (l) => eff(l, 'aceleracao') * 1.2 + eff(l, 'drible') + eff(l, 'decisoes') * 0.5);
+      const mates = atts.filter((l) => l !== carrier);
+      const support = mates.filter((l) => r() < cl(0.3 + (eff(l, 'aceleracao') + eff(l, 'trabalhoEquipa') - 20) * 0.02, 0.1, 0.65)).length;
+      const na = 1 + Math.min(2, support);
+      let nd = 0;
+      for (const d of defs) if (r() < cl(0.3 + (eff(d, 'aceleracao') + eff(d, 'posicionamento') + eff(d, 'concentracao') - 30) * 0.015, 0.08, 0.7)) nd++;
+      nd = Math.min(nd, na);
+      cnt = [na, nd];
+      // vantagem de passar: 2x0 (baliza quase vazia) é melhor do que rematar com o GR à frente; 2x1 obriga a passar se o
+      // defensor fecha; com o defensor a chegar (nd = na) a melhor opção é rematar cedo. Quem decide mal escolhe ao acaso
+      const passGood = na === 1 ? 0 : nd === 0 ? 0.72 : nd < na ? 0.62 : 0.2;
+      const shootPull = (eff(carrier, 'finalizacao') - 10) * 0.025 + (eff(carrier, 'compostura') - 10) * 0.015 - (eff(carrier, 'visao') - 10) * 0.01;
+      const wise = cl((eff(carrier, 'decisoes') - 1) / 19, 0, 1);
+      const pPass = na === 1 ? 0 : cl(lerpN(0.5, passGood, 0.4 + wise * 0.6) - shootPull, 0.05, 0.9);
+      if (r() < pPass) {
+        shooter = pick(mates, (l) => eff(l, 'finalizacao') + eff(l, 'antecipacao') + eff(l, 'aceleracao') * 0.5);
+        assist = carrier;
+      } else { shooter = carrier; assist = undefined; }
+      others = atts.filter((l) => l !== shooter);
+    }
     tstats[s].shots++;
     pstats[shooter.p.id].shots++;
 
@@ -426,7 +453,16 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     let pBlock = 0.24 + (defQ - finish) * 0.01;
     let pOn = 0.47 + (finish - 10) * 0.016 + (compo - 10) * 0.006;
     let pGoal = 0.155 + (finish - gkQ) * 0.022; // calibrado com 5 épocas reais (6,38 golos/jogo); 0,155 após os planteis oficiais da FPF (2/11)
-    if (kind === 'contra') { pBlock *= 0.5; pOn += 0.08; pGoal += 0.1; }
+    if (kind === 'contra') {
+      pBlock *= 0.5; pOn += 0.08; pGoal += 0.1;
+      // situação do contra-ataque: cada defensor que recupera fecha espaço (bloqueia ou obriga a rematar pior);
+      // passe em superioridade (2x0, 2x1) deixa o colega com a baliza mais aberta
+      if (cnt) {
+        const [na, nd] = cnt;
+        pBlock += nd * 0.03; pGoal -= nd * 0.015;
+        if (assist && nd < na) pGoal += 0.07;
+      }
+    }
     if (kind === 'livre10') { pBlock = 0; pOn = 0.72 + (finish - 10) * 0.015; pGoal = 0.42 + (finish - gkQ) * 0.025; }
     if (kind === 'penalti') { pBlock = 0; pOn = 0.86 + (compo - 10) * 0.01; pGoal = 0.78 + (finish - gkQ) * 0.02; }
     if (kind === 'canto') { pBlock += 0.05 + (setPiece?.block ?? 0); pOn -= 0.05; pGoal *= setPiece?.q ?? 1; }
@@ -434,7 +470,6 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     // recarga: a bola sai da defesa para a frente da baliza e alguém chega primeiro (GR ainda no chão)
     if (kind === 'recarga') { pBlock = 0.18; pOn = 0.62 + (finish - 10) * 0.012; pGoal = 0.3 + (finish - gkQ) * 0.02; }
     if (kind === 'baliza_aberta') { pBlock = 0.08; pOn = 0.5 + (eff(shooter, 'remate') - 10) * 0.02; }
-    const cl = (x: number, a: number, b: number) => Math.max(a, Math.min(b, x));
     if (kind === 'jogada' || kind === 'contra' || kind === 'canto') pGoal *= form[s] * pace * TEMPO[att.setup.tactics.tempo].quality * (opts.goalFactor ?? 1);
     // empate no fim (por liga, ex.: Itália com ~20% de empates reais): com o jogo empatado na 2.ª parte as equipas arriscam menos
     if (opts.tieCaution && period === 2 && score[0] === score[1] && periodStart + periodLen - clock < opts.tieCaution[0]) pGoal *= opts.tieCaution[1];
@@ -448,14 +483,14 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     if (r() < pBlock) {
       const blocker = pick(outfield(def), (l) => eff(l, 'desarme') + eff(l, 'posicionamento'));
       pstats[blocker.p.id].tackles++;
-      actions.push({ type: 'shot', side: s, kind: vk, shooter: shooter.p.id, assist: assist?.p.id, result: 'blocked', other: blocker.p.id });
+      actions.push({ type: 'shot', side: s, kind: vk, shooter: shooter.p.id, assist: assist?.p.id, ...(cnt ? { counterNum: cnt } : {}), result: 'blocked', other: blocker.p.id });
       if (r() < 0.25) corner(s);
       else log('remate_bloqueado', `Remate de ${shooter.p.name} bloqueado por ${blocker.p.name}`, s, shooter.p.id);
       return;
     }
     if (r() > pOn) {
       const post = r() < 0.07;
-      actions.push({ type: 'shot', side: s, kind: vk, shooter: shooter.p.id, assist: assist?.p.id, result: post ? 'post' : 'wide' });
+      actions.push({ type: 'shot', side: s, kind: vk, shooter: shooter.p.id, assist: assist?.p.id, ...(cnt ? { counterNum: cnt } : {}), result: post ? 'post' : 'wide' });
       if (post) log('poste', `${shooter.p.name} acerta no poste!`, s, shooter.p.id);
       else if (kind !== 'jogada') log('remate_fora', `${shooter.p.name} remata ao lado${how[kind]}`, s, shooter.p.id);
       return;
@@ -463,12 +498,12 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     tstats[s].onTarget++;
     pstats[shooter.p.id].onTarget++;
     if (r() < pGoal) {
-      actions.push({ type: 'shot', side: s, kind: vk, shooter: shooter.p.id, assist: assist?.p.id, result: 'goal' });
+      actions.push({ type: 'shot', side: s, kind: vk, shooter: shooter.p.id, assist: assist?.p.id, ...(cnt ? { counterNum: cnt } : {}), result: 'goal' });
       goal(s, shooter, assist, how[kind]);
     } else if (gk) {
       // agarra ou defende para a frente/canto (melhores reflexos e colocação agarram mais)
       const caught = r() < 0.5 + (eff(gk, 'posicionamento') - 10) * 0.02;
-      actions.push({ type: 'shot', side: s, kind: vk, shooter: shooter.p.id, assist: assist?.p.id, result: 'saved', other: gk.p.id, caught });
+      actions.push({ type: 'shot', side: s, kind: vk, shooter: shooter.p.id, assist: assist?.p.id, ...(cnt ? { counterNum: cnt } : {}), result: 'saved', other: gk.p.id, caught });
       if (caught) savedCaught = { side: (1 - s) as Side, gk };
       pstats[gk.p.id].saves++;
       if (kind !== 'jogada' || r() < 0.35) log('remate_defendido', `Defesa de ${gk.p.name} a remate de ${shooter.p.name}${kind === 'penalti' ? ' (penálti defendido!)' : kind === 'livre10' ? ' (livre dos 10 m)' : ''}`, s, shooter.p.id);
@@ -1019,6 +1054,7 @@ export interface Action {
   players?: string[]; // confronto: quem se envolve (os dois primeiros começaram)
   cards?: { id: string; red: boolean }[]; // confronto: castigos da arbitragem
   result?: 'goal' | 'saved' | 'post' | 'wide' | 'blocked';
+  counterNum?: [number, number]; // contra-ataque: atacantes x defensores que chegam a tempo
 }
 
 export interface Possession {

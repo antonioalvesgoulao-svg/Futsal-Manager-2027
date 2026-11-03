@@ -1,0 +1,65 @@
+{
+ "epocas": 5,
+ "jogos": 2770,
+ "golosPorJogo": 6.26,
+ "casa": 48.4,
+ "empates": 16.3,
+ "fora": 35.3,
+ "menosDe3Golos": 7.6,
+ "sistemasNoInicio": {
+  "3-1": "46%",
+  "4-0": "34.8%",
+  "1-2-1": "11.4%",
+  "2-2": "7.8%"
+ },
+ "sistemasNoFim": {
+  "4-0": "51.2%",
+  "3-1": "38.7%",
+  "1-2-1": "5.2%",
+  "2-2": "4.9%"
+ },
+ "campeoes": [
+  [
+   "Liga Placard: Sporting CP",
+   "Liga Prime Futsal: Jimbee Cartagena",
+   "Serie A: Napoli Futsal"
+  ],
+  [
+   "Liga Placard: Sporting CP",
+   "Liga Prime Futsal: Jaén Paraíso Interior",
+   "Serie A: Sandro Abate"
+  ],
+  [
+   "Liga Placard: Sporting CP",
+   "Liga Prime Futsal: FC Barcelona",
+   "Serie A: Napoli Futsal"
+  ],
+  [
+   "Liga Placard: Sporting CP",
+   "Liga Prime Futsal: Jimbee Cartagena",
+   "Serie A: L84 Torino"
+  ],
+  [
+   "Liga Placard: Sporting CP",
+   "Liga Prime Futsal: FC Barcelona",
+   "Serie A: L84 Torino"
+  ]
+ ],
+ "porLiga": {
+  "Liga Placard": {
+   "golos": 6.44,
+   "casa": 50.5,
+   "empates": 13.8
+  },
+  "Liga Prime Futsal": {
+   "golos": 6.14,
+   "casa": 49.3,
+   "empates": 13.9
+  },
+  "Serie A": {
+   "golos": 6.29,
+   "casa": 45.7,
+   "empates": 21.2
+  }
+ }
+}
