@@ -1,4 +1,5 @@
 import './style.css';
+import { quickScreen } from './ui/screens/quick';
 import { broadcastCss } from './ui/broadcast';
 import { renderSettings } from './ui/screens/settings';
 import { initRouter, register, go } from './ui/router';
@@ -8,6 +9,7 @@ import { homeScreen } from './ui/screens/home';
 
 initRouter(document.getElementById('app')!);
 register('menu', menuScreen);
+register('quick', quickScreen);
 register('newGame', newGameScreen);
 register('home', homeScreen);
 go('menu');

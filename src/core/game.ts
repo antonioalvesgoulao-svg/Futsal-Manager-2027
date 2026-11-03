@@ -29,7 +29,9 @@ export const itaIds = (s: GameState) => s.leagues.find((l) => l.id === 'ita1')?.
 
 /** Tipo de golo pelo texto do relato (relatórios do analista). */
 /** Itália: média real 2021/22-2025/26 (divisionecalcioa5.it) ~6,1 golos/jogo; os planteis dão menos com os parâmetros de Portugal. */
-export const ITA_GOAL_FACTOR = 1.16;
+/** Itália: 19,7% de empates reais (vs 13,5% em Portugal): jogos mais equilibrados no fim; calibrado na simulação. */
+export const ITA_TIE: [number, number] = [720, 0.5];
+export const ITA_GOAL_FACTOR = 1.24;
 const ITA_COMPS = ['ita', 'itaPlayoff', 'coppaIta', 'superIta'];
 export function goalKind(t: string) {
   return /contra-ataque/.test(t) ? 'contra' : /canto/.test(t) ? 'canto' : /10 metros/.test(t) ? 'livre10' : /penálti/.test(t) ? 'penalti' : /deserta/.test(t) ? 'baliza deserta' : /recarga/.test(t) ? 'recarga' : 'jogada';
@@ -102,7 +104,7 @@ export function matchOptions(s: GameState, f: Fixture) {
   // prolongamento de 2 x 3 min. Play-off (melhor de 3): estimativa com o mesmo prolongamento
   const esp = ['esp', 'espPlayoff', 'copaEsp', 'superEsp', 'copaRey'].includes(f.comp);
   const noExtraTime = (f.comp === 'taca' || f.comp === 'copaEsp' || f.comp === 'superEsp') && (f.stage === 'Quartos-de-final' || f.stage === 'Meias-finais');
-  return { knockout: f.knockout, noExtraTime, noPenalties: !!f.tieToHome, extraTimeLen: esp ? 180 : undefined, goalFactor: ITA_COMPS.includes(f.comp) ? ITA_GOAL_FACTOR : undefined, seed: `${f.id}-${s.season.year}`, manual: f.home === s.clubId ? (0 as const) : f.away === s.clubId ? (1 as const) : undefined, referees: ref, importance: importanceOf(s, f) };
+  return { knockout: f.knockout, noExtraTime, noPenalties: !!f.tieToHome, extraTimeLen: esp ? 180 : undefined, goalFactor: ITA_COMPS.includes(f.comp) ? ITA_GOAL_FACTOR : undefined, tieCaution: ITA_COMPS.includes(f.comp) ? ITA_TIE : undefined, seed: `${f.id}-${s.season.year}`, manual: f.home === s.clubId ? (0 as const) : f.away === s.clubId ? (1 as const) : undefined, referees: ref, importance: importanceOf(s, f) };
 }
 
 function playFixture(s: GameState, f: Fixture, given?: MatchResult): MatchResult {

@@ -436,6 +436,8 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     if (kind === 'baliza_aberta') { pBlock = 0.08; pOn = 0.5 + (eff(shooter, 'remate') - 10) * 0.02; }
     const cl = (x: number, a: number, b: number) => Math.max(a, Math.min(b, x));
     if (kind === 'jogada' || kind === 'contra' || kind === 'canto') pGoal *= form[s] * pace * TEMPO[att.setup.tactics.tempo].quality * (opts.goalFactor ?? 1);
+    // empate no fim (por liga, ex.: Itália com ~20% de empates reais): com o jogo empatado na 2.ª parte as equipas arriscam menos
+    if (opts.tieCaution && period === 2 && score[0] === score[1] && periodStart + periodLen - clock < opts.tieCaution[0]) pGoal *= opts.tieCaution[1];
     pBlock = cl(pBlock, 0, 0.45); pOn = cl(pOn, 0.2, 0.95); pGoal = cl(pGoal, 0.06, 0.92);
 
     const how: Record<string, string> = {
@@ -699,7 +701,7 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     diff += s === 0 ? 3.0 : -0.8; // vantagem de jogar em casa
     // momento do jogo: quem perde arrisca e empurra; quem ganha gere (aproxima resultados e empates)
     const gd = score[s] - score[1 - s];
-    diff += Math.min(3, Math.max(0, -gd)) * 0.55 - Math.min(3, Math.max(0, gd)) * 0.2;
+    diff += Math.min(3, Math.max(0, -gd)) * (opts.momentum?.[0] ?? 0.55) - Math.min(3, Math.max(0, gd)) * (opts.momentum?.[1] ?? 0.2);
     // estilo do GR: o construtor ajuda a sair da pressão; o atacante dá mais um jogador ao ataque
     const gs = att.setup.tactics.gkStyle ?? 'classico';
     if (att.gk && !att.flying && gs !== 'classico') diff += (eff(att.gk, 'jogoPes') - 10) * (gs === 'avancado' ? 0.08 : 0.06) + (gs === 'avancado' ? 0.15 : 0.05);

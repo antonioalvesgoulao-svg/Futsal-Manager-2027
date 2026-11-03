@@ -9,6 +9,7 @@ export function menuScreen(root: HTMLElement) {
       <div class="panel menu">
         <h1>Futsal Manager <span class="accent">2027</span></h1>
         <button class="btn primary" id="new">Novo jogo</button>
+        <button class="btn" id="quick">⚡ Jogo rápido</button>
         <h3>Carregar jogo</h3>
         <div class="slots">
           ${slots
@@ -28,6 +29,7 @@ export function menuScreen(root: HTMLElement) {
   root.append(el);
 
   el.querySelector('#new')!.addEventListener('click', () => go('newGame'));
+  el.querySelector('#quick')!.addEventListener('click', () => go('quick'));
   el.querySelectorAll<HTMLButtonElement>('[data-load]').forEach((b) =>
     b.addEventListener('click', () => {
       const s = loadFromSlot(Number(b.dataset.load));
