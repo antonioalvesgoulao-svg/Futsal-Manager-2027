@@ -91,7 +91,7 @@
    "shortName": "SAA",
    "city": "Avellino",
    "arena": "Pala Del Mauro",
-   "capacity": 5195,
+   "capacity": 5300,
    "capacityReal": true,
    "colors": [
     "#15803d",
@@ -148,8 +148,8 @@
    "shortName": "ROM",
    "city": "Roma",
    "arena": "PalaCesaroni",
-   "capacity": 1500,
-   "capacityReal": false,
+   "capacity": 2000,
+   "capacityReal": true,
    "colors": [
     "#fbb900",
     "#980a2b"
@@ -262,8 +262,8 @@
    "shortName": "CPR",
    "city": "Capurso",
    "arena": "Pala Pinto Mola di Bari",
-   "capacity": 800,
-   "capacityReal": false,
+   "capacity": 2500,
+   "capacityReal": true,
    "colors": [
     "#d50000",
     "#ffffff"
@@ -275,5 +275,5 @@
    "league": "ita1"
   }
  ],
- "_info": " Cores: tiradas do site oficial de cada clube (cores principais do design, 2/11/2026); Benevento, Giovinazzo, Padova e Capurso sem site acessível, Came Treviso corrigida pelo António (não veste verde; azul-claro/branco, estimativa). Lotações reais (Wikipédia, Comune di Eboli, metacatania.it): Catania 5000, PalaVesuvio 3711, PalaSele 8000, Del Mauro 5195, PalaPansini 3350, PalaTedeschi 4000; restantes estimativa."
+ "_info": " Cores: tiradas do site oficial de cada clube (cores principais do design, 2/11/2026); Benevento, Giovinazzo, Padova e Capurso sem site acessível, Came Treviso corrigida pelo António (não veste verde; azul-claro/branco, estimativa). Lotações reais (Wikipédia, Comune di Eboli, metacatania.it): Catania 5000, PalaVesuvio 3711, PalaSele 8000, Del Mauro 5195, PalaPansini 3350, PalaTedeschi 4000; restantes estimativa. Lotações indicadas pelo António (3/11): Pala Del Mauro 5300, PalaCesaroni 2000, Pala Pinto 2500."
 }
