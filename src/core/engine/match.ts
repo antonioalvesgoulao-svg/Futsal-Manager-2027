@@ -431,10 +431,17 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
       cnt = [na, nd];
       // vantagem de passar: 2x0 (baliza quase vazia) é melhor do que rematar com o GR à frente; 2x1 obriga a passar se o
       // defensor fecha; com o defensor a chegar (nd = na) a melhor opção é rematar cedo. Quem decide mal escolhe ao acaso
-      const passGood = na === 1 ? 0 : nd === 0 ? 0.72 : nd < na ? 0.62 : 0.2;
+      // sozinho perante o GR (nenhum defensor a chegar): remata, porque esperar pelo colega dá tempo à defesa; só passa
+      // se um colega já vier mesmo ao lado e quem conduz aguentar a bola (força, drible) até ele chegar (raro)
+      let mateClose = false;
+      if (na > 1 && nd === 0) {
+        const fastest = Math.max(...mates.map((l) => eff(l, 'aceleracao')));
+        mateClose = r() < cl(0.1 + (fastest - 10) * 0.012 + (eff(carrier, 'forca') + eff(carrier, 'drible') - 20) * 0.008, 0.04, 0.25);
+      }
+      const passGood = na === 1 || (nd === 0 && !mateClose) ? 0 : nd === 0 ? 0.72 : nd < na ? 0.62 : 0.2;
       const shootPull = (eff(carrier, 'finalizacao') - 10) * 0.025 + (eff(carrier, 'compostura') - 10) * 0.015 - (eff(carrier, 'visao') - 10) * 0.01;
       const wise = cl((eff(carrier, 'decisoes') - 1) / 19, 0, 1);
-      const pPass = na === 1 ? 0 : cl(lerpN(0.5, passGood, 0.4 + wise * 0.6) - shootPull, 0.05, 0.9);
+      const pPass = na === 1 || (nd === 0 && !mateClose) ? 0 : cl(lerpN(0.5, passGood, 0.4 + wise * 0.6) - shootPull, 0.05, 0.9);
       if (r() < pPass) {
         shooter = pick(mates, (l) => eff(l, 'finalizacao') + eff(l, 'antecipacao') + eff(l, 'aceleracao') * 0.5);
         assist = carrier;

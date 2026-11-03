@@ -1428,6 +1428,8 @@ export class Choreo {
       const uc = lerp(this.U(cp), this.U(end), 0.95);
       const post = this.A(Math.min(36.6, uc + 4.6), s1 * 1.9);
       this.key(carrier, tS - 0.55, this.A(uc, vc));
+      // o colega já vem ao lado desde o início (é por isso que há passe); quem conduz não abranda à espera dele
+      if (a.counterNum && a.counterNum[1] === 0) this.key(shooter, lerp(T, tS, 0.35), this.A(lerp(this.U(cp), this.U(end), 0.35) - 0.8, lerp(cp.y, vc, 0.35) + s1 * 3.4));
       this.key(shooter, lerp(T, tS, 0.75), this.A(uc - 1.2, vc + s1 * 3.4));
       this.key(shooter, tS - 0.5, this.A(uc + 0.4, vc + s1 * 3.2));
       this.key(shooter, tS, post);
