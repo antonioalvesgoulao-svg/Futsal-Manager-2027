@@ -289,8 +289,11 @@ button[disabled] { opacity: .45; cursor: not-allowed; }
 .sp-editor { margin: 8px 0 14px; } .sp-court { max-width: 100%; height: auto; border-radius: 8px; user-select: none; }
 
 /* jogo rápido */
-.quick label { display: flex; flex-direction: column; gap: 4px; margin: 8px 0; text-align: left; }
+.quick { width: min(640px, calc(100vw - 32px)); margin: 24px auto; box-sizing: border-box; }
+.quick label { display: flex; flex-direction: column; gap: 4px; margin: 8px 0; text-align: left; min-width: 0; }
 .quick label.check { flex-direction: row; align-items: center; }
-.qk-teams { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: end; }
+.quick select { width: 100%; min-width: 0; box-sizing: border-box; }
+.quick .row { justify-content: flex-end; gap: 10px; }
+.qk-teams { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 10px; align-items: end; }
 .qk-crests { display: flex; align-items: center; gap: 6px; padding-bottom: 8px; }
 @media (max-width: 560px) { .qk-teams { grid-template-columns: 1fr; } .qk-crests { justify-content: center; } }
