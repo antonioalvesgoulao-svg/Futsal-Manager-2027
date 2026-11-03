@@ -579,14 +579,17 @@ export class Choreo {
         const ax = B[a].xs[i] + ox[a][i], ay = B[a].ys[i] + oy[a][i], bx = B[b].xs[i] + ox[b][i], by = B[b].ys[i] + oy[b][i];
         let dx = bx - ax, dy = by - ay;
         const d2 = dx * dx + dy * dy;
-        if (d2 >= 0.5625) continue; // 0,75 m: mais longe do que qualquer mínimo
+        if (d2 >= 6.25) continue; // 2,5 m: mais longe do que qualquer mínimo
         const same = side[a] === side[b];
-        const minD = same ? 0.75 : gk[a] || gk[b] ? 0.6 : 0.5;
         const d = Math.sqrt(d2);
+        // ocupação do espaço no ataque: colegas da equipa com bola não se juntam a menos de ~2,5 m (exceto em contacto
+        // voluntário: bloqueio, proteção, festejo); correção suave, só metade do que falta
+        const spread = same && side[a] === this.att && !gk[a] && !gk[b] && !busyAt(ids[a], i) && !busyAt(ids[b], i);
+        const minD = spread ? 2.5 : same ? 0.75 : gk[a] || gk[b] ? 0.6 : 0.5;
         if (d >= minD) continue;
         if (!same && (busyAt(ids[a], i) || busyAt(ids[b], i))) continue; // contacto voluntário entre adversários
         if (d < 1e-3) { dx = 1; dy = 0; } else { dx /= d; dy /= d; }
-        const push = minD - d;
+        const push = spread && d >= 0.75 ? (minD - d) * 0.5 : minD - d;
         if (holder === undefined) holder = this.holderAt(t);
         // quem tem a bola ou está numa ação de GR não é empurrado
         let wa = 0.5, wb = 0.5;
@@ -1425,6 +1428,8 @@ export class Choreo {
       const uc = lerp(this.U(cp), this.U(end), 0.95);
       const post = this.A(Math.min(36.6, uc + 4.6), s1 * 1.9);
       this.key(carrier, tS - 0.55, this.A(uc, vc));
+      // o colega já vem ao lado desde o início (é por isso que há passe); quem conduz não abranda à espera dele
+      if (a.counterNum && a.counterNum[1] === 0) this.key(shooter, lerp(T, tS, 0.35), this.A(lerp(this.U(cp), this.U(end), 0.35) - 0.8, lerp(cp.y, vc, 0.35) + s1 * 3.4));
       this.key(shooter, lerp(T, tS, 0.75), this.A(uc - 1.2, vc + s1 * 3.4));
       this.key(shooter, tS - 0.5, this.A(uc + 0.4, vc + s1 * 3.2));
       this.key(shooter, tS, post);
@@ -1436,17 +1441,40 @@ export class Choreo {
     // superioridade real: os defensores apanhados à frente da bola ficam para trás (correm a recuperar, sem chegar);
     // só 0, 1 ou 2 defendem (2x0, 2x1, 3x2), e o GR é atraído por quem conduz antes do passe lateral
     const nAttack = shooter === carrier ? 1 : assist && assist !== carrier && r2 ? 3 : 2;
-    const keep = nAttack === 3 ? 2 : nAttack === 1 ? (r() < 0.4 ? 0 : 1) : 1;
+    // quantos defensores chegam a tempo: decidido no motor (aceleração, posicionamento, concentração); sem esse dado, estimativa
+    const keep = a.counterNum ? Math.min(a.counterNum[1], this.defOut.length) : nAttack === 3 ? 2 : nAttack === 1 ? (r() < 0.4 ? 0 : 1) : 1;
     const defs = [...this.defOut].sort((x, y) => this.U(this.P(y, T)) - this.U(this.P(x, T)));
-    defs.slice(keep).forEach((id, i) => {
+    // os apanhados à frente da bola não ficam a ver: o mais próximo de quem conduz persegue-o (tenta tocar por trás ou
+    // pelo lado e atrasá-lo), os outros sprintam para a frente da baliza e procuram quem acompanha o contra-ataque
+    const beaten = defs.slice(keep);
+    const chaser = [...beaten].sort((x, y) => dist(this.P(x, T), cp) - dist(this.P(y, T), cp))[0];
+    beaten.forEach((id, i) => {
       const d0 = this.P(id, T);
       this.fix(id, T, tS + 0.6);
       this.key(id, T, d0);
-      // corre para a própria baliza atrás da jogada, sempre uns metros atrás
+      const pace = 0.75 + this.au(id, 'aceleracao') * 0.45; // ~5-7 m/s
+      if (id === chaser) {
+        this.later.push(() => {
+          const c1 = this.P(carrier, tS - 0.9), c2 = this.P(carrier, tS - 0.35);
+          const reach = (tS - 0.9 - T) * 6.2 * pace; // até onde consegue chegar a correr
+          const gap0 = Math.max(0.9, dist(d0, c1) - reach);
+          const side0 = d0.y >= c1.y ? 1 : -1;
+          this.key(id, tS - 0.9, this.A(this.U(c1) - Math.min(gap0, 4), c1.y + side0 * 0.9));
+          this.key(id, tS - 0.3, this.A(this.U(c2) - Math.min(gap0 * 0.6, 2.6), c2.y + side0 * 0.7));
+          this.key(id, tS + 0.6, this.A(Math.min(this.U(c2) + 1, 37), c2.y * 0.6));
+        });
+        this.act(id, 'run', T, tS);
+        this.label(T + 0.9, `${this.nm(id)} recupera e persegue ${this.nm(carrier)}`);
+        return;
+      }
+      // correm para a frente da baliza; se houver quem acompanhe o contra-ataque, vão no seu encalço
       this.later.push(() => {
         const bu = this.U(this.P(carrier, tS - 0.8));
-        this.key(id, tS - 0.3, this.A(Math.min(bu - 2.5 - i * 1.6, this.U(d0) + 0.8 * (tS - T) * 5.6), d0.y * 0.5));
-        this.key(id, tS + 0.6, this.A(Math.min(bu - 1 - i * 1.6, 36), d0.y * 0.4));
+        const runner = [r1, r2].filter((x): x is string => !!x && x !== carrier)[i % 2];
+        const rp = runner ? this.P(runner, tS - 0.4) : null;
+        const gu = Math.min(bu - 1.5 - i * 1.2, this.U(d0) + (tS - 0.3 - T) * 6 * pace);
+        this.key(id, tS - 0.3, this.A(gu, rp ? lerp(d0.y * 0.4, rp.y, 0.7) : clamp(d0.y * 0.4, -2.5, 2.5)));
+        this.key(id, tS + 0.6, this.A(Math.min(bu + 0.5, 36.5), rp ? rp.y * 0.8 : d0.y * 0.3));
       });
       this.act(id, 'run', T, tS);
     });
@@ -1567,12 +1595,24 @@ export class Choreo {
       const bu = this.U(ball), bv = ball.y;
       const holder = this.holderAt(t);
       // antecipação: o defensor lê para onde vai o atacante (posição daqui a 0,15 s)
-      const atts = this.attOut.map((id) => ({ id, p: this.P(id, Math.min(t1, t + 0.15)) }));
+      // quem corre (desmarcação, entrada na zona de finalização) é lido mais à frente (0,35 s) do que quem está parado
+      const atts = this.attOut.map((id) => {
+        const p0 = this.P(id, t), p1 = this.P(id, Math.min(t1, t + 0.3));
+        const vu = (this.U(p1) - this.U(p0)) / 0.3, sp = dist(p0, p1) / 0.3;
+        const run = sp > 3;
+        return { id, p: this.P(id, Math.min(t1, t + (run ? 0.35 : 0.15))), run, vu };
+      });
+      // ameaça de cada atacante: perto da baliza, por dentro, e a atacar a baliza (0-1)
+      const threatOf = (m: { p: P2; run: boolean; vu: number }) => {
+        const au = this.U(m.p);
+        return clamp(clamp((au - 24) / 11, 0, 1) * clamp(1.15 - Math.abs(m.p.y) / 9, 0.35, 1) + (m.run && m.vu > 1.5 ? 0.35 : 0), 0, 1);
+      };
       // com menos defensores (5x4, expulsões) fica livre o atacante mais longe da bola
       const marks = [...atts];
       while (marks.length > this.defOut.length) {
         let wi = 0, wd = -1;
-        marks.forEach((m, i) => { const d = dist(m.p, ball) + (m.id === holder ? -99 : 0); if (d > wd) { wd = d; wi = i; } });
+        // inferioridade: fica livre o atacante menos perigoso (longe da bola e da baliza), nunca quem ameaça a zona de finalização
+        marks.forEach((m, i) => { const d = dist(m.p, ball) - threatOf(m) * 10 + (m.id === holder ? -99 : 0); if (d > wd) { wd = d; wi = i; } });
         marks.splice(wi, 1);
       }
       // gatilho de pressão: passe para trás (a bola recua >2 m em 0,5 s) faz o bloco subir junto durante ~1,5 s
@@ -1592,7 +1632,11 @@ export class Choreo {
           // atacante, do lado da bola e por dentro (bloco compacto que fecha o meio); quanto mais longe da bola, mais ajuda
           const dB = Math.hypot(au - bu, av - bv);
           const zone = tD.marking === 'zona' ? 1 : tD.marking === 'misto' ? 0.55 : 0.15;
-          const help = clamp(0.2 + (dB - 4) / 12, 0.15, 0.8) * zone;
+          // ajuda ao meio só a quem marca um atacante pouco perigoso: quem ameaça a baliza (segundo poste, entrada na área,
+          // desmarcação) é acompanhado de perto, do lado da baliza, mesmo longe da bola (não se fica a olhar para a bola)
+          const th = threatOf(m);
+          const help = clamp(0.2 + (dB - 4) / 12, 0.15, 0.8) * zone * (1 - 0.85 * th);
+          if (th > 0.45) { const g1 = Math.min(gap, 0.95); u = au + (gu / gl) * g1; v = av + (gv / gl) * g1; }
           const sag = help * 2.2; // afasta-se do atacante para o lado da baliza
           u += (gu / gl) * sag + help * 1.5;
           v = lerp(v + (gv / gl) * sag, bv * 0.45, help * 0.8);
@@ -1618,6 +1662,16 @@ export class Choreo {
       const free = this.defOut.filter((id) => !this.isFixed(id, t));
       const assign = new Map<string, string>();
       if (tD.marking === 'individual' && fixedPairs) {
+        // cruzamento de trajetórias: se trocar de marcação poupa muito caminho (>3 m), os dois trocam (como na realidade, "troca!")
+        const fp: [string, string][] = [...fixedPairs];
+        for (let i = 0; i < fp.length; i++) for (let j = i + 1; j < fp.length; j++) {
+          const [d1, a1] = fp[i], [d2, a2] = fp[j];
+          const s1 = spots.get(a1), s2 = spots.get(a2);
+          if (!s1 || !s2) continue;
+          const p1 = this.P(d1, t - dt), p2 = this.P(d2, t - dt);
+          if (dist(p1, s2) + dist(p2, s1) < dist(p1, s1) + dist(p2, s2) - 3) { fp[i] = [d1, a2]; fp[j] = [d2, a1]; }
+        }
+        fixedPairs = new Map(fp);
         for (const [d, a] of fixedPairs) if (spots.has(a) && free.includes(d)) assign.set(d, a);
       }
       const taken = new Set(assign.values());
@@ -1630,6 +1684,7 @@ export class Choreo {
       // bola (pressão imediata); os outros correm para trás da linha da bola, para o lado da própria baliza
       const transition = this.turnover && t < 2.6;
       const pressers = transition ? [...free].sort((x, y) => dist(this.P(x, t - dt), ball) - dist(this.P(y, t - dt), ball)).slice(0, tD.pressure === 'baixa' ? 1 : 2) : [];
+      const targets = new Map<string, P2>();
       for (const d of free) {
         const a = assign.get(d);
         let target = a ? spots.get(a)! : this.A(clamp(Math.max(bu + 4, press + 4), 20, 36), bv * 0.3);
@@ -1637,13 +1692,37 @@ export class Choreo {
           if (pressers.includes(d)) target = this.A(clamp(bu + 0.7, 1, 39), bv);
           else target = this.A(clamp(Math.max(this.U(target), bu + 3), 2, 38.5), target.y);
         }
+        targets.set(d, target);
+      }
+      // ocupação racional: dois defensores não ocupam o mesmo espaço (mínimo ~2 m); cede quem marca o atacante menos perigoso
+      // (quem pressiona o portador e a sua cobertura podem ficar juntos)
+      const thr = new Map(marks.map((m) => [m.id, threatOf(m)]));
+      const tl = [...targets.keys()];
+      for (let i = 0; i < tl.length; i++) for (let j = i + 1; j < tl.length; j++) {
+        const A1 = tl[i], B1 = tl[j];
+        const ai = assign.get(A1), bj = assign.get(B1);
+        if (ai === holder || bj === holder || pressers.includes(A1) || pressers.includes(B1)) continue;
+        const pa = targets.get(A1)!, pb = targets.get(B1)!;
+        const dd0 = dist(pa, pb);
+        if (dd0 >= 2) continue;
+        const mover = (thr.get(ai ?? '') ?? 0) >= (thr.get(bj ?? '') ?? 0) ? B1 : A1;
+        const other = mover === A1 ? pb : pa, mp = targets.get(mover)!;
+        const ux = dd0 < 1e-3 ? 0 : (mp.x - other.x) / dd0, uy = dd0 < 1e-3 ? 1 : (mp.y - other.y) / dd0;
+        targets.set(mover, { x: mp.x + ux * (2 - dd0), y: clamp(mp.y + uy * (2 - dd0), -9.4, 9.4) });
+      }
+      for (const d of free) {
+        const a = assign.get(d);
+        const target = targets.get(d)!;
+        const am = a ? atts.find((x) => x.id === a) : undefined;
+        const chase = !!am && (am.run || threatOf(am) > 0.6); // acompanha a desmarcação ao sprint
+        const pace = 0.88 + this.au(d, 'aceleracao') * 0.17 + this.au(d, 'concentracao') * 0.08;
         const prev = this.P(d, t - dt);
         // defensor humano: pequenas diferenças não o fazem mexer (fica apoiado, pronto); corrige devagar o que é pouco
         // e só sprinta quando fica mesmo para trás (perto do portador reage sempre)
         const dd = dist(prev, target);
         const nearBall = a === holder || dist(prev, ball) < 3.5;
-        const dead = nearBall ? 0.15 : dist(prev, ball) < 8 ? 0.5 : 0.9; // perto do lance ajusta-se a cada passe
-        const vmax = transition ? VMAX : Math.min(VMAX * 1.05, (nearBall ? 2.0 : 0.8) + Math.max(0, dd - dead) * 1.4);
+        const dead = nearBall || chase ? 0.15 : dist(prev, ball) < 8 ? 0.5 : 0.9; // perto do lance ajusta-se a cada passe
+        const vmax = transition || chase ? VMAX * Math.min(1.05, pace) : Math.min(VMAX * 1.05, (nearBall ? 2.0 : 0.8) + Math.max(0, dd - dead) * 1.4);
         const maxd = vmax * dt;
         const np = dd <= dead && !transition ? prev : dd > maxd ? { x: prev.x + ((target.x - prev.x) * maxd) / dd, y: prev.y + ((target.y - prev.y) * maxd) / dd } : target;
         this.key(d, t, np);
