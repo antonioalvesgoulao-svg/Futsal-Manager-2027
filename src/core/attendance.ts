@@ -134,6 +134,7 @@ export function neutralFor(comp: string, year: number): ArenaProfile {
 }
 
 export function arenaOf(s: GameState, f: Fixture): ArenaProfile {
+  if (f.arenaId) { const a = ARENAS[f.arenaId] ?? NEUTRALS.find((n) => n.name === f.arenaId); if (a) return a; }
   const c = s.clubs.find((x) => x.id === f.home);
   if (c?.league === 'esp1' || c?.league === 'ita1') {
     if (!f.neutral) return ARENAS[c.id] ?? spanishArena(c);

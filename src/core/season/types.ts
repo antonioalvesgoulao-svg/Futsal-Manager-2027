@@ -65,6 +65,7 @@ export interface Fixture {
   home: string;
   away: string;
   neutral?: boolean;
+  arenaId?: string; // jogo rápido: pavilhão escolhido (id do clube em ARENAS ou nome de um campo neutro)
   knockout: boolean; // empate vai a prolongamento e penáltis
   tieToHome?: boolean; // Itália (play-in): empate depois do prolongamento = passa a casa (melhor classificada), sem penáltis
   seriesId?: string;
