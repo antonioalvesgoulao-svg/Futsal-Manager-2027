@@ -563,6 +563,21 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
   const seats: { p: THREE.Vector3; ry: number; side: string; row: number; u: number; txt?: boolean }[] = [];
   let maxRows = 0;
   const concrete = new THREE.MeshStandardMaterial({ color: modern ? '#9aa3ad' : '#b5b0a6', roughness: 0.9 });
+  // degraus pintados por zona (lado/anel), cores alternadas fila a fila (ex.: verde e branco no PalaPansini)
+  const stepMats = new Map<string, THREE.MeshStandardMaterial>();
+  const stepMatFor = (sd: string, row: number, sp: number) => {
+    let c: string[] | null = null;
+    for (const z of pr.stepZones ?? []) {
+      if (z.sides && !z.sides.includes(sd as 'N')) continue;
+      if (z.ring === 'lower' && row >= sp) continue;
+      if (z.ring === 'upper' && row < sp) continue;
+      c = z.colors;
+    }
+    if (!c) return concrete;
+    const col = c[Math.floor(row / (pr.stepBand ?? 1)) % c.length];
+    if (!stepMats.has(col)) stepMats.set(col, new THREE.MeshStandardMaterial({ color: col, roughness: 0.85 }));
+    return stepMats.get(col)!;
+  };
   const rowsBySide: Record<string, number> = {};
   for (const sd of pr.sides) {
     const gap = sd === 'N' ? TUNNEL_GAP : 0; // passagem do túnel pela bancada (sem lugares)
@@ -575,6 +590,17 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
     const out = sd === 'N' || sd === 'W' ? -1 : 1; // para fora do campo
     let left = cap;
     const split = splitAt(rows);
+    // entradas de setor (vomitórios): aberturas na bancada com 3 filas de altura e 2,4 m de largura, por lado e por anel
+    // (vomZones; o antigo `vomitories` = N por lateral e metade nos topos, a 30% da altura)
+    const zones = pr.vomZones ?? (pr.vomitories ? [{ sides: ['N', 'S'], n: pr.vomitories, at: 0.3 }, { sides: ['E', 'W'], n: Math.max(1, Math.round(pr.vomitories / 2)), at: 0.3 }] : []);
+    const vList: { u: number; r0: number }[] = [];
+    for (const z of zones) {
+      if (!z.sides.includes(sd) || !z.n) continue;
+      const r0 = z.ring === 'upper' && split < rows ? split + 1 : z.ring === 'lower' && split < rows ? Math.max(1, split - 3) : Math.max(1, Math.round(rows * (z.at ?? 0.3)));
+      for (let i = 0; i < z.n; i++) { const u = (-0.5 + (i + 0.5) / z.n) * (sideLen[sd] - 4); if (!(gap && Math.abs(u) < gap / 2 + 1.5)) vList.push({ u, r0: Math.min(r0, rows - 3) }); }
+    }
+    const vU = vList.map((v) => v.u);
+    const inVom = (u: number, row: number) => vList.some((v) => row >= v.r0 && row <= v.r0 + 2 && Math.abs(u - v.u) < 1.3);
     for (let rI = 0; rI < rows; rI++) {
       // segundo anel: recua e sobe, com camarotes envidraçados (ou só um corredor) no intervalo
       const up = rI >= split;
@@ -611,8 +637,9 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
       // 2.º anel em consola: os degraus são uma laje suspensa (por baixo continuam as filas do 1.º anel)
       const slab = up && pr.overhang;
       const sh = slab ? 0.6 : y + 0.01, sy = slab ? y - 0.29 : (y + 0.01) / 2;
+      const stepMat = stepMatFor(sd, rI, split);
       for (const [c0, len0] of pieces) {
-        const step = new THREE.Mesh(new THREE.BoxGeometry(len0, sh, rowD), concrete);
+        const step = new THREE.Mesh(new THREE.BoxGeometry(len0, sh, rowD), stepMat);
         step.receiveShadow = true;
         if (sd === 'N' || sd === 'S') step.position.set(c0, sy, out * (d + rowD / 2));
         else { step.rotation.y = Math.PI / 2; step.position.set(out * (d + rowD / 2), sy, c0); }
@@ -626,6 +653,7 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
       for (let k = 0; k < tot; k++) {
         const u = (k - (tot - 1) / 2) * seatW;
         if (pr.aisles && Math.round(Math.abs(u) / seatW) % (pr.aisles + 1) === Math.floor(pr.aisles / 2)) continue; // escadas
+        if (inVom(u, rI)) continue; // entrada de setor
         if (Math.abs(u) > gap / 2 + 0.2 || !gap || overTunnel) us.push(u);
       }
       us.sort((a, b) => Math.abs(a) - Math.abs(b));
@@ -636,6 +664,50 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
         if (isBench(sd, rI)) p.y -= 0.3;
         if (pr.standing) p.y += 0.4;
         seats.push({ p, ry, side: sd, row: rI, u, txt: !!textMask && pr.seatText!.side === sd && textMask(u, rI, rows, sideLen[sd]) });
+      }
+    }
+    if (vList.length) {
+      const dark = new THREE.MeshStandardMaterial({ color: '#1b1f24', roughness: 0.9 }), white = new THREE.MeshStandardMaterial({ color: pr.vomColor ?? '#eef0f2', roughness: 0.6 });
+      for (const { u, r0 } of vList) {
+        const up0 = r0 >= split;
+        const dIn = front[sd] + r0 * rowD + (up0 ? upD : 0), yIn = base + r0 * rise + (up0 ? upY : 0), depth = 3 * rowD, hgt = 3 * rise + 1.2;
+        const put = (m: THREE.Mesh, uu: number, dd: number, yy: number) => { if (sd === 'N' || sd === 'S') m.position.set(uu, yy, out * dd); else { m.rotation.y = Math.PI / 2; m.position.set(out * dd, yy, uu); } scene.add(m); };
+        put(new THREE.Mesh(new THREE.BoxGeometry(2.4, hgt, depth), dark), u, dIn + depth / 2, yIn - 1 + hgt / 2); // boca escura do túnel de acesso
+        for (const sg of [-1, 1]) put(new THREE.Mesh(new THREE.BoxGeometry(0.25, hgt + 0.1, depth + 0.1), white), u + sg * 1.32, dIn + depth / 2, yIn - 1 + hgt / 2); // paredes
+        put(new THREE.Mesh(new THREE.BoxGeometry(2.9, 0.3, depth + 0.1), white), u, dIn + depth / 2, yIn - 1 + hgt + 0.15); // laje por cima
+        if (pr.rails) put(new THREE.Mesh(new THREE.BoxGeometry(2.9, 0.05, 0.05), new THREE.MeshStandardMaterial({ color: pr.rails, metalness: 0.6, roughness: 0.35 })), u, dIn + depth + 0.05, yIn - 1 + hgt + 1.1); // grade em cima
+      }
+    }
+    // corrimãos (ex.: Pala Del Mauro): ao longo de cada escada, a subir com os degraus, e na frente da bancada
+    if ((pr.rails || pr.stairColor) && pr.aisles) {
+      const rm = new THREE.MeshStandardMaterial({ color: pr.rails ?? '#cccccc', metalness: 0.6, roughness: 0.35 });
+      const stM = pr.stairColor ? new THREE.MeshStandardMaterial({ color: pr.stairColor, roughness: 0.8 }) : null;
+      const at = (u: number, dd: number, yy: number) => (sd === 'N' || sd === 'S' ? new THREE.Vector3(u, yy, out * dd) : new THREE.Vector3(out * dd, yy, u));
+      const rod = (a: THREE.Vector3, b: THREE.Vector3) => {
+        if (!pr.rails) return;
+        const len = a.distanceTo(b); const m = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, len, 6), rm);
+        m.position.copy(a).add(b).multiplyScalar(0.5); m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), b.clone().sub(a).normalize()); scene.add(m);
+      };
+      const tot = Math.floor(sideLen[sd] / seatW);
+      const tiers: [number, number][] = split < rows ? [[0, split - 1], [split, rows - 1]] : [[0, rows - 1]];
+      for (let k = 0; k < tot; k++) {
+        const u = (k - (tot - 1) / 2) * seatW;
+        if (Math.round(Math.abs(u) / seatW) % (pr.aisles + 1) !== Math.floor(pr.aisles / 2)) continue;
+        if (gap && Math.abs(u) < gap / 2 + 0.3) continue;
+        for (const [r0, r1] of tiers) {
+          if (r1 <= r0) continue;
+          const dA = front[sd] + r0 * rowD + (r0 >= split ? upD : 0), yA = base + r0 * rise + (r0 >= split ? upY : 0);
+          const dB = front[sd] + r1 * rowD + (r1 >= split ? upD : 0), yB = base + r1 * rise + (r1 >= split ? upY : 0);
+          rod(at(u, dA + 0.2, yA + 0.95), at(u, dB + 0.6, yB + 0.95));
+          // degraus das escadas pintados (ex.: amarelos no Pala Del Mauro)
+          if (stM) for (let rr = r0; rr <= r1; rr++) { const dd = front[sd] + rr * rowD + (rr >= split ? upD : 0) + rowD / 2, yy = base + rr * rise + (rr >= split ? upY : 0) + 0.02; const st = new THREE.Mesh(new THREE.BoxGeometry(seatW * 0.95, 0.04, rowD * 0.95), stM); if (sd === 'N' || sd === 'S') st.position.set(u, yy, out * dd); else { st.rotation.y = Math.PI / 2; st.position.set(out * dd, yy, u); } scene.add(st); }
+          for (let rr = r0; rr <= r1; rr += 3) { const dd = front[sd] + rr * rowD + (rr >= split ? upD : 0) + 0.3, yy = base + rr * rise + (rr >= split ? upY : 0); rod(at(u, dd, yy), at(u, dd, yy + 0.95)); }
+        }
+      }
+      // grade da frente da bancada
+      if (pr.rails) {
+      const d0 = front[sd] - 0.05, y0 = base + 0.95;
+      rod(at(-sideLen[sd] / 2, d0, y0), at(sideLen[sd] / 2, d0, y0));
       }
     }
     // frente da bancada: LED nos modernos, muro pintado nos outros
@@ -716,6 +788,22 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
   const back = new THREE.BoxGeometry(0.44, 0.42, 0.06);
   back.translate(0, 0.62, -0.2);
   const seatGeo = mergeGeometries([pan, back])!;
+  // cores das cadeiras por zona (lado e anel ou filas), vistas nas fotos; a última zona que se aplica ganha
+  const seatZoneColors = (st: { side: string; row: number; u: number }) => {
+    let c: string[] | null = null;
+    for (const z of pr.seatZones ?? []) {
+      if (z.sides && !z.sides.includes(st.side as 'N')) continue;
+      const rows = rowsBySide[st.side] ?? maxRows, sp = splitAt(rows);
+      if (z.ring === 'lower' && st.row >= sp) continue;
+      if (z.ring === 'upper' && st.row < sp) continue;
+      if (z.rows && (st.row < z.rows[0] * rows || st.row >= z.rows[1] * rows)) continue;
+      const half = (st.side === 'N' || st.side === 'S' ? W + 8 : H + 4) / 2;
+      if (z.ends && Math.abs(st.u) < half * (1 - z.ends)) continue; // só as pontas da bancada
+      if (z.middle && Math.abs(st.u) > half * z.middle) continue; // só o meio
+      c = z.colors;
+    }
+    return c;
+  };
   const seatMesh = new THREE.InstancedMesh(seatGeo, new THREE.MeshStandardMaterial({ color: pr.seat, roughness: 0.6 }), seats.length);
   const m4 = new THREE.Matrix4();
   const q = new THREE.Quaternion();
@@ -723,18 +811,20 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
   let ns = 0;
   const sc0 = new THREE.Color();
   seats.forEach((s) => {
-    if (isBench(s.side, s.row) || pr.standing) return;
+    const zc = seatZoneColors(s);
+    if ((isBench(s.side, s.row) && !zc) || pr.standing || zc?.[0] === 'cimento') return; // degraus de cimento (zona 'cimento' ou bancada sem cadeiras)
     // as cadeiras viram-se para o campo (de costas para fora)
     q.setFromAxisAngle(new THREE.Vector3(0, 1, 0), s.ry + Math.PI);
     m4.compose(s.p, q, one);
     seatMesh.setMatrixAt(ns, m4);
     if (s.txt) seatMesh.setColorAt(ns, sc0.set(pr.seatText!.color));
+    else if (zc) seatMesh.setColorAt(ns, sc0.set(zc[Math.floor(r() * zc.length)]));
     else if (pr.seatMix) seatMesh.setColorAt(ns, sc0.set(pr.seatMix[Math.floor(r() * pr.seatMix.length)]));
     else if (pr.seatText) seatMesh.setColorAt(ns, sc0.set(pr.seat));
     ns++;
   });
   seatMesh.count = ns;
-  if (pr.seatMix || pr.seatText) (seatMesh.material as THREE.MeshStandardMaterial).color.set('#ffffff');
+  if (pr.seatMix || pr.seatText || pr.seatZones) (seatMesh.material as THREE.MeshStandardMaterial).color.set('#ffffff');
   if (ns) scene.add(seatMesh);
 
   // adeptos: ocupam primeiro os lugares centrais e mais baixos
@@ -793,7 +883,7 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
   // ---- edifício: paredes, janelas, teto e luzes ----
   const hallW = W + 2 * (W / 2 + 4.6 + TR + standDepth + 3 - W / 2);
   const hallD = H + 2 * (FN + standDepth + 3 - H / 2);
-  const hallH = Math.max(11, base + maxRows * rise + (pr.upperTier ? upY : 0) + 6);
+  const hallH = Math.max(11, base + maxRows * rise + (pr.upperTier ? upY : 0) + (pr.roofGap ?? 6)); // roofGap: espaço entre a última fila e o teto
   // chão do pavilhão à volta do campo e das bancadas
   // chão do pavilhão com a abertura da rampa do túnel
   const rampEnd = pr.sides.includes('N') ? FN + standDepth : FN;
@@ -811,7 +901,7 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
   scene.add(hall);
   // faixa de cor do clube a meia altura
   const bandMat = new THREE.MeshStandardMaterial({ color: o.teams[0].colors[0], roughness: 0.8 });
-  for (const [x, z, len, ry] of [[0, -hallD / 2 + 0.03, hallW, 0], [0, hallD / 2 - 0.03, hallW, Math.PI], [-hallW / 2 + 0.03, 0, hallD, Math.PI / 2], [hallW / 2 - 0.03, 0, hallD, -Math.PI / 2]] as const) {
+  if (!pr.noBand) for (const [x, z, len, ry] of [[0, -hallD / 2 + 0.03, hallW, 0], [0, hallD / 2 - 0.03, hallW, Math.PI], [-hallW / 2 + 0.03, 0, hallD, Math.PI / 2], [hallW / 2 - 0.03, 0, hallD, -Math.PI / 2]] as const) {
     const band = new THREE.Mesh(new THREE.PlaneGeometry(len, 1.2), bandMat);
     band.position.set(x, hallH * 0.5, z);
     band.rotation.y = ry;
