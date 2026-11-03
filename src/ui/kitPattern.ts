@@ -23,6 +23,21 @@ export function drawKitPattern(c: CanvasRenderingContext2D, k: Pick<KitDef, 'shi
     case 'centro': c.fillRect(106, 0, 44, S); c.fillRect(0, 0, 22, S); c.fillRect(234, 0, 22, S); break; // risca larga ao centro (frente e costas)
     case 'xadrez': for (let y = 0; y < S; y += 32) for (let x = (y / 32) % 2 ? 32 : 0; x < S; x += 64) c.fillRect(x, y, 32, 32); break;
     case 'degrade': { const g = c.createLinearGradient(0, 0, 0, S); g.addColorStop(0.15, k.shirt); g.addColorStop(1, k.alt); c.fillStyle = g; c.fillRect(0, 0, S, S); break; }
+    case 'chevron': { // riscas verticais que, no peito, sobem em diagonal para os ombros (V ao centro), frente e costas
+      c.lineWidth = 9;
+      for (const cx of [128, 0, 256]) {
+        c.save(); c.beginPath(); c.rect(cx - 64, 0, 128, S); c.clip();
+        for (let i = -7; i <= 7; i += 2) { c.beginPath(); c.moveTo(cx + i * 16, -10); c.lineTo(cx + i * 9, 130); c.lineTo(cx + i * 9, S + 10); c.stroke(); }
+        c.restore();
+      }
+      break;
+    }
+    case 'salpicos': { // manchas de tinta na parte de baixo (sempre iguais: gerador fixo)
+      let z = 7; const rnd = () => ((z = (z * 16807) % 2147483647) / 2147483647);
+      for (let n = 0; n < 160; n++) { const y = 120 + Math.pow(rnd(), 0.6) * 136; c.globalAlpha = 0.55 + rnd() * 0.45; c.beginPath(); c.ellipse(rnd() * S, y, 3 + rnd() * 14, 2 + rnd() * 7, rnd() * 3, 0, 7); c.fill(); }
+      c.globalAlpha = 1; break;
+    }
+    case 'diagonais': c.lineWidth = 3; for (let x = -S; x < S * 2; x += 12) { c.beginPath(); c.moveTo(x, 0); c.lineTo(x + S, S); c.stroke(); } break;
     default: break;
   }
 }

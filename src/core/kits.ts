@@ -2,12 +2,16 @@
 // confirmed=false: cores por confirmar com o António (não encontradas em fontes públicas acessíveis).
 // listas = horizontais; riscas = verticais; finas = riscas finas; faixa = diagonal do ombro à anca; banda = horizontal no peito;
 // ombros = parte de cima noutra cor; laterais = painéis dos lados; centro = risca larga ao meio; xadrez; degrade = cor que muda para baixo
-export type KitPattern = 'liso' | 'listas' | 'riscas' | 'metade' | 'finas' | 'faixa' | 'banda' | 'ombros' | 'laterais' | 'centro' | 'xadrez' | 'degrade';
-export const KIT_PATTERNS: KitPattern[] = ['liso', 'listas', 'riscas', 'finas', 'metade', 'faixa', 'banda', 'ombros', 'laterais', 'centro', 'xadrez', 'degrade'];
+// chevron = riscas que fecham em V ao centro do peito; salpicos = manchas de tinta na parte de baixo; diagonais = riscas finas em diagonal
+export type KitPattern = 'liso' | 'listas' | 'riscas' | 'metade' | 'finas' | 'faixa' | 'banda' | 'ombros' | 'laterais' | 'centro' | 'xadrez' | 'degrade' | 'chevron' | 'salpicos' | 'diagonais';
+export const KIT_PATTERNS: KitPattern[] = ['liso', 'listas', 'riscas', 'finas', 'metade', 'faixa', 'banda', 'ombros', 'laterais', 'centro', 'xadrez', 'degrade', 'chevron', 'salpicos', 'diagonais'];
 /** alt = 2.ª cor do padrão; sleeves = cor das mangas (opcional, senão como a camisola); collar = cor da gola (opcional, senão a dos calções) */
-export interface KitDef { shirt: string; shorts: string; socks: string; pattern: KitPattern; alt: string; sleeves?: string; collar?: string }
-export interface ClubKits { home: KitDef; away: KitDef; confirmed: boolean }
+/** cuffs = cor dos punhos; shortsStripe = risca lateral dos calções */
+export interface KitDef { shirt: string; shorts: string; socks: string; pattern: KitPattern; alt: string; sleeves?: string; collar?: string; cuffs?: string; shortsStripe?: string }
+/** goalkeeper = equipamento real do GR (camisola, calções, meias), quando conhecido */
+export interface ClubKits { home: KitDef; away: KitDef; confirmed: boolean; goalkeeper?: KitDef }
 
+const x = (base: KitDef, extra: Partial<KitDef>): KitDef => ({ ...base, ...extra });
 const k = (shirt: string, shorts: string, socks: string, pattern: KitPattern = 'liso', alt = '#ffffff', sleeves?: string, collar?: string): KitDef => ({ shirt, shorts, socks, pattern, alt, ...(sleeves ? { sleeves } : {}), ...(collar ? { collar } : {}) });
 
 export const KITS: Record<string, ClubKits> = {
@@ -41,6 +45,21 @@ export const KITS: Record<string, ClubKits> = {
   eji: { home: k('#7cc4ec', '#1e3a8a', '#7cc4ec', 'liso', '#1e3a8a'), away: k('#ffffff', '#ffffff', '#ffffff'), confirmed: false },
   noi: { home: k('#ffffff', '#ffffff', '#ffffff', 'liso', '#c9a227'), away: k('#1e3a8a', '#1e3a8a', '#1e3a8a'), confirmed: false },
   stc: { home: k('#9fd3f0', '#1e3a8a', '#9fd3f0', 'liso', '#1e3a8a'), away: k('#e30613', '#e30613', '#e30613'), confirmed: false },
+  // Itália: equipamentos 2025/26 a partir das fotos e notas do António (3/11/2026); Petrarca Padova pela descrição do António (sem foto)
+  cat: { home: x(k('#2f7fd0', '#2f7fd0', '#d8262d', 'riscas', '#d8262d', undefined, '#1e2a5c'), {}), away: x(k('#efe6d5', '#ffffff', '#ffffff', 'liso', '#ffffff', undefined, '#3b2a6b'), { cuffs: '#3b2a6b' }), confirmed: true },
+  nap: { home: k('#1f6fd1', '#1f6fd1', '#1f6fd1', 'liso', '#ffffff', undefined, '#ffffff'), away: x(k('#ffffff', '#ffffff', '#ffffff', 'finas', '#e4e8f0', undefined, '#1d4fbf'), { shortsStripe: '#1d4fbf' }), confirmed: true },
+  l84: { home: x(k('#1e9a3c', '#111111', '#111111', 'chevron', '#111111', undefined, '#111111'), { shortsStripe: '#1e9a3c' }), away: x(k('#eee9e4', '#ffffff', '#ffffff', 'liso', '#ffffff', undefined, '#7d1f2a'), { cuffs: '#7d1f2a', shortsStripe: '#7d1f2a' }), confirmed: true },
+  ebo: { home: x(k('#c8102e', '#1f2a5c', '#1f2a5c', 'riscas', '#1f2a5c', '#1f2a5c', '#1f2a5c'), { cuffs: '#c8102e' }), away: x(k('#ffffff', '#ffffff', '#ffffff', 'liso', '#ffffff', undefined, '#1f2a5c'), { cuffs: '#c8102e' }), confirmed: true },
+  ave: { home: k('#ffffff', '#1e7a3c', '#ffffff', 'ombros', '#1e7a3c', '#1e7a3c', '#1e7a3c'), away: k('#4fb3e3', '#ffffff', '#ffffff', 'liso', '#ffffff', '#ffffff', '#ffffff'), confirmed: true },
+  tre: { home: k('#3aa6d8', '#3aa6d8', '#3aa6d8'), away: k('#1a1a1a', '#1a1a1a', '#1a1a1a'), confirmed: true },
+  sal: { home: x(k('#f2e01a', '#1e8a3c', '#1e8a3c', 'diagonais', '#e6cf10', undefined, '#1e8a3c'), { cuffs: '#1e8a3c' }), away: k('#141414', '#141414', '#141414', 'liso', '#ffffff', undefined, '#ffffff'), confirmed: true },
+  rom: { home: x(k('#b5121b', '#b5121b', '#b5121b', 'liso', '#f5b800', undefined, '#f5b800'), { shortsStripe: '#f5b800' }), away: x(k('#ffffff', '#ffffff', '#ffffff', 'liso', '#ffffff', '#f5b800', '#c8102e'), { shortsStripe: '#c8102e' }), confirmed: true },
+  ben: { home: k('#d81e2a', '#d81e2a', '#d81e2a', 'riscas', '#f5c400'), away: k('#8fe3d0', '#8fe3d0', '#8fe3d0'), confirmed: true },
+  act: { home: x(k('#141414', '#141414', '#141414', 'salpicos', '#f07b1a', undefined, '#f07b1a'), { cuffs: '#f07b1a', shortsStripe: '#f07b1a' }), away: x(k('#ffffff', '#ffffff', '#ffffff', 'salpicos', '#f07b1a', undefined, '#141414'), { cuffs: '#f07b1a', shortsStripe: '#f07b1a' }), confirmed: true },
+  pom: { home: x(k('#f04a2a', '#f04a2a', '#f04a2a', 'finas', '#1f2a5c', '#1f2a5c', '#1f2a5c'), { cuffs: '#f04a2a' }), away: k('#d62a2a', '#d62a2a', '#d62a2a', 'finas', '#ffffff'), confirmed: true, goalkeeper: k('#f5d90a', '#1f2a5c', '#1f2a5c') },
+  gio: { home: k('#1a8a4a', '#1a8a4a', '#1a8a4a'), away: k('#f4f1ea', '#f4f1ea', '#ffffff'), confirmed: true },
+  pad: { home: k('#111111', '#111111', '#111111'), away: k('#ffffff', '#ffffff', '#ffffff'), confirmed: true },
+  cpr: { home: x(k('#d7192a', '#d7192a', '#d7192a'), { cuffs: '#ffffff', shortsStripe: '#ffffff' }), away: x(k('#ffffff', '#ffffff', '#ffffff'), { cuffs: '#1f2a5c' }), confirmed: true },
 };
 
 export type KitChoice = 'auto' | 'home' | 'away';
@@ -100,6 +119,8 @@ export function matchGkKits(homeId: string, awayId: string, kits: [KitDef, KitDe
   const field = [kits[0].shirt, kits[1].shirt];
   const ok = (g: KitDef, other?: KitDef) => field.every((f) => hexDist(f, g.shirt) > 110) && (!other || hexDist(other.shirt, g.shirt) > 110);
   const choose = (id: string, other?: KitDef) => {
+    const real = KITS[id]?.goalkeeper; // equipamento real do GR, se não chocar
+    if (real && ok(real, other)) return real;
     const p = gkPref(id);
     for (let i = 0; i < GK_KITS.length; i++) { const g = GK_KITS[(p + i) % GK_KITS.length]; if (ok(g, other)) return g; }
     for (let i = 0; i < GK_KITS.length; i++) { const g = GK_KITS[(p + i) % GK_KITS.length]; if (!other || hexDist(other.shirt, g.shirt) > 110) return g; }

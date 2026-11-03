@@ -31,7 +31,7 @@ export interface Actor {
   init: boolean;
 }
 
-export interface Kit { shirt: string; shorts: string; socks: string; number: number | null; name?: string; gk: boolean; pattern?: KitPattern; alt?: string; sleeves?: string; collar?: string }
+export interface Kit { shirt: string; shorts: string; socks: string; number: number | null; name?: string; gk: boolean; pattern?: KitPattern; alt?: string; sleeves?: string; collar?: string; cuffs?: string; shortsStripe?: string }
 
 const HIP = 0.92;
 
@@ -266,6 +266,8 @@ export function makePlayer(kit: Kit, look: Look) {
   const sleeveParts = kit.sleeves ? shirt.splice(1) : [];
   g.add(skinned(shirt, bones, shirtMat));
   if (sleeveParts.length) g.add(skinned(sleeveParts, bones, fabric(kit.sleeves!)));
+  // punhos noutra cor: aro no fim da manga curta (presos ao braço)
+  if (kit.cuffs && !kit.gk) for (const a of arm) { const ring = new THREE.Mesh(new THREE.TorusGeometry(0.063, 0.008, 6, 20), fabric(kit.cuffs)); ring.rotation.x = Math.PI / 2; ring.position.y = -0.085; a.add(ring); }
 
   // ---- calções ----
   const pelvis = segGeo(0.2, [0.128, 0.15, 0.155], 0.2, [true, true], 20, 0.5);
@@ -274,6 +276,8 @@ export function makePlayer(kit: Kit, look: Look) {
   // as peças de roupa usam exatamente os mesmos pesos que a pele por baixo (não deixam a pele atravessar)
   for (let i = 0; i < 2; i++) shortsParts.push({ geo: segGeo(0.17, [0.104, 0.101], 0.03, [false, true], 20, 0.3), bone: thigh[i], y0: 0.02, len: 0.45, parent: body, child: shin[i], blend: 0.25 });
   g.add(skinned(shortsParts, bones, shortsMat));
+  // risca lateral dos calções (lado de fora de cada perna)
+  if (kit.shortsStripe) thigh.forEach((th, i) => { const st = new THREE.Mesh(new THREE.BoxGeometry(0.008, 0.17, 0.03), fabric(kit.shortsStripe!)); st.position.set(i ? 0.104 : -0.104, -0.055, 0); th.add(st); });
 
   // ---- meias ----
   g.add(skinned([0, 1].map((i) => ({ geo: segGeo(0.31, [0.066, 0.061, 0.046, 0.042], -0.09, [false, false]), bone: shin[i], y0: 0.03, len: 0.44, parent: thigh[i], blend: 0.25 })), bones, sockMat));

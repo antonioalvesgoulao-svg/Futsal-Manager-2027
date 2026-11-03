@@ -14,7 +14,7 @@ export function kitSvg(k: KitDef, w = 92) {
   return `<svg viewBox="0 0 100 150" width="${w}" height="${(w * 1.5).toFixed(0)}" class="kitsvg"><defs>${pat}</defs>
     <path d="M30 8 L42 4 Q50 12 58 4 L70 8 L94 26 L84 42 L74 34 L74 70 L26 70 L26 34 L16 42 L6 26 Z" fill="${fill}" ${st}/>${sleeve}
     <path d="M42 4 Q50 12 58 4" fill="none" stroke="${k.collar ?? k.shorts}" stroke-width="3"/>
-    <path d="M26 72 L74 72 L78 104 L54 104 L50 88 L46 104 L22 104 Z" fill="${k.shorts}" ${st}/>
+    <path d="M26 72 L74 72 L78 104 L54 104 L50 88 L46 104 L22 104 Z" fill="${k.shorts}" ${st}/>${k.shortsStripe ? `<path d="M25 73 L22.5 103 M75 73 L77.5 103" stroke="${k.shortsStripe}" stroke-width="3"/>` : ''}${k.cuffs ? `<path d="M8 28 L17 41 M92 28 L83 41" stroke="${k.cuffs}" stroke-width="3.5"/>` : ''}
     <path d="M27 110 L44 110 L43 140 L28 140 Z M56 110 L73 110 L72 140 L57 140 Z" fill="${k.socks}" ${st}/>
   </svg>`;
 }
