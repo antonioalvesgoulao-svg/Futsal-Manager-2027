@@ -1,5 +1,5 @@
 {
- "_info": "D1 Futsal França 2026/27 (dossiê do António + thefootdata.com/FFF). Lotações reais só onde capacityReal; reputation/level/wealth/budget estimativa pela classificação 2025/26 (prevRank) e presença europeia. Cores provisórias até às fotos do António.",
+ "_info": "D1 Futsal França 2026/27 (dossiê do António + thefootdata.com/FFF). Lotações reais só onde capacityReal; reputation/level/wealth/budget estimativa pela classificação 2025/26 (prevRank) e presença europeia. Cores provisórias até às fotos do António. Pavilhões: os declarados por cada clube à FFF para a D1 2026/27 (thefootdata.com, ficha dos jogos em casa).",
  "league": {
   "id": "fra1",
   "name": "D1 Futsal",
@@ -12,7 +12,7 @@
    "name": "Étoile Lavalloise",
    "shortName": "LAV",
    "city": "Laval",
-   "arena": "Espace Mayenne",
+   "arena": "Salle Mayenne (Espace Mayenne)",
    "capacity": 3500,
    "capacityReal": false,
    "colors": [
@@ -31,9 +31,9 @@
    "name": "Montpellier Méditerranée Futsal",
    "shortName": "MON",
    "city": "Montpellier",
-   "arena": "Palais des sports René Bougnol",
-   "capacity": 3000,
-   "capacityReal": true,
+   "arena": "Gymnase Coubertin",
+   "capacity": 800,
+   "capacityReal": false,
    "colors": [
     "#1e3a8a",
     "#ffffff"
@@ -88,7 +88,7 @@
    "name": "Nantes Métropole Futsal",
    "shortName": "NAN",
    "city": "Nantes",
-   "arena": "Complexe Sportif Mangin Beaulieu",
+   "arena": "Salle Mangin Beaulieu",
    "capacity": 1200,
    "capacityReal": false,
    "colors": [
@@ -106,8 +106,8 @@
    "id": "goa",
    "name": "GOAL Futsal Club",
    "shortName": "GOA",
-   "city": "Lyon",
-   "arena": "Gymnase (por confirmar)",
+   "city": "Neuville-sur-Saône",
+   "arena": "Salle du Lycée Rosa Parks",
    "capacity": 800,
    "capacityReal": false,
    "colors": [
@@ -145,7 +145,7 @@
    "name": "AS Avion Futsal",
    "shortName": "AVI",
    "city": "Avion",
-   "arena": "Gymnase (por confirmar)",
+   "arena": "Salle Roger Blezel",
    "capacity": 600,
    "capacityReal": false,
    "colors": [
@@ -164,7 +164,7 @@
    "name": "UJS Toulouse",
    "shortName": "UJS",
    "city": "Toulouse",
-   "arena": "Petit Palais des Sports",
+   "arena": "Petit Palais des Sports (Compans Caffarelli)",
    "capacity": 1000,
    "capacityReal": false,
    "colors": [
@@ -183,7 +183,7 @@
    "name": "Nice Futsal Club",
    "shortName": "NIC",
    "city": "Nice",
-   "arena": "Gymnase (por confirmar)",
+   "arena": "Gymnase Parc Charles Ehrmann",
    "capacity": 600,
    "capacityReal": false,
    "colors": [
@@ -221,7 +221,7 @@
    "name": "Artistes Futsal",
    "shortName": "ART",
    "city": "Villepinte",
-   "arena": "Gymnase (por confirmar)",
+   "arena": "Gymnase Lamberdière",
    "capacity": 500,
    "capacityReal": false,
    "colors": [
