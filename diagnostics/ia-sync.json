@@ -1,0 +1,21 @@
+{
+ "jogos": 8,
+ "1. 1x0: remata sozinho (%)": 100,
+ "contra-ataques analisados": 58,
+ "1. 2x0: passa (%)": 0,
+ "1. 2x1: passa (%)": 60,
+ "1. superioridade, decisões ≥13: passa (%)": 50,
+ "1. superioridade, decisões ≤9: passa (%)": 75,
+ "1. golos por contra-ataque (%)": 15.5,
+ "2/3/4/12. transição: defensor mais próximo de quem conduz no último 1,5 s (m)": 1.42,
+ "2/3/4/12. transição: instantes com defensor a <3 m de quem conduz (%)": 96.1,
+ "2/3/4/12. transição: defensores parados (<0,8 m/s) (%)": 12.9,
+ "5. ataque: pares de colegas a <2,5 m por instante": 0.06,
+ "5. ataque: largura (m)": 13.04,
+ "3. defesa: pares de defensores a <2 m por instante": 0.35,
+ "6/7/8/10. atacante sem bola na zona de finalização sem defensor a <2,5 m (%)": 17.7,
+ "6/7. desmarcações (>3 m/s): distância ao defensor mais próximo (m)": 2.47,
+ "11. remates em ataque organizado: defensor mais próximo do rematador (m)": 1.48,
+ "11. remates em ataque organizado sem defensor a <3 m (%)": 6.6,
+ "9. inferioridade: atacantes livres na zona de finalização (%)": 55.8
+}

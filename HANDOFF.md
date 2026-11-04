@@ -430,3 +430,15 @@ Todas as ferramentas em `tools/diag` correm com: `npx esbuild <ficheiro> --bundl
 - Motor (`shot`, contra): `counterNum` [atacantes, defensores] pela aceleração/trabalho de equipa e aceleração/posicionamento/concentração; quem conduz decide rematar ou passar pela situação (sozinho perante o GR remata sempre, salvo colega já ao lado e bola aguentada, ~10%; 2x1 tende a passar) e pelos atributos (decisões, finalização, compostura, visão). Golos validados (5 épocas: PT 6,44, ES 6,14, IT 6,29).
 - Coreografia: perseguidor do portador e recuperação para a frente da baliza (`counterRun`); marcação pela ameaça (`threatOf` em `defend`: perto da baliza, por dentro, a atacar a baliza → marcado de perto mesmo longe da bola), leitura antecipada de quem corre, sprint a acompanhar desmarcações, troca de marcação no individual quando os atacantes cruzam, 2 m mínimos entre defensores, em inferioridade fica livre o menos perigoso; ataque com 2,5 m mínimos entre colegas (`separate`).
 - Testes: `tools/diag/ia.ts` (cenários 1-12; antes/depois em `diagnostics/ia-antes.json` e `ia-depois.json`); diagnóstico tático `diagnostics/ia-tatica.md` vs `main-antes`.
+
+## Correções de sincronização e 3D (4/11, pedido do António: 7 problemas)
+| Problema | Causa | Correção |
+|---|---|---|
+| Golos do 2D sem correspondência no 3D (hat-trick do Erick Mendonça) | Na recarga a coreografia dava o remate ao atacante mais perto da bola, não ao marcador do motor (golo visto com outro jogador) | `rebound` usa sempre `a.shooter` |
+| Cantos sem a bola sair | Bola só saía pela linha de fundo por sorteio (30%), independente do canto; o motor dava canto mesmo com a bola agarrada pelo GR | `shot`: `cornerNext` decide se sai pela linha de fundo; motor só dá canto se a bola não ficou nas mãos (0,4 dos não agarrados) |
+| Penáltis por faltas fora da área | Só 1,5 s para conduzir até à área (deslizava até lá); a queda era de outro jogador quando a bola não estava com a vítima | 4,4 s de condução, chega antes do contacto; a vítima do motor recebe a bola antes |
+| GR não defende remates à figura | Alvo do golo sorteado sem olhar ao GR | golo entra longe do corpo (≥0,95 m) ou rasteiro/alto |
+| GR cai cedo | Gesto começava 0,1 s após o remate | começa só o tempo do gesto antes da bola (voo 0,45 s, espargata 0,33 s, outros 0,3 s) |
+| Pés no chão | Pose sem contacto com o piso (solas 5-23 cm abaixo) | `pose` mede a sola mais baixa e sobe o corpo (exceto o voo aprovado) |
+| Pivô a proteger | Colegas sem chaves durante a proteção | `pivotSupport` (apoio, segundo poste, equilíbrio); o fixo marca o pivô |
+- Testes: `tools/diag/sync.ts` (20 jogos): golos com remate visível 100%, marcador certo 97,3→100%, cantos com bola fora 82,7→100%, penáltis dentro da área 50→100%, golos a <0,5 m do GR 37,8→0%, gestos >0,6 s antes da bola 7→2,6%, pivô: colegas parados 23→20,5%. Motor 5 épocas: PT 6,33, ES 6,01, IT 6,08.
