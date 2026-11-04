@@ -77,7 +77,7 @@ export interface Coach {
 export interface Settings {
   speed: 'lento' | 'medio' | 'rapido';
   moments3d: 'nenhum' | 'golos' | 'importantes' | 'todos';
-  scoreboard: 'auto' | 'liga' | 'taca' | 'tacaLiga' | 'supertaca' | 'esp' | 'copaRey' | 'copaEsp' | 'superEsp' | 'ita' | 'coppaIta' | 'superIta';
+  scoreboard: 'auto' | 'liga' | 'taca' | 'tacaLiga' | 'supertaca' | 'esp' | 'copaRey' | 'copaEsp' | 'superEsp' | 'ita' | 'coppaIta' | 'superIta' | 'fra' | 'coupeFra';
   quality?: 'normal' | 'alta';
   sound?: 'off' | 'low' | 'mid' | 'high'; // volume do som do jogo
   chantWords?: boolean; // letra dos cânticos dita pela voz do sistema

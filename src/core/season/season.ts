@@ -92,7 +92,7 @@ const newId = (y: number) => `f${y}_${++fid}`;
  * @param ranking  clubes ordenados pela época anterior (melhor primeiro): define cabeças de série na Taça
  * @param supercup [campeão, vencedor da Taça ou finalista]
  */
-export function createSeason(y: number, ranking: string[], supercup: [string, string], esp?: { ranking: string[]; four: string[] }, ita?: { ranking: string[]; four: string[] }): SeasonState {
+export function createSeason(y: number, ranking: string[], supercup: [string, string], esp?: { ranking: string[]; four: string[] }, ita?: { ranking: string[]; four: string[] }, fra?: { ranking: string[] }): SeasonState {
   fid = 0;
   const r = rng('calendario' + y);
   const shuffled = [...ranking].sort(() => r() - 0.5);
@@ -119,6 +119,7 @@ export function createSeason(y: number, ranking: string[], supercup: [string, st
   const season: SeasonState = { year: y, label: `${y}/${String((y + 1) % 100).padStart(2, '0')}`, fixtures, series: [], winners: {}, finished: false };
   if (esp) addSpain(season, y, esp.ranking, esp.four);
   if (ita) addItaly(season, y, ita.ranking, ita.four);
+  if (fra) addFrance(season, y, fra.ranking);
   return season;
 }
 
@@ -380,6 +381,81 @@ function afterItaly(s: SeasonState, clubIds: string[], name: (id: string) => str
   }
 }
 
+
+// ---------------- França (FFF, D1 Futsal) ----------------
+// Formato (dossiê do António com o regulamento D1/D2 da FFF e o calendário 2026/27): 12 clubes, 22 jornadas (início 5 set., última
+// jornada 22 mai.); play-off com os 4 primeiros: meias-finais 1.º-4.º e 2.º-3.º a duas mãos (2 e 5 jun.; o mais bem classificado
+// recebe a 2.ª mão; agregado empatado → prolongamento 2x5 e penáltis), final em jogo único a 12 jun. (campo neutro; em 2025/26 foi em
+// Reims). Coupe Nationale Futsal (Trophée Michel Muffat-Joly): os clubes da D1 entram nos 16 avos (13 fev.); sem divisões
+// inferiores no jogo, o 5.º-12.º da época anterior jogam entre si (16 avos), juntam-se aos 4 primeiros nos quartos (10 abr.),
+// meias (1 mai.) e final (29 mai., neutro): aproximação. Sem Supertaça (não existe). Descidas: 2 últimos (estimativa) quando houver D2.
+export function franceDates(y: number) {
+  const n = y + 1;
+  return { start: `${y}-09-05`, end: `${n}-05-22`, cupR1: `${n}-02-13`, cupQF: `${n}-04-10`, cupSF: `${n}-05-01`, cupF: `${n}-05-29`, sf1: `${n}-06-02`, sf2: `${n}-06-05`, f: `${n}-06-12` };
+}
+
+function addFrance(s: SeasonState, y: number, ranking: string[]) {
+  const k = franceDates(y);
+  const r = rng('calendario-fra' + y);
+  const first = roundRobin([...ranking].sort(() => r() - 0.5));
+  const rounds = [...first, ...first.map((g) => g.map(([a, b]) => [b, a] as [string, string]))];
+  const blocked = (d: string) => (d >= `${y}-12-20` && d <= `${y + 1}-01-08`) || d === k.cupR1 || d === k.cupQF || d === k.cupSF;
+  const dates: string[] = [];
+  for (let d = k.start; dates.length < rounds.length; d = addDays(d, 7)) if (!blocked(d)) dates.push(d);
+  // se não couber até ao fim de maio, encaixa as jornadas restantes às quartas-feiras (aproximação)
+  rounds.forEach((games, i) => games.forEach(([h, a]) => s.fixtures.push({ id: newId(y), comp: 'fra', stage: `Journée ${i + 1}`, round: i + 1, date: dates[i], home: h, away: a, knockout: false })));
+  const low = ranking.slice(4);
+  for (let i = 0; i < low.length / 2; i++) s.fixtures.push({ id: newId(y), comp: 'coupeFra', stage: '16 avos de final', date: k.cupR1, home: low[low.length - 1 - i], away: low[i], knockout: true });
+  s.fra = { seeds: ranking.slice(0, 4) };
+}
+
+function afterFrance(s: SeasonState, clubIds: string[], name: (id: string) => string, news: string[]) {
+  if (!s.fra || !clubIds.length) return;
+  const k = franceDates(s.year);
+  const seeds = s.fra.seeds ?? [];
+  // Coupe Nationale
+  const r1 = byStage(s, 'coupeFra', '16 avos de final');
+  if (done(r1) && !byStage(s, 'coupeFra', 'Quartos-de-final').length) {
+    const ws = r1.map(winnerOf) as string[];
+    const all = [...seeds, ...ws];
+    const r = rng('coupe-fra' + s.year);
+    const draw = [...all].sort(() => r() - 0.5);
+    const pairs: [string, string][] = [];
+    for (let i = 0; i < draw.length; i += 2) pairs.push([draw[i], draw[i + 1]]);
+    addCupRound(s, 'coupeFra', 'Quartos-de-final', k.cupQF, pairs, false);
+  }
+  for (const [from, to, d, neutral] of [['Quartos-de-final', 'Meias-finais', k.cupSF, false], ['Meias-finais', 'Final', k.cupF, true]] as const) {
+    const prev = byStage(s, 'coupeFra', from);
+    if (done(prev) && !byStage(s, 'coupeFra', to).length) {
+      const ws = prev.map(winnerOf) as string[];
+      const pairs: [string, string][] = [];
+      for (let i = 0; i < ws.length; i += 2) pairs.push([ws[i], ws[i + 1]]);
+      addCupRound(s, 'coupeFra', to, d, pairs, neutral);
+    }
+  }
+  const cf = byStage(s, 'coupeFra', 'Final')[0];
+  if (cf?.result && !s.winners.coupeFra) { s.winners.coupeFra = winnerOf(cf)!; news.push(`${name(s.winners.coupeFra!)} vence a Coupe Nationale Futsal.`); }
+  // fim da fase regular: meias-finais a duas mãos
+  const liga = s.fixtures.filter((f) => f.comp === 'fra');
+  if (!s.fra.regularTable && done(liga)) {
+    const t = (s.fra.regularTable = leagueTable(s, clubIds, 99, 'fra').map((x) => x.club));
+    news.push(`${name(t[0])} termina a fase regular da D1 Futsal em 1.º. Meias-finais: ${name(t[0])}-${name(t[3])} e ${name(t[1])}-${name(t[2])}.`);
+    for (const [hi, lo] of [[t[0], t[3]], [t[1], t[2]]]) s.fixtures.push({ id: newId(s.year), comp: 'fraPlayoff', stage: 'Meias-finais - 1.ª mão', date: k.sf1, home: lo, away: hi, knockout: false });
+  }
+  const leg1 = byStage(s, 'fraPlayoff', 'Meias-finais - 1.ª mão');
+  if (done(leg1) && !byStage(s, 'fraPlayoff', 'Meias-finais - 2.ª mão').length) {
+    for (const f of leg1) s.fixtures.push({ id: newId(s.year), comp: 'fraPlayoff', stage: 'Meias-finais - 2.ª mão', date: k.sf2, home: f.away, away: f.home, knockout: true, agg: [f.result!.score[1], f.result!.score[0]] });
+  }
+  const leg2 = byStage(s, 'fraPlayoff', 'Meias-finais - 2.ª mão');
+  if (done(leg2) && !byStage(s, 'fraPlayoff', 'Final').length) {
+    const t = s.fra.regularTable!;
+    const ws = (leg2.map(winnerOf) as string[]).sort((a, b) => t.indexOf(a) - t.indexOf(b));
+    s.fixtures.push({ id: newId(s.year), comp: 'fraPlayoff', stage: 'Final', date: k.f, home: ws[0], away: ws[1], neutral: true, knockout: true });
+  }
+  const fin = byStage(s, 'fraPlayoff', 'Final')[0];
+  if (fin?.result && !s.winners.fra) { s.winners.fra = winnerOf(fin)!; news.push(`${name(s.winners.fra!)} é campeão de França!`); }
+}
+
 export interface TableRow {
   club: string;
   p: number;
@@ -428,6 +504,11 @@ export function leagueTable(s: SeasonState, clubIds: string[], upToRound = 99, c
 export function winnerOf(f: Fixture): string | null {
   if (!f.result) return null;
   if (f.tieToHome && !f.result.pens && f.result.score[0] === f.result.score[1]) return f.home; // Itália: empate = passa a melhor classificada
+  if (f.agg) { // 2.ª mão (França): agregado; empatado → penáltis deste jogo
+    if (f.result.pens) return f.result.pens[0] > f.result.pens[1] ? f.home : f.away;
+    const h = f.result.score[0] + f.agg[0], a = f.result.score[1] + f.agg[1];
+    return h > a ? f.home : f.away;
+  }
   const [h, a] = f.result.pens ?? f.result.score;
   return h > a ? f.home : f.away;
 }
@@ -462,7 +543,7 @@ const byStage = (s: SeasonState, comp: CompId, stage: string) => s.fixtures.filt
  * Depois de cada dia de jogos: atualiza séries, cria as rondas seguintes e regista vencedores.
  * Devolve mensagens para as notícias.
  */
-export function afterMatchday(s: SeasonState, clubIds: string[], name: (id: string) => string, espIds: string[] = [], itaIds: string[] = []): string[] {
+export function afterMatchday(s: SeasonState, clubIds: string[], name: (id: string) => string, espIds: string[] = [], itaIds: string[] = [], fraIds: string[] = []): string[] {
   const news: string[] = [];
   const k = keyDates(s.year);
   const r = rng('sorteio' + s.year + s.fixtures.filter((f) => f.result).length);
@@ -574,6 +655,7 @@ export function afterMatchday(s: SeasonState, clubIds: string[], name: (id: stri
   }
   afterSpain(s, espIds, name, news);
   afterItaly(s, itaIds, name, news);
+  afterFrance(s, fraIds, name, news);
   return news;
 }
 

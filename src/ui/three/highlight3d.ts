@@ -351,7 +351,7 @@ export class Highlight3D {
 
   // ---------- festa do título (palanque, taça, confetes) ----------
   private cer: { g: THREE.Group; cup: THREE.Group; conf: THREE.Points; vel: Float32Array; captain: string } | null = null;
-  trophyCeremony(comp: string, captain: string, colors: [string, string], lang: 'pt' | 'es' | 'it' = 'pt') {
+  trophyCeremony(comp: string, captain: string, colors: [string, string], lang: 'pt' | 'es' | 'it' | 'fr' = 'pt') {
     this.cer?.g.removeFromParent();
     const g = new THREE.Group();
     const P = PODIUM;
@@ -371,7 +371,7 @@ export class Highlight3D {
       const gr = c.createLinearGradient(0, 0, 1024, 0); gr.addColorStop(0, colors[0]); gr.addColorStop(1, colors[1] === '#ffffff' ? '#111827' : colors[1]);
       c.fillStyle = gr; c.fillRect(0, 0, 1024, 256);
       c.fillStyle = '#ffe08a'; c.font = 'bold 96px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle';
-      c.fillText(lang === 'es' ? 'CAMPEONES' : lang === 'it' ? 'CAMPIONI' : 'CAMPEÕES', 512, 92, 980);
+      c.fillText(lang === 'es' ? 'CAMPEONES' : lang === 'it' ? 'CAMPIONI' : lang === 'fr' ? 'CHAMPIONS' : 'CAMPEÕES', 512, 92, 980);
       c.fillStyle = '#ffffff'; c.font = 'bold 46px sans-serif'; c.fillText(comp.toUpperCase(), 512, 190, 980);
     });
     const wall = new THREE.Mesh(new THREE.PlaneGeometry(w + 1.5, 3.2), new THREE.MeshStandardMaterial({ map: back, roughness: 0.7, side: THREE.DoubleSide }));

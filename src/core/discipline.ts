@@ -21,8 +21,8 @@ import type { GameState } from './types';
 // Coppa Italia: 1 jogo a cada 2 amarelos, só nessa competição. Vermelhos: 1 jogo (2 amarelos, impedir golo); confronto 1-3,
 // agressão/conduta violenta 3+ (estimativa pelo CGS)
 /** Liga e play-off são a mesma competição para efeitos de castigo. */
-export type DComp = Exclude<CompId, 'playoff' | 'espPlayoff' | 'espAp' | 'espCl' | 'itaPlayoff'>;
-export const dcomp = (c: CompId): DComp => (c === 'playoff' ? 'liga' : c === 'itaPlayoff' ? 'ita' : ['esp', 'espPlayoff', 'espAp', 'espCl', 'copaEsp', 'superEsp', 'copaRey'].includes(c) ? 'esp' : (c as DComp));
+export type DComp = Exclude<CompId, 'playoff' | 'espPlayoff' | 'espAp' | 'espCl' | 'itaPlayoff' | 'fraPlayoff'>;
+export const dcomp = (c: CompId): DComp => (c === 'playoff' ? 'liga' : c === 'itaPlayoff' ? 'ita' : c === 'fraPlayoff' ? 'fra' : ['esp', 'espPlayoff', 'espAp', 'espCl', 'copaEsp', 'superEsp', 'copaRey'].includes(c) ? 'esp' : (c as DComp));
 
 export interface Suspension { comp: DComp; games: number; reason: string; yellowsOnly?: boolean }
 export interface Discipline {
@@ -36,6 +36,9 @@ export const emptyDiscipline = (): Discipline => ({ yellows: {}, sanctioned: {},
 
 const THRESH = (n: number) => n === 5 || n === 9 || (n >= 12 && (n - 12) % 3 === 0);
 const THRESH_ITA = (n: number) => n === 5 || n === 10 || n === 14 || n === 17 || n >= 19;
+// França (FFF): ESTIMATIVA até o António mandar o barème disciplinaire do futsal: 1 jogo a cada 3 amarelos na D1 (como no futebol
+// amador francês: 3 avertissements); expulsão por 2 amarelos 1 jogo; vermelho direto 1-3; agressão 3+
+const THRESH_FRA = (n: number) => n > 0 && n % 3 === 0;
 
 /** Jogos de castigo de um jogador numa competição. */
 export function banFor(s: GameState, pid: string, comp: CompId) {
@@ -86,7 +89,7 @@ export function applyDiscipline(s: GameState, f: Fixture, m: MatchResult, name: 
         // agressão / jogo violento: castigo conforme o dano (dias de paragem do atingido)
         const injDays = st.victim ? s.injuries?.[st.victim]?.days ?? 0 : 0;
         let g: number;
-        if (comp === 'ita' || comp === 'coppaIta' || comp === 'superIta') {
+        if (comp === 'ita' || comp === 'coppaIta' || comp === 'superIta' || comp === 'fra' || comp === 'coupeFra') {
           // FIGC (CGS, conduta violenta): 3 jogos ou mais, conforme o dano (estimativa)
           g = 3 + Math.floor(rnd() * rnd() * 4) + Math.floor(injDays / 15);
         } else if (comp === 'esp') {
@@ -101,7 +104,7 @@ export function applyDiscipline(s: GameState, f: Fixture, m: MatchResult, name: 
         add(id, Math.min(24, g), k === 'agressao' ? `agressão a adversário${injDays ? `, que ficou ${injDays} dias parado` : ''}` : `entrada violenta${injDays ? `, adversário ${injDays} dias parado` : ''}`);
       }
       else if (k === 'dogso') add(id, comp === 'esp' || comp === 'ita' || comp === 'coppaIta' ? 1 : rnd() < 0.75 ? 1 : 2, 'vermelho direto: impediu oportunidade de golo');
-      else if (comp === 'esp' || comp === 'ita' || comp === 'coppaIta' || comp === 'superIta') add(id, 1 + Math.floor(rnd() * rnd() * 3), 'vermelho direto em confronto'); // RFEF 145.2 até 3; Itália 1-3 (estimativa)
+      else if (comp === 'esp' || comp === 'ita' || comp === 'coppaIta' || comp === 'superIta' || comp === 'fra' || comp === 'coupeFra') add(id, 1 + Math.floor(rnd() * rnd() * 3), 'vermelho direto em confronto'); // RFEF 145.2 até 3; Itália 1-3 (estimativa)
       else {
         // confronto: agressão sem lesão (Art. 154, 1 a 8; na prática quase sempre perto do mínimo)
         const g = 1 + Math.floor(rnd() * rnd() * 5);
@@ -114,6 +117,11 @@ export function applyDiscipline(s: GameState, f: Fixture, m: MatchResult, name: 
       const key = `${id}@${comp}`;
       const n = (d.yellows[key] = (d.yellows[key] ?? 0) + st.yellow);
       if (comp === 'ita' ? THRESH_ITA(n) && d.sanctioned[key] !== n : n % 2 === 0) { d.sanctioned[key] = n; add(id, 1, `${n}.º amarelo${comp === 'coppaIta' ? ' na Coppa Italia' : ''}`, true); }
+    }
+    if (comp === 'fra' && st.yellow > 0 && !(st.red && (st.redKind ?? 'twoYellows') === 'twoYellows')) {
+      const key = `${id}@fra`;
+      const n = (d.yellows[key] = (d.yellows[key] ?? 0) + st.yellow);
+      if (THRESH_FRA(n) && d.sanctioned[key] !== n) { d.sanctioned[key] = n; add(id, 1, `${n}.º amarelo`, true); }
     }
     if (comp === 'liga' && st.yellow > 0 && !(st.red && (st.redKind ?? 'twoYellows') === 'twoYellows')) {
       const n = (d.yellows[id] = (d.yellows[id] ?? 0) + st.yellow);

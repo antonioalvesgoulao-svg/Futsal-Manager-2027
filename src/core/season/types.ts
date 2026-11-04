@@ -1,5 +1,5 @@
 // Tipos da época: calendário, competições, séries de play-off, estatísticas e palmarés
-export type CompId = 'liga' | 'playoff' | 'taca' | 'tacaLiga' | 'supertaca' | 'esp' | 'espPlayoff' | 'copaRey' | 'copaEsp' | 'superEsp' | 'espAp' | 'espCl' | 'ita' | 'itaPlayoff' | 'coppaIta' | 'superIta';
+export type CompId = 'liga' | 'playoff' | 'taca' | 'tacaLiga' | 'supertaca' | 'esp' | 'espPlayoff' | 'copaRey' | 'copaEsp' | 'superEsp' | 'espAp' | 'espCl' | 'ita' | 'itaPlayoff' | 'coppaIta' | 'superIta' | 'fra' | 'fraPlayoff' | 'coupeFra';
 
 export const COMP_NAMES: Record<CompId, string> = {
   liga: 'Liga Placard',
@@ -18,6 +18,9 @@ export const COMP_NAMES: Record<CompId, string> = {
   itaPlayoff: 'Serie A (play-off)',
   coppaIta: 'Coppa Italia',
   superIta: 'Supercoppa Italiana',
+  fra: 'D1 Futsal',
+  fraPlayoff: 'D1 Futsal (play-off)',
+  coupeFra: 'Coupe Nationale Futsal',
 };
 
 /** Tipo de cada competição, igual em todos os países: liga, play-off, taça (todos), taça da liga (final eight), supertaça. */
@@ -26,6 +29,7 @@ export const COMP_KIND: Record<CompId, CompKind> = {
   liga: 'league', playoff: 'playoff', taca: 'cup', tacaLiga: 'leagueCup', supertaca: 'super',
   esp: 'league', espPlayoff: 'playoff', copaRey: 'cup', copaEsp: 'leagueCup', superEsp: 'super', espAp: 'leagueCup', espCl: 'leagueCup',
   ita: 'league', itaPlayoff: 'playoff', coppaIta: 'leagueCup', superIta: 'super',
+  fra: 'league', fraPlayoff: 'playoff', coupeFra: 'cup',
 };
 export const kindOf = (c: CompId) => COMP_KIND[c];
 /** Competições de cada país, pela ordem liga, play-off, taça, taça da liga, supertaça. */
@@ -33,11 +37,13 @@ export const COUNTRY_COMPS: Record<string, { league: CompId; playoff: CompId; cu
   por: { league: 'liga', playoff: 'playoff', cup: 'taca', leagueCup: 'tacaLiga', super: 'supertaca' },
   esp: { league: 'esp', playoff: 'espPlayoff', cup: 'copaEsp', leagueCup: 'copaEsp', super: 'superEsp' },
   ita: { league: 'ita', playoff: 'itaPlayoff', cup: 'coppaIta', leagueCup: 'coppaIta', super: 'superIta' },
+  // França: sem supertaça nem taça da liga (dossiê do António, FFF); 'super' aponta para a Coupe só para preencher
+  fra: { league: 'fra', playoff: 'fraPlayoff', cup: 'coupeFra', leagueCup: 'coupeFra', super: 'coupeFra' },
 };
 /** Competição de liga de cada liga do jogo (id da liga → CompId). */
-export const leagueCompOf = (leagueId?: string): CompId => (leagueId === 'esp1' ? 'esp' : leagueId === 'ita1' ? 'ita' : 'liga');
+export const leagueCompOf = (leagueId?: string): CompId => (leagueId === 'esp1' ? 'esp' : leagueId === 'ita1' ? 'ita' : leagueId === 'fra1' ? 'fra' : 'liga');
 /** Nome do país de cada liga. */
-export const leagueCountryName = (leagueId?: string) => (leagueId === 'esp1' ? 'Espanha' : leagueId === 'ita1' ? 'Itália' : 'Portugal');
+export const leagueCountryName = (leagueId?: string) => (leagueId === 'esp1' ? 'Espanha' : leagueId === 'ita1' ? 'Itália' : leagueId === 'fra1' ? 'França' : 'Portugal');
 export const countryOfComp = (c: CompId) => (Object.entries(COUNTRY_COMPS).find(([, v]) => Object.values(v).includes(c))?.[0] ?? 'por');
 
 export interface Scorer {
@@ -67,6 +73,7 @@ export interface Fixture {
   neutral?: boolean;
   arenaId?: string; // jogo rápido: pavilhão escolhido (id do clube em ARENAS ou nome de um campo neutro)
   knockout: boolean; // empate vai a prolongamento e penáltis
+  agg?: [number, number]; // 2.ª mão (França): golos da 1.ª mão [casa deste jogo, fora]; o vencedor é decidido pelo agregado
   tieToHome?: boolean; // Itália (play-in): empate depois do prolongamento = passa a casa (melhor classificada), sem penáltis
   seriesId?: string;
   cancelled?: boolean; // jogo da série que deixou de ser preciso
@@ -94,6 +101,7 @@ export interface SeasonState {
   regularTable?: string[]; // classificação final da fase regular
   esp?: { halfTable?: string[]; regularTable?: string[] }; // o mesmo para a Primera División
   ita?: { halfTable?: string[]; regularTable?: string[]; playIn?: boolean; playout?: boolean }; // Serie A italiana
+  fra?: { regularTable?: string[]; seeds?: string[] }; // D1 Futsal francesa
   winners: Partial<Record<CompId, string>>;
   finished: boolean;
 }

@@ -391,7 +391,7 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
     hl = new mod.Highlight3D($('#hlv'), {
       kits,
       quality: st.quality ?? 'normal',
-      lang: countryOfComp(f.comp) === 'esp' ? 'es' : countryOfComp(f.comp) === 'ita' ? 'it' : 'pt', // anúncios e cores do túnel conforme o país da liga
+      lang: countryOfComp(f.comp) === 'esp' ? 'es' : countryOfComp(f.comp) === 'ita' ? 'it' : countryOfComp(f.comp) === 'fra' ? 'fr' : 'pt', // anúncios e cores do túnel conforme o país da liga
       gkKits,
       refShirt,
       profile: crowd.arena,
@@ -667,7 +667,7 @@ const shirtName = (n: string) => n.split(' ').filter(Boolean).pop() ?? n;
     hl.setBench([[], []]);
     hl.play(scene, info, kit, 0, scene.total, [[shownScore[0], shownScore[1]], [shownScore[0], shownScore[1]]]);
     hl.setTags(false); // sem etiquetas por cima dos campeões
-    hl.trophyCeremony(COMP_NAMES[comp].replace(/ \((play-off|fase final)\)/, ''), capId, kit[mySide], countryOfComp(f.comp) === 'esp' ? 'es' : countryOfComp(f.comp) === 'ita' ? 'it' : 'pt');
+    hl.trophyCeremony(COMP_NAMES[comp].replace(/ \((play-off|fase final)\)/, ''), capId, kit[mySide], countryOfComp(f.comp) === 'esp' ? 'es' : countryOfComp(f.comp) === 'ita' ? 'it' : countryOfComp(f.comp) === 'fra' ? 'fr' : 'pt');
     $('#hlc').textContent = 'Continuar ▸';
   }
 

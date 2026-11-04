@@ -19,6 +19,10 @@ import itaData from '../data/ita/clubs.json';
 import itaPlayers from '../data/ita/players.json';
 import itaFp from '../data/ita/fpstats.json';
 import itaCoaches from '../data/ita/coaches.json';
+import fraData from '../data/fra/clubs.json';
+import fraPlayers from '../data/fra/players.json';
+import fraFp from '../data/fra/fpstats.json';
+import fraCoaches from '../data/fra/coaches.json';
 
 // Base de dados: cada liga é um ficheiro em src/data/<país>/clubs.json
 export const DB_CLUBS: Club[] = [
@@ -26,16 +30,18 @@ export const DB_CLUBS: Club[] = [
   ...espData.clubs.map(({ fp, ...c }) => ({ ...c, colors: c.colors as [string, string] })),
   // Itália só entra quando os plantéis estiverem gerados (tools/ita/build_ita.py)
   ...(itaPlayers.players.length ? itaData.clubs.map(({ slug, ...c }) => ({ ...c, colors: c.colors as [string, string] })) : []),
+  // França só entra quando os planteis estiverem gerados (tools/fra/build_fra.py)
+  ...(fraPlayers.players.length ? fraData.clubs.map((c) => ({ ...c, colors: c.colors as [string, string] })) : []),
 ];
 type RawPlayer = Omit<Player, 'attrs' | 'potential'>;
 const BOOST = porOverrides.boost as Record<string, number>;
 const HISTORY = porHistory.players as Record<string, SeasonRow[]>;
 const ATTR_OVERRIDES = porOverrides.attrs as Record<string, Partial<Player['attrs']>>;
-export const FP_STATS = { ...porFp.players, ...espFp.players, ...itaFp.players } as Record<string, { games: number; yellow: number; red: number; seasons: { s: string; team: string; games: number; goals: number }[]; titles: string[] }>;
+export const FP_STATS = { ...porFp.players, ...espFp.players, ...itaFp.players, ...(fraFp.players as Record<string, unknown>) } as Record<string, { games: number; yellow: number; red: number; seasons: { s: string; team: string; games: number; goals: number }[]; titles: string[] }>;
 
 // Jogadores com atributos gerados (sempre iguais para o mesmo jogador)
 function buildPlayers(): Player[] {
-  return ([...porPlayers.players, ...espPlayers.players, ...itaPlayers.players] as (RawPlayer & { serieA?: number })[]).map((p) => {
+  return ([...porPlayers.players, ...espPlayers.players, ...itaPlayers.players, ...(fraPlayers.players as RawPlayer[])] as (RawPlayer & { serieA?: number })[]).map((p) => {
     const club = DB_CLUBS.find((c) => c.id === p.clubId.replace('@jun', ''))!; // Sub-19 não inscritos como seniores ficam na formação
     const key = `${p.clubId}|${p.name}`;
     // historial: zerozero; quem não o tem (jogadores novos do site da FPF) usa as épocas oficiais do futsalportugal.com
@@ -56,11 +62,12 @@ function buildPlayers(): Player[] {
   });
 }
 export const DB_PLAYERS: Player[] = buildPlayers();
-export const DB_COACHES: Coach[] = [...porCoaches.coaches, ...espCoaches.coaches, ...itaCoaches.coaches] as Coach[];
+export const DB_COACHES: Coach[] = [...porCoaches.coaches, ...espCoaches.coaches, ...itaCoaches.coaches, ...(fraCoaches.coaches as Coach[])] as Coach[];
 export const DB_LEAGUES: League[] = [
   { ...porData.league, clubIds: porData.clubs.map((c) => c.id) },
   { ...espData.league, clubIds: espData.clubs.map((c) => c.id) },
   ...(itaPlayers.players.length ? [{ ...itaData.league, clubIds: itaData.clubs.map((c) => c.id) }] : []),
+  ...(fraPlayers.players.length ? [{ ...fraData.league, clubIds: fraData.clubs.map((c) => c.id) }] : []),
 ];
 
 /** Liga de um clube (os clubes sem `league` são da Liga Placard). */
@@ -68,7 +75,7 @@ export function leagueOf(s: GameState, clubId: string): League {
   const c = s.clubs.find((x) => x.id === clubId.replace('@jun', ''));
   return s.leagues.find((l) => l.id === (c?.league ?? 'por1')) ?? s.leagues[0];
 }
-export const countryOf = (s: GameState, clubId: string) => { const id = leagueOf(s, clubId).id; return id === 'esp1' ? 'esp' : id === 'ita1' ? 'ita' : 'por'; };
+export const countryOf = (s: GameState, clubId: string) => { const id = leagueOf(s, clubId).id; return id === 'esp1' ? 'esp' : id === 'ita1' ? 'ita' : id === 'fra1' ? 'fra' : 'por'; };
 
 let current: GameState | null = null;
 const listeners = new Set<() => void>();

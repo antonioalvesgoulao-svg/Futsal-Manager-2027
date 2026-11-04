@@ -8,7 +8,7 @@ import { renderLive } from './live';
 import { resultHtml } from './friendly';
 import { crestSvg } from '../crest';
 
-const LEAGUE_NAME: Record<string, string> = { por1: '🇵🇹 Liga Placard', esp1: '🇪🇸 Liga Prime Futsal', ita1: '🇮🇹 Serie A' };
+const LEAGUE_NAME: Record<string, string> = { por1: '🇵🇹 Liga Placard', esp1: '🇪🇸 Liga Prime Futsal', ita1: '🇮🇹 Serie A', fra1: '🇫🇷 D1 Futsal' };
 
 export function quickScreen(root: HTMLElement) {
   const base = { clubs: DB_CLUBS, leagues: DB_LEAGUES };

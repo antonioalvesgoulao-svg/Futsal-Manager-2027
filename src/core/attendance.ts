@@ -177,12 +177,12 @@ export function neutralFor(comp: string, year: number): ArenaProfile {
 export function arenaOf(s: GameState, f: Fixture): ArenaProfile {
   if (f.arenaId) { const a = ARENAS[f.arenaId] ?? NEUTRALS.find((n) => n.name === f.arenaId); if (a) return a; }
   const c = s.clubs.find((x) => x.id === f.home);
-  if (c?.league === 'esp1' || c?.league === 'ita1') {
+  if (c?.league === 'esp1' || c?.league === 'ita1' || c?.league === 'fra1') {
     if (!f.neutral) return ARENAS[c.id] ?? spanishArena(c);
     // campo neutro em Espanha/Itália: um dos grandes pavilhões, que não seja de quem joga, rodando por época (estimativa)
     const big = c.league === 'esp1' ? 4500 : 2500;
     const hosts = s.clubs.filter((x) => x.league === c.league && (x.capacity ?? 0) >= big && x.id !== f.home && x.id !== f.away);
-    const comps = ['superEsp', 'copaEsp', 'copaRey', 'superIta', 'coppaIta'];
+    const comps = ['superEsp', 'copaEsp', 'copaRey', 'superIta', 'coppaIta', 'fraPlayoff', 'coupeFra'];
     const host = hosts[(comps.indexOf(f.comp) + s.season.year) % hosts.length] ?? c;
     return ARENAS[host.id] ?? spanishArena(host);
   }
@@ -222,7 +222,7 @@ export function attendance(s: GameState, f: Fixture): Crowd {
   const h = s.clubs.find((c) => c.id === f.home)!;
   const a = s.clubs.find((c) => c.id === f.away)!;
   // Espanha enche mais os pavilhões do que Portugal (estimativa ×1,5 na procura)
-  const country = h.league === 'esp1' ? 1.5 : h.league === 'ita1' ? 1.2 : 1; // Itália: estimativa
+  const country = h.league === 'esp1' ? 1.5 : h.league === 'ita1' ? 1.2 : h.league === 'fra1' ? 0.9 : 1; // Itália e França: estimativa (França: recorde da D1 3 200 em Laval)
   let people: number;
   if (f.neutral) people = (demand(h.reputation) + demand(a.reputation)) * 0.75;
   else {

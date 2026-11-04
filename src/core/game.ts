@@ -26,6 +26,7 @@ import type { GameState } from './types';
 /** Clubes da Primera División (vazio em gravações antigas, sem Espanha). */
 export const espIds = (s: GameState) => s.leagues.find((l) => l.id === 'esp1')?.clubIds ?? [];
 export const itaIds = (s: GameState) => s.leagues.find((l) => l.id === 'ita1')?.clubIds ?? [];
+export const fraIds = (s: GameState) => s.leagues.find((l) => l.id === 'fra1')?.clubIds ?? [];
 
 /** Tipo de golo pelo texto do relato (relatórios do analista). */
 /** Itália: média real 2021/22-2025/26 (divisionecalcioa5.it) ~6,1 golos/jogo; os planteis dão menos com os parâmetros de Portugal. */
@@ -80,7 +81,9 @@ export function startFirstSeason(s: GameState) {
   // Napoli (1.º da fase regular), Feldi Eboli (finalista da Coppa)
   const ita = itaIds(s).map((id) => s.clubs.find((c) => c.id === id)!).sort((a, b) => b.level - a.level).map((c) => c.id);
   const itaFour = ['l84', 'cat', 'nap', 'ebo'].filter((x) => ita.includes(x));
-  s.season = createSeason(2026, ranking, ['slb', 'scp'], esp.length ? { ranking: esp, four: esp.slice(0, 4) } : undefined, ita.length ? { ranking: ita, four: itaFour.length === 4 ? itaFour : ita.slice(0, 4) } : undefined);
+  // França: ordem da classificação real de 2025/26 (clubs.json, prevRank; quem subiu fica no fim)
+  const fra = fraIds(s).map((id) => s.clubs.find((c) => c.id === id)!).sort((a, b) => ((a as { prevRank?: number }).prevRank ?? 99) - ((b as { prevRank?: number }).prevRank ?? 99) || b.level - a.level).map((c) => c.id);
+  s.season = createSeason(2026, ranking, ['slb', 'scp'], esp.length ? { ranking: esp, four: esp.slice(0, 4) } : undefined, ita.length ? { ranking: ita, four: itaFour.length === 4 ? itaFour : ita.slice(0, 4) } : undefined, fra.length ? { ranking: fra } : undefined);
   s.date = '2026-07-01';
   s.pstats = {};
   ensureContracts(s);
@@ -104,7 +107,7 @@ export function matchOptions(s: GameState, f: Fixture) {
   // prolongamento de 2 x 3 min. Play-off (melhor de 3): estimativa com o mesmo prolongamento
   const esp = ['esp', 'espPlayoff', 'copaEsp', 'superEsp', 'copaRey'].includes(f.comp);
   const noExtraTime = (f.comp === 'taca' || f.comp === 'copaEsp' || f.comp === 'superEsp') && (f.stage === 'Quartos-de-final' || f.stage === 'Meias-finais');
-  return { knockout: f.knockout, noExtraTime, noPenalties: !!f.tieToHome, extraTimeLen: esp ? 180 : undefined, goalFactor: ITA_COMPS.includes(f.comp) ? ITA_GOAL_FACTOR : undefined, tieCaution: ITA_COMPS.includes(f.comp) ? ITA_TIE : undefined, seed: `${f.id}-${s.season.year}`, manual: f.home === s.clubId ? (0 as const) : f.away === s.clubId ? (1 as const) : undefined, referees: ref, importance: importanceOf(s, f) };
+  return { knockout: f.knockout, noExtraTime, noPenalties: !!f.tieToHome, aggregate: f.agg, extraTimeLen: esp ? 180 : undefined, goalFactor: ITA_COMPS.includes(f.comp) ? ITA_GOAL_FACTOR : undefined, tieCaution: ITA_COMPS.includes(f.comp) ? ITA_TIE : undefined, seed: `${f.id}-${s.season.year}`, manual: f.home === s.clubId ? (0 as const) : f.away === s.clubId ? (1 as const) : undefined, referees: ref, importance: importanceOf(s, f) };
 }
 
 function playFixture(s: GameState, f: Fixture, given?: MatchResult): MatchResult {
@@ -256,7 +259,7 @@ function playDay(s: GameState, d: string) {
   for (const f of s.season.fixtures.filter((x) => x.date === d && !x.result && !x.cancelled)) playFixture(s, f);
   const clubIds = s.leagues[0].clubIds;
   const before = { ...s.season.winners };
-  for (const t of afterMatchday(s.season, clubIds, (id) => clubName(s, id), espIds(s), itaIds(s))) news(s, t);
+  for (const t of afterMatchday(s.season, clubIds, (id) => clubName(s, id), espIds(s), itaIds(s), fraIds(s))) news(s, t);
   // títulos: todo o plantel ganha moral
   for (const [comp, w] of Object.entries(s.season.winners)) if (w && before[comp as keyof typeof before] !== w) {
     moraleEvent(s, s.players.filter((p) => p.clubId === w).map((p) => p.id), 10);
@@ -330,7 +333,14 @@ function endSeason(s: GameState): DevChange[] {
     for (const c of [ic, old.winners.coppaIta, it[0], runnerUp(old, 'coppaIta'), ...it]) if (c && !four.includes(c) && four.length < 4) four.push(c);
     itaNext = { ranking: [ic, ...it.filter((c) => c !== ic)], four };
   }
-  s.season = createSeason(old.year + 1, ranking, [champ, second], espNext, itaNext);
+  // França: ordem da época seguinte = campeão + classificação da fase regular
+  let fraNext: { ranking: string[] } | undefined;
+  if (fraIds(s).length) {
+    const ft = old.fra?.regularTable ?? leagueTable(old, fraIds(s), 99, 'fra').map((x) => x.club);
+    const fc = old.winners.fra ?? ft[0];
+    fraNext = { ranking: [fc, ...ft.filter((c) => c !== fc)] };
+  }
+  s.season = createSeason(old.year + 1, ranking, [champ, second], espNext, itaNext, fraNext);
   for (const l of s.leagues) l.season = s.season.label;
   s.date = `${old.year + 1}-07-01`;
   s.pstats = {};
