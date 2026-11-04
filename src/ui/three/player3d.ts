@@ -358,8 +358,21 @@ export function sit(a: Actor) {
 // Convenção dos ângulos (rotação em x): coxa/braço negativo = para a frente; perna (joelho)
 // positivo = dobra (o pé vai para trás); antebraço negativo = cotovelo dobrado. Rotação em z:
 // braço/coxa do lado -x (índice 0) negativo = para fora; do lado +x (índice 1) positivo = para fora.
-/** Pose do jogador conforme a corrida e a ação em curso. */
+/** Pose do jogador conforme a corrida e a ação em curso; no fim, os pés nunca ficam abaixo do piso. */
 export function pose(a: Actor, act: Act | undefined, gk: boolean, near: boolean, dt: number) {
+  poseRaw(a, act, gk, near, dt);
+  // contacto com o chão: depois de calcular a pose (corrida, travagens, gestos), mede-se a sola mais baixa (calcanhar e
+  // biqueira de cada pé) e, se atravessar o piso, sobe-se o corpo o que for preciso. Não se aplica ao voo do GR (pose aprovada)
+  if (act?.kind === 'dive') return;
+  a.g.updateMatrixWorld(true);
+  let minY = Infinity;
+  for (const sh of a.shin) for (const z of [-0.07, 0.045, 0.165]) { SOLE.set(0, -0.479, z); sh.localToWorld(SOLE); minY = Math.min(minY, SOLE.y); }
+  const floor = 0.002;
+  if (minY < floor) { a.body.position.y += (floor - minY) / (a.g.scale.y || 1); }
+}
+const SOLE = new THREE.Vector3();
+
+function poseRaw(a: Actor, act: Act | undefined, gk: boolean, near: boolean, dt: number) {
   const { body, thigh, shin, arm, fore } = a;
   body.position.set(0, HIP, 0);
   body.rotation.set(0, 0, 0);

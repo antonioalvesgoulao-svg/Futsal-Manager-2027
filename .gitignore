@@ -14,3 +14,4 @@ diagnostics/.seasons-run.mjs
 diagnostics/.engine.mjs
 diagnostics/.careers.mjs
 diagnostics/.ball.mjs
+diagnostics/.*.mjs

@@ -518,7 +518,7 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
         // ressalto: a bola fica viva à frente da baliza; recarga de um atacante (às vezes o próprio rematador)
         const rs = r() < 0.3 ? shooter : pick(outfield(att), (l) => eff(l, 'antecipacao') + eff(l, 'finalizacao'));
         shot(s, 'recarga', rs);
-      } else if (r() < 0.2) corner(s);
+      } else if (!caught && r() < 0.4) corner(s); // só há canto se a bola não ficou nas mãos do GR (sai pela linha de fundo)
     }
   }
 
