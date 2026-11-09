@@ -928,6 +928,19 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
     band.rotation.y = ry;
     scene.add(band);
   }
+  // galeria iluminada no topo das bancadas (camarotes/marquise envidraçada à volta da sala, ex.: Toulon)
+  if (pr.topGallery) {
+    const yG = base + maxRows * rise + (pr.upperTier ? upY : 0) + 0.6;
+    const lit = new THREE.MeshStandardMaterial({ color: pr.topGallery, emissive: pr.topGallery, emissiveIntensity: 0.9, roughness: 0.4 });
+    const frameM = new THREE.MeshStandardMaterial({ color: '#15181d', roughness: 0.7 });
+    for (const [x, z, len, ry] of [[0, -hallD / 2, hallW, 0], [0, hallD / 2, hallW, Math.PI], [-hallW / 2, 0, hallD, Math.PI / 2], [hallW / 2, 0, hallD, -Math.PI / 2]] as const) {
+      const g = new THREE.Group();
+      const box = new THREE.Mesh(new THREE.BoxGeometry(len, 2.0, 1.4), frameM); box.position.set(0, 1.0, 0.7); g.add(box); // laje e fundo
+      const glow = new THREE.Mesh(new THREE.PlaneGeometry(len - 0.4, 1.3), lit); glow.position.set(0, 1.05, 1.42); g.add(glow); // vidro iluminado
+      for (let u = -len / 2 + 3; u < len / 2; u += 3) { const m = new THREE.Mesh(new THREE.BoxGeometry(0.15, 1.4, 0.1), frameM); m.position.set(u, 1.05, 1.46); g.add(m); } // caixilhos
+      g.position.set(x, yG, z); g.rotation.y = ry; scene.add(g);
+    }
+  }
   if (pr.windows) {
     const winMat = new THREE.MeshBasicMaterial({ color: '#cfe8ff' });
     for (const sg of [-1, 1]) {
