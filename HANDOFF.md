@@ -444,4 +444,4 @@ Todas as ferramentas em `tools/diag` correm com: `npx esbuild <ficheiro> --bundl
 - Testes: `tools/diag/sync.ts` (20 jogos): golos com remate visível 100%, marcador certo 97,3→100%, cantos com bola fora 82,7→100%, penáltis dentro da área 50→100%, golos a <0,5 m do GR 37,8→0%, gestos >0,6 s antes da bola 7→2,6%, pivô: colegas parados 23→20,5%. Motor 5 épocas: PT 6,33, ES 6,01, IT 6,08.
 
 ## França (4/11)
-D1 Futsal ativa (planteis em `src/data/fra/players.json`, gerados por `tools/fra/build_fra.py`). Calibração FRA_GOAL_FACTOR/FRA_TIE em `src/core/game.ts`. Por fazer: pavilhões 3D a partir das fotos do António.
+D1 Futsal ativa (planteis em `src/data/fra/players.json`, gerados por `tools/fra/build_fra.py`). Calibração FRA_GOAL_FACTOR/FRA_TIE em `src/core/game.ts`. Pavilhões 3D em `ARENAS_FRA` (Avion, Garges e GOAL sem fotos).
