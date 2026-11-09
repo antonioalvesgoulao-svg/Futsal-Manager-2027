@@ -1,5 +1,5 @@
 {
- "_info": "D1 Futsal França 2026/27 (dossiê do António + thefootdata.com/FFF). Lotações reais só onde capacityReal; reputation/level/wealth/budget estimativa pela classificação 2025/26 (prevRank) e presença europeia. Cores provisórias até às fotos do António. Pavilhões: os declarados por cada clube à FFF para a D1 2026/27 (thefootdata.com, ficha dos jogos em casa).",
+ "_info": "D1 Futsal França 2026/27 (dossiê do António + thefootdata.com/FFF). Lotações reais só onde capacityReal; reputation/level/wealth/budget estimativa pela classificação 2025/26 (prevRank) e presença europeia. Cores das fotos dos equipamentos do António (4/11). prevRank = classificação oficial FFF 2025/26 (Garges e Artistes subiram). Pavilhões: os declarados por cada clube à FFF para a D1 2026/27 (thefootdata.com, ficha dos jogos em casa).",
  "league": {
   "id": "fra1",
   "name": "D1 Futsal",
@@ -16,8 +16,8 @@
    "capacity": 3500,
    "capacityReal": false,
    "colors": [
-    "#1e3a8a",
-    "#ffffff"
+    "#f07b1a",
+    "#111111"
    ],
    "reputation": 78,
    "level": 80,
@@ -25,44 +25,6 @@
    "budget": 1209524,
    "league": "fra1",
    "prevRank": 1
-  },
-  {
-   "id": "mon",
-   "name": "Montpellier Méditerranée Futsal",
-   "shortName": "MON",
-   "city": "Montpellier",
-   "arena": "Gymnase Coubertin",
-   "capacity": 800,
-   "capacityReal": false,
-   "colors": [
-    "#1e3a8a",
-    "#ffffff"
-   ],
-   "reputation": 70,
-   "level": 72,
-   "wealth": 52,
-   "budget": 480000,
-   "league": "fra1",
-   "prevRank": 2
-  },
-  {
-   "id": "tln",
-   "name": "Toulon Métropole Futsal",
-   "shortName": "TLN",
-   "city": "Toulon",
-   "arena": "Palais des Sports de Toulon",
-   "capacity": 4200,
-   "capacityReal": true,
-   "colors": [
-    "#1e3a8a",
-    "#ffffff"
-   ],
-   "reputation": 68,
-   "level": 70,
-   "wealth": 50,
-   "budget": 380976,
-   "league": "fra1",
-   "prevRank": 3
   },
   {
    "id": "spa",
@@ -73,7 +35,26 @@
    "capacity": 1500,
    "capacityReal": false,
    "colors": [
-    "#1e3a8a",
+    "#00804a",
+    "#ffffff"
+   ],
+   "reputation": 73,
+   "level": 75,
+   "wealth": 52,
+   "budget": 480000,
+   "league": "fra1",
+   "prevRank": 2
+  },
+  {
+   "id": "mon",
+   "name": "Montpellier Méditerranée Futsal",
+   "shortName": "MON",
+   "city": "Montpellier",
+   "arena": "Gymnase Coubertin",
+   "capacity": 800,
+   "capacityReal": false,
+   "colors": [
+    "#c8102e",
     "#ffffff"
    ],
    "reputation": 70,
@@ -81,26 +62,7 @@
    "wealth": 52,
    "budget": 480000,
    "league": "fra1",
-   "prevRank": 4
-  },
-  {
-   "id": "nan",
-   "name": "Nantes Métropole Futsal",
-   "shortName": "NAN",
-   "city": "Nantes",
-   "arena": "Salle Mangin Beaulieu",
-   "capacity": 1200,
-   "capacityReal": false,
-   "colors": [
-    "#1e3a8a",
-    "#ffffff"
-   ],
-   "reputation": 67,
-   "level": 69,
-   "wealth": 49,
-   "budget": 339411,
-   "league": "fra1",
-   "prevRank": 5
+   "prevRank": 3
   },
   {
    "id": "goa",
@@ -111,13 +73,51 @@
    "capacity": 800,
    "capacityReal": false,
    "colors": [
-    "#1e3a8a",
+    "#111111",
     "#ffffff"
    ],
    "reputation": 68,
    "level": 70,
    "wealth": 50,
    "budget": 380976,
+   "league": "fra1",
+   "prevRank": 4
+  },
+  {
+   "id": "tln",
+   "name": "Toulon Métropole Futsal",
+   "shortName": "TLN",
+   "city": "Toulon",
+   "arena": "Palais des Sports de Toulon",
+   "capacity": 4200,
+   "capacityReal": true,
+   "colors": [
+    "#111111",
+    "#d7192a"
+   ],
+   "reputation": 66,
+   "level": 68,
+   "wealth": 50,
+   "budget": 380976,
+   "league": "fra1",
+   "prevRank": 5
+  },
+  {
+   "id": "nan",
+   "name": "Nantes Métropole Futsal",
+   "shortName": "NAN",
+   "city": "Nantes",
+   "arena": "Salle Mangin Beaulieu",
+   "capacity": 1200,
+   "capacityReal": false,
+   "colors": [
+    "#1c2a44",
+    "#c9a54a"
+   ],
+   "reputation": 66,
+   "level": 68,
+   "wealth": 49,
+   "budget": 339411,
    "league": "fra1",
    "prevRank": 6
   },
@@ -130,11 +130,11 @@
    "capacity": 1000,
    "capacityReal": false,
    "colors": [
-    "#1e3a8a",
+    "#0e7a4f",
     "#ffffff"
    ],
-   "reputation": 64,
-   "level": 66,
+   "reputation": 63,
+   "level": 65,
    "wealth": 46,
    "budget": 240000,
    "league": "fra1",
@@ -149,11 +149,11 @@
    "capacity": 600,
    "capacityReal": false,
    "colors": [
-    "#1e3a8a",
+    "#111111",
     "#ffffff"
    ],
-   "reputation": 62,
-   "level": 64,
+   "reputation": 61,
+   "level": 63,
    "wealth": 44,
    "budget": 190488,
    "league": "fra1",
@@ -168,11 +168,11 @@
    "capacity": 1000,
    "capacityReal": false,
    "colors": [
-    "#1e3a8a",
+    "#d7192a",
     "#ffffff"
    ],
-   "reputation": 62,
-   "level": 64,
+   "reputation": 60,
+   "level": 62,
    "wealth": 44,
    "budget": 190488,
    "league": "fra1",
@@ -187,11 +187,11 @@
    "capacity": 600,
    "capacityReal": false,
    "colors": [
-    "#1e3a8a",
-    "#ffffff"
+    "#111111",
+    "#c9a54a"
    ],
-   "reputation": 60,
-   "level": 62,
+   "reputation": 58,
+   "level": 60,
    "wealth": 42,
    "budget": 151190,
    "league": "fra1",
@@ -206,11 +206,11 @@
    "capacity": 500,
    "capacityReal": false,
    "colors": [
-    "#1e3a8a",
+    "#f21a23",
     "#ffffff"
    ],
-   "reputation": 58,
-   "level": 60,
+   "reputation": 56,
+   "level": 58,
    "wealth": 40,
    "budget": 120000,
    "league": "fra1",
@@ -225,11 +225,11 @@
    "capacity": 500,
    "capacityReal": false,
    "colors": [
-    "#1e3a8a",
+    "#2f4fd8",
     "#ffffff"
    ],
-   "reputation": 58,
-   "level": 60,
+   "reputation": 56,
+   "level": 58,
    "wealth": 40,
    "budget": 120000,
    "league": "fra1",

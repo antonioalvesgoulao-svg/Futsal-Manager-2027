@@ -27,6 +27,19 @@ export const KITS: Record<string, ClubKits> = {
   por: { home: k('#111111', '#111111', '#ffffff', 'riscas', '#ffffff'), away: k('#facc15', '#facc15', '#facc15', 'liso', '#ffffff'), confirmed: true },
   fam: { home: k('#ffffff', '#ffffff', '#ffffff', 'metade', '#18214e'), away: k('#cee5d4', '#cee5d4', '#cee5d4', 'liso', '#ffffff'), confirmed: true },
   tor: { home: k('#881732', '#34497e', '#881732', 'metade', '#34497e'), away: k('#cbd9e6', '#cbd9e6', '#cbd9e6', 'riscas', '#d6e0ea'), confirmed: true },
+  // França: fotos dos equipamentos 2026/27 enviadas pelo António (4/11); Sporting Club Paris = Sporting CP (indicação do António)
+  lav: { home: x(k('#ffffff', '#ffffff', '#ffffff', 'liso', '#f07b1a', undefined, '#111111'), { cuffs: '#f07b1a', shortsStripe: '#f07b1a' }), away: x(k('#f07b1a', '#111111', '#f07b1a', 'liso', '#111111'), { cuffs: '#111111' }), confirmed: true },
+  spa: { home: k('#00804a', '#111111', '#00804a', 'listas', '#ffffff'), away: k('#ccaa6b', '#ccab6a', '#ccab6a', 'liso', '#ffffff'), confirmed: true },
+  mon: { home: k('#c8102e', '#c8102e', '#c8102e', 'liso', '#ffffff'), away: k('#075ba1', '#075ba1', '#075ba1', 'liso', '#ffffff'), confirmed: true },
+  goa: { home: k('#141414', '#141414', '#141414', 'liso', '#ffffff'), away: x(k('#ffffff', '#ffffff', '#ffffff', 'centro', '#141414'), { cuffs: '#141414' }), confirmed: true },
+  tln: { home: x(k('#141414', '#141414', '#141414', 'liso', '#d7192a'), { cuffs: '#d7192a' }), away: k('#ece9e4', '#141414', '#ece9e4', 'liso', '#d7192a'), confirmed: true },
+  nan: { home: k('#1c2a44', '#1c2a44', '#1c2a44', 'liso', '#c9a54a', undefined, '#c9a54a'), away: k('#ffffff', '#ffffff', '#ffffff', 'liso', '#c9a54a'), confirmed: true },
+  aca: { home: k('#0e7a4f', '#0e7a4f', '#0e7a4f', 'liso', '#ffffff'), away: k('#d8c48c', '#ffffff', '#ffffff', 'liso', '#111111'), confirmed: true },
+  avi: { home: k('#141414', '#141414', '#141414', 'liso', '#ffffff'), away: k('#a8e6cf', '#141414', '#141414', 'liso', '#141414'), confirmed: true },
+  ujs: { home: k('#d7192a', '#d7192a', '#d7192a', 'liso', '#ffffff'), away: k('#ffffff', '#ffffff', '#ffffff', 'liso', '#d7192a', undefined, '#1c2a44'), confirmed: true },
+  nic: { home: x(k('#141414', '#141414', '#141414', 'liso', '#c9a54a', undefined, '#c9a54a'), { cuffs: '#c9a54a' }), away: k('#ffffff', '#ffffff', '#ffffff', 'liso', '#c9a54a', undefined, '#c9a54a'), confirmed: true },
+  gar: { home: x(k('#f21a23', '#f21a23', '#f21a23', 'riscas', '#ffffff'), { shortsStripe: '#ffffff' }), away: k('#141414', '#0a0a0a', '#0a0a0a', 'diagonais', '#3a3a3a'), confirmed: true },
+  art: { home: k('#2f4fd8', '#2f4fd8', '#2f4fd8', 'liso', '#ffffff'), away: k('#ffffff', '#141414', '#ffffff', 'liso', '#141414'), confirmed: true },
   // Espanha: camisola principal tirada das fotos oficiais dos jogadores na RFEF (2026/27); calções, meias e alternativos
   // são estimativa até o António confirmar (confirmed: false)
   bar: { home: k('#a50044', '#004d98', '#004d98', 'riscas', '#004d98'), away: k('#f5e04c', '#f5e04c', '#f5e04c'), confirmed: false },

@@ -59,9 +59,11 @@ export const TEAM_LEVELS: Record<string, number> = {
   // Brasil (LNF), Cazaquistão e outros que aparecem no historial dos jogadores da Liga Prime
   'Kairat Almaty': 82, Joinville: 78, 'Jaraguá Futsal': 76, 'Pato Futsal': 76, 'Magnus Futsal': 80, 'São José Futsal': 72, 'Foz Cataratas Futsal': 72,
   'Cascavel Futsal': 76, 'Carlos Barbosa': 78, Corinthians: 76, 'Joaçaba Futsal': 72, 'Santo André': 70, Blumenau: 70, 'Atlântico': 72,
-  'Royal Sporting Anderlecht Futsal': 82, 'Etoile Lavalloise': 70, 'Haladás VSE': 64, 'FK Chrudim': 68, 'Uragan Ivano-Frankivsk': 70, 'MNK Olmissum': 66, ACCS: 66,
+  'Royal Sporting Anderlecht Futsal': 82, 'Etoile Lavalloise': 80, 'Haladás VSE': 64, 'FK Chrudim': 68, 'Uragan Ivano-Frankivsk': 70, 'MNK Olmissum': 66, ACCS: 66,
   // Itália (Serie A): nomes canónicos de tools/ita/build_matchstats.py; clubes atuais com o nível do jogo, os outros estimativa
   'Meta Catania': 82, 'Napoli Futsal': 80, 'L84 Torino': 81, 'Feldi Eboli': 77, 'Sandro Abate': 74, 'Came Treviso': 73, 'Sporting Sala Consilina': 71, 'Roma 1927': 69, 'Benevento 5': 68, 'Active Network': 67, 'Giovinazzo C5': 64, 'Petrarca Padova': 64, 'Capurso': 63, 'Olimpus Roma': 76, 'Real San Giuseppe': 72, 'Futsal Pescara': 72, 'Ciampino Aniene': 68, 'Sporting Ciampino': 62, 'CMB Matera': 72, '360 GG Monastir': 64, 'Città di Melilli': 62, 'Futsal Polistena': 62, 'Nuova Comauto Pistoia': 62, 'Olimpia Verona': 60, 'Saviatesta Mantova': 64, 'Lido di Ostia': 66, 'Manfredonia C5': 62, 'Pirossigeno Cosenza': 64, 'CDM Futsal': 62,
+  // França (D1 Futsal): nomes das fichas FFF; clubes atuais com o nível do jogo, os que desceram estimativa
+  'Étoile Lavalloise': 80, 'Sporting Club Paris': 75, 'Montpellier Méditerranée Futsal': 72, 'GOAL Futsal Club': 70, 'Toulon Métropole Futsal': 68, 'Toulon Élite Futsal': 66, 'Nantes Métropole Futsal': 68, 'Paris ACASA': 65, 'AS Avion Futsal': 63, 'UJS Toulouse': 62, 'Nice Futsal Club': 60, 'Garges Djibson': 58, 'Artistes Futsal': 58, 'FC Kingersheim': 55, 'Kremlin-Bicêtre Futsal': 58, 'Hérouville Futsal': 55, 'Futsal Club Béthunois': 56, 'AC Ajaccio': 55,
   // Estrangeiro
   Barcelona: 96, 'ElPozo Murcia Costa Cálida': 90, 'Illes Balears Palma': 93,
   'Real Betis': 78, Levante: 82, 'Ribera Navarra': 80, 'ETB Calviá': 55, 'Wanapix AD Sala 10': 70,
@@ -83,7 +85,7 @@ const LEAGUE_OF: Record<string, number> = {
   'BeSoccer CD UMA Antequera': 92, 'Burela FS': 80, 'Alzira FS': 65,
   'Kairat Almaty': 70, Joinville: 75, 'Jaraguá Futsal': 75, 'Pato Futsal': 75, 'Magnus Futsal': 75, 'São José Futsal': 75, 'Foz Cataratas Futsal': 75,
   'Cascavel Futsal': 75, 'Carlos Barbosa': 75, Corinthians: 75, 'Joaçaba Futsal': 75, 'Santo André': 75, Blumenau: 75, 'Atlântico': 75,
-  'Royal Sporting Anderlecht Futsal': 58, 'Etoile Lavalloise': 55, 'Haladás VSE': 55, 'FK Chrudim': 58, 'Uragan Ivano-Frankivsk': 62, 'MNK Olmissum': 55, ACCS: 55,
+  'Royal Sporting Anderlecht Futsal': 58, 'Etoile Lavalloise': 62, 'Haladás VSE': 55, 'FK Chrudim': 58, 'Uragan Ivano-Frankivsk': 62, 'MNK Olmissum': 55, ACCS: 55,
   // Espanha (a mais forte)
   Barcelona: 92, 'ElPozo Murcia Costa Cálida': 92, 'Illes Balears Palma': 92, 'Viña Albali Valdepeñas': 92, 'Jaén Paraíso Interior': 92,
   'Real Betis': 92, Levante: 92, 'Ribera Navarra': 92, 'Wanapix AD Sala 10': 72, 'ETB Calviá': 50,
@@ -94,6 +96,8 @@ const LEAGUE_OF: Record<string, number> = {
   'United Galati': 52, 'Araz Naxçivan': 55, 'Piast Gliwice': 65, 'KS Constract Lubawa': 65, 'Svarog FC Teplice': 58,
   // Serie A italiana (estimativa: abaixo da Liga Placard e da Liga Prime)
   'Meta Catania': 70, 'Napoli Futsal': 70, 'L84 Torino': 70, 'Feldi Eboli': 70, 'Sandro Abate': 70, 'Came Treviso': 70, 'Sporting Sala Consilina': 70, 'Roma 1927': 70, 'Benevento 5': 70, 'Active Network': 70, 'Giovinazzo C5': 70, 'Petrarca Padova': 70, 'Capurso': 70, 'Olimpus Roma': 70, 'Real San Giuseppe': 70, 'Futsal Pescara': 70, 'Ciampino Aniene': 70, 'Sporting Ciampino': 70, 'CMB Matera': 70, '360 GG Monastir': 70, 'Città di Melilli': 70, 'Futsal Polistena': 70, 'Nuova Comauto Pistoia': 70, 'Olimpia Verona': 70, 'Saviatesta Mantova': 70, 'Lido di Ostia': 70, 'Manfredonia C5': 70, 'Pirossigeno Cosenza': 70, 'CDM Futsal': 70,
+  // D1 Futsal francesa (estimativa: abaixo da Serie A)
+  'Étoile Lavalloise': 62, 'Sporting Club Paris': 62, 'Montpellier Méditerranée Futsal': 62, 'GOAL Futsal Club': 62, 'Toulon Métropole Futsal': 62, 'Toulon Élite Futsal': 62, 'Nantes Métropole Futsal': 62, 'Paris ACASA': 62, 'AS Avion Futsal': 62, 'UJS Toulouse': 62, 'Nice Futsal Club': 62, 'Garges Djibson': 62, 'Artistes Futsal': 62, 'FC Kingersheim': 62, 'Kremlin-Bicêtre Futsal': 62, 'Hérouville Futsal': 62, 'Futsal Club Béthunois': 62, 'AC Ajaccio': 62,
   // Médio Oriente e América do Sul
   'Al-Nassr': 48, 'Al-Qadisiyah': 48, 'Al-Ula FC': 48, 'Al-Riyadh': 48, 'Al-Tadhamon': 42, Magallanes: 38,
 };

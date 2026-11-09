@@ -101,29 +101,25 @@ export const REF_PAIRS_ITA: RefPair[] = [
 ];
 
 
-// França: 40 árbitros federais de futsal (D1 e D2) de documentos FFF citados no dossiê do António; lista por validar para 2026/27.
-// 20 duplas sorteadas; duplas de topo e temperamento são estimativa
+// França: 34 árbitros federais de futsal 2026/27 (lista do António, 4/11): 17 FFU1 + 17 FFU2; duplas FFU1 = topo (sorteio fixo; temperamento estimado)
 export const REF_PAIRS_FRA: RefPair[] = [
-  { id: 'f1', names: ['Nebyl Rahal', 'Jordan Feltesse'], tolerance: 1.01, cards: 0.90, harsh: 1.18, real: true, top: true },
-  { id: 'f2', names: ['Pierre Bouriez', 'Tarik El Ghourraf'], tolerance: 0.87, cards: 1.16, harsh: 0.99, real: true, top: true },
-  { id: 'f3', names: ['Hachim Abdallah', 'Tristan Daniele'], tolerance: 0.89, cards: 0.89, harsh: 1.22, real: true, top: true },
-  { id: 'f4', names: ['Mostapha Hallou', 'Simon Veissiere'], tolerance: 1.07, cards: 1.00, harsh: 0.91, real: true, top: true },
-  { id: 'f5', names: ['Julien Lang', 'Benoit Chandelier'], tolerance: 0.86, cards: 1.09, harsh: 0.91, real: true, top: true },
-  { id: 'f6', names: ['Samuel Le Tennier', 'El Houcine Maataoui'], tolerance: 1.03, cards: 1.07, harsh: 1.15, real: true, top: false },
-  { id: 'f7', names: ['Nizar Ayadi', 'Karim Amejal'], tolerance: 0.95, cards: 1.05, harsh: 0.96, real: true, top: false },
-  { id: 'f8', names: ['Yacine Oualaouch', 'Bryan François'], tolerance: 0.84, cards: 1.09, harsh: 1.15, real: true, top: false },
-  { id: 'f9', names: ['Aurélien Uzan', 'Gerald Kieffer'], tolerance: 1.03, cards: 1.07, harsh: 1.08, real: true, top: false },
-  { id: 'f10', names: ['Ala Eddine Diani', 'Joel Fernandes'], tolerance: 0.84, cards: 0.90, harsh: 1.04, real: true, top: false },
-  { id: 'f11', names: ['Jérémy Deidda', 'Cristian Morar'], tolerance: 0.85, cards: 0.85, harsh: 1.00, real: true, top: false },
-  { id: 'f12', names: ['Jonathan Presse', 'Toufik Ait Hammou'], tolerance: 0.93, cards: 0.96, harsh: 1.01, real: true, top: false },
-  { id: 'f13', names: ['Damien Vasseur', 'Laurent Chabot'], tolerance: 0.97, cards: 0.93, harsh: 1.17, real: true, top: false },
-  { id: 'f14', names: ['Thomas David', 'Fadil Darraz'], tolerance: 0.96, cards: 1.21, harsh: 0.97, real: true, top: false },
-  { id: 'f15', names: ['Benjamin Sorbet', 'Benjamin Barbier'], tolerance: 1.01, cards: 1.04, harsh: 1.15, real: true, top: false },
-  { id: 'f16', names: ['Mael Messaoudi', 'Océane Ordonez Gomez'], tolerance: 1.14, cards: 1.12, harsh: 1.08, real: true, top: false },
-  { id: 'f17', names: ['Sofian Ouramdane', 'Rémi Fabre'], tolerance: 0.87, cards: 1.15, harsh: 1.11, real: true, top: false },
-  { id: 'f18', names: ['Hatem Fekrane', 'Ahtman Belhadj'], tolerance: 0.83, cards: 0.89, harsh: 1.05, real: true, top: false },
-  { id: 'f19', names: ['Marouane Abbad El Andaloussi', 'Victor Chaix'], tolerance: 0.85, cards: 0.95, harsh: 1.14, real: true, top: false },
-  { id: 'f20', names: ['Clement Loire', 'Adrien Crumois'], tolerance: 0.85, cards: 0.95, harsh: 1.09, real: true, top: false },
+  { id: 'f1', names: ['Marouane Abbad El Andaloussi', 'Hachim Abdallah'], tolerance: 0.97, cards: 1.05, harsh: 0.98, real: true, top: true },
+  { id: 'f2', names: ['Toufik Ait Hammou', 'Karim Amejal'], tolerance: 0.97, cards: 0.91, harsh: 0.98, real: true, top: true },
+  { id: 'f3', names: ['Pierre Bourez', 'Victor Chaix'], tolerance: 1.11, cards: 1.04, harsh: 1.10, real: true, top: true },
+  { id: 'f4', names: ['Adrien Crumois', 'Tristan Daniele'], tolerance: 1.02, cards: 1.04, harsh: 1.02, real: true, top: true },
+  { id: 'f5', names: ['Fadil Darraz', 'Thomas David'], tolerance: 0.83, cards: 1.09, harsh: 1.05, real: true, top: true },
+  { id: 'f6', names: ['Jordan Feltesse', 'Bryan Francois'], tolerance: 1.05, cards: 0.83, harsh: 0.83, real: true, top: true },
+  { id: 'f7', names: ['Mostapha Hallou', 'Julien Lang'], tolerance: 0.91, cards: 0.95, harsh: 1.03, real: true, top: true },
+  { id: 'f8', names: ['Yacine Oualaouch', 'Samuel Le Tennier'], tolerance: 1.00, cards: 1.05, harsh: 0.94, real: true, top: true },
+  { id: 'f9', names: ['Hatem Fekrane', 'Jeremy Deidda'], tolerance: 1.03, cards: 1.04, harsh: 0.93, real: true, top: false },
+  { id: 'f10', names: ['Remi Fabre', 'Benoit Chandelier'], tolerance: 1.17, cards: 1.06, harsh: 1.12, real: true, top: false },
+  { id: 'f11', names: ['Ahtman Belhadj', 'Benjamin Barbier'], tolerance: 0.94, cards: 0.93, harsh: 0.97, real: true, top: false },
+  { id: 'f12', names: ['Cristian Morar', 'Nebyl Rahal'], tolerance: 0.99, cards: 1.06, harsh: 1.02, real: true, top: false },
+  { id: 'f13', names: ['Tarik El Ghourraf', 'Gerald Kieffer'], tolerance: 0.96, cards: 0.90, harsh: 0.95, real: true, top: false },
+  { id: 'f14', names: ['Damien Vasse', 'Mael Messaoudi'], tolerance: 1.12, cards: 0.92, harsh: 1.02, real: true, top: false },
+  { id: 'f15', names: ['Oceane Ordonez Gomez', 'Laurent Chabot'], tolerance: 1.04, cards: 0.85, harsh: 1.00, real: true, top: false },
+  { id: 'f16', names: ['Sofian Ouramdane', 'El Houcine Maataoui'], tolerance: 1.13, cards: 0.80, harsh: 0.97, real: true, top: false },
+  { id: 'f17', names: ['Joel Fernandes', 'Benjamin Sorbet'], tolerance: 0.99, cards: 0.92, harsh: 1.05, real: true, top: false },
 ];
 
 /** Clássicos espanhóis (estimativa): dérbi de Múrcia (ElPozo x Cartagena) e jogos entre os 5 grandes. */

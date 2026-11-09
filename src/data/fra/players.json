@@ -1,1 +1,2384 @@
-{"_info":"a gerar (tools/fra/build_fra.py)","players":[]}
+{
+ "_info": "D1 Futsal 2026/27: planteis do zerozero + fichas de jogo FFF (recolha do António via Claude in Chrome, 4/11/2026). estimated = campos estimados (posição pelos golos/jogo, idade 25, nacionalidade França, número livre).",
+ "players": [
+  {
+   "id": "lav01",
+   "clubId": "lav",
+   "name": "Marquet",
+   "position": "GR",
+   "number": 1,
+   "age": 33,
+   "nationality": "França",
+   "fullName": "Louis Marquet"
+  },
+  {
+   "id": "lav02",
+   "clubId": "lav",
+   "name": "Amiard",
+   "position": "GR",
+   "number": 12,
+   "age": 23,
+   "nationality": "França",
+   "fullName": "Jules Amiard"
+  },
+  {
+   "id": "lav03",
+   "clubId": "lav",
+   "name": "Dongmo",
+   "position": "GR",
+   "number": 20,
+   "age": 20,
+   "nationality": "França",
+   "fullName": "Momo Dongmo"
+  },
+  {
+   "id": "lav04",
+   "clubId": "lav",
+   "name": "Aberkan",
+   "position": "FIX",
+   "number": 5,
+   "age": 22,
+   "nationality": "França",
+   "fullName": "Naoufel Aberkan"
+  },
+  {
+   "id": "lav05",
+   "clubId": "lav",
+   "name": "Bakkali",
+   "position": "FIX",
+   "number": 11,
+   "age": 33,
+   "nationality": "Marrocos",
+   "fullName": "Bilal Bakkali"
+  },
+  {
+   "id": "lav06",
+   "clubId": "lav",
+   "name": "Garcia",
+   "position": "UNI",
+   "number": 13,
+   "age": 19,
+   "nationality": "França",
+   "fullName": "Thomassin Garcia"
+  },
+  {
+   "id": "lav07",
+   "clubId": "lav",
+   "name": "Bourdais",
+   "position": "UNI",
+   "number": 3,
+   "age": 18,
+   "nationality": "França",
+   "fullName": "Yann Bourdais"
+  },
+  {
+   "id": "lav08",
+   "clubId": "lav",
+   "name": "Kolski",
+   "position": "UNI",
+   "number": 6,
+   "age": 20,
+   "nationality": "França",
+   "fullName": "Tom Kolski"
+  },
+  {
+   "id": "lav09",
+   "clubId": "lav",
+   "name": "Kolski",
+   "position": "UNI",
+   "number": 14,
+   "age": 20,
+   "nationality": "França",
+   "fullName": "Eliott Kolski"
+  },
+  {
+   "id": "lav10",
+   "clubId": "lav",
+   "name": "Megrous",
+   "position": "UNI",
+   "number": 18,
+   "age": 19,
+   "nationality": "França",
+   "fullName": "Ismael Megrous"
+  },
+  {
+   "id": "lav11",
+   "clubId": "lav",
+   "name": "Bakkali",
+   "position": "ALA",
+   "number": 2,
+   "age": 28,
+   "nationality": "Marrocos",
+   "fullName": "Anas Bakkali"
+  },
+  {
+   "id": "lav12",
+   "clubId": "lav",
+   "name": "Guirio",
+   "position": "ALA",
+   "number": 7,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Ouassini Guirio"
+  },
+  {
+   "id": "lav13",
+   "clubId": "lav",
+   "name": "Souza",
+   "position": "ALA",
+   "number": 8,
+   "age": 30,
+   "nationality": "Brasil",
+   "fullName": "Kaíque Souza"
+  },
+  {
+   "id": "lav14",
+   "clubId": "lav",
+   "name": "Lutin",
+   "position": "ALA",
+   "number": 9,
+   "age": 28,
+   "nationality": "França",
+   "fullName": "Nélson Lutin"
+  },
+  {
+   "id": "lav15",
+   "clubId": "lav",
+   "name": "Mohammed",
+   "position": "ALA",
+   "number": 19,
+   "age": 35,
+   "nationality": "França",
+   "fullName": "Abdessamad Mohammed"
+  },
+  {
+   "id": "lav16",
+   "clubId": "lav",
+   "name": "El-Mesrar",
+   "position": "PIV",
+   "number": 10,
+   "age": 36,
+   "nationality": "Marrocos",
+   "fullName": "Soufiane El-Mesrar"
+  },
+  {
+   "id": "spa01",
+   "clubId": "spa",
+   "name": "Lokoka",
+   "position": "GR",
+   "number": 1,
+   "age": 32,
+   "nationality": "França",
+   "fullName": "Francis Lokoka"
+  },
+  {
+   "id": "spa02",
+   "clubId": "spa",
+   "name": "Santos",
+   "position": "FIX",
+   "number": 19,
+   "age": 31,
+   "nationality": "Brasil",
+   "fullName": "Caio Santos"
+  },
+  {
+   "id": "spa03",
+   "clubId": "spa",
+   "name": "Mareco",
+   "position": "FIX",
+   "number": 2,
+   "age": 31,
+   "nationality": "Paraguai",
+   "fullName": "Damián Mareco",
+   "estimated": [
+    "número"
+   ]
+  },
+  {
+   "id": "spa04",
+   "clubId": "spa",
+   "name": "Belhaj",
+   "position": "FIX",
+   "number": 8,
+   "age": 33,
+   "nationality": "França",
+   "fullName": "Sid Belhaj"
+  },
+  {
+   "id": "spa05",
+   "clubId": "spa",
+   "name": "Aissi",
+   "position": "UNI",
+   "number": 3,
+   "age": 25,
+   "nationality": "Marrocos",
+   "fullName": "El Mahdi Aissi",
+   "estimated": [
+    "idade",
+    "número"
+   ]
+  },
+  {
+   "id": "spa06",
+   "clubId": "spa",
+   "name": "Dahani",
+   "position": "ALA",
+   "number": 10,
+   "age": 26,
+   "nationality": "Marrocos",
+   "fullName": "Anas Dahani"
+  },
+  {
+   "id": "spa07",
+   "clubId": "spa",
+   "name": "Martinez",
+   "position": "ALA",
+   "number": 11,
+   "age": 33,
+   "nationality": "Paraguai",
+   "fullName": "Francisco Martinez"
+  },
+  {
+   "id": "spa08",
+   "clubId": "spa",
+   "name": "Kozlovskis",
+   "position": "ALA",
+   "number": 7,
+   "age": 24,
+   "nationality": "Letónia",
+   "fullName": "Artjoms Kozlovskis"
+  },
+  {
+   "id": "spa09",
+   "clubId": "spa",
+   "name": "Tchaptchet",
+   "position": "PIV",
+   "number": 5,
+   "age": 30,
+   "nationality": "França",
+   "fullName": "Arthur Tchaptchet",
+   "estimated": [
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "spa10",
+   "clubId": "spa",
+   "name": "Amarilla",
+   "position": "PIV",
+   "number": 15,
+   "age": 31,
+   "nationality": "Paraguai",
+   "fullName": "Aldo Amarilla"
+  },
+  {
+   "id": "spa11",
+   "clubId": "spa",
+   "name": "Mehdaoui",
+   "position": "GR",
+   "number": 20,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Walid Mehdaoui",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "spa12",
+   "clubId": "spa",
+   "name": "Girard",
+   "position": "FIX",
+   "number": 26,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Maxime Girard",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "spa13",
+   "clubId": "spa",
+   "name": "Ndukuta",
+   "position": "FIX",
+   "number": 17,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Steven Ndukuta",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "spa14",
+   "clubId": "spa",
+   "name": "Galeano",
+   "position": "UNI",
+   "number": 4,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Julio Mareco Galeano",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade",
+    "número"
+   ]
+  },
+  {
+   "id": "mon01",
+   "clubId": "mon",
+   "name": "Marques",
+   "position": "GR",
+   "number": 12,
+   "age": 29,
+   "nationality": "Portugal",
+   "fullName": "Cristiano Marques"
+  },
+  {
+   "id": "mon02",
+   "clubId": "mon",
+   "name": "Moral",
+   "position": "FIX",
+   "number": 14,
+   "age": 33,
+   "nationality": "Espanha",
+   "fullName": "Pablo del Moral"
+  },
+  {
+   "id": "mon03",
+   "clubId": "mon",
+   "name": "Ruas",
+   "position": "FIX/ALA",
+   "number": 2,
+   "age": 25,
+   "nationality": "Brasil",
+   "fullName": "Jhonatan Ruas",
+   "estimated": [
+    "idade",
+    "número"
+   ]
+  },
+  {
+   "id": "mon04",
+   "clubId": "mon",
+   "name": "Sadaoui",
+   "position": "FIX/ALA",
+   "number": 7,
+   "age": 17,
+   "nationality": "França",
+   "fullName": "Ayoub Sadaoui"
+  },
+  {
+   "id": "mon05",
+   "clubId": "mon",
+   "name": "Simiand",
+   "position": "UNI",
+   "number": 19,
+   "age": 17,
+   "nationality": "França",
+   "fullName": "Fabio Simiand"
+  },
+  {
+   "id": "mon06",
+   "clubId": "mon",
+   "name": "Fricheteau",
+   "position": "UNI",
+   "number": 4,
+   "age": 21,
+   "nationality": "França",
+   "fullName": "Kennan Fricheteau"
+  },
+  {
+   "id": "mon07",
+   "clubId": "mon",
+   "name": "Ladire",
+   "position": "UNI",
+   "number": 8,
+   "age": 17,
+   "nationality": "França",
+   "fullName": "Laurys Ladire"
+  },
+  {
+   "id": "mon08",
+   "clubId": "mon",
+   "name": "Mesquita",
+   "position": "UNI",
+   "number": 10,
+   "age": 26,
+   "nationality": "Brasil",
+   "fullName": "David Mesquita"
+  },
+  {
+   "id": "mon09",
+   "clubId": "mon",
+   "name": "Bakhti",
+   "position": "UNI",
+   "number": 17,
+   "age": 19,
+   "nationality": "França",
+   "fullName": "Wassim Bakhti"
+  },
+  {
+   "id": "mon10",
+   "clubId": "mon",
+   "name": "Bahjaoui",
+   "position": "FIX",
+   "number": 5,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Yassine Bahjaoui",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "mon11",
+   "clubId": "mon",
+   "name": "Sarsari",
+   "position": "FIX",
+   "number": 9,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Mostafa Sarsari",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "mon12",
+   "clubId": "mon",
+   "name": "Bulgaz",
+   "position": "FIX",
+   "number": 15,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Amine Bulgaz",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "mon13",
+   "clubId": "mon",
+   "name": "Nasri",
+   "position": "GR",
+   "number": 20,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Ilies Nasri",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "mon14",
+   "clubId": "mon",
+   "name": "Toumiat",
+   "position": "FIX",
+   "number": 22,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Mouad Toumiat",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "mon15",
+   "clubId": "mon",
+   "name": "Oliveira",
+   "position": "PIV",
+   "number": 18,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Jhonatan Pereira de Oliveira",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "goa01",
+   "clubId": "goa",
+   "name": "Ramsamy",
+   "position": "GR",
+   "number": 20,
+   "age": 19,
+   "nationality": "França",
+   "fullName": "Jéremy Ramsamy"
+  },
+  {
+   "id": "goa02",
+   "clubId": "goa",
+   "name": "Mutombo",
+   "position": "GR",
+   "number": 12,
+   "age": 24,
+   "nationality": "França",
+   "fullName": "Japhet Mutombo",
+   "estimated": [
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "goa03",
+   "clubId": "goa",
+   "name": "Rocca",
+   "position": "GR",
+   "number": 1,
+   "age": 40,
+   "nationality": "Venezuela",
+   "fullName": "Gabriel La Rocca"
+  },
+  {
+   "id": "goa04",
+   "clubId": "goa",
+   "name": "Idrissi",
+   "position": "FIX",
+   "number": 7,
+   "age": 26,
+   "nationality": "Marrocos",
+   "fullName": "Othmane El Idrissi"
+  },
+  {
+   "id": "goa05",
+   "clubId": "goa",
+   "name": "Menendez",
+   "position": "FIX",
+   "number": 17,
+   "age": 30,
+   "nationality": "França",
+   "fullName": "Nicolas Menendez"
+  },
+  {
+   "id": "goa06",
+   "clubId": "goa",
+   "name": "Franco",
+   "position": "FIX",
+   "number": 2,
+   "age": 33,
+   "nationality": "Brasil",
+   "fullName": "Felipe Franco"
+  },
+  {
+   "id": "goa07",
+   "clubId": "goa",
+   "name": "Coelho",
+   "position": "FIX",
+   "number": 5,
+   "age": 38,
+   "nationality": "Portugal",
+   "fullName": "Coelho"
+  },
+  {
+   "id": "goa08",
+   "clubId": "goa",
+   "name": "Sow",
+   "position": "UNI",
+   "number": 19,
+   "age": 20,
+   "nationality": "França",
+   "fullName": "Demba Sow"
+  },
+  {
+   "id": "goa09",
+   "clubId": "goa",
+   "name": "Rezzoug",
+   "position": "UNI",
+   "number": 11,
+   "age": 20,
+   "nationality": "França",
+   "fullName": "Marouane Rezzoug"
+  },
+  {
+   "id": "goa10",
+   "clubId": "goa",
+   "name": "Pessot",
+   "position": "UNI",
+   "number": 3,
+   "age": 19,
+   "nationality": "França",
+   "fullName": "Mathéo Le Pessot",
+   "estimated": [
+    "número"
+   ]
+  },
+  {
+   "id": "goa11",
+   "clubId": "goa",
+   "name": "Asname",
+   "position": "UNI",
+   "number": 10,
+   "age": 22,
+   "nationality": "França",
+   "fullName": "Lahcen Asname"
+  },
+  {
+   "id": "goa12",
+   "clubId": "goa",
+   "name": "Asname",
+   "position": "UNI",
+   "number": 9,
+   "age": 21,
+   "nationality": "França",
+   "fullName": "Ayoub Asname"
+  },
+  {
+   "id": "goa13",
+   "clubId": "goa",
+   "name": "Gueddoura",
+   "position": "ALA",
+   "number": 6,
+   "age": 24,
+   "nationality": "França",
+   "fullName": "Amine Gueddoura"
+  },
+  {
+   "id": "goa14",
+   "clubId": "goa",
+   "name": "El-Fenni",
+   "position": "ALA",
+   "number": 4,
+   "age": 30,
+   "nationality": "Marrocos",
+   "fullName": "Idriss El-Fenni"
+  },
+  {
+   "id": "goa15",
+   "clubId": "goa",
+   "name": "Rachiq",
+   "position": "ALA",
+   "number": 8,
+   "age": 25,
+   "nationality": "Marrocos",
+   "fullName": "Zakaria Rachiq",
+   "estimated": [
+    "idade",
+    "número"
+   ]
+  },
+  {
+   "id": "goa16",
+   "clubId": "goa",
+   "name": "Ramírez",
+   "position": "ALA",
+   "number": 14,
+   "age": 36,
+   "nationality": "Colômbia",
+   "fullName": "Wilmar Ramírez"
+  },
+  {
+   "id": "goa17",
+   "clubId": "goa",
+   "name": "Martins",
+   "position": "ALA",
+   "number": 13,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Pedro Oliveira Martins",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade",
+    "número"
+   ]
+  },
+  {
+   "id": "goa18",
+   "clubId": "goa",
+   "name": "Alla",
+   "position": "UNI",
+   "number": 15,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Sofiane Alla",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade",
+    "número"
+   ]
+  },
+  {
+   "id": "tln01",
+   "clubId": "tln",
+   "name": "Carrión",
+   "position": "GR",
+   "number": 20,
+   "age": 24,
+   "nationality": "Espanha",
+   "fullName": "Álvaro Carrión"
+  },
+  {
+   "id": "tln02",
+   "clubId": "tln",
+   "name": "Charnot",
+   "position": "GR",
+   "number": 12,
+   "age": 20,
+   "nationality": "França",
+   "fullName": "Florian Charnot"
+  },
+  {
+   "id": "tln03",
+   "clubId": "tln",
+   "name": "Klalouzi",
+   "position": "FIX",
+   "number": 21,
+   "age": 31,
+   "nationality": "França",
+   "fullName": "Mosaab Klalouzi",
+   "estimated": [
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "tln04",
+   "clubId": "tln",
+   "name": "Pasquier",
+   "position": "FIX",
+   "number": 6,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Jérôme Pasquier"
+  },
+  {
+   "id": "tln05",
+   "clubId": "tln",
+   "name": "Dubois",
+   "position": "UNI",
+   "number": 8,
+   "age": 23,
+   "nationality": "França",
+   "fullName": "Alexis Dubois"
+  },
+  {
+   "id": "tln06",
+   "clubId": "tln",
+   "name": "Martinez",
+   "position": "UNI",
+   "number": 9,
+   "age": 33,
+   "nationality": "Paraguai",
+   "fullName": "Hugo Martinez"
+  },
+  {
+   "id": "tln07",
+   "clubId": "tln",
+   "name": "Skora",
+   "position": "UNI",
+   "number": 11,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Nassim Skora",
+   "estimated": [
+    "idade"
+   ]
+  },
+  {
+   "id": "tln08",
+   "clubId": "tln",
+   "name": "Villaverde",
+   "position": "ALA",
+   "number": 14,
+   "age": 27,
+   "nationality": "Espanha",
+   "fullName": "Raúl Villaverde"
+  },
+  {
+   "id": "tln09",
+   "clubId": "tln",
+   "name": "Ordoñez",
+   "position": "ALA",
+   "number": 2,
+   "age": 28,
+   "nationality": "Espanha",
+   "fullName": "Rubén Ordoñez",
+   "estimated": [
+    "número"
+   ]
+  },
+  {
+   "id": "tln10",
+   "clubId": "tln",
+   "name": "Gustavo",
+   "position": "ALA",
+   "number": 17,
+   "age": 28,
+   "nationality": "Brasil",
+   "fullName": "Gustavo"
+  },
+  {
+   "id": "tln11",
+   "clubId": "tln",
+   "name": "Diop",
+   "position": "ALA",
+   "number": 7,
+   "age": 22,
+   "nationality": "França",
+   "fullName": "Gora Diop"
+  },
+  {
+   "id": "tln12",
+   "clubId": "tln",
+   "name": "Sambague",
+   "position": "PIV",
+   "number": 5,
+   "age": 26,
+   "nationality": "França",
+   "fullName": "Souleymane Sambague",
+   "estimated": [
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "tln13",
+   "clubId": "tln",
+   "name": "Simon",
+   "position": "PIV",
+   "number": 19,
+   "age": 27,
+   "nationality": "França",
+   "fullName": "Luc Simon"
+  },
+  {
+   "id": "tln14",
+   "clubId": "tln",
+   "name": "Marouani",
+   "position": "PIV",
+   "number": 22,
+   "age": 19,
+   "nationality": "França",
+   "fullName": "Ilyan Marouani",
+   "estimated": [
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "nan01",
+   "clubId": "nan",
+   "name": "Hula",
+   "position": "GR",
+   "number": 12,
+   "age": 27,
+   "nationality": "Chéquia",
+   "fullName": "Michal Hula"
+  },
+  {
+   "id": "nan02",
+   "clubId": "nan",
+   "name": "Garros",
+   "position": "GR",
+   "number": 1,
+   "age": 23,
+   "nationality": "França",
+   "fullName": "Thibaut Garros"
+  },
+  {
+   "id": "nan03",
+   "clubId": "nan",
+   "name": "Santagata",
+   "position": "UNI",
+   "number": 2,
+   "age": 22,
+   "nationality": "França",
+   "fullName": "Maxime Santagata"
+  },
+  {
+   "id": "nan04",
+   "clubId": "nan",
+   "name": "Hokari",
+   "position": "UNI",
+   "number": 5,
+   "age": 28,
+   "nationality": "Marrocos",
+   "fullName": "Othmane El Hokari"
+  },
+  {
+   "id": "nan05",
+   "clubId": "nan",
+   "name": "Botella",
+   "position": "UNI",
+   "number": 20,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Malo Botella",
+   "estimated": [
+    "idade"
+   ]
+  },
+  {
+   "id": "nan06",
+   "clubId": "nan",
+   "name": "Rabou",
+   "position": "UNI",
+   "number": 9,
+   "age": 23,
+   "nationality": "Marrocos",
+   "fullName": "Mustapha Rabou"
+  },
+  {
+   "id": "nan07",
+   "clubId": "nan",
+   "name": "Sacko",
+   "position": "UNI",
+   "number": 23,
+   "age": 20,
+   "nationality": "França",
+   "fullName": "Mbemba Sacko"
+  },
+  {
+   "id": "nan08",
+   "clubId": "nan",
+   "name": "Leozinho",
+   "position": "ALA",
+   "number": 3,
+   "age": 27,
+   "nationality": "Brasil",
+   "fullName": "Leozinho",
+   "estimated": [
+    "número"
+   ]
+  },
+  {
+   "id": "nan09",
+   "clubId": "nan",
+   "name": "Riaño",
+   "position": "ALA",
+   "number": 7,
+   "age": 27,
+   "nationality": "Colômbia",
+   "fullName": "Eduardo Riaño"
+  },
+  {
+   "id": "nan10",
+   "clubId": "nan",
+   "name": "Velasco",
+   "position": "ALA",
+   "number": 8,
+   "age": 28,
+   "nationality": "Espanha",
+   "fullName": "David Velasco"
+  },
+  {
+   "id": "nan11",
+   "clubId": "nan",
+   "name": "Renatinho",
+   "position": "ALA",
+   "number": 4,
+   "age": 33,
+   "nationality": "Brasil",
+   "fullName": "Renatinho",
+   "estimated": [
+    "número"
+   ]
+  },
+  {
+   "id": "nan12",
+   "clubId": "nan",
+   "name": "Andrade",
+   "position": "ALA",
+   "number": 18,
+   "age": 30,
+   "nationality": "França",
+   "fullName": "Michaël Andrade",
+   "estimated": [
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "nan13",
+   "clubId": "nan",
+   "name": "Mingolo",
+   "position": "ALA",
+   "number": 10,
+   "age": 34,
+   "nationality": "França",
+   "fullName": "Joy Mingolo"
+  },
+  {
+   "id": "nan14",
+   "clubId": "nan",
+   "name": "Bendali",
+   "position": "ALA",
+   "number": 17,
+   "age": 31,
+   "nationality": "França",
+   "fullName": "Steve Bendali"
+  },
+  {
+   "id": "nan15",
+   "clubId": "nan",
+   "name": "Pele",
+   "position": "PIV",
+   "number": 6,
+   "age": 29,
+   "nationality": "Espanha",
+   "fullName": "Pele",
+   "estimated": [
+    "número"
+   ]
+  },
+  {
+   "id": "nan16",
+   "clubId": "nan",
+   "name": "Jimenez",
+   "position": "ALA",
+   "number": 11,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Francisco Valdelvira Jimenez",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "nan17",
+   "clubId": "nan",
+   "name": "Rosa",
+   "position": "PIV",
+   "number": 13,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Leonardo Almeida Rosa",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "aca01",
+   "clubId": "aca",
+   "name": "Aboudou",
+   "position": "GR",
+   "number": 2,
+   "age": 35,
+   "nationality": "Comores",
+   "fullName": "Samir Aboudou",
+   "estimated": [
+    "número"
+   ]
+  },
+  {
+   "id": "aca02",
+   "clubId": "aca",
+   "name": "Chaib",
+   "position": "GR",
+   "number": 20,
+   "age": 24,
+   "nationality": "França",
+   "fullName": "Wassim Si Chaib",
+   "estimated": [
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "aca03",
+   "clubId": "aca",
+   "name": "Haddad",
+   "position": "UNI",
+   "number": 17,
+   "age": 28,
+   "nationality": "França",
+   "fullName": "Moussa Haddad"
+  },
+  {
+   "id": "aca04",
+   "clubId": "aca",
+   "name": "Viaud",
+   "position": "UNI",
+   "number": 18,
+   "age": 19,
+   "nationality": "França",
+   "fullName": "Louis Viaud"
+  },
+  {
+   "id": "aca05",
+   "clubId": "aca",
+   "name": "Toure",
+   "position": "UNI",
+   "number": 13,
+   "age": 28,
+   "nationality": "França",
+   "fullName": "Mamadou Toure"
+  },
+  {
+   "id": "aca06",
+   "clubId": "aca",
+   "name": "Alaoui",
+   "position": "UNI",
+   "number": 5,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Yassine Alaoui",
+   "estimated": [
+    "idade"
+   ]
+  },
+  {
+   "id": "aca07",
+   "clubId": "aca",
+   "name": "Dianka",
+   "position": "UNI",
+   "number": 22,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Bandyongou Dianka",
+   "estimated": [
+    "idade"
+   ]
+  },
+  {
+   "id": "aca08",
+   "clubId": "aca",
+   "name": "Soumare",
+   "position": "UNI",
+   "number": 11,
+   "age": 23,
+   "nationality": "França",
+   "fullName": "Sirou Soumare"
+  },
+  {
+   "id": "aca09",
+   "clubId": "aca",
+   "name": "Fahmi",
+   "position": "UNI",
+   "number": 10,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Bilal Fahmi",
+   "estimated": [
+    "idade"
+   ]
+  },
+  {
+   "id": "aca10",
+   "clubId": "aca",
+   "name": "Chaib",
+   "position": "UNI",
+   "number": 21,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Ali Si Chaib",
+   "estimated": [
+    "idade"
+   ]
+  },
+  {
+   "id": "aca11",
+   "clubId": "aca",
+   "name": "Diarra",
+   "position": "ALA",
+   "number": 8,
+   "age": 26,
+   "nationality": "França",
+   "fullName": "Ismaïla Diarra"
+  },
+  {
+   "id": "aca12",
+   "clubId": "aca",
+   "name": "Ndiaye",
+   "position": "ALA",
+   "number": 14,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Abdoul Ndiaye"
+  },
+  {
+   "id": "aca13",
+   "clubId": "aca",
+   "name": "Soumaré",
+   "position": "PIV",
+   "number": 7,
+   "age": 26,
+   "nationality": "França",
+   "fullName": "Soumaila Soumaré"
+  },
+  {
+   "id": "aca14",
+   "clubId": "aca",
+   "name": "Bessa",
+   "position": "PIV",
+   "number": 6,
+   "age": 25,
+   "nationality": "Argélia",
+   "fullName": "Amar Bessa",
+   "estimated": [
+    "idade"
+   ]
+  },
+  {
+   "id": "aca15",
+   "clubId": "aca",
+   "name": "Zorohudi",
+   "position": "PIV",
+   "number": 19,
+   "age": 23,
+   "nationality": "França",
+   "fullName": "Axel Zorohudi"
+  },
+  {
+   "id": "aca16",
+   "clubId": "aca",
+   "name": "Drame",
+   "position": "FIX",
+   "number": 3,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Sadio Drame",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade",
+    "número"
+   ]
+  },
+  {
+   "id": "aca17",
+   "clubId": "aca",
+   "name": "Dlimsi",
+   "position": "FIX",
+   "number": 23,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Anas Dlimsi",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "avi01",
+   "clubId": "avi",
+   "name": "Marien",
+   "position": "GR",
+   "number": 20,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Matteo Marien",
+   "estimated": [
+    "idade"
+   ]
+  },
+  {
+   "id": "avi02",
+   "clubId": "avi",
+   "name": "Dubois",
+   "position": "GR",
+   "number": 1,
+   "age": 26,
+   "nationality": "França",
+   "fullName": "Geoffrey Dubois"
+  },
+  {
+   "id": "avi03",
+   "clubId": "avi",
+   "name": "Bentout",
+   "position": "UNI",
+   "number": 22,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Billal Bentout",
+   "estimated": [
+    "idade"
+   ]
+  },
+  {
+   "id": "avi04",
+   "clubId": "avi",
+   "name": "Berrada",
+   "position": "UNI",
+   "number": 10,
+   "age": 18,
+   "nationality": "França",
+   "fullName": "Islem Berrada"
+  },
+  {
+   "id": "avi05",
+   "clubId": "avi",
+   "name": "Ndelo",
+   "position": "UNI",
+   "number": 2,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Christevie Ndelo",
+   "estimated": [
+    "idade",
+    "número"
+   ]
+  },
+  {
+   "id": "avi06",
+   "clubId": "avi",
+   "name": "Khadiri",
+   "position": "UNI",
+   "number": 6,
+   "age": 25,
+   "nationality": "Marrocos",
+   "fullName": "Aziz El Khadiri",
+   "estimated": [
+    "idade"
+   ]
+  },
+  {
+   "id": "avi07",
+   "clubId": "avi",
+   "name": "Abouya",
+   "position": "UNI",
+   "number": 24,
+   "age": 24,
+   "nationality": "Bélgica",
+   "fullName": "Hamza Abouya"
+  },
+  {
+   "id": "avi08",
+   "clubId": "avi",
+   "name": "Aouadi",
+   "position": "PIV",
+   "number": 3,
+   "age": 24,
+   "nationality": "França",
+   "fullName": "Marwan Aouadi",
+   "estimated": [
+    "número"
+   ]
+  },
+  {
+   "id": "avi09",
+   "clubId": "avi",
+   "name": "El-Balaoui",
+   "position": "ALA",
+   "number": 8,
+   "age": 31,
+   "nationality": "Marrocos",
+   "fullName": "Abdellah El-Balaoui"
+  },
+  {
+   "id": "avi10",
+   "clubId": "avi",
+   "name": "Ahmad",
+   "position": "ALA",
+   "number": 4,
+   "age": 19,
+   "nationality": "França",
+   "fullName": "Ait Amy Ahmad",
+   "estimated": [
+    "nacionalidade",
+    "número"
+   ]
+  },
+  {
+   "id": "avi11",
+   "clubId": "avi",
+   "name": "Ammar",
+   "position": "ALA",
+   "number": 21,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Raslene Ben Ammar",
+   "estimated": [
+    "idade"
+   ]
+  },
+  {
+   "id": "avi12",
+   "clubId": "avi",
+   "name": "Ferreira",
+   "position": "ALA",
+   "number": 18,
+   "age": 34,
+   "nationality": "Brasil",
+   "fullName": "Matheus Ferreira"
+  },
+  {
+   "id": "avi13",
+   "clubId": "avi",
+   "name": "Zahry",
+   "position": "ALA",
+   "number": 5,
+   "age": 35,
+   "nationality": "França",
+   "fullName": "Jamal Zahry"
+  },
+  {
+   "id": "avi14",
+   "clubId": "avi",
+   "name": "Berranteiro",
+   "position": "ALA",
+   "number": 7,
+   "age": 25,
+   "nationality": "Brasil",
+   "fullName": "Sérgio Berranteiro",
+   "estimated": [
+    "idade",
+    "número"
+   ]
+  },
+  {
+   "id": "avi15",
+   "clubId": "avi",
+   "name": "Zireg",
+   "position": "PIV",
+   "number": 9,
+   "age": 31,
+   "nationality": "França",
+   "fullName": "Abdellah Zireg",
+   "estimated": [
+    "número"
+   ]
+  },
+  {
+   "id": "avi16",
+   "clubId": "avi",
+   "name": "Kasmi",
+   "position": "FIX",
+   "number": 11,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Yacine Kasmi",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade",
+    "número"
+   ]
+  },
+  {
+   "id": "avi17",
+   "clubId": "avi",
+   "name": "Wisnewski",
+   "position": "UNI",
+   "number": 12,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Valentin Gosset Wisnewski",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "avi18",
+   "clubId": "avi",
+   "name": "Farine",
+   "position": "FIX",
+   "number": 17,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Tao Farine",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "avi19",
+   "clubId": "avi",
+   "name": "Santos",
+   "position": "UNI",
+   "number": 15,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Sergio Alves dos Santos",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "ujs01",
+   "clubId": "ujs",
+   "name": "Felipe",
+   "position": "GR",
+   "number": 1,
+   "age": 26,
+   "nationality": "Brasil",
+   "fullName": "Bruno Felipe"
+  },
+  {
+   "id": "ujs02",
+   "clubId": "ujs",
+   "name": "Touil",
+   "position": "GR",
+   "number": 12,
+   "age": 25,
+   "nationality": "Marrocos",
+   "fullName": "Mohamed Touil",
+   "estimated": [
+    "idade"
+   ]
+  },
+  {
+   "id": "ujs03",
+   "clubId": "ujs",
+   "name": "Gonçalves",
+   "position": "GR",
+   "number": 25,
+   "age": 33,
+   "nationality": "França",
+   "fullName": "Ricardo Gonçalves",
+   "estimated": [
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "ujs04",
+   "clubId": "ujs",
+   "name": "Addi",
+   "position": "GR",
+   "number": 20,
+   "age": 19,
+   "nationality": "Marrocos",
+   "fullName": "Amine Addi"
+  },
+  {
+   "id": "ujs05",
+   "clubId": "ujs",
+   "name": "Hachhouche",
+   "position": "UNI",
+   "number": 2,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Mohamed Hachhouche",
+   "estimated": [
+    "idade",
+    "número"
+   ]
+  },
+  {
+   "id": "ujs06",
+   "clubId": "ujs",
+   "name": "Erraddaf",
+   "position": "UNI",
+   "number": 8,
+   "age": 22,
+   "nationality": "França",
+   "fullName": "Yanis Erraddaf",
+   "estimated": [
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "ujs07",
+   "clubId": "ujs",
+   "name": "Adam",
+   "position": "UNI",
+   "number": 11,
+   "age": 17,
+   "nationality": "França",
+   "fullName": "Eyoube Adam"
+  },
+  {
+   "id": "ujs08",
+   "clubId": "ujs",
+   "name": "Kouri",
+   "position": "UNI",
+   "number": 9,
+   "age": 32,
+   "nationality": "Marrocos",
+   "fullName": "Khalid Kouri"
+  },
+  {
+   "id": "ujs09",
+   "clubId": "ujs",
+   "name": "Bengoua",
+   "position": "UNI",
+   "number": 3,
+   "age": 19,
+   "nationality": "França",
+   "fullName": "Jybril Bengoua"
+  },
+  {
+   "id": "ujs10",
+   "clubId": "ujs",
+   "name": "Diaoune",
+   "position": "UNI",
+   "number": 19,
+   "age": 22,
+   "nationality": "França",
+   "fullName": "Mohamed Diaoune"
+  },
+  {
+   "id": "ujs11",
+   "clubId": "ujs",
+   "name": "Benziane",
+   "position": "UNI",
+   "number": 15,
+   "age": 19,
+   "nationality": "França",
+   "fullName": "Jibril Benziane"
+  },
+  {
+   "id": "ujs12",
+   "clubId": "ujs",
+   "name": "Touil",
+   "position": "PIV",
+   "number": 21,
+   "age": 18,
+   "nationality": "França",
+   "fullName": "Yanis Touil"
+  },
+  {
+   "id": "ujs13",
+   "clubId": "ujs",
+   "name": "Bouita",
+   "position": "ALA",
+   "number": 6,
+   "age": 28,
+   "nationality": "França",
+   "fullName": "Ayoub Bouita"
+  },
+  {
+   "id": "ujs14",
+   "clubId": "ujs",
+   "name": "Azzakhnini",
+   "position": "ALA",
+   "number": 4,
+   "age": 19,
+   "nationality": "Marrocos",
+   "fullName": "Hamza Azzakhnini"
+  },
+  {
+   "id": "ujs15",
+   "clubId": "ujs",
+   "name": "Charrady",
+   "position": "ALA",
+   "number": 5,
+   "age": 21,
+   "nationality": "Marrocos",
+   "fullName": "Ihab Charrady",
+   "estimated": [
+    "número"
+   ]
+  },
+  {
+   "id": "ujs16",
+   "clubId": "ujs",
+   "name": "Pingas",
+   "position": "ALA/PIV",
+   "number": 7,
+   "age": 22,
+   "nationality": "Portugal",
+   "fullName": "Pingas",
+   "estimated": [
+    "número"
+   ]
+  },
+  {
+   "id": "ujs17",
+   "clubId": "ujs",
+   "name": "Ahssen",
+   "position": "PIV",
+   "number": 10,
+   "age": 31,
+   "nationality": "França",
+   "fullName": "Youness Ahssen"
+  },
+  {
+   "id": "ujs18",
+   "clubId": "ujs",
+   "name": "Ahssen",
+   "position": "PIV",
+   "number": 13,
+   "age": 27,
+   "nationality": "França",
+   "fullName": "Issam Ahssen",
+   "estimated": [
+    "número"
+   ]
+  },
+  {
+   "id": "ujs19",
+   "clubId": "ujs",
+   "name": "Takdjerad",
+   "position": "PIV",
+   "number": 22,
+   "age": 28,
+   "nationality": "Argélia",
+   "fullName": "Azeddine Takdjerad"
+  },
+  {
+   "id": "ujs20",
+   "clubId": "ujs",
+   "name": "Hachhouche",
+   "position": "FIX",
+   "number": 18,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Youssef Hachhouche",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "nic01",
+   "clubId": "nic",
+   "name": "Menvouididiot",
+   "position": "GR",
+   "number": 12,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "David Menvouididiot",
+   "estimated": [
+    "idade"
+   ]
+  },
+  {
+   "id": "nic02",
+   "clubId": "nic",
+   "name": "Teixeira",
+   "position": "FIX",
+   "number": 14,
+   "age": 41,
+   "nationality": "França",
+   "fullName": "Alexandre Teixeira",
+   "estimated": [
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "nic03",
+   "clubId": "nic",
+   "name": "Pereira",
+   "position": "FIX",
+   "number": 5,
+   "age": 24,
+   "nationality": "Brasil",
+   "fullName": "Gabriel Pereira"
+  },
+  {
+   "id": "nic04",
+   "clubId": "nic",
+   "name": "Salem",
+   "position": "UNI",
+   "number": 3,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Mehdi Ben Salem",
+   "estimated": [
+    "idade"
+   ]
+  },
+  {
+   "id": "nic05",
+   "clubId": "nic",
+   "name": "Araújo",
+   "position": "ALA",
+   "number": 19,
+   "age": 39,
+   "nationality": "França",
+   "fullName": "Finéo de Araújo",
+   "estimated": [
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "nic06",
+   "clubId": "nic",
+   "name": "Paroldo",
+   "position": "ALA",
+   "number": 9,
+   "age": 22,
+   "nationality": "Uruguai",
+   "fullName": "Lucas Paroldo"
+  },
+  {
+   "id": "nic07",
+   "clubId": "nic",
+   "name": "Zaimi",
+   "position": "ALA",
+   "number": 6,
+   "age": 31,
+   "nationality": "Marrocos",
+   "fullName": "Hassan Zaimi"
+  },
+  {
+   "id": "nic08",
+   "clubId": "nic",
+   "name": "Bsahi",
+   "position": "ALA",
+   "number": 7,
+   "age": 25,
+   "nationality": "Marrocos",
+   "fullName": "Jamal El Bsahi",
+   "estimated": [
+    "idade"
+   ]
+  },
+  {
+   "id": "nic09",
+   "clubId": "nic",
+   "name": "Duque",
+   "position": "ALA",
+   "number": 18,
+   "age": 21,
+   "nationality": "Uruguai",
+   "fullName": "Franco Duque"
+  },
+  {
+   "id": "nic10",
+   "clubId": "nic",
+   "name": "Djelassi",
+   "position": "UNI",
+   "number": 17,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Mehdi Djelassi",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "nic11",
+   "clubId": "nic",
+   "name": "Nardy",
+   "position": "UNI",
+   "number": 26,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Charles Nardy",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "nic12",
+   "clubId": "nic",
+   "name": "Salhi",
+   "position": "FIX",
+   "number": 2,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Saif Eldine Salhi",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade",
+    "número"
+   ]
+  },
+  {
+   "id": "nic13",
+   "clubId": "nic",
+   "name": "Eladdad",
+   "position": "FIX",
+   "number": 8,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Ayoub Eladdad",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "nic14",
+   "clubId": "nic",
+   "name": "Didouh",
+   "position": "GR",
+   "number": 20,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Issam Didouh",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "gar01",
+   "clubId": "gar",
+   "name": "Teffaf",
+   "position": "GR",
+   "number": 1,
+   "age": 27,
+   "nationality": "França",
+   "fullName": "Samyr Teffaf",
+   "estimated": [
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "gar02",
+   "clubId": "gar",
+   "name": "Jallouli",
+   "position": "GR",
+   "number": 20,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Faysal Jallouli"
+  },
+  {
+   "id": "gar03",
+   "clubId": "gar",
+   "name": "Ribeiro",
+   "position": "FIX",
+   "number": 17,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Steven Ribeiro",
+   "estimated": [
+    "idade"
+   ]
+  },
+  {
+   "id": "gar04",
+   "clubId": "gar",
+   "name": "Kebé",
+   "position": "FIX",
+   "number": 10,
+   "age": 38,
+   "nationality": "França",
+   "fullName": "Samba Kebé"
+  },
+  {
+   "id": "gar05",
+   "clubId": "gar",
+   "name": "Ndiaye",
+   "position": "FIX",
+   "number": 18,
+   "age": 25,
+   "nationality": "Senegal",
+   "fullName": "Arouna Ndiaye",
+   "estimated": [
+    "idade"
+   ]
+  },
+  {
+   "id": "gar06",
+   "clubId": "gar",
+   "name": "Ziyati",
+   "position": "FIX",
+   "number": 6,
+   "age": 23,
+   "nationality": "Argélia",
+   "fullName": "Yassine Ziyati"
+  },
+  {
+   "id": "gar07",
+   "clubId": "gar",
+   "name": "Sarrazin",
+   "position": "UNI",
+   "number": 22,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Noa Sarrazin",
+   "estimated": [
+    "idade"
+   ]
+  },
+  {
+   "id": "gar08",
+   "clubId": "gar",
+   "name": "Soumare",
+   "position": "UNI",
+   "number": 11,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Sallou Soumare",
+   "estimated": [
+    "idade"
+   ]
+  },
+  {
+   "id": "gar09",
+   "clubId": "gar",
+   "name": "Plé",
+   "position": "ALA",
+   "number": 19,
+   "age": 29,
+   "nationality": "França",
+   "fullName": "Jordan Plé",
+   "estimated": [
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "gar10",
+   "clubId": "gar",
+   "name": "Chanai",
+   "position": "ALA",
+   "number": 9,
+   "age": 23,
+   "nationality": "França",
+   "fullName": "Othmane Chanai",
+   "estimated": [
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "gar11",
+   "clubId": "gar",
+   "name": "Berbak",
+   "position": "PIV",
+   "number": 14,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Thomas Berbak",
+   "estimated": [
+    "idade"
+   ]
+  },
+  {
+   "id": "gar12",
+   "clubId": "gar",
+   "name": "Zakehi",
+   "position": "PIV",
+   "number": 7,
+   "age": 37,
+   "nationality": "França",
+   "fullName": "Ronny Zakehi"
+  },
+  {
+   "id": "gar13",
+   "clubId": "gar",
+   "name": "Aouad",
+   "position": "FIX",
+   "number": 4,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Mohammed Aouad",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "gar14",
+   "clubId": "gar",
+   "name": "Ali",
+   "position": "FIX",
+   "number": 5,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Halim Hadji Ali",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "gar15",
+   "clubId": "gar",
+   "name": "Marcus",
+   "position": "UNI",
+   "number": 8,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Anojh Marcus",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "gar16",
+   "clubId": "gar",
+   "name": "Fofana",
+   "position": "FIX",
+   "number": 2,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Youssouf Fofana",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade",
+    "número"
+   ]
+  },
+  {
+   "id": "gar17",
+   "clubId": "gar",
+   "name": "Appuah",
+   "position": "UNI",
+   "number": 23,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Morrison Appuah",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "gar18",
+   "clubId": "gar",
+   "name": "Fernandes",
+   "position": "UNI",
+   "number": 16,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Stephane Sanches Fernandes",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "gar19",
+   "clubId": "gar",
+   "name": "Soumahoro",
+   "position": "UNI",
+   "number": 24,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Abou Soumahoro",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "art01",
+   "clubId": "art",
+   "name": "Sako",
+   "position": "UNI",
+   "number": 7,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Mamadou Sako",
+   "estimated": [
+    "idade"
+   ]
+  },
+  {
+   "id": "art02",
+   "clubId": "art",
+   "name": "Koita",
+   "position": "UNI",
+   "number": 17,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Ibrahim Koita",
+   "estimated": [
+    "idade"
+   ]
+  },
+  {
+   "id": "art03",
+   "clubId": "art",
+   "name": "Doucoure",
+   "position": "UNI",
+   "number": 8,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Moussa Doucoure",
+   "estimated": [
+    "idade"
+   ]
+  },
+  {
+   "id": "art04",
+   "clubId": "art",
+   "name": "Idaassi",
+   "position": "UNI",
+   "number": 21,
+   "age": 20,
+   "nationality": "França",
+   "fullName": "Marwan Idaassi"
+  },
+  {
+   "id": "art05",
+   "clubId": "art",
+   "name": "Marie-Sainte",
+   "position": "UNI",
+   "number": 13,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Rahim Marie-Sainte",
+   "estimated": [
+    "idade"
+   ]
+  },
+  {
+   "id": "art06",
+   "clubId": "art",
+   "name": "Bulbul",
+   "position": "ALA/PIV",
+   "number": 11,
+   "age": 22,
+   "nationality": "França",
+   "fullName": "Hakan Bulbul",
+   "estimated": [
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "art07",
+   "clubId": "art",
+   "name": "Martins",
+   "position": "GR",
+   "number": 1,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Ibrahim Martins",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "art08",
+   "clubId": "art",
+   "name": "Herrantz",
+   "position": "GR",
+   "number": 4,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Yanis Puch Herrantz",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "art09",
+   "clubId": "art",
+   "name": "Ouachani",
+   "position": "FIX",
+   "number": 9,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Ahmed Ouachani",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "art10",
+   "clubId": "art",
+   "name": "Saidou",
+   "position": "FIX",
+   "number": 14,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Ibrahim Abdou Saidou",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "art11",
+   "clubId": "art",
+   "name": "Agourram",
+   "position": "FIX",
+   "number": 16,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Ali Agourram",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "art12",
+   "clubId": "art",
+   "name": "Sey",
+   "position": "FIX",
+   "number": 25,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Alpha Sey",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "art13",
+   "clubId": "art",
+   "name": "Hammad",
+   "position": "PIV",
+   "number": 2,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Mathieu Hammad",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade",
+    "número"
+   ]
+  },
+  {
+   "id": "art14",
+   "clubId": "art",
+   "name": "Boucau",
+   "position": "UNI",
+   "number": 5,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Jules Casamayou dit Boucau",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  },
+  {
+   "id": "art15",
+   "clubId": "art",
+   "name": "Dembele",
+   "position": "FIX",
+   "number": 19,
+   "age": 25,
+   "nationality": "França",
+   "fullName": "Houmany Dembele",
+   "estimated": [
+    "posição",
+    "idade",
+    "nacionalidade"
+   ]
+  }
+ ]
+}
