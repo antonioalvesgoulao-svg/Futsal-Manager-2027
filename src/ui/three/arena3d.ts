@@ -928,18 +928,29 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
     band.rotation.y = ry;
     scene.add(band);
   }
-  // galeria iluminada no topo das bancadas (camarotes/marquise envidraçada à volta da sala, ex.: Toulon)
-  if (pr.topGallery) {
-    const yG = base + maxRows * rise + (pr.upperTier ? upY : 0) + 0.6;
-    const lit = new THREE.MeshStandardMaterial({ color: pr.topGallery, emissive: pr.topGallery, emissiveIntensity: 0.9, roughness: 0.4 });
-    const frameM = new THREE.MeshStandardMaterial({ color: '#15181d', roughness: 0.7 });
-    for (const [x, z, len, ry] of [[0, -hallD / 2, hallW, 0], [0, hallD / 2, hallW, Math.PI], [-hallW / 2, 0, hallD, Math.PI / 2], [hallW / 2, 0, hallD, -Math.PI / 2]] as const) {
-      const g = new THREE.Group();
-      const box = new THREE.Mesh(new THREE.BoxGeometry(len, 2.0, 1.4), frameM); box.position.set(0, 1.0, 0.7); g.add(box); // laje e fundo
-      const glow = new THREE.Mesh(new THREE.PlaneGeometry(len - 0.4, 1.3), lit); glow.position.set(0, 1.05, 1.42); g.add(glow); // vidro iluminado
-      for (let u = -len / 2 + 3; u < len / 2; u += 3) { const m = new THREE.Mesh(new THREE.BoxGeometry(0.15, 1.4, 0.1), frameM); m.position.set(u, 1.05, 1.46); g.add(m); } // caixilhos
-      g.position.set(x, yG, z); g.rotation.y = ry; scene.add(g);
-    }
+  // camarotes iluminados: um só bloco envidraçado no topo de uma bancada (parede clara iluminada por dentro), ex.: Toulon
+  if (pr.boxes) {
+    const bx0 = pr.boxes;
+    const sdB = bx0.side, outB = sdB === 'N' || sdB === 'W' ? -1 : 1;
+    const yB = base + (rowsBySide[sdB] ?? maxRows) * rise + (pr.upperTier ? upY : 0) + 0.3;
+    const dB = front[sdB] + (rowsBySide[sdB] ?? maxRows) * rowD + (pr.upperTier ? upD : 0) - 0.6;
+    const g = new THREE.Group();
+    const room = new THREE.MeshStandardMaterial({ color: bx0.light, emissive: bx0.light, emissiveIntensity: 0.6, roughness: 0.8, side: THREE.DoubleSide });
+    const back = new THREE.Mesh(new THREE.PlaneGeometry(bx0.len, 3.0), room); back.position.set(0, 1.5, 1.5); g.add(back); // parede do fundo iluminada
+    const ceilB = new THREE.Mesh(new THREE.PlaneGeometry(bx0.len, 1.5), room); ceilB.rotation.x = Math.PI / 2; ceilB.position.set(0, 2.95, 0.75); g.add(ceilB);
+    for (const sg of [-1, 1]) { const sw = new THREE.Mesh(new THREE.PlaneGeometry(1.5, 3.0), room); sw.rotation.y = Math.PI / 2; sw.position.set(sg * bx0.len / 2, 1.5, 0.75); g.add(sw); }
+    const glass = new THREE.Mesh(new THREE.PlaneGeometry(bx0.len, 2.4), new THREE.MeshStandardMaterial({ color: '#cfe0ea', transparent: true, opacity: 0.18, roughness: 0.05 })); glass.position.set(0, 1.4, 0.02); g.add(glass);
+    const dk = new THREE.MeshStandardMaterial({ color: '#15181d', roughness: 0.7 });
+    const slabTop = new THREE.Mesh(new THREE.BoxGeometry(bx0.len + 0.4, 0.35, 1.7), dk); slabTop.position.set(0, 3.15, 0.75); g.add(slabTop);
+    for (let u = -bx0.len / 2; u <= bx0.len / 2 + 0.01; u += bx0.len / Math.max(1, Math.round(bx0.len / 4))) { const m = new THREE.Mesh(new THREE.BoxGeometry(0.18, 2.6, 0.18), dk); m.position.set(u, 1.4, 0.05); g.add(m); } // divisórias dos camarotes
+    // dentro: algumas filas de cadeiras azuis com pessoas
+    const sm = new THREE.MeshStandardMaterial({ color: bx0.seats ?? '#2a55c8', roughness: 0.6 });
+    for (let r2 = 0; r2 < 2; r2++) for (let u = -bx0.len / 2 + 0.5; u < bx0.len / 2 - 0.3; u += 0.6) { const c2 = new THREE.Mesh(new THREE.BoxGeometry(0.45, 0.5, 0.45), sm); c2.position.set(u, 0.25 + r2 * 0.35, 0.4 + r2 * 0.6); g.add(c2); }
+    const ry = sdB === 'N' ? 0 : sdB === 'S' ? Math.PI : sdB === 'E' ? -Math.PI / 2 : Math.PI / 2;
+    // a frente (z local 0) fica virada para o campo
+    g.rotation.y = ry + Math.PI;
+    if (sdB === 'N' || sdB === 'S') g.position.set(bx0.at, yB, outB * dB); else g.position.set(outB * dB, yB, bx0.at);
+    scene.add(g);
   }
   if (pr.windows) {
     const winMat = new THREE.MeshBasicMaterial({ color: '#cfe8ff' });
