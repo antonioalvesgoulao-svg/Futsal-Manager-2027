@@ -549,14 +549,16 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
   }
 
   // ---- bancadas: filas à medida da lotação ----
-  const sideLen = { N: W + 8, S: W + 8, E: H + 4, W: H + 4 };
+  // oval: os cantos passam a arcos largos (raio + OV m) e as bancadas retas encurtam (pavilhões ovais, ex.: Toulon)
+  const OV = pr.corners ? pr.oval ?? 0 : 0;
+  const sideLen = { N: W + 8 - 2 * OV, S: W + 8 - 2 * OV, E: H + 4 - 2 * OV, W: H + 4 - 2 * OV };
   // cantos fechados (bacia): cada canto entre duas bancadas leva um leque de lugares em curva
   const cornerList: [number, number][] = [];
   if (pr.corners) for (const sz of [-1, 1]) for (const sx of [-1, 1]) {
     const zs = sz < 0 ? 'N' : 'S', xs = sx < 0 ? 'W' : 'E';
     if (pr.sides.includes(zs) && pr.sides.includes(xs)) cornerList.push([sx, sz]);
   }
-  const CORNER_LEN = 9; // comprimento médio de cada canto (m), para repartir a lotação
+  const CORNER_LEN = 9 + OV * 1.6; // comprimento médio de cada canto (m), para repartir a lotação
   const lenTot = pr.sides.reduce((a, s) => a + sideLen[s], 0) + cornerList.length * CORNER_LEN;
   const seatW = 0.5, rowD = 0.85, rise = pr.rake ?? 0.42;
   const front = { N: FN, S: H / 2 + 4.2 + TR, E: W / 2 + 4.6 + TR, W: W / 2 + 4.6 + TR };
@@ -763,8 +765,8 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
     for (const [sx, sz] of cornerList) {
       const zs = sz < 0 ? 'N' : 'S', xs = sx < 0 ? 'W' : 'E';
       const rows = Math.min(rowsBySide[zs], rowsBySide[xs]);
-      const P = new THREE.Vector2(sx * (W / 2 + 4), sz * (H / 2 + 2));
-      const dX = front[xs] - (W / 2 + 4), dZ = front[zs] - (H / 2 + 2);
+      const P = new THREE.Vector2(sx * (W / 2 + 4 - OV), sz * (H / 2 + 2 - OV));
+      const dX = front[xs] - (W / 2 + 4) + OV, dZ = front[zs] - (H / 2 + 2) + OV;
       const split = Math.min(splitAt(rowsBySide[zs]), splitAt(rowsBySide[xs]));
       for (let rI = 0; rI < rows; rI++) {
         const up = rI >= split;
@@ -792,7 +794,7 @@ export function buildArena(scene: THREE.Scene, o: ArenaOpts): ArenaHandle {
           const ox = Math.cos(a) * sx, oz = Math.sin(a) * sz;
           const p = new THREE.Vector3(P.x + ox * rr, y, P.y + oz * rr);
           if (isBench(xs, rI)) p.y -= 0.3;
-          seats.push({ p, ry: Math.atan2(-ox, -oz), side: a < Math.PI / 4 ? xs : zs, row: rI, u: (a < Math.PI / 4 ? sz * (H / 2 + 2) : sx * (W / 2 + 4)) });
+          seats.push({ p, ry: Math.atan2(-ox, -oz), side: a < Math.PI / 4 ? xs : zs, row: rI, u: (a < Math.PI / 4 ? sz * (H / 2 + 2 - OV) : sx * (W / 2 + 4 - OV)) });
         }
       }
     }
