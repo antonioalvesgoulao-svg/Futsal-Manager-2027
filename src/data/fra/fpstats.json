@@ -1,0 +1,4361 @@
+{
+ "_info": "Historial FFF por época (D1 e play-off) 2023/24-2026/27; títulos não recolhidos.",
+ "players": {
+  "lav01": {
+   "games": 58,
+   "yellow": 1,
+   "red": 1,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Étoile Lavalloise",
+     "games": 6,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "Étoile Lavalloise",
+     "games": 13,
+     "goals": 0
+    },
+    {
+     "s": "25",
+     "team": "Étoile Lavalloise",
+     "games": 17,
+     "goals": 0
+    },
+    {
+     "s": "24",
+     "team": "Étoile Lavalloise",
+     "games": 22,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "lav02": {
+   "games": 49,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Étoile Lavalloise",
+     "games": 2,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "Étoile Lavalloise",
+     "games": 12,
+     "goals": 0
+    },
+    {
+     "s": "25",
+     "team": "Étoile Lavalloise",
+     "games": 20,
+     "goals": 0
+    },
+    {
+     "s": "24",
+     "team": "Étoile Lavalloise",
+     "games": 15,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "lav03": {
+   "games": 24,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Étoile Lavalloise",
+     "games": 4,
+     "goals": 1
+    },
+    {
+     "s": "26",
+     "team": "Étoile Lavalloise",
+     "games": 14,
+     "goals": 0
+    },
+    {
+     "s": "25",
+     "team": "Étoile Lavalloise",
+     "games": 6,
+     "goals": 1
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "lav04": {
+   "games": 44,
+   "yellow": 10,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Étoile Lavalloise",
+     "games": 6,
+     "goals": 5
+    },
+    {
+     "s": "26",
+     "team": "Montpellier Méditerranée Futsal",
+     "games": 17,
+     "goals": 8
+    },
+    {
+     "s": "25",
+     "team": "Montpellier Méditerranée Futsal",
+     "games": 21,
+     "goals": 7
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "lav05": {
+   "games": 55,
+   "yellow": 12,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Étoile Lavalloise",
+     "games": 5,
+     "goals": 6
+    },
+    {
+     "s": "26",
+     "team": "Étoile Lavalloise",
+     "games": 16,
+     "goals": 7
+    },
+    {
+     "s": "25",
+     "team": "Étoile Lavalloise",
+     "games": 16,
+     "goals": 5
+    },
+    {
+     "s": "24",
+     "team": "Étoile Lavalloise",
+     "games": 18,
+     "goals": 14
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "lav06": {
+   "games": 8,
+   "yellow": 1,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Étoile Lavalloise",
+     "games": 3,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "Étoile Lavalloise",
+     "games": 5,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "lav07": {
+   "games": 18,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Étoile Lavalloise",
+     "games": 4,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "Étoile Lavalloise",
+     "games": 14,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "lav08": {
+   "games": 37,
+   "yellow": 3,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Étoile Lavalloise",
+     "games": 6,
+     "goals": 2
+    },
+    {
+     "s": "26",
+     "team": "Étoile Lavalloise",
+     "games": 16,
+     "goals": 6
+    },
+    {
+     "s": "25",
+     "team": "Étoile Lavalloise",
+     "games": 15,
+     "goals": 3
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "lav09": {
+   "games": 24,
+   "yellow": 5,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Étoile Lavalloise",
+     "games": 6,
+     "goals": 1
+    },
+    {
+     "s": "26",
+     "team": "Étoile Lavalloise",
+     "games": 8,
+     "goals": 5
+    },
+    {
+     "s": "25",
+     "team": "Étoile Lavalloise",
+     "games": 10,
+     "goals": 2
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "lav10": {
+   "games": 38,
+   "yellow": 5,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Étoile Lavalloise",
+     "games": 6,
+     "goals": 2
+    },
+    {
+     "s": "26",
+     "team": "Étoile Lavalloise",
+     "games": 19,
+     "goals": 13
+    },
+    {
+     "s": "25",
+     "team": "Étoile Lavalloise",
+     "games": 12,
+     "goals": 2
+    },
+    {
+     "s": "24",
+     "team": "Étoile Lavalloise",
+     "games": 1,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "lav11": {
+   "games": 51,
+   "yellow": 9,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Étoile Lavalloise",
+     "games": 4,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "Étoile Lavalloise",
+     "games": 10,
+     "goals": 2
+    },
+    {
+     "s": "25",
+     "team": "Étoile Lavalloise",
+     "games": 21,
+     "goals": 6
+    },
+    {
+     "s": "24",
+     "team": "Étoile Lavalloise",
+     "games": 16,
+     "goals": 5
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "lav12": {
+   "games": 48,
+   "yellow": 3,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Étoile Lavalloise",
+     "games": 6,
+     "goals": 3
+    },
+    {
+     "s": "26",
+     "team": "Étoile Lavalloise",
+     "games": 13,
+     "goals": 9
+    },
+    {
+     "s": "25",
+     "team": "Étoile Lavalloise",
+     "games": 17,
+     "goals": 5
+    },
+    {
+     "s": "24",
+     "team": "Étoile Lavalloise",
+     "games": 12,
+     "goals": 5
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "lav13": {
+   "games": 28,
+   "yellow": 6,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Étoile Lavalloise",
+     "games": 3,
+     "goals": 1
+    },
+    {
+     "s": "26",
+     "team": "Étoile Lavalloise",
+     "games": 1,
+     "goals": 0
+    },
+    {
+     "s": "25",
+     "team": "Étoile Lavalloise",
+     "games": 11,
+     "goals": 1
+    },
+    {
+     "s": "24",
+     "team": "Étoile Lavalloise",
+     "games": 13,
+     "goals": 9
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "lav14": {
+   "games": 64,
+   "yellow": 7,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Étoile Lavalloise",
+     "games": 6,
+     "goals": 3
+    },
+    {
+     "s": "26",
+     "team": "Étoile Lavalloise",
+     "games": 17,
+     "goals": 11
+    },
+    {
+     "s": "25",
+     "team": "Étoile Lavalloise",
+     "games": 19,
+     "goals": 10
+    },
+    {
+     "s": "24",
+     "team": "Étoile Lavalloise",
+     "games": 22,
+     "goals": 13
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "lav15": {
+   "games": 53,
+   "yellow": 17,
+   "red": 1,
+   "seasons": [
+    {
+     "s": "26",
+     "team": "Étoile Lavalloise",
+     "games": 14,
+     "goals": 16
+    },
+    {
+     "s": "25",
+     "team": "Étoile Lavalloise",
+     "games": 19,
+     "goals": 19
+    },
+    {
+     "s": "24",
+     "team": "Étoile Lavalloise",
+     "games": 20,
+     "goals": 20
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "lav16": {
+   "games": 61,
+   "yellow": 7,
+   "red": 1,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Étoile Lavalloise",
+     "games": 5,
+     "goals": 4
+    },
+    {
+     "s": "26",
+     "team": "Étoile Lavalloise",
+     "games": 14,
+     "goals": 22
+    },
+    {
+     "s": "25",
+     "team": "Étoile Lavalloise",
+     "games": 21,
+     "goals": 30
+    },
+    {
+     "s": "24",
+     "team": "Étoile Lavalloise",
+     "games": 21,
+     "goals": 26
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "spa01": {
+   "games": 63,
+   "yellow": 4,
+   "red": 2,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Sporting Club Paris",
+     "games": 6,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "Sporting Club Paris",
+     "games": 18,
+     "goals": 1
+    },
+    {
+     "s": "25",
+     "team": "Sporting Club Paris",
+     "games": 20,
+     "goals": 0
+    },
+    {
+     "s": "24",
+     "team": "Nantes Métropole Futsal",
+     "games": 19,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "spa02": {
+   "games": 32,
+   "yellow": 7,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Sporting Club Paris",
+     "games": 6,
+     "goals": 5
+    },
+    {
+     "s": "25",
+     "team": "GOAL Futsal Club",
+     "games": 8,
+     "goals": 5
+    },
+    {
+     "s": "24",
+     "team": "Paris ACASA",
+     "games": 18,
+     "goals": 14
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "spa04": {
+   "games": 60,
+   "yellow": 10,
+   "red": 1,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Sporting Club Paris",
+     "games": 5,
+     "goals": 5
+    },
+    {
+     "s": "26",
+     "team": "Sporting Club Paris",
+     "games": 14,
+     "goals": 11
+    },
+    {
+     "s": "25",
+     "team": "Sporting Club Paris",
+     "games": 20,
+     "goals": 8
+    },
+    {
+     "s": "24",
+     "team": "Sporting Club Paris",
+     "games": 21,
+     "goals": 15
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "spa05": {
+   "games": 6,
+   "yellow": 1,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Sporting Club Paris",
+     "games": 6,
+     "goals": 3
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "spa06": {
+   "games": 25,
+   "yellow": 8,
+   "red": 1,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Sporting Club Paris",
+     "games": 4,
+     "goals": 2
+    },
+    {
+     "s": "26",
+     "team": "Sporting Club Paris",
+     "games": 17,
+     "goals": 13
+    },
+    {
+     "s": "25",
+     "team": "Sporting Club Paris",
+     "games": 4,
+     "goals": 4
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "spa07": {
+   "games": 17,
+   "yellow": 6,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Sporting Club Paris",
+     "games": 5,
+     "goals": 11
+    },
+    {
+     "s": "26",
+     "team": "Sporting Club Paris",
+     "games": 12,
+     "goals": 8
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "spa08": {
+   "games": 2,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Sporting Club Paris",
+     "games": 2,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "spa09": {
+   "games": 37,
+   "yellow": 7,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Sporting Club Paris",
+     "games": 5,
+     "goals": 1
+    },
+    {
+     "s": "26",
+     "team": "Sporting Club Paris",
+     "games": 19,
+     "goals": 16
+    },
+    {
+     "s": "24",
+     "team": "Nantes Métropole Futsal",
+     "games": 13,
+     "goals": 6
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "spa10": {
+   "games": 39,
+   "yellow": 11,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Sporting Club Paris",
+     "games": 5,
+     "goals": 2
+    },
+    {
+     "s": "26",
+     "team": "Sporting Club Paris",
+     "games": 9,
+     "goals": 4
+    },
+    {
+     "s": "25",
+     "team": "Sporting Club Paris",
+     "games": 14,
+     "goals": 8
+    },
+    {
+     "s": "24",
+     "team": "Sporting Club Paris",
+     "games": 11,
+     "goals": 7
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "spa11": {
+   "games": 6,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Sporting Club Paris",
+     "games": 6,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "spa12": {
+   "games": 3,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Sporting Club Paris",
+     "games": 3,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "spa13": {
+   "games": 53,
+   "yellow": 10,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Sporting Club Paris",
+     "games": 3,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "Sporting Club Paris",
+     "games": 11,
+     "goals": 1
+    },
+    {
+     "s": "25",
+     "team": "Sporting Club Paris",
+     "games": 20,
+     "goals": 1
+    },
+    {
+     "s": "24",
+     "team": "Sporting Club Paris",
+     "games": 19,
+     "goals": 4
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "spa14": {
+   "games": 2,
+   "yellow": 2,
+   "red": 1,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Sporting Club Paris",
+     "games": 2,
+     "goals": 1
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "mon01": {
+   "games": 6,
+   "yellow": 1,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Montpellier Méditerranée Futsal",
+     "games": 6,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "mon02": {
+   "games": 5,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Montpellier Méditerranée Futsal",
+     "games": 5,
+     "goals": 3
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "mon04": {
+   "games": 11,
+   "yellow": 2,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Montpellier Méditerranée Futsal",
+     "games": 6,
+     "goals": 3
+    },
+    {
+     "s": "26",
+     "team": "Montpellier Méditerranée Futsal",
+     "games": 5,
+     "goals": 2
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "mon05": {
+   "games": 5,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Montpellier Méditerranée Futsal",
+     "games": 5,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "mon06": {
+   "games": 23,
+   "yellow": 3,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Montpellier Méditerranée Futsal",
+     "games": 6,
+     "goals": 0
+    },
+    {
+     "s": "24",
+     "team": "AC Ajaccio",
+     "games": 17,
+     "goals": 7
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "mon07": {
+   "games": 6,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Montpellier Méditerranée Futsal",
+     "games": 6,
+     "goals": 3
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "mon08": {
+   "games": 6,
+   "yellow": 1,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Montpellier Méditerranée Futsal",
+     "games": 6,
+     "goals": 7
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "mon09": {
+   "games": 6,
+   "yellow": 2,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Montpellier Méditerranée Futsal",
+     "games": 6,
+     "goals": 1
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "mon10": {
+   "games": 5,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Montpellier Méditerranée Futsal",
+     "games": 5,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "mon11": {
+   "games": 4,
+   "yellow": 2,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Montpellier Méditerranée Futsal",
+     "games": 4,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "mon12": {
+   "games": 5,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Montpellier Méditerranée Futsal",
+     "games": 4,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "Montpellier Méditerranée Futsal",
+     "games": 1,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "mon13": {
+   "games": 7,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Montpellier Méditerranée Futsal",
+     "games": 6,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "Montpellier Méditerranée Futsal",
+     "games": 1,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "mon14": {
+   "games": 3,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Montpellier Méditerranée Futsal",
+     "games": 3,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "mon15": {
+   "games": 34,
+   "yellow": 6,
+   "red": 1,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Montpellier Méditerranée Futsal",
+     "games": 4,
+     "goals": 1
+    },
+    {
+     "s": "26",
+     "team": "Montpellier Méditerranée Futsal",
+     "games": 10,
+     "goals": 4
+    },
+    {
+     "s": "25",
+     "team": "Montpellier Méditerranée Futsal",
+     "games": 20,
+     "goals": 13
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "goa01": {
+   "games": 21,
+   "yellow": 1,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "GOAL Futsal Club",
+     "games": 4,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "GOAL Futsal Club",
+     "games": 17,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "goa02": {
+   "games": 7,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "GOAL Futsal Club",
+     "games": 1,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "GOAL Futsal Club",
+     "games": 6,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "goa03": {
+   "games": 56,
+   "yellow": 1,
+   "red": 4,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "GOAL Futsal Club",
+     "games": 3,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "GOAL Futsal Club",
+     "games": 16,
+     "goals": 0
+    },
+    {
+     "s": "25",
+     "team": "GOAL Futsal Club",
+     "games": 21,
+     "goals": 0
+    },
+    {
+     "s": "24",
+     "team": "GOAL Futsal Club",
+     "games": 16,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "goa04": {
+   "games": 20,
+   "yellow": 8,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "GOAL Futsal Club",
+     "games": 2,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "GOAL Futsal Club",
+     "games": 18,
+     "goals": 9
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "goa05": {
+   "games": 31,
+   "yellow": 8,
+   "red": 1,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "GOAL Futsal Club",
+     "games": 4,
+     "goals": 4
+    },
+    {
+     "s": "26",
+     "team": "Montpellier Méditerranée Futsal",
+     "games": 9,
+     "goals": 3
+    },
+    {
+     "s": "24",
+     "team": "UJS Toulouse",
+     "games": 18,
+     "goals": 2
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "goa06": {
+   "games": 42,
+   "yellow": 11,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "GOAL Futsal Club",
+     "games": 3,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "GOAL Futsal Club",
+     "games": 19,
+     "goals": 4
+    },
+    {
+     "s": "24",
+     "team": "Toulon Élite Futsal",
+     "games": 20,
+     "goals": 6
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "goa08": {
+   "games": 9,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "GOAL Futsal Club",
+     "games": 3,
+     "goals": 1
+    },
+    {
+     "s": "26",
+     "team": "GOAL Futsal Club",
+     "games": 6,
+     "goals": 2
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "goa09": {
+   "games": 42,
+   "yellow": 16,
+   "red": 1,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "GOAL Futsal Club",
+     "games": 4,
+     "goals": 2
+    },
+    {
+     "s": "26",
+     "team": "Montpellier Méditerranée Futsal",
+     "games": 17,
+     "goals": 7
+    },
+    {
+     "s": "25",
+     "team": "Montpellier Méditerranée Futsal",
+     "games": 21,
+     "goals": 3
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "goa10": {
+   "games": 16,
+   "yellow": 2,
+   "red": 1,
+   "seasons": [
+    {
+     "s": "26",
+     "team": "GOAL Futsal Club",
+     "games": 16,
+     "goals": 7
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "goa11": {
+   "games": 46,
+   "yellow": 9,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "GOAL Futsal Club",
+     "games": 3,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "GOAL Futsal Club",
+     "games": 10,
+     "goals": 4
+    },
+    {
+     "s": "25",
+     "team": "GOAL Futsal Club",
+     "games": 18,
+     "goals": 1
+    },
+    {
+     "s": "24",
+     "team": "GOAL Futsal Club",
+     "games": 15,
+     "goals": 6
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "goa12": {
+   "games": 37,
+   "yellow": 4,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "GOAL Futsal Club",
+     "games": 4,
+     "goals": 1
+    },
+    {
+     "s": "26",
+     "team": "GOAL Futsal Club",
+     "games": 14,
+     "goals": 2
+    },
+    {
+     "s": "25",
+     "team": "GOAL Futsal Club",
+     "games": 14,
+     "goals": 2
+    },
+    {
+     "s": "24",
+     "team": "GOAL Futsal Club",
+     "games": 5,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "goa13": {
+   "games": 40,
+   "yellow": 8,
+   "red": 1,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "GOAL Futsal Club",
+     "games": 4,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "Montpellier Méditerranée Futsal",
+     "games": 16,
+     "goals": 9
+    },
+    {
+     "s": "25",
+     "team": "Montpellier Méditerranée Futsal",
+     "games": 20,
+     "goals": 5
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "goa14": {
+   "games": 19,
+   "yellow": 2,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "GOAL Futsal Club",
+     "games": 3,
+     "goals": 2
+    },
+    {
+     "s": "26",
+     "team": "Sporting Club Paris",
+     "games": 16,
+     "goals": 12
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "goa15": {
+   "games": 17,
+   "yellow": 1,
+   "red": 1,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "GOAL Futsal Club",
+     "games": 2,
+     "goals": 1
+    },
+    {
+     "s": "26",
+     "team": "GOAL Futsal Club",
+     "games": 15,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "goa16": {
+   "games": 61,
+   "yellow": 9,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "GOAL Futsal Club",
+     "games": 4,
+     "goals": 2
+    },
+    {
+     "s": "26",
+     "team": "GOAL Futsal Club",
+     "games": 20,
+     "goals": 9
+    },
+    {
+     "s": "25",
+     "team": "GOAL Futsal Club",
+     "games": 21,
+     "goals": 9
+    },
+    {
+     "s": "24",
+     "team": "GOAL Futsal Club",
+     "games": 16,
+     "goals": 9
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "goa17": {
+   "games": 66,
+   "yellow": 6,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "GOAL Futsal Club",
+     "games": 3,
+     "goals": 3
+    },
+    {
+     "s": "26",
+     "team": "GOAL Futsal Club",
+     "games": 20,
+     "goals": 6
+    },
+    {
+     "s": "25",
+     "team": "GOAL Futsal Club",
+     "games": 21,
+     "goals": 11
+    },
+    {
+     "s": "24",
+     "team": "GOAL Futsal Club",
+     "games": 22,
+     "goals": 2
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "goa18": {
+   "games": 1,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "GOAL Futsal Club",
+     "games": 1,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "tln01": {
+   "games": 6,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Toulon Métropole Futsal",
+     "games": 6,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "tln02": {
+   "games": 45,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Toulon Métropole Futsal",
+     "games": 6,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "Toulon Métropole Futsal",
+     "games": 20,
+     "goals": 0
+    },
+    {
+     "s": "25",
+     "team": "Toulon Élite Futsal",
+     "games": 14,
+     "goals": 0
+    },
+    {
+     "s": "24",
+     "team": "Toulon Élite Futsal",
+     "games": 5,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "tln03": {
+   "games": 27,
+   "yellow": 5,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Toulon Métropole Futsal",
+     "games": 3,
+     "goals": 1
+    },
+    {
+     "s": "26",
+     "team": "FC Kingersheim",
+     "games": 4,
+     "goals": 1
+    },
+    {
+     "s": "24",
+     "team": "Toulon Élite Futsal",
+     "games": 20,
+     "goals": 5
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "tln04": {
+   "games": 62,
+   "yellow": 8,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Toulon Métropole Futsal",
+     "games": 6,
+     "goals": 3
+    },
+    {
+     "s": "26",
+     "team": "Toulon Métropole Futsal",
+     "games": 18,
+     "goals": 2
+    },
+    {
+     "s": "25",
+     "team": "Sporting Club Paris",
+     "games": 19,
+     "goals": 1
+    },
+    {
+     "s": "24",
+     "team": "Sporting Club Paris",
+     "games": 19,
+     "goals": 7
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "tln05": {
+   "games": 6,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Toulon Métropole Futsal",
+     "games": 6,
+     "goals": 9
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "tln06": {
+   "games": 2,
+   "yellow": 1,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Toulon Métropole Futsal",
+     "games": 2,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "tln07": {
+   "games": 32,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Toulon Métropole Futsal",
+     "games": 6,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "Toulon Métropole Futsal",
+     "games": 14,
+     "goals": 1
+    },
+    {
+     "s": "25",
+     "team": "Toulon Élite Futsal",
+     "games": 12,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "tln08": {
+   "games": 56,
+   "yellow": 12,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Toulon Métropole Futsal",
+     "games": 1,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "Toulon Métropole Futsal",
+     "games": 17,
+     "goals": 3
+    },
+    {
+     "s": "25",
+     "team": "Toulon Élite Futsal",
+     "games": 20,
+     "goals": 4
+    },
+    {
+     "s": "24",
+     "team": "Futsal Club Béthunois",
+     "games": 18,
+     "goals": 11
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "tln10": {
+   "games": 46,
+   "yellow": 5,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Toulon Métropole Futsal",
+     "games": 6,
+     "goals": 2
+    },
+    {
+     "s": "26",
+     "team": "Toulon Métropole Futsal",
+     "games": 20,
+     "goals": 7
+    },
+    {
+     "s": "25",
+     "team": "Toulon Élite Futsal",
+     "games": 20,
+     "goals": 16
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "tln11": {
+   "games": 61,
+   "yellow": 2,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Toulon Métropole Futsal",
+     "games": 6,
+     "goals": 3
+    },
+    {
+     "s": "26",
+     "team": "Montpellier Méditerranée Futsal",
+     "games": 15,
+     "goals": 2
+    },
+    {
+     "s": "25",
+     "team": "Nantes Métropole Futsal",
+     "games": 18,
+     "goals": 7
+    },
+    {
+     "s": "24",
+     "team": "Nantes Métropole Futsal",
+     "games": 22,
+     "goals": 11
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "tln12": {
+   "games": 24,
+   "yellow": 3,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Toulon Métropole Futsal",
+     "games": 6,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "Toulon Métropole Futsal",
+     "games": 15,
+     "goals": 4
+    },
+    {
+     "s": "25",
+     "team": "Toulon Élite Futsal",
+     "games": 3,
+     "goals": 1
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "tln13": {
+   "games": 57,
+   "yellow": 17,
+   "red": 1,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Toulon Métropole Futsal",
+     "games": 6,
+     "goals": 5
+    },
+    {
+     "s": "26",
+     "team": "UJS Toulouse",
+     "games": 14,
+     "goals": 7
+    },
+    {
+     "s": "25",
+     "team": "UJS Toulouse",
+     "games": 17,
+     "goals": 13
+    },
+    {
+     "s": "24",
+     "team": "UJS Toulouse",
+     "games": 20,
+     "goals": 12
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "tln14": {
+   "games": 9,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Toulon Métropole Futsal",
+     "games": 3,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "Toulon Métropole Futsal",
+     "games": 5,
+     "goals": 1
+    },
+    {
+     "s": "25",
+     "team": "Toulon Élite Futsal",
+     "games": 1,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "nan01": {
+   "games": 3,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Nantes Métropole Futsal",
+     "games": 3,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "nan02": {
+   "games": 54,
+   "yellow": 3,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Nantes Métropole Futsal",
+     "games": 5,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "UJS Toulouse",
+     "games": 14,
+     "goals": 0
+    },
+    {
+     "s": "25",
+     "team": "UJS Toulouse",
+     "games": 14,
+     "goals": 2
+    },
+    {
+     "s": "24",
+     "team": "UJS Toulouse",
+     "games": 21,
+     "goals": 1
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "nan03": {
+   "games": 22,
+   "yellow": 1,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Nantes Métropole Futsal",
+     "games": 3,
+     "goals": 1
+    },
+    {
+     "s": "26",
+     "team": "Nantes Métropole Futsal",
+     "games": 16,
+     "goals": 0
+    },
+    {
+     "s": "25",
+     "team": "Nantes Métropole Futsal",
+     "games": 3,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "nan04": {
+   "games": 43,
+   "yellow": 11,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Nantes Métropole Futsal",
+     "games": 4,
+     "goals": 1
+    },
+    {
+     "s": "26",
+     "team": "AS Avion Futsal",
+     "games": 20,
+     "goals": 4
+    },
+    {
+     "s": "25",
+     "team": "AS Avion Futsal",
+     "games": 19,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "nan05": {
+   "games": 13,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Nantes Métropole Futsal",
+     "games": 2,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "Nantes Métropole Futsal",
+     "games": 8,
+     "goals": 0
+    },
+    {
+     "s": "25",
+     "team": "Nantes Métropole Futsal",
+     "games": 3,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "nan06": {
+   "games": 44,
+   "yellow": 7,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Nantes Métropole Futsal",
+     "games": 4,
+     "goals": 1
+    },
+    {
+     "s": "26",
+     "team": "AS Avion Futsal",
+     "games": 18,
+     "goals": 32
+    },
+    {
+     "s": "25",
+     "team": "AS Avion Futsal",
+     "games": 22,
+     "goals": 32
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "nan07": {
+   "games": 40,
+   "yellow": 5,
+   "red": 1,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Nantes Métropole Futsal",
+     "games": 5,
+     "goals": 2
+    },
+    {
+     "s": "26",
+     "team": "Nantes Métropole Futsal",
+     "games": 19,
+     "goals": 9
+    },
+    {
+     "s": "25",
+     "team": "Nantes Métropole Futsal",
+     "games": 16,
+     "goals": 1
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "nan09": {
+   "games": 5,
+   "yellow": 1,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Nantes Métropole Futsal",
+     "games": 5,
+     "goals": 3
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "nan10": {
+   "games": 5,
+   "yellow": 2,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Nantes Métropole Futsal",
+     "games": 5,
+     "goals": 3
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "nan11": {
+   "games": 59,
+   "yellow": 8,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "26",
+     "team": "Nantes Métropole Futsal",
+     "games": 16,
+     "goals": 6
+    },
+    {
+     "s": "25",
+     "team": "Nantes Métropole Futsal",
+     "games": 21,
+     "goals": 10
+    },
+    {
+     "s": "24",
+     "team": "Nantes Métropole Futsal",
+     "games": 22,
+     "goals": 8
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "nan12": {
+   "games": 60,
+   "yellow": 5,
+   "red": 1,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Nantes Métropole Futsal",
+     "games": 4,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "Nantes Métropole Futsal",
+     "games": 19,
+     "goals": 9
+    },
+    {
+     "s": "25",
+     "team": "Nantes Métropole Futsal",
+     "games": 16,
+     "goals": 7
+    },
+    {
+     "s": "24",
+     "team": "Nantes Métropole Futsal",
+     "games": 21,
+     "goals": 9
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "nan13": {
+   "games": 66,
+   "yellow": 9,
+   "red": 1,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Nantes Métropole Futsal",
+     "games": 5,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "Nantes Métropole Futsal",
+     "games": 18,
+     "goals": 3
+    },
+    {
+     "s": "25",
+     "team": "Nantes Métropole Futsal",
+     "games": 20,
+     "goals": 3
+    },
+    {
+     "s": "24",
+     "team": "Nantes Métropole Futsal",
+     "games": 23,
+     "goals": 3
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "nan14": {
+   "games": 46,
+   "yellow": 9,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Nantes Métropole Futsal",
+     "games": 5,
+     "goals": 1
+    },
+    {
+     "s": "26",
+     "team": "Nantes Métropole Futsal",
+     "games": 18,
+     "goals": 12
+    },
+    {
+     "s": "24",
+     "team": "Nantes Métropole Futsal",
+     "games": 23,
+     "goals": 22
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "nan16": {
+   "games": 41,
+   "yellow": 6,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Nantes Métropole Futsal",
+     "games": 4,
+     "goals": 2
+    },
+    {
+     "s": "26",
+     "team": "Nantes Métropole Futsal",
+     "games": 18,
+     "goals": 10
+    },
+    {
+     "s": "25",
+     "team": "Nantes Métropole Futsal",
+     "games": 19,
+     "goals": 5
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "nan17": {
+   "games": 14,
+   "yellow": 2,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Nantes Métropole Futsal",
+     "games": 5,
+     "goals": 3
+    },
+    {
+     "s": "26",
+     "team": "Nantes Métropole Futsal",
+     "games": 9,
+     "goals": 5
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "aca01": {
+   "games": 57,
+   "yellow": 5,
+   "red": 1,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Paris ACASA",
+     "games": 5,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "Paris ACASA",
+     "games": 16,
+     "goals": 0
+    },
+    {
+     "s": "25",
+     "team": "Paris ACASA",
+     "games": 15,
+     "goals": 0
+    },
+    {
+     "s": "24",
+     "team": "Paris ACASA",
+     "games": 21,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "aca02": {
+   "games": 24,
+   "yellow": 3,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Paris ACASA",
+     "games": 2,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "Paris ACASA",
+     "games": 15,
+     "goals": 0
+    },
+    {
+     "s": "25",
+     "team": "Paris ACASA",
+     "games": 7,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "aca03": {
+   "games": 53,
+   "yellow": 7,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Paris ACASA",
+     "games": 2,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "FC Kingersheim",
+     "games": 7,
+     "goals": 1
+    },
+    {
+     "s": "25",
+     "team": "FC Kingersheim",
+     "games": 22,
+     "goals": 7
+    },
+    {
+     "s": "24",
+     "team": "FC Kingersheim",
+     "games": 22,
+     "goals": 14
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "aca04": {
+   "games": 3,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Paris ACASA",
+     "games": 3,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "aca05": {
+   "games": 63,
+   "yellow": 17,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Paris ACASA",
+     "games": 4,
+     "goals": 1
+    },
+    {
+     "s": "26",
+     "team": "Sporting Club Paris",
+     "games": 18,
+     "goals": 10
+    },
+    {
+     "s": "25",
+     "team": "Sporting Club Paris",
+     "games": 19,
+     "goals": 13
+    },
+    {
+     "s": "24",
+     "team": "Nantes Métropole Futsal",
+     "games": 22,
+     "goals": 8
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "aca06": {
+   "games": 17,
+   "yellow": 2,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Paris ACASA",
+     "games": 2,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "AS Avion Futsal",
+     "games": 15,
+     "goals": 2
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "aca07": {
+   "games": 42,
+   "yellow": 8,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Paris ACASA",
+     "games": 5,
+     "goals": 5
+    },
+    {
+     "s": "26",
+     "team": "Paris ACASA",
+     "games": 19,
+     "goals": 9
+    },
+    {
+     "s": "25",
+     "team": "Paris ACASA",
+     "games": 18,
+     "goals": 4
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "aca08": {
+   "games": 13,
+   "yellow": 3,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Paris ACASA",
+     "games": 1,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "Paris ACASA",
+     "games": 6,
+     "goals": 0
+    },
+    {
+     "s": "25",
+     "team": "Paris ACASA",
+     "games": 6,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "aca09": {
+   "games": 44,
+   "yellow": 12,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Paris ACASA",
+     "games": 5,
+     "goals": 1
+    },
+    {
+     "s": "26",
+     "team": "Paris ACASA",
+     "games": 17,
+     "goals": 10
+    },
+    {
+     "s": "25",
+     "team": "Paris ACASA",
+     "games": 17,
+     "goals": 8
+    },
+    {
+     "s": "24",
+     "team": "Paris ACASA",
+     "games": 5,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "aca10": {
+   "games": 19,
+   "yellow": 3,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Paris ACASA",
+     "games": 3,
+     "goals": 1
+    },
+    {
+     "s": "26",
+     "team": "Paris ACASA",
+     "games": 16,
+     "goals": 2
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "aca11": {
+   "games": 57,
+   "yellow": 7,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Paris ACASA",
+     "games": 5,
+     "goals": 1
+    },
+    {
+     "s": "26",
+     "team": "Paris ACASA",
+     "games": 13,
+     "goals": 2
+    },
+    {
+     "s": "25",
+     "team": "Paris ACASA",
+     "games": 17,
+     "goals": 1
+    },
+    {
+     "s": "24",
+     "team": "Paris ACASA",
+     "games": 22,
+     "goals": 9
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "aca12": {
+   "games": 62,
+   "yellow": 10,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Paris ACASA",
+     "games": 3,
+     "goals": 1
+    },
+    {
+     "s": "26",
+     "team": "Sporting Club Paris",
+     "games": 16,
+     "goals": 5
+    },
+    {
+     "s": "25",
+     "team": "Sporting Club Paris",
+     "games": 20,
+     "goals": 3
+    },
+    {
+     "s": "24",
+     "team": "Paris ACASA",
+     "games": 23,
+     "goals": 8
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "aca13": {
+   "games": 49,
+   "yellow": 17,
+   "red": 2,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Paris ACASA",
+     "games": 5,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "Paris ACASA",
+     "games": 12,
+     "goals": 3
+    },
+    {
+     "s": "25",
+     "team": "Paris ACASA",
+     "games": 17,
+     "goals": 2
+    },
+    {
+     "s": "24",
+     "team": "Paris ACASA",
+     "games": 15,
+     "goals": 2
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "aca14": {
+   "games": 48,
+   "yellow": 12,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Paris ACASA",
+     "games": 4,
+     "goals": 1
+    },
+    {
+     "s": "26",
+     "team": "Paris ACASA",
+     "games": 11,
+     "goals": 1
+    },
+    {
+     "s": "25",
+     "team": "Kremlin-Bicêtre Futsal",
+     "games": 14,
+     "goals": 11
+    },
+    {
+     "s": "24",
+     "team": "Kremlin-Bicêtre Futsal",
+     "games": 19,
+     "goals": 12
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "aca15": {
+   "games": 57,
+   "yellow": 9,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Paris ACASA",
+     "games": 5,
+     "goals": 3
+    },
+    {
+     "s": "26",
+     "team": "Paris ACASA",
+     "games": 16,
+     "goals": 8
+    },
+    {
+     "s": "25",
+     "team": "Paris ACASA",
+     "games": 20,
+     "goals": 18
+    },
+    {
+     "s": "24",
+     "team": "Paris ACASA",
+     "games": 16,
+     "goals": 2
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "aca16": {
+   "games": 3,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Paris ACASA",
+     "games": 3,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "aca17": {
+   "games": 3,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Paris ACASA",
+     "games": 3,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "avi01": {
+   "games": 20,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "AS Avion Futsal",
+     "games": 3,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "AS Avion Futsal",
+     "games": 10,
+     "goals": 0
+    },
+    {
+     "s": "25",
+     "team": "AS Avion Futsal",
+     "games": 7,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "avi02": {
+   "games": 14,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "AS Avion Futsal",
+     "games": 6,
+     "goals": 0
+    },
+    {
+     "s": "25",
+     "team": "Hérouville Futsal",
+     "games": 8,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "avi03": {
+   "games": 32,
+   "yellow": 2,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "AS Avion Futsal",
+     "games": 5,
+     "goals": 2
+    },
+    {
+     "s": "26",
+     "team": "AS Avion Futsal",
+     "games": 17,
+     "goals": 2
+    },
+    {
+     "s": "25",
+     "team": "AS Avion Futsal",
+     "games": 10,
+     "goals": 1
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "avi04": {
+   "games": 25,
+   "yellow": 2,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "AS Avion Futsal",
+     "games": 5,
+     "goals": 0
+    },
+    {
+     "s": "25",
+     "team": "AS Avion Futsal",
+     "games": 20,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "avi06": {
+   "games": 42,
+   "yellow": 13,
+   "red": 3,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "AS Avion Futsal",
+     "games": 5,
+     "goals": 2
+    },
+    {
+     "s": "26",
+     "team": "AS Avion Futsal",
+     "games": 16,
+     "goals": 6
+    },
+    {
+     "s": "25",
+     "team": "AS Avion Futsal",
+     "games": 21,
+     "goals": 10
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "avi07": {
+   "games": 5,
+   "yellow": 2,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "AS Avion Futsal",
+     "games": 5,
+     "goals": 1
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "avi08": {
+   "games": 3,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "26",
+     "team": "AS Avion Futsal",
+     "games": 3,
+     "goals": 1
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "avi09": {
+   "games": 53,
+   "yellow": 18,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "AS Avion Futsal",
+     "games": 6,
+     "goals": 2
+    },
+    {
+     "s": "26",
+     "team": "AS Avion Futsal",
+     "games": 11,
+     "goals": 4
+    },
+    {
+     "s": "25",
+     "team": "AS Avion Futsal",
+     "games": 20,
+     "goals": 3
+    },
+    {
+     "s": "24",
+     "team": "Futsal Club Béthunois",
+     "games": 16,
+     "goals": 6
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "avi10": {
+   "games": 8,
+   "yellow": 1,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "AS Avion Futsal",
+     "games": 5,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "AS Avion Futsal",
+     "games": 3,
+     "goals": 1
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "avi11": {
+   "games": 2,
+   "yellow": 1,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "AS Avion Futsal",
+     "games": 2,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "avi12": {
+   "games": 33,
+   "yellow": 9,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "AS Avion Futsal",
+     "games": 2,
+     "goals": 0
+    },
+    {
+     "s": "25",
+     "team": "FC Kingersheim",
+     "games": 12,
+     "goals": 6
+    },
+    {
+     "s": "24",
+     "team": "FC Kingersheim",
+     "games": 19,
+     "goals": 23
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "avi13": {
+   "games": 42,
+   "yellow": 6,
+   "red": 1,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "AS Avion Futsal",
+     "games": 6,
+     "goals": 3
+    },
+    {
+     "s": "26",
+     "team": "AS Avion Futsal",
+     "games": 16,
+     "goals": 8
+    },
+    {
+     "s": "25",
+     "team": "AS Avion Futsal",
+     "games": 20,
+     "goals": 11
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "avi16": {
+   "games": 45,
+   "yellow": 6,
+   "red": 1,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "AS Avion Futsal",
+     "games": 6,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "AS Avion Futsal",
+     "games": 18,
+     "goals": 2
+    },
+    {
+     "s": "25",
+     "team": "AS Avion Futsal",
+     "games": 21,
+     "goals": 2
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "avi17": {
+   "games": 1,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "AS Avion Futsal",
+     "games": 1,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "avi18": {
+   "games": 6,
+   "yellow": 1,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "AS Avion Futsal",
+     "games": 6,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "avi19": {
+   "games": 2,
+   "yellow": 1,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "AS Avion Futsal",
+     "games": 2,
+     "goals": 1
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "ujs01": {
+   "games": 3,
+   "yellow": 0,
+   "red": 1,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "UJS Toulouse",
+     "games": 3,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "ujs02": {
+   "games": 8,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "UJS Toulouse",
+     "games": 4,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "UJS Toulouse",
+     "games": 4,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "ujs03": {
+   "games": 36,
+   "yellow": 1,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "UJS Toulouse",
+     "games": 5,
+     "goals": 0
+    },
+    {
+     "s": "25",
+     "team": "UJS Toulouse",
+     "games": 16,
+     "goals": 0
+    },
+    {
+     "s": "24",
+     "team": "UJS Toulouse",
+     "games": 15,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "ujs04": {
+   "games": 2,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "UJS Toulouse",
+     "games": 1,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "UJS Toulouse",
+     "games": 1,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "ujs05": {
+   "games": 5,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "26",
+     "team": "UJS Toulouse",
+     "games": 3,
+     "goals": 1
+    },
+    {
+     "s": "25",
+     "team": "UJS Toulouse",
+     "games": 2,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "ujs06": {
+   "games": 31,
+   "yellow": 13,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "UJS Toulouse",
+     "games": 3,
+     "goals": 4
+    },
+    {
+     "s": "26",
+     "team": "Montpellier Méditerranée Futsal",
+     "games": 13,
+     "goals": 10
+    },
+    {
+     "s": "25",
+     "team": "Montpellier Méditerranée Futsal",
+     "games": 15,
+     "goals": 14
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "ujs07": {
+   "games": 5,
+   "yellow": 3,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "UJS Toulouse",
+     "games": 5,
+     "goals": 3
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "ujs08": {
+   "games": 44,
+   "yellow": 5,
+   "red": 1,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "UJS Toulouse",
+     "games": 6,
+     "goals": 2
+    },
+    {
+     "s": "26",
+     "team": "Montpellier Méditerranée Futsal",
+     "games": 17,
+     "goals": 7
+    },
+    {
+     "s": "25",
+     "team": "Montpellier Méditerranée Futsal",
+     "games": 21,
+     "goals": 9
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "ujs09": {
+   "games": 7,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "UJS Toulouse",
+     "games": 2,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "UJS Toulouse",
+     "games": 5,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "ujs10": {
+   "games": 43,
+   "yellow": 13,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "UJS Toulouse",
+     "games": 4,
+     "goals": 3
+    },
+    {
+     "s": "26",
+     "team": "Montpellier Méditerranée Futsal",
+     "games": 17,
+     "goals": 8
+    },
+    {
+     "s": "25",
+     "team": "Montpellier Méditerranée Futsal",
+     "games": 12,
+     "goals": 2
+    },
+    {
+     "s": "24",
+     "team": "Futsal Club Béthunois",
+     "games": 10,
+     "goals": 4
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "ujs11": {
+   "games": 5,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "UJS Toulouse",
+     "games": 4,
+     "goals": 1
+    },
+    {
+     "s": "26",
+     "team": "UJS Toulouse",
+     "games": 1,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "ujs12": {
+   "games": 21,
+   "yellow": 2,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "UJS Toulouse",
+     "games": 2,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "UJS Toulouse",
+     "games": 18,
+     "goals": 4
+    },
+    {
+     "s": "25",
+     "team": "UJS Toulouse",
+     "games": 1,
+     "goals": 1
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "ujs13": {
+   "games": 55,
+   "yellow": 5,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "UJS Toulouse",
+     "games": 6,
+     "goals": 4
+    },
+    {
+     "s": "26",
+     "team": "UJS Toulouse",
+     "games": 13,
+     "goals": 5
+    },
+    {
+     "s": "25",
+     "team": "UJS Toulouse",
+     "games": 18,
+     "goals": 11
+    },
+    {
+     "s": "24",
+     "team": "UJS Toulouse",
+     "games": 18,
+     "goals": 7
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "ujs14": {
+   "games": 24,
+   "yellow": 3,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "UJS Toulouse",
+     "games": 5,
+     "goals": 1
+    },
+    {
+     "s": "26",
+     "team": "UJS Toulouse",
+     "games": 16,
+     "goals": 4
+    },
+    {
+     "s": "24",
+     "team": "UJS Toulouse",
+     "games": 3,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "ujs15": {
+   "games": 30,
+   "yellow": 9,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "UJS Toulouse",
+     "games": 6,
+     "goals": 2
+    },
+    {
+     "s": "26",
+     "team": "AS Avion Futsal",
+     "games": 15,
+     "goals": 4
+    },
+    {
+     "s": "25",
+     "team": "AS Avion Futsal",
+     "games": 9,
+     "goals": 1
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "ujs17": {
+   "games": 63,
+   "yellow": 10,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "UJS Toulouse",
+     "games": 6,
+     "goals": 3
+    },
+    {
+     "s": "26",
+     "team": "UJS Toulouse",
+     "games": 18,
+     "goals": 12
+    },
+    {
+     "s": "25",
+     "team": "UJS Toulouse",
+     "games": 19,
+     "goals": 7
+    },
+    {
+     "s": "24",
+     "team": "UJS Toulouse",
+     "games": 20,
+     "goals": 7
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "ujs18": {
+   "games": 56,
+   "yellow": 10,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "UJS Toulouse",
+     "games": 4,
+     "goals": 1
+    },
+    {
+     "s": "26",
+     "team": "UJS Toulouse",
+     "games": 16,
+     "goals": 5
+    },
+    {
+     "s": "25",
+     "team": "UJS Toulouse",
+     "games": 16,
+     "goals": 1
+    },
+    {
+     "s": "24",
+     "team": "UJS Toulouse",
+     "games": 20,
+     "goals": 5
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "ujs19": {
+   "games": 37,
+   "yellow": 9,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "UJS Toulouse",
+     "games": 1,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "UJS Toulouse",
+     "games": 12,
+     "goals": 4
+    },
+    {
+     "s": "25",
+     "team": "UJS Toulouse",
+     "games": 11,
+     "goals": 3
+    },
+    {
+     "s": "24",
+     "team": "UJS Toulouse",
+     "games": 13,
+     "goals": 4
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "ujs20": {
+   "games": 6,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "UJS Toulouse",
+     "games": 4,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "UJS Toulouse",
+     "games": 1,
+     "goals": 0
+    },
+    {
+     "s": "25",
+     "team": "UJS Toulouse",
+     "games": 1,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "nic01": {
+   "games": 40,
+   "yellow": 2,
+   "red": 1,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Nice Futsal Club",
+     "games": 6,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "Nice Futsal Club",
+     "games": 16,
+     "goals": 0
+    },
+    {
+     "s": "24",
+     "team": "AC Ajaccio",
+     "games": 18,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "nic02": {
+   "games": 31,
+   "yellow": 5,
+   "red": 1,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Nice Futsal Club",
+     "games": 4,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "Nice Futsal Club",
+     "games": 19,
+     "goals": 2
+    },
+    {
+     "s": "24",
+     "team": "Sporting Club Paris",
+     "games": 8,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "nic03": {
+   "games": 5,
+   "yellow": 1,
+   "red": 1,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Nice Futsal Club",
+     "games": 5,
+     "goals": 3
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "nic04": {
+   "games": 18,
+   "yellow": 9,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Nice Futsal Club",
+     "games": 5,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "Nice Futsal Club",
+     "games": 13,
+     "goals": 2
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "nic05": {
+   "games": 22,
+   "yellow": 3,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Nice Futsal Club",
+     "games": 5,
+     "goals": 3
+    },
+    {
+     "s": "26",
+     "team": "Nice Futsal Club",
+     "games": 17,
+     "goals": 5
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "nic06": {
+   "games": 11,
+   "yellow": 2,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Nice Futsal Club",
+     "games": 6,
+     "goals": 1
+    },
+    {
+     "s": "26",
+     "team": "Nice Futsal Club",
+     "games": 5,
+     "goals": 2
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "nic07": {
+   "games": 11,
+   "yellow": 4,
+   "red": 1,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Nice Futsal Club",
+     "games": 6,
+     "goals": 1
+    },
+    {
+     "s": "26",
+     "team": "Nice Futsal Club",
+     "games": 5,
+     "goals": 1
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "nic08": {
+   "games": 5,
+   "yellow": 1,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Nice Futsal Club",
+     "games": 5,
+     "goals": 1
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "nic09": {
+   "games": 5,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Nice Futsal Club",
+     "games": 5,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "nic10": {
+   "games": 1,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Nice Futsal Club",
+     "games": 1,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "nic11": {
+   "games": 1,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Nice Futsal Club",
+     "games": 1,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "nic12": {
+   "games": 4,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Nice Futsal Club",
+     "games": 3,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "Nice Futsal Club",
+     "games": 1,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "nic13": {
+   "games": 4,
+   "yellow": 1,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Nice Futsal Club",
+     "games": 4,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "nic14": {
+   "games": 22,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Nice Futsal Club",
+     "games": 6,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "Nice Futsal Club",
+     "games": 16,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "gar01": {
+   "games": 21,
+   "yellow": 1,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Garges Djibson",
+     "games": 1,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "Sporting Club Paris",
+     "games": 14,
+     "goals": 0
+    },
+    {
+     "s": "25",
+     "team": "Kremlin-Bicêtre Futsal",
+     "games": 6,
+     "goals": 1
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "gar02": {
+   "games": 6,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Garges Djibson",
+     "games": 6,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "gar03": {
+   "games": 3,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Garges Djibson",
+     "games": 3,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "gar04": {
+   "games": 22,
+   "yellow": 4,
+   "red": 1,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Garges Djibson",
+     "games": 6,
+     "goals": 3
+    },
+    {
+     "s": "24",
+     "team": "Sporting Club Paris",
+     "games": 16,
+     "goals": 2
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "gar05": {
+   "games": 1,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Garges Djibson",
+     "games": 1,
+     "goals": 1
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "gar06": {
+   "games": 3,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Garges Djibson",
+     "games": 3,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "gar07": {
+   "games": 4,
+   "yellow": 1,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Garges Djibson",
+     "games": 4,
+     "goals": 1
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "gar08": {
+   "games": 6,
+   "yellow": 2,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Garges Djibson",
+     "games": 6,
+     "goals": 1
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "gar09": {
+   "games": 4,
+   "yellow": 3,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Garges Djibson",
+     "games": 4,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "gar10": {
+   "games": 5,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Garges Djibson",
+     "games": 5,
+     "goals": 3
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "gar11": {
+   "games": 5,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Garges Djibson",
+     "games": 5,
+     "goals": 1
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "gar12": {
+   "games": 60,
+   "yellow": 13,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Garges Djibson",
+     "games": 5,
+     "goals": 3
+    },
+    {
+     "s": "26",
+     "team": "Sporting Club Paris",
+     "games": 15,
+     "goals": 6
+    },
+    {
+     "s": "25",
+     "team": "Sporting Club Paris",
+     "games": 20,
+     "goals": 22
+    },
+    {
+     "s": "24",
+     "team": "Kremlin-Bicêtre Futsal",
+     "games": 20,
+     "goals": 9
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "gar13": {
+   "games": 5,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Garges Djibson",
+     "games": 5,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "gar14": {
+   "games": 5,
+   "yellow": 1,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Garges Djibson",
+     "games": 5,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "gar15": {
+   "games": 2,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Garges Djibson",
+     "games": 2,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "gar16": {
+   "games": 5,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Garges Djibson",
+     "games": 5,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "gar17": {
+   "games": 2,
+   "yellow": 1,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Garges Djibson",
+     "games": 2,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "gar18": {
+   "games": 1,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Garges Djibson",
+     "games": 1,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "gar19": {
+   "games": 1,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Garges Djibson",
+     "games": 1,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "art01": {
+   "games": 5,
+   "yellow": 1,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Artistes Futsal",
+     "games": 5,
+     "goals": 3
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "art02": {
+   "games": 6,
+   "yellow": 2,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Artistes Futsal",
+     "games": 6,
+     "goals": 3
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "art03": {
+   "games": 6,
+   "yellow": 2,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Artistes Futsal",
+     "games": 6,
+     "goals": 1
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "art04": {
+   "games": 4,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Artistes Futsal",
+     "games": 4,
+     "goals": 1
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "art05": {
+   "games": 6,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Artistes Futsal",
+     "games": 6,
+     "goals": 4
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "art06": {
+   "games": 6,
+   "yellow": 2,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Artistes Futsal",
+     "games": 6,
+     "goals": 3
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "art07": {
+   "games": 6,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Artistes Futsal",
+     "games": 6,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "art08": {
+   "games": 6,
+   "yellow": 2,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Artistes Futsal",
+     "games": 6,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "art09": {
+   "games": 3,
+   "yellow": 1,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Artistes Futsal",
+     "games": 2,
+     "goals": 0
+    },
+    {
+     "s": "24",
+     "team": "Kremlin-Bicêtre Futsal",
+     "games": 1,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "art10": {
+   "games": 31,
+   "yellow": 1,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Artistes Futsal",
+     "games": 6,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "Paris ACASA",
+     "games": 2,
+     "goals": 0
+    },
+    {
+     "s": "25",
+     "team": "Paris ACASA",
+     "games": 7,
+     "goals": 1
+    },
+    {
+     "s": "24",
+     "team": "Paris ACASA",
+     "games": 16,
+     "goals": 1
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "art11": {
+   "games": 6,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Artistes Futsal",
+     "games": 6,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "art12": {
+   "games": 6,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Artistes Futsal",
+     "games": 6,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "art13": {
+   "games": 59,
+   "yellow": 8,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Artistes Futsal",
+     "games": 2,
+     "goals": 0
+    },
+    {
+     "s": "26",
+     "team": "Paris ACASA",
+     "games": 17,
+     "goals": 8
+    },
+    {
+     "s": "25",
+     "team": "Kremlin-Bicêtre Futsal",
+     "games": 20,
+     "goals": 16
+    },
+    {
+     "s": "24",
+     "team": "Kremlin-Bicêtre Futsal",
+     "games": 20,
+     "goals": 10
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "art14": {
+   "games": 2,
+   "yellow": 0,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Artistes Futsal",
+     "games": 2,
+     "goals": 0
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  },
+  "art15": {
+   "games": 14,
+   "yellow": 3,
+   "red": 0,
+   "seasons": [
+    {
+     "s": "27",
+     "team": "Artistes Futsal",
+     "games": 1,
+     "goals": 0
+    },
+    {
+     "s": "25",
+     "team": "Kremlin-Bicêtre Futsal",
+     "games": 1,
+     "goals": 0
+    },
+    {
+     "s": "24",
+     "team": "AC Ajaccio",
+     "games": 12,
+     "goals": 1
+    }
+   ],
+   "titles": [],
+   "src": "FFF (D1 e play-off 2023/24-2026/27, recolha do António)"
+  }
+ }
+}

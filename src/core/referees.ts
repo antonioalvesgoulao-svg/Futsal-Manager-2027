@@ -100,10 +100,34 @@ export const REF_PAIRS_ITA: RefPair[] = [
   { id: 'i43', names: ['Salvatore Pagano', 'Mario Certa'], tolerance: 1.10, cards: 1.09, harsh: 0.97, real: true, top: false }, // Catania / Marsala
 ];
 
+
+// França: 34 árbitros federais de futsal 2026/27 (lista do António, 4/11): 17 FFU1 + 17 FFU2; duplas FFU1 = topo (sorteio fixo; temperamento estimado)
+export const REF_PAIRS_FRA: RefPair[] = [
+  { id: 'f1', names: ['Marouane Abbad El Andaloussi', 'Hachim Abdallah'], tolerance: 0.97, cards: 1.05, harsh: 0.98, real: true, top: true },
+  { id: 'f2', names: ['Toufik Ait Hammou', 'Karim Amejal'], tolerance: 0.97, cards: 0.91, harsh: 0.98, real: true, top: true },
+  { id: 'f3', names: ['Pierre Bourez', 'Victor Chaix'], tolerance: 1.11, cards: 1.04, harsh: 1.10, real: true, top: true },
+  { id: 'f4', names: ['Adrien Crumois', 'Tristan Daniele'], tolerance: 1.02, cards: 1.04, harsh: 1.02, real: true, top: true },
+  { id: 'f5', names: ['Fadil Darraz', 'Thomas David'], tolerance: 0.83, cards: 1.09, harsh: 1.05, real: true, top: true },
+  { id: 'f6', names: ['Jordan Feltesse', 'Bryan Francois'], tolerance: 1.05, cards: 0.83, harsh: 0.83, real: true, top: true },
+  { id: 'f7', names: ['Mostapha Hallou', 'Julien Lang'], tolerance: 0.91, cards: 0.95, harsh: 1.03, real: true, top: true },
+  { id: 'f8', names: ['Yacine Oualaouch', 'Samuel Le Tennier'], tolerance: 1.00, cards: 1.05, harsh: 0.94, real: true, top: true },
+  { id: 'f9', names: ['Hatem Fekrane', 'Jeremy Deidda'], tolerance: 1.03, cards: 1.04, harsh: 0.93, real: true, top: false },
+  { id: 'f10', names: ['Remi Fabre', 'Benoit Chandelier'], tolerance: 1.17, cards: 1.06, harsh: 1.12, real: true, top: false },
+  { id: 'f11', names: ['Ahtman Belhadj', 'Benjamin Barbier'], tolerance: 0.94, cards: 0.93, harsh: 0.97, real: true, top: false },
+  { id: 'f12', names: ['Cristian Morar', 'Nebyl Rahal'], tolerance: 0.99, cards: 1.06, harsh: 1.02, real: true, top: false },
+  { id: 'f13', names: ['Tarik El Ghourraf', 'Gerald Kieffer'], tolerance: 0.96, cards: 0.90, harsh: 0.95, real: true, top: false },
+  { id: 'f14', names: ['Damien Vasse', 'Mael Messaoudi'], tolerance: 1.12, cards: 0.92, harsh: 1.02, real: true, top: false },
+  { id: 'f15', names: ['Oceane Ordonez Gomez', 'Laurent Chabot'], tolerance: 1.04, cards: 0.85, harsh: 1.00, real: true, top: false },
+  { id: 'f16', names: ['Sofian Ouramdane', 'El Houcine Maataoui'], tolerance: 1.13, cards: 0.80, harsh: 0.97, real: true, top: false },
+  { id: 'f17', names: ['Joel Fernandes', 'Benjamin Sorbet'], tolerance: 0.99, cards: 0.92, harsh: 1.05, real: true, top: false },
+];
+
 /** Clássicos espanhóis (estimativa): dérbi de Múrcia (ElPozo x Cartagena) e jogos entre os 5 grandes. */
 const ESP_BIG = ['bar', 'epz', 'pal', 'jca', 'int'];
 /** Itália: os 4 mais fortes (estimativa) e o dérbi da Campânia (Napoli x Feldi Eboli). */
 const ITA_BIG = ['cat', 'nap', 'l84', 'ebo'];
+/** França: os mais fortes (estimativa) e o dérbi de Paris (Sporting Paris x Paris ACASA). */
+const FRA_BIG = ['lav', 'spa', 'goa', 'mon'];
 
 export const TEMPER_LABEL = (p: RefPair) =>
   `${p.tolerance >= 1.1 ? 'deixa jogar' : p.tolerance <= 0.9 ? 'apita muito' : 'critério médio'}, ${p.cards >= 1.15 ? 'cartões fáceis' : p.cards <= 0.9 ? 'poucos cartões' : 'cartões normais'}`;
@@ -123,6 +147,8 @@ export function importanceOf(s: GameState, f: Fixture): number {
   else if (ESP_BIG.includes(f.home) && ESP_BIG.includes(f.away)) imp += 0.3;
   else if ([f.home, f.away].sort().join('-') === 'ebo-nap') imp += 0.35;
   else if (ITA_BIG.includes(f.home) && ITA_BIG.includes(f.away)) imp += 0.25;
+  else if ([f.home, f.away].sort().join('-') === 'aca-spa') imp += 0.35;
+  else if (FRA_BIG.includes(f.home) && FRA_BIG.includes(f.away)) imp += 0.25;
   if (/Final/.test(f.stage) && !/Meias|Quartos/.test(f.stage)) imp += 0.45;
   else if (kindOf(f.comp) === 'playoff') imp += 0.25;
   else if (f.knockout) imp += 0.15;
@@ -143,7 +169,7 @@ export function importanceOf(s: GameState, f: Fixture): number {
 export function refereesFor(s: GameState, f: Fixture): RefPair {
   const imp = importanceOf(s, f);
   const all = f.comp === 'esp' || f.comp === 'espPlayoff' || f.comp === 'copaRey' || f.comp === 'copaEsp' || f.comp === 'superEsp' ? REF_PAIRS_ESP
-    : f.comp === 'ita' || f.comp === 'itaPlayoff' || f.comp === 'coppaIta' || f.comp === 'superIta' ? REF_PAIRS_ITA : REF_PAIRS;
+    : f.comp === 'ita' || f.comp === 'itaPlayoff' || f.comp === 'coppaIta' || f.comp === 'superIta' ? REF_PAIRS_ITA : f.comp === 'fra' || f.comp === 'fraPlayoff' || f.comp === 'coupeFra' ? REF_PAIRS_FRA : REF_PAIRS;
   const pool = imp >= 0.5 ? all.filter((p) => p.top) : all;
   return pool[Math.floor(hash(f.id + s.season.year) * pool.length)];
 }

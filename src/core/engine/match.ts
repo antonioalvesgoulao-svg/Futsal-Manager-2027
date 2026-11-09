@@ -922,7 +922,7 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
     }
     endPeriod();
     stage++;
-    if (stage === 2 && opts.knockout && !opts.noExtraTime && score[0] === score[1]) {
+    if (stage === 2 && opts.knockout && !opts.noExtraTime && aggTied()) {
       extraTime = true;
       plan.push({ p: 3, len: opts.extraTimeLen ?? ET, start: first }, { p: 4, len: opts.extraTimeLen ?? ET, start: (1 - first) as Side });
     }
@@ -930,10 +930,13 @@ export function createMatch(home: TeamSetup, away: TeamSetup, opts: MatchOptions
       beginPeriod(stage);
       return true;
     }
-    if (opts.knockout && !opts.noPenalties && score[0] === score[1]) penalties = shootout();
+    if (opts.knockout && !opts.noPenalties && aggTied()) penalties = shootout();
     finish();
     return false;
   }
+
+  // eliminatória a duas mãos (França): o prolongamento e os penáltis dependem do agregado (golos da 1.ª mão em opts.aggregate)
+  function aggTied() { return score[0] + (opts.aggregate?.[0] ?? 0) === score[1] + (opts.aggregate?.[1] ?? 0); }
 
   function shootout(): [number, number] {
     period = 5;

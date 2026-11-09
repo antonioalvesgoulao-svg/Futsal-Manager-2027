@@ -4,7 +4,7 @@
 // Uso: npx esbuild tools/diag/engine.ts --bundle --platform=node --format=esm --outfile=diagnostics/.engine.mjs && node diagnostics/.engine.mjs [--epocas 5] [--nome x]
 import { writeFileSync } from 'node:fs';
 import { newGame } from '../../src/core/state';
-import { setupFor, ITA_GOAL_FACTOR, ITA_TIE } from '../../src/core/game';
+import { setupFor, ITA_GOAL_FACTOR, FRA_GOAL_FACTOR, ITA_TIE, FRA_TIE } from '../../src/core/game';
 import { simulateMatch } from '../../src/core/engine/match';
 
 const arg = (k: string, d: string) => { const i = process.argv.indexOf(`--${k}`); return i > 0 ? process.argv[i + 1] : d; };
@@ -24,7 +24,7 @@ for (let se = 0; se < SEASONS; se++) {
       if (h === a) continue;
       const hs = setupFor(s, h), as = setupFor(s, a);
       sysStart[hs.tactics.system] = (sysStart[hs.tactics.system] ?? 0) + 1; sysStart[as.tactics.system] = (sysStart[as.tactics.system] ?? 0) + 1;
-      const r = simulateMatch(hs, as, { seed: `val${se}-${h}-${a}`, goalFactor: lg.id === 'ita1' ? ITA_GOAL_FACTOR : undefined, tieCaution: lg.id === 'ita1' ? ITA_TIE : undefined });
+      const r = simulateMatch(hs, as, { seed: `val${se}-${h}-${a}`, goalFactor: lg.id === 'ita1' ? ITA_GOAL_FACTOR : lg.id === 'fra1' ? FRA_GOAL_FACTOR : undefined, tieCaution: lg.id === 'ita1' ? ITA_TIE : lg.id === 'fra1' ? FRA_TIE : undefined });
       sysEnd[hs.tactics.system] = (sysEnd[hs.tactics.system] ?? 0) + 1; sysEnd[as.tactics.system] = (sysEnd[as.tactics.system] ?? 0) + 1;
       const [x, y] = r.score; n++; const L = (perLg[lg.name] ??= { n: 0, g: 0, h: 0, d: 0 }); L.n++; L.g += x + y; if (x > y) L.h++; else if (x === y) L.d++; goals += x + y; if (x + y < 3) low++;
       if (x > y) { home++; pts[h] = (pts[h] ?? 0) + 3; } else if (y > x) { away++; pts[a] = (pts[a] ?? 0) + 3; } else { draw++; pts[h] = (pts[h] ?? 0) + 1; pts[a] = (pts[a] ?? 0) + 1; }

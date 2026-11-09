@@ -52,6 +52,19 @@ const CRESTS: Record<string, Crest> = {
   gio: { shape: 'redondo', c1: '#15803d', c2: '#ffffff', edge: '#ffffff', pat: 'metade', sym: 'ancora', symC: '#ffffff' },
   pad: { shape: 'escudo', c1: '#111111', c2: '#ffffff', edge: '#ffffff', pat: 'riscas', sym: 'torre', symC: '#d4af37' },
   cpr: { shape: 'frances', c1: '#ffffff', c2: '#d50000', edge: '#d50000', pat: 'faixa', sym: 'bola', symC: '#d50000' },
+  // França (originais, cores reais)
+  lav: { shape: 'escudo', c1: '#f07b1a', c2: '#111111', edge: '#ffffff', pat: 'banda', sym: 'estrela', symC: '#ffffff' },
+  spa: { shape: 'redondo', c1: '#00804a', c2: '#ffffff', edge: '#ffffff', pat: 'banda', sym: 'torre', symC: '#ffffff' },
+  mon: { shape: 'frances', c1: '#c8102e', c2: '#075ba1', edge: '#ffffff', pat: 'faixa', sym: 'ondas', symC: '#ffffff' },
+  goa: { shape: 'losango', c1: '#141414', c2: '#ffffff', edge: '#ffffff', pat: 'liso', sym: 'bola', symC: '#ffffff' },
+  tln: { shape: 'escudo', c1: '#141414', c2: '#d7192a', edge: '#d7192a', pat: 'banda', sym: 'ancora', symC: '#ffffff' },
+  nan: { shape: 'frances', c1: '#1c2a44', c2: '#c9a54a', edge: '#c9a54a', pat: 'liso', sym: 'leao', symC: '#c9a54a' },
+  aca: { shape: 'redondo', c1: '#0e7a4f', c2: '#ffffff', edge: '#ffffff', pat: 'liso', sym: 'torre', symC: '#ffffff' },
+  avi: { shape: 'escudo', c1: '#141414', c2: '#a8e6cf', edge: '#ffffff', pat: 'faixa', sym: 'raio', symC: '#ffffff' },
+  ujs: { shape: 'frances', c1: '#d7192a', c2: '#ffffff', edge: '#ffffff', pat: 'metade', sym: 'castelo', symC: '#111111' },
+  nic: { shape: 'redondo', c1: '#141414', c2: '#c9a54a', edge: '#c9a54a', pat: 'liso', sym: 'aguia', symC: '#c9a54a' },
+  gar: { shape: 'escudo', c1: '#f21a23', c2: '#ffffff', edge: '#111111', pat: 'riscas', sym: 'estrela', symC: '#111111' },
+  art: { shape: 'losango', c1: '#2f4fd8', c2: '#ffffff', edge: '#ffffff', pat: 'liso', sym: 'estrela', symC: '#ffffff' },
 };
 
 // contornos no espaço 100 x 120

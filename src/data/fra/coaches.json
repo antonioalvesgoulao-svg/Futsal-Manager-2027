@@ -1,0 +1,125 @@
+{
+ "_info": "Treinadores 2026/27: Laval (Manolo Moya) e GOAL (Nicolas Karilaos) confirmados nos sites dos clubes; Sporting Club Paris (Rodolphe Lopes) e Montpellier (Mohamed Nezlioui) pela Wikipédia, por confirmar; os outros 8 são nomes fictícios até haver dados. Atributos estimados pelo nível do clube.",
+ "coaches": [
+  {
+   "id": "c_lav",
+   "name": "Manolo Moya",
+   "clubId": "lav",
+   "tactical": 12,
+   "motivation": 12,
+   "discipline": 12,
+   "youth": 11,
+   "style": {}
+  },
+  {
+   "id": "c_spa",
+   "name": "Rodolphe Lopes",
+   "clubId": "spa",
+   "tactical": 11,
+   "motivation": 11,
+   "discipline": 12,
+   "youth": 11,
+   "style": {}
+  },
+  {
+   "id": "c_mon",
+   "name": "Mohamed Nezlioui",
+   "clubId": "mon",
+   "tactical": 10,
+   "motivation": 10,
+   "discipline": 12,
+   "youth": 11,
+   "style": {}
+  },
+  {
+   "id": "c_goa",
+   "name": "Nicolas Karilaos",
+   "clubId": "goa",
+   "tactical": 9,
+   "motivation": 9,
+   "discipline": 12,
+   "youth": 11,
+   "style": {}
+  },
+  {
+   "id": "c_tln",
+   "name": "Julien Morel",
+   "clubId": "tln",
+   "tactical": 9,
+   "motivation": 9,
+   "discipline": 12,
+   "youth": 11,
+   "style": {}
+  },
+  {
+   "id": "c_nan",
+   "name": "Thomas Garnier",
+   "clubId": "nan",
+   "tactical": 9,
+   "motivation": 9,
+   "discipline": 12,
+   "youth": 11,
+   "style": {}
+  },
+  {
+   "id": "c_aca",
+   "name": "Karim Benali",
+   "clubId": "aca",
+   "tactical": 8,
+   "motivation": 8,
+   "discipline": 12,
+   "youth": 11,
+   "style": {}
+  },
+  {
+   "id": "c_avi",
+   "name": "Olivier Lefebvre",
+   "clubId": "avi",
+   "tactical": 7,
+   "motivation": 7,
+   "discipline": 12,
+   "youth": 11,
+   "style": {}
+  },
+  {
+   "id": "c_ujs",
+   "name": "Sébastien Roux",
+   "clubId": "ujs",
+   "tactical": 7,
+   "motivation": 7,
+   "discipline": 12,
+   "youth": 11,
+   "style": {}
+  },
+  {
+   "id": "c_nic",
+   "name": "Mathieu Faure",
+   "clubId": "nic",
+   "tactical": 7,
+   "motivation": 7,
+   "discipline": 12,
+   "youth": 11,
+   "style": {}
+  },
+  {
+   "id": "c_gar",
+   "name": "Yassine Haddad",
+   "clubId": "gar",
+   "tactical": 6,
+   "motivation": 6,
+   "discipline": 12,
+   "youth": 11,
+   "style": {}
+  },
+  {
+   "id": "c_art",
+   "name": "Romain Chevalier",
+   "clubId": "art",
+   "tactical": 6,
+   "motivation": 6,
+   "discipline": 12,
+   "youth": 11,
+   "style": {}
+  }
+ ]
+}

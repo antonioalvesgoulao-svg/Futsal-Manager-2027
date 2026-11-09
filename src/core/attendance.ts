@@ -36,6 +36,7 @@ export interface ArenaProfile {
   banners?: boolean; // grandes painéis publicitários nas paredes
   structure?: 'arcos' | 'malha' | 'cupula' | 'trelicas' | 'vigas' | 'led' | 'liso'; // estrutura do teto
   // forma das bancadas (vista nas fotos)
+  oval?: number; // planta oval: cantos em arco largo (m a mais no raio; as bancadas retas encurtam 2× isto)
   corners?: boolean; // cantos fechados: as bancadas ligam-se em curva (bacia), sem espaços entre elas
   tierGap?: 'camarotes' | 'corredor'; // entre o 1.º e o 2.º anel: camarotes envidraçados ou só um corredor
   tierAds?: boolean; // placas LED de publicidade na frente do 2.º anel
@@ -114,7 +115,7 @@ export const ARENAS_ITA: Record<string, ArenaProfile> = {
   // Pala Maggiore (L84): bancada de cadeiras vermelhas; asnas de madeira; paredes creme (lado sem foto = igual ao oposto)
   l84: { name: 'Pala Maggiore', capacity: 1000, capacityReal: false, style: 'municipal', sides: ['N', 'S'], seat: '#b03a2e', wall: '#efe9dc', roof: 'treliça', windows: true, beams: '#7a4a2a', structure: 'vigas', ceiling: '#e9e2d4', aisles: 12, floor: { court: '#d9b27a', surround: '#d9b27a', wood: true } },
   // PalaSele: bacia oval de degraus de cimento com muitas entradas de setor; cadeiras azuis só nos blocos de baixo das laterais; cúpula de madeira; grades cor de laranja
-  ebo: { name: 'PalaSele', capacity: 8000, capacityReal: true, style: 'moderno', sides: ['N', 'S', 'E', 'W'], corners: true, benches: true, seat: '#1f4fb0',
+  ebo: { name: 'PalaSele', capacity: 8000, capacityReal: true, style: 'moderno', sides: ['N', 'S', 'E', 'W'], corners: true, oval: 6, benches: true, seat: '#1f4fb0',
     seatZones: [{ sides: ['N', 'S'], rows: [0, 0.35], middle: 0.75, colors: ['#1f4fb0'] }], stepZones: [{ colors: ['#b9b4aa'] }], rails: '#d9772b', vomZones: [{ sides: ['N', 'S'], n: 6, at: 0.45 }, { sides: ['E', 'W'], n: 3, at: 0.45 }],
     wall: '#8a5a30', roof: 'abóbada', windows: false, beams: '#a0622f', structure: 'cupula', ceiling: '#8a5a30', truss: '#c9ced4', aisles: 14, rake: 0.5, floor: { court: '#1f5fd0', surround: '#7fe0c0', wood: true } },
   // Pala Del Mauro (3 fotos): laterais com 1.º anel verde ao meio e vermelho nas pontas, 2.º anel vermelho (e cadeiras pretas no lateral da câmara),
@@ -152,6 +153,57 @@ export const ARENAS_ITA: Record<string, ArenaProfile> = {
 for (const a of Object.values(ARENAS_ITA)) a.noBand = true; // feitos a partir das fotos: nenhum tem a faixa
 Object.assign(ARENAS, ARENAS_ITA);
 
+// França: pavilhões feitos a partir das fotos do António (ZIP Liga_Francesa, 4/11); lotações reais só onde capacityReal.
+// Lado sem foto = igual ao oposto (pedido do António). Avion, Garges e GOAL sem fotos: ginásio municipal típico (estimativa)
+const FR_WOOD = { court: '#dcc292', surround: '#dcc292', wood: true };
+export const ARENAS_FRA: Record<string, ArenaProfile> = {
+  // Espace Mayenne: bacia de 4 lados com cantos fechados, cadeiras pretas, 2.º anel recuado nas laterais; paredes de ripas de madeira clara;
+  // teto escuro com painéis acústicos suspensos; quadra de madeira com contorno escuro; grades escuras
+  lav: { name: 'Espace Mayenne', capacity: 3500, capacityReal: false, style: 'moderno', sides: ['N', 'S', 'E', 'W'], corners: true, oval: 3, upperTier: true, tierGap: 'corredor', tierSplit: 0.65,
+    seat: '#262626', rails: '#1f1f1f', stairColor: '#3a3a3a', wall: '#d8c7a4', roof: 'laje', windows: false, ceiling: '#2e2a26', ceilingDark: true, structure: 'led', aisles: 14, rake: 0.48,
+    floor: { court: '#e2cb9a', surround: '#2b2b2b', wood: true } },
+  // Halle Georges Carpentier: 4 lados de bancadas telescópicas sem cantos, cadeiras azuis e vermelhas (blocos), topo de cadeiras bege;
+  // teto escuro com condutas, janelas altas nos topos
+  spa: { name: 'Halle Georges Carpentier', capacity: 1500, capacityReal: false, style: 'moderno', sides: ['N', 'S', 'E', 'W'], seat: '#1f3f9a',
+    seatZones: [{ sides: ['N'], colors: ['#1f3f9a', '#c62828'] }, { sides: ['S'], colors: ['#c62828', '#1f3f9a'] }, { sides: ['E', 'W'], colors: ['#c62828'] }],
+    rails: '#2b2b2b', wall: '#e3e6ea', roof: 'laje', windows: true, ceiling: '#1c1f24', ceilingDark: true, structure: 'vigas', beams: '#2a2d33', aisles: 14,
+    floor: { court: '#1f63c8', surround: '#e8641e' } },
+  // Palais des Sports Pierre de Coubertin (renovado): bancadas de cadeiras azuis num lateral e num topo, paredes de madeira clara,
+  // treliça metálica cinzenta com teto de madeira e fitas de LED
+  mon: { name: 'Palais des Sports Pierre de Coubertin', capacity: 800, capacityReal: false, style: 'municipal', sides: ['N', 'E'], seat: '#2a55c8', stairColor: '#1f3f9a', rails: '#3a3f47',
+    wall: '#e3cfa6', roof: 'treliça', windows: true, truss: '#8a929c', structure: 'trelicas', ceiling: '#c9a46c', aisles: 10, floor: FR_WOOD },
+  // GOAL (Rosa Parks): sem fotos
+  goa: { name: 'Salle du Lycée Rosa Parks', capacity: 800, capacityReal: false, style: 'municipal', sides: ['N', 'S'], seat: '#3a3f47', wall: '#eceae4', roof: 'treliça', windows: true, truss: '#9aa1a8', ceiling: '#d5d9dd', aisles: 10, floor: FR_WOOD },
+  // Palais des Sports de Toulon: planta oval (cantos em arco largo), 2 anéis, cadeiras azul-acinzentadas, treliça escura, quadra de madeira com contorno azul-claro
+  tln: { name: 'Palais des Sports de Toulon', capacity: 4200, capacityReal: true, style: 'moderno', sides: ['N', 'S', 'E', 'W'], corners: true, oval: 6, upperTier: true, tierGap: 'corredor', tierSplit: 0.6, seat: '#5a6f90',
+    seatZones: [{ ring: 'lower', colors: ['#5a6f90'] }, { ring: 'upper', colors: ['#3f5d9a', '#3f5d9a', '#a3393a'] }], rails: '#3a3f47', stairColor: '#b9c2cc',
+    wall: '#2f3a4a', roof: 'treliça', windows: false, truss: '#1f242b', structure: 'trelicas', ceiling: '#1f242b', ceilingDark: true, aisles: 14, rake: 0.5,
+    floor: { court: '#dcc292', surround: '#3d8fd6', wood: true } },
+  // Salle Mangin Beaulieu: laterais e topo de cadeiras verdes em degraus de cimento claro, treliça metálica clara, contorno da quadra verde
+  nan: { name: 'Salle Mangin Beaulieu', capacity: 1200, capacityReal: false, style: 'municipal', sides: ['N', 'S', 'E'], seat: '#1f8a4a', stairColor: '#d6d8da', rails: '#e5e7eb',
+    wall: '#d8dcdf', roof: 'treliça', windows: false, truss: '#c9ced4', structure: 'trelicas', ceiling: '#9aa1a8', aisles: 12, floor: { court: '#1f63c8', surround: '#1f9a4a' } },
+  // Adidas Arena, ginásio 2: um lateral de degraus de madeira (sem cadeiras), galeria de madeira em cima, asnas de madeira, paredes de betão claro;
+  // piso cinzento com contorno azul
+  aca: { name: 'Adidas Arena – gymnase 2', capacity: 1000, capacityReal: false, style: 'clube', sides: ['N'], benches: true, stepZones: [{ colors: ['#c99a5e'] }], seat: '#c99a5e', rails: '#d6d8da',
+    wall: '#d9d5cc', roof: 'treliça', windows: true, beams: '#c9894a', structure: 'vigas', ceiling: '#b9bec4', floor: { court: '#9aa1a8', surround: '#2a6fd1' } },
+  // Avion (Roger Blezel): sem fotos
+  avi: { name: 'Salle Roger Blezel', capacity: 600, capacityReal: false, style: 'municipal', sides: ['N'], seat: '#c62828', wall: '#eceae4', roof: 'treliça', windows: true, truss: '#9aa1a8', ceiling: '#d5d9dd', aisles: 10, floor: FR_WOOD },
+  // Petit Palais des Sports (Toulouse): 4 lados, cadeiras verdes com blocos brancos ao centro de cada lado, treliça verde, claraboias, quadra de madeira com contorno preto
+  ujs: { name: 'Petit Palais des Sports', capacity: 1000, capacityReal: false, style: 'municipal', sides: ['N', 'S', 'E', 'W'], seat: '#1f7a4a',
+    seatZones: [{ middle: 0.3, colors: ['#e8eaed'] }], rails: '#d6d8da', stairColor: '#2b2b2b', wall: '#3a3f47', roof: 'treliça', windows: false, truss: '#2f7a5a', structure: 'vigas', skylights: true, ceiling: '#5a6068', aisles: 12,
+    floor: { court: '#d9b27a', surround: '#1f1f1f', wood: true } },
+  // Nice: pista de atletismo à volta da quadra; um lateral de cadeiras azuis em degraus azuis com corrimãos brancos; claraboias; paredes brancas e lilases
+  nic: { name: 'Gymnase Parc Charles Ehrmann', capacity: 600, capacityReal: false, track: 5, style: 'municipal', sides: ['N'], seat: '#1f3fb0', stairColor: '#5a8ad8', rails: '#f2f2f2',
+    wall: '#e8e6f0', roof: 'treliça', windows: true, truss: '#4b5a52', structure: 'trelicas', skylights: true, ceiling: '#6b5a48', aisles: 8, floor: FR_WOOD },
+  // Garges (Allende Neruda): sem fotos
+  gar: { name: 'Gymnase Allende Neruda', capacity: 500, capacityReal: false, style: 'clube', sides: ['N'], benches: true, seat: '#9ca3af', rails: '#c62828', wall: '#e6e3dc', roof: 'treliça', windows: true, truss: '#6b7280', ceiling: '#9aa1a8', floor: FR_WOOD },
+  // Artistes: as fotos do António são as mesmas do ginásio da Adidas Arena
+  art: { name: 'Gymnase Lamberdière', capacity: 500, capacityReal: false, style: 'clube', sides: ['N'], benches: true, stepZones: [{ colors: ['#c99a5e'] }], seat: '#c99a5e', rails: '#d6d8da',
+    wall: '#d9d5cc', roof: 'treliça', windows: true, beams: '#c9894a', structure: 'vigas', ceiling: '#b9bec4', floor: { court: '#9aa1a8', surround: '#2a6fd1' } },
+};
+for (const a of Object.values(ARENAS_FRA)) a.noBand = true;
+Object.assign(ARENAS, ARENAS_FRA);
+
 /** Campos neutros (final eight, finais, Supertaça), indicados pelo António. Gondomar: 3 005 lugares
  *  sentados com a bancada retrátil (apresentação da Câmara de Gondomar, 2018); Vila do Conde: 800
  *  (Wikipédia); Odivelas: 2 000 (indicada pelo António). */
@@ -177,12 +229,12 @@ export function neutralFor(comp: string, year: number): ArenaProfile {
 export function arenaOf(s: GameState, f: Fixture): ArenaProfile {
   if (f.arenaId) { const a = ARENAS[f.arenaId] ?? NEUTRALS.find((n) => n.name === f.arenaId); if (a) return a; }
   const c = s.clubs.find((x) => x.id === f.home);
-  if (c?.league === 'esp1' || c?.league === 'ita1') {
+  if (c?.league === 'esp1' || c?.league === 'ita1' || c?.league === 'fra1') {
     if (!f.neutral) return ARENAS[c.id] ?? spanishArena(c);
     // campo neutro em Espanha/Itália: um dos grandes pavilhões, que não seja de quem joga, rodando por época (estimativa)
     const big = c.league === 'esp1' ? 4500 : 2500;
     const hosts = s.clubs.filter((x) => x.league === c.league && (x.capacity ?? 0) >= big && x.id !== f.home && x.id !== f.away);
-    const comps = ['superEsp', 'copaEsp', 'copaRey', 'superIta', 'coppaIta'];
+    const comps = ['superEsp', 'copaEsp', 'copaRey', 'superIta', 'coppaIta', 'fraPlayoff', 'coupeFra'];
     const host = hosts[(comps.indexOf(f.comp) + s.season.year) % hosts.length] ?? c;
     return ARENAS[host.id] ?? spanishArena(host);
   }
@@ -222,7 +274,7 @@ export function attendance(s: GameState, f: Fixture): Crowd {
   const h = s.clubs.find((c) => c.id === f.home)!;
   const a = s.clubs.find((c) => c.id === f.away)!;
   // Espanha enche mais os pavilhões do que Portugal (estimativa ×1,5 na procura)
-  const country = h.league === 'esp1' ? 1.5 : h.league === 'ita1' ? 1.2 : 1; // Itália: estimativa
+  const country = h.league === 'esp1' ? 1.5 : h.league === 'ita1' ? 1.2 : h.league === 'fra1' ? 0.9 : 1; // Itália e França: estimativa (França: recorde da D1 3 200 em Laval)
   let people: number;
   if (f.neutral) people = (demand(h.reputation) + demand(a.reputation)) * 0.75;
   else {

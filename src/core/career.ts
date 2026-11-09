@@ -56,7 +56,7 @@ export function expectedPoints(home: Club, away: Club, side: 0 | 1, neutral = fa
 /** Títulos nacionais (Liga, Taça, Taça da Liga, Supertaça) antes do jogo começar: ordem de grandeza (estimativa). */
 // Espanha (Liga, Copa de España, Copa del Rey, Supercopa; ordem de grandeza, estimativa): Inter, Barça e ElPozo os mais titulados
 // Itália (Scudetto, Coppa Italia, Supercoppa; ordem de grandeza, estimativa): L84 campeão 2025/26, Meta Catania Coppa Italia 2025/26
-const PAST_TITLES: Record<string, number> = { scp: 60, slb: 35, scb: 4, fun: 1, int: 35, bar: 18, epz: 16, jca: 4, pal: 3, jae: 3, val: 1, l84: 2, cat: 2, nap: 2, ebo: 3, ave: 1, pom: 1 };
+const PAST_TITLES: Record<string, number> = { scp: 60, slb: 35, scb: 4, fun: 1, int: 35, bar: 18, epz: 16, jca: 4, pal: 3, jae: 3, val: 1, l84: 2, cat: 2, nap: 2, ebo: 3, ave: 1, pom: 1, lav: 4, spa: 6 }; // França: Laval 4 (2022/23-2025/26, FFF); Sporting Paris estimativa
 /** Palmarés do clube: história + títulos ganhos no jogo. */
 export const palmaresOf = (s: GameState, clubId: string) => (PAST_TITLES[clubId] ?? 0) + s.honours.filter((h) => h.winner === clubId).length;
 /**

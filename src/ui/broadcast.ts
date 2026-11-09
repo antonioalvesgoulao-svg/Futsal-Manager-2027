@@ -3,7 +3,7 @@ import { crestSvg } from './crest';
 // Inspiração portuguesa (azulejo, calçada, verde e vermelho), desenhado de raiz.
 import type { CompId } from '../core/season/types';
 
-export type ScoreStyle = Exclude<CompId, 'playoff' | 'espPlayoff' | 'espAp' | 'espCl' | 'itaPlayoff'>;
+export type ScoreStyle = Exclude<CompId, 'playoff' | 'espPlayoff' | 'espAp' | 'espCl' | 'itaPlayoff' | 'fraPlayoff'>;
 export const SCOREBOARD_NAMES: Record<ScoreStyle, string> = {
   liga: 'Liga Placard',
   taca: 'Taça de Portugal',
@@ -16,9 +16,11 @@ export const SCOREBOARD_NAMES: Record<ScoreStyle, string> = {
   ita: 'Serie A',
   coppaIta: 'Coppa Italia',
   superIta: 'Supercoppa',
+  fra: 'D1 Futsal',
+  coupeFra: 'Coupe Nationale',
 };
 /** Marcador da competição de um jogo (o play-off usa o da liga). */
-export const styleOf = (c: CompId): ScoreStyle => (c === 'playoff' ? 'liga' : c === 'espPlayoff' || c === 'espAp' || c === 'espCl' ? 'esp' : c === 'itaPlayoff' ? 'ita' : c);
+export const styleOf = (c: CompId): ScoreStyle => (c === 'playoff' ? 'liga' : c === 'espPlayoff' || c === 'espAp' || c === 'espCl' ? 'esp' : c === 'itaPlayoff' ? 'ita' : c === 'fraPlayoff' ? 'fra' : c);
 
 // Emblema original de cada estilo de marcador (desenho abstrato, sem logótipos reais)
 const EMBLEM: Record<string, string> = {
@@ -35,6 +37,9 @@ const EMBLEM: Record<string, string> = {
   ita: `<svg viewBox="0 0 40 40" class="emb"><circle cx="20" cy="20" r="17" fill="#fff"/><path d="M8 8 A17 17 0 0 0 8 32 L15 32 L15 8 Z" fill="#009246"/><path d="M32 8 A17 17 0 0 1 32 32 L25 32 L25 8 Z" fill="#ce2b37"/><circle cx="20" cy="20" r="4" fill="#0b3d91"/></svg>`,
   coppaIta: `<svg viewBox="0 0 40 40" class="emb"><path d="M12 30 Q6 20 12 9 M28 30 Q34 20 28 9" fill="none" stroke="#0b3d91" stroke-width="3"/><path d="M14 9h12v5a6 6 0 0 1-12 0z" fill="#d4a017"/><rect x="18.5" y="20" width="3" height="6" fill="#d4a017"/><rect x="15" y="26" width="10" height="3" rx="1" fill="#d4a017"/></svg>`,
   superIta: `<svg viewBox="0 0 40 40" class="emb"><path d="M20 4 L24 15 L36 15 L26 22 L30 34 L20 27 L10 34 L14 22 L4 15 L16 15 Z" fill="#009246" stroke="#fff" stroke-width="1.5"/></svg>`,
+  // França: emblemas originais (hexágono com as cores da bandeira; taça) — não copiam os oficiais
+  fra: `<svg viewBox="0 0 40 40" class="emb"><path d="M20 3 L35 11.5 L35 28.5 L20 37 L5 28.5 L5 11.5 Z" fill="#fff"/><path d="M20 3 L5 11.5 L5 28.5 L12 32.5 L12 7.5 Z" fill="#0055a4"/><path d="M20 3 L35 11.5 L35 28.5 L28 32.5 L28 7.5 Z" fill="#ef4135"/><circle cx="20" cy="20" r="4.5" fill="#0b1f3a"/></svg>`,
+  coupeFra: `<svg viewBox="0 0 40 40" class="emb"><path d="M13 7h14v6a7 7 0 0 1-14 0z" fill="#c9a227"/><path d="M13 9 Q6 10 9 16 Q11 18 14 16 M27 9 Q34 10 31 16 Q29 18 26 16" fill="none" stroke="#c9a227" stroke-width="2"/><rect x="18.5" y="20" width="3" height="7" fill="#c9a227"/><rect x="14" y="27" width="12" height="4" rx="1" fill="#0055a4"/></svg>`,
 };
 
 export interface ScoreboardData {
@@ -171,6 +176,18 @@ export const broadcastCss = `
 .sb-superIta .sb-mid { background: repeating-linear-gradient(45deg, #0f2e1d 0 6px, #16402a 6px 12px); color: #fff; }
 .sb-superIta .sb-sub { background: #16402a; color: #f5f5f5; }
 .sb-superIta .sb-period { background: #ce2b37; color: #fff; }
+.sb-fra .gb-main, .sb-fra .lu-row { background: #0b1f3a; }
+.sb-coupeFra .gb-main, .sb-coupeFra .lu-row { background: #0055a4; }
+.sb-fra .sb-row { background: #0b1f3a; color: #fff; border-bottom: 3px solid; border-image: linear-gradient(90deg, #0055a4 33%, #fff 33% 66%, #ef4135 66%) 1; }
+.sb-fra .sb-score { background: #fff; color: #0b1f3a; }
+.sb-fra .sb-mid { background: repeating-linear-gradient(135deg, #12305a 0 8px, #0b1f3a 8px 16px); color: #fff; }
+.sb-fra .sb-sub { background: #edf1f7; color: #0b1f3a; }
+.sb-fra .sb-period { background: #ef4135; color: #fff; }
+.sb-coupeFra .sb-row { background: linear-gradient(90deg, #0055a4, #0b3f7a); color: #fff; border-bottom: 3px solid #c9a227; }
+.sb-coupeFra .sb-score { background: #c9a227; color: #0b1f3a; }
+.sb-coupeFra .sb-mid { background: #082b55; color: #c9a227; }
+.sb-coupeFra .sb-sub { background: #082b55; color: #f5f5f5; }
+.sb-coupeFra .sb-period { background: #ef4135; color: #fff; }
 .sb-ita .fouls i { background: rgba(0,0,0,.15); }
 .sb-ita .fouls i.on { background: #eab308; }
 .sb-esp .fouls i, .sb-copaEsp .fouls i { background: rgba(0,0,0,.15); }

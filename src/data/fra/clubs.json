@@ -1,0 +1,239 @@
+{
+ "_info": "D1 Futsal França 2026/27 (dossiê do António + thefootdata.com/FFF). Lotações reais só onde capacityReal; reputation/level/wealth/budget estimativa pela classificação 2025/26 (prevRank) e presença europeia. Cores das fotos dos equipamentos do António (4/11). prevRank = classificação oficial FFF 2025/26 (Garges e Artistes subiram). Pavilhões: os declarados por cada clube à FFF para a D1 2026/27 (thefootdata.com, ficha dos jogos em casa).",
+ "league": {
+  "id": "fra1",
+  "name": "D1 Futsal",
+  "country": "França",
+  "season": "2026/27"
+ },
+ "clubs": [
+  {
+   "id": "lav",
+   "name": "Étoile Lavalloise",
+   "shortName": "LAV",
+   "city": "Laval",
+   "arena": "Salle Mayenne (Espace Mayenne)",
+   "capacity": 3500,
+   "capacityReal": false,
+   "colors": [
+    "#f07b1a",
+    "#111111"
+   ],
+   "reputation": 78,
+   "level": 80,
+   "wealth": 60,
+   "budget": 1209524,
+   "league": "fra1",
+   "prevRank": 1
+  },
+  {
+   "id": "spa",
+   "name": "Sporting Club Paris",
+   "shortName": "SCP",
+   "city": "Paris",
+   "arena": "Halle Georges Carpentier",
+   "capacity": 1500,
+   "capacityReal": false,
+   "colors": [
+    "#00804a",
+    "#ffffff"
+   ],
+   "reputation": 73,
+   "level": 75,
+   "wealth": 52,
+   "budget": 480000,
+   "league": "fra1",
+   "prevRank": 2
+  },
+  {
+   "id": "mon",
+   "name": "Montpellier Méditerranée Futsal",
+   "shortName": "MON",
+   "city": "Montpellier",
+   "arena": "Gymnase Coubertin",
+   "capacity": 800,
+   "capacityReal": false,
+   "colors": [
+    "#c8102e",
+    "#ffffff"
+   ],
+   "reputation": 70,
+   "level": 72,
+   "wealth": 52,
+   "budget": 480000,
+   "league": "fra1",
+   "prevRank": 3
+  },
+  {
+   "id": "goa",
+   "name": "GOAL Futsal Club",
+   "shortName": "GOA",
+   "city": "Neuville-sur-Saône",
+   "arena": "Salle du Lycée Rosa Parks",
+   "capacity": 800,
+   "capacityReal": false,
+   "colors": [
+    "#111111",
+    "#ffffff"
+   ],
+   "reputation": 68,
+   "level": 70,
+   "wealth": 50,
+   "budget": 380976,
+   "league": "fra1",
+   "prevRank": 4
+  },
+  {
+   "id": "tln",
+   "name": "Toulon Métropole Futsal",
+   "shortName": "TLN",
+   "city": "Toulon",
+   "arena": "Palais des Sports de Toulon",
+   "capacity": 4200,
+   "capacityReal": true,
+   "colors": [
+    "#111111",
+    "#d7192a"
+   ],
+   "reputation": 66,
+   "level": 68,
+   "wealth": 50,
+   "budget": 380976,
+   "league": "fra1",
+   "prevRank": 5
+  },
+  {
+   "id": "nan",
+   "name": "Nantes Métropole Futsal",
+   "shortName": "NAN",
+   "city": "Nantes",
+   "arena": "Salle Mangin Beaulieu",
+   "capacity": 1200,
+   "capacityReal": false,
+   "colors": [
+    "#1c2a44",
+    "#c9a54a"
+   ],
+   "reputation": 66,
+   "level": 68,
+   "wealth": 49,
+   "budget": 339411,
+   "league": "fra1",
+   "prevRank": 6
+  },
+  {
+   "id": "aca",
+   "name": "Paris ACASA Futsal",
+   "shortName": "ACA",
+   "city": "Paris",
+   "arena": "Adidas Arena – gymnase 2",
+   "capacity": 1000,
+   "capacityReal": false,
+   "colors": [
+    "#0e7a4f",
+    "#ffffff"
+   ],
+   "reputation": 63,
+   "level": 65,
+   "wealth": 46,
+   "budget": 240000,
+   "league": "fra1",
+   "prevRank": 7
+  },
+  {
+   "id": "avi",
+   "name": "AS Avion Futsal",
+   "shortName": "AVI",
+   "city": "Avion",
+   "arena": "Salle Roger Blezel",
+   "capacity": 600,
+   "capacityReal": false,
+   "colors": [
+    "#111111",
+    "#ffffff"
+   ],
+   "reputation": 61,
+   "level": 63,
+   "wealth": 44,
+   "budget": 190488,
+   "league": "fra1",
+   "prevRank": 8
+  },
+  {
+   "id": "ujs",
+   "name": "UJS Toulouse",
+   "shortName": "UJS",
+   "city": "Toulouse",
+   "arena": "Petit Palais des Sports (Compans Caffarelli)",
+   "capacity": 1000,
+   "capacityReal": false,
+   "colors": [
+    "#d7192a",
+    "#ffffff"
+   ],
+   "reputation": 60,
+   "level": 62,
+   "wealth": 44,
+   "budget": 190488,
+   "league": "fra1",
+   "prevRank": 9
+  },
+  {
+   "id": "nic",
+   "name": "Nice Futsal Club",
+   "shortName": "NIC",
+   "city": "Nice",
+   "arena": "Gymnase Parc Charles Ehrmann",
+   "capacity": 600,
+   "capacityReal": false,
+   "colors": [
+    "#111111",
+    "#c9a54a"
+   ],
+   "reputation": 58,
+   "level": 60,
+   "wealth": 42,
+   "budget": 151190,
+   "league": "fra1",
+   "prevRank": 10
+  },
+  {
+   "id": "gar",
+   "name": "Garges Djibson Futsal",
+   "shortName": "GAR",
+   "city": "Garges-lès-Gonesse",
+   "arena": "Gymnase Allende Neruda",
+   "capacity": 500,
+   "capacityReal": false,
+   "colors": [
+    "#f21a23",
+    "#ffffff"
+   ],
+   "reputation": 56,
+   "level": 58,
+   "wealth": 40,
+   "budget": 120000,
+   "league": "fra1",
+   "prevRank": 11
+  },
+  {
+   "id": "art",
+   "name": "Artistes Futsal",
+   "shortName": "ART",
+   "city": "Villepinte",
+   "arena": "Gymnase Lamberdière",
+   "capacity": 500,
+   "capacityReal": false,
+   "colors": [
+    "#2f4fd8",
+    "#ffffff"
+   ],
+   "reputation": 56,
+   "level": 58,
+   "wealth": 40,
+   "budget": 120000,
+   "league": "fra1",
+   "prevRank": 12
+  }
+ ]
+}

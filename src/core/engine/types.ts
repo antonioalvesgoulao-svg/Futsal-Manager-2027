@@ -96,6 +96,7 @@ export interface MatchOptions {
   knockout?: boolean; // prolongamento e penáltis em caso de empate
   injuries?: boolean; // false = sem lesões (amigáveis de teste)
   momentum?: [number, number]; // momento do jogo por liga: [empurrão de quem perde, gestão de quem ganha] por golo (0,55/0,2 em Portugal e Espanha)
+  aggregate?: [number, number]; // 2.ª mão de uma eliminatória: golos da 1.ª mão [casa deste jogo, fora] (desempate pelo agregado)
   tieCaution?: [number, number]; // [segundos finais da 2.ª parte, fator na eficácia] quando está empatado (só ligas com muitos empates)
   goalFactor?: number; // fator da liga sobre a eficácia dos remates em jogo corrido (1 = Portugal/Espanha; Itália calibrada pela média real)
   extraTimeLen?: number; // duração de cada parte do prolongamento (s): 300 em Portugal, 180 em Espanha (RFEF)
