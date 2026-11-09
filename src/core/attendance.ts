@@ -36,7 +36,6 @@ export interface ArenaProfile {
   banners?: boolean; // grandes painéis publicitários nas paredes
   structure?: 'arcos' | 'malha' | 'cupula' | 'trelicas' | 'vigas' | 'led' | 'liso'; // estrutura do teto
   // forma das bancadas (vista nas fotos)
-  topGallery?: string; // galeria envidraçada e iluminada à volta da sala, no topo das bancadas (cor da luz)
   oval?: number; // planta oval: cantos em arco largo (m a mais no raio; as bancadas retas encurtam 2× isto)
   corners?: boolean; // cantos fechados: as bancadas ligam-se em curva (bacia), sem espaços entre elas
   tierGap?: 'camarotes' | 'corredor'; // entre o 1.º e o 2.º anel: camarotes envidraçados ou só um corredor
@@ -177,8 +176,8 @@ export const ARENAS_FRA: Record<string, ArenaProfile> = {
   goa: { name: 'Salle du Lycée Rosa Parks', capacity: 800, capacityReal: false, style: 'municipal', sides: ['N', 'S'], seat: '#3a3f47', wall: '#eceae4', roof: 'treliça', windows: true, truss: '#9aa1a8', ceiling: '#d5d9dd', aisles: 10, floor: FR_WOOD },
   // Palais des Sports de Toulon: planta oval (cantos em arco largo), 2 anéis, cadeiras azul-acinzentadas, treliça escura, quadra de madeira com contorno azul-claro
   tln: { name: 'Palais des Sports de Toulon', capacity: 4200, capacityReal: true, style: 'moderno', sides: ['N', 'S', 'E', 'W'], corners: true, oval: 6, upperTier: true, tierGap: 'corredor', tierSplit: 0.6, seat: '#5a6f90',
-    seatZones: [{ ring: 'lower', colors: ['#5a6f90'] }, { ring: 'upper', colors: ['#3f5d9a', '#3f5d9a', '#a3393a'] }], rails: '#3a3f47', stairColor: '#b9c2cc', topGallery: '#f3e3b8',
-    wall: '#1c2a48', roof: 'treliça', windows: false, truss: '#1f242b', structure: 'trelicas', ceiling: '#1f242b', ceilingDark: true, aisles: 14, rake: 0.5,
+    seatZones: [{ ring: 'lower', colors: ['#5a6f90'] }, { ring: 'upper', colors: ['#3f5d9a', '#3f5d9a', '#a3393a'] }], rails: '#3a3f47', stairColor: '#b9c2cc',
+    wall: '#2f3a4a', roof: 'treliça', windows: false, truss: '#1f242b', structure: 'trelicas', ceiling: '#1f242b', ceilingDark: true, aisles: 14, rake: 0.5,
     floor: { court: '#dcc292', surround: '#3d8fd6', wood: true } },
   // Salle Mangin Beaulieu: laterais e topo de cadeiras verdes em degraus de cimento claro, treliça metálica clara, contorno da quadra verde
   nan: { name: 'Salle Mangin Beaulieu', capacity: 1200, capacityReal: false, style: 'municipal', sides: ['N', 'S', 'E'], seat: '#1f8a4a', stairColor: '#d6d8da', rails: '#e5e7eb',
